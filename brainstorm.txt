@@ -1,0 +1,58 @@
+SPECIES RESOURCES
+
+* https://www.sharkbook.ai - photo ID library of individual whale shark encounters, which are matched/catalogued 
+
+* https://www.conservation.org/projects/whale-shark-tracker - tracking for individual satellite-tagged whale sharks (specific to eastern Indonesia, from May 2016 - Oct 2022)
+
+* https://www.ocearch.org/tracker/ - tracker encompassing multiple species (not just whale sharks but also great whites, turtles, etc.. global & more recent, but not many whale sharks)
+
+* https://www.gbif.org/species/2417522 - gbif.org (species parameter "rhincodon typus"), offering tons of data from 1840 to present day, on a global scale!! Drawback: not the friendlist website interface
+
+* https://www.iucnredlist.org/species/19488/2365291 - endangerment assessments over time in the context of population, conservation, etc 
+
+* https://earth.org/?endangered-species=whale-sharks - high-level overview of whale sharks with focus on endangerment (2022)
+
+* https://www.edgeofexistence.org/species/whale-shark/ - high-level summary of current population & endangerment status
+
+
+
+
+RELATED RESOURCES
+
+* https://www.earthdata.nasa.gov - NASA Earth observation data (ocean temperature & currents, climate indicators, etc)
+
+* https://marine.copernicus.eu - all kinds of ocean info over time (plankton, chlorophyll, temperature, etc)! Reports, trends, visualizations, data exports, etc 
+
+* https://coralreefwatch.noaa.gov - satellite monitoring for ocean anomalies & habitat stressors
+
+* https://globalfishingwatch.org - human activity monitoring for illegal fishing, ship traffic, vessel tracking & emissions, etc 
+
+
+
+
+DATASETS
+
+* https://zenodo.org/records/834663 - tracking data from eastern tropical pacific (2011 - 2012)
+
+* https://researchdata.edu.au/indian-ocean-whale-tracking-collaboration/3369594 - tracking data from Indian Ocean (2010 - 2019, likely includes Ningaloo/gbif.org data)
+
+* https://www.gbif.org/dataset/12495db0-7564-4a7c-bce2-2501efe4fc21 - tracking data from Indian Ocean (2016 - 2019)
+
+
+
+
+PAPERS
+
+* https://www.publish.csiro.au/MF/MF23147 - research paper studying 4 years of movement/migration of individual whale shark ("Rio Lady") 
+
+* https://pmc.ncbi.nlm.nih.gov/articles/PMC5560665/ - research paper estimating population trends in western Atlantic Ocean (1999 - 2015)
+
+
+
+
+
+
+
+
+
+
