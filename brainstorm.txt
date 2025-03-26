@@ -27,6 +27,26 @@ RELATED RESOURCES
 
 * https://globalfishingwatch.org - human activity monitoring for illegal fishing, ship traffic, vessel tracking & emissions, etc 
 
+* https://obis.org - extensive ocean biodiversity & biogeographic data 
+
+
+
+API ENDPOINTS
+
+* https://power.larc.nasa.gov/docs/services/api/ - NASA Power 
+
+* https://oceandata.sci.gsfc.nasa.gov/api/ - NASA Ocean Color
+
+* https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal#edsc - NASA earth data developer portal 
+
+* https://help.marine.copernicus.eu/en/articles/8286883-copernicus-marine-toolbox-api-get-original-files - Copernicus Marine 
+
+* https://techdocs.gbif.org/en/openapi/ - GBIF
+
+* https://obis.org/data/access/ - OBIS
+
+* https://open-meteo.com/en/docs - Open-Meteo
+
 
 
 
