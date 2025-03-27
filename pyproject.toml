@@ -1,0 +1,25 @@
+[project]
+name = "whale-shark-site"
+version = "0.1.0"
+description = "A data project for whale shark research"
+authors = [
+    {name = "Adrien Lynch",email = "adriienlynch@gmail.com"}
+]
+readme = "README.md"
+packages = [
+    { include = "src" }
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+requests = "^2.31.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.3.0"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

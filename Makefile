@@ -7,23 +7,24 @@ VENV_DIR = .venv
 
 all: setup run
 
-# Install Poetry dependencies & set up venv
+# Check if virtual environment exists, if not, create it
 setup:
 	@which poetry > /dev/null || (echo "Poetry not found. Installing..."; curl -sSL https://install.python-poetry.org | python3 -)
+	@$(POETRY) config virtualenvs.in-project true  # Ensure virtualenv is inside project folder
 	@if [ ! -d "$(VENV_DIR)" ]; then \
 		echo "Virtual environment not found. Creating..."; \
 		$(POETRY) env use python3; \
+		$(POETRY) install --no-root; \
 	fi
-	@$(POETRY) install --quiet
 
 # Run full pipeline (for now, just fetch APIs)
 run: apis
 
 # Fetch data from APIs
 apis:
-	$(POETRY) run python src/fetch/nasa.py
-	$(POETRY) run python src/fetch/copernicus.py
-	$(POETRY) run python src/fetch/gbif.py
+	$(POETRY) run python -m src.fetch.nasa
+	$(POETRY) run python -m src.fetch.copernicus
+	$(POETRY) run python -m src.fetch.gbif
 
 # Clean & analyze data
 analysis:
