@@ -21,6 +21,7 @@ BASE_URL = "https://api.gbif.org/v1"
 SPECIES_MATCH_ENDPOINT = "species/match"
 OCCURRENCE_SEARCH_ENDPOINT = "occurrence/search"
 
+LIMIT = 200
 
 OCCURRENCE_RESULT_FIELDS = [
     "key", 
@@ -67,9 +68,21 @@ def get_species_key(name: str = SPECIES_NAME) -> int:
     return species_key
 
 
-def get_occurrence_search(name: str = SPECIES_NAME, key: int = get_species_key()) -> dict:
+def get_occurrence_search(offset: int,
+                            limit: int = LIMIT,
+                            name: str = SPECIES_NAME, 
+                            key: int = get_species_key()
+                        ) -> dict:
+    if offset is None:
+        raise ValueError("ERROR: missing offset")
+
     url_endpoint = f"{BASE_URL}/{OCCURRENCE_SEARCH_ENDPOINT}"
-    params = {"scientificName": name, "speciesKey": key, "limit": 2}
+    params = {
+        "offset": offset,
+        "limit": limit,
+        "scientificName": name, 
+        "speciesKey": key, 
+    }
 
     response = requests.get(url_endpoint, params=params)
     response.raise_for_status()
@@ -89,19 +102,33 @@ def extract_occurrence_fields(data: dict) -> dict:
     return extracted_data
 
 
+def get_all_occurrences() -> list:
+    cleaned_occurrences = []
+    offset = 0
+
+    while True:
+        raw_data = get_occurrence_search(offset)
+
+        for occurrence in raw_data["results"]:
+            extracted_data = extract_occurrence_fields(occurrence)
+            cleaned_occurrences.append(extracted_data)
+
+        # Stop if fetched all records
+        if offset + LIMIT >= raw_data.get("count", 0):
+            break  
+        
+        offset += LIMIT
+
+    return cleaned_occurrences
+
+
 if __name__ == "__main__":
     species_key = get_species_key()
     print(species_key)
     print(f"\n\n\n")
 
-    raw_data = get_occurrence_search()
-    cleaned_occurrences = []
-
-    for occurrence in raw_data["results"]:
-        extracted_data = extract_occurrence_fields(occurrence)
-        cleaned_occurrences.append(extracted_data)
-
-    print(prettify_json(cleaned_occurrences))
+    all_occurrences = get_all_occurrences()
+    print(prettify_json(all_occurrences[:3]))
 
 
 
