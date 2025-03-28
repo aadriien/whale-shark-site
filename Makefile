@@ -35,7 +35,7 @@ analysis:
 zip_data:
 	@if [ -d "data" ]; then \
 		echo "Zipping the data folder..."; \
-		zip -r data/data.zip data/; \
+		zip -r data/data.zip data/ > /dev/null 2>&1; \
 	else \
         echo "Error: 'data' folder does not exist."; \
         exit 1; \
@@ -45,3 +45,4 @@ zip_data:
 format:
 	@which black > /dev/null || (echo "black not found. Installing..."; $(POETRY) add black)
 	$(POETRY) run black src/
+
