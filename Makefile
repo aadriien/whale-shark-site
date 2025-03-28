@@ -5,7 +5,7 @@ VENV_DIR = .venv
 
 .PHONY: setup run format clean apis analysis
 
-all: setup run
+all: setup run zip_data
 
 # Install Poetry dependencies & set up venv
 setup:
@@ -30,6 +30,16 @@ apis:
 analysis:
 	@$(POETRY) run python src/clean.py
 	@$(POETRY) run python src/analyze.py
+
+# Zip data folder to reduce load (if exists)
+zip_data:
+	@if [ -d "data" ]; then \
+		echo "Zipping the data folder..."; \
+		zip -r data/data.zip data/; \
+	else \
+        echo "Error: 'data' folder does not exist."; \
+        exit 1; \
+    fi
 
 # Auto-format Python code
 format:

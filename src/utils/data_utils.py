@@ -11,10 +11,17 @@ import pandas as pd
 from typing import Optional
 
 
+def get_folder_name(csv_file: str) -> str:
+    if not csv_file:
+        raise ValueError("Error, must specify CSV")
+
+    return os.path.dirname(csv_file) 
+
+
 # Check valid directory (with option to create if doesn't exist)
 def folder_exists(csv_file: str, create: bool = False) -> bool:
     # Extract folder in file path
-    folder = os.path.dirname(csv_file)  
+    folder = get_folder_name(csv_file)  
 
     if create and not os.path.exists(folder):
         print(f"Folder '{folder}' not found. Creating it...")
@@ -24,6 +31,9 @@ def folder_exists(csv_file: str, create: bool = False) -> bool:
 
 
 def csv_exists(csv_file: str) -> bool:
+    if not csv_file:
+        raise ValueError("Error, must specify CSV")
+
     if folder_exists(csv_file):
         return os.path.exists(csv_file)
 
