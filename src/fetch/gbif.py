@@ -41,7 +41,6 @@ OCCURRENCE_RESULT_FIELDS = [
     "month", 
     "day", 
     "eventDate", 
-    "media",
     "countryCode", 
     "country", 
     "gbifRegion", 
@@ -49,7 +48,8 @@ OCCURRENCE_RESULT_FIELDS = [
     "verbatimLocality", 
     "gbifId", 
     "occurrenceID", 
-    "identificationID"
+    "identificationID",
+    "media",
 ]
 
 
@@ -123,12 +123,9 @@ def get_all_occurrences() -> list:
 
 
 if __name__ == "__main__":
-    species_key = get_species_key()
-    print(species_key)
-    print(f"\n\n\n")
-
     all_occurrences = get_all_occurrences()
     print(prettify_json(all_occurrences[:3]))
+
 
 
 
