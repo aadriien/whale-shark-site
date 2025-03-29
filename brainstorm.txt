@@ -77,6 +77,26 @@ PAPERS
 
 
 
+——————————————————————————————
+
+
+DATA STRUCTURING
+
+* individual CSVs per calendar year, with months as columns (log occurrences in time)
+
+* CSV of continent stats (total occurrences, average per year, who are the publishing countries, how many have media)
+
+* CSV of country stats (total occurrences, average per year, who are the publishing countries, how many have media)
+
+* CSV of publishing country stats (total occurrences, average per year, what countries are they visiting, how many have media)
+
+* CSV of stats by basisOfRecord (human observation vs machine observation, etc)
+
+* CSV of individual whale sharks (based on identificationID), exploring number of times seen, calendar period (when), countries found in, etc
+
+* CSV of stats by sex (where data available)
+
+* CSV of stats by lifeStage (where data available)
 
 
 
