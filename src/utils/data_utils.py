@@ -10,6 +10,10 @@ import csv
 import pandas as pd
 from typing import Optional
 
+from src.utils.api_utils import (
+    find_field,
+)
+
 
 def get_folder_name(csv_file: str) -> str:
     if not csv_file:
@@ -65,6 +69,22 @@ def export_to_csv(csv_file: str, dataframe: pd.DataFrame) -> None:
     dataframe.to_csv(csv_file, index=False)
 
     print(f"Exported {len(dataframe)} entries to {csv_file}")
+
+
+#####
+## JSON parsing helpers
+#####
+
+def extract_relevant_fields(data: dict, fields: list) -> dict:
+    if not data and isinstance(data, dict):
+        raise ValueError("ERROR: must specify data (dict)")
+
+    if not fields and isinstance(fields, list):
+        raise ValueError("ERROR: must specify fields (list)")
+
+    extracted_data = {field: find_field(data, field) for field in fields}
+    return extracted_data
+
 
 
 

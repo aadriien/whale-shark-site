@@ -22,9 +22,9 @@ run: apis
 
 # Fetch data from APIs
 apis:
-	@$(POETRY) run python -m src.fetch.nasa
-	@$(POETRY) run python -m src.fetch.copernicus
-	@$(POETRY) run python -m src.fetch.gbif
+	@$(POETRY) run python -m src.clean.nasa
+	@$(POETRY) run python -m src.clean.copernicus
+	@$(POETRY) run python -m src.clean.gbif
 
 # Clean & analyze data
 analysis:
