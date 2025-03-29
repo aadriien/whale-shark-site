@@ -18,7 +18,7 @@ setup:
 	fi
 
 # Run full pipeline (for now, just fetch & clean data)
-run: clean_data
+run: analyze_data
 
 # Fetch data from APIs (NOTE: returned data don't really "go" anywhere)
 fetch_data:

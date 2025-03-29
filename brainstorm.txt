@@ -82,7 +82,7 @@ PAPERS
 
 DATA STRUCTURING
 
-* individual CSVs per calendar year, with months as columns (log occurrences in time)
+* CSV of sightings per calendar year, with months as columns (log occurrences in time)
 
 * CSV of continent stats (total occurrences, average per year, who are the publishing countries, how many have media)
 

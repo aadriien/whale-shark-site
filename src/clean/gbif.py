@@ -48,6 +48,10 @@ OCCURRENCE_RESULT_FIELDS = [
 ]
 
 
+#####
+## Handle API results
+#####
+
 def extract_media_data(occurrences: list) -> list:
     media_data = []
 
@@ -85,7 +89,7 @@ def get_all_occurrences_clean() -> list:
     return cleaned_occurrences
 
 
-def export_gbif_occurrences() -> None:
+def export_gbif_occurrences() -> pd.DataFrame:
     all_occurrences = get_all_occurrences_clean()
 
     if not all_occurrences:
@@ -104,11 +108,7 @@ def export_gbif_occurrences() -> None:
             export_to_csv(GBIF_MEDIA_CLEAN_FILE, media_df)
 
     export_to_csv(GBIF_CLEAN_FILE, occurrences_df)
-
-
-if __name__ == "__main__":
-    export_gbif_occurrences()
-
+    return occurrences_df
 
 
 
