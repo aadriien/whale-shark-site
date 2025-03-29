@@ -29,6 +29,10 @@ RELATED RESOURCES
 
 * https://obis.org - extensive ocean biodiversity & biogeographic data 
 
+* https://seamap.env.duke.edu - related to OBIS above, but specifically the SEAMAP
+
+* https://www.wildme.org/code.html - Wildbook open source code, including ML identification model for animals (computer vision) 
+
 
 
 API ENDPOINTS

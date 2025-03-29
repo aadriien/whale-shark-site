@@ -1,7 +1,7 @@
 ###############################################################################
 ##  `gbif.py`                                                                ##
 ##                                                                           ##
-##  Purpose: Accesses GBIF's API endpoint                                    ##
+##  Purpose: Accesses GBIF's API endpoint to extract relevant data           ##
 ###############################################################################
 
 
