@@ -21,6 +21,7 @@ BASE_URL = "https://api.gbif.org/v1"
 SPECIES_MATCH_ENDPOINT = "species/match"
 OCCURRENCE_SEARCH_ENDPOINT = "occurrence/search"
 
+# GBIF allows maximum limit of 300 per query as of March 2025
 LIMIT = 200
 
 
