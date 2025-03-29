@@ -33,6 +33,7 @@ RELATED RESOURCES
 
 * https://www.wildme.org/code.html - Wildbook open source code, including ML identification model for animals (computer vision) 
 
+* https://huggingface.co/conservationxlabs/miewid-msv3 - Wildbook Hugging Face ML model for above code 
 
 
 API ENDPOINTS
