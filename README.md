@@ -13,22 +13,18 @@ In the works!
 <br>
     ↓
 <br>
-(Raw CSVs saved in data/)
+[Cleaning scripts in src/clean/]
 <br>
     ↓
 <br>
-clean.py
+(Cleaned CSVs saved in data/)
 <br>
     ↓
 <br>
-(Cleaned CSVs saved in outputs/)
+[Analysis scripts in src/analyze/]
 <br>
     ↓
 <br>
-analyze.py
-<br>
-    ↓
-<br>
-(Results, summaries, visualizations)
+(Results, summaries, visualizations saved in outputs/)
 
 
