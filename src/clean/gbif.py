@@ -43,6 +43,7 @@ OCCURRENCE_RESULT_FIELDS = [
     "collectionCode", 
     "verbatimLocality", 
     "occurrenceID", 
+    "organismID",
     "identificationID",
     "media",
 ]

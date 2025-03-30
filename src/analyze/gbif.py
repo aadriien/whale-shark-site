@@ -8,11 +8,12 @@
 import pandas as pd
 
 from src.utils.data_utils import (
-    export_to_csv, 
+    read_csv, export_to_csv, 
 )
 
 from src.clean.gbif import (
     export_gbif_occurrences,
+    GBIF_CLEAN_FILE,
 )
 
 
@@ -48,8 +49,11 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    occurrences_df = export_gbif_occurrences()
+    # occurrences_df = export_gbif_occurrences()
+
+    occurrences_df = read_csv(GBIF_CLEAN_FILE)
 
     # Use copy to generate specific CSVs (don't modify original DataFrame)
     export_calendar_stats(occurrences_df.copy())
+
 

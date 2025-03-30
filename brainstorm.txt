@@ -92,7 +92,7 @@ DATA STRUCTURING
 
 * CSV of stats by basisOfRecord (human observation vs machine observation, etc)
 
-* CSV of individual whale sharks (based on identificationID), exploring number of times seen, calendar period (when), countries found in, etc
+* CSV of individual whale sharks (based on organismID and/or identificationID), exploring number of times seen, calendar period (when), countries found in, etc
 
 * CSV of stats by sex (where data available)
 
