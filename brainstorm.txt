@@ -36,6 +36,8 @@ RELATED RESOURCES
 * https://huggingface.co/conservationxlabs/miewid-msv3 - Wildbook Hugging Face ML model for above code 
 
 
+
+
 API ENDPOINTS
 
 * https://power.larc.nasa.gov/docs/services/api/ - NASA Power 
@@ -78,6 +80,36 @@ PAPERS
 
 
 ——————————————————————————————
+
+
+KEY QUESTIONS
+
+* How many whale sharks do we see over time?
+*** How many sightings (occurrences) are reported per year? 
+*** Of those sightings each year, which months are they happening in?
+*** How many are male vs female vs unknown? 
+*** How many are juveniles vs adults vs unknown?
+
+* When & where are we most likely to see them?
+*** How many sightings are reported in each country? Each continent?
+*** Of those countries & continents, how many sightings in each calendar month? 
+
+* How many have we seen before / can we "track" their journey over time?
+*** How many organism IDs were reported more than once? 
+*** For each individual, where (& when) did we see them? 
+*** What else do we know about them? Sex? Life stage? Any media? 
+
+* Where are the data coming from? 
+*** How many reports does each publishing country have? Average per year? 
+*** When did the reports happen? Is publishing consistent or intermittent? 
+*** For each publishing country, where are they going for their research? 
+*** Who's providing media? Who's doing so regularly?
+*** What's the ratio of human observation to machine observation to other?
+
+* What are the gaps in the data?
+*** Of all the reports, how many specified sex? Life stage? Organism ID? Media? 
+
+
 
 
 DATA STRUCTURING
