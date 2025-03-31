@@ -1,0 +1,73 @@
+countryCode,country,Total Occurrences,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
+AU,Australia,997,46,28,77,89,101,114,163,35,111,110,97,26
+BS,Bahamas,1,1,0,0,0,0,0,0,0,0,0,0,0
+BH,Bahrain,1,0,0,0,0,0,0,0,0,0,1,0,0
+BZ,Belize,5,0,0,0,0,3,2,0,0,0,0,0,0
+BJ,Benin,5,0,0,0,0,1,1,2,1,0,0,0,0
+BM,Bermuda,1,0,0,0,0,1,0,0,0,0,0,0,0
+BQ,"Bonaire, Sint Eustatius and Saba",2,1,0,0,0,0,0,0,1,0,0,0,0
+BR,Brazil,11,0,0,3,2,0,2,0,1,0,0,2,1
+CM,Cameroon,3,0,0,0,1,0,0,0,0,0,2,0,0
+CA,Canada,2,0,0,0,0,0,0,1,0,0,0,0,1
+CN,China,2,0,0,0,0,0,0,2,0,0,0,0,0
+TW,Chinese Taipei,10,0,0,0,2,0,1,6,0,0,1,0,0
+CX,Christmas Island,25,2,0,6,0,0,0,3,8,0,0,0,6
+CC,Cocos (Keeling) Islands,7,0,0,0,0,0,0,0,0,3,4,0,0
+CO,Colombia,92,36,0,1,1,1,2,1,0,1,24,10,15
+CR,Costa Rica,165,0,3,3,0,0,2,1,1,26,4,48,77
+CU,Cuba,9,0,1,0,0,0,1,0,1,1,3,2,0
+DJ,Djibouti,31,29,0,0,0,0,0,0,0,0,0,0,2
+EC,Ecuador,1040,14,0,3,4,2,11,61,51,400,307,185,2
+EG,Egypt,13,0,0,2,0,0,0,3,1,0,0,6,1
+GQ,Equatorial Guinea,2,0,0,0,0,0,0,0,2,0,0,0,0
+FJ,Fiji,1,0,0,0,0,0,0,0,0,1,0,0,0
+FR,France,1,1,0,0,0,0,0,0,0,0,0,0,0
+GF,French Guiana,3,0,0,0,0,0,0,0,0,0,3,0,0
+PF,French Polynesia,15,2,3,5,4,0,0,0,0,0,1,0,0
+TF,French Southern Territories,3,1,1,0,1,0,0,0,0,0,0,0,0
+GU,Guam,1,0,0,1,0,0,0,0,0,0,0,0,0
+GT,Guatemala,1,0,1,0,0,0,0,0,0,0,0,0,0
+HN,Honduras,28,2,0,2,9,1,6,2,2,1,0,2,1
+IN,India,8,0,2,3,1,0,0,0,1,0,0,0,1
+ID,Indonesia,124,7,9,2,7,5,12,19,18,15,20,6,4
+IL,Israel,9,0,0,1,1,2,0,1,1,0,2,0,1
+JP,Japan,29,0,0,1,2,8,2,5,2,3,1,2,3
+KE,Kenya,4,0,1,0,1,0,0,0,0,0,0,1,1
+MG,Madagascar,38,7,5,0,0,0,1,0,0,1,9,6,9
+MY,Malaysia,16,0,1,3,0,2,3,3,1,0,3,0,0
+MV,Maldives,83,3,13,9,12,3,2,1,2,8,6,15,9
+MQ,Martinique,1,0,0,0,0,1,0,0,0,0,0,0,0
+YT,Mayotte,1,0,0,0,0,0,0,0,0,1,0,0,0
+MX,Mexico,526,40,24,40,26,12,35,88,102,44,31,44,40
+MZ,Mozambique,25,2,1,1,0,0,3,8,3,2,3,2,0
+MM,Myanmar,3,1,0,1,0,0,0,0,0,0,0,1,0
+NR,Nauru,1,0,0,0,0,0,0,0,0,0,0,1,0
+NC,New Caledonia,23,0,0,0,1,0,1,0,0,0,11,9,1
+NZ,New Zealand,14,5,6,1,1,1,0,0,0,0,0,0,0
+NI,Nicaragua,3,3,0,0,0,0,0,0,0,0,0,0,0
+OM,Oman,8,0,0,1,0,1,0,0,0,2,2,0,2
+PK,Pakistan,3,0,3,0,0,0,0,0,0,0,0,0,0
+PA,Panama,9,3,2,1,0,0,0,0,1,1,0,1,0
+PE,Peru,368,155,76,15,0,0,0,0,0,0,0,1,121
+PH,Philippines,168,19,20,17,17,20,13,28,7,8,4,10,5
+PT,Portugal,6,0,0,0,0,0,0,0,3,2,1,0,0
+QA,Qatar,63,0,0,0,1,10,14,23,12,3,0,0,0
+SH,"Saint Helena, Ascension and Tristan da Cunha",41,17,0,0,24,0,0,0,0,0,0,0,0
+LC,Saint Lucia,1,0,0,1,0,0,0,0,0,0,0,0,0
+SA,Saudi Arabia,9,0,1,0,2,0,2,0,3,0,1,0,0
+SC,Seychelles,14,0,0,0,0,0,0,0,4,3,3,1,3
+ZA,South Africa,35,11,2,5,1,3,0,0,2,1,2,0,8
+ES,Spain,2,0,0,0,0,0,0,0,0,1,0,1,0
+LK,Sri Lanka,5,0,1,2,1,0,0,0,0,0,0,0,1
+SD,Sudan,1,0,0,0,0,1,0,0,0,0,0,0,0
+SR,Suriname,6,0,0,0,1,0,2,1,0,1,0,0,1
+TZ,"Tanzania, United Republic of",17,2,2,0,0,0,0,0,1,1,5,5,1
+TH,Thailand,54,4,4,11,5,8,1,1,5,5,7,1,2
+TL,Timor-Leste,2,0,0,0,0,0,0,0,0,0,1,0,1
+TT,Trinidad and Tobago,1,0,0,0,1,0,0,0,0,0,0,0,0
+TC,Turks and Caicos Islands,1,0,0,0,0,0,0,0,0,0,0,1,0
+AE,United Arab Emirates,6,1,2,1,0,0,0,0,0,0,0,2,0
+US,United States of America,116,7,5,4,2,17,5,15,30,11,8,7,5
+VE,Venezuela (Bolivarian Republic of),2,0,0,0,0,0,0,0,0,0,0,0,2
+VN,Viet Nam,1,0,0,0,0,0,1,0,0,0,0,0,0
+WF,Wallis and Futuna,22,7,0,0,0,0,0,0,0,0,0,9,6
