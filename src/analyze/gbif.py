@@ -23,6 +23,7 @@ from src.clean.gbif import (
 
 GBIF_CALENDAR_STATS_FILE = "outputs/gbif_calendar_stats.csv"
 GBIF_COUNTRY_STATS_FILE = "outputs/gbif_country_stats.csv"
+GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
 
 
 def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
@@ -64,8 +65,7 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
     life_stage_counts = life_stage_counts.add_prefix("Life Stage: ")
     calendar_stats = calendar_stats.merge(life_stage_counts, on="year", how="left")
 
-    calendar_stats = calendar_stats.sort_values(by="year", ascending=False)
-    calendar_stats.reset_index(inplace=True)
+    calendar_stats = calendar_stats.sort_values(by="year", ascending=False).reset_index()
 
     export_to_csv(GBIF_CALENDAR_STATS_FILE, calendar_stats)
 
@@ -74,7 +74,7 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     if occurrences_df is None or not isinstance(occurrences_df, pd.DataFrame):
         raise ValueError("Error, must specify a valid DataFrame to export")
 
-    occurrences_df = occurrences_df.dropna(subset=["countryCode", "country"])
+    occurrences_df = occurrences_df.dropna(subset=["countryCode", "country", "eventDate"])
 
     # Restructure data into pivot table (high-level summary)
     country_stats = occurrences_df.pivot_table(
@@ -83,14 +83,59 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     country_stats.columns = MONTH_NAMES
 
     # Total for each year
-    country_stats.loc[:, "Total Occurrences"] = country_stats.sum(axis=1)
+    country_stats.loc[:, "Total Occurrences"] = occurrences_df.groupby(["countryCode", "country"]).size()
     country_stats = country_stats[["Total Occurrences"] + [col for col in country_stats.columns if col != "Total Occurrences"]]
 
-    country_stats = country_stats.sort_values(by="country", ascending=True)
-    country_stats.reset_index(inplace=True)
+    # Oldest & most recent sightings (take first date if range)
+    occurrences_df.loc[:, "eventDate"] = occurrences_df["eventDate"].astype(str).str.strip()
+    occurrences_df.loc[:, "eventDate"] = occurrences_df["eventDate"].str.split("/").str[0]
+
+    # occurrences_df.loc[:, "eventDate"] = pd.to_datetime(occurrences_df["eventDate"], errors="coerce")
+    date_stats = occurrences_df.groupby(["countryCode", "country"])["eventDate"].agg(["min", "max"])
+
+    date_stats["Oldest Occurrence"] = date_stats["min"].astype(str).str[:10]
+    date_stats["Newest Occurrence"] = date_stats["max"].astype(str).str[:10]
+    date_stats.drop(columns=["min", "max"], inplace=True)
+
+    country_stats = country_stats.merge(date_stats, on=["countryCode", "country"], how="left")
+
+    country_stats = country_stats.sort_values(by="country", ascending=True).reset_index()
 
     export_to_csv(GBIF_COUNTRY_STATS_FILE, country_stats)
 
+
+def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
+    if occurrences_df is None or not isinstance(occurrences_df, pd.DataFrame):
+        raise ValueError("Error, must specify a valid DataFrame to export")
+
+    occurrences_df = occurrences_df.dropna(subset=["continent", "eventDate"])
+
+    # Restructure data into pivot table (high-level summary)
+    continent_stats = occurrences_df.pivot_table(
+        index="continent", columns="month", aggfunc="size", fill_value=0
+    )
+    continent_stats.columns = MONTH_NAMES
+
+    # Total for each year
+    continent_stats.loc[:, "Total Occurrences"] = continent_stats.sum(axis=1)
+    continent_stats = continent_stats[["Total Occurrences"] + [col for col in continent_stats.columns if col != "Total Occurrences"]]
+
+    # Oldest & most recent sightings (take first date if range)
+    occurrences_df.loc[:, "eventDate"] = occurrences_df["eventDate"].astype(str).str.strip()
+    occurrences_df.loc[:, "eventDate"] = occurrences_df["eventDate"].str.split("/").str[0]
+
+    # occurrences_df.loc[:, "eventDate"] = pd.to_datetime("eventDate", errors="coerce")
+    date_stats = occurrences_df.groupby(["continent"])["eventDate"].agg(["min", "max"])
+
+    date_stats["Oldest Occurrence"] = date_stats["min"].astype(str).str[:10]
+    date_stats["Newest Occurrence"] = date_stats["max"].astype(str).str[:10]
+    date_stats.drop(columns=["min", "max"], inplace=True)
+
+    continent_stats = continent_stats.merge(date_stats, on=["continent"], how="left")
+
+    continent_stats = continent_stats.sort_values(by="continent", ascending=True).reset_index()
+
+    export_to_csv(GBIF_CONTINENT_STATS_FILE, continent_stats)
 
 
 if __name__ == "__main__":
@@ -101,5 +146,7 @@ if __name__ == "__main__":
     # Use copy to generate specific CSVs (don't modify original DataFrame)
     export_calendar_stats(occurrences_df.copy())
     export_country_stats(occurrences_df.copy())
+    export_continent_stats(occurrences_df.copy())
+
 
 
