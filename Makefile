@@ -38,15 +38,23 @@ analyze_data:
 	@$(POETRY) run python -m src.analyze.copernicus
 	@$(POETRY) run python -m src.analyze.gbif
 
-# Zip data folder to reduce load (if exists)
+# Zip data folder to reduce load (if exists, & if needs to be updated)
 zip_data:
 	@if [ -d "data" ]; then \
-		echo "Zipping the data folder..."; \
-		zip -r data/data.zip data/ > /dev/null 2>&1; \
+		TMP_ZIP="data/data_new.zip"; \
+		(cd data && zip -Xrq ../$$TMP_ZIP . --exclude data.zip); \
+		if [ -f "data/data.zip" ] && cmp -s $$TMP_ZIP data/data.zip; then \
+			echo "No changes detected. Keeping existing data.zip."; \
+			rm $$TMP_ZIP; \
+		else \
+			echo "Changes detected. Updating data.zip..."; \
+			mv $$TMP_ZIP data/data.zip; \
+		fi; \
 	else \
-        echo "Error: 'data' folder does not exist."; \
-        exit 1; \
-    fi
+		echo "Error: 'data' folder does not exist."; \
+		exit 1; \
+	fi
+
 
 # Auto-format Python code
 format:
