@@ -16,7 +16,10 @@ from src.fetch.gbif import (
 )
 
 
+GBIF_RAW_FILE = "data/gbif_raw.csv"
 GBIF_CLEAN_FILE = "data/gbif_clean.csv"
+
+GBIF_MEDIA_RAW_FILE = "data/gbif_media_raw.csv"
 GBIF_MEDIA_CLEAN_FILE = "data/gbif_media_clean.csv"
 
 OCCURRENCE_RESULT_FIELDS = [
@@ -76,8 +79,8 @@ def extract_media_data(occurrences: list) -> list:
     return media_data
 
 
-def get_all_occurrences_clean() -> list:
-    cleaned_occurrences = []
+def get_all_extracted_occurrences() -> list:
+    extracted_occurrences = []
 
     # Returns array of dicts
     raw_occurrences = get_all_occurrences_raw()
@@ -85,13 +88,13 @@ def get_all_occurrences_clean() -> list:
     for occurrence in raw_occurrences:
         # Returns list, which we then append
         extracted_data = extract_relevant_fields(occurrence, OCCURRENCE_RESULT_FIELDS)
-        cleaned_occurrences.append(extracted_data)
+        extracted_occurrences.append(extracted_data)
 
-    return cleaned_occurrences
+    return extracted_occurrences
 
 
 def export_gbif_occurrences() -> pd.DataFrame:
-    all_occurrences = get_all_occurrences_clean()
+    all_occurrences = get_all_extracted_occurrences()
 
     if not all_occurrences:
         raise ValueError("Error: No occurrences to export")
@@ -106,9 +109,9 @@ def export_gbif_occurrences() -> pd.DataFrame:
         media_df = pd.DataFrame(all_media_data)
 
         if not media_df.empty:
-            export_to_csv(GBIF_MEDIA_CLEAN_FILE, media_df)
+            export_to_csv(GBIF_MEDIA_RAW_FILE, media_df)
 
-    export_to_csv(GBIF_CLEAN_FILE, occurrences_df)
+    export_to_csv(GBIF_RAW_FILE, occurrences_df)
     return occurrences_df
 
 
