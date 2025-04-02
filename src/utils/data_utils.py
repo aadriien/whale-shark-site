@@ -58,7 +58,7 @@ def export_to_csv(csv_file: str, dataframe: pd.DataFrame) -> None:
     if not csv_file:
         raise ValueError("Error, must specify CSV file path")
 
-    if dataframe is None or not isinstance(dataframe, pd.DataFrame):
+    if not isinstance(dataframe, pd.DataFrame):
         raise ValueError("Error, must specify a valid DataFrame to export")
 
     if dataframe.empty:
@@ -85,6 +85,16 @@ def extract_relevant_fields(data: dict, fields: list) -> dict:
     extracted_data = {field: find_field(data, field) for field in fields}
     return extracted_data
 
+
+#####
+## DataFrame manipulation helpers
+#####
+
+def validate_and_dropna(dataframe: pd.DataFrame, na_subset: Optional[list[str]] = None) -> pd.DataFrame:
+    if not isinstance(dataframe, pd.DataFrame):
+        raise ValueError("Error, must specify a valid DataFrame")
+
+    return dataframe.dropna(subset=na_subset)
 
 
 
