@@ -127,6 +127,24 @@ def make_continent_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return continent_counts
 
 
+def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFrame:
+    if not isinstance(index, list):
+        raise ValueError("Error, must specify index/indices")
+
+    df = occurrences_df.copy()
+
+    # Standardize values for column
+    df.loc[:, "basisOfRecord"] = df["basisOfRecord"].apply(
+        lambda x: x if x in ["HUMAN_OBSERVATION", "MACHINE_OBSERVATION"] else "Other"
+    )
+
+    basisOfRecord_counts = df.pivot_table(
+        index=index, columns="basisOfRecord", aggfunc="size", fill_value=0
+    )
+    basisOfRecord_counts = basisOfRecord_counts.add_prefix("Basis of Record: ")
+    return basisOfRecord_counts
+
+
 #####
 ## Larger datasets to export
 #####
@@ -134,13 +152,15 @@ def make_continent_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, ["year", "month"])
 
-    # Get data for calendar, sex, lifeStage
+    # Get data for calendar, basisOfRecord, sex, lifeStage
     calendar_counts = make_calendar_df(occurrences_df)
+    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["year"])
     sex_counts = make_sex_df(occurrences_df)
     life_stage_counts = make_lifeStage_df(occurrences_df)
 
     # Merge DataFrames
-    calendar_stats = calendar_counts.merge(sex_counts, on="year", how="left")
+    calendar_stats = calendar_counts.merge(basisOfRecord_counts, on="year", how="left")
+    calendar_stats = calendar_stats.merge(sex_counts, on="year", how="left")
     calendar_stats = calendar_stats.merge(life_stage_counts, on="year", how="left")
 
     calendar_stats = calendar_stats.sort_values(by="year", ascending=False).reset_index()
@@ -152,10 +172,12 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
 
     # Get data for country, eventDate
     country_counts = make_country_df(occurrences_df)
+    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["countryCode", "country"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["countryCode", "country"])
 
     # Merge DataFrames
-    country_stats = country_counts.merge(date_min_max, on=["countryCode", "country"], how="left")
+    country_stats = country_counts.merge(basisOfRecord_counts, on=["countryCode", "country"], how="left")
+    country_stats = country_stats.merge(date_min_max, on=["countryCode", "country"], how="left")
 
     country_stats = country_stats.sort_values(by="country", ascending=True).reset_index()
     export_to_csv(GBIF_COUNTRY_STATS_FILE, country_stats)
@@ -166,10 +188,12 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
 
     # Get data for continent, eventDate
     continent_counts = make_continent_df(occurrences_df)
+    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["continent"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["continent"])
 
     # Merge DataFrames
-    continent_stats = continent_counts.merge(date_min_max, on=["continent"], how="left")
+    continent_stats = continent_counts.merge(basisOfRecord_counts, on=["continent"], how="left")
+    continent_stats = continent_stats.merge(date_min_max, on=["continent"], how="left")
 
     continent_stats = continent_stats.sort_values(by="continent", ascending=True).reset_index()
     export_to_csv(GBIF_CONTINENT_STATS_FILE, continent_stats)
