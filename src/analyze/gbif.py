@@ -39,12 +39,12 @@ def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
 
-    # target_df.loc[:, "Total Occurrences"] = source_df.groupby(groupby).size()
-    target_df.loc[:, "Total Occurrences"] = target_df.index.map(source_df.groupby(groupby).size())
+    target_df["Total Occurrences"] = target_df.index.map(source_df.groupby(groupby).size())
     target_df = target_df[["Total Occurrences"] + 
         [col for col in target_df.columns if col != "Total Occurrences"]]
     
     return target_df
+
 
 
 def get_str_with_year_range(full_str: str,
@@ -65,6 +65,7 @@ def get_str_with_year_range(full_str: str,
     else: full_str += " (all)"                        
     
     return full_str
+
 
 
 def add_avg_per_year(source_df: pd.DataFrame, 
@@ -99,6 +100,42 @@ def add_avg_per_year(source_df: pd.DataFrame,
     target_df = target_df[[column_name] + 
         [col for col in target_df.columns if col != column_name]]
 
+    return target_df
+
+
+
+def add_top_3_countries_visited(occurrences_df: pd.DataFrame, 
+                                target_df: pd.DataFrame,
+                                groupby: list[str]) -> pd.DataFrame:
+    if not isinstance(groupby, list):
+        raise ValueError("Error, must specify groupby")
+
+    top_visited = (
+        occurrences_df.groupby(groupby + ["country"])
+        .size()
+        .reset_index(name="count")
+        .sort_values(groupby + ["count"], ascending=[True, False])
+    )
+
+    # Keep only top 3 visited countries per publishingCountry
+    top_visited["rank"] = (
+        top_visited.groupby(groupby)["count"]
+        .rank(method="first", ascending=False)
+    )
+    top_visited = top_visited[top_visited["rank"] <= 3].drop(columns=["rank", "count"])
+
+    # Convert to single column format (countries separated by commas)
+    top_visited = (
+        top_visited.groupby(groupby)["country"]
+        .apply(lambda x: " > ".join(x.tolist()))
+    )
+
+    target_df["Top 3 Countries Visited"] = target_df.index.map(top_visited)
+    target_df = target_df[["Total Occurrences"] + ["Top 3 Countries Visited"] + 
+        [col for col in target_df.columns if 
+            (col != "Top 3 Countries Visited" and col != "Total Occurrences")
+        ]]
+        
     return target_df
 
 
@@ -316,8 +353,14 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["publishingCountry"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["publishingCountry"])
 
+    # Get top 3 visited countries per publishing country
+    publishingCountry_stats = add_top_3_countries_visited(
+        occurrences_df, publishingCountry_counts, 
+        groupby=["publishingCountry"]
+    )
+
     # Merge DataFrames
-    publishingCountry_stats = publishingCountry_counts.merge(basisOfRecord_counts, on=["publishingCountry"], how="left")
+    publishingCountry_stats = publishingCountry_stats.merge(basisOfRecord_counts, on=["publishingCountry"], how="left")
     publishingCountry_stats = publishingCountry_stats.merge(date_min_max, on=["publishingCountry"], how="left")
 
     # Format: map countryCode column (index) to get full country name
