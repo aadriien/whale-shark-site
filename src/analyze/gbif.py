@@ -24,6 +24,8 @@ from src.clean.gbif import (
 GBIF_CALENDAR_STATS_FILE = "outputs/gbif_calendar_stats.csv"
 GBIF_COUNTRY_STATS_FILE = "outputs/gbif_country_stats.csv"
 GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
+GBIF_PUBLISHING_COUNTRY_STATS_FILE = "outputs/gbif_publishingCountry_stats.csv"
+
 
 
 #####
@@ -41,6 +43,7 @@ def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby:
     return target_df
 
 
+
 def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
@@ -54,6 +57,7 @@ def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
     calendar_counts = add_totals_column(source_df=df, target_df=calendar_counts, groupby=["year"])
     return calendar_counts
+
 
 
 def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
@@ -71,6 +75,7 @@ def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return sex_counts
 
 
+
 def make_lifeStage_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
@@ -84,16 +89,21 @@ def make_lifeStage_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return life_stage_counts
 
 
-def make_country_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+
+def make_country_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFrame:
+    if not isinstance(index, list):
+        raise ValueError("Error, must specify index/indices")
+
     df = occurrences_df.copy()
 
     country_counts = df.pivot_table(
-        index=["countryCode", "country"], columns="month", aggfunc="size", fill_value=0
+        index=index, columns="month", aggfunc="size", fill_value=0
     )
     country_counts.columns = MONTH_NAMES
 
-    country_counts = add_totals_column(source_df=df, target_df=country_counts, groupby=["countryCode", "country"])
+    country_counts = add_totals_column(source_df=df, target_df=country_counts, groupby=index)
     return country_counts
+
 
 
 def make_eventDate_df(occurrences_df: pd.DataFrame, groupby: list[str]) -> pd.DataFrame:
@@ -115,6 +125,7 @@ def make_eventDate_df(occurrences_df: pd.DataFrame, groupby: list[str]) -> pd.Da
     return date_min_max
 
 
+
 def make_continent_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
@@ -125,6 +136,7 @@ def make_continent_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
     continent_counts = add_totals_column(source_df=df, target_df=continent_counts, groupby=["continent"])
     return continent_counts
+
 
 
 def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFrame:
@@ -143,6 +155,11 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
     )
     basisOfRecord_counts = basisOfRecord_counts.add_prefix("Basis of Record: ")
     return basisOfRecord_counts
+
+
+def map_codes_to_countries(occurrences_df: pd.DataFrame) -> dict:
+    country_mappings = occurrences_df.set_index("countryCode")["country"].to_dict()
+    return country_mappings
 
 
 #####
@@ -167,11 +184,12 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
     export_to_csv(GBIF_CALENDAR_STATS_FILE, calendar_stats)
 
 
+
 def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, ["countryCode", "country", "eventDate"])
 
-    # Get data for country, eventDate
-    country_counts = make_country_df(occurrences_df)
+    # Get data for country, basisOfRecord, eventDate
+    country_counts = make_country_df(occurrences_df, index=["countryCode", "country"])
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["countryCode", "country"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["countryCode", "country"])
 
@@ -183,10 +201,11 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     export_to_csv(GBIF_COUNTRY_STATS_FILE, country_stats)
 
 
+
 def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, ["continent", "eventDate"])
 
-    # Get data for continent, eventDate
+    # Get data for continent, basisOfRecord, eventDate
     continent_counts = make_continent_df(occurrences_df)
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["continent"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["continent"])
@@ -199,6 +218,39 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
     export_to_csv(GBIF_CONTINENT_STATS_FILE, continent_stats)
 
 
+
+def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
+    # Hold country / codes mappings for later (& before dropping null values)
+    country_mappings = map_codes_to_countries(occurrences_df)
+
+    occurrences_df = validate_and_dropna(occurrences_df, ["publishingCountry", "eventDate"])
+
+    # Get data for publishingCountry, basisOfRecord, eventDate
+    publishingCountry_counts = make_country_df(occurrences_df, index=["publishingCountry"])
+    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["publishingCountry"])
+    date_min_max = make_eventDate_df(occurrences_df, groupby=["publishingCountry"])
+
+    # Merge DataFrames
+    publishingCountry_stats = publishingCountry_counts.merge(basisOfRecord_counts, on=["publishingCountry"], how="left")
+    publishingCountry_stats = publishingCountry_stats.merge(date_min_max, on=["publishingCountry"], how="left")
+
+    # Format: map countryCode column (index) to get full country name
+    publishingCountry_stats = publishingCountry_stats.rename_axis(
+        index={"publishingCountry": "countryCode"}
+    )
+    publishingCountry_stats["publishingCountry"] = publishingCountry_stats.index.map(country_mappings)
+    
+    publishingCountry_stats = publishingCountry_stats[["publishingCountry"] + 
+        [col for col in publishingCountry_stats.columns if col != "publishingCountry"]]
+
+    publishingCountry_stats = publishingCountry_stats.sort_values(
+        by="publishingCountry", ascending=True
+    ).reset_index()
+    
+    export_to_csv(GBIF_PUBLISHING_COUNTRY_STATS_FILE, publishingCountry_stats)
+
+
+
 if __name__ == "__main__":
     # occurrences_df = export_gbif_occurrences()
 
@@ -208,6 +260,8 @@ if __name__ == "__main__":
     export_calendar_stats(occurrences_df.copy())
     export_country_stats(occurrences_df.copy())
     export_continent_stats(occurrences_df.copy())
+    export_publishingCountry_stats(occurrences_df.copy())
+
 
 
 
