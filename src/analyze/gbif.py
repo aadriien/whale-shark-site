@@ -47,19 +47,49 @@ def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby:
     return target_df
 
 
+def get_str_with_year_range(full_str: str,
+                            after_year: Optional[int] = None, 
+                            before_year: Optional[int] = None) -> str:
+    if not isinstance(full_str, str):
+        raise ValueError("Error, must specify full_str")
+
+    if after_year and before_year:
+        full_str += f" ({after_year} - {before_year})"
+
+    elif after_year:
+        full_str += f" (after {after_year})"
+
+    elif before_year:
+        full_str += f" (before {before_year})"
+
+    else: full_str += " (all)"                        
+    
+    return full_str
+
+
 def add_avg_per_year(source_df: pd.DataFrame, 
                     target_df: pd.DataFrame, 
                     groupby: list[str],
-                    after_year: Optional[int] = None) -> pd.DataFrame:
+                    after_year: Optional[int] = None,
+                    before_year: Optional[int] = None) -> pd.DataFrame:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
 
     source_df = validate_and_dropna(source_df, na_subset=["year"])
-    column_name = "Avg Per Year (all)"
 
-    if after_year:
+    column_name_base = "Avg Per Year"
+    column_name = get_str_with_year_range(
+        column_name_base, 
+        after_year=after_year, 
+        before_year=before_year
+    )
+
+    if after_year and before_year:
+        source_df = source_df[source_df["year"].between(after_year, before_year)]
+    elif after_year:
         source_df = source_df[source_df["year"] > after_year]
-        column_name = f"Avg Per Year (after {after_year})"
+    elif before_year:
+        source_df = source_df[source_df["year"] < before_year]
 
     # Get total occurrences per [{metric}, year] grouping, then average
     yearly_counts = source_df.groupby(groupby + ["year"]).size()
@@ -130,9 +160,22 @@ def make_region_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFra
     )
     region_counts.columns = MONTH_NAMES
 
-    region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index, after_year=2000)
-    region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index, after_year=2010)
-    region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index, after_year=2020)
+    region_counts = add_avg_per_year(
+        source_df=df, target_df=region_counts, groupby=index, 
+        before_year=2000
+    )
+    region_counts = add_avg_per_year(
+        source_df=df, target_df=region_counts, groupby=index, 
+        after_year=2000, before_year=2010
+    )
+    region_counts = add_avg_per_year(
+        source_df=df, target_df=region_counts, groupby=index, 
+        after_year=2010, before_year=2020
+    )
+    region_counts = add_avg_per_year(
+        source_df=df, target_df=region_counts, groupby=index, 
+        after_year=2020
+    )
     
     region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index)
     region_counts = add_totals_column(source_df=df, target_df=region_counts, groupby=index)
