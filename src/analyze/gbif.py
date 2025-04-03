@@ -119,25 +119,25 @@ def make_lifeStage_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
 
 
-def make_country_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFrame:
+def make_region_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFrame:
     if not isinstance(index, list):
         raise ValueError("Error, must specify index/indices")
 
     df = occurrences_df.copy()
 
-    country_counts = df.pivot_table(
+    region_counts = df.pivot_table(
         index=index, columns="month", aggfunc="size", fill_value=0
     )
-    country_counts.columns = MONTH_NAMES
+    region_counts.columns = MONTH_NAMES
 
-    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index, after_year=2000)
-    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index, after_year=2010)
-    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index, after_year=2020)
+    region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index, after_year=2000)
+    region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index, after_year=2010)
+    region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index, after_year=2020)
     
-    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index)
-    country_counts = add_totals_column(source_df=df, target_df=country_counts, groupby=index)
+    region_counts = add_avg_per_year(source_df=df, target_df=region_counts, groupby=index)
+    region_counts = add_totals_column(source_df=df, target_df=region_counts, groupby=index)
 
-    return country_counts
+    return region_counts
 
 
 
@@ -158,25 +158,6 @@ def make_eventDate_df(occurrences_df: pd.DataFrame, groupby: list[str]) -> pd.Da
     date_min_max.drop(columns=["min", "max"], inplace=True)
 
     return date_min_max
-
-
-
-def make_continent_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
-    df = occurrences_df.copy()
-
-    continent_counts = df.pivot_table(
-        index="continent", columns="month", aggfunc="size", fill_value=0
-    )
-    continent_counts.columns = MONTH_NAMES
-
-    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"], after_year=2000)
-    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"], after_year=2010)
-    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"], after_year=2020)
-    
-    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"])
-    continent_counts = add_totals_column(source_df=df, target_df=continent_counts, groupby=["continent"])
-
-    return continent_counts
 
 
 
@@ -251,7 +232,7 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, ["countryCode", "country", "eventDate"])
 
     # Get data for country, basisOfRecord, eventDate
-    country_counts = make_country_df(occurrences_df, index=["countryCode", "country"])
+    country_counts = make_region_df(occurrences_df, index=["countryCode", "country"])
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["countryCode", "country"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["countryCode", "country"])
 
@@ -268,7 +249,7 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, ["continent", "eventDate"])
 
     # Get data for continent, basisOfRecord, eventDate
-    continent_counts = make_continent_df(occurrences_df)
+    continent_counts = make_region_df(occurrences_df, index=["continent"])
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["continent"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["continent"])
 
@@ -288,7 +269,7 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, ["publishingCountry", "eventDate"])
 
     # Get data for publishingCountry, basisOfRecord, eventDate
-    publishingCountry_counts = make_country_df(occurrences_df, index=["publishingCountry"])
+    publishingCountry_counts = make_region_df(occurrences_df, index=["publishingCountry"])
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["publishingCountry"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["publishingCountry"])
 
