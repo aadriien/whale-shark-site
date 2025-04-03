@@ -6,6 +6,8 @@
 
 
 import pandas as pd
+from typing import Optional
+
 
 from src.config import (
     MONTH_NAMES, 
@@ -37,10 +39,36 @@ def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
 
-    target_df.loc[:, "Total Occurrences"] = source_df.groupby(groupby).size()
+    # target_df.loc[:, "Total Occurrences"] = source_df.groupby(groupby).size()
+    target_df.loc[:, "Total Occurrences"] = target_df.index.map(source_df.groupby(groupby).size())
     target_df = target_df[["Total Occurrences"] + 
         [col for col in target_df.columns if col != "Total Occurrences"]]
     
+    return target_df
+
+
+def add_avg_per_year(source_df: pd.DataFrame, 
+                    target_df: pd.DataFrame, 
+                    groupby: list[str],
+                    after_year: Optional[int] = None) -> pd.DataFrame:
+    if not isinstance(groupby, list):
+        raise ValueError("Error, must specify groupby")
+
+    source_df = validate_and_dropna(source_df, na_subset=["year"])
+    column_name = "Avg Per Year (all)"
+
+    if after_year:
+        source_df = source_df[source_df["year"] > after_year]
+        column_name = f"Avg Per Year (after {after_year})"
+
+    # Get total occurrences per [{metric}, year] grouping, then average
+    yearly_counts = source_df.groupby(groupby + ["year"]).size()
+    avg_per_year = yearly_counts.groupby(groupby).mean().round(2)
+
+    target_df[column_name] = target_df.index.map(avg_per_year)
+    target_df = target_df[[column_name] + 
+        [col for col in target_df.columns if col != column_name]]
+
     return target_df
 
 
@@ -102,7 +130,13 @@ def make_country_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFr
     )
     country_counts.columns = MONTH_NAMES
 
+    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index, after_year=2000)
+    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index, after_year=2010)
+    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index, after_year=2020)
+    
+    country_counts = add_avg_per_year(source_df=df, target_df=country_counts, groupby=index)
     country_counts = add_totals_column(source_df=df, target_df=country_counts, groupby=index)
+
     return country_counts
 
 
@@ -135,7 +169,13 @@ def make_continent_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     )
     continent_counts.columns = MONTH_NAMES
 
+    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"], after_year=2000)
+    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"], after_year=2010)
+    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"], after_year=2020)
+    
+    continent_counts = add_avg_per_year(source_df=df, target_df=continent_counts, groupby=["continent"])
     continent_counts = add_totals_column(source_df=df, target_df=continent_counts, groupby=["continent"])
+
     return continent_counts
 
 
