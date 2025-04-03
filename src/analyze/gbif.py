@@ -9,6 +9,7 @@ import pandas as pd
 
 from src.config import (
     MONTH_NAMES, 
+    convert_ISO_code_to_country,
 )
 
 from src.utils.data_utils import (
@@ -162,6 +163,27 @@ def map_codes_to_countries(occurrences_df: pd.DataFrame) -> dict:
     return country_mappings
 
 
+def format_publishingCountry(publishingCountry_stats: pd.DataFrame, country_mappings: dict) -> pd.DataFrame:
+    if not isinstance(publishingCountry_stats, pd.DataFrame):
+        raise ValueError("Error, must specify publishingCountry_stats")
+    if not isinstance(country_mappings, dict):
+        raise ValueError("Error, must specify country_mappings")
+
+    publishingCountry_stats = publishingCountry_stats.rename_axis(
+        index={"publishingCountry": "countryCode"}
+    )
+
+    # If can't find countryCode in mappings, then fall back on country_converter
+    publishingCountry_stats["publishingCountry"] = publishingCountry_stats.index.map(
+        lambda code: country_mappings.get(code, convert_ISO_code_to_country(code))
+    )
+    
+    publishingCountry_stats = publishingCountry_stats[["publishingCountry"] + 
+        [col for col in publishingCountry_stats.columns if col != "publishingCountry"]]
+
+    return publishingCountry_stats
+
+
 #####
 ## Larger datasets to export
 #####
@@ -235,18 +257,12 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     publishingCountry_stats = publishingCountry_stats.merge(date_min_max, on=["publishingCountry"], how="left")
 
     # Format: map countryCode column (index) to get full country name
-    publishingCountry_stats = publishingCountry_stats.rename_axis(
-        index={"publishingCountry": "countryCode"}
-    )
-    publishingCountry_stats["publishingCountry"] = publishingCountry_stats.index.map(country_mappings)
-    
-    publishingCountry_stats = publishingCountry_stats[["publishingCountry"] + 
-        [col for col in publishingCountry_stats.columns if col != "publishingCountry"]]
+    publishingCountry_stats = format_publishingCountry(publishingCountry_stats, country_mappings)
 
     publishingCountry_stats = publishingCountry_stats.sort_values(
         by="publishingCountry", ascending=True
     ).reset_index()
-    
+
     export_to_csv(GBIF_PUBLISHING_COUNTRY_STATS_FILE, publishingCountry_stats)
 
 
