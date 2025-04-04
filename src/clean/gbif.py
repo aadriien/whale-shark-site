@@ -20,11 +20,8 @@ from src.fetch.gbif import (
 )
 
 
-GBIF_RAW_FILE = "data/gbif_raw.csv"
 GBIF_CLEAN_FILE = "data/gbif_clean.csv"
-
-GBIF_MEDIA_RAW_FILE = "data/gbif_media_raw.csv"
-GBIF_MEDIA_CLEAN_FILE = "data/gbif_media_clean.csv"
+GBIF_MEDIA_FILE = "data/gbif_media.csv"
 
 OCCURRENCE_RESULT_FIELDS = [
     "key", 
@@ -86,7 +83,7 @@ def extract_media_data(occurrences: list) -> list:
 def get_all_extracted_occurrences() -> list:
     extracted_occurrences = []
 
-    # Returns array of dicts
+    # Returns array of dicts (also exports raw dataset in process)
     raw_occurrences = get_all_occurrences_raw()
 
     for occurrence in raw_occurrences:
@@ -115,12 +112,15 @@ def export_gbif_occurrences() -> pd.DataFrame:
         media_df = pd.DataFrame(all_media_data)
 
         if not media_df.empty:
-            export_to_csv(GBIF_MEDIA_RAW_FILE, media_df)
+            export_to_csv(GBIF_MEDIA_FILE, media_df)
 
-    export_to_csv(GBIF_RAW_FILE, occurrences_df)
+    export_to_csv(GBIF_CLEAN_FILE, occurrences_df)
     return occurrences_df
 
 
+#####
+## Format & standardize DataFrames
+#####
 
 def map_codes_to_countries(occurrences_df: pd.DataFrame, code_column: str) -> dict:
     if not isinstance(code_column, str):
@@ -169,12 +169,5 @@ def format_publishingCountry(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 if __name__ == "__main__":
     occurrences_df = export_gbif_occurrences()
 
-    # from src.utils.data_utils import read_csv
-    
-
-    # occurrences_df = read_csv(GBIF_RAW_FILE)
-    # occurrences_df = format_country_names(occurrences_df)
-    # occurrences_df = format_publishingCountry(occurrences_df)
-    # print(occurrences_df)
 
 

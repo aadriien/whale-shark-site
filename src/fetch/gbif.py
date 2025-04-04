@@ -6,6 +6,7 @@
 
 
 import requests
+import pandas as pd
 
 from src.config import (
     SPECIES_NAME,
@@ -15,6 +16,12 @@ from src.utils.api_utils import (
     find_field,
 )
 
+from src.utils.data_utils import (
+    export_to_csv, 
+)
+
+
+GBIF_RAW_FILE = "data/gbif_raw.csv"
 
 BASE_URL = "https://api.gbif.org/v1"
 
@@ -79,8 +86,16 @@ def get_all_occurrences_raw() -> list:
         
         offset += LIMIT
 
+    # Export raw dataset
+    raw_occurrencess_df = pd.DataFrame(raw_occurrences)
+    export_to_csv(GBIF_RAW_FILE, raw_occurrencess_df)
+
     return raw_occurrences
 
+
+
+if __name__ == "__main__":
+    occurrences_df = get_all_occurrences_raw()
 
 
 

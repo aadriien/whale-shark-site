@@ -148,5 +148,120 @@ def move_column_after(dataframe: pd.DataFrame, col_to_move: str, after_col: str)
     return dataframe[cols]
 
 
+#####
+## Specific DataFrame metrics to arrange / introduce
+#####
+
+def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby: list[str]) -> pd.DataFrame:
+    if not isinstance(groupby, list):
+        raise ValueError("Error, must specify groupby")
+
+    target_df["Total Occurrences"] = target_df.index.map(source_df.groupby(groupby).size())
+    target_df = move_columns(target_df, cols_to_move=["Total Occurrences"], position="front")
+    
+    return target_df
+
+
+def get_str_with_year_range(full_str: str,
+                            after_year: Optional[int] = None, 
+                            before_year: Optional[int] = None) -> str:
+    if not isinstance(full_str, str):
+        raise ValueError("Error, must specify full_str")
+
+    if after_year and before_year:
+        full_str += f" ({after_year} - {before_year})"
+
+    elif after_year:
+        full_str += f" (after {after_year})"
+
+    elif before_year:
+        full_str += f" (before {before_year})"
+
+    else: full_str += " (all)"                        
+    
+    return full_str
+
+
+def add_avg_per_year(source_df: pd.DataFrame, 
+                    target_df: pd.DataFrame, 
+                    groupby: list[str],
+                    after_year: Optional[int] = None,
+                    before_year: Optional[int] = None) -> pd.DataFrame:
+    if not isinstance(groupby, list):
+        raise ValueError("Error, must specify groupby")
+
+    source_df = validate_and_dropna(source_df, na_subset=["year"])
+
+    column_name_base = "Avg Per Year"
+    column_name = get_str_with_year_range(
+        column_name_base, 
+        after_year=after_year, 
+        before_year=before_year
+    )
+
+    if after_year and before_year:
+        source_df = source_df[source_df["year"].between(after_year, before_year)]
+    elif after_year:
+        source_df = source_df[source_df["year"] > after_year]
+    elif before_year:
+        source_df = source_df[source_df["year"] < before_year]
+
+    # Get total occurrences per [{metric}, year] grouping, then average
+    yearly_counts = source_df.groupby(groupby + ["year"]).size()
+    avg_per_year = yearly_counts.groupby(groupby).mean().round(2)
+
+    target_df[column_name] = target_df.index.map(avg_per_year)
+    target_df = move_columns(target_df, cols_to_move=[column_name], position="front")
+    
+    return target_df
+
+
+def add_top_x_metric(occurrences_df: pd.DataFrame, 
+                    target_df: pd.DataFrame,
+                    groupby: list[str],
+                    top_x: int,
+                    metric: str,
+                    column_name: str) -> pd.DataFrame:
+    if not isinstance(groupby, list):
+        raise ValueError("Error, must specify groupby")
+    if not isinstance(top_x, int):
+        raise ValueError("Error, must specify top_x")
+    if not isinstance(metric, str):
+        raise ValueError("Error, must specify metric")
+    if not isinstance(column_name, str):
+        raise ValueError("Error, must specify column_name")
+
+    top_metric = (
+        occurrences_df.groupby(groupby + [metric])
+        .size()
+        .reset_index(name="count")
+        .sort_values(groupby + ["count"], ascending=[True] * len(groupby) + [False])
+    )
+
+    # Keep only top {x} {metric} per {category}
+    # e.g. top 3 countries / regions visited by publishingCountry
+    top_metric["rank"] = (
+        top_metric.groupby(groupby)["count"]
+        .rank(method="first", ascending=False)
+    )
+    top_metric = top_metric[top_metric["rank"] <= top_x].drop(columns=["rank", "count"])
+
+    # Convert to single column format (countries separated by commas)
+    top_metric = (
+        top_metric.groupby(groupby)[metric]
+        .apply(lambda x: " > ".join(x.tolist()))
+    )
+    target_df[column_name] = target_df.index.get_level_values(groupby[0]).map(top_metric)
+
+    target_df = move_column_after(
+        target_df, 
+        col_to_move=column_name, 
+        after_col="Total Occurrences"
+    )
+
+    return target_df
+
+
+
 
 

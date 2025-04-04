@@ -14,12 +14,12 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, validate_and_dropna, move_columns, move_column_after, 
+    read_csv, export_to_csv, validate_and_dropna, 
+    add_totals_column, add_avg_per_year, add_top_x_metric,
 )
 
 from src.clean.gbif import (
-    export_gbif_occurrences,
-    GBIF_RAW_FILE,
+    GBIF_CLEAN_FILE,
 )
 
 
@@ -29,124 +29,9 @@ GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
 GBIF_PUBLISHING_COUNTRY_STATS_FILE = "outputs/gbif_publishingCountry_stats.csv"
 
 
-
 #####
-## Specific categories to arrange
+## Specific categories / DataFrames to build
 #####
-
-def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby: list[str]) -> pd.DataFrame:
-    if not isinstance(groupby, list):
-        raise ValueError("Error, must specify groupby")
-
-    target_df["Total Occurrences"] = target_df.index.map(source_df.groupby(groupby).size())
-    target_df = move_columns(target_df, cols_to_move=["Total Occurrences"], position="front")
-    
-    return target_df
-
-
-
-def get_str_with_year_range(full_str: str,
-                            after_year: Optional[int] = None, 
-                            before_year: Optional[int] = None) -> str:
-    if not isinstance(full_str, str):
-        raise ValueError("Error, must specify full_str")
-
-    if after_year and before_year:
-        full_str += f" ({after_year} - {before_year})"
-
-    elif after_year:
-        full_str += f" (after {after_year})"
-
-    elif before_year:
-        full_str += f" (before {before_year})"
-
-    else: full_str += " (all)"                        
-    
-    return full_str
-
-
-
-def add_avg_per_year(source_df: pd.DataFrame, 
-                    target_df: pd.DataFrame, 
-                    groupby: list[str],
-                    after_year: Optional[int] = None,
-                    before_year: Optional[int] = None) -> pd.DataFrame:
-    if not isinstance(groupby, list):
-        raise ValueError("Error, must specify groupby")
-
-    source_df = validate_and_dropna(source_df, na_subset=["year"])
-
-    column_name_base = "Avg Per Year"
-    column_name = get_str_with_year_range(
-        column_name_base, 
-        after_year=after_year, 
-        before_year=before_year
-    )
-
-    if after_year and before_year:
-        source_df = source_df[source_df["year"].between(after_year, before_year)]
-    elif after_year:
-        source_df = source_df[source_df["year"] > after_year]
-    elif before_year:
-        source_df = source_df[source_df["year"] < before_year]
-
-    # Get total occurrences per [{metric}, year] grouping, then average
-    yearly_counts = source_df.groupby(groupby + ["year"]).size()
-    avg_per_year = yearly_counts.groupby(groupby).mean().round(2)
-
-    target_df[column_name] = target_df.index.map(avg_per_year)
-    target_df = move_columns(target_df, cols_to_move=[column_name], position="front")
-    
-    return target_df
-
-
-
-def add_top_x_metric(occurrences_df: pd.DataFrame, 
-                    target_df: pd.DataFrame,
-                    groupby: list[str],
-                    top_x: int,
-                    metric: str,
-                    column_name: str) -> pd.DataFrame:
-    if not isinstance(groupby, list):
-        raise ValueError("Error, must specify groupby")
-    if not isinstance(top_x, int):
-        raise ValueError("Error, must specify top_x")
-    if not isinstance(metric, str):
-        raise ValueError("Error, must specify metric")
-    if not isinstance(column_name, str):
-        raise ValueError("Error, must specify column_name")
-
-    top_metric = (
-        occurrences_df.groupby(groupby + [metric])
-        .size()
-        .reset_index(name="count")
-        .sort_values(groupby + ["count"], ascending=[True] * len(groupby) + [False])
-    )
-
-    # Keep only top {x} {metric} per {category}
-    # e.g. top 3 countries / regions visited by publishingCountry
-    top_metric["rank"] = (
-        top_metric.groupby(groupby)["count"]
-        .rank(method="first", ascending=False)
-    )
-    top_metric = top_metric[top_metric["rank"] <= top_x].drop(columns=["rank", "count"])
-
-    # Convert to single column format (countries separated by commas)
-    top_metric = (
-        top_metric.groupby(groupby)[metric]
-        .apply(lambda x: " > ".join(x.tolist()))
-    )
-    target_df[column_name] = target_df.index.get_level_values(groupby[0]).map(top_metric)
-
-    target_df = move_column_after(
-        target_df, 
-        col_to_move=column_name, 
-        after_col="Total Occurrences"
-    )
-
-    return target_df
-
-
 
 def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
@@ -161,7 +46,6 @@ def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
     calendar_counts = add_totals_column(source_df=df, target_df=calendar_counts, groupby=["year"])
     return calendar_counts
-
 
 
 def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
@@ -179,7 +63,6 @@ def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return sex_counts
 
 
-
 def make_lifeStage_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
@@ -191,7 +74,6 @@ def make_lifeStage_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     )
     life_stage_counts = life_stage_counts.add_prefix("Life Stage: ")
     return life_stage_counts
-
 
 
 def make_region_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFrame:
@@ -228,7 +110,6 @@ def make_region_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFra
     return region_counts
 
 
-
 def make_eventDate_df(occurrences_df: pd.DataFrame, groupby: list[str]) -> pd.DataFrame:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
@@ -248,7 +129,6 @@ def make_eventDate_df(occurrences_df: pd.DataFrame, groupby: list[str]) -> pd.Da
     return date_min_max
 
 
-
 def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFrame:
     if not isinstance(index, list):
         raise ValueError("Error, must specify index/indices")
@@ -265,7 +145,6 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
     )
     basisOfRecord_counts = basisOfRecord_counts.add_prefix("Basis of Record: ")
     return basisOfRecord_counts
-
 
 
 #####
@@ -288,7 +167,6 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
 
     calendar_stats = calendar_stats.sort_values(by="year", ascending=False).reset_index()
     export_to_csv(GBIF_CALENDAR_STATS_FILE, calendar_stats)
-
 
 
 def export_country_stats(occurrences_df: pd.DataFrame) -> None:
@@ -316,7 +194,6 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     export_to_csv(GBIF_COUNTRY_STATS_FILE, country_stats)
 
 
-
 def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, ["continent", "eventDate"])
 
@@ -340,7 +217,6 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
 
     continent_stats = continent_stats.sort_values(by="continent", ascending=True).reset_index()
     export_to_csv(GBIF_CONTINENT_STATS_FILE, continent_stats)
-
 
 
 def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
@@ -388,15 +264,21 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     export_to_csv(GBIF_PUBLISHING_COUNTRY_STATS_FILE, publishingCountry_stats)
 
 
+def export_all_analyses(dataframe: pd.DataFrame) -> None:
+    # Use copy to generate specific CSVs (don't modify original DataFrame)
+    occurrences_df = dataframe.copy()
+
+    export_calendar_stats(occurrences_df)
+    export_country_stats(occurrences_df)
+    export_continent_stats(occurrences_df)
+    export_publishingCountry_stats(occurrences_df)
+
+
 
 if __name__ == "__main__":
-    occurrences_df = read_csv(GBIF_RAW_FILE)
-
-    # Use copy to generate specific CSVs (don't modify original DataFrame)
-    export_calendar_stats(occurrences_df.copy())
-    export_country_stats(occurrences_df.copy())
-    export_continent_stats(occurrences_df.copy())
-    export_publishingCountry_stats(occurrences_df.copy())
+    occurrences_df = read_csv(GBIF_CLEAN_FILE)
+    export_all_analyses(occurrences_df)
+    
 
 
 
