@@ -11,11 +11,10 @@ from typing import Optional
 
 from src.config import (
     MONTH_NAMES, 
-    convert_ISO_code_to_country,
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, validate_and_dropna, move_columns,
+    read_csv, export_to_csv, validate_and_dropna, move_columns, move_column_after, 
 )
 
 from src.clean.gbif import (
@@ -117,32 +116,32 @@ def add_top_x_metric(occurrences_df: pd.DataFrame,
     if not isinstance(column_name, str):
         raise ValueError("Error, must specify column_name")
 
-    top_visited = (
+    top_metric = (
         occurrences_df.groupby(groupby + [metric])
         .size()
         .reset_index(name="count")
-        .sort_values(groupby + ["count"], ascending=[True, False])
+        .sort_values(groupby + ["count"], ascending=[True] * len(groupby) + [False])
     )
 
     # Keep only top {x} {metric} per {category}
     # e.g. top 3 countries / regions visited by publishingCountry
-    top_visited["rank"] = (
-        top_visited.groupby(groupby)["count"]
+    top_metric["rank"] = (
+        top_metric.groupby(groupby)["count"]
         .rank(method="first", ascending=False)
     )
-    top_visited = top_visited[top_visited["rank"] <= top_x].drop(columns=["rank", "count"])
+    top_metric = top_metric[top_metric["rank"] <= top_x].drop(columns=["rank", "count"])
 
     # Convert to single column format (countries separated by commas)
-    top_visited = (
-        top_visited.groupby(groupby)[metric]
+    top_metric = (
+        top_metric.groupby(groupby)[metric]
         .apply(lambda x: " > ".join(x.tolist()))
     )
-    target_df[column_name] = target_df.index.map(top_visited)
+    target_df[column_name] = target_df.index.get_level_values(groupby[0]).map(top_metric)
 
-    target_df = move_columns(
+    target_df = move_column_after(
         target_df, 
-        cols_to_move=["Total Occurrences", column_name], 
-        position="front"
+        col_to_move=column_name, 
+        after_col="Total Occurrences"
     )
 
     return target_df
@@ -268,33 +267,6 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
     return basisOfRecord_counts
 
 
-def map_codes_to_countries(occurrences_df: pd.DataFrame) -> dict:
-    country_mappings = occurrences_df.set_index("countryCode")["country"].to_dict()
-    return country_mappings
-
-
-def format_publishingCountry(publishingCountry_stats: pd.DataFrame, country_mappings: dict) -> pd.DataFrame:
-    if not isinstance(publishingCountry_stats, pd.DataFrame):
-        raise ValueError("Error, must specify publishingCountry_stats")
-    if not isinstance(country_mappings, dict):
-        raise ValueError("Error, must specify country_mappings")
-
-    publishingCountry_stats = publishingCountry_stats.rename_axis(
-        index={"publishingCountry": "countryCode"}
-    )
-
-    # If can't find countryCode in mappings, then fall back on country_converter
-    publishingCountry_stats["publishingCountry"] = publishingCountry_stats.index.map(
-        lambda code: country_mappings.get(code, convert_ISO_code_to_country(code))
-    )
-    publishingCountry_stats = move_columns(
-        publishingCountry_stats, 
-        cols_to_move=["publishingCountry"], 
-        position="front"
-    )
-
-    return publishingCountry_stats
-
 
 #####
 ## Larger datasets to export
@@ -327,8 +299,17 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["countryCode", "country"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["countryCode", "country"])
 
+    # Get top 3 publishing countries per country
+    country_stats = add_top_x_metric(
+        occurrences_df, country_counts, 
+        groupby=["country"],
+        top_x=3,
+        metric="publishingCountry",
+        column_name="Top 3 Publishing Countries"
+    )
+
     # Merge DataFrames
-    country_stats = country_counts.merge(basisOfRecord_counts, on=["countryCode", "country"], how="left")
+    country_stats = country_stats.merge(basisOfRecord_counts, on=["countryCode", "country"], how="left")
     country_stats = country_stats.merge(date_min_max, on=["countryCode", "country"], how="left")
 
     country_stats = country_stats.sort_values(by="country", ascending=True).reset_index()
@@ -344,8 +325,17 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["continent"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["continent"])
 
+    # Get top 3 publishing countries per continent
+    continent_stats = add_top_x_metric(
+        occurrences_df, continent_counts, 
+        groupby=["continent"],
+        top_x=3,
+        metric="publishingCountry",
+        column_name="Top 3 Publishing Countries"
+    )
+
     # Merge DataFrames
-    continent_stats = continent_counts.merge(basisOfRecord_counts, on=["continent"], how="left")
+    continent_stats = continent_stats.merge(basisOfRecord_counts, on=["continent"], how="left")
     continent_stats = continent_stats.merge(date_min_max, on=["continent"], how="left")
 
     continent_stats = continent_stats.sort_values(by="continent", ascending=True).reset_index()
@@ -354,17 +344,23 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
-    # Hold country / codes mappings for later (& before dropping null values)
-    country_mappings = map_codes_to_countries(occurrences_df)
-
-    occurrences_df = validate_and_dropna(occurrences_df, ["publishingCountry", "eventDate"])
+    occurrences_df = validate_and_dropna(
+        occurrences_df, 
+        ["publishingCountryCode", "publishingCountry", "eventDate"]
+    )
 
     # Get data for publishingCountry, basisOfRecord, eventDate
-    publishingCountry_counts = make_region_df(occurrences_df, index=["publishingCountry"])
-    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["publishingCountry"])
-    date_min_max = make_eventDate_df(occurrences_df, groupby=["publishingCountry"])
+    publishingCountry_counts = make_region_df(
+        occurrences_df, index=["publishingCountryCode", "publishingCountry"]
+    )
+    basisOfRecord_counts = make_basisOfRecord_df(
+        occurrences_df, index=["publishingCountryCode", "publishingCountry"]
+    )
+    date_min_max = make_eventDate_df(
+        occurrences_df, groupby=["publishingCountryCode", "publishingCountry"]
+    )
 
-    # Get top 3 visited countries per publishingCountry
+    # Get top 3 visited / surveyed countries per publishingCountry
     publishingCountry_stats = add_top_x_metric(
         occurrences_df, publishingCountry_counts, 
         groupby=["publishingCountry"],
@@ -374,11 +370,16 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     )
 
     # Merge DataFrames
-    publishingCountry_stats = publishingCountry_stats.merge(basisOfRecord_counts, on=["publishingCountry"], how="left")
-    publishingCountry_stats = publishingCountry_stats.merge(date_min_max, on=["publishingCountry"], how="left")
-
-    # Format: map countryCode column (index) to get full country name
-    publishingCountry_stats = format_publishingCountry(publishingCountry_stats, country_mappings)
+    publishingCountry_stats = publishingCountry_stats.merge(
+        basisOfRecord_counts, 
+        on=["publishingCountryCode", "publishingCountry"], 
+        how="left"
+    )
+    publishingCountry_stats = publishingCountry_stats.merge(
+        date_min_max, 
+        on=["publishingCountryCode", "publishingCountry"], 
+        how="left"
+    )
 
     publishingCountry_stats = publishingCountry_stats.sort_values(
         by="publishingCountry", ascending=True
@@ -389,8 +390,6 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    # occurrences_df = export_gbif_occurrences()
-
     occurrences_df = read_csv(GBIF_RAW_FILE)
 
     # Use copy to generate specific CSVs (don't modify original DataFrame)
