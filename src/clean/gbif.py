@@ -104,6 +104,7 @@ def export_gbif_occurrences() -> pd.DataFrame:
         raise ValueError("Error: No occurrences to export")
 
     occurrences_df = pd.DataFrame(all_occurrences)
+    occurrences_df = format_country_names(occurrences_df)
     occurrences_df = format_publishingCountry(occurrences_df)
 
     # Media goes in its own separate CSV (since variable per occurrence)
@@ -121,12 +122,25 @@ def export_gbif_occurrences() -> pd.DataFrame:
 
 
 
-def map_codes_to_countries(occurrences_df: pd.DataFrame) -> dict:
+def map_codes_to_countries(occurrences_df: pd.DataFrame, code_column: str) -> dict:
+    if not isinstance(code_column, str):
+        raise ValueError("Error, must specify code_column")
+
     # Get unique codes in occurrences, then populate map via country_converter
-    unique_codes = occurrences_df["publishingCountryCode"].dropna().unique()
+    unique_codes = occurrences_df[code_column].dropna().unique()
     country_mappings = {code: convert_ISO_code_to_country(code) for code in unique_codes}
 
     return country_mappings
+
+
+def format_country_names(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+    if not isinstance(occurrences_df, pd.DataFrame):
+        raise ValueError("Error, must specify occurrences_df")
+
+    country_mappings = map_codes_to_countries(occurrences_df, code_column="countryCode")
+    occurrences_df["country"] = occurrences_df["countryCode"].replace(country_mappings)
+
+    return occurrences_df
 
     
 def format_publishingCountry(occurrences_df: pd.DataFrame) -> pd.DataFrame:
@@ -137,7 +151,7 @@ def format_publishingCountry(occurrences_df: pd.DataFrame) -> pd.DataFrame:
         columns={"publishingCountry": "publishingCountryCode"}, 
         inplace=True
     )
-    country_mappings = map_codes_to_countries(occurrences_df)
+    country_mappings = map_codes_to_countries(occurrences_df, code_column="publishingCountryCode")
 
     occurrences_df["publishingCountry"] = (
         occurrences_df["publishingCountryCode"].replace(country_mappings)
@@ -159,6 +173,7 @@ if __name__ == "__main__":
     
 
     # occurrences_df = read_csv(GBIF_RAW_FILE)
+    # occurrences_df = format_country_names(occurrences_df)
     # occurrences_df = format_publishingCountry(occurrences_df)
     # print(occurrences_df)
 
