@@ -6,7 +6,6 @@
 
 
 import pandas as pd
-from typing import Optional
 
 
 from src.config import (
