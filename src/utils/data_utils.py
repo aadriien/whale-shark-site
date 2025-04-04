@@ -8,7 +8,7 @@
 import os
 import csv
 import pandas as pd
-from typing import Optional
+from typing import Optional, Union, Literal
 
 from src.utils.api_utils import (
     find_field,
@@ -95,6 +95,40 @@ def validate_and_dropna(dataframe: pd.DataFrame, na_subset: Optional[list[str]] 
         raise ValueError("Error, must specify a valid DataFrame")
 
     return dataframe.dropna(subset=na_subset)
+
+
+def move_columns(dataframe: pd.DataFrame, 
+                cols_to_move: list[str], 
+                position: Union[Literal["front", "end"], int]) -> pd.DataFrame:
+    # Allow reordering of multiple columns (grouped together)
+    if not isinstance(cols_to_move, list):
+        raise ValueError("Error, must specify valid cols_to_move")
+
+    # Allow position to be either a number or a str (front/end)
+    if not isinstance(position, int) and not isinstance(position, str):
+        raise ValueError("Error, must specify valid position")
+    if isinstance(position, str) and position not in ["front", "end"]:
+        raise ValueError("Error, str position must be 'front' or 'end'")
+   
+    cols_to_move = [col for col in cols_to_move if col in dataframe.columns]
+    remaining_cols = [col for col in dataframe.columns if col not in cols_to_move]
+
+    if position == "front":
+        new_order = cols_to_move + remaining_cols
+    elif position == "end":
+        new_order = remaining_cols + cols_to_move
+    
+    # Constrain to valid range if int provided
+    elif isinstance(position, int):
+        position = max(0, min(position, len(remaining_cols)))
+        new_order = (
+            remaining_cols[:position] + 
+            cols_to_move + 
+            remaining_cols[position:]
+        )
+
+    return dataframe[new_order]
+
 
 
 

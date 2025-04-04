@@ -15,7 +15,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, validate_and_dropna,
+    read_csv, export_to_csv, validate_and_dropna, move_columns,
 )
 
 from src.clean.gbif import (
@@ -40,8 +40,7 @@ def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby:
         raise ValueError("Error, must specify groupby")
 
     target_df["Total Occurrences"] = target_df.index.map(source_df.groupby(groupby).size())
-    target_df = target_df[["Total Occurrences"] + 
-        [col for col in target_df.columns if col != "Total Occurrences"]]
+    target_df = move_columns(target_df, cols_to_move=["Total Occurrences"], position="front")
     
     return target_df
 
@@ -97,9 +96,8 @@ def add_avg_per_year(source_df: pd.DataFrame,
     avg_per_year = yearly_counts.groupby(groupby).mean().round(2)
 
     target_df[column_name] = target_df.index.map(avg_per_year)
-    target_df = target_df[[column_name] + 
-        [col for col in target_df.columns if col != column_name]]
-
+    target_df = move_columns(target_df, cols_to_move=[column_name], position="front")
+    
     return target_df
 
 
@@ -129,13 +127,14 @@ def add_top_3_countries_visited(occurrences_df: pd.DataFrame,
         top_visited.groupby(groupby)["country"]
         .apply(lambda x: " > ".join(x.tolist()))
     )
-
     target_df["Top 3 Countries Visited"] = target_df.index.map(top_visited)
-    target_df = target_df[["Total Occurrences"] + ["Top 3 Countries Visited"] + 
-        [col for col in target_df.columns if 
-            (col != "Top 3 Countries Visited" and col != "Total Occurrences")
-        ]]
-        
+
+    target_df = move_columns(
+        target_df, 
+        cols_to_move=["Total Occurrences", "Top 3 Countries Visited"], 
+        position="front"
+    )
+
     return target_df
 
 
@@ -278,9 +277,11 @@ def format_publishingCountry(publishingCountry_stats: pd.DataFrame, country_mapp
     publishingCountry_stats["publishingCountry"] = publishingCountry_stats.index.map(
         lambda code: country_mappings.get(code, convert_ISO_code_to_country(code))
     )
-    
-    publishingCountry_stats = publishingCountry_stats[["publishingCountry"] + 
-        [col for col in publishingCountry_stats.columns if col != "publishingCountry"]]
+    publishingCountry_stats = move_columns(
+        publishingCountry_stats, 
+        cols_to_move=["publishingCountry"], 
+        position="front"
+    )
 
     return publishingCountry_stats
 
