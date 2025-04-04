@@ -151,7 +151,9 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
 #####
 
 def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
-    occurrences_df = validate_and_dropna(occurrences_df, ["year", "month"])
+    # Copy after dropping null so pandas doesn't warn about df.loc[:,] vs df[]
+    occurrences_df = validate_and_dropna(occurrences_df, ["year", "month"]).copy()
+    occurrences_df["year"] = occurrences_df["year"].astype(int)
 
     # Get data for calendar, basisOfRecord, sex, lifeStage
     calendar_counts = make_calendar_df(occurrences_df)
