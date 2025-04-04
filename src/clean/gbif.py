@@ -12,7 +12,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    export_to_csv, extract_relevant_fields, move_column_after,
+    export_to_csv, extract_relevant_fields, move_column_after, read_csv,
 )
 
 from src.fetch.gbif import (
@@ -101,8 +101,7 @@ def export_gbif_occurrences() -> pd.DataFrame:
         raise ValueError("Error: No occurrences to export")
 
     occurrences_df = pd.DataFrame(all_occurrences)
-    occurrences_df = format_country_names(occurrences_df)
-    occurrences_df = format_publishingCountry(occurrences_df)
+    occurrences_df = refactor_field_values(occurrences_df)
 
     # Media goes in its own separate CSV (since variable per occurrence)
     if "media" in occurrences_df.columns:
@@ -121,7 +120,7 @@ def export_gbif_occurrences() -> pd.DataFrame:
 #####
 ## Format & standardize DataFrames
 #####
-
+    
 def map_codes_to_countries(occurrences_df: pd.DataFrame, code_column: str) -> dict:
     if not isinstance(code_column, str):
         raise ValueError("Error, must specify code_column")
@@ -165,9 +164,37 @@ def format_publishingCountry(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return occurrences_df
 
 
+def format_year_month_day(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+    if not isinstance(occurrences_df, pd.DataFrame):
+        raise ValueError("Error, must specify occurrences_df")
+
+    calendar_fields = ["year", "month", "day"]
+
+    # Strip '.0' from str (e.g. 2025.0 -> 2025)
+    for field in calendar_fields:
+        occurrences_df[field] = (
+            occurrences_df[field]
+            .astype(str)
+            .str.replace(r"\.0$", "", regex=True)
+        )
+    
+    return occurrences_df
+
+
+def refactor_field_values(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+    if not isinstance(occurrences_df, pd.DataFrame):
+        raise ValueError("Error, must specify occurrences_df")
+
+    occurrences_df = format_country_names(occurrences_df)
+    occurrences_df = format_publishingCountry(occurrences_df)
+    occurrences_df = format_year_month_day(occurrences_df)
+    
+    return occurrences_df
+
+
 
 if __name__ == "__main__":
     occurrences_df = export_gbif_occurrences()
 
-
+ 
 
