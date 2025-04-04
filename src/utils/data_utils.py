@@ -130,5 +130,23 @@ def move_columns(dataframe: pd.DataFrame,
     return dataframe[new_order]
 
 
+def move_column_after(dataframe: pd.DataFrame, col_to_move: str, after_col: str) -> pd.DataFrame:
+    if not isinstance(col_to_move, str):
+        raise ValueError("Error, must specify valid col_to_move")
+    if not isinstance(after_col, str):
+        raise ValueError("Error, must specify valid after_col")
+
+    cols = dataframe.columns.tolist()
+
+    if col_to_move not in cols or after_col not in cols:
+        raise ValueError(f"Columns must exist in DataFrame: {col_to_move}, {after_col}")
+
+    cols.remove(col_to_move)
+    insert_at = cols.index(after_col) + 1
+    cols.insert(insert_at, col_to_move)
+
+    return dataframe[cols]
+
+
 
 

@@ -7,8 +7,12 @@
 
 import pandas as pd
 
+from src.config import (
+    convert_ISO_code_to_country,
+)
+
 from src.utils.data_utils import (
-    export_to_csv, extract_relevant_fields,
+    export_to_csv, extract_relevant_fields, move_column_after,
 )
 
 from src.fetch.gbif import (
@@ -100,6 +104,7 @@ def export_gbif_occurrences() -> pd.DataFrame:
         raise ValueError("Error: No occurrences to export")
 
     occurrences_df = pd.DataFrame(all_occurrences)
+    occurrences_df = format_publishingCountry(occurrences_df)
 
     # Media goes in its own separate CSV (since variable per occurrence)
     if "media" in occurrences_df.columns:
@@ -115,5 +120,46 @@ def export_gbif_occurrences() -> pd.DataFrame:
     return occurrences_df
 
 
+
+def map_codes_to_countries(occurrences_df: pd.DataFrame) -> dict:
+    # Get unique codes in occurrences, then populate map via country_converter
+    unique_codes = occurrences_df["publishingCountryCode"].dropna().unique()
+    country_mappings = {code: convert_ISO_code_to_country(code) for code in unique_codes}
+
+    return country_mappings
+
+    
+def format_publishingCountry(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+    if not isinstance(occurrences_df, pd.DataFrame):
+        raise ValueError("Error, must specify occurrences_df")
+
+    occurrences_df.rename(
+        columns={"publishingCountry": "publishingCountryCode"}, 
+        inplace=True
+    )
+    country_mappings = map_codes_to_countries(occurrences_df)
+
+    occurrences_df["publishingCountry"] = (
+        occurrences_df["publishingCountryCode"].replace(country_mappings)
+    )
+    occurrences_df = move_column_after(
+        occurrences_df, 
+        col_to_move="publishingCountry", 
+        after_col="publishingCountryCode"
+    )
+
+    return occurrences_df
+
+
+
+if __name__ == "__main__":
+    occurrences_df = export_gbif_occurrences()
+
+    # from src.utils.data_utils import read_csv
+    
+
+    # occurrences_df = read_csv(GBIF_RAW_FILE)
+    # occurrences_df = format_publishingCountry(occurrences_df)
+    # print(occurrences_df)
 
 
