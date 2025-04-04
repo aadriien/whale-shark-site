@@ -102,36 +102,46 @@ def add_avg_per_year(source_df: pd.DataFrame,
 
 
 
-def add_top_3_countries_visited(occurrences_df: pd.DataFrame, 
-                                target_df: pd.DataFrame,
-                                groupby: list[str]) -> pd.DataFrame:
+def add_top_x_metric(occurrences_df: pd.DataFrame, 
+                    target_df: pd.DataFrame,
+                    groupby: list[str],
+                    top_x: int,
+                    metric: str,
+                    column_name: str) -> pd.DataFrame:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
+    if not isinstance(top_x, int):
+        raise ValueError("Error, must specify top_x")
+    if not isinstance(metric, str):
+        raise ValueError("Error, must specify metric")
+    if not isinstance(column_name, str):
+        raise ValueError("Error, must specify column_name")
 
     top_visited = (
-        occurrences_df.groupby(groupby + ["country"])
+        occurrences_df.groupby(groupby + [metric])
         .size()
         .reset_index(name="count")
         .sort_values(groupby + ["count"], ascending=[True, False])
     )
 
-    # Keep only top 3 visited countries per publishingCountry
+    # Keep only top {x} {metric} per {category}
+    # e.g. top 3 countries / regions visited by publishingCountry
     top_visited["rank"] = (
         top_visited.groupby(groupby)["count"]
         .rank(method="first", ascending=False)
     )
-    top_visited = top_visited[top_visited["rank"] <= 3].drop(columns=["rank", "count"])
+    top_visited = top_visited[top_visited["rank"] <= top_x].drop(columns=["rank", "count"])
 
     # Convert to single column format (countries separated by commas)
     top_visited = (
-        top_visited.groupby(groupby)["country"]
+        top_visited.groupby(groupby)[metric]
         .apply(lambda x: " > ".join(x.tolist()))
     )
-    target_df["Top 3 Countries Visited"] = target_df.index.map(top_visited)
+    target_df[column_name] = target_df.index.map(top_visited)
 
     target_df = move_columns(
         target_df, 
-        cols_to_move=["Total Occurrences", "Top 3 Countries Visited"], 
+        cols_to_move=["Total Occurrences", column_name], 
         position="front"
     )
 
@@ -355,9 +365,12 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     date_min_max = make_eventDate_df(occurrences_df, groupby=["publishingCountry"])
 
     # Get top 3 visited countries per publishingCountry
-    publishingCountry_stats = add_top_3_countries_visited(
+    publishingCountry_stats = add_top_x_metric(
         occurrences_df, publishingCountry_counts, 
-        groupby=["publishingCountry"]
+        groupby=["publishingCountry"],
+        top_x=3,
+        metric="country",
+        column_name="Top 3 Countries Visited"
     )
 
     # Merge DataFrames
