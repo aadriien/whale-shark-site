@@ -6,7 +6,7 @@ SPECIES RESOURCES
 
 * https://www.ocearch.org/tracker/ - tracker encompassing multiple species (not just whale sharks but also great whites, turtles, etc.. global & more recent, but not many whale sharks)
 
-* https://www.gbif.org/species/2417522 - gbif.org (species parameter "rhincodon typus"), offering tons of data from 1840 to present day, on a global scale!! Drawback: not the friendlist website interface
+* https://www.gbif.org/species/2417522 - gbif.org (species parameter "rhincodon typus"), offering tons of data from 1840 to present day, on a global scale!!
 
 * https://www.iucnredlist.org/species/19488/2365291 - endangerment assessments over time in the context of population, conservation, etc 
 

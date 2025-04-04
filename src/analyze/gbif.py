@@ -353,7 +353,7 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["publishingCountry"])
     date_min_max = make_eventDate_df(occurrences_df, groupby=["publishingCountry"])
 
-    # Get top 3 visited countries per publishing country
+    # Get top 3 visited countries per publishingCountry
     publishingCountry_stats = add_top_3_countries_visited(
         occurrences_df, publishingCountry_counts, 
         groupby=["publishingCountry"]
