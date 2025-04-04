@@ -159,6 +159,15 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
     sex_counts = make_sex_df(occurrences_df)
     life_stage_counts = make_lifeStage_df(occurrences_df)
 
+    # Get top 3 publishing countries per year
+    calendar_stats = add_top_x_metric(
+        occurrences_df, calendar_counts, 
+        groupby=["year"],
+        top_x=3,
+        metric="publishingCountry",
+        column_name="Top 3 Publishing Countries"
+    )
+
     # Merge DataFrames
     calendar_stats = calendar_counts.merge(basisOfRecord_counts, on="year", how="left")
     calendar_stats = calendar_stats.merge(sex_counts, on="year", how="left")
