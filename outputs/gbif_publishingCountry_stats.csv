@@ -13,18 +13,18 @@ FR,France,143,Thailand > Philippines > Maldives,6.09,5.0,9.64,3.29,1.25,7,10,16,
 DE,Germany,10,Australia > Malaysia > Mexico,1.67,1.0,2.0,1.5,,1,0,4,1,0,0,0,1,0,1,0,2,10,0,0,2002-01-22,2022-10-10
 GT,Guatemala,1,Guatemala,1.0,1.0,,,,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,2021-02-19,2021-02-19
 IN,India,1,India,1.0,,,1.0,,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,2009-02-22,2009-02-22
-IL,Israel,12,"Israel > Madagascar > Tanzania, United Republic of",2.0,1.75,2.5,,,0,0,1,1,2,0,1,1,0,5,0,1,12,0,0,2019-04-26,2024-10-12
+IL,Israel,12,Israel > Madagascar > Tanzania,2.0,1.75,2.5,,,0,0,1,1,2,0,1,1,0,5,0,1,12,0,0,2019-04-26,2024-10-12
 JP,Japan,7,Japan > Australia > Philippines,1.0,,1.0,1.0,1.0,0,1,0,0,3,0,2,1,0,0,0,0,7,0,0,1995-07-27,2016-05-04
-MX,Mexico,188,"Mexico > Saint Helena, Ascension and Tristan da Cunha > Honduras",8.95,11.6,12.0,1.8,1.0,26,8,16,20,5,13,23,33,14,12,10,8,187,0,1,1989-04-05,2025-02-14
-NL,Netherlands,48,"Saint Helena, Ascension and Tristan da Cunha > Mexico > Maldives",3.69,2.0,5.0,1.33,1.0,0,1,1,28,1,1,5,7,0,1,2,1,48,0,0,1994-06-21,2022-11-16
+MX,Mexico,188,Mexico > St. Helena > Honduras,8.95,11.6,12.0,1.8,1.0,26,8,16,20,5,13,23,33,14,12,10,8,187,0,1,1989-04-05,2025-02-14
+NL,Netherlands,48,St. Helena > Mexico > Maldives,3.69,2.0,5.0,1.33,1.0,0,1,1,28,1,1,5,7,0,1,2,1,48,0,0,1994-06-21,2022-11-16
 NZ,New Zealand,13,New Zealand > Australia > Ecuador,1.18,1.5,1.0,1.0,,1,2,0,2,2,0,1,1,2,1,1,0,13,0,0,2007-02-11,2025-02-08
 PA,Panama,3,Panama > Costa Rica,1.0,1.0,1.0,,,1,0,0,0,0,0,0,0,0,0,1,1,3,0,0,2018-12-04,2022-11-27
 PT,Portugal,6,Maldives > Portugal > Mozambique,1.0,1.0,1.0,1.0,,0,1,0,0,0,0,0,1,1,2,0,1,6,0,0,2010-08-14,2025-02-16
 ZA,South Africa,10,South Africa > Mozambique,1.67,,1.75,,1.5,4,0,1,0,0,1,1,0,0,1,0,2,8,0,2,1973-01,2017-03-11
 ES,Spain,16,Mexico > Mozambique > Maldives,1.78,1.5,2.0,,1.0,1,3,0,0,0,0,4,0,0,6,1,1,15,0,1,1931-01-01,2024-12-03
-SE,Sweden,12,Brazil > China > Chinese Taipei,1.09,,1.0,,1.1,0,2,1,2,1,1,2,1,0,1,0,1,1,0,11,1970-08-13,2020-02-16
-TW,Taiwan,6,Chinese Taipei > Christmas Island > Ecuador,1.2,1.5,1.0,,1.0,0,0,0,0,0,2,1,0,0,1,1,1,4,0,2,1956-10-25,2024-06-19
+SE,Sweden,12,Brazil > China > Taiwan,1.09,,1.0,,1.1,0,2,1,2,1,1,2,1,0,1,0,1,1,0,11,1970-08-13,2020-02-16
+TW,Taiwan,6,Taiwan > Christmas Island > Ecuador,1.2,1.5,1.0,,1.0,0,0,0,0,0,2,1,0,0,1,1,1,4,0,2,1956-10-25,2024-06-19
 GB,United Kingdom,167,Qatar > Japan > Australia,6.96,4.33,13.4,6.67,1.67,3,5,3,6,17,16,29,18,10,4,2,7,20,0,147,1993-05-05,2024-12-29
-US,United States,1316,Mexico > Australia > United States of America,27.13,66.8,72.55,16.18,1.35,136,71,77,62,62,93,146,165,93,95,99,90,948,346,22,1858,2025-03-16
+US,United States,1316,Mexico > Australia > United States,27.13,66.8,72.55,16.18,1.35,136,71,77,62,62,93,146,165,93,95,99,90,948,346,22,1858,2025-03-16
 ZZ,Unknown,15,South Africa > India > Mexico,1.36,,1.2,1.67,1.0,4,3,1,3,1,0,1,0,0,1,0,1,0,0,15,1997-02-24,2020-03-22
 VE,Venezuela,11,Ecuador,1.57,1.5,1.0,1.75,,0,0,1,1,1,1,0,3,1,3,0,0,11,0,0,2002-04-04,2022-10-08

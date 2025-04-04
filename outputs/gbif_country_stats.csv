@@ -5,12 +5,11 @@ BH,Bahrain,1,United States,1.0,,1.0,,,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,2020-10-23,2
 BZ,Belize,7,United States > France,1.75,,2.0,1.0,,0,0,0,0,3,2,0,0,0,0,0,0,3,4,0,2006-05-18,2018-05-07
 BJ,Benin,5,Benin,1.0,,,1.0,,0,0,0,0,1,1,2,1,0,0,0,0,5,0,0,2000-07-09,2009-05-24
 BM,Bermuda,1,United States,1.0,1.0,,,,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,2022-05-03,2022-05-03
-BQ,"Bonaire, Sint Eustatius and Saba",2,Germany > Netherlands,1.0,1.0,,1.0,,1,0,0,0,0,0,0,1,0,0,0,0,2,0,0,2002-01-22,2021-08-19
+BQ,"Bonaire, Saint Eustatius and Saba",2,Germany > Netherlands,1.0,1.0,,1.0,,1,0,0,0,0,0,0,1,0,0,0,0,2,0,0,2002-01-22,2021-08-19
 BR,Brazil,11,Sweden > Australia > France,1.0,1.0,1.0,1.0,1.0,0,0,3,2,0,2,0,1,0,0,2,1,7,0,4,1984-03-24,2022-11-10
 CM,Cameroon,3,United States,1.5,1.0,2.0,,,0,0,0,1,0,0,0,0,0,2,0,0,3,0,0,2020-10-23,2021-04-23
 CA,Canada,2,United States,1.0,,1.0,1.0,,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,2010-12-15,2011-07-16
 CN,China,2,Sweden > United States,2.0,,,,2.0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,1983-07-20,1983-07-20
-TW,Chinese Taipei,13,Taiwan > United Kingdom > Australia,1.86,1.0,,1.5,2.25,0,0,0,2,0,1,6,0,0,1,0,0,1,0,12,1955,2023-06-29
 CX,Christmas Island,26,United States > Australia > Taiwan,3.71,1.0,5.0,2.0,6.0,2,0,6,0,0,0,3,8,0,0,0,6,14,12,0,1995-03-21,2022-12-24
 CC,Cocos (Keeling) Islands,7,United States,7.0,,7.0,,,0,0,0,0,0,0,0,0,3,4,0,0,0,7,0,2018-09-05,2018-10-10
 CO,Colombia,94,Ecuador > Colombia > France,10.44,2.0,12.86,1.0,,36,0,1,1,1,2,1,0,1,24,10,15,8,86,0,2010-07-09,2024
@@ -52,22 +51,23 @@ PE,Peru,369,Ecuador > United Kingdom,73.8,,73.8,,,155,76,15,0,0,0,0,0,0,0,1,121,
 PH,Philippines,190,United States > France > Philippines,6.13,13.25,12.11,1.33,1.62,19,20,17,17,20,13,28,7,8,4,10,5,164,0,26,1840,2025-03-14
 PT,Portugal,6,United States > Portugal > Netherlands,1.2,1.0,1.5,,,0,0,0,0,0,0,0,3,2,1,0,0,6,0,0,2011-08-10,2024-08-14
 QA,Qatar,63,United Kingdom > United States,12.6,2.0,15.25,,,0,0,0,1,10,14,23,12,3,0,0,0,2,0,61,2011-07-09,2024-05-07
-SH,"Saint Helena, Ascension and Tristan da Cunha",41,Netherlands > Mexico > United States,8.2,,8.2,,,17,0,0,24,0,0,0,0,0,0,0,0,41,0,0,2015-01-07,2019-01-21
-LC,Saint Lucia,1,United States,1.0,,,,1.0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,1995-03-14,1995-03-14
 SA,Saudi Arabia,9,United States > Japan,2.25,2.5,2.0,,,0,1,0,2,0,2,0,3,0,1,0,0,9,0,0,2011-02-11,2024-08-16
 SC,Seychelles,25,United Kingdom > United States > New Zealand,5.0,6.0,6.0,6.0,,0,0,0,0,0,0,0,4,3,3,1,3,13,0,12,2007-10-22,2024-12-29
 ZA,South Africa,35,United States > South Africa > United Kingdom,2.92,,3.12,5.0,1.5,11,2,5,1,3,0,0,2,1,2,0,8,21,0,14,1973-01,2019-08-06
 ES,Spain,2,Belgium,1.0,,1.0,,,0,0,0,0,0,0,0,0,1,0,1,0,2,0,0,2015-09,2017-11
 LK,Sri Lanka,5,United States > France,1.67,1.0,2.0,,,0,1,2,1,0,0,0,0,0,0,0,1,5,0,0,2017-02-13,2023-04-22
+SH,St. Helena,41,Netherlands > Mexico > United States,8.2,,8.2,,,17,0,0,24,0,0,0,0,0,0,0,0,41,0,0,2015-01-07,2019-01-21
+LC,St. Lucia,1,United States,1.0,,,,1.0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,1995-03-14,1995-03-14
 SD,Sudan,1,France,1.0,,1.0,,,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,2019-05-12,2019-05-12
 SR,Suriname,6,United States,1.2,,1.33,1.0,,0,0,0,1,0,2,1,0,1,0,0,1,6,0,0,2008-12-28,2017-07-13
-TZ,"Tanzania, United Republic of",17,United States > Israel > Netherlands,1.7,2.0,1.5,1.0,,2,2,0,0,0,0,0,1,1,5,5,1,17,0,0,2010-01-01,2024-09-28
+TW,Taiwan,13,Taiwan > United Kingdom > Australia,1.86,1.0,,1.5,2.25,0,0,0,2,0,1,6,0,0,1,0,0,1,0,12,1955,2023-06-29
+TZ,Tanzania,17,United States > Israel > Netherlands,1.7,2.0,1.5,1.0,,2,2,0,0,0,0,0,1,1,5,5,1,17,0,0,2010-01-01,2024-09-28
 TH,Thailand,56,France > United States > Philippines,2.8,1.33,4.78,1.25,1.0,4,4,11,5,8,1,1,5,5,7,1,2,54,0,2,1919,2024-08-25
 TL,Timor-Leste,2,United States,2.0,2.0,,,,0,0,0,0,0,0,0,0,0,1,0,1,2,0,0,2024-10-19,2024-12-02
 TT,Trinidad and Tobago,1,United States,1.0,,1.0,,,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,2011-04-27,2011-04-27
 TC,Turks and Caicos Islands,1,United States,1.0,,1.0,1.0,,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,2010-11-30,2010-11-30
 AE,United Arab Emirates,6,France > United States > United Kingdom,1.5,1.0,1.67,1.0,,1,2,1,0,0,0,0,0,0,0,2,0,4,0,2,2010-03-13,2021-11-04
-US,United States of America,132,United States > France > Canada,4.63,6.0,7.27,3.5,1.71,7,5,4,2,17,5,15,30,11,8,7,5,91,38,3,1902-01-25,2024-12-30
-VE,Venezuela (Bolivarian Republic of),2,United States,1.0,,,1.0,,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,2008-12-14,2009-12-26
-VN,Viet Nam,5,Philippines > Netherlands,1.0,,,,1.0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,4,1934,1994-06-21
-WF,Wallis and Futuna,22,United States,11.0,,11.0,,,7,0,0,0,0,0,0,0,0,0,9,6,22,0,0,2014-11-20,2015-01-10
+US,United States,132,United States > France > Canada,4.63,6.0,7.27,3.5,1.71,7,5,4,2,17,5,15,30,11,8,7,5,91,38,3,1902-01-25,2024-12-30
+VE,Venezuela,2,United States,1.0,,,1.0,,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,2008-12-14,2009-12-26
+VN,Vietnam,5,Philippines > Netherlands,1.0,,,,1.0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,4,1934,1994-06-21
+WF,Wallis and Futuna Islands,22,United States,11.0,,11.0,,,7,0,0,0,0,0,0,0,0,0,9,6,22,0,0,2014-11-20,2015-01-10
