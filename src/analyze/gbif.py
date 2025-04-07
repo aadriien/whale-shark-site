@@ -274,6 +274,44 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     export_to_csv(GBIF_PUBLISHING_COUNTRY_STATS_FILE, publishingCountry_stats)
 
 
+
+
+#####
+## Tracing individual whale sharks over time & space
+##
+## We want to know:
+##
+##  - ID (organismID and/or identificationID)
+##  - sex (if available)
+##  - lifeStage (if available, as of given year)
+##      - store/display as str from list, e.g. "Juvenile (2019), Adult (2024)"
+##  - all sightings/occurrences (by key/ID, to map for further info)
+##      - store list of all corresponding keys from full GBIF clean dataset
+##      - can also store occurrenceIDs if desired BUT they're not all uniform
+##  - all countries visited by year
+##      - store as str from list... 
+##          - example 1: "Ecuador (2016)" 
+##          - example 2: "Mexico (2018)"
+##  - all specific places (stateProvince, verbatimLocality) by month + year
+##      - again, represent as str from list...
+##          - example 1: "Cebu - Philippines (July 2017)" 
+##          - example 2: "Baja California Sur - La Paz, MX-BS, MX (Aug 2021)"
+##  - all explicit coordinates (decimalLatitude, decimalLongitude) by eventDate
+##      - roughly the same representation...
+##          - example 1: "-34.996 lat, 150.829 long (2025-01-03)" 
+##          - example 2: "24.178 lat, -110.416 long (2025-01-05)"
+##
+#####
+
+
+def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
+    return
+
+
+
+
+
+
 def export_all_analyses(dataframe: pd.DataFrame) -> None:
     # Use copy to generate specific CSVs (don't modify original DataFrame)
     occurrences_df = dataframe.copy()
