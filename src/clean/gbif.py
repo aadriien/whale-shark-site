@@ -49,6 +49,10 @@ OCCURRENCE_RESULT_FIELDS = [
     "occurrenceID", 
     "organismID",
     "identificationID",
+    "occurrenceRemarks",
+    "projectId",
+    "recordedBy",
+    "identifiedBy",
     "media",
 ]
 
