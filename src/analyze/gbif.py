@@ -302,13 +302,23 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     # Use how="all" to allow either organismID or identificationID
     occurrences_df = validate_and_dropna(occurrences_df, ["organismID", "identificationID"], how="all")
-    individual_sharks = occurrences_df.drop_duplicates(subset=["organismID", "identificationID"]).copy()
+    sharks_all_data = occurrences_df.drop_duplicates(subset=["organismID", "identificationID"]).copy()
 
     # Consolidate organismID / identificationID into 1 column (whaleSharkID)
-    individual_sharks["whaleSharkID"] = (
-        individual_sharks["organismID"].combine_first(individual_sharks["identificationID"])
+    sharks_all_data["whaleSharkID"] = (
+        sharks_all_data["organismID"].combine_first(sharks_all_data["identificationID"])
     )
-    individual_sharks = individual_sharks[["whaleSharkID"]].reset_index(drop=True)
+
+    # Now focus on clean entries & map info (sex, lifeStage, etc) where available
+    individual_sharks = sharks_all_data[["whaleSharkID"]].reset_index(drop=True)
+
+    sex_mappings = (
+        sharks_all_data[sharks_all_data["sex"].isin(["Female", "Male"])] 
+        .drop_duplicates(subset="whaleSharkID", keep="first") 
+        [["whaleSharkID", "sex"]] 
+    )
+    individual_sharks = individual_sharks.merge(sex_mappings, on="whaleSharkID", how="left")
+    individual_sharks.loc[:, "sex"] = individual_sharks["sex"].fillna("Unknown")
 
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
