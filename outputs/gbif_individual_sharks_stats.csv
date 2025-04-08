@@ -579,7 +579,7 @@ whaleSharkID,Total Occurrences,sex,lifeStage
 2020_WS33,5,Male,Unknown (2020)
 2020_WS4,1,Male,Unknown (2020)
 275325472,1,Unknown,Unknown (2019)
-57829,6,Male,"Adult (2018), Adult (2019)"
+57829,12,Male,"Adult (2018), Adult (2019), Unknown (Year Unknown)"
 287717479,1,Unknown,Unknown (2019)
 43604990,1,Unknown,Adult (2019)
 123448455,1,Unknown,Unknown (2019)
@@ -601,7 +601,7 @@ whaleSharkID,Total Occurrences,sex,lifeStage
 81200865,1,Unknown,Unknown (2019)
 89525669,1,Unknown,Unknown (2019)
 96273961,1,Unknown,Unknown (2019)
-57826,8,Female,"Juvenile (2018), Juvenile (2019)"
+57826,10,Female,"Juvenile (2018), Juvenile (2019), Unknown (2018)"
 330042756,1,Unknown,Unknown (2019)
 456201035,1,Unknown,Unknown (2019)
 50791219,1,Unknown,Unknown (2019)
@@ -710,9 +710,9 @@ whaleSharkID,Total Occurrences,sex,lifeStage
 86595663,1,Unknown,Unknown (2018)
 20409833,1,Unknown,Unknown (2018)
 22049568,1,Unknown,Unknown (2018)
-36309,7,Female,"Subadult (2017), Subadult (2018)"
-36324,2,Male,Subadult (2018)
-161731;36309,1,Unknown,Subadult (2018)
+36309,18,Female,"Subadult (2017), Subadult (2018), Subadult (Year Unknown), Unknown (Year Unknown)"
+36324,14,Male,"Subadult (2018), Subadult (Year Unknown), Unknown (Year Unknown)"
+161731,14,Male,"Subadult (2017), Subadult (2018), Unknown (Year Unknown)"
 A69-9001-19476,88,Male,"Unknown (2016), Unknown (2017), Unknown (2018)"
 54958642,1,Unknown,Unknown (2018)
 176144192,1,Unknown,Unknown (2018)
@@ -746,16 +746,16 @@ A69-1602-1571,5,Male,"Unknown (2017), Unknown (2018)"
 199547057,1,Unknown,Adult (2018)
 229720808,1,Unknown,Unknown (2018)
 238516818,1,Female,Adult (2018)
-57823,12,Male,Adult (2018)
+57823,18,Male,"Adult (2018), Unknown (2018), Unknown (Year Unknown)"
 31230744,1,Unknown,Juvenile (2018)
 331430701,1,Unknown,Unknown (2018)
 56677281,1,Unknown,Unknown (2018)
 91626802,1,Unknown,Unknown (2018)
 154605143,1,Unknown,Unknown (2018)
 154606646,1,Unknown,Adult (2018)
-57821,30,Female,Subadult (2018)
-57827,4,Female,Subadult (2018)
-57828,8,Male,Subadult (2018)
+57821,35,Female,"Subadult (2018), Subadult (Year Unknown), Unknown (Year Unknown)"
+57827,11,Female,"Subadult (2018), Subadult (Year Unknown), Unknown (Year Unknown)"
+57828,29,Male,"Subadult (2018), Subadult (Year Unknown), Unknown (2018), Unknown (Year Unknown)"
 34736011,1,Unknown,Unknown (2018)
 41318369,1,Unknown,Unknown (2018)
 42785417,1,Unknown,Unknown (2018)
@@ -789,9 +789,8 @@ A69-1602-1571,5,Male,"Unknown (2017), Unknown (2018)"
 589325767,1,Unknown,Adult (2018)
 156110098,1,Unknown,Unknown (2018)
 189136380,1,Unknown,Unknown (2018)
-36324;57824,2,Unknown,"Subadult (2018), Subadult (Year Unknown)"
-57823;57826,2,Unknown,Unknown (2018)
-57825;57828,1,Unknown,Unknown (2018)
+57824,11,Unknown,"Subadult (2018), Subadult (Year Unknown), Unknown (Year Unknown)"
+57825,7,Female,"Unknown (2018), Unknown (Year Unknown)"
 2018_WS1,1,Female,Unknown (2018)
 2018_WS32,1,Female,Unknown (2018)
 2018_WS33,1,Male,Unknown (2018)
@@ -803,7 +802,7 @@ A69-1602-1571,5,Male,"Unknown (2017), Unknown (2018)"
 2018_WS80,1,Male,Unknown (2018)
 2018_WS9,1,Male,Unknown (2018)
 247664632,1,Unknown,Unknown (2017)
-163471,1,Male,Adult (2017)
+163471,6,Male,"Adult (2017), Unknown (Year Unknown)"
 A69-9001-19499,36,Female,"Unknown (2016), Unknown (2017)"
 A69-9001-19477,10,Male,"Unknown (2016), Unknown (2017)"
 455294481,1,Unknown,Unknown (2017)
@@ -842,7 +841,6 @@ A69-9001-19497,17,Female,"Unknown (2016), Unknown (2017)"
 435194394,1,Unknown,Unknown (2017)
 151578699,1,Unknown,Unknown (2017)
 198553515,1,Unknown,Unknown (2017)
-161731,5,Male,Subadult (2017)
 A69-1602-1569,6,Female,Unknown (2017)
 A69-1602-1570,27,Male,Unknown (2017)
 A69-1602-1572,1,Male,Unknown (2017)
@@ -880,8 +878,8 @@ A69-1602-1578,13,Male,Unknown (2017)
 19313790,1,Unknown,Unknown (2017)
 19313789,1,Unknown,Unknown (2017)
 199070561,1,Unknown,Unknown (2017)
-36325,2,Male,Subadult (2017)
-161732,5,Male,Juvenile (2017)
+36325,17,Male,"Subadult (2017), Subadult (Year Unknown), Unknown (2017), Unknown (Year Unknown)"
+161732,13,Male,"Juvenile (2017), Unknown (2017), Unknown (Year Unknown)"
 298005089,1,Unknown,Unknown (2017)
 114487972,1,Unknown,Adult (2017)
 239823704,1,Unknown,Unknown (2017)
@@ -910,8 +908,6 @@ A69-1602-1578,13,Male,Unknown (2017)
 54013247,1,Unknown,Unknown (2017)
 94748906,1,Unknown,Unknown (2017)
 20466894,1,Unknown,Juvenile (2017)
-36309;36325,1,Unknown,Subadult (2017)
-161732;36325,1,Male,Unknown (2017)
 497063895,1,Unknown,Unknown (2016)
 4747535,1,Unknown,Unknown (2016)
 Ranger,25,Unknown,"Unknown (2011), Unknown (2015), Unknown (2016)"
@@ -922,12 +918,12 @@ George,106,Unknown,"Unknown (2011), Unknown (2015), Unknown (2016)"
 9967270,1,Unknown,Unknown (2016)
 9967208,1,Unknown,Unknown (2016)
 276898856,1,Unknown,Unknown (2016)
-A69-9002-11972;A69-9002-11972,2,Male,"Unknown (2015), Unknown (2016)"
-A69-9002-11974;A69-9002-11974,29,Male,"Unknown (2015), Unknown (2016)"
+A69-9002-11972,4,Male,"Unknown (2015), Unknown (2016)"
+A69-9002-11974,58,Male,"Unknown (2015), Unknown (2016)"
 444869774,1,Unknown,Juvenile (2016)
 94183348,1,Unknown,Unknown (2016)
 182758683,1,Unknown,Unknown (2016)
-A69-9002-11970;A69-9002-11970,18,Female,"Unknown (2015), Unknown (2016)"
+A69-9002-11970,36,Female,"Unknown (2015), Unknown (2016)"
 34572183,1,Unknown,Unknown (2016)
 41576194,1,Unknown,Unknown (2016)
 41577018,1,Unknown,Unknown (2016)
@@ -955,7 +951,7 @@ A69-9002-11970;A69-9002-11970,18,Female,"Unknown (2015), Unknown (2016)"
 75623734,1,Unknown,Unknown (2016)
 75623983,1,Unknown,Unknown (2016)
 18999542,1,Unknown,Unknown (2016)
-161737,1,Female,Juvenile (2016)
+161737,4,Female,"Juvenile (2016), Unknown (Year Unknown)"
 A69-9001-19482,2,Female,"Unknown (2015), Unknown (2016)"
 A69-9001-19479,12,Female,"Unknown (2015), Unknown (2016)"
 A69-9001-19503,7,Female,"Unknown (2015), Unknown (2016)"
@@ -968,8 +964,8 @@ A69-9001-19478,7,Female,Unknown (2016)
 107909090,1,Unknown,Unknown (2016)
 130860226,1,Unknown,Unknown (2016)
 214401034,1,Unknown,Unknown (2016)
-161733,3,Female,Juvenile (2016)
-163470,9,Female,Adult (2016)
+161733,12,Female,"Juvenile (2016), Unknown (2016), Unknown (Year Unknown)"
+163470,20,Female,"Adult (2016), Adult (Year Unknown), Unknown (2016), Unknown (Year Unknown)"
 313935399,1,Unknown,Unknown (2016)
 375388525,1,Unknown,Unknown (2016)
 375388531,1,Unknown,Unknown (2016)
@@ -980,7 +976,7 @@ A69-9001-19478,7,Female,Unknown (2016)
 205274764,1,Unknown,Unknown (2016)
 21013404,1,Unknown,Juvenile (2016)
 21492563,1,Unknown,Unknown (2016)
-143670,2,Male,Subadult (2016)
+143670,11,Male,"Subadult (2016), Subadult (Year Unknown), Unknown (Year Unknown)"
 75603394,1,Unknown,Unknown (2016)
 82494295,1,Unknown,Unknown (2016)
 82494302,1,Unknown,Unknown (2016)
@@ -994,7 +990,7 @@ A69-9001-19478,7,Female,Unknown (2016)
 9175380,1,Unknown,Unknown (2016)
 164090362,1,Unknown,Unknown (2016)
 226896578,1,Unknown,Unknown (2016)
-161736,1,Male,Juvenile (2016)
+161736,7,Male,"Juvenile (2016), Unknown (Year Unknown)"
 35466639,1,Unknown,Unknown (2016)
 532397914,1,Male,Unknown (2016)
 553853366,1,Unknown,Unknown (2016)
@@ -1023,9 +1019,9 @@ Cindy,130,Unknown,"Unknown (2012), Unknown (2016)"
 Kika,1,Unknown,Unknown (2016)
 Michelle,97,Unknown,Unknown (2016)
 Caroline,1,Unknown,Unknown (2016)
-Queen Mabel,133,Unknown,"Unknown (2012), Unknown (2016)"
+QueenMabel,133,Unknown,"Unknown (2012), Unknown (2016)"
 Inti,2,Unknown,"Unknown (2012), Unknown (2016)"
-Miss Jamie,2,Unknown,Unknown (2016)
+MissJamie,2,Unknown,Unknown (2016)
 Juliana,3,Unknown,Unknown (2016)
 114106722,1,Unknown,Unknown (2016)
 18834165,1,Unknown,Unknown (2016)
@@ -1037,7 +1033,6 @@ Juliana,3,Unknown,Unknown (2016)
 9804529,1,Unknown,Unknown (2016)
 9985063,1,Unknown,Unknown (2016)
 18169430,1,Unknown,Juvenile (2016)
-161733;163470,1,Female,Unknown (2016)
 2016_WS13,1,Female,Unknown (2016)
 2016_WS22,1,Female,Unknown (2016)
 2016_WS23,1,Male,Unknown (2016)
@@ -1080,7 +1075,7 @@ Juliana,3,Unknown,Unknown (2016)
 9872286,1,Unknown,Adult (2015)
 24636646,1,Unknown,Unknown (2015)
 143678,17,Male,Juvenile (2015)
-A69-9002-12411;A69-9002-12411,6,Male,Unknown (2015)
+A69-9002-12411,12,Male,Unknown (2015)
 79317039,1,Unknown,Unknown (2015)
 9967126,1,Unknown,Unknown (2015)
 117816825,1,Unknown,Unknown (2015)
@@ -1121,7 +1116,7 @@ Kamila,67,Unknown,"Unknown (2011), Unknown (2015)"
 369086486,1,Unknown,Adult (2015)
 3818526,1,Unknown,Juvenile (2015)
 527503683,1,Unknown,Unknown (2015)
-Maria Gracia,7,Unknown,Unknown (2015)
+MariaGracia,7,Unknown,Unknown (2015)
 108100,3,Unknown,Unknown (2015)
 108103,5,Unknown,Unknown (2015)
 Yessie,10,Unknown,Unknown (2015)
@@ -1134,7 +1129,7 @@ Margarita,57,Unknown,Unknown (2015)
 151677,15,Unknown,Unknown (2015)
 18853225,1,Unknown,Juvenile (2015)
 19200694,1,Unknown,Unknown (2015)
-Rata verde,2,Unknown,Unknown (2015)
+Rataverde,2,Unknown,Unknown (2015)
 Belen,5,Unknown,Unknown (2015)
 177383356,1,Unknown,Unknown (2015)
 215951401,1,Unknown,Unknown (2015)
@@ -1199,24 +1194,21 @@ A69-9001-28404,20,Male,Unknown (2013)
 823144,1,Unknown,Adult (2013)
 9836650,1,Unknown,Unknown (2013)
 124940635,1,Unknown,Unknown (2013)
-130667,7,Male,Subadult (2013)
+130667,15,Male,"Subadult (2013), Unknown (Year Unknown)"
 45741323,1,Female,Unknown (2013)
-112468,7,Male,Subadult (2013)
-112470,9,Male,Subadult (2013)
+112468,29,Male,"Subadult (2013), Unknown (Year Unknown)"
+112470,31,Male,"Subadult (2013), Unknown (Year Unknown)"
 144197201,1,Unknown,Unknown (2013)
 144197202,1,Unknown,Unknown (2013)
 144197203,1,Unknown,Unknown (2013)
 778235,1,Unknown,Adult (2013)
 131986,51,Unknown,Unknown (2013)
 131988,1,Unknown,Unknown (2013)
-112468;112470,2,Male,Subadult (2013)
 87470607,1,Unknown,Unknown (2013)
 169656174,1,Unknown,Unknown (2013)
 3496611,1,Unknown,Unknown (2013)
-112471,2,Male,Subadult (2013)
-112467,1,Male,Subadult (2013)
-112470;112471,1,Male,Subadult (2013)
-112468;130667,3,Male,Subadult (2013)
+112471,16,Male,"Subadult (2013), Unknown (Year Unknown)"
+112467,2,Male,"Subadult (2013), Unknown (Year Unknown)"
 A69-1303-64094,39,Male,"Unknown (2011), Unknown (2012)"
 240514850,1,Unknown,Unknown (2012)
 3360710,1,Unknown,Unknown (2012)
@@ -1261,20 +1253,22 @@ A69-9001-28409,11,Male,"Unknown (2011), Unknown (2012)"
 2937437,1,Unknown,Juvenile (2012)
 A69-1303-64093,88,Male,"Unknown (2011), Unknown (2012)"
 239322152,1,Unknown,Unknown (2012)
-50835a,1,Male,Adult (2011)
-101369a,4,Male,"Juvenile (2010), Juvenile (2011), Juvenile (Year Unknown)"
-101371a,14,Female,"Juvenile (2010), Juvenile (2011), Juvenile (Year Unknown)"
-101376a,5,Male,"Adult (2010), Adult (2011)"
-50834a,3,Male,Juvenile (2011)
+50835a,3,Male,"Adult (2011), Adult (Year Unknown), Unknown (Year Unknown)"
+101369a,22,Male,"Juvenile (2010), Juvenile (2011), Juvenile (Year Unknown), Unknown (2010), Unknown (Year Unknown)"
+101371a,28,Female,"Juvenile (2010), Juvenile (2011), Juvenile (Year Unknown), Unknown (2010), Unknown (Year Unknown)"
+101376a,11,Male,"Adult (2010), Adult (2011), Adult (Year Unknown), Unknown (2010), Unknown (Year Unknown)"
+50834a,9,Male,"Juvenile (2011), Unknown (Year Unknown)"
 A69-1303-64091,21,Male,Unknown (2011)
 A69-1303-64112,8,Male,Unknown (2011)
 A69-1303-64092,22,Male,Unknown (2011)
 A69-1303-64110,9,Male,Unknown (2011)
 84565650,1,Unknown,Unknown (2011)
-101373;101373b,1,Male,Adult (2011)
+101373,5,Male,Adult (2011)
+101373b,5,Male,Adult (2011)
 165770044,1,Unknown,Unknown (2011)
 10718623,1,Unknown,Unknown (2011)
-50769;50769b,6,Unknown,Unknown (2011)
+50769,11,Female,"Adult (2011), Unknown (2011)"
+50769b,11,Female,"Adult (2011), Unknown (2011)"
 325173786,1,Unknown,Unknown (2011)
 457499067,1,Unknown,Unknown (2011)
 587581975,1,Unknown,Unknown (2011)
@@ -1290,8 +1284,7 @@ A69-1303-64110,9,Male,Unknown (2011)
 12151307,1,Unknown,Unknown (2011)
 24437579,1,Unknown,Adult (2011)
 15069683,1,Unknown,Unknown (2011)
-101368a;50769;50769b,1,Female,Adult (2011)
-101373;101373b;50769;50769b,4,Male,Adult (2011)
+101368a,5,Female,"Adult (2010), Adult (2011), Adult (Year Unknown), Unknown (Year Unknown)"
 456277824,1,Female,Unknown (2010)
 327156,1,Unknown,Adult (2010)
 477659425,1,Unknown,Unknown (2010)
@@ -1317,23 +1310,14 @@ A69-1303-8497,1,Female,Unknown (2010)
 71385672,1,Unknown,Unknown (2010)
 236875542,1,Unknown,Juvenile (2010)
 63230611,1,Unknown,Unknown (2010)
-50831a,2,Male,Adult (2010)
-101375a,3,Male,Adult (2010)
+50831a,19,Male,"Adult (2010), Unknown (2010), Unknown (Year Unknown)"
+101375a,5,Male,"Adult (2010), Unknown (2010), Unknown (Year Unknown)"
 239288605,1,Unknown,Unknown (2010)
-101367a;101370a,3,Female,Adult (2010)
-101373a,5,Male,"Adult (2010), Adult (Year Unknown)"
-101371a;101373a,9,Unknown,Unknown (2010)
-101369a;101371a;101373a;101376a,2,Unknown,Unknown (2010)
-101373a;101376a,1,Male,Adult (2010)
+101367a,13,Female,"Adult (2010), Adult (Year Unknown), Unknown (2010), Unknown (Year Unknown)"
+101370a,22,Female,"Adult (2010), Unknown (2010), Unknown (Year Unknown)"
+101373a,21,Male,"Adult (2010), Adult (Year Unknown), Unknown (2010), Unknown (Year Unknown)"
 522248664,1,Unknown,Unknown (2010)
-101367a,4,Female,Adult (2010)
-101368a,2,Female,"Adult (2010), Adult (Year Unknown)"
-101370a,10,Female,Adult (2010)
-101367a;50832b,1,Unknown,Unknown (2010)
-101369a;50831a,1,Male,Unknown (2010)
-101369a;101370a,1,Unknown,Unknown (2010)
-101371a;101375a,1,Unknown,Unknown (2010)
-101369a;101373a;101376a,1,Male,Unknown (2010)
+50832b,2,Unknown,"Unknown (2010), Unknown (Year Unknown)"
 259500513,1,Unknown,Unknown (2009)
 395760,1,Unknown,Unknown (2009)
 24747444,1,Unknown,Unknown (2009)
@@ -1413,34 +1397,16 @@ S14600,1,Unknown,Unknown (2009)
 620234,1,Unknown,Unknown (1937)
 619183,1,Unknown,Unknown (1936)
 6170,1,Unknown,Unknown (Year Unknown)
-36325;57824,1,Unknown,Subadult (Year Unknown)
-36324;36325;57824,1,Unknown,Subadult (Year Unknown)
-36295;57825,1,Unknown,Unknown (Year Unknown)
-36309;36325;57827;57828,1,Unknown,Subadult (Year Unknown)
-36309;57828,1,Unknown,Subadult (Year Unknown)
-36309;36325;57827;57830,1,Unknown,Subadult (Year Unknown)
-143670;57825;57827;57828;57830,1,Unknown,Unknown (Year Unknown)
-143670;36325;57829;57830,1,Male,Unknown (Year Unknown)
-143670;36325;57828,1,Male,Subadult (Year Unknown)
-161730;57821;57827,1,Female,Subadult (Year Unknown)
-161731;57828;57829,1,Male,Unknown (Year Unknown)
-161733;57823,1,Unknown,Unknown (Year Unknown)
-161733;57828,3,Unknown,Unknown (Year Unknown)
-161733;57824;57828,1,Unknown,Unknown (Year Unknown)
-161736;36324;36325,1,Male,Unknown (Year Unknown)
-161732;161736;36293;36324;36325;57828,1,Male,Unknown (Year Unknown)
-143669;143670;161727;161729;161730;161731;161732;161734;161735;161736;161737;36293;36295;36309;36324;36325;57821;57823;57824;57828;57829,1,Unknown,Unknown (Year Unknown)
-143669;143670;161730;161731;161732;161735;161736;161737;36293;36295;36309;36324;36325;57821;57824;57825;57827;57828;57830,1,Unknown,Unknown (Year Unknown)
-143669;143670;161730;161731;161732;161733;161734;161735;161737;36293;36309;36324;36325;57823;57825;57827;57828;57830,1,Unknown,Unknown (Year Unknown)
-163470;57828,6,Unknown,Unknown (Year Unknown)
-143670;161729;161732;161734;161735;163470;36295;36309;57830,1,Unknown,Unknown (Year Unknown)
-163470;57825,1,Female,Unknown (Year Unknown)
-163470;36293,1,Unknown,Adult (Year Unknown)
-163471;36324;57824,1,Unknown,Unknown (Year Unknown)
-161731;163471;36295;36324;57824,1,Unknown,Unknown (Year Unknown)
-161731;163471;57824;57829,1,Unknown,Unknown (Year Unknown)
-143669;143670;161727;161729;161730;161731;161732;161733;161734;161735;161736;163470;163471;36293;36295;36309;36324;36325;57821;57822;57824;57825;57827;57828;57829,1,Unknown,Unknown (Year Unknown)
-143669;143670;161727;161729;161730;161731;161732;161733;161734;161735;161736;163471;36293;36295;36309;36324;36325;57821;57823;57829,1,Unknown,Unknown (Year Unknown)
+36295,7,Unknown,Unknown (Year Unknown)
+57830,6,Male,"Subadult (Year Unknown), Unknown (Year Unknown)"
+161730,6,Female,"Subadult (Year Unknown), Unknown (Year Unknown)"
+36293,7,Male,"Adult (Year Unknown), Unknown (Year Unknown)"
+143669,5,Unknown,Unknown (Year Unknown)
+161727,3,Unknown,Unknown (Year Unknown)
+161729,4,Unknown,Unknown (Year Unknown)
+161734,5,Unknown,Unknown (Year Unknown)
+161735,6,Unknown,Unknown (Year Unknown)
+57822,1,Unknown,Unknown (Year Unknown)
 45ecfd99-fc21-11e2-ac3f-081965b14959,1,Unknown,Unknown (Year Unknown)
 45ecffc5-fc21-11e2-ac3f-081965b14959,1,Unknown,Unknown (Year Unknown)
 45ed01f1-fc21-11e2-ac3f-081965b14959,1,Unknown,Unknown (Year Unknown)
@@ -1455,33 +1421,17 @@ S14600,1,Unknown,Unknown (2009)
 43e5e8c1-fc21-11e2-ac3f-081965b14959,1,Unknown,Unknown (Year Unknown)
 630316,1,Unknown,Unknown (Year Unknown)
 3530208,1,Unknown,Unknown (Year Unknown)
-101370a;112468,1,Unknown,Unknown (Year Unknown)
-101369a;101370a;101371a;101373a;112468;112470;50831a;50836a,1,Unknown,Unknown (Year Unknown)
-101370a;112470,1,Unknown,Unknown (Year Unknown)
-101369a;112468;112470;50831a,2,Male,Unknown (Year Unknown)
-112468;112470;50831a;50834a,1,Male,Unknown (Year Unknown)
-112468;112470;50831a,1,Male,Unknown (Year Unknown)
-112470;50831a;50834a,1,Male,Unknown (Year Unknown)
-101369a;112468;112470;112471,2,Male,Unknown (Year Unknown)
-101367a;101369a;112468;112470;112471,1,Unknown,Unknown (Year Unknown)
-101369a;112468;112471;50831a,1,Male,Unknown (Year Unknown)
-112468;112471;50831a,1,Male,Unknown (Year Unknown)
-101370a;112468;112470;112471;50831a,1,Unknown,Unknown (Year Unknown)
-101369a;112468;112470;112471;50831a,1,Male,Unknown (Year Unknown)
-112470;112471;50834a,2,Male,Unknown (Year Unknown)
-112471;50834a,1,Male,Unknown (Year Unknown)
-101370a;112470;112471,1,Unknown,Unknown (Year Unknown)
-101369a;112471;50831a,1,Male,Unknown (Year Unknown)
-101367a;101368a;101373a;101376a;50835a;50836a;85227,1,Unknown,Adult (Year Unknown)
-101366a;101367a;101368a;101369a;101370a;101371a;101373a;101375a;101376a;112467;112468;112470;112471;130663;130664;130665;130666;130667;50831a;50832b;50834a;50835a;50836a,1,Unknown,Unknown (Year Unknown)
-101367a;101369a;101370a;112468;112470;130667;50831a;50836a,1,Unknown,Unknown (Year Unknown)
-101367a;101369a;101370a;112468;112470;130664;130667;50831a,1,Unknown,Unknown (Year Unknown)
-101369a;112468;112470;130664;130667;50831a,1,Male,Unknown (Year Unknown)
-130667;50831a,1,Male,Unknown (Year Unknown)
+50836a,4,Unknown,"Adult (Year Unknown), Unknown (Year Unknown)"
+85227,1,Unknown,Adult (Year Unknown)
+101366a,1,Unknown,Unknown (Year Unknown)
+130663,1,Unknown,Unknown (Year Unknown)
+130664,3,Male,Unknown (Year Unknown)
+130665,1,Unknown,Unknown (Year Unknown)
+130666,1,Unknown,Unknown (Year Unknown)
 3127,1,Unknown,Unknown (Year Unknown)
 4619,1,Unknown,Unknown (Year Unknown)
 3,1,Unknown,Unknown (Year Unknown)
 1561,1,Unknown,Unknown (Year Unknown)
-{5D0A9DAE-B748-4358-BF7D-37757BD13AD6},1,Unknown,Unknown (Year Unknown)
-{B68197D6-7BF5-4C53-BBBE-57CCFC786C9B},1,Unknown,Unknown (Year Unknown)
-{F1759933-3460-4B3E-B0AE-16F09A5944A4},1,Unknown,Unknown (Year Unknown)
+5D0A9DAE-B748-4358-BF7D-37757BD13AD6,1,Unknown,Unknown (Year Unknown)
+B68197D6-7BF5-4C53-BBBE-57CCFC786C9B,1,Unknown,Unknown (Year Unknown)
+F1759933-3460-4B3E-B0AE-16F09A5944A4,1,Unknown,Unknown (Year Unknown)
