@@ -296,17 +296,7 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
-    # Use how="all" to allow either organismID or identificationID
-    occurrences_df = validate_and_dropna(
-        occurrences_df, 
-        na_subset=["organismID", "identificationID"], 
-        how="all"
-    ).copy()
-
-    # Consolidate organismID / identificationID into 1 column (whaleSharkID)
-    occurrences_df["whaleSharkID"] = (
-        occurrences_df["organismID"].combine_first(occurrences_df["identificationID"])
-    )
+    occurrences_df = validate_and_dropna(occurrences_df, na_subset=["whaleSharkID"])
 
     # Now focus on clean entries & map info (sex, lifeStage, etc) where available
     individual_sharks = occurrences_df[["whaleSharkID"]].drop_duplicates().reset_index(drop=True)

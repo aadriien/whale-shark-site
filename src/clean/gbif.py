@@ -199,14 +199,36 @@ def format_sex_lifeStage(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return occurrences_df
 
 
+def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+    # Work with copy to satisfy pandas DataFrame slice concerns
+    df = occurrences_df.copy()
+
+    # Consolidate organismID / identificationID into 1 column (whaleSharkID)
+    df["whaleSharkID"] = df["organismID"].combine_first(df["identificationID"])
+    df = move_column_after(df, col_to_move="whaleSharkID", after_col="identificationID")
+
+    # Split entries with multiple IDs (multiple sharks) into separate rows
+    df["whaleSharkID"] = df["whaleSharkID"].str.split(';')
+    df = df.explode("whaleSharkID")
+
+    # Remove any spaces or weird formatting chars, e.g. "{"
+    df["whaleSharkID"] = df["whaleSharkID"].str.replace(r"[{} ]", "", regex=True)
+
+    df = df.reset_index(drop=True)
+    return df
+    
+
 def refactor_field_values(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     if not isinstance(occurrences_df, pd.DataFrame):
         raise ValueError("Error, must specify occurrences_df")
 
     occurrences_df = format_country_names(occurrences_df)
     occurrences_df = format_publishingCountry(occurrences_df)
+    
     occurrences_df = format_year_month_day(occurrences_df)
     occurrences_df = format_sex_lifeStage(occurrences_df)
+
+    occurrences_df = format_individual_shark_IDs(occurrences_df)
     
     return occurrences_df
 
