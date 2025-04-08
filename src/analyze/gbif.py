@@ -301,24 +301,47 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
         occurrences_df, 
         na_subset=["organismID", "identificationID"], 
         how="all"
-    )
-    sharks_all_data = occurrences_df.drop_duplicates(subset=["organismID", "identificationID"]).copy()
+    ).copy()
 
     # Consolidate organismID / identificationID into 1 column (whaleSharkID)
-    sharks_all_data["whaleSharkID"] = (
-        sharks_all_data["organismID"].combine_first(sharks_all_data["identificationID"])
+    occurrences_df["whaleSharkID"] = (
+        occurrences_df["organismID"].combine_first(occurrences_df["identificationID"])
     )
 
     # Now focus on clean entries & map info (sex, lifeStage, etc) where available
-    individual_sharks = sharks_all_data[["whaleSharkID"]].reset_index(drop=True)
+    individual_sharks = occurrences_df[["whaleSharkID"]].drop_duplicates().reset_index(drop=True)
+    individual_sharks.set_index("whaleSharkID", inplace=True)
+
+    individual_sharks = add_totals_column(
+        source_df=occurrences_df,
+        target_df=individual_sharks,
+        groupby=["whaleSharkID"]
+    )
 
     sex_mappings = (
-        sharks_all_data[sharks_all_data["sex"].isin(["Female", "Male"])] 
+        occurrences_df[occurrences_df["sex"].isin(["Female", "Male"])] 
         .drop_duplicates(subset="whaleSharkID", keep="first") 
         [["whaleSharkID", "sex"]] 
     )
     individual_sharks = individual_sharks.merge(sex_mappings, on="whaleSharkID", how="left")
     individual_sharks.loc[:, "sex"] = individual_sharks["sex"].fillna("Unknown")
+
+
+
+    valid_lifeStage = occurrences_df.dropna(subset=["lifeStage"]).copy()
+
+    # Ugly type casting trick to populate null year vals (type int) to str :/
+    valid_lifeStage["year"] = valid_lifeStage["year"].astype(object).fillna("Year Unknown").astype(str)
+
+    # Assemble lifeStage vals over time per shark ID
+    valid_lifeStage = valid_lifeStage.groupby("whaleSharkID").apply(
+        lambda x: ", ".join(sorted(set(
+            f"{stage} ({year})" for stage, year in zip(x["lifeStage"], x["year"])
+        ))), 
+        include_groups=False
+    ).reset_index(name="lifeStage")
+
+    individual_sharks = individual_sharks.merge(valid_lifeStage, on="whaleSharkID", how="left")
 
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
