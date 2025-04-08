@@ -12,7 +12,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    export_to_csv, extract_relevant_fields, move_column_after, read_csv,
+    export_to_csv, extract_relevant_fields, move_column_after, standardize_column_vals,
 )
 
 from src.fetch.gbif import (
@@ -185,6 +185,20 @@ def format_year_month_day(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return occurrences_df
 
 
+def format_sex_lifeStage(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+    # Whale shark recorded sex
+    occurrences_df = standardize_column_vals(
+        occurrences_df, col_name="sex", 
+        valid_vals=["Female", "Male"], 
+        fill_val="Unknown"
+    )
+
+    # Whale shark recorded lifeStage
+    occurrences_df.loc[:, "lifeStage"] = occurrences_df["lifeStage"].fillna("Unknown")
+
+    return occurrences_df
+
+
 def refactor_field_values(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     if not isinstance(occurrences_df, pd.DataFrame):
         raise ValueError("Error, must specify occurrences_df")
@@ -192,6 +206,7 @@ def refactor_field_values(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     occurrences_df = format_country_names(occurrences_df)
     occurrences_df = format_publishingCountry(occurrences_df)
     occurrences_df = format_year_month_day(occurrences_df)
+    occurrences_df = format_sex_lifeStage(occurrences_df)
     
     return occurrences_df
 
