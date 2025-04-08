@@ -52,12 +52,6 @@ def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
-    df = standardize_column_vals(
-        df, col_name="sex", 
-        valid_vals=["Female", "Male"], 
-        fill_val="Unknown"
-    )
-
     sex_counts = df.pivot_table(
         index="year", columns="sex", aggfunc="size", fill_value=0
     )
@@ -67,9 +61,6 @@ def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
 def make_lifeStage_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
-
-    # Standardize values for column
-    df.loc[:, "lifeStage"] = df["lifeStage"].fillna("Unknown")
 
     life_stage_counts = df.pivot_table(
         index="year", columns="lifeStage", aggfunc="size", fill_value=0
