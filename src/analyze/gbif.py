@@ -13,7 +13,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, validate_and_dropna, 
+    read_csv, export_to_csv, validate_and_dropna, standardize_column_vals,
     add_totals_column, add_avg_per_year, add_top_x_metric,
 )
 
@@ -26,6 +26,8 @@ GBIF_CALENDAR_STATS_FILE = "outputs/gbif_calendar_stats.csv"
 GBIF_COUNTRY_STATS_FILE = "outputs/gbif_country_stats.csv"
 GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
 GBIF_PUBLISHING_COUNTRY_STATS_FILE = "outputs/gbif_publishingCountry_stats.csv"
+GBIF_INDIVIDUAL_SHARKS_STATS_FILE = "outputs/gbif_individual_sharks_stats.csv"
+
 
 
 #####
@@ -50,9 +52,10 @@ def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
-    # Standardize values for column
-    df.loc[:, "sex"] = df["sex"].apply(
-        lambda x: x if x in ["Female", "Male"] else "Unknown"
+    df = standardize_column_vals(
+        df, col_name="sex", 
+        valid_vals=["Female", "Male"], 
+        fill_val="Unknown"
     )
 
     sex_counts = df.pivot_table(
@@ -134,9 +137,10 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
 
     df = occurrences_df.copy()
 
-    # Standardize values for column
-    df.loc[:, "basisOfRecord"] = df["basisOfRecord"].apply(
-        lambda x: x if x in ["HUMAN_OBSERVATION", "MACHINE_OBSERVATION"] else "Other"
+    df = standardize_column_vals(
+        df, col_name="basisOfRecord", 
+        valid_vals=["HUMAN_OBSERVATION", "MACHINE_OBSERVATION"], 
+        fill_val="Other"
     )
 
     basisOfRecord_counts = df.pivot_table(
@@ -305,6 +309,19 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
+    # Use how="all" to allow either organismID or identificationID
+    occurrences_df = validate_and_dropna(occurrences_df, ["organismID", "identificationID"], how="all")
+    individual_sharks = occurrences_df.drop_duplicates(subset=["organismID", "identificationID"]).copy()
+
+    # Consolidate organismID / identificationID into 1 column (whaleSharkID)
+    individual_sharks["whaleSharkID"] = (
+        individual_sharks["organismID"].combine_first(individual_sharks["identificationID"])
+    )
+    individual_sharks = individual_sharks[["whaleSharkID"]].reset_index(drop=True)
+
+
+    export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
+
     return
 
 
@@ -317,9 +334,12 @@ def export_all_analyses(dataframe: pd.DataFrame) -> None:
     occurrences_df = dataframe.copy()
 
     export_calendar_stats(occurrences_df)
+
     export_country_stats(occurrences_df)
     export_continent_stats(occurrences_df)
     export_publishingCountry_stats(occurrences_df)
+
+    export_individual_shark_stats(occurrences_df)
 
 
 

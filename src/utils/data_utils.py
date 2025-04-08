@@ -89,11 +89,13 @@ def extract_relevant_fields(data: dict, fields: list) -> dict:
 ## DataFrame manipulation helpers
 #####
 
-def validate_and_dropna(dataframe: pd.DataFrame, na_subset: Optional[list[str]] = None) -> pd.DataFrame:
+def validate_and_dropna(dataframe: pd.DataFrame, 
+                        na_subset: Optional[list[str]] = None,
+                        how: Optional[str] = "any") -> pd.DataFrame:
     if not isinstance(dataframe, pd.DataFrame):
         raise ValueError("Error, must specify a valid DataFrame")
 
-    return dataframe.dropna(subset=na_subset)
+    return dataframe.dropna(subset=na_subset, how=how)
 
 
 def move_columns(dataframe: pd.DataFrame, 
@@ -145,6 +147,24 @@ def move_column_after(dataframe: pd.DataFrame, col_to_move: str, after_col: str)
     cols.insert(insert_at, col_to_move)
 
     return dataframe[cols]
+
+
+def standardize_column_vals(dataframe: pd.DataFrame, 
+                            col_name: str, 
+                            valid_vals: list, 
+                            fill_val) -> pd.DataFrame:
+    if not isinstance(col_name, str):
+        raise ValueError("Error, must specify valid col_name")
+    if not isinstance(valid_vals, list):
+        raise ValueError("Error, must specify valid_vals list")
+    if not all(isinstance(val, type(valid_vals[0])) for val in valid_vals):
+        raise ValueError(f"Error, fill_val type must match valid_vals type")
+
+    # Standardize values for column (fill with default if not in list)
+    dataframe.loc[:, col_name] = dataframe[col_name].apply(
+        lambda x: x if x in valid_vals else fill_val
+    )
+    return dataframe
 
 
 #####
