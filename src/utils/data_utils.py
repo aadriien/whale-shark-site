@@ -43,14 +43,16 @@ def csv_exists(csv_file: str) -> bool:
     return False
 
 
-def read_csv(csv_file: str, columns: Optional[list[str]] = None) -> pd.DataFrame:
+def read_csv(csv_file: str, 
+            columns: Optional[list[str]] = None, 
+            dtype: Optional[dict] = None) -> pd.DataFrame:
     if not csv_file:
         raise ValueError("Error, must specify CSV to read")
 
     if not csv_exists(csv_file):
         raise ValueError("Error, CSV does not exist")
 
-    return pd.read_csv(csv_file, usecols=columns)
+    return pd.read_csv(csv_file, usecols=columns, dtype=dtype)
 
 
 def export_to_csv(csv_file: str, dataframe: pd.DataFrame) -> None:

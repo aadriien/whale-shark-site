@@ -37,9 +37,6 @@ GBIF_INDIVIDUAL_SHARKS_STATS_FILE = "outputs/gbif_individual_sharks_stats.csv"
 def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
-    df.loc[:, "year"] = df["year"].astype(int)
-    df.loc[:, "month"] = df["month"].astype(int)
-
     calendar_counts = df.pivot_table(
         index="year", columns="month", aggfunc="size", fill_value=0
     )
@@ -147,8 +144,7 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
 
 def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
     # Copy after dropping null so pandas doesn't warn about df.loc[:,] vs df[]
-    occurrences_df = validate_and_dropna(occurrences_df, ["year", "month"]).copy()
-    occurrences_df["year"] = occurrences_df["year"].astype(int)
+    occurrences_df = validate_and_dropna(occurrences_df, ["year", "month"])
 
     # Get data for calendar, basisOfRecord, sex, lifeStage
     calendar_counts = make_calendar_df(occurrences_df)
@@ -175,7 +171,7 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 def export_country_stats(occurrences_df: pd.DataFrame) -> None:
-    occurrences_df = validate_and_dropna(occurrences_df, ["countryCode", "country", "eventDate"])
+    occurrences_df = validate_and_dropna(occurrences_df, na_subset=["countryCode", "country", "eventDate"])
 
     # Get data for country, basisOfRecord, eventDate
     country_counts = make_region_df(occurrences_df, index=["countryCode", "country"])
@@ -200,7 +196,7 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
-    occurrences_df = validate_and_dropna(occurrences_df, ["continent", "eventDate"])
+    occurrences_df = validate_and_dropna(occurrences_df, na_subset=["continent", "eventDate"])
 
     # Get data for continent, basisOfRecord, eventDate
     continent_counts = make_region_df(occurrences_df, index=["continent"])
@@ -227,7 +223,7 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
 def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(
         occurrences_df, 
-        ["publishingCountryCode", "publishingCountry", "eventDate"]
+        na_subset=["publishingCountryCode", "publishingCountry", "eventDate"]
     )
 
     # Get data for publishingCountry, basisOfRecord, eventDate
@@ -301,7 +297,11 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 
 def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     # Use how="all" to allow either organismID or identificationID
-    occurrences_df = validate_and_dropna(occurrences_df, ["organismID", "identificationID"], how="all")
+    occurrences_df = validate_and_dropna(
+        occurrences_df, 
+        na_subset=["organismID", "identificationID"], 
+        how="all"
+    )
     sharks_all_data = occurrences_df.drop_duplicates(subset=["organismID", "identificationID"]).copy()
 
     # Consolidate organismID / identificationID into 1 column (whaleSharkID)
@@ -345,7 +345,10 @@ def export_all_analyses(dataframe: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    occurrences_df = read_csv(GBIF_CLEAN_FILE)
+    occurrences_df = read_csv(
+        GBIF_CLEAN_FILE, 
+        dtype={"year": "Int64", "month": "Int64", "day": "Int64"}
+    )
     export_all_analyses(occurrences_df)
     
 
