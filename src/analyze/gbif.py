@@ -13,7 +13,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, validate_and_dropna, standardize_column_vals,
+    read_csv, export_to_csv, validate_and_dropna, move_columns, standardize_column_vals,
     add_totals_column, add_avg_per_year, add_top_x_metric,
 )
 
@@ -273,12 +273,14 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 ## We want to know:
 ##
 ##  - ID (organismID and/or identificationID)
+##      - UPDATE: consolidated into whaleSharkID during cleaning
 ##  - sex (if available)
 ##  - lifeStage (if available, as of given year)
 ##      - store/display as str from list, e.g. "Juvenile (2019), Adult (2024)"
 ##  - all sightings/occurrences (by key/ID, to map for further info)
 ##      - store list of all corresponding keys from full GBIF clean dataset
 ##      - can also store occurrenceIDs if desired BUT they're not all uniform
+##      - UPDATE: definitely NOT doing this b/c some sharks have hundreds
 ##  - all countries visited by year
 ##      - store as str from list... 
 ##          - example 1: "Ecuador (2016)" 
@@ -332,6 +334,25 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     ).reset_index(name="lifeStage")
 
     individual_sharks = individual_sharks.merge(valid_lifeStage, on="whaleSharkID", how="left")
+
+
+
+    # Roughly same process, but now tracing countries where sighted
+    valid_country = occurrences_df.dropna(subset=["country"]).copy()
+
+    # Ugly type casting trick to populate null year vals (type int) to str :/
+    valid_country["year"] = valid_country["year"].astype(object).fillna("Year Unknown").astype(str)
+
+    # Assemble country vals over time per shark ID
+    valid_country = valid_country.groupby("whaleSharkID").apply(
+        lambda x: ", ".join(sorted(set(
+            f"{stage} ({year})" for stage, year in zip(x["country"], x["year"])
+        ))), 
+        include_groups=False
+    ).reset_index(name="country")
+
+    individual_sharks = individual_sharks.merge(valid_country, on="whaleSharkID", how="left")
+    individual_sharks.loc[:, "country"] = individual_sharks["country"].fillna("Unknown")
 
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
