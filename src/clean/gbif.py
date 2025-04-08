@@ -8,6 +8,7 @@
 import pandas as pd
 
 from src.config import (
+    MONTH_NAMES,
     convert_ISO_code_to_country,
 )
 
@@ -181,6 +182,10 @@ def format_year_month_day(occurrences_df: pd.DataFrame) -> pd.DataFrame:
             .astype(str)
             .str.replace(r"\.0$", "", regex=True)
         )
+
+    occurrences_df.loc[:, "month"] = occurrences_df["month"].map(
+        lambda x: MONTH_NAMES[int(x) - 1] if x.isdigit() else None
+    )
     
     return occurrences_df
 
