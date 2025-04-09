@@ -7,9 +7,8 @@
 
 import pandas as pd
 
-
 from src.config import (
-    MONTH_NAMES, 
+    MONTH_NAMES,
 )
 
 from src.utils.data_utils import (
@@ -40,7 +39,14 @@ def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     calendar_counts = df.pivot_table(
         index="year", columns="month", aggfunc="size", fill_value=0
     )
-    calendar_counts.columns = MONTH_NAMES
+
+    # Preserve month order appearance
+    calendar_counts.columns = pd.CategoricalIndex(
+        calendar_counts.columns,
+        categories=MONTH_NAMES,
+        ordered=True
+    )
+    calendar_counts = calendar_counts.sort_index(axis=1)
 
     calendar_counts = add_totals_column(source_df=df, target_df=calendar_counts, groupby=["year"])
     return calendar_counts
@@ -75,7 +81,14 @@ def make_region_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.DataFra
     region_counts = df.pivot_table(
         index=index, columns="month", aggfunc="size", fill_value=0
     )
-    region_counts.columns = MONTH_NAMES
+
+    # Preserve month order appearance
+    region_counts.columns = pd.CategoricalIndex(
+        region_counts.columns,
+        categories=MONTH_NAMES,
+        ordered=True
+    )
+    region_counts = region_counts.sort_index(axis=1)
 
     region_counts = add_avg_per_year(
         source_df=df, target_df=region_counts, groupby=index, 
@@ -106,14 +119,11 @@ def make_eventDate_df(occurrences_df: pd.DataFrame, groupby: list[str]) -> pd.Da
 
     df = occurrences_df.copy()
 
-    # Oldest & most recent sightings (take first date if range)
-    df.loc[:, "eventDate"] = df["eventDate"].astype(str).str.strip()
-    df.loc[:, "eventDate"] = df["eventDate"].str.split("/").str[0]
-
+    # Oldest & most recent sightings 
     date_min_max = df.groupby(groupby)["eventDate"].agg(["min", "max"])
 
-    date_min_max["Oldest Occurrence"] = date_min_max["min"].astype(str).str[:10]
-    date_min_max["Newest Occurrence"] = date_min_max["max"].astype(str).str[:10]
+    date_min_max["Oldest Occurrence"] = date_min_max["min"]
+    date_min_max["Newest Occurrence"] = date_min_max["max"]
     date_min_max.drop(columns=["min", "max"], inplace=True)
 
     return date_min_max
@@ -291,8 +301,8 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 ##          - example 2: "Baja California Sur - La Paz, MX-BS, MX (Aug 2021)"
 ##  - all explicit coordinates (decimalLatitude, decimalLongitude) by eventDate
 ##      - roughly the same representation...
-##          - example 1: "-34.996 lat, 150.829 long (2025-01-03)" 
-##          - example 2: "24.178 lat, -110.416 long (2025-01-05)"
+##          - example 1: "lat:-34.996 long:150.829 (2025-01-03)" 
+##          - example 2: "lat:24.178 long:-110.416 (2025-01-05)"
 ##
 #####
 
@@ -346,13 +356,64 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     # Assemble country vals over time per shark ID
     valid_country = valid_country.groupby("whaleSharkID").apply(
         lambda x: ", ".join(sorted(set(
-            f"{stage} ({year})" for stage, year in zip(x["country"], x["year"])
+            f"{country} ({year})" for country, year in zip(x["country"], x["year"])
         ))), 
         include_groups=False
     ).reset_index(name="country")
 
     individual_sharks = individual_sharks.merge(valid_country, on="whaleSharkID", how="left")
     individual_sharks.loc[:, "country"] = individual_sharks["country"].fillna("Unknown")
+
+
+
+
+    # Now specific places by month + year
+    valid_locality = occurrences_df.dropna(subset=["stateProvince", "verbatimLocality"]).copy()
+
+    # Ugly type casting trick to populate null vals :/
+    valid_locality["month"] = valid_locality["month"].astype(object).fillna("Month Unknown").astype(str)
+    valid_locality["year"] = valid_locality["year"].apply(
+        lambda x: str(int(x)) if pd.notnull(x) else "Year Unknown"
+    )
+
+
+    # Assemble specific location vals over time per shark ID
+    valid_locality = valid_locality.groupby("whaleSharkID").apply(
+        lambda x: ", ".join(sorted(set(
+            f"{state} - {locality} ({month} {year})" for 
+            state, locality, month, year in 
+            zip(x["stateProvince"], x["verbatimLocality"], x["month"], x["year"])
+        ))), 
+        include_groups=False
+    ).reset_index(name="stateLocality")
+
+    individual_sharks = individual_sharks.merge(valid_locality, on="whaleSharkID", how="left")
+    individual_sharks.loc[:, "stateLocality"] = individual_sharks["stateLocality"].fillna("Unknown")
+
+
+
+
+    # Now latitude & longitude coordinates by eventDate
+    valid_coordinates = occurrences_df.dropna(subset=["decimalLatitude", "decimalLongitude"]).copy()
+
+    # Ugly type casting trick to populate null vals :/
+    valid_coordinates["eventDate"] = valid_coordinates["eventDate"].astype(object).fillna("eventDate Unknown").astype(str)
+
+    # Assemble specific location vals over time per shark ID
+    valid_coordinates = valid_coordinates.groupby("whaleSharkID").apply(
+        lambda x: ", ".join(sorted(set(
+            f"lat:{latitude} long:{longitude} ({eventDate})" for 
+            latitude, longitude, eventDate in 
+            zip(x["decimalLatitude"], x["decimalLongitude"], x["eventDate"])
+        ))), 
+        include_groups=False
+    ).reset_index(name="coordinatesLatLong")
+
+    individual_sharks = individual_sharks.merge(valid_coordinates, on="whaleSharkID", how="left")
+    individual_sharks.loc[:, "coordinatesLatLong"] = individual_sharks["coordinatesLatLong"].fillna("Unknown")
+
+
+
 
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
@@ -381,7 +442,7 @@ def export_all_analyses(dataframe: pd.DataFrame) -> None:
 if __name__ == "__main__":
     occurrences_df = read_csv(
         GBIF_CLEAN_FILE, 
-        dtype={"year": "Int64", "month": "Int64", "day": "Int64"}
+        dtype={"year": "Int64", "day": "Int64"}
     )
     export_all_analyses(occurrences_df)
     

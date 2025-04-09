@@ -186,7 +186,12 @@ def format_year_month_day(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     occurrences_df.loc[:, "month"] = occurrences_df["month"].map(
         lambda x: MONTH_NAMES[int(x) - 1] if x.isdigit() else None
     )
-    
+
+    # Remove time extra from eventDate (+ take first date if range)
+    occurrences_df.loc[:, "eventDate"] = occurrences_df["eventDate"].apply(
+        lambda x: str(x).strip().split("/")[0][:10] if pd.notnull(x) else None
+    )
+
     return occurrences_df
 
 
