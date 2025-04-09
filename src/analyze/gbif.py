@@ -350,6 +350,27 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 
+    # Now latitude & longitude coordinates by eventDate
+    valid_remarks = occurrences_df.dropna(subset=["occurrenceRemarks"]).copy()
+
+    # Ugly type casting trick to populate null vals :/
+    valid_remarks["eventDate"] = valid_remarks["eventDate"].astype(object).fillna("eventDate Unknown").astype(str)
+
+    # Assemble any researcher/diver remarks over time per shark ID
+    valid_remarks = valid_remarks.groupby("whaleSharkID").apply(
+        lambda x: ", ".join(sorted(set(
+            f"{occurrenceRemark} ({eventDate})" for 
+            occurrenceRemark, eventDate in 
+            zip(x["occurrenceRemarks"], x["eventDate"])
+        ))), 
+        include_groups=False
+    ).reset_index(name="occurrenceRemarks (eventDate)")
+
+    individual_sharks = individual_sharks.merge(valid_remarks, on="whaleSharkID", how="left")
+
+
+
+
     # Roughly same process, but now tracing countries where sighted
     valid_country = occurrences_df.dropna(subset=["country"]).copy()
 
