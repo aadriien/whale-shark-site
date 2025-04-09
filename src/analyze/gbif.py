@@ -341,7 +341,7 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
             f"{stage} ({year})" for stage, year in zip(x["lifeStage"], x["year"])
         ))), 
         include_groups=False
-    ).reset_index(name="lifeStage")
+    ).reset_index(name="lifeStage (year)")
 
     individual_sharks = individual_sharks.merge(valid_lifeStage, on="whaleSharkID", how="left")
 
@@ -359,10 +359,10 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
             f"{country} ({year})" for country, year in zip(x["country"], x["year"])
         ))), 
         include_groups=False
-    ).reset_index(name="country")
+    ).reset_index(name="country (year)")
 
     individual_sharks = individual_sharks.merge(valid_country, on="whaleSharkID", how="left")
-    individual_sharks.loc[:, "country"] = individual_sharks["country"].fillna("Unknown")
+    individual_sharks.loc[:, "country (year)"] = individual_sharks["country (year)"].fillna("Unknown")
 
 
 
@@ -385,10 +385,13 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
             zip(x["stateProvince"], x["verbatimLocality"], x["month"], x["year"])
         ))), 
         include_groups=False
-    ).reset_index(name="stateLocality")
+    ).reset_index(name="stateProvince - verbatimLocality (month year)")
 
     individual_sharks = individual_sharks.merge(valid_locality, on="whaleSharkID", how="left")
-    individual_sharks.loc[:, "stateLocality"] = individual_sharks["stateLocality"].fillna("Unknown")
+    individual_sharks.loc[:, "stateProvince - verbatimLocality (month year)"] = (
+        individual_sharks["stateProvince - verbatimLocality (month year)"]
+        .fillna("Unknown")
+    )
 
 
 
@@ -407,10 +410,13 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
             zip(x["decimalLatitude"], x["decimalLongitude"], x["eventDate"])
         ))), 
         include_groups=False
-    ).reset_index(name="coordinatesLatLong")
+    ).reset_index(name="lat:decimalLatitude long:decimalLongitude (eventDate)")
 
     individual_sharks = individual_sharks.merge(valid_coordinates, on="whaleSharkID", how="left")
-    individual_sharks.loc[:, "coordinatesLatLong"] = individual_sharks["coordinatesLatLong"].fillna("Unknown")
+    individual_sharks.loc[:, "lat:decimalLatitude long:decimalLongitude (eventDate)"] = (
+        individual_sharks["lat:decimalLatitude long:decimalLongitude (eventDate)"]
+        .fillna("Unknown")
+    )
 
 
 

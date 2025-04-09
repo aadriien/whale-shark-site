@@ -1,4 +1,4 @@
-whaleSharkID,Total Occurrences,sex,lifeStage,country,stateLocality,coordinatesLatLong
+whaleSharkID,Total Occurrences,sex,lifeStage (year),country (year),stateProvince - verbatimLocality (month year),lat:decimalLatitude long:decimalLongitude (eventDate)
 579995792,1,Unknown,Adult (2025),Australia (2025),"New South Wales - Tasman Sea, Beecroft Peninsula, NSW, AU (Jan 2025)",lat:-34.996087 long:150.82945 (2025-01-03)
 580647077,1,Unknown,Adult (2025),Mexico (2025),"Baja California Sur - Bahía de La Paz, MX (Jan 2025)",lat:24.178112 long:-110.416032 (2025-01-05)
 581272702,1,Unknown,Adult (2025),Mexico (2025),"Baja California Sur - La Paz, MX-BS, MX (Jan 2025)",lat:24.176277 long:-110.376397 (2025-01-07)
