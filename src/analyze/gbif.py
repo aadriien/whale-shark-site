@@ -320,6 +320,9 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
         groupby=["whaleSharkID"]
     )
 
+    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["whaleSharkID"])
+    individual_sharks = individual_sharks.merge(basisOfRecord_counts, on="whaleSharkID", how="left")
+
     sex_mappings = (
         occurrences_df[occurrences_df["sex"].isin(["Female", "Male"])] 
         .drop_duplicates(subset="whaleSharkID", keep="first") 
