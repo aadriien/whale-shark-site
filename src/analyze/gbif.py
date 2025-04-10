@@ -12,7 +12,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, validate_and_dropna, move_columns, standardize_column_vals,
+    read_csv, export_to_csv, validate_and_dropna, standardize_column_vals,
     add_totals_column, add_avg_per_year, add_top_x_metric,
 )
 
@@ -368,13 +368,16 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 ##
 ##  - ID (organismID and/or identificationID)
 ##      - UPDATE: consolidated into whaleSharkID during cleaning
+##  - total occurrences (how many times seen and/or tracked)
+##  - oldest & newest dates of occurrence(s)
+##  - ratio of human observation instances to machine observation
+##      - i.e. physically seen by divers vs data logged by satellite tag 
+##      - disregard any other forms (e.g. specimen sample)
 ##  - sex (if available)
 ##  - lifeStage (if available, as of given year)
 ##      - store/display as str from list, e.g. "Juvenile (2019), Adult (2024)"
-##  - all sightings/occurrences (by key/ID, to map for further info)
-##      - store list of all corresponding keys from full GBIF clean dataset
-##      - can also store occurrenceIDs if desired BUT they're not all uniform
-##      - UPDATE: definitely NOT doing this b/c some sharks have hundreds
+##  - any occurrenceRemarks (notes) left by researchers, scientists, divers, etc
+##      - str list by eventDate, e.g. "2.5- 3m juvenile female (2024-01-19)"
 ##  - all countries visited by year
 ##      - store as str from list... 
 ##          - example 1: "Ecuador (2016)" 
@@ -408,6 +411,7 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     date_min_max = make_eventDate_df(occurrences_df, groupby=["whaleSharkID"])
     individual_sharks = individual_sharks.merge(date_min_max, on=["whaleSharkID"], how="left")
 
+    # Observation type (human/divers vs machine/satellites)
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["whaleSharkID"])
     individual_sharks = individual_sharks.merge(basisOfRecord_counts, on="whaleSharkID", how="left")
 
