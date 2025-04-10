@@ -149,6 +149,89 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
     return basisOfRecord_counts
 
 
+def make_individual_metric_df(occurrences_df: pd.DataFrame, 
+                            individual_sharks: pd.DataFrame,
+                            metric_subset: list[str],
+                            metric_timing: list[str],
+                            format_str: str,
+                            column_name: str) -> pd.DataFrame:
+
+    # Combine metrics (e.g. ["decimalLatitude", "decimalLongitude"] + ["eventDate"])
+    all_metric_vals = metric_subset + metric_timing
+
+    # Now, non-null specific metric by chosen time views (e.g. month year)
+    valid_metric = occurrences_df.dropna(subset=metric_subset).copy()
+
+    # Ugly type casting trick to populate & format null vals :/
+    with pd.option_context('future.no_silent_downcasting', True):
+        for time_view in metric_timing:
+            valid_metric[time_view] = (
+                valid_metric[time_view].astype(object)
+                .fillna(f"{time_view} Unknown").astype(str)
+            )
+
+    # Assemble specific metric values over time per shark ID (e.g. lifeStage)
+    valid_metric = valid_metric.groupby("whaleSharkID").apply(
+        lambda x: ", ".join(sorted(set(
+            # Example: zip occurrenceRemarks with eventDate
+            format_str.format(*vals) 
+            for vals in 
+            zip(*(x[col] for col in all_metric_vals))
+        ))), 
+        include_groups=False
+    ).reset_index(name=column_name)
+
+    individual_sharks = individual_sharks.merge(valid_metric, on="whaleSharkID", how="left")
+    individual_sharks.loc[:, column_name] = individual_sharks[column_name].fillna("Unknown")
+
+    return individual_sharks
+
+
+def assemble_individual_metrics(occurrences_df: pd.DataFrame, 
+                                individual_sharks: pd.DataFrame) -> pd.DataFrame:
+    # Build "lifeStage (year)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        metric_subset=["lifeStage"], metric_timing=["year"],
+        format_str="{0} ({1})", # == f"{stage} ({year})"
+        column_name="lifeStage (year)"
+    )
+
+    # Build "occurrenceRemarks (eventDate)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        metric_subset=["occurrenceRemarks"], metric_timing=["eventDate"],
+        format_str="{0} ({1})", # == f"{occurrenceRemarks} ({eventDate})"
+        column_name="occurrenceRemarks (eventDate)"
+    )
+
+    # Build "country (year)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        metric_subset=["country"], metric_timing=["year"],
+        format_str="{0} ({1})", # == f"{country} ({year})"
+        column_name="country (year)"
+    )
+
+    # Build "stateProvince - verbatimLocality (month year)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        metric_subset=["stateProvince", "verbatimLocality"], metric_timing=["month", "year"],
+        format_str="{0} - {1} ({2} {3})", # == f"{state} - {locality} ({month} {year})"
+        column_name="stateProvince - verbatimLocality (month year)"
+    )
+
+    # Build "lat:decimalLatitude long:decimalLongitude (eventDate)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        metric_subset=["decimalLatitude", "decimalLongitude"], metric_timing=["eventDate"],
+        format_str="lat:{0} long:{1} ({2})", # == f"lat:{latitude} long:{longitude} ({eventDate})"
+        column_name="lat:decimalLatitude long:decimalLongitude (eventDate)"
+    )
+
+    return individual_sharks
+
+
 #####
 ## Larger datasets to export
 #####
@@ -336,127 +419,10 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     individual_sharks = individual_sharks.merge(sex_mappings, on="whaleSharkID", how="left")
     individual_sharks.loc[:, "sex"] = individual_sharks["sex"].fillna("Unknown")
 
-
-
-    valid_lifeStage = occurrences_df.dropna(subset=["lifeStage"]).copy()
-
-    # Ugly type casting trick to populate null year vals (type int) to str :/
-    valid_lifeStage["year"] = valid_lifeStage["year"].astype(object).fillna("Year Unknown").astype(str)
-
-    # Assemble lifeStage vals over time per shark ID
-    valid_lifeStage = valid_lifeStage.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
-            f"{stage} ({year})" for stage, year in zip(x["lifeStage"], x["year"])
-        ))), 
-        include_groups=False
-    ).reset_index(name="lifeStage (year)")
-
-    individual_sharks = individual_sharks.merge(valid_lifeStage, on="whaleSharkID", how="left")
-
-
-
-    # Now latitude & longitude coordinates by eventDate
-    valid_remarks = occurrences_df.dropna(subset=["occurrenceRemarks"]).copy()
-
-    # Ugly type casting trick to populate null vals :/
-    valid_remarks["eventDate"] = valid_remarks["eventDate"].astype(object).fillna("eventDate Unknown").astype(str)
-
-    # Assemble any researcher/diver remarks over time per shark ID
-    valid_remarks = valid_remarks.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
-            f"{occurrenceRemark} ({eventDate})" for 
-            occurrenceRemark, eventDate in 
-            zip(x["occurrenceRemarks"], x["eventDate"])
-        ))), 
-        include_groups=False
-    ).reset_index(name="occurrenceRemarks (eventDate)")
-
-    individual_sharks = individual_sharks.merge(valid_remarks, on="whaleSharkID", how="left")
-
-
-
-
-    # Roughly same process, but now tracing countries where sighted
-    valid_country = occurrences_df.dropna(subset=["country"]).copy()
-
-    # Ugly type casting trick to populate null year vals (type int) to str :/
-    valid_country["year"] = valid_country["year"].astype(object).fillna("Year Unknown").astype(str)
-
-    # Assemble country vals over time per shark ID
-    valid_country = valid_country.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
-            f"{country} ({year})" for country, year in zip(x["country"], x["year"])
-        ))), 
-        include_groups=False
-    ).reset_index(name="country (year)")
-
-    individual_sharks = individual_sharks.merge(valid_country, on="whaleSharkID", how="left")
-    individual_sharks.loc[:, "country (year)"] = individual_sharks["country (year)"].fillna("Unknown")
-
-
-
-
-    # Now specific places by month + year
-    valid_locality = occurrences_df.dropna(subset=["stateProvince", "verbatimLocality"]).copy()
-
-    # Ugly type casting trick to populate null vals :/
-    valid_locality["month"] = valid_locality["month"].astype(object).fillna("Month Unknown").astype(str)
-    valid_locality["year"] = valid_locality["year"].apply(
-        lambda x: str(int(x)) if pd.notnull(x) else "Year Unknown"
-    )
-
-
-    # Assemble specific location vals over time per shark ID
-    valid_locality = valid_locality.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
-            f"{state} - {locality} ({month} {year})" for 
-            state, locality, month, year in 
-            zip(x["stateProvince"], x["verbatimLocality"], x["month"], x["year"])
-        ))), 
-        include_groups=False
-    ).reset_index(name="stateProvince - verbatimLocality (month year)")
-
-    individual_sharks = individual_sharks.merge(valid_locality, on="whaleSharkID", how="left")
-    individual_sharks.loc[:, "stateProvince - verbatimLocality (month year)"] = (
-        individual_sharks["stateProvince - verbatimLocality (month year)"]
-        .fillna("Unknown")
-    )
-
-
-
-
-    # Now latitude & longitude coordinates by eventDate
-    valid_coordinates = occurrences_df.dropna(subset=["decimalLatitude", "decimalLongitude"]).copy()
-
-    # Ugly type casting trick to populate null vals :/
-    valid_coordinates["eventDate"] = valid_coordinates["eventDate"].astype(object).fillna("eventDate Unknown").astype(str)
-
-    # Assemble specific location vals over time per shark ID
-    valid_coordinates = valid_coordinates.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
-            f"lat:{latitude} long:{longitude} ({eventDate})" for 
-            latitude, longitude, eventDate in 
-            zip(x["decimalLatitude"], x["decimalLongitude"], x["eventDate"])
-        ))), 
-        include_groups=False
-    ).reset_index(name="lat:decimalLatitude long:decimalLongitude (eventDate)")
-
-    individual_sharks = individual_sharks.merge(valid_coordinates, on="whaleSharkID", how="left")
-    individual_sharks.loc[:, "lat:decimalLatitude long:decimalLongitude (eventDate)"] = (
-        individual_sharks["lat:decimalLatitude long:decimalLongitude (eventDate)"]
-        .fillna("Unknown")
-    )
-
-
-
-
+    # Build & assemble all other relevant metrics (e.g. lifeStage, locations, etc)
+    individual_sharks = assemble_individual_metrics(occurrences_df, individual_sharks)
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
-
-    return
-
-
-
 
 
 
