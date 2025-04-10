@@ -138,13 +138,14 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
     df = standardize_column_vals(
         df, col_name="basisOfRecord", 
         valid_vals=["HUMAN_OBSERVATION", "MACHINE_OBSERVATION"], 
-        fill_val="Other"
+        fill_val="Other (e.g. specimen sample)"
     )
 
     basisOfRecord_counts = df.pivot_table(
         index=index, columns="basisOfRecord", aggfunc="size", fill_value=0
     )
-    basisOfRecord_counts = basisOfRecord_counts.add_prefix("Basis of Record: ")
+    basisOfRecord_counts.drop("Other (e.g. specimen sample)", axis=1, inplace=True)
+
     return basisOfRecord_counts
 
 

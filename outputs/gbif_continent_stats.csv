@@ -1,8 +1,8 @@
-continent,Total Occurrences,Top 3 Publishing Countries,Avg Per Year (all),Avg Per Year (after 2020),Avg Per Year (2010 - 2020),Avg Per Year (2000 - 2010),Avg Per Year (before 2000),Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,Basis of Record: HUMAN_OBSERVATION,Basis of Record: MACHINE_OBSERVATION,Basis of Record: Other,Oldest Occurrence,Newest Occurrence
-AFRICA,148,United States > United Kingdom > Mexico,6.17,4.8,8.82,8.57,1.5,28,3,5,8,4,3,10,5,5,19,12,17,105,0,43,1973-01,2025-02-28
-ANTARCTICA,11,Netherlands,5.5,,5.5,,,0,0,0,11,0,0,0,0,0,0,0,0,11,0,0,2017-04-16,2018-04-20
-ASIA,379,United States > United Kingdom > France,9.48,20.0,21.18,2.62,1.82,26,32,37,26,30,33,58,30,19,25,24,18,276,3,100,1929,2025-03-14
-EUROPE,1,Portugal,1.0,,1.0,,,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,2020-10-17,2020-10-17
-NORTH_AMERICA,384,United States > Mexico > France,13.43,24.4,21.18,4.5,1.0,33,24,37,23,16,21,43,40,30,25,34,31,340,38,6,1858,2025-01-07
-OCEANIA,765,Australia > United States > United Kingdom,28.27,7.8,61.73,4.29,1.5,31,22,49,62,87,74,98,21,68,97,76,28,158,587,20,1964-04,2025-03-16
-SOUTH_AMERICA,36,Ecuador > France > United States,1.89,2.0,2.14,2.25,1.0,1,0,3,5,2,4,1,4,4,5,1,2,25,6,5,1984-03-24,2024
+continent,Total Occurrences,Top 3 Publishing Countries,Avg Per Year (all),Avg Per Year (after 2020),Avg Per Year (2010 - 2020),Avg Per Year (2000 - 2010),Avg Per Year (before 2000),Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,HUMAN_OBSERVATION,MACHINE_OBSERVATION,Oldest Occurrence,Newest Occurrence
+AFRICA,148,United States > United Kingdom > Mexico,6.17,4.8,8.82,8.57,1.5,28,3,5,8,4,3,10,5,5,19,12,17,105,0,1973-01,2025-02-28
+ANTARCTICA,11,Netherlands,5.5,,5.5,,,0,0,0,11,0,0,0,0,0,0,0,0,11,0,2017-04-16,2018-04-20
+ASIA,379,United States > United Kingdom > France,9.48,20.0,21.18,2.62,1.82,26,32,37,26,30,33,58,30,19,25,24,18,276,3,1929,2025-03-14
+EUROPE,1,Portugal,1.0,,1.0,,,0,0,0,0,0,0,0,0,0,1,0,0,1,0,2020-10-17,2020-10-17
+NORTH_AMERICA,384,United States > Mexico > France,13.43,24.4,21.18,4.5,1.0,33,24,37,23,16,21,43,40,30,25,34,31,340,38,1858,2025-01-07
+OCEANIA,765,Australia > United States > United Kingdom,28.27,7.8,61.73,4.29,1.5,31,22,49,62,87,74,98,21,68,97,76,28,158,587,1964-04,2025-03-16
+SOUTH_AMERICA,36,Ecuador > France > United States,1.89,2.0,2.14,2.25,1.0,1,0,3,5,2,4,1,4,4,5,1,2,25,6,1984-03-24,2024
