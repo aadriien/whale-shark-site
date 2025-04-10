@@ -61,3 +61,24 @@ format:
 	@which black > /dev/null || (echo "black not found. Installing..."; $(POETRY) add black)
 	$(POETRY) run black src/
 
+
+# Setup frontend env (Vite + React) inside website folder
+setup_website:
+	@which npm > /dev/null || (echo "npm not found. Please install Node.js and npm." && exit 1)
+	@cd website && \
+	if [ ! -d "node_modules" ]; then \
+		echo "Setting up frontend with Vite + React..."; \
+		npx create-vite@latest . --template react; \
+		npm install; \
+		npm install three d3 p5; \
+	else \
+		echo "Frontend already set up."; \
+	fi && \
+	echo "Checking npm version..."; \
+	npm install -g npm@latest; \
+
+# Run frontend dev server
+run_website:
+	@cd website && npm run dev
+
+
