@@ -10,6 +10,3 @@ __pycache__/
 data/*
 !data/data.zip
 
-website/node_modules
-website/dist
-
