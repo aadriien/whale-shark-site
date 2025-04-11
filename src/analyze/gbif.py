@@ -29,7 +29,8 @@ GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
 GBIF_PUBLISHING_COUNTRY_STATS_FILE = "outputs/gbif_publishingCountry_stats.csv"
 GBIF_INDIVIDUAL_SHARKS_STATS_FILE = "outputs/gbif_individual_sharks_stats.csv"
 
-GBIF_SHARK_TRACKING_FILE = "outputs/gbif_shark_tracking.json"
+# Feeds as JSON into Three.js globe display on website
+GBIF_SHARK_TRACKING_FILE = "website/src/assets/data/gbif_shark_tracking.json"
 
 
 
