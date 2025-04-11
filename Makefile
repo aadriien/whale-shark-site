@@ -3,7 +3,7 @@
 POETRY = poetry
 VENV_DIR = .venv
 
-.PHONY: setup run format clean apis analysis
+.PHONY: setup run fetch_data clean_data analyze_data zip_data format setup_website run_website
 
 all: setup run zip_data
 
@@ -70,7 +70,7 @@ setup_website:
 		echo "Setting up frontend with Vite + React..."; \
 		npx create-vite@latest . --template react; \
 		npm install; \
-		npm install three d3 p5; \
+		npm install three d3 p5 react-router-dom; \
 	else \
 		echo "Frontend already set up."; \
 	fi && \
