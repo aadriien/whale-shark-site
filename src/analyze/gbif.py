@@ -5,6 +5,8 @@
 ###############################################################################
 
 
+import re
+import json
 import pandas as pd
 
 from src.config import (
@@ -26,6 +28,8 @@ GBIF_COUNTRY_STATS_FILE = "outputs/gbif_country_stats.csv"
 GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
 GBIF_PUBLISHING_COUNTRY_STATS_FILE = "outputs/gbif_publishingCountry_stats.csv"
 GBIF_INDIVIDUAL_SHARKS_STATS_FILE = "outputs/gbif_individual_sharks_stats.csv"
+
+GBIF_SHARK_TRACKING_FILE = "outputs/gbif_shark_tracking.json"
 
 
 
@@ -427,6 +431,46 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     individual_sharks = assemble_individual_metrics(occurrences_df, individual_sharks)
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
+    export_individual_shark_tracking_json(individual_sharks)
+
+
+
+def parse_coordinates_history(coordinates_str_list: str) -> list[dict]:
+    if coordinates_str_list == "Unknown" or not isinstance(coordinates_str_list, str):
+        return []
+    
+    entries = coordinates_str_list.split(", ")
+    parsed = []
+    for entry in entries:
+        match = re.match(r"lat:([-\d.]+) long:([-\d.]+) \(([^)]+)\)", entry)
+        if match:
+            lat, long, eventDate = match.groups()
+            parsed.append({
+                "lat": float(lat),
+                "long": float(long),
+                "eventDate": eventDate
+            })
+    return parsed
+
+
+def export_individual_shark_tracking_json(individual_sharks: pd.DataFrame) -> None:
+    # Build export list
+    output = []
+    for _, row in individual_sharks.iterrows():
+        coords = parse_coordinates_history(row["lat:decimalLatitude long:decimalLongitude (eventDate)"])
+        
+        # Skip if "Unknown" or parsing failed
+        if coords:  
+            output.append({
+                "whaleSharkID": row["whaleSharkID"],
+                "coordinates": coords
+            })
+
+    # Export to JSON
+    with open(GBIF_SHARK_TRACKING_FILE, "w") as f:
+        json.dump(output, f, indent=2)
+
+    print(f"Exported {len(output)} entries to {GBIF_SHARK_TRACKING_FILE}")
 
 
 
