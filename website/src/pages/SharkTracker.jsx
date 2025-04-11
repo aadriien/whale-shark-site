@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Globe from '../components/Globe.jsx';
 
 function SharkTracker() {
     return (
@@ -12,7 +13,11 @@ function SharkTracker() {
       }}>
         <h1>SharkTracker Page</h1>
         <p>Here’s where we’ll visualize whale shark data.</p>
-            <Link to="/home" style={{
+        
+        {/* Globe component */}
+        <Globe />
+        
+        <Link to="/home" style={{
             marginTop: "20px",
             fontSize: "18px",
             textDecoration: "underline",
