@@ -69,13 +69,14 @@ setup_website:
 	if [ ! -d "node_modules" ]; then \
 		echo "Setting up frontend with Vite + React..."; \
 		npx create-vite@latest . --template react; \
-		npm install; \
-		npm install three d3 p5 react-router-dom; \
 	else \
 		echo "Frontend already set up."; \
 	fi && \
-	echo "Checking npm version..."; \
-	npm install -g npm@latest; \
+	echo "Installing frontend dependencies..."; \
+	npm install && \
+	npm install three three-globe d3 p5 react-router-dom && \
+	echo "Checking npm version..." && \
+	npm install -g npm@latest
 
 # Run frontend dev server
 run_website:
