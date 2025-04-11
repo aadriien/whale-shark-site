@@ -1,10 +1,16 @@
 import React, { useEffect, useRef } from 'react';
+
 import * as THREE from 'three';
 import ThreeGlobe from 'three-globe';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+import getCoordinates from './Coordinates.jsx';
+
 import earthImg from '../assets/images/three-globe-imgs/earth-blue-marble.jpg';
 import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';
+
+
+const pointsData = getCoordinates();
 
 const Globe = () => {
   const mountRef = useRef(null);
@@ -16,13 +22,25 @@ const Globe = () => {
     const globe = new ThreeGlobe()
         .globeImageUrl(earthImg)
         .bumpImageUrl(bumpImg)
-        // .ringsData(pointsData)
-        // .ringColor(() => colorInterpolator)
-        // .ringMaxRadius('ringMaxSize')
-        // .ringPropagationSpeed('ringPropagationSpeed')
-        // .ringRepeatPeriod('ringRepeatPeriod');
 
-        
+
+    // Color Interpolator for ring effects
+    const colorInterpolator = t => {
+        // Yellow (255, 255, 0) -> Neon Cyan (0, 255, 255) transition
+        const r = Math.round(255 - t * 255);  // Transition from yellow to red
+        const g = Math.round(255);             // Keep green constant (255)
+        const b = Math.round(t * 255);        // Transition from no blue to full cyan
+        return `rgba(${r}, ${g}, ${b}, ${0.9 + (1 - t) * 0.1})`;  // Hold opacity
+    };
+  
+    // Setting up the points (rings) based on `pointsData`
+    globe.ringsData(pointsData)
+        .ringColor(() => colorInterpolator)
+        .ringMaxRadius('ringMaxSize')
+        .ringPropagationSpeed('ringPropagationSpeed') 
+        .ringRepeatPeriod('ringRepeatPeriod'); 
+
+
     // Material for the globe with roughness
     const globeMaterial = new THREE.MeshStandardMaterial({
         color: 0x0055ff, 
@@ -38,7 +56,7 @@ const Globe = () => {
 
     const scene = new THREE.Scene();
     scene.add(globe);
-    scene.add(new THREE.AmbientLight(0xcccccc, 0.5 * Math.PI));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5 * Math.PI));
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI);
     directionalLight.position.set(0, 1, 1); 
@@ -94,8 +112,8 @@ const Globe = () => {
     controls.enableZoom = true;
     controls.autoRotate = false;
 
-    controls.minDistance = 120;
-    controls.maxDistance = 250;
+    controls.minDistance = 125;
+    controls.maxDistance = 220;
 
 
     // Animation loop
@@ -117,7 +135,7 @@ const Globe = () => {
       }
       renderer.dispose();
     };
-  }, []);
+  }, []); 
 
   return (
     <div
