@@ -2,7 +2,7 @@ import coordinatesData from '../assets/data/gbif_shark_tracking.json';
 
 
 const getCoordinates = () => {
-  // TEST with specific whale shark to start ("Nati")
+  // TEST with specific whale shark to start ("Karla")
   const shark = coordinatesData.find(shark => shark.whaleSharkID == "Karla");
 
   if (!shark) return [];
@@ -12,7 +12,7 @@ const getCoordinates = () => {
     const baseDelay = Math.random() * 2000;
 
     return {
-      id: `nati-${coord.lat}-${coord.long}`,
+      id: `${coord.whaleSharkID}-${coord.lat}-${coord.long}`,
       lat: coord.lat,
       lng: coord.long,
       date: coord.eventDate,
