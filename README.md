@@ -2,7 +2,7 @@
 
 ## Description
 
-Take a deep dive into the world of gentle giants with this master website of whale shark data! 
+Take a deep dive into the world of gentle giants with this **master website of whale shark data**! 
 
 For this project, `whale-shark-site`, I aim to bridge the gap between scientific research and everyday engagement by amassing shark, climate, and ocean data from a variety of sources—funneling them into one central site that can appeal to users of all backgrounds. 
 
@@ -18,7 +18,7 @@ For this project, `whale-shark-site`, I aim to bridge the gap between scientific
 
 ## Project Goals
 
-While this platform is inherently educational, I want it to also be accessible and exciting. It should mirror the feeling you experience when you step inside a really interesting museum, or a particularly impressive library. This master site of whale shark data is a kind of playground. It's meant to be discovered and explored.
+While this platform is inherently educational, I want it to also be **accessible and exciting**. It should mirror the feeling you experience when you step inside a really interesting museum, or a particularly impressive library. This master site of whale shark data is a kind of playground. It's meant to be **discovered and explored**.
 
 This is a **work in progress**, but I can assure you that I'm fit to burst with ideas and plans! A project of this nature is a huge undertaking, with many moving pieces, so please hang tight while I chip away. 
 
@@ -66,9 +66,9 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 1. Pages dedicated to different audiences
 
-    - Science and research (data + detail)
+    - **Science and research** (data + detail)
 
-    - Fun and play (interaction + connection)
+    - **Fun and play** (interaction + connection)
 
 2. Insight from data pipelines pulled in to web pages
 
