@@ -81,7 +81,7 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 - **🛰️ Satellite tracking by tag**: Mapping of where the sharks have been, and where they are going.
 
 - **🦈 Individual shark views**: Personal detailing of various whale sharks worldwide.
-- **🤿 Personal diver stories**: Records and details from divers who have encountered them.
+- **🤿 Personal diver stories**: Records and takeaways from divers who have encountered them.
 - **💻 Computer vision matching**: Integration of a really neat open source Hugging Face model.
 
 - **📊 Historic data trends**: Holistic insights into the sharks (+ related factors) over time.

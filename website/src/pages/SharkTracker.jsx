@@ -12,7 +12,7 @@ function SharkTracker() {
         textAlign: "center"
       }}>
         <h1>SharkTracker Page</h1>
-        <p>Here’s where we’ll visualize whale shark data.</p>
+        <p>Here's where we'll visualize whale shark data.</p>
         
         <div className="globe-container">
             {/* Globe component */}
