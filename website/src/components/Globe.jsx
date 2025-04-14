@@ -33,6 +33,15 @@ const yaw = new THREE.Object3D() // y-axis (vertical), turn left/right
 const pitch = new THREE.Object3D() // x-axis (horizontal), tilt up/down
 
 
+const resetGlobe = (camera) => {
+    // Reset pitch & yaw rotations
+    pitch.rotation.set(0, 0, 0); 
+    yaw.rotation.set(0, 0, 0); 
+  
+    // Reset camera position (zoom)
+    camera.position.set(0, 0, 200); 
+};
+
 
 // Ease camera view to coords point for globe storytelling
 const goTo = (lat, long) => {
@@ -66,8 +75,6 @@ const playStoryMode = async (sortedPoints, globe, controls, camera) => {
         .to({ z: 150 }, 2500) 
         .easing(Cubic.InOut)
         .start();
-
-    
 
     for (let i = 0; i < sortedPoints.length; i++) {
       const point = sortedPoints[i];
@@ -109,6 +116,10 @@ const Globe = forwardRef((props, ref) => {
 
     const playStory = async () => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
+
+        resetGlobe(cameraRef.current);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
         await playStoryMode(pointsData, globeRef.current, controlsRef.current, cameraRef.current);
     };
     
