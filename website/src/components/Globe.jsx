@@ -58,13 +58,28 @@ const goTo = (lat, long) => {
 const playStoryMode = async (sortedPoints, globe, controls, camera) => {
     if (!globe || !sortedPoints.length) return;
 
+    // If story mode, disable orbit controls (user can't move globe)
+    controls.enabled = false;
+    
+    // Have camera zoom into globe gradually, over 1.5 sec period
+    new JEasing(camera.position)
+        .to({ z: 150 }, 2500) 
+        .easing(Cubic.InOut)
+        .start();
+
+    
+
     for (let i = 0; i < sortedPoints.length; i++) {
       const point = sortedPoints[i];
 
       console.log(point)
 
       goTo(point.lat, point.lng)
-  
+
+      // Wait 2 sec after zoom in before starting story
+      if (i == 0) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
   
       // Show ripple for this point
       globe.ringsData([point])
@@ -75,6 +90,11 @@ const playStoryMode = async (sortedPoints, globe, controls, camera) => {
   
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
+
+    // Restore orbit controls after story told
+    setTimeout(() => {
+        controls.enabled = true;
+    }, 1000);
 };
 
 
