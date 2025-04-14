@@ -5,7 +5,9 @@ import * as THREE from 'three';
 import ThreeGlobe from 'three-globe';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-import getCoordinates from './Coordinates.jsx';
+import JEASINGS, { JEasing, Cubic } from '../utils/JEasings/JEasings.ts';
+
+import getCoordinates from '../utils/Coordinates.js';
 
 import earthImg from '../assets/images/three-globe-imgs/earth-blue-marble.jpg';
 import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';
@@ -24,6 +26,35 @@ const colorInterpolator = t => {
 };
 
 
+
+// Euler angles for managing globe storytelling
+const pivot = new THREE.Object3D() // point around which globe rotates
+const yaw = new THREE.Object3D() // y-axis (vertical), turn left/right
+const pitch = new THREE.Object3D() // x-axis (horizontal), tilt up/down
+
+
+
+// Ease camera view to coords point for globe storytelling
+const goTo = (lat, long) => {
+    new JEasing(pitch.rotation)
+        // Convert latitude to radians, & animate over 2000 ms (2 sec)
+        .to(
+            { x: (lat / 180) * Math.PI * -1 },
+            1000
+        )
+        .easing(Cubic.InOut)
+        .start()
+    new JEasing(yaw.rotation)
+        // Convert longitude to radians, & animate over 2000 ms (2 sec)
+        .to(
+            { y: (long / 180) * Math.PI },
+            1000
+        )
+        .easing(Cubic.InOut)
+        .start()
+}
+
+
 const playStoryMode = async (sortedPoints, globe, controls, camera) => {
     if (!globe || !sortedPoints.length) return;
 
@@ -31,6 +62,8 @@ const playStoryMode = async (sortedPoints, globe, controls, camera) => {
       const point = sortedPoints[i];
 
       console.log(point)
+
+      goTo(point.lat, point.lng)
   
   
       // Show ripple for this point
@@ -114,6 +147,15 @@ const Globe = forwardRef((props, ref) => {
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
 
+
+    // Add Euler angles for goTo storytelling
+    scene.add(pivot)
+    pivot.add(yaw)
+    yaw.add(pitch)
+    pitch.add(camera)
+
+
+
     const resizeCanvas = () => {
         if (!globeContainer.offsetWidth || !globeContainer.offsetHeight) return;
   
@@ -165,6 +207,9 @@ const Globe = forwardRef((props, ref) => {
     // Animation loop
     const animate = () => {
       controls.update();
+
+      JEASINGS.update();
+
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
