@@ -20,9 +20,9 @@ For this project, `whale-shark-site`, I aim to bridge the gap between scientific
 
 While this platform is inherently educational, I want it to also be **accessible and exciting**. It should mirror the feeling you experience when you step inside a really interesting museum, or a particularly impressive library. This master site of whale shark data is a kind of playground. It's meant to be **discovered and explored**.
 
-This is a **work in progress**, but I can assure you that I'm fit to burst with ideas and plans! A project of this nature is a huge undertaking, with many moving pieces, so please hang tight while I chip away. 
+This is a **work in progress**, but I can assure you that I'm fit to burst with ideas and plans! A project of this nature is a huge undertaking, with many moving pieces, so please hang tight while I chip away. 🚀 
 
-In the meantime, feel free to explore the codebase and/or reach out with any questions.
+In the meantime, feel free to explore the codebase and/or reach out with any questions. 
 
 
 ## Technical Overview
@@ -99,7 +99,9 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 - **Playful education**: Plenty to learn, but with exploration and engagement as the primary goal.
 
 
-Stay tuned! 🚀
+## Acknowledgements
+
+Thank you to Sean Bradley, whose open source [JEasings module](https://github.com/Sean-Bradley/JEasings), a JavaScript animation engine, allows me to control movements on the Three.js globe for "storytelling mode".
 
 
 
