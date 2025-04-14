@@ -42,6 +42,8 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 - **Vite + React**: Web app
 
+- **JavaScript + TypeScript**: Under the hood web utils 
+
 - **Three.js (+ WebGL)**: 3D web graphics
 
 - **P5.js + D3.js**: Interactive web + data visuals
