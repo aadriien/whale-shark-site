@@ -15,7 +15,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, validate_and_dropna, standardize_column_vals,
+    read_csv, export_to_csv, export_to_json, validate_and_dropna, standardize_column_vals,
     add_totals_column, add_avg_per_year, add_top_x_metric,
 )
 
@@ -28,10 +28,14 @@ GBIF_CALENDAR_STATS_FILE = "outputs/gbif_calendar_stats.csv"
 GBIF_COUNTRY_STATS_FILE = "outputs/gbif_country_stats.csv"
 GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
 GBIF_PUBLISHING_COUNTRY_STATS_FILE = "outputs/gbif_publishingCountry_stats.csv"
+
 GBIF_INDIVIDUAL_SHARKS_STATS_FILE = "outputs/gbif_individual_sharks_stats.csv"
 
 # Feeds as JSON into Three.js globe display on website
 GBIF_SHARK_TRACKING_FILE = "website/src/assets/data/gbif_shark_tracking.json"
+
+GBIF_STORY_SHARKS_FILE = "outputs/gbif_story_sharks.csv"
+GBIF_STORY_SHARK_TRACKING_FILE = "website/src/assets/data/gbif_story_shark_tracking.json"
 
 
 
@@ -433,7 +437,10 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     individual_sharks = assemble_individual_metrics(occurrences_df, individual_sharks)
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
-    export_individual_shark_tracking_json(individual_sharks)
+
+    # Also build & export datasets for globe / storytelling
+    export_shark_tracking_json(shark_df=individual_sharks, json_file=GBIF_SHARK_TRACKING_FILE)
+    export_story_sharks(individual_sharks)
 
 
 
@@ -476,10 +483,10 @@ def parse_coordinates_history(coordinates_str_list: str) -> list[dict]:
     return parsed
 
 
-def export_individual_shark_tracking_json(individual_sharks: pd.DataFrame) -> None:
+def export_shark_tracking_json(shark_df: pd.DataFrame, json_file: str) -> None:
     # Build export list
     output = []
-    for _, row in individual_sharks.iterrows():
+    for _, row in shark_df.iterrows():
         coords = parse_coordinates_history(row["lat:decimalLatitude long:decimalLongitude (eventDate)"])
         
         # Skip if "Unknown" or parsing failed
@@ -489,11 +496,19 @@ def export_individual_shark_tracking_json(individual_sharks: pd.DataFrame) -> No
                 "coordinates": coords
             })
 
-    # Export to JSON
-    with open(GBIF_SHARK_TRACKING_FILE, "w") as f:
-        json.dump(output, f, indent=2)
+    export_to_json(json_file, output)
 
-    print(f"Exported {len(output)} entries to {GBIF_SHARK_TRACKING_FILE}")
+
+def export_story_sharks(individual_sharks: pd.DataFrame) -> None:
+    frequently_sighted = individual_sharks.loc[individual_sharks["Total Occurrences"] > 3]
+    
+    frequently_sighted = (
+        frequently_sighted.sort_values(by="Total Occurrences", ascending=True)
+        .reset_index(drop=True)
+    )
+
+    export_to_csv(GBIF_STORY_SHARKS_FILE, frequently_sighted)
+    export_shark_tracking_json(shark_df=frequently_sighted, json_file=GBIF_STORY_SHARK_TRACKING_FILE)
 
 
 

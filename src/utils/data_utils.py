@@ -6,6 +6,7 @@
 
 
 import os
+import json
 import pandas as pd
 from typing import Optional, Union, Literal
 
@@ -70,6 +71,24 @@ def export_to_csv(csv_file: str, dataframe: pd.DataFrame) -> None:
     dataframe.to_csv(csv_file, index=False)
 
     print(f"Exported {len(dataframe)} entries to {csv_file}")
+
+
+def export_to_json(json_file: str, output_list: list) -> None:
+    if not json_file:
+        raise ValueError("Error, must specify JSON file path")
+
+    if not isinstance(output_list, list):
+        raise ValueError("Error, must specify a valid list to export")
+
+    if not output_list:
+        raise ValueError("Error, must specify a non-empty list to export")
+
+    # Proceed with creating folder if doesn't exist, then export JSON
+    _ = folder_exists(json_file, True)
+    with open(json_file, "w") as f:
+        json.dump(output_list, f, indent=2)
+
+    print(f"Exported {len(output_list)} entries to {json_file}")
 
 
 #####
