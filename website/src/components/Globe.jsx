@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { forwardRef, useImperativeHandle } from "react";
 
 import * as THREE from 'three';
 import ThreeGlobe from 'three-globe';
@@ -12,8 +13,56 @@ import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';
 
 const pointsData = getCoordinates();
 
-const Globe = () => {
-  const mountRef = useRef(null);
+
+// Color Interpolator for ring effects
+const colorInterpolator = t => {
+    // Yellow (255, 255, 0) -> Neon Cyan (0, 255, 255) transition
+    const r = Math.round(255 - t * 255);  // Transition from yellow to red
+    const g = Math.round(255);             // Keep green constant (255)
+    const b = Math.round(t * 255);        // Transition from no blue to full cyan
+    return `rgba(${r}, ${g}, ${b}, ${0.9 + (1 - t) * 0.1})`;  // Hold opacity
+};
+
+
+const playStoryMode = async (sortedPoints, globe, controls, camera) => {
+    if (!globe || !sortedPoints.length) return;
+
+    for (let i = 0; i < sortedPoints.length; i++) {
+      const point = sortedPoints[i];
+
+      console.log(point)
+  
+  
+      // Show ripple for this point
+      globe.ringsData([point])
+        .ringColor(() => colorInterpolator)
+        .ringMaxRadius('ringMaxSize')
+        .ringPropagationSpeed('ringPropagationSpeed') 
+        .ringRepeatPeriod('ringRepeatPeriod'); 
+  
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+};
+
+
+
+const Globe = forwardRef((props, ref) => {
+    const mountRef = useRef(null);
+
+    // Hoist these so playStory can access them
+    const globeRef = useRef(null);
+    const cameraRef = useRef(null);
+    const controlsRef = useRef(null);
+
+    const playStory = async () => {
+        if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
+        await playStoryMode(pointsData, globeRef.current, controlsRef.current, cameraRef.current);
+    };
+    
+    useImperativeHandle(ref, () => ({
+        playStory
+    }));
+
 
   useEffect(() => {
     const globeContainer = mountRef.current;
@@ -23,22 +72,13 @@ const Globe = () => {
         .globeImageUrl(earthImg)
         .bumpImageUrl(bumpImg)
 
-
-    // Color Interpolator for ring effects
-    const colorInterpolator = t => {
-        // Yellow (255, 255, 0) -> Neon Cyan (0, 255, 255) transition
-        const r = Math.round(255 - t * 255);  // Transition from yellow to red
-        const g = Math.round(255);             // Keep green constant (255)
-        const b = Math.round(t * 255);        // Transition from no blue to full cyan
-        return `rgba(${r}, ${g}, ${b}, ${0.9 + (1 - t) * 0.1})`;  // Hold opacity
-    };
   
     // Setting up the points (rings) based on `pointsData`
-    globe.ringsData(pointsData)
-        .ringColor(() => colorInterpolator)
-        .ringMaxRadius('ringMaxSize')
-        .ringPropagationSpeed('ringPropagationSpeed') 
-        .ringRepeatPeriod('ringRepeatPeriod'); 
+    // globe.ringsData(pointsData)
+    //     .ringColor(() => colorInterpolator)
+    //     .ringMaxRadius('ringMaxSize')
+    //     .ringPropagationSpeed('ringPropagationSpeed') 
+    //     .ringRepeatPeriod('ringRepeatPeriod'); 
 
 
     // Material for the globe with roughness
@@ -116,6 +156,12 @@ const Globe = () => {
     controls.maxDistance = 220;
 
 
+    // Set for playStory
+    globeRef.current = globe;
+    cameraRef.current = camera;
+    controlsRef.current = controls;
+
+
     // Animation loop
     const animate = () => {
       controls.update();
@@ -152,6 +198,6 @@ const Globe = () => {
       }}
     />
   );
-};
+});
 
 export default Globe;

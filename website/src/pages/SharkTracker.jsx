@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
+import { useRef } from "react";
+
 import Globe from '../components/Globe.jsx';
 
 function SharkTracker() {
+    const globeRef = useRef();
+
     return (
       <div style={{
         display: "flex",
@@ -14,9 +18,13 @@ function SharkTracker() {
         <h1>SharkTracker Page</h1>
         <p>Here's where we'll visualize whale shark data.</p>
         
+        <button onClick={() => globeRef.current?.playStory()}>
+          Play Story
+        </button>
+
         <div className="globe-container">
             {/* Globe component */}
-            <Globe />
+            <Globe ref={globeRef} />
         </div>
         
         <Link to="/home" style={{
