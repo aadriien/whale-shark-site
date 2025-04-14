@@ -8,6 +8,7 @@
 import re
 import json
 import pandas as pd
+from datetime import datetime
 
 from src.config import (
     MONTH_NAMES,
@@ -446,11 +447,32 @@ def parse_coordinates_history(coordinates_str_list: str) -> list[dict]:
         match = re.match(r"lat:([-\d.]+) long:([-\d.]+) \(([^)]+)\)", entry)
         if match:
             lat, long, eventDate = match.groups()
+
+            # Try parsing in order: full date, year-month, year
+            for time_format in ("%Y-%m-%d", "%Y-%m", "%Y"):
+                try:
+                    # e.g. "2024" defaults to "2024-01-01"
+                    parsed_date = datetime.strptime(eventDate, time_format)
+                    break
+                except ValueError:
+                    continue
+            else:
+                # If no time formats matched, push to end
+                parsed_date = datetime.max
+
             parsed.append({
                 "lat": float(lat),
                 "long": float(long),
-                "eventDate": eventDate
+                "eventDate": eventDate,
+                "parsedDate": parsed_date  # temp field for sort & display on globe
             })
+
+    # Sort chronologically, then convert to str before return (avoid JSON errors)
+    parsed.sort(key=lambda x: x["parsedDate"])
+
+    for item in parsed:
+        item["parsedDate"] = item["parsedDate"].strftime("%Y-%m-%d")
+
     return parsed
 
 
