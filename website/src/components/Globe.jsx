@@ -33,20 +33,38 @@ const yaw = new THREE.Object3D() // y-axis (vertical), turn left/right
 const pitch = new THREE.Object3D() // x-axis (horizontal), tilt up/down
 
 
-const resetGlobe = (camera) => {
-    // Reset pitch & yaw rotations
-    pitch.rotation.set(0, 0, 0); 
-    yaw.rotation.set(0, 0, 0); 
-  
-    // Reset camera position (zoom)
-    camera.position.set(0, 0, 200); 
+const resetGlobe = async (camera) => {
+    // Start with camera zooming out.. far!
+    new JEasing(camera.position)
+        .to({ x: 0, y: 0, z: 300 }, 1000) 
+        .easing(Cubic.InOut)
+        .start();
+
+    // Then reset pitch & yaw rotations
+    new JEasing(pitch.rotation)
+    .to({ x: 0, y: 0, z: 0 }, 1000) 
+    .easing(Cubic.InOut)
+    .start();
+
+    new JEasing(yaw.rotation)
+        .to({ x: 0, y: 0, z: 0 }, 1000)
+        .easing(Cubic.InOut)
+        .start();
+
+    // Finally, animate camera's zoom to reset position
+    new JEasing(camera.position)
+        .to({ x: 0, y: 0, z: 200 }, 1000)
+        .easing(Cubic.InOut)
+        .start();
+
+    JEASINGS.update();
 };
 
 
 // Ease camera view to coords point for globe storytelling
 const goTo = (lat, long) => {
     new JEasing(pitch.rotation)
-        // Convert latitude to radians, & animate over 2000 ms (2 sec)
+        // Convert latitude to radians, & animate over 1000 ms (1 sec)
         .to(
             { x: (lat / 180) * Math.PI * -1 },
             1000
@@ -54,7 +72,7 @@ const goTo = (lat, long) => {
         .easing(Cubic.InOut)
         .start()
     new JEasing(yaw.rotation)
-        // Convert longitude to radians, & animate over 2000 ms (2 sec)
+        // Convert longitude to radians, & animate over 1000 ms (1 sec)
         .to(
             { y: (long / 180) * Math.PI },
             1000
@@ -70,7 +88,7 @@ const playStoryMode = async (sortedPoints, globe, controls, camera) => {
     // If story mode, disable orbit controls (user can't move globe)
     controls.enabled = false;
     
-    // Have camera zoom into globe gradually, over 1.5 sec period
+    // Have camera zoom into globe gradually, over 2.5 sec period
     new JEasing(camera.position)
         .to({ z: 150 }, 2500) 
         .easing(Cubic.InOut)
