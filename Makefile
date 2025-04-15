@@ -75,6 +75,7 @@ setup_website:
 	echo "Installing frontend dependencies..."; \
 	npm install && \
 	npm install three three-globe d3 p5 react-router-dom && \
+	npm install @react-three/fiber @react-three/drei && \
 	echo "Checking npm version..." && \
 	npm install -g npm@latest
 

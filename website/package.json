@@ -10,13 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.0.6",
+    "@react-three/fiber": "^9.1.2",
     "d3": "^7.9.0",
     "p5": "^1.11.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.0",
     "three": "^0.175.0",
-    "three-globe": "^2.42.3"
+    "three-globe": "^2.42.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

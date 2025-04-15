@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import SharkAnimation from '../components/SharkAnimation.jsx';
+
 function Animation() {
   return (
     <div style={{
@@ -11,6 +13,12 @@ function Animation() {
       textAlign: "center"
     }}>
       <h1>Animation Page</h1>
+
+      <div>
+        {/* SharkAnimation component */}
+        <SharkAnimation />
+      </div>
+
       <Link to="/home" style={{
         marginTop: "20px",
         fontSize: "18px",
