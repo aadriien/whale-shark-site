@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle } from 'react';
 
 import * as THREE from 'three';
 import ThreeGlobe from 'three-globe';
@@ -62,7 +62,7 @@ const resetGlobe = async (camera) => {
 
 
 // Ease camera view to coords point for globe storytelling
-const goTo = (lat, long) => {
+const goToCoordinates = (lat, long) => {
     new JEasing(pitch.rotation)
         // Convert latitude to radians, & animate over 1000 ms (1 sec)
         .to(
@@ -99,7 +99,7 @@ const playStoryMode = async (sortedPoints, globe, controls, camera) => {
 
       console.log(point)
 
-      goTo(point.lat, point.lng)
+      goToCoordinates(point.lat, point.lng)
 
       // Wait 2 sec after zoom in before starting story
       if (i == 0) {
@@ -197,7 +197,7 @@ const Globe = forwardRef((props, ref) => {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 
-    // Add Euler angles for goTo storytelling
+    // Add Euler angles for goToCoordinates storytelling
     scene.add(pivot)
     pivot.add(yaw)
     yaw.add(pitch)
