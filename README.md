@@ -103,7 +103,18 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 ## Acknowledgements
 
+### Libraries and Modules
+
 Thank you to Sean Bradley, whose open source [JEasings module](https://github.com/Sean-Bradley/JEasings), a JavaScript animation engine, allows me to control movements on the Three.js globe for "storytelling mode".
+
+
+### 3D Model Credits
+
+"Model 99A - Whale Shark" (https://skfb.ly/oLzqI) by DigitalLife3D is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+
+"Whale Shark Fantasy" (https://skfb.ly/6ysSQ) by Alenzo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+
 
 
 

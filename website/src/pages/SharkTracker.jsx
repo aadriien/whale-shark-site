@@ -35,6 +35,14 @@ function SharkTracker() {
         }}>
             Go back to Home Page
         </Link>
+        <Link to="/animation" style={{
+            marginTop: "20px",
+            fontSize: "18px",
+            textDecoration: "underline",
+            color: "blue"
+        }}>
+            Go to Animation Page
+        </Link>
       </div>
     );
   }

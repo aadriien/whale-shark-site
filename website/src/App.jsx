@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import SharkTracker from './pages/SharkTracker.jsx'
+import Animation from './pages/Animation.jsx'
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Route path="/" element={<Navigate to="/home" />} />  {/* Redirect root to /home */}
         <Route path="/home" element={<Home />} />
         <Route path="/sharktracker" element={<SharkTracker />} />
+        <Route path="/animation" element={<Animation />} />
       </Routes>
     </BrowserRouter>
   )
