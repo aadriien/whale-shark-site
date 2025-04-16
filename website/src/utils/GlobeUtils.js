@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import JEASINGS, { JEasing, Cubic } from './JEasings/JEasings.ts';
 
-import getCoordinates from './CoordinateUtils.js';
+import { getSharkCoordinates } from './CoordinateUtils.js';
 
 import earthImg from '../assets/images/three-globe-imgs/earth-blue-marble.jpg';
 import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';
@@ -106,9 +106,25 @@ export function addRingsData(globe, pointsData) {
         .ringColor(() => colorInterpolator)
         .ringMaxRadius('ringMaxSize')
         .ringPropagationSpeed('ringPropagationSpeed') 
+
+        // Repeat period variable (randomized delay in data)
         .ringRepeatPeriod('ringRepeatPeriod'); 
 };
 
+
+export function addRingsDataStatic(globe, pointsData) {
+    if (!globe) return;
+
+    // Setting up the points (rings) based on 'pointsData'
+    globe.ringsData(pointsData)
+        .ringColor(() => colorInterpolator)
+
+        // Smaller radius & slower speed
+        .ringMaxRadius(1)
+        .ringPropagationSpeed(0.3) 
+
+        .ringRepeatPeriod('ringRepeatPeriod'); 
+};
 
 
 export async function resetGlobe(camera, pitchRef, yawRef) {
@@ -161,7 +177,7 @@ export function goToCoordinates(lat, long, pitchRef, yawRef) {
 
 
 export async function playStoryMode(globe, controls, camera, pitchRef, yawRef) {
-    const sortedPointsData = getCoordinates();
+    const sortedPointsData = getSharkCoordinates("Elsa");
     if (!globe || !sortedPointsData.length) return;
 
     // If story mode, disable orbit controls (user can't move globe)

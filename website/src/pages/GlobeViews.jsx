@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 
 import Globe from '../components/Globe.jsx';
 
-import getCoordinates from '../utils/CoordinateUtils.js';
-import { addRingsData } from '../utils/GlobeUtils.js';
+import { getAllCoordinates } from '../utils/CoordinateUtils.js';
+import { addRingsData, addRingsDataStatic } from '../utils/GlobeUtils.js';
 
 
 function GlobeViews() {
@@ -15,8 +15,8 @@ function GlobeViews() {
           const globeInstance = globeRef.current.getGlobe();
 
           // Populate all data on whole globe (NOT storytelling)
-          const pointsData = getCoordinates();
-          addRingsData(globeInstance, pointsData); 
+          const pointsData = getAllCoordinates();
+          addRingsDataStatic(globeInstance, pointsData); 
         }
       }, []);
 
