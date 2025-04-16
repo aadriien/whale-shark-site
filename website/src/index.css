@@ -96,3 +96,90 @@ button:focus-visible {
 }
 
 
+
+/* Basic card styling */
+.shark-card {
+    background-color: white;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+  
+.shark-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+  
+/* Styling for image placeholder */
+.shark-card-image {
+    width: 100%;
+    height: 160px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+  
+.shark-card-image span {
+    font-size: 16px;
+    color: #888;
+}
+  
+/* Content styling */
+.shark-card-content {
+    margin-bottom: 12px;
+}
+  
+.shark-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+  
+.shark-id {
+    font-size: 14px;
+    color: #666;
+}
+  
+/* Expandable details styling */
+.shark-card-details {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #333;
+}
+
+
+/* Styling for grid layout */
+.shark-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Automatically adjusts columns based on the screen size */
+    gap: 16px; 
+    padding: 16px; 
+    justify-items: center; 
+    align-items: start; 
+  }
+  
+  
+/* Medium screens (tablet) */
+@media (min-width: 640px) {
+    .shark-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Adjust for tablets */
+    }
+}
+  
+/* Large screens (desktop) */
+@media (min-width: 1024px) {
+    .shark-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust for desktop */
+    }
+}
+  
+  
+
+

@@ -2,9 +2,18 @@ import { Link } from "react-router-dom";
 import { useRef } from "react";
 
 import Globe from '../components/Globe.jsx';
+import SharkGrid from "../components/SharkGrid.jsx";
 
 function SharkTracker() {
     const globeRef = useRef();
+
+    const sharks = [
+        { id: 1, name: "Shark 1" },
+        { id: 2, name: "Shark 2" },
+        { id: 3, name: "Shark 3" },
+        { id: 4, name: "Shark 4" },
+        // Add more sharks as needed
+      ];
 
     return (
       <div style={{
@@ -25,6 +34,11 @@ function SharkTracker() {
         <div className="globe-container">
             {/* Globe component */}
             <Globe ref={globeRef} />
+        </div>
+
+        <div>
+            {/* Pass sharks data to SharkGrid */}
+            <SharkGrid sharks={sharks} />
         </div>
         
         <Link to="/home" style={{
