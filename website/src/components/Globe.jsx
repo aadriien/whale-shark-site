@@ -2,126 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { forwardRef, useImperativeHandle } from 'react';
 
 import * as THREE from 'three';
-import ThreeGlobe from 'three-globe';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import JEASINGS from '../utils/JEasings/JEasings.ts';
 
-import JEASINGS, { JEasing, Cubic } from '../utils/JEasings/JEasings.ts';
-
-import getCoordinates from '../utils/Coordinates.js';
-
-import earthImg from '../assets/images/three-globe-imgs/earth-blue-marble.jpg';
-import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';
-
-
-const pointsData = getCoordinates();
-
-
-// Color Interpolator for ring effects
-const colorInterpolator = t => {
-    // Yellow (255, 255, 0) -> Neon Cyan (0, 255, 255) transition
-    const r = Math.round(255 - t * 255);  // Transition from yellow to red
-    const g = Math.round(255);             // Keep green constant (255)
-    const b = Math.round(t * 255);        // Transition from no blue to full cyan
-    return `rgba(${r}, ${g}, ${b}, ${0.9 + (1 - t) * 0.1})`;  // Hold opacity
-};
-
-
-
-// Euler angles for managing globe storytelling
-const pivot = new THREE.Object3D() // point around which globe rotates
-const yaw = new THREE.Object3D() // y-axis (vertical), turn left/right
-const pitch = new THREE.Object3D() // x-axis (horizontal), tilt up/down
-
-
-const resetGlobe = async (camera) => {
-    // Start with camera zooming out.. far!
-    new JEasing(camera.position)
-        .to({ x: 0, y: 0, z: 300 }, 1000) 
-        .easing(Cubic.InOut)
-        .start();
-
-    // Then reset pitch & yaw rotations
-    new JEasing(pitch.rotation)
-    .to({ x: 0, y: 0, z: 0 }, 1000) 
-    .easing(Cubic.InOut)
-    .start();
-
-    new JEasing(yaw.rotation)
-        .to({ x: 0, y: 0, z: 0 }, 1000)
-        .easing(Cubic.InOut)
-        .start();
-
-    // Finally, animate camera's zoom to reset position
-    new JEasing(camera.position)
-        .to({ x: 0, y: 0, z: 200 }, 1000)
-        .easing(Cubic.InOut)
-        .start();
-
-    JEASINGS.update();
-};
-
-
-// Ease camera view to coords point for globe storytelling
-const goToCoordinates = (lat, long) => {
-    new JEasing(pitch.rotation)
-        // Convert latitude to radians, & animate over 1000 ms (1 sec)
-        .to(
-            { x: (lat / 180) * Math.PI * -1 },
-            1000
-        )
-        .easing(Cubic.InOut)
-        .start()
-    new JEasing(yaw.rotation)
-        // Convert longitude to radians, & animate over 1000 ms (1 sec)
-        .to(
-            { y: (long / 180) * Math.PI },
-            1000
-        )
-        .easing(Cubic.InOut)
-        .start()
-}
-
-
-const playStoryMode = async (sortedPoints, globe, controls, camera) => {
-    if (!globe || !sortedPoints.length) return;
-
-    // If story mode, disable orbit controls (user can't move globe)
-    controls.enabled = false;
-    
-    // Have camera zoom into globe gradually, over 2.5 sec period
-    new JEasing(camera.position)
-        .to({ z: 150 }, 2500) 
-        .easing(Cubic.InOut)
-        .start();
-
-    for (let i = 0; i < sortedPoints.length; i++) {
-      const point = sortedPoints[i];
-
-      console.log(point)
-
-      goToCoordinates(point.lat, point.lng)
-
-      // Wait 2 sec after zoom in before starting story
-      if (i == 0) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      }
-  
-      // Show ripple for this point
-      globe.ringsData([point])
-        .ringColor(() => colorInterpolator)
-        .ringMaxRadius('ringMaxSize')
-        .ringPropagationSpeed('ringPropagationSpeed') 
-        .ringRepeatPeriod('ringRepeatPeriod'); 
-  
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    }
-
-    // Restore orbit controls after story told
-    setTimeout(() => {
-        controls.enabled = true;
-    }, 1000);
-};
-
+import { 
+    createGlobe, createLights, createCamera, createControls,
+    setupCameraAngles, resetGlobe, playStoryMode 
+} from '../utils/GlobeUtils.js';
 
 
 const Globe = forwardRef((props, ref) => {
@@ -132,16 +18,26 @@ const Globe = forwardRef((props, ref) => {
     const cameraRef = useRef(null);
     const controlsRef = useRef(null);
 
+    const pivotRef = useRef(null);
+    const yawRef = useRef(null);
+    const pitchRef = useRef(null);
+
+
     const playStory = async () => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
 
-        resetGlobe(cameraRef.current);
+        resetGlobe(cameraRef.current, pitchRef, yawRef);
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        await playStoryMode(pointsData, globeRef.current, controlsRef.current, cameraRef.current);
+        await playStoryMode(
+            globeRef.current, controlsRef.current, cameraRef.current, 
+            pitchRef, yawRef
+        );
     };
     
+    // Expose globe instance & playStory method to parent
     useImperativeHandle(ref, () => ({
+        getGlobe: () => globeRef.current,
         playStory
     }));
 
@@ -150,58 +46,28 @@ const Globe = forwardRef((props, ref) => {
     const globeContainer = mountRef.current;
     if (!globeContainer) return;
 
-    const globe = new ThreeGlobe()
-        .globeImageUrl(earthImg)
-        .bumpImageUrl(bumpImg)
-
-  
-    // Setting up the points (rings) based on `pointsData`
-    // globe.ringsData(pointsData)
-    //     .ringColor(() => colorInterpolator)
-    //     .ringMaxRadius('ringMaxSize')
-    //     .ringPropagationSpeed('ringPropagationSpeed') 
-    //     .ringRepeatPeriod('ringRepeatPeriod'); 
-
-
-    // Material for the globe with roughness
-    const globeMaterial = new THREE.MeshStandardMaterial({
-        color: 0x0055ff, 
-        roughness: 0.7,  
-        metalness: 0.3,  
-        emissive: 0xFFD700, 
-        emissiveIntensity: 1, 
-    });
-    globe.material = globeMaterial;
-
-    globe.scale.set(1, 1, 1);
-    globe.visible = true;
 
     const scene = new THREE.Scene();
-    scene.add(globe);
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5 * Math.PI));
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI);
-    directionalLight.position.set(0, 1, 1); 
+    const globe = createGlobe();
+    scene.add(globe);
+
+
+    const { ambientLight, directionalLight } = createLights();
+    scene.add(ambientLight);
     scene.add(directionalLight);
 
-    
-    const camera = new THREE.PerspectiveCamera(
-        75,
-        globeContainer.clientWidth / globeContainer.clientHeight,
-        0.1,
-        1000
-    );
-    camera.position.set(0, 0, 200);
-
+    const camera = createCamera(globeContainer);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 
     // Add Euler angles for goToCoordinates storytelling
-    scene.add(pivot)
-    pivot.add(yaw)
-    yaw.add(pitch)
-    pitch.add(camera)
+    const { pivot, yaw, pitch } = setupCameraAngles(scene, camera);
+
+    pivotRef.current = pivot;
+    yawRef.current = yaw;
+    pitchRef.current = pitch;
 
 
 
@@ -234,17 +100,7 @@ const Globe = forwardRef((props, ref) => {
 
 
     // OrbitControls setup
-    const controls = new OrbitControls(camera, renderer.domElement);
-
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.rotateSpeed = 0.5;
-
-    controls.enableZoom = true;
-    controls.autoRotate = false;
-
-    controls.minDistance = 125;
-    controls.maxDistance = 220;
+    const controls = createControls(camera, renderer);
 
 
     // Set for playStory
@@ -281,7 +137,7 @@ const Globe = forwardRef((props, ref) => {
     <div
       ref={mountRef}
       style={{
-        width: '80%',
+        width: '60%',
         height: '500px',
         position: 'relative',
         margin: 'auto', 
