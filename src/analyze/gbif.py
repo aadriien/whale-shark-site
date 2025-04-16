@@ -207,14 +207,6 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
         column_name="lifeStage (year)"
     )
 
-    # Build "occurrenceRemarks (eventDate)" metric
-    individual_sharks = make_individual_metric_df(
-        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
-        metric_subset=["occurrenceRemarks"], metric_timing=["eventDate"],
-        format_str="{0} ({1})", # == f"{occurrenceRemarks} ({eventDate})"
-        column_name="occurrenceRemarks (eventDate)"
-    )
-
     # Build "country (year)" metric
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
@@ -229,6 +221,14 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
         metric_subset=["stateProvince", "verbatimLocality"], metric_timing=["month", "year"],
         format_str="{0} - {1} ({2} {3})", # == f"{state} - {locality} ({month} {year})"
         column_name="stateProvince - verbatimLocality (month year)"
+    )
+
+    # Build "occurrenceRemarks (eventDate)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        metric_subset=["occurrenceRemarks"], metric_timing=["eventDate"],
+        format_str="{0} ({1})", # == f"{occurrenceRemarks} ({eventDate})"
+        column_name="occurrenceRemarks (eventDate)"
     )
 
     # Build "lat:decimalLatitude long:decimalLongitude (eventDate)" metric
