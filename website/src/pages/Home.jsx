@@ -11,6 +11,16 @@ function Home() {
       textAlign: "center"
     }}>
       <h1>Welcome to the Whale Shark Project</h1>
+
+      <Link to="/globeviews" style={{
+        marginTop: "20px",
+        fontSize: "18px",
+        textDecoration: "underline",
+        color: "blue"
+      }}>
+        Go to GlobeViews Page
+      </Link>
+
       <Link to="/sharktracker" style={{
         marginTop: "20px",
         fontSize: "18px",
@@ -19,6 +29,7 @@ function Home() {
       }}>
         Go to SharkTracker Page
       </Link>
+
       <Link to="/animation" style={{
         marginTop: "20px",
         fontSize: "18px",
@@ -27,6 +38,7 @@ function Home() {
       }}>
         Go to Animation Page
       </Link>
+      
     </div>
   );
 }

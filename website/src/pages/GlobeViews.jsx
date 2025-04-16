@@ -1,10 +1,24 @@
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import Globe from '../components/Globe.jsx';
 
-function SharkTracker() {
+import getCoordinates from '../utils/CoordinateUtils.js';
+import { addRingsData } from '../utils/GlobeUtils.js';
+
+
+function GlobeViews() {
     const globeRef = useRef();
+
+    useEffect(() => {
+        if (globeRef.current) {
+          const globeInstance = globeRef.current.getGlobe();
+
+          // Populate all data on whole globe (NOT storytelling)
+          const pointsData = getCoordinates();
+          addRingsData(globeInstance, pointsData); 
+        }
+      }, []);
 
     return (
       <div style={{
@@ -15,12 +29,8 @@ function SharkTracker() {
         minHeight: "100vh",
         textAlign: "center"
       }}>
-        <h1>SharkTracker Page</h1>
-        <p>Here's where we'll do whale shark storytelling.</p>
-        
-        <button onClick={() => globeRef.current?.playStory()}>
-          Play Story
-        </button>
+        <h1>GlobeViews Page</h1>
+        <p>Here's where we'll visualize globe data.</p>
 
         <div className="globe-container">
             {/* Globe component */}
@@ -36,13 +46,13 @@ function SharkTracker() {
             Go back to Home Page
         </Link>
 
-        <Link to="/globeviews" style={{
+        <Link to="/sharktracker" style={{
             marginTop: "20px",
             fontSize: "18px",
             textDecoration: "underline",
             color: "blue"
         }}>
-            Go to GlobeViews Page
+            Go to SharkTracker Page
         </Link>
 
         <Link to="/animation" style={{
@@ -53,11 +63,11 @@ function SharkTracker() {
         }}>
             Go to Animation Page
         </Link>
-        
+
       </div>
     );
   }
   
-  export default SharkTracker;
+  export default GlobeViews;
   
 

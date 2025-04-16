@@ -27,6 +27,16 @@ function Animation() {
       }}>
         Go back to Home Page
       </Link>
+
+      <Link to="/globeviews" style={{
+        marginTop: "20px",
+        fontSize: "18px",
+        textDecoration: "underline",
+        color: "blue"
+      }}>
+        Go to GlobeViews Page
+      </Link>
+
       <Link to="/sharktracker" style={{
         marginTop: "20px",
         fontSize: "18px",
@@ -35,6 +45,7 @@ function Animation() {
       }}>
         Go to SharkTracker Page
       </Link>
+      
     </div>
   );
 }
