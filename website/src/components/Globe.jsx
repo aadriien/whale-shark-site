@@ -137,14 +137,8 @@ const Globe = forwardRef((props, ref) => {
     <div
       ref={mountRef}
       style={{
-        width: '60%',
-        height: '500px',
-        position: 'relative',
-        margin: 'auto', 
-        overflow: 'hidden',
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center',    
+        width: '100%',
+        height: '100%',
       }}
     />
   );

@@ -32,7 +32,7 @@ function GlobeViews() {
         <h1>GlobeViews Page</h1>
         <p>Here's where we'll visualize globe data.</p>
 
-        <div className="globe-container">
+        <div className="globe-container" style={{ maxWidth: "80%", maxHeight: "80%" }}>
             {/* Globe component */}
             <Globe ref={globeRef} />
         </div>
