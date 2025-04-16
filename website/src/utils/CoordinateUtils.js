@@ -1,27 +1,48 @@
 import coordinatesData from '../assets/data/gbif_shark_tracking.json';
 
 
-const getCoordinates = () => {
-  // TEST with specific whale shark to start ("Elsa")
-  const shark = coordinatesData.find(shark => shark.whaleSharkID == "Elsa");
+export function getCoordinates(sharkDict, limit = Infinity) {
+  if (!sharkDict) return [];
 
-  if (!shark) return [];
+  // Grab the last N points per shark (if you grab everything, then globe laggy)
+  const coords = sharkDict.coordinates.slice(-limit); 
 
-  return shark.coordinates.map(coord => {
+  return coords.map(coord => {
     // Randomize delay in ring propagation
     const baseDelay = Math.random() * 2000;
 
     return {
-      id: `${coord.whaleSharkID}-${coord.lat}-${coord.long}`,
-      lat: coord.lat,
-      lng: coord.long,
-      date: coord.eventDate,
-      size: 1,  
-      ringMaxSize: 3,
-      ringPropagationSpeed: 0.7,
-      ringRepeatPeriod: 2000 + baseDelay,
+        id: `${coord.whaleSharkID}-${coord.lat}-${coord.long}`,
+        lat: coord.lat,
+        lng: coord.long,
+        date: coord.eventDate,
+        size: 1,  
+        ringMaxSize: 3,
+        ringPropagationSpeed: 0.7,
+        ringRepeatPeriod: 2000 + baseDelay,
     };
   });
 };
 
-export default getCoordinates;
+
+export function getAllCoordinates() {
+    let fullResult = [];
+    const limitResults = 3;
+
+    coordinatesData.forEach(sharkDict => {
+        let currResult = getCoordinates(sharkDict, limitResults);
+        fullResult.push(...currResult);
+    })
+    return fullResult;
+};
+
+
+export function getSharkCoordinates(sharkID) {
+    if (!sharkID) return [];
+
+    const sharkDict = coordinatesData.find(
+        shark => shark.whaleSharkID == sharkID
+    );
+    return getCoordinates(sharkDict);
+};
+
