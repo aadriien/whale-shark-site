@@ -4,16 +4,12 @@ import { useRef } from "react";
 import Globe from "../components/Globe.jsx";
 import SharkGrid from "../components/SharkGrid.jsx";
 
+import { storySharks } from "../utils/DataUtils.js";
+
 function SharkTracker() {
   const globeRef = useRef();
 
-  const sharks = [
-    { id: 1, name: "Shark 1" },
-    { id: 2, name: "Shark 2" },
-    { id: 3, name: "Shark 3" },
-    { id: 4, name: "Shark 4" },
-    // Add more sharks as needed (TEST)
-  ];
+  const sharks = storySharks;
 
   const mid = Math.ceil(sharks.length / 2);
   const leftSharks = sharks.slice(0, mid);
@@ -38,17 +34,17 @@ function SharkTracker() {
         }}
       >
         {/* Left Shark Cards */}
-        <div style={{ flex: "0.15", height: "35rem" }}>
+        <div style={{ flex: "0.1", height: "35rem" }}>
           <SharkGrid sharks={leftSharks} />
         </div>
 
         {/* Globe */}
-        <div className="globe-container" style={{ flex: "0.7", height: "35rem" }}>
+        <div className="globe-container" style={{ flex: "0.8", height: "37rem" }}>
           <Globe ref={globeRef} />
         </div>
 
         {/* Right Shark Cards */}
-        <div style={{ flex: "0.15", height: "35rem" }}>
+        <div style={{ flex: "0.1", height: "35rem" }}>
           <SharkGrid sharks={rightSharks} />
         </div>
       </div>

@@ -13,8 +13,8 @@ const SharkCard = ({ shark }) => {
         <span>Shark Image</span> {/* Placeholder text */}
       </div>
       <div className="shark-card-content">
-        <h2 className="shark-name">Shark Name</h2>
-        <p className="shark-id">ID: XXXXX</p>
+        <h2 className="shark-name">{shark.name}</h2>
+        <p className="shark-id">ID: {shark.id}</p>
       </div>
 
       {/* Expandable content */}

@@ -161,12 +161,12 @@ button:focus-visible {
 /* Styling for grid layout */
 .shark-grid {
     display: grid; 
-    gap: 16px; 
+    gap: 32px; 
     padding: 0 16px;
     justify-items: center; 
     align-items: start; 
     width: 90%;
-    height: 100%;
+    height: 90%;
     margin: 0 auto;
 
     /* Automatically adjusts columns based on the screen size */
