@@ -23,7 +23,7 @@ const Globe = forwardRef((props, ref) => {
     const pitchRef = useRef(null);
 
 
-    const playStory = async () => {
+    const playStory = async (sharkID) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
 
         resetGlobe(cameraRef.current, pitchRef, yawRef);
@@ -31,7 +31,7 @@ const Globe = forwardRef((props, ref) => {
 
         await playStoryMode(
             globeRef.current, controlsRef.current, cameraRef.current, 
-            pitchRef, yawRef
+            pitchRef, yawRef, sharkID
         );
     };
     

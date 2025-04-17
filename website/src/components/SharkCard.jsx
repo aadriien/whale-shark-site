@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SharkCard = ({ shark }) => {
+const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -15,6 +15,18 @@ const SharkCard = ({ shark }) => {
       <div className="shark-card-content">
         <h2 className="shark-name">{shark.name}</h2>
         <p className="shark-id">ID: {shark.id}</p>
+
+        {/* Play Story button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent toggling expand
+            onPlayStory(shark.id);
+          }}
+          disabled={isPlaying}  // Disable if a story is already playing
+        >
+          {isPlaying ? "Story in Progress..." : `Play ${shark.name}'s Story`}
+        </button>
+
       </div>
 
       {/* Expandable content */}

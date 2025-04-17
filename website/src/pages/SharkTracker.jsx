@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useState, useRef } from "react";
 
 import Globe from "../components/Globe.jsx";
 import SharkGrid from "../components/SharkGrid.jsx";
@@ -7,6 +7,7 @@ import SharkGrid from "../components/SharkGrid.jsx";
 import { storySharks } from "../utils/DataUtils.js";
 
 function SharkTracker() {
+  const [isPlaying, setIsPlaying] = useState(false);
   const globeRef = useRef();
 
   const sharks = storySharks;
@@ -15,14 +16,20 @@ function SharkTracker() {
   const leftSharks = sharks.slice(0, mid);
   const rightSharks = sharks.slice(mid);
 
+  const handlePlayStory = (sharkId) => {
+    setIsPlaying(true);
+
+    // Reset isPlaying state when story finished
+    // (buttons disabled while story playing)
+    globeRef.current?.playStory(sharkId).finally(() => {
+        setIsPlaying(false);  
+    });
+  };
+
   return (
     <div style={{ minHeight: "100vh", padding: "2rem", textAlign: "center" }}>
       <h1>SharkTracker Page</h1>
       <p>Here's where we'll do whale shark storytelling.</p>
-
-      <button onClick={() => globeRef.current?.playStory()} style={{ margin: "1rem 0" }}>
-        Play Story
-      </button>
 
       <div
         style={{
@@ -35,7 +42,7 @@ function SharkTracker() {
       >
         {/* Left Shark Cards */}
         <div style={{ flex: "0.1", height: "35rem" }}>
-          <SharkGrid sharks={leftSharks} />
+          <SharkGrid sharks={leftSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} />
         </div>
 
         {/* Globe */}
@@ -45,7 +52,7 @@ function SharkTracker() {
 
         {/* Right Shark Cards */}
         <div style={{ flex: "0.1", height: "35rem" }}>
-          <SharkGrid sharks={rightSharks} />
+          <SharkGrid sharks={rightSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} />
         </div>
       </div>
 

@@ -175,8 +175,8 @@ export function goToCoordinates(lat, long, pitchRef, yawRef) {
 };
 
 
-export async function playStoryMode(globe, controls, camera, pitchRef, yawRef) {
-    const sortedPointsData = getSharkCoordinates("Elsa");
+export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, sharkID) {
+    const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
 
     // If story mode, disable orbit controls (user can't move globe)
@@ -187,6 +187,8 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef) {
         .to({ z: 150 }, 2500) 
         .easing(Cubic.InOut)
         .start();
+
+    console.log(`Playing story for shark ID: ${sharkID}`);
 
     for (let i = 0; i < sortedPointsData.length; i++) {
       const point = sortedPointsData[i];

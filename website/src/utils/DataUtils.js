@@ -27,19 +27,19 @@ export const storySharks = [
     }, 
     {
         id: "Ranger",
-        name: "101373a"
+        name: "Ranger"
     }, 
     {
         id: "101371a",
-        name: "101373a"
+        name: "101371a"
     }, 
     {
         id: "57828",
-        name: "101373a"
+        name: "57828"
     }, 
     {
         id: "57821",
-        name: "101373a"
+        name: "57821"
     }
 ]
 
