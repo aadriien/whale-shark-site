@@ -27,7 +27,7 @@ export function getCoordinates(sharkDict, limit = Infinity) {
 
 export function getAllCoordinates() {
     let fullResult = [];
-    const limitResults = 3;
+    const limitResults = 5;
 
     coordinatesData.forEach(sharkDict => {
         let currResult = getCoordinates(sharkDict, limitResults);

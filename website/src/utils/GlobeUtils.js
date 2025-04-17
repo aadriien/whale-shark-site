@@ -115,15 +115,14 @@ export function addRingsData(globe, pointsData) {
 export function addRingsDataStatic(globe, pointsData) {
     if (!globe) return;
 
-    // Setting up the points (rings) based on 'pointsData'
     globe.ringsData(pointsData)
-        .ringColor(() => colorInterpolator)
+        // Ring color static since no movement
+        .ringColor(() => 'rgba(230, 255, 50, 0.9)')
 
-        // Smaller radius & slower speed
-        .ringMaxRadius(1)
-        .ringPropagationSpeed(0.3) 
-
-        .ringRepeatPeriod('ringRepeatPeriod'); 
+        // Smaller radius & zero movement
+        .ringMaxRadius(0.5)
+        .ringPropagationSpeed(0) 
+        .ringRepeatPeriod(0); 
 };
 
 
