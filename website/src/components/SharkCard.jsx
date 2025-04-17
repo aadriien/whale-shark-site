@@ -13,18 +13,22 @@ const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
         <span>Shark Image</span> {/* Placeholder text */}
       </div>
       <div className="shark-card-content">
-        <h2 className="shark-name">{shark.name}</h2>
-        <p className="shark-id">ID: {shark.id}</p>
 
         {/* Play Story button */}
         <button
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent toggling expand
-            onPlayStory(shark.id);
-          }}
-          disabled={isPlaying}  // Disable if a story is already playing
-        >
-          {isPlaying ? "Story in Progress..." : `Play ${shark.name}'s Story`}
+            onClick={(e) => {
+                e.stopPropagation();
+                onPlayStory(shark.id);
+            }}
+            disabled={isPlaying}
+            >
+            {isPlaying ? (
+                "Story in Progress..."
+            ) : (
+                <>
+                Play <strong>{shark.name}</strong>'s Story
+                </>
+            )}
         </button>
 
       </div>
@@ -32,7 +36,11 @@ const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
       {/* Expandable content */}
       {isExpanded && (
         <div className="shark-card-details">
-          <p>Additional details about shark here...</p>
+
+            <h2 className="shark-name">Name: {shark.name}</h2>
+            <p className="shark-id">ID: {shark.id}</p>
+            
+            <p>Additional details about shark here...</p>
         </div>
       )}
     </div>
