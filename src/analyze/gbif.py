@@ -6,7 +6,6 @@
 
 
 import re
-import json
 import pandas as pd
 from datetime import datetime
 
@@ -15,7 +14,7 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, export_to_json, validate_and_dropna, standardize_column_vals,
+    move_column_after, read_csv, export_to_csv, export_to_json, validate_and_dropna, standardize_column_vals,
     add_totals_column, add_avg_per_year, add_top_x_metric,
 )
 
@@ -159,6 +158,31 @@ def make_basisOfRecord_df(occurrences_df: pd.DataFrame, index: list[str]) -> pd.
     return basisOfRecord_counts
 
 
+def make_unique_sharks_count(source_df: pd.DataFrame, 
+                            target_df: pd.DataFrame, 
+                            groupby: list[str]) -> pd.DataFrame:
+    # Get unique sharks 
+    source_df = validate_and_dropna(source_df, na_subset=["whaleSharkID"] + groupby)
+    unique_sharks = source_df.drop_duplicates(subset=["whaleSharkID"]).reset_index()
+
+    # Copy to make pandas happy
+    target_df = target_df.copy()
+
+    target_df["Unique Sharks (with ID)"] = unique_sharks.groupby(groupby).size()
+    target_df["Unique Sharks (with ID)"] = (
+        target_df["Unique Sharks (with ID)"]
+        .fillna(0).astype(int)
+    )
+    
+    target_df = move_column_after(
+        dataframe=target_df, 
+        col_to_move="Unique Sharks (with ID)", 
+        after_col="Total Occurrences"
+    )
+
+    return target_df
+
+
 def make_individual_metric_df(occurrences_df: pd.DataFrame, 
                             individual_sharks: pd.DataFrame,
                             metric_subset: list[str],
@@ -265,8 +289,15 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
         column_name="Top 3 Publishing Countries"
     )
 
+    # Get count of unique sharks (to compare against total occurrences)
+    calendar_stats = make_unique_sharks_count(
+        source_df=occurrences_df,
+        target_df=calendar_stats,
+        groupby=["year"]
+    )
+
     # Merge DataFrames
-    calendar_stats = calendar_counts.merge(basisOfRecord_counts, on="year", how="left")
+    calendar_stats = calendar_stats.merge(basisOfRecord_counts, on="year", how="left")
     calendar_stats = calendar_stats.merge(sex_counts, on="year", how="left")
     calendar_stats = calendar_stats.merge(life_stage_counts, on="year", how="left")
 
@@ -289,6 +320,13 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
         top_x=3,
         metric="publishingCountry",
         column_name="Top 3 Publishing Countries"
+    )
+
+    # Get count of unique sharks (to compare against total occurrences)
+    country_stats = make_unique_sharks_count(
+        source_df=occurrences_df,
+        target_df=country_stats,
+        groupby=["countryCode", "country"]
     )
 
     # Merge DataFrames
@@ -314,6 +352,13 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
         top_x=3,
         metric="publishingCountry",
         column_name="Top 3 Publishing Countries"
+    )
+
+    # Get count of unique sharks (to compare against total occurrences)
+    continent_stats = make_unique_sharks_count(
+        source_df=occurrences_df,
+        target_df=continent_stats,
+        groupby=["continent"]
     )
 
     # Merge DataFrames
@@ -348,6 +393,13 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
         top_x=3,
         metric="country",
         column_name="Top 3 Countries Visited"
+    )
+
+    # Get count of unique sharks (to compare against total occurrences)
+    publishingCountry_stats = make_unique_sharks_count(
+        source_df=occurrences_df,
+        target_df=publishingCountry_stats,
+        groupby=["publishingCountryCode", "publishingCountry"]
     )
 
     # Merge DataFrames
