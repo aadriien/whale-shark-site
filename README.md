@@ -102,7 +102,10 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 
 ## Video Demos
+### 🌊 3D model, with swimming animation
 ![Video demo of 3D whale shark animation](./video-demos/whale-shark-3Dmodel-demo.gif)
+<br>
+### 🌐 Tracker page, with globe storytelling 
 ![Video demo of tracker storytelling feature](./video-demos/whale-shark-tracker-demo.gif)
 
 
