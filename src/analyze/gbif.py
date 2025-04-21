@@ -19,7 +19,7 @@ from src.utils.data_utils import (
 )
 
 from src.clean.gbif import (
-    GBIF_CLEAN_FILE,
+    GBIF_CLEAN_FILE, GBIF_MEDIA_FILE,
 )
 
 
@@ -181,6 +181,41 @@ def make_unique_sharks_count(source_df: pd.DataFrame,
     )
 
     return target_df
+
+
+def make_media_conditions(occurrences_df: pd.DataFrame, 
+                        individual_sharks: pd.DataFrame) -> pd.DataFrame:
+    # Anything more restrictive probably not usable
+    license_types = {
+        "http://creativecommons.org/licenses/by/4.0/": "CC BY [Attribution]",
+        "http://creativecommons.org/licenses/by-nc/4.0/": "CC BY-NC [Attribution-NonCommercial]",
+        "http://creativecommons.org/publicdomain/zero/1.0/": "CC0 [Public Domain]"
+    }
+
+    media_fields = [
+        "key",
+        "identificationID", # shark ID (?)
+        "creator",
+        "license",
+        "rightsHolder",
+        "identifier" # image URL
+    ]
+
+    media_df = read_csv(GBIF_MEDIA_FILE)
+
+    # Merge with media & extract licensing rights
+    occurrences_media = occurrences_df.merge(media_df[media_fields], on = "key")    
+    occurrences_media["license"] = occurrences_media["license"].replace(license_types)
+
+    # Build "identifier (license: license, creator: creator)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_media, individual_sharks=individual_sharks,
+        metric_subset=["identifier"], metric_timing=["license", "creator"],
+        format_str="{0} (license: {1}, creator: {2})", # == f"{identifier} (license: {license}, creator: {creator})"
+        column_name="imageURL (license, creator)"
+    )
+
+    return individual_sharks
 
 
 def make_individual_metric_df(occurrences_df: pd.DataFrame, 
@@ -487,6 +522,9 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
 
     # Build & assemble all other relevant metrics (e.g. lifeStage, locations, etc)
     individual_sharks = assemble_individual_metrics(occurrences_df, individual_sharks)
+
+    # Get any available media (+ licensing rights)
+    individual_sharks = make_media_conditions(occurrences_df, individual_sharks)
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
 
