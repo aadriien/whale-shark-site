@@ -154,6 +154,17 @@
     ]
   },
   {
+    "whaleSharkID": "607402176",
+    "coordinates": [
+      {
+        "lat": 3.586564,
+        "long": 72.689523,
+        "eventDate": "2025-03-31",
+        "parsedDate": "2025-03-31"
+      }
+    ]
+  },
+  {
     "whaleSharkID": "440789997",
     "coordinates": [
       {
@@ -6578,6 +6589,17 @@
     ]
   },
   {
+    "whaleSharkID": "605569691",
+    "coordinates": [
+      {
+        "lat": 24.367546,
+        "long": -110.445926,
+        "eventDate": "2019-03-16",
+        "parsedDate": "2019-03-16"
+      }
+    ]
+  },
+  {
     "whaleSharkID": "81200865",
     "coordinates": [
       {
@@ -6848,6 +6870,17 @@
         "long": 113.45886,
         "eventDate": "2019-06-30",
         "parsedDate": "2019-06-30"
+      }
+    ]
+  },
+  {
+    "whaleSharkID": "607236354",
+    "coordinates": [
+      {
+        "lat": 21.5223,
+        "long": -87.379596,
+        "eventDate": "2019-06-26",
+        "parsedDate": "2019-06-26"
       }
     ]
   },
@@ -30816,6 +30849,17 @@
     ]
   },
   {
+    "whaleSharkID": "605863848",
+    "coordinates": [
+      {
+        "lat": -21.846745,
+        "long": 113.721938,
+        "eventDate": "2014-05-16",
+        "parsedDate": "2014-05-16"
+      }
+    ]
+  },
+  {
     "whaleSharkID": "2152331",
     "coordinates": [
       {
@@ -32577,6 +32621,17 @@
         "long": 123.449979,
         "eventDate": "2013-04-17",
         "parsedDate": "2013-04-17"
+      }
+    ]
+  },
+  {
+    "whaleSharkID": "606177274",
+    "coordinates": [
+      {
+        "lat": 22.677906,
+        "long": -109.981328,
+        "eventDate": "2013-04-19",
+        "parsedDate": "2013-04-19"
       }
     ]
   },
