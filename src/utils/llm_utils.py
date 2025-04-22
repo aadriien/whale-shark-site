@@ -19,7 +19,6 @@ GBIF_STORY_SHARKS_NAMED_JSON = "website/src/assets/data/gbif_story_sharks_named.
 
 SHARK_FIELDS_TO_REVIEW = [
     "whaleSharkID",
-    "Total Occurrences",
     "sex",
     "lifeStage (year)",
     "country (year)",
@@ -176,9 +175,10 @@ def name_all_sharks(named_sharks: pd.DataFrame, generated_names: dict) -> pd.Dat
 
 if __name__ == "__main__":
     story_sharks = read_csv(GBIF_STORY_SHARKS_CSV)
+    named_sharks = story_sharks.copy()
 
-    named_sharks = story_sharks[SHARK_FIELDS_TO_REVIEW].copy()
-    generated_names = named_sharks.apply(name_shark_row, axis=1)
+    relevant_shark_fields = story_sharks[SHARK_FIELDS_TO_REVIEW]
+    generated_names = relevant_shark_fields.apply(name_shark_row, axis=1)
 
     named_sharks_df = name_all_sharks(named_sharks, generated_names)
     named_sharks_list = named_sharks_df.to_dict(orient='records')

@@ -41,6 +41,19 @@ const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
             <p className="shark-id">ID: {shark.id}</p>
             
             <p>Additional details about shark here...</p>
+
+            <p className="shark-id">Sex: {shark.sex}</p>
+            <p className="shark-id">Life Stage: {shark.lifeStage}</p>
+
+            <p className="shark-id">Total Records: {shark.occurrences}</p>
+            <p className="shark-id">Oldest Record: {shark.oldest}</p>
+            <p className="shark-id">Newest Record: {shark.newest}</p>
+
+            <p className="shark-id">{shark.human} sightings by human divers</p>
+            <p className="shark-id">{shark.machine} sightings by satellite tag</p>
+
+            <p className="shark-id">Countries visited: {shark.countries}</p>
+
         </div>
       )}
     </div>

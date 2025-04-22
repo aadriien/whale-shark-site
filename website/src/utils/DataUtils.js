@@ -1,5 +1,4 @@
-import coordinatesDataAll from '../assets/data/gbif_shark_tracking.json';
-import coordinatesDataStory from '../assets/data/gbif_story_shark_tracking.json';
+import storySharkOptions from "../assets/data/gbif_story_sharks_named.json";
 
 
 const sharksOfInterest = [
@@ -15,36 +14,64 @@ const sharksOfInterest = [
     "George", // total: 106 --> Unknown Unknown --> Colombia (2015), Ecuador (2015), Ecuador (2016)
 ]
 
-
-export const storySharks = [
-    {
-        id: "101376a",
-        name: "101376a"
-    }, 
-    {
-        id: "101373a",
-        name: "101373a"
-    }, 
-    {
-        id: "Ranger",
-        name: "Ranger"
-    }, 
-    {
-        id: "101371a",
-        name: "101371a"
-    }, 
-    {
-        id: "57828",
-        name: "57828"
-    }, 
-    {
-        id: "57821",
-        name: "57821"
-    }
+const selectedSharkIDs = [
+    "101376a",
+    "101373a",
+    "Ranger",
+    "101371a",
+    "57828",
+    "57821",
 ]
 
+const keyMap = {
+    "whaleSharkID": "id",
+    "LLM-Gen Name (openai API)": "name",
+    "LLM-Gen Name (gemma:2b local)": "otherName",
+    "Total Occurrences": "occurrences",
+    "Oldest Occurrence": "oldest",
+    "Newest Occurrence": "newest",
+    "HUMAN_OBSERVATION": "human",
+    "MACHINE_OBSERVATION": "machine",
+    "lifeStage (year)": "lifeStage",
+    "country (year)": "countries",
+    "stateProvince - verbatimLocality (month year)": "regions",
+};
 
 
+const storySharksRaw = storySharkOptions.filter(
+    shark => selectedSharkIDs.includes(shark.whaleSharkID)
+);
+
+export const storySharks = storySharksRaw.map(obj => formatKeyVals(obj, keyMap));
+
+
+function cleanLifestage(obj) {
+    const rawLifeStage = obj.lifeStage;
+  
+    const cleanedLifeStage =
+        rawLifeStage
+            ?.split(",")
+            .map(stage => stage.trim())
+            .find(stage => !stage.toLowerCase().startsWith("unknown"))
+            ?.replace(/\s*\(\d{4}\)/, "") || "Unknown";
+  
+    return cleanedLifeStage;
+}
+
+
+function formatKeyVals(obj, keyMap) {
+    // Adjust column names for easier access in shark card
+    const renamed = Object.fromEntries(
+        Object.entries(obj).map(([key, value]) => [keyMap[key] || key, value])
+    );
+
+    // Extract just 1 lifeStage where available
+    if (renamed.lifeStage) {
+        renamed.lifeStage = cleanLifestage(renamed);
+    }
+
+    return renamed;
+}
 
 
 
