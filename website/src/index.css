@@ -115,6 +115,34 @@ button:focus-visible {
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+
+/* Tags to label regions for a given shark's card view */
+.shark-country-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+    grid-column: span 2;
+    justify-content: center;
+}
+
+.country-tag {
+    background-color: #e0f7fa;
+    color: #00796b;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 10px;
+    white-space: nowrap;
+    box-shadow: 0 0 0 1px #b2ebf2;
+    transition: background-color 0.2s ease;
+}
+
+.country-tag:hover {
+    background-color: #b2ebf2;
+}
+
   
 /* Styling for image placeholder */
 .shark-card-image {
@@ -133,34 +161,148 @@ button:focus-visible {
     color: #888;
 }
   
-/* Content styling */
 .shark-card-content {
-    margin-bottom: 2px;
+    margin-bottom: 0px;
 }
 
-.shark-id {
-    font-size: 18px;
-    font-weight: bold;
-}
-  
-.shark-name {
-    font-size: 15px;
-    font-weight: bold;
-    color: #666;
-}
 
-.shark-details {
-    font-size: 14px;
-    color: #666;
-}
-  
-/* Expandable details styling */
 .shark-card-details {
-    margin-top: 12px;
-    font-size: 14px;
+    background: #f9fbfd; 
+    padding: 0; 
+    border-radius: 5px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+    margin-top: 16px;
+    font-size: 13px; 
     color: #333;
-    max-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px; 
+    max-height: 300px;
     overflow-y: auto;
+    transition: box-shadow 0.3s ease;
+}
+
+.shark-card-details:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Each category (div section) gets its own color band with left strip */
+.shark-id {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 8px 12px;
+    background-color: #dbd9f7;
+    border-left: 6px solid #7a7de0; 
+}
+
+.shark-nicknames {
+    padding: 8px 12px;
+    background-color: #e0f7fa;
+    border-left: 6px solid #2093a2; 
+}
+
+.shark-traits {
+    padding: 8px 12px;
+    background-color: #e3f4cf;
+    border-left: 6px solid #66bb6a; 
+}
+
+.shark-records {
+    padding: 8px 12px;
+    background-color: #fefcd5;
+    border-left: 6px solid #f2d251; 
+}
+
+.shark-regions {
+    padding: 8px 12px;
+    background-color: #fff3e0;
+    border-left: 6px solid #ff7043; 
+}
+
+
+/* Category Headers */
+.shark-nicknames h3,
+.shark-traits h3,
+.shark-records h3,
+.shark-observation h3,
+.shark-regions h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #25417d;
+    margin-bottom: 6px; 
+}
+
+/* Category Items */
+.shark-nicknames p,
+.shark-traits p,
+.shark-records p,
+.shark-observation p,
+.shark-regions p {
+    font-size: 13px; 
+    color: #444;
+    margin: 0; 
+}
+
+/* Center text vertically & align to left */
+.shark-nicknames p,
+.shark-traits p,
+.shark-records p,
+.shark-observation p,
+.shark-regions p,
+.shark-nicknames h3,
+.shark-traits h3,
+.shark-records h3,
+.shark-observation h3,
+.shark-regions h3 {
+    text-align: left; 
+    margin: 0;
+    margin-bottom: 8px;
+} 
+
+/* Timeline list styling for regions by date */
+.shark-regions ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.timeline-list {
+    padding-left: 30px; 
+    position: relative;
+}
+
+.timeline-item {
+    padding-left: 25px; 
+    position: relative;
+    text-align: left;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Timeline circle */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    background-color: #eaa089; 
+    border-radius: 50%; 
+    border: 2px solid #fff; 
+}
+
+/* Vertical line connecting items via circles */
+.timeline-list::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #eaa089; 
 }
 
 
