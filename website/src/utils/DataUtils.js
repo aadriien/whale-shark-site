@@ -26,7 +26,7 @@ const selectedSharkIDs = [
 const keyMap = {
     "whaleSharkID": "id",
     "LLM-Gen Name (openai API)": "name",
-    "LLM-Gen Name (gemma:2b local)": "otherName",
+    "LLM-Gen Name (gemma:2b local)": "gemmaName",
     "Total Occurrences": "occurrences",
     "Oldest Occurrence": "oldest",
     "Newest Occurrence": "newest",
