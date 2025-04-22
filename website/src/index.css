@@ -137,13 +137,19 @@ button:focus-visible {
 .shark-card-content {
     margin-bottom: 2px;
 }
-  
-.shark-name {
+
+.shark-id {
     font-size: 18px;
     font-weight: bold;
 }
   
-.shark-id {
+.shark-name {
+    font-size: 15px;
+    font-weight: bold;
+    color: #666;
+}
+
+.shark-details {
     font-size: 14px;
     color: #666;
 }
@@ -153,7 +159,7 @@ button:focus-visible {
     margin-top: 12px;
     font-size: 14px;
     color: #333;
-    max-height: 130px;
+    max-height: 200px;
     overflow-y: auto;
 }
 
