@@ -21,8 +21,8 @@ from src.fetch.gbif import (
 )
 
 
-GBIF_CLEAN_FILE = "data/gbif_clean.csv"
-GBIF_MEDIA_FILE = "data/gbif_media.csv"
+GBIF_CLEAN_CSV = "data/gbif_clean.csv"
+GBIF_MEDIA_CSV = "data/gbif_media.csv"
 
 OCCURRENCE_RESULT_FIELDS = [
     "key", 
@@ -116,9 +116,9 @@ def export_gbif_occurrences() -> pd.DataFrame:
         media_df = pd.DataFrame(all_media_data)
 
         if not media_df.empty:
-            export_to_csv(GBIF_MEDIA_FILE, media_df)
+            export_to_csv(GBIF_MEDIA_CSV, media_df)
 
-    export_to_csv(GBIF_CLEAN_FILE, occurrences_df)
+    export_to_csv(GBIF_CLEAN_CSV, occurrences_df)
     return occurrences_df
 
 

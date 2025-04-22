@@ -19,22 +19,22 @@ from src.utils.data_utils import (
 )
 
 from src.clean.gbif import (
-    GBIF_CLEAN_FILE, GBIF_MEDIA_FILE,
+    GBIF_CLEAN_CSV, GBIF_MEDIA_CSV,
 )
 
 
-GBIF_CALENDAR_STATS_FILE = "outputs/gbif_calendar_stats.csv"
-GBIF_COUNTRY_STATS_FILE = "outputs/gbif_country_stats.csv"
-GBIF_CONTINENT_STATS_FILE = "outputs/gbif_continent_stats.csv"
-GBIF_PUBLISHING_COUNTRY_STATS_FILE = "outputs/gbif_publishingCountry_stats.csv"
+GBIF_CALENDAR_STATS_CSV = "outputs/gbif_calendar_stats.csv"
+GBIF_COUNTRY_STATS_CSV = "outputs/gbif_country_stats.csv"
+GBIF_CONTINENT_STATS_CSV = "outputs/gbif_continent_stats.csv"
+GBIF_PUBLISHING_COUNTRY_STATS_CSV = "outputs/gbif_publishingCountry_stats.csv"
 
-GBIF_INDIVIDUAL_SHARKS_STATS_FILE = "outputs/gbif_individual_sharks_stats.csv"
+GBIF_INDIVIDUAL_SHARKS_STATS_CSV = "outputs/gbif_individual_sharks_stats.csv"
 
 # Feeds as JSON into Three.js globe display on website
-GBIF_SHARK_TRACKING_FILE = "website/src/assets/data/gbif_shark_tracking.json"
+GBIF_SHARK_TRACKING_JSON = "website/src/assets/data/gbif_shark_tracking.json"
 
-GBIF_STORY_SHARKS_FILE = "outputs/gbif_story_sharks.csv"
-GBIF_STORY_SHARK_TRACKING_FILE = "website/src/assets/data/gbif_story_shark_tracking.json"
+GBIF_STORY_SHARKS_CSV = "outputs/gbif_story_sharks.csv"
+GBIF_STORY_SHARK_TRACKING_JSON = "website/src/assets/data/gbif_story_shark_tracking.json"
 
 
 
@@ -201,7 +201,7 @@ def make_media_conditions(occurrences_df: pd.DataFrame,
         "identifier" # image URL
     ]
 
-    media_df = read_csv(GBIF_MEDIA_FILE)
+    media_df = read_csv(GBIF_MEDIA_CSV)
 
     # Merge with media & extract licensing rights
     occurrences_media = occurrences_df.merge(media_df[media_fields], on = "key")    
@@ -337,7 +337,7 @@ def export_calendar_stats(occurrences_df: pd.DataFrame) -> None:
     calendar_stats = calendar_stats.merge(life_stage_counts, on="year", how="left")
 
     calendar_stats = calendar_stats.sort_values(by="year", ascending=False).reset_index()
-    export_to_csv(GBIF_CALENDAR_STATS_FILE, calendar_stats)
+    export_to_csv(GBIF_CALENDAR_STATS_CSV, calendar_stats)
 
 
 def export_country_stats(occurrences_df: pd.DataFrame) -> None:
@@ -369,7 +369,7 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
     country_stats = country_stats.merge(date_min_max, on=["countryCode", "country"], how="left")
 
     country_stats = country_stats.sort_values(by="country", ascending=True).reset_index()
-    export_to_csv(GBIF_COUNTRY_STATS_FILE, country_stats)
+    export_to_csv(GBIF_COUNTRY_STATS_CSV, country_stats)
 
 
 def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
@@ -401,7 +401,7 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
     continent_stats = continent_stats.merge(date_min_max, on=["continent"], how="left")
 
     continent_stats = continent_stats.sort_values(by="continent", ascending=True).reset_index()
-    export_to_csv(GBIF_CONTINENT_STATS_FILE, continent_stats)
+    export_to_csv(GBIF_CONTINENT_STATS_CSV, continent_stats)
 
 
 def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
@@ -453,7 +453,7 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
         by="publishingCountry", ascending=True
     ).reset_index()
 
-    export_to_csv(GBIF_PUBLISHING_COUNTRY_STATS_FILE, publishingCountry_stats)
+    export_to_csv(GBIF_PUBLISHING_COUNTRY_STATS_CSV, publishingCountry_stats)
 
 
 
@@ -526,10 +526,10 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     # Get any available media (+ licensing rights)
     individual_sharks = make_media_conditions(occurrences_df, individual_sharks)
 
-    export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE, individual_sharks)
+    export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_CSV, individual_sharks)
 
     # Also build & export datasets for globe / storytelling
-    export_shark_tracking_json(shark_df=individual_sharks, json_file=GBIF_SHARK_TRACKING_FILE)
+    export_shark_tracking_json(shark_df=individual_sharks, json_file=GBIF_SHARK_TRACKING_JSON)
     export_story_sharks(individual_sharks)
 
 
@@ -597,8 +597,8 @@ def export_story_sharks(individual_sharks: pd.DataFrame) -> None:
         .reset_index(drop=True)
     )
 
-    export_to_csv(GBIF_STORY_SHARKS_FILE, frequently_sighted)
-    export_shark_tracking_json(shark_df=frequently_sighted, json_file=GBIF_STORY_SHARK_TRACKING_FILE)
+    export_to_csv(GBIF_STORY_SHARKS_CSV, frequently_sighted)
+    export_shark_tracking_json(shark_df=frequently_sighted, json_file=GBIF_STORY_SHARK_TRACKING_JSON)
 
 
 
@@ -618,7 +618,7 @@ def export_all_analyses(dataframe: pd.DataFrame) -> None:
 
 if __name__ == "__main__":
     occurrences_df = read_csv(
-        GBIF_CLEAN_FILE, 
+        GBIF_CLEAN_CSV, 
         dtype={"year": "Int64", "day": "Int64"}
     )
     export_all_analyses(occurrences_df)

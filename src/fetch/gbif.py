@@ -21,7 +21,7 @@ from src.utils.data_utils import (
 )
 
 
-GBIF_RAW_FILE = "data/gbif_raw.csv"
+GBIF_RAW_CSV = "data/gbif_raw.csv"
 
 BASE_URL = "https://api.gbif.org/v1"
 
@@ -88,7 +88,7 @@ def get_all_occurrences_raw() -> list:
 
     # Export raw dataset
     raw_occurrencess_df = pd.DataFrame(raw_occurrences)
-    export_to_csv(GBIF_RAW_FILE, raw_occurrencess_df)
+    export_to_csv(GBIF_RAW_CSV, raw_occurrencess_df)
 
     return raw_occurrences
 
