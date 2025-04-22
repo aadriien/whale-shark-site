@@ -1,19 +1,19 @@
+import re
 import ollama
+import requests
 import pandas as pd
-from typing import Dict
+from typing import Dict, Literal
 
 from src.utils.data_utils import (
     read_csv, export_to_csv, move_column_after,
 )
 
 from src.analyze.gbif import (
-    GBIF_INDIVIDUAL_SHARKS_STATS_FILE,
+    GBIF_STORY_SHARKS_FILE,
 )
 
 
-LLM_MODEL = "gemma:2b"
-
-GBIF_INDIVIDUAL_SHARKS_NAMED_FILE = "outputs/gbif_individual_sharks_named.csv"
+GBIF_STORY_SHARKS_NAMED_FILE = "outputs/gbif_story_sharks_named.csv"
 
 SHARK_FIELDS_TO_REVIEW = [
     "whaleSharkID",
@@ -25,11 +25,86 @@ SHARK_FIELDS_TO_REVIEW = [
     "occurrenceRemarks (eventDate)",
 ]
 
+# Compare local Ollama instance with result from API endpoint (uses openai)
+LOCAL_LLM_MODEL = "gemma:2b"
+API_LLM_MODEL = "openai"
 
-def format_prompt(shark_data: Dict[str, str]) -> str:
-    prompt = "You are a creative marine biologist who loves naming whale sharks.\n"
-    prompt += "Given the following whale shark traits, respond ONLY with a short, fun name.\n" 
-    prompt += "No explanation. No formatting. No quotes.\n\n"
+TEXT_GEN_URL_BASE = "https://text.pollinations.ai/"
+
+PROMPT = (
+    # "Given the following whale shark traits, respond with a short, fun name.\n"
+    # "No explanation or formatting. ONLY the name, wrapped in **.\n\n"
+    # "Suggested name: "
+    "Come up with a fun, original name for this whale shark, given its traits. "
+    "Wrap it in **:\n"
+)
+
+SYSTEM_PROMPT = (
+    "You are a creative marine biologist who loves naming whale sharks.\n\n"
+    # "You are a creative marine biologist with a quirky sense of humor.\n"
+)
+
+API_PARAMS = {
+    "model": API_LLM_MODEL,
+    "seed": 1,
+    "private": "true",
+    # "system": SYSTEM_PROMPT, # can only use system prompt in GET request
+}
+
+
+# Generate nickname using Pollinations.AI via API query
+def prompt_API_LLM(prompt: str) -> str:
+    try:
+        # GET request faster, but more likely to fail
+        # response = requests.get(f"{TEXT_GEN_URL_BASE}/{prompt}", params=API_PARAMS)
+
+        # Use POST instead of GET for more reliability & security
+        response = requests.post(
+            TEXT_GEN_URL_BASE, 
+            json={
+                "messages": [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt}
+                ], 
+                **API_PARAMS
+            }, 
+            timeout=10
+        )
+        response.raise_for_status()
+        return response.text.strip()
+
+    except requests.RequestException as e:
+        raise RuntimeError(f"Error, failed to reach URL: {e}")
+
+
+# Generate nickname using small local Ollama model 
+def prompt_local_LLM(prompt: str, method: Literal["chat", "generate"]) -> str:
+    if method not in {"chat", "generate"}:
+        raise ValueError(f"Error, must specify either 'chat' or 'generate' method")
+
+    # Chat mode with user roles
+    if method == "chat":
+        response = ollama.chat(
+            model=LOCAL_LLM_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            stream=False
+        )
+        name = response["message"]["content"].strip()
+
+    # Generate mode for simple output (method == "generate")
+    else: 
+        response = ollama.generate(
+            model=LOCAL_LLM_MODEL,
+            prompt=prompt,
+            stream=False
+        )
+        name = response["response"].strip()
+
+    return name
+
+
+def format_prompt(prompt: str, shark_data: Dict[str, str]) -> str:
+    prompt = PROMPT
 
     for key, value in shark_data.items():
         prompt += f"- {key.capitalize()}: {value}\n"
@@ -38,43 +113,65 @@ def format_prompt(shark_data: Dict[str, str]) -> str:
     return prompt
 
 
-def generate_shark_name(shark_data: Dict[str, str], model=LLM_MODEL) -> str:
-    prompt = format_prompt(shark_data)
+def extract_bold_name(text: str) -> str:
+    # We only want "**name**" from LLM text response
+    match = re.search(r"\*\*(.+?)\*\*", text)
 
-    response = ollama.chat(model=model, messages=[
-        {"role": "user", "content": prompt}
-    ])
+    if match:
+        return match.group(1).strip()
 
-    name = response["message"]["content"].strip()
-    return name
+    # If ** bold not found, default to full text
+    return text.strip() 
 
 
-def name_shark_row(row: pd.Series) -> str:
+def generate_shark_names(shark_data: Dict[str, str]) -> dict:
+    local_prompt = format_prompt(SYSTEM_PROMPT + PROMPT, shark_data)
+    API_prompt = format_prompt(SYSTEM_PROMPT + PROMPT, shark_data)
+
+    local_LLM_raw = prompt_local_LLM(prompt=local_prompt, method="generate")
+    API_LLM_raw = prompt_API_LLM(prompt=API_prompt)
+
+    # Get just the name from within "**name**"
+    local_LLM_name = extract_bold_name(local_LLM_raw)
+    API_LLM_name = extract_bold_name(API_LLM_raw)
+
+    return {"local_name": local_LLM_name, "API_name": API_LLM_name}
+
+
+def name_shark_row(row: pd.Series) -> dict:
     shark_data = {metric: row.get(metric, "") for metric in SHARK_FIELDS_TO_REVIEW}
 
     try:
-        generated_name = generate_shark_name(shark_data)
-        print(f"whaleSharkID:{row.get('whaleSharkID')} has been named {generated_name}")
-        return generated_name
+        generated_names = generate_shark_names(shark_data)
+        print(f"whaleSharkID:{row.get('whaleSharkID')} has been named {generated_names}")
+        return generated_names
 
     except Exception as e:
-        print(f"Error: Failed to name row {row.name}: {e}")
-        return "Unnamed"
+        print(f"Error, failed to name row {row.name}: {e}")
+        return {"local_name": "Unnamed", "API_name": "Unnamed"}
 
 
 if __name__ == "__main__":
-    individual_sharks = read_csv(GBIF_INDIVIDUAL_SHARKS_STATS_FILE)
+    story_sharks = read_csv(GBIF_STORY_SHARKS_FILE)
 
-    named_sharks = individual_sharks[SHARK_FIELDS_TO_REVIEW]
-    named_sharks["LLM-Generated Name"] = individual_sharks.apply(name_shark_row, axis=1)
+    named_sharks = story_sharks[SHARK_FIELDS_TO_REVIEW].copy()
+    generated_names = named_sharks.apply(name_shark_row, axis=1)
+
+    named_sharks["LLM-Gen Name ({LOCAL_LLM_MODEL} local)"] = generated_names.apply(lambda x: x["local_name"])
+    named_sharks["LLM-Gen Name ({API_LLM_MODEL} API)"] = generated_names.apply(lambda x: x["API_name"])
     
     named_sharks = move_column_after(
         dataframe=named_sharks, 
-        col_to_move="LLM-Generated Name", 
+        col_to_move="LLM-Gen Name ({LOCAL_LLM_MODEL} local)", 
         after_col="whaleSharkID"
     )
+    named_sharks = move_column_after(
+        dataframe=named_sharks, 
+        col_to_move="LLM-Gen Name ({API_LLM_MODEL} API)", 
+        after_col="LLM-Gen Name ({LOCAL_LLM_MODEL} local)"
+    )
 
-    export_to_csv(GBIF_INDIVIDUAL_SHARKS_NAMED_FILE, named_sharks)
+    export_to_csv(GBIF_STORY_SHARKS_NAMED_FILE, named_sharks)
 
 
 
