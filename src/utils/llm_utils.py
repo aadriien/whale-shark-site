@@ -5,7 +5,7 @@ import pandas as pd
 from typing import Dict, Literal
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, move_column_after,
+    read_csv, export_to_csv, export_to_json, move_column_after,
 )
 
 from src.analyze.gbif import (
@@ -146,7 +146,6 @@ def name_shark_row(row: pd.Series) -> dict:
 
     try:
         generated_names = generate_shark_names(shark_data)
-        print(f"whaleSharkID:{row.get('whaleSharkID')} has been named {generated_names}")
         return generated_names
 
     except Exception as e:
@@ -179,11 +178,13 @@ if __name__ == "__main__":
     story_sharks = read_csv(GBIF_STORY_SHARKS_CSV)
 
     named_sharks = story_sharks[SHARK_FIELDS_TO_REVIEW].copy()
-    
     generated_names = named_sharks.apply(name_shark_row, axis=1)
-    named_sharks = name_all_sharks(named_sharks, generated_names)
 
-    export_to_csv(GBIF_STORY_SHARKS_NAMED_CSV, named_sharks)
+    named_sharks_df = name_all_sharks(named_sharks, generated_names)
+    named_sharks_list = named_sharks_df.to_dict(orient='records')
+
+    export_to_csv(GBIF_STORY_SHARKS_NAMED_CSV, named_sharks_df)
+    export_to_json(GBIF_STORY_SHARKS_NAMED_JSON, named_sharks_list)
 
 
 
