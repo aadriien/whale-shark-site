@@ -9,11 +9,13 @@ from src.utils.data_utils import (
 )
 
 from src.analyze.gbif import (
-    GBIF_STORY_SHARKS_FILE,
+    GBIF_STORY_SHARKS_CSV,
 )
 
 
-GBIF_STORY_SHARKS_NAMED_FILE = "outputs/gbif_story_sharks_named.csv"
+GBIF_STORY_SHARKS_NAMED_CSV = "outputs/gbif_story_sharks_named.csv"
+GBIF_STORY_SHARKS_NAMED_JSON = "website/src/assets/data/gbif_story_sharks_named.json"
+
 
 SHARK_FIELDS_TO_REVIEW = [
     "whaleSharkID",
@@ -40,8 +42,9 @@ PROMPT = (
 )
 
 SYSTEM_PROMPT = (
-    "You are a creative marine biologist who loves naming whale sharks.\n\n"
+    # "You are a creative marine biologist who loves naming whale sharks.\n\n"
     # "You are a creative marine biologist with a quirky sense of humor.\n"
+    "You are a creative and quirky marine biologist who loves naming whale sharks.\n"
 )
 
 API_PARAMS = {
@@ -151,27 +154,36 @@ def name_shark_row(row: pd.Series) -> dict:
         return {"local_name": "Unnamed", "API_name": "Unnamed"}
 
 
-if __name__ == "__main__":
-    story_sharks = read_csv(GBIF_STORY_SHARKS_FILE)
+def name_all_sharks(named_sharks: pd.DataFrame, generated_names: dict) -> pd.DataFrame:
+    local_col_str = f"LLM-Gen Name ({LOCAL_LLM_MODEL} local)"
+    api_col_str = f"LLM-Gen Name ({API_LLM_MODEL} API)"
 
-    named_sharks = story_sharks[SHARK_FIELDS_TO_REVIEW].copy()
-    generated_names = named_sharks.apply(name_shark_row, axis=1)
-
-    named_sharks["LLM-Gen Name ({LOCAL_LLM_MODEL} local)"] = generated_names.apply(lambda x: x["local_name"])
-    named_sharks["LLM-Gen Name ({API_LLM_MODEL} API)"] = generated_names.apply(lambda x: x["API_name"])
+    named_sharks[local_col_str] = generated_names.apply(lambda x: x["local_name"])
+    named_sharks[api_col_str] = generated_names.apply(lambda x: x["API_name"])
     
     named_sharks = move_column_after(
         dataframe=named_sharks, 
-        col_to_move="LLM-Gen Name ({LOCAL_LLM_MODEL} local)", 
+        col_to_move=local_col_str, 
         after_col="whaleSharkID"
     )
     named_sharks = move_column_after(
         dataframe=named_sharks, 
-        col_to_move="LLM-Gen Name ({API_LLM_MODEL} API)", 
-        after_col="LLM-Gen Name ({LOCAL_LLM_MODEL} local)"
+        col_to_move=api_col_str, 
+        after_col=local_col_str
     )
 
-    export_to_csv(GBIF_STORY_SHARKS_NAMED_FILE, named_sharks)
+    return named_sharks
+
+
+if __name__ == "__main__":
+    story_sharks = read_csv(GBIF_STORY_SHARKS_CSV)
+
+    named_sharks = story_sharks[SHARK_FIELDS_TO_REVIEW].copy()
+    
+    generated_names = named_sharks.apply(name_shark_row, axis=1)
+    named_sharks = name_all_sharks(named_sharks, generated_names)
+
+    export_to_csv(GBIF_STORY_SHARKS_NAMED_CSV, named_sharks)
 
 
 
