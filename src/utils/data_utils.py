@@ -15,17 +15,17 @@ from src.utils.api_utils import (
 )
 
 
-def get_folder_name(csv_file: str) -> str:
-    if not csv_file:
-        raise ValueError("Error, must specify CSV")
+def get_folder_name(file_name: str) -> str:
+    if not file_name:
+        raise ValueError("Error, must specify file name")
 
-    return os.path.dirname(csv_file) 
+    return os.path.dirname(file_name) 
 
 
 # Check valid directory (with option to create if doesn't exist)
-def folder_exists(csv_file: str, create: bool = False) -> bool:
+def folder_exists(file_name: str, create: bool = False) -> bool:
     # Extract folder in file path
-    folder = get_folder_name(csv_file)  
+    folder = get_folder_name(file_name)  
 
     if create and not os.path.exists(folder):
         print(f"Folder '{folder}' not found. Creating it...")

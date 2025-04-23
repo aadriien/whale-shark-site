@@ -9,7 +9,7 @@ from diffusers import StableDiffusionPipeline
 
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, export_to_json, move_column_after,
+    folder_exists, read_csv, export_to_csv, export_to_json, move_column_after,
 )
 
 from src.analyze.gbif import (
@@ -20,6 +20,11 @@ from src.analyze.gbif import (
 GBIF_STORY_SHARKS_NAMED_CSV = "outputs/gbif_story_sharks_named.csv"
 GBIF_STORY_SHARKS_NAMED_JSON = "website/src/assets/data/gbif_story_sharks_named.json"
 
+GBIF_STORY_SHARK_IMAGES_CSV = "outputs/gbif_story_shark_images.csv"
+GBIF_STORY_SHARK_IMAGES_JSON = "website/src/assets/data/gbif_story_shark_images.json"
+
+JPG_FILE_BASE_PATH = "website/src/assets/images/generated-shark-imgs/"
+
 
 SHARK_FIELDS_TO_REVIEW = [
     "whaleSharkID",
@@ -27,34 +32,53 @@ SHARK_FIELDS_TO_REVIEW = [
     "lifeStage (year)",
     "country (year)",
     "stateProvince - verbatimLocality (month year)",
-    "occurrenceRemarks (eventDate)",
 ]
+
 
 # Compare local Ollama instance with result from API endpoint (uses openai)
 LOCAL_LLM_MODEL = "gemma:2b"
 API_LLM_MODEL = "openai"
 
-TEXT_GEN_URL_BASE = "https://text.pollinations.ai/"
+LOCAL_COL_STR = f"LLM-Gen Name ({LOCAL_LLM_MODEL} local)"
+API_COL_STR = f"LLM-Gen Name ({API_LLM_MODEL} API)"
 
-PROMPT = (
-    # "Given the following whale shark traits, respond with a short, fun name.\n"
-    # "No explanation or formatting. ONLY the name, wrapped in **.\n\n"
-    # "Suggested name: "
+IMAGE_COL_STR = f"LLM-Gen Image (API)"
+
+
+TEXT_GEN_URL_BASE = "https://text.pollinations.ai/"
+IMAGE_GEN_URL_BASE = "https://image.pollinations.ai/prompt"
+
+
+SYSTEM_PROMPT = (
+    "You are a creative and quirky marine biologist who loves naming whale sharks.\n"
+)
+
+TEXT_PROMPT = (
     "Come up with a fun, original name for this whale shark, given its traits. "
     "Wrap it in **:\n"
 )
 
-SYSTEM_PROMPT = (
-    # "You are a creative marine biologist who loves naming whale sharks.\n\n"
-    # "You are a creative marine biologist with a quirky sense of humor.\n"
-    "You are a creative and quirky marine biologist who loves naming whale sharks.\n"
+IMAGE_PROMPT = (
+    "Given this whale shark's LLM-Gen nicknames, and its traits "
+    "(sex, lifeStage, country, etc), generate a fun cartoon image of the shark. "
+    "This image should be detailed and very unique to the particular shark. "
+    "Make sure the image has plenty of personality for the shark. \n"
 )
 
-API_PARAMS = {
+
+API_TEXT_PARAMS = {
     "model": API_LLM_MODEL,
     "seed": 1,
     "private": "true",
     # "system": SYSTEM_PROMPT, # can only use system prompt in GET request
+}
+
+API_IMAGE_PARAMS = {
+    "width": 900,
+    "height": 400,
+    "private": "true",
+    "nologo": "true",
+    "safe": "true"
 }
 
 
@@ -72,7 +96,7 @@ def prompt_API_LLM(prompt: str) -> str:
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": prompt}
                 ], 
-                **API_PARAMS
+                **API_TEXT_PARAMS
             }, 
             timeout=10
         )
@@ -110,12 +134,9 @@ def prompt_local_LLM(prompt: str, method: Literal["chat", "generate"]) -> str:
 
 
 def format_prompt(prompt: str, shark_data: Dict[str, str]) -> str:
-    prompt = PROMPT
-
     for key, value in shark_data.items():
         prompt += f"- {key.capitalize()}: {value}\n"
 
-    prompt += "\nName:"
     return prompt
 
 
@@ -131,8 +152,8 @@ def extract_bold_name(text: str) -> str:
 
 
 def generate_shark_names(shark_data: Dict[str, str]) -> dict:
-    local_prompt = format_prompt(SYSTEM_PROMPT + PROMPT, shark_data)
-    API_prompt = format_prompt(SYSTEM_PROMPT + PROMPT, shark_data)
+    local_prompt = format_prompt(SYSTEM_PROMPT + TEXT_PROMPT, shark_data)
+    API_prompt = format_prompt(SYSTEM_PROMPT + TEXT_PROMPT, shark_data)
 
     local_LLM_raw = prompt_local_LLM(prompt=local_prompt, method="generate")
     API_LLM_raw = prompt_API_LLM(prompt=API_prompt)
@@ -157,21 +178,18 @@ def name_shark_row(row: pd.Series) -> dict:
 
 
 def name_all_sharks(named_sharks: pd.DataFrame, generated_names: dict) -> pd.DataFrame:
-    local_col_str = f"LLM-Gen Name ({LOCAL_LLM_MODEL} local)"
-    api_col_str = f"LLM-Gen Name ({API_LLM_MODEL} API)"
-
-    named_sharks[local_col_str] = generated_names.apply(lambda x: x["local_name"])
-    named_sharks[api_col_str] = generated_names.apply(lambda x: x["API_name"])
+    named_sharks[LOCAL_COL_STR] = generated_names.apply(lambda x: x["local_name"])
+    named_sharks[API_COL_STR] = generated_names.apply(lambda x: x["API_name"])
     
     named_sharks = move_column_after(
         dataframe=named_sharks, 
-        col_to_move=local_col_str, 
+        col_to_move=LOCAL_COL_STR, 
         after_col="whaleSharkID"
     )
     named_sharks = move_column_after(
         dataframe=named_sharks, 
-        col_to_move=api_col_str, 
-        after_col=local_col_str
+        col_to_move=API_COL_STR, 
+        after_col=LOCAL_COL_STR
     )
 
     return named_sharks
@@ -179,7 +197,7 @@ def name_all_sharks(named_sharks: pd.DataFrame, generated_names: dict) -> pd.Dat
 
 
 
-def generate_shark_image() -> None:
+def generate_image_huggingface() -> None:
     model_id = "lavaman131/cartoonify"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch_dtype = torch.float32
@@ -188,6 +206,72 @@ def generate_shark_image() -> None:
     image.save("output.png")
 
 
+
+def generate_image_API(prompt: str, shark_ID: str) -> str:
+    if not shark_ID:
+        raise ValueError("Error, must specify whale shark ID")
+
+    jpg_file = JPG_FILE_BASE_PATH + f"{shark_ID}.jpg"
+
+    import random
+    seed = random.randint(0, 99999) 
+
+    try:
+        response = requests.get(
+            f"{IMAGE_GEN_URL_BASE}/{prompt}?seed={seed}", 
+            params=API_IMAGE_PARAMS
+        )
+        response.raise_for_status()
+
+        # Create folder to hold images if doesn't already exist
+        _ = folder_exists(file_name=jpg_file, create=True)
+        print(f"Exporting generated image to: {jpg_file}")
+
+        with open(jpg_file, "wb") as file:
+            file.write(response.content)
+
+        return response.url
+
+    except requests.RequestException as e:
+        raise RuntimeError(f"Error, failed to reach URL: {e}")
+
+
+def generate_shark_image_url(row: pd.Series) -> str:
+    IMAGE_FIELDS_TO_REVIEW = SHARK_FIELDS_TO_REVIEW + [LOCAL_COL_STR, API_COL_STR]
+
+    shark_data = {metric: row.get(metric, "") for metric in IMAGE_FIELDS_TO_REVIEW}
+    shark_ID = shark_data["whaleSharkID"]
+
+    # API_prompt = format_prompt(IMAGE_PROMPT, shark_data)
+
+    API_prompt = (
+        f"**Cartoon of {shark_data[API_COL_STR]} the whale shark**. " 
+        f"{shark_data[API_COL_STR]} is a playful {shark_data['sex']} " 
+        f"{shark_data['lifeStage (year)']} from {shark_data['country (year)']}. "
+        f"Make the whale shark highly unique, expressive, and full of charm. "
+        f"Do not include any text or letters in the image.\n"
+    )
+
+
+    try:
+        API_image_url = generate_image_API(prompt=API_prompt, shark_ID=shark_ID)
+        return API_image_url
+
+    except Exception as e:
+        print(f"Error, failed to generate image for row {row.name}: {e}")
+        return ""
+
+
+def get_all_shark_images(selected_sharks: pd.DataFrame, generated_images: list) -> pd.DataFrame:
+    selected_sharks[IMAGE_COL_STR] = generated_images.apply(lambda x: x)
+    
+    selected_sharks = move_column_after(
+        dataframe=selected_sharks, 
+        col_to_move=IMAGE_COL_STR, 
+        after_col="whaleSharkID"
+    )
+
+    return selected_sharks
 
 
 
@@ -204,7 +288,32 @@ if __name__ == "__main__":
     # export_to_csv(GBIF_STORY_SHARKS_NAMED_CSV, named_sharks_df)
     # export_to_json(GBIF_STORY_SHARKS_NAMED_JSON, named_sharks_list)
 
-    generate_shark_image()
+    # generate_image_huggingface()
+
+    selected_shark_IDs = [
+        "101376a",
+        "101373a",
+        "Ranger",
+        "101371a",
+        "57828",
+        "57821",
+    ]
+
+    story_sharks_named = read_csv(GBIF_STORY_SHARKS_NAMED_CSV)
+    selected = story_sharks_named.loc[story_sharks_named["whaleSharkID"].isin(selected_shark_IDs)]
+    selected_sharks = selected.copy()
+
+    relevant_shark_image_fields = selected_sharks[SHARK_FIELDS_TO_REVIEW + [LOCAL_COL_STR, API_COL_STR]]
+    generated_images = relevant_shark_image_fields.apply(generate_shark_image_url, axis=1)
+
+    shark_images_df = get_all_shark_images(selected_sharks, generated_images)
+    shark_images_list = shark_images_df.to_dict(orient='records')
+
+    export_to_csv(GBIF_STORY_SHARK_IMAGES_CSV, shark_images_df)
+    export_to_json(GBIF_STORY_SHARK_IMAGES_JSON, shark_images_list)
+
+    # image_url = generate_image_API("cartoon whale shark")
+    # print(image_url)
 
 
 
