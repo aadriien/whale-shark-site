@@ -39,8 +39,8 @@ analyze_data:
 	@$(POETRY) run python -m src.analyze.gbif
 
 
-# Use LLM to generate names for each shark
-name_sharks: 
+# Use LLMs to generate names & images for each shark
+generate_shark_names_images: 
 	@which ollama > /dev/null || (echo "ollama not found. Installing..."; $(POETRY) add ollama)
 	@$(POETRY) run python -m src.utils.llm_utils
 
