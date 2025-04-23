@@ -12,7 +12,10 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
         onClick={toggleExpand}
         style={{
             // Give card border only if specific shark's story playing
-            border: playingSharkId === shark.id && isPlaying ? "1.5px solid black" : "",
+            border: playingSharkId === shark.id && isPlaying ? "2px solid black" : "",
+
+            // Add transition for easing
+            transition: "border 0.3s ease-out"
         }}   
     >
         <div className="shark-country-tags">
@@ -46,7 +49,12 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
                 style={{
                     // Apply button styling only if specific shark's story playing
                     backgroundColor: playingSharkId === shark.id && isPlaying ? "#b2ebf2" : "",  
-                    border: playingSharkId === shark.id && isPlaying ? "2px solid black" : "",
+                    border: playingSharkId === shark.id && isPlaying ? "1.5px solid black" : "",
+                    color: playingSharkId === shark.id && isPlaying ? "#25417d" : "",
+                    fontWeight: playingSharkId === shark.id && isPlaying ? "bold" : "",
+
+                    // Add transition for easing
+                    transition: "background-color 0.3s ease-out, border 0.3s ease-out, color 0.3s ease-out, font-weight 0.3s ease-out"
                 }}
             >
                 {isPlaying ? (
