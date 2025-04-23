@@ -1,4 +1,5 @@
 import storySharkOptions from "../assets/data/gbif_story_sharks_named.json";
+import selectedStorySharks from "../assets/data/gbif_story_shark_images.json";
 
 
 const sharksOfInterest = [
@@ -25,6 +26,7 @@ const selectedSharkIDs = [
 
 const keyMap = {
     "whaleSharkID": "id",
+    "LLM-Gen Image (API)": "cartoonImageURL",
     "LLM-Gen Name (openai API)": "name",
     "LLM-Gen Name (gemma:2b local)": "gemmaName",
     "Total Occurrences": "occurrences",
@@ -38,7 +40,7 @@ const keyMap = {
 };
 
 
-const storySharksRaw = storySharkOptions.filter(
+const storySharksRaw = selectedStorySharks.filter(
     shark => selectedSharkIDs.includes(shark.whaleSharkID)
 );
 

@@ -31,9 +31,12 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
             ))}
         </div>
 
-
         <div className="shark-card-image">
-            <span>Shark Image</span> {/* Placeholder text */}
+            {shark.cartoonImageURL ? (
+                <img src={shark.cartoonImageURL} alt={`LLM-generated cartoon image of whale shark named ${shark.name}`} />
+            ) : (
+                <span>Shark Image</span> /* Placeholder text */
+            )}
         </div>
 
         <div className="shark-card-content">
