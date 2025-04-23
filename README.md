@@ -14,6 +14,9 @@ For this project, `whale-shark-site`, I aim to bridge the gap between scientific
 - [How It Works](#how-it-works)
 - [Features](#features)
 - [Design Choices](#design-choices)
+- [Example Images](#example-images)
+- [Video Demos](#video-demos)
+- [Acknowledgements](#acknowledgements)
 
 
 ## Project Goals
@@ -117,14 +120,19 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 ## Acknowledgements
 
-### APIs and Data
+### People
+
+A massive thank you to the wonderful community of builders, creators, and programmers at [the Recurse Center](https://www.recurse.com)! Much of this project has been developed during my time at RC, and I'm continually inspired by the energy and passion of those around me.
+
+
+### APIs & Data
 
 I used biodiversity data from [GBIF](https://www.gbif.org) to access whale shark records.
 
 I used [Pollinations.AI](https://pollinations.ai)'s API to access OpenAI text generation.
 
 
-### Libraries and Modules
+### Libraries & Modules
 
 Thank you to Sean Bradley, whose open source [JEasings module](https://github.com/Sean-Bradley/JEasings), a JavaScript animation engine, allows me to control movements on the Three.js globe for "storytelling mode".
 
