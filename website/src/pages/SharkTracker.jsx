@@ -8,6 +8,7 @@ import { storySharks } from "../utils/DataUtils.js";
 
 function SharkTracker() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playingSharkId, setPlayingSharkId] = useState(null);
   const globeRef = useRef();
 
   const sharks = storySharks;
@@ -18,11 +19,13 @@ function SharkTracker() {
 
   const handlePlayStory = (sharkId) => {
     setIsPlaying(true);
+    setPlayingSharkId(sharkId);
 
     // Reset isPlaying state when story finished
     // (buttons disabled while story playing)
     globeRef.current?.playStory(sharkId).finally(() => {
         setIsPlaying(false);  
+        setPlayingSharkId(null);
     });
   };
 
@@ -42,7 +45,7 @@ function SharkTracker() {
       >
         {/* Left Shark Cards */}
         <div style={{ flex: "0.1", height: "35rem" }}>
-          <SharkGrid sharks={leftSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} />
+          <SharkGrid sharks={leftSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} playingSharkId={playingSharkId} />
         </div>
 
         {/* Globe */}
@@ -52,7 +55,7 @@ function SharkTracker() {
 
         {/* Right Shark Cards */}
         <div style={{ flex: "0.1", height: "35rem" }}>
-          <SharkGrid sharks={rightSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} />
+          <SharkGrid sharks={rightSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} playingSharkId={playingSharkId} />
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
+const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -8,7 +8,13 @@ const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
   };
 
   return (
-    <div className="shark-card" onClick={toggleExpand}>
+    <div className="shark-card" 
+        onClick={toggleExpand}
+        style={{
+            // Give card border only if specific shark's story playing
+            border: playingSharkId === shark.id && isPlaying ? "1.5px solid black" : "",
+        }}   
+    >
         <div className="shark-country-tags">
             {Array.from(
                 new Set(
@@ -37,7 +43,12 @@ const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
                     onPlayStory(shark.id);
                 }}
                 disabled={isPlaying}
-                >
+                style={{
+                    // Apply button styling only if specific shark's story playing
+                    backgroundColor: playingSharkId === shark.id && isPlaying ? "#b2ebf2" : "",  
+                    border: playingSharkId === shark.id && isPlaying ? "2px solid black" : "",
+                }}
+            >
                 {isPlaying ? (
                     "Story in Progress..."
                 ) : (
@@ -45,7 +56,7 @@ const SharkCard = ({ shark, onPlayStory, isPlaying }) => {
                     Play <strong>{shark.name}</strong>'s Story
                     </>
                 )}
-            </button>
+            </button> 
         </div>
 
       {/* Expandable content */}
