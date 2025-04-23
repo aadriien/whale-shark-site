@@ -135,18 +135,18 @@ export async function resetGlobe(camera, pitchRef, yawRef) {
 
     // Then reset pitch & yaw rotations
     new JEasing(pitchRef.current.rotation)
-        .to({ x: 0, y: 0, z: 0 }, 1000) 
+        .to({ x: 0, y: 0, z: 0 }, 1025) 
         .easing(Cubic.InOut)
         .start();
 
     new JEasing(yawRef.current.rotation)
-        .to({ x: 0, y: 0, z: 0 }, 1000)
+        .to({ x: 0, y: 0, z: 0 }, 1050)
         .easing(Cubic.InOut)
         .start();
 
     // Finally, animate camera's zoom to reset position
     new JEasing(camera.position)
-        .to({ x: 0, y: 0, z: 200 }, 1000)
+        .to({ x: 0, y: 0, z: 200 }, 1075)
         .easing(Cubic.InOut)
         .start();
 
