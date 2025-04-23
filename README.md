@@ -117,6 +117,13 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 ## Acknowledgements
 
+### APIs and Data
+
+I used biodiversity data from [GBIF](https://www.gbif.org) to access whale shark records.
+
+I used [Pollinations.AI](https://pollinations.ai)'s API to access OpenAI text generation.
+
+
 ### Libraries and Modules
 
 Thank you to Sean Bradley, whose open source [JEasings module](https://github.com/Sean-Bradley/JEasings), a JavaScript animation engine, allows me to control movements on the Three.js globe for "storytelling mode".
@@ -124,9 +131,9 @@ Thank you to Sean Bradley, whose open source [JEasings module](https://github.co
 
 ### 3D Model Credits
 
-"Model 99A - Whale Shark" (https://skfb.ly/oLzqI) by DigitalLife3D is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+["Model 99A - Whale Shark"](https://skfb.ly/oLzqI) by DigitalLife3D is licensed under [Creative Commons Attribution-NonCommercial](http://creativecommons.org/licenses/by-nc/4.0/).
 
-"Whale Shark Fantasy" (https://skfb.ly/6ysSQ) by Alenzo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+["Whale Shark Fantasy"](https://skfb.ly/6ysSQ) by Alenzo is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
 
 
 
