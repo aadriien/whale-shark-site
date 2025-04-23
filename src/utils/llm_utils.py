@@ -1,8 +1,12 @@
 import re
+import torch
 import ollama
 import requests
 import pandas as pd
+from PIL import Image
 from typing import Dict, Literal
+from diffusers import StableDiffusionPipeline
+
 
 from src.utils.data_utils import (
     read_csv, export_to_csv, export_to_json, move_column_after,
@@ -173,18 +177,34 @@ def name_all_sharks(named_sharks: pd.DataFrame, generated_names: dict) -> pd.Dat
     return named_sharks
 
 
+
+
+def generate_shark_image() -> None:
+    model_id = "lavaman131/cartoonify"
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    torch_dtype = torch.float32
+    pipeline = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch_dtype).to(device)
+    image = pipeline("A cartoon whale shark swimming in the ocean").images[0]
+    image.save("output.png")
+
+
+
+
+
 if __name__ == "__main__":
-    story_sharks = read_csv(GBIF_STORY_SHARKS_CSV)
-    named_sharks = story_sharks.copy()
+    # story_sharks = read_csv(GBIF_STORY_SHARKS_CSV)
+    # named_sharks = story_sharks.copy()
 
-    relevant_shark_fields = story_sharks[SHARK_FIELDS_TO_REVIEW]
-    generated_names = relevant_shark_fields.apply(name_shark_row, axis=1)
+    # relevant_shark_fields = story_sharks[SHARK_FIELDS_TO_REVIEW]
+    # generated_names = relevant_shark_fields.apply(name_shark_row, axis=1)
 
-    named_sharks_df = name_all_sharks(named_sharks, generated_names)
-    named_sharks_list = named_sharks_df.to_dict(orient='records')
+    # named_sharks_df = name_all_sharks(named_sharks, generated_names)
+    # named_sharks_list = named_sharks_df.to_dict(orient='records')
 
-    export_to_csv(GBIF_STORY_SHARKS_NAMED_CSV, named_sharks_df)
-    export_to_json(GBIF_STORY_SHARKS_NAMED_JSON, named_sharks_list)
+    # export_to_csv(GBIF_STORY_SHARKS_NAMED_CSV, named_sharks_df)
+    # export_to_json(GBIF_STORY_SHARKS_NAMED_JSON, named_sharks_list)
+
+    generate_shark_image()
 
 
 

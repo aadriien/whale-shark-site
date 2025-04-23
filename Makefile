@@ -13,7 +13,7 @@ setup:
 	@$(POETRY) config virtualenvs.in-project true  # Ensure virtualenv is inside project folder
 	@if [ ! -d "$(VENV_DIR)" ]; then \
 		echo "Virtual environment not found. Creating..."; \
-		$(POETRY) env use python3; \
+		$(POETRY) env use python3.10; \
 		$(POETRY) install --no-root --quiet; \
 	fi
 
