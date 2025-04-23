@@ -12,15 +12,15 @@ import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';
 
 export function createGlobe() {
     const globe = new ThreeGlobe()
-      .globeImageUrl(earthImg)
-      .bumpImageUrl(bumpImg);
+        .globeImageUrl(earthImg)
+        .bumpImageUrl(bumpImg);
   
     const material = new THREE.MeshStandardMaterial({
-      color: 0x0055ff,
-      roughness: 0.7,
-      metalness: 0.3,
-      emissive: 0xFFD700,
-      emissiveIntensity: 1,
+        color: 0x0055ff,
+        roughness: 0.7,
+        metalness: 0.3,
+        emissive: 0xFFD700,
+        emissiveIntensity: 3,
     });
   
     globe.material = material;
@@ -32,7 +32,7 @@ export function createGlobe() {
 
 
 export function createLights() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5 * Math.PI);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0 * Math.PI);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI);
     directionalLight.position.set(0, 1, 1);
@@ -135,9 +135,9 @@ export async function resetGlobe(camera, pitchRef, yawRef) {
 
     // Then reset pitch & yaw rotations
     new JEasing(pitchRef.current.rotation)
-    .to({ x: 0, y: 0, z: 0 }, 1000) 
-    .easing(Cubic.InOut)
-    .start();
+        .to({ x: 0, y: 0, z: 0 }, 1000) 
+        .easing(Cubic.InOut)
+        .start();
 
     new JEasing(yawRef.current.rotation)
         .to({ x: 0, y: 0, z: 0 }, 1000)
@@ -164,6 +164,7 @@ export function goToCoordinates(lat, long, pitchRef, yawRef) {
         )
         .easing(Cubic.InOut)
         .start()
+
     new JEasing(yawRef.current.rotation)
         // Convert longitude to radians, & animate over 1000 ms (1 sec)
         .to(
@@ -191,20 +192,20 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
     console.log(`Playing story for shark ID: ${sharkID}`);
 
     for (let i = 0; i < sortedPointsData.length; i++) {
-      const point = sortedPointsData[i];
+        const point = sortedPointsData[i];
 
-      console.log(point);
+        console.log(point);
 
-      goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
+        goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
 
-      // Wait 2 sec after zoom in before starting story
-      if (i == 0) {
+        // Wait 2 sec after zoom in before starting story
+        if (i == 0) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+    
+        // Show ripple for this current singular point
+        addRingsData(globe, [point]);
         await new Promise(resolve => setTimeout(resolve, 2000));
-      }
-  
-      // Show ripple for this current singular point
-      addRingsData(globe, [point]);
-      await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
     // Restore orbit controls after story told

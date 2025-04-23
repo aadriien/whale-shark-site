@@ -14,8 +14,8 @@ from src.config import (
 )
 
 from src.utils.data_utils import (
-    read_csv, export_to_csv, export_to_json, validate_and_dropna, move_column_after, standardize_column_vals,
-    add_totals_column, add_avg_per_year, add_top_x_metric,
+    read_csv, export_to_csv, export_to_json, validate_and_dropna, move_column_after, 
+    standardize_column_vals, add_totals_column, add_avg_per_year, add_top_x_metric,
 )
 
 from src.clean.gbif import (
