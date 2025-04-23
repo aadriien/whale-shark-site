@@ -272,15 +272,6 @@ def get_shark_row_image_url(row: pd.Series) -> str:
     shark_ID = shark_data["whaleSharkID"]
 
     # Highlight key traits to infuse more personality
-    # image_prompt = (
-    #     f"**Cartoon of {shark_data[API_COL_STR]} the filter-feeder whale shark**. " 
-    #     f"{shark_data[API_COL_STR]} is a playful {shark_data['sex']} " 
-    #     f"{shark_data['lifeStage (year)']} from {shark_data['country (year)']}. "
-    #     f"Make the whale shark highly unique, expressive, and full of charm. "
-    #     f"Avoid aggressive shark features - this is a gentle filter-feeding giant."
-    #     f"Do not include any text or letters in the image.\n"
-    # )
-
     image_prompt = (
         f"Whimsical cartoon of {shark_data[API_COL_STR]}, a filter-feeding whale shark. "
         f"This is *not* a scary shark (absolutely *no* pointy teeth)! "
