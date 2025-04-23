@@ -102,19 +102,17 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 
 ## Example Images
-### 🪪 Individual shark card
-![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)
-<br>
-### 📍 Globe view geo-mapped data
-![Example image of globe view with geo-mapped data](./example-media/example-imgs/globe-views-example-img.png)
+
+🪪 Individual Shark Card   |   📍 Geo-Mapping Globe View
+:-------------------------:|:-------------------------:
+![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)  |  ![Example image of globe view with geo-mapped data](./example-media/example-imgs/globe-views-example-img.png)
 
 
 ## Video Demos
-### 🌊 3D model, with swimming animation
-![Video demo of 3D whale shark animation](./example-media/video-demos/whale-shark-3Dmodel-demo.gif)
-<br>
-### 🌐 Tracker page, with globe storytelling 
-![Video demo of tracker storytelling feature](./example-media/video-demos/whale-shark-tracker-demo.gif)
+
+🌊 3D Model Swimming Animation   |   🌐 Tracker Page Globe Storytelling
+:-------------------------------:|:-------------------------------:
+![Video demo of 3D whale shark animation](./example-media/video-demos/whale-shark-3Dmodel-demo.gif)  |  ![Video demo of tracker storytelling feature](./example-media/video-demos/whale-shark-tracker-demo.gif)
 
 
 ## Acknowledgements
