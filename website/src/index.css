@@ -129,16 +129,22 @@ button.currentlyPlaying {
 }
 
 /* Individual card styling either on hover or click (toggle open / expand) */
-.shark-card:hover,
-.shark-card.expanded {
+.shark-card:hover:not(.anyPlaying),
+.shark-card.expanded:not(.anyPlaying) {
     transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shark-card.anyPlaying:hover,
+.shark-card.expanded.anyPlaying {
+    transform: scale(1.03);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Individual card styling for shark whose story is actively playing */
 .shark-card.currentlyPlaying {
     border: 2px solid black;
-    transform: scale(1.05);
+    transform: scale(1.03);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
