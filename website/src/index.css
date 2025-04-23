@@ -53,20 +53,29 @@ button {
     background-color: #1a1a1a;
     width: 100%;
     cursor: pointer;
-    transition: border-color 0.25s;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
+button:hover:not(.anyPlaying) {
     background-color: #b2ebf2;
     border: 2px solid black;
 }
 
-button:focus,
-button:focus-visible {
+button:focus:not(.anyPlaying),
+button:focus-visible:not(.anyPlaying) {
     background-color: #b2ebf2;
     border: 1px solid black;
     outline: 4px auto -webkit-focus-ring-color;
 }
+
+/* Individual button styling for shark whose story is actively playing */
+button.currentlyPlaying {
+    background-color: #b2ebf2;
+    border: 1.5px solid black;
+    color: #25417d;
+    font-weight: bold;
+}
+
 
 @media (prefers-color-scheme: light) {
     :root {
@@ -112,14 +121,23 @@ button:focus-visible {
     border-radius: 8px;
     padding: 16px;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
     width: 90%; 
     height: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-  
-.shark-card:hover {
+
+/* Individual card styling either on hover or click (toggle open / expand) */
+.shark-card:hover,
+.shark-card.expanded {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual card styling for shark whose story is actively playing */
+.shark-card.currentlyPlaying {
+    border: 2px solid black;
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
