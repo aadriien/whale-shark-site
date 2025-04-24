@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import SharkAnimation from '../components/SharkAnimation.jsx';
+import SharkAnimation from "../components/SharkAnimation.jsx";
 
 function Animation() {
     return (

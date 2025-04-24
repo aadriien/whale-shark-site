@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Home from './pages/Home.jsx'
-import GlobeViews from './pages/GlobeViews.jsx'
-import SharkTracker from './pages/SharkTracker.jsx'
-import DataVisuals from './pages/DataVisuals.jsx'
-import SharkGenerator from './pages/SharkGenerator.jsx'
-import Animation from './pages/Animation.jsx'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import Home from "./pages/Home.jsx"
+import GlobeViews from "./pages/GlobeViews.jsx"
+import SharkTracker from "./pages/SharkTracker.jsx"
+import DataVisuals from "./pages/DataVisuals.jsx"
+import SharkGenerator from "./pages/SharkGenerator.jsx"
+import Animation from "./pages/Animation.jsx"
 
 function App() {
     return (

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
-import Globe from '../components/Globe.jsx';
+import Globe from "../components/Globe.jsx";
 
-import { getAllCoordinates } from '../utils/CoordinateUtils.js';
-import { addRingsData, addRingsDataStatic } from '../utils/GlobeUtils.js';
+import { getAllCoordinates } from "../utils/CoordinateUtils.js";
+import { addRingsData, addRingsDataStatic } from "../utils/GlobeUtils.js";
 
 
 function GlobeViews() {
