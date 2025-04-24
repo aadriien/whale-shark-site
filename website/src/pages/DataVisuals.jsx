@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 
-import SharkAnimation from '../components/SharkAnimation.jsx';
-
-function Animation() {
+function DataVisuals() {
     return (
         <div style={{
             display: "flex",
@@ -12,12 +10,8 @@ function Animation() {
             height: "100vh",
             textAlign: "center"
         }}>
-            <h1>Animation Page</h1>
-
-            <div>
-                {/* SharkAnimation component */}
-                <SharkAnimation />
-            </div>
+            <h1>DataVisuals Page</h1>
+            <p>Here's where we'll incorporate d3.js visualizations.</p>
 
             <Link to="/home" style={{
                 marginTop: "20px",
@@ -46,15 +40,6 @@ function Animation() {
                 Go to SharkTracker Page
             </Link>
 
-            <Link to="/datavisuals" style={{
-                marginTop: "20px",
-                fontSize: "18px",
-                textDecoration: "underline",
-                color: "blue"
-            }}>
-                Go to DataVisuals Page
-            </Link>
-
             <Link to="/sharkgenerator" style={{
                 marginTop: "20px",
                 fontSize: "18px",
@@ -63,11 +48,20 @@ function Animation() {
             }}>
                 Go to SharkGenerator Page
             </Link>
-        
+
+            <Link to="/animation" style={{
+                marginTop: "20px",
+                fontSize: "18px",
+                textDecoration: "underline",
+                color: "blue"
+            }}>
+                Go to Animation Page
+            </Link>
+            
         </div>
     );
 }
 
-export default Animation;
+export default DataVisuals;
 
 

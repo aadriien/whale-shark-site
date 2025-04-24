@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 
-import SharkAnimation from '../components/SharkAnimation.jsx';
-
-function Animation() {
+function SharkGenerator() {
     return (
         <div style={{
             display: "flex",
@@ -12,12 +10,8 @@ function Animation() {
             height: "100vh",
             textAlign: "center"
         }}>
-            <h1>Animation Page</h1>
-
-            <div>
-                {/* SharkAnimation component */}
-                <SharkAnimation />
-            </div>
+            <h1>SharkGenerator Page</h1>
+            <p>Here's where users can create their own cartoon shark image.</p>
 
             <Link to="/home" style={{
                 marginTop: "20px",
@@ -55,19 +49,19 @@ function Animation() {
                 Go to DataVisuals Page
             </Link>
 
-            <Link to="/sharkgenerator" style={{
+            <Link to="/animation" style={{
                 marginTop: "20px",
                 fontSize: "18px",
                 textDecoration: "underline",
                 color: "blue"
             }}>
-                Go to SharkGenerator Page
+                Go to Animation Page
             </Link>
         
         </div>
     );
 }
 
-export default Animation;
+export default SharkGenerator;
 
 
