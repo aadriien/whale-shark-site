@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef } from "react";
+import { forwardRef, useImperativeHandle } from "react";
 
-import * as THREE from 'three';
-import JEASINGS from '../utils/JEasings/JEasings.ts';
+import * as THREE from "three";
+import JEASINGS from "../utils/JEasings/JEasings.ts";
 
 import { 
     createGlobe, createLights, createCamera, createControls,
     setupCameraAngles, resetGlobe, playStoryMode 
-} from '../utils/GlobeUtils.js';
+} from "../utils/GlobeUtils.js";
 
 
 const Globe = forwardRef((props, ref) => {
@@ -96,7 +96,7 @@ const Globe = forwardRef((props, ref) => {
         // Call initGlobe initially
         initGlobe();
         
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener("resize", resizeCanvas);
         
         
         // OrbitControls setup
@@ -123,7 +123,7 @@ const Globe = forwardRef((props, ref) => {
         
         // Cleanup on component unmount
         return () => {
-            window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener("resize", resizeCanvas);
             
             // Remove renderer's canvas
             if (globeContainer.contains(renderer.domElement)) {
@@ -137,8 +137,8 @@ const Globe = forwardRef((props, ref) => {
         <div
             ref={mountRef}
             style={{
-                width: '100%',
-                height: '100%',
+                width: "100%",
+                height: "100%",
             }}
         />
     );
