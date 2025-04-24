@@ -14,6 +14,9 @@ from src.utils.api_utils import (
     find_field,
 )
 
+DATA_FOLDER_PY_CSV = "outputs"
+DATA_FOLDER_WEB_JSON = "website/src/assets/data/json"
+
 
 def get_folder_name(file_name: str) -> str:
     if not file_name:
@@ -89,6 +92,38 @@ def export_to_json(json_file: str, output_list: list) -> None:
         json.dump(output_list, f, indent=2)
 
     print(f"Exported {len(output_list)} entries to {json_file}")
+
+
+def csv_to_json(input_csv_file: str, output_json_file: str, convert_types: Optional[bool] = False) -> None:
+    df = pd.read_csv(input_csv_file)
+
+    if convert_types:
+        df = df.convert_dtypes()
+
+    json_data = df.to_dict(orient="records")
+
+    # Create folder to hold files if doesn't already exist
+    _ = folder_exists(file_name=output_json_file, create=True)
+
+    with open(output_json_file, "w", encoding="utf-8") as f:
+        json.dump(json_data, f, ensure_ascii=False)
+    
+    print(f"Saved {input_csv_file} to: {output_json_file}")
+
+
+def convert_all_csvs_to_json(input_folder_path: str = DATA_FOLDER_PY_CSV, 
+                            output_folder_path: str = DATA_FOLDER_WEB_JSON) -> None:
+    # Get list of all CSV files in folder
+    for filename in os.listdir(input_folder_path):
+        if filename.endswith(".csv"):
+            input_csv_file = os.path.join(input_folder_path, filename)
+
+            # Create name for output JSON file (same as CSV), then convert
+            output_json_file = os.path.join(
+                output_folder_path, 
+                f"{os.path.splitext(filename)[0]}.json"
+            )
+            csv_to_json(input_csv_file, output_json_file)
 
 
 #####

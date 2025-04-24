@@ -39,10 +39,8 @@ analyze_data:
 	@$(POETRY) run python -m src.analyze.gbif
 
 
-# Use LLMs to generate names & images for each shark
-generate_shark_names_images: 
-	@which ollama > /dev/null || (echo "ollama not found. Installing..."; $(POETRY) add ollama)
-	@$(POETRY) run python -m src.utils.llm_utils
+convert_csv_json:
+	@$(POETRY) run python -c "from src.utils.data_utils import convert_all_csvs_to_json; convert_all_csvs_to_json()"
 
 
 # Zip data folder to reduce load (if exists, & if needs to be updated)
@@ -61,6 +59,18 @@ zip_data:
 		echo "Error: 'data' folder does not exist."; \
 		exit 1; \
 	fi
+
+
+# Use LLMs to generate names & images for each shark
+generate_shark_names_images: generate_shark_names generate_shark_images
+
+generate_shark_names:
+	@which ollama > /dev/null || (echo "ollama not found. Installing..."; $(POETRY) add ollama)
+	@$(POETRY) run python -c "from src.utils.llm_utils import handle_names; handle_names()"
+
+generate_shark_images:
+	@which ollama > /dev/null || (echo "ollama not found. Installing..."; $(POETRY) add ollama)
+	@$(POETRY) run python -c "from src.utils.llm_utils import handle_images; handle_images()"
 
 
 # Auto-format Python code
