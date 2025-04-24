@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import CountryData from "../components/CountryData.jsx";
+import ContinentData from "../components/ContinentData.jsx";
 
 function DataVisuals() {
     return (
@@ -15,8 +15,8 @@ function DataVisuals() {
             <h1>DataVisuals Page</h1>
             <p>Here's where we'll incorporate d3.js visualizations.</p>
 
-            {/* Rendering GBIFCountryOccurrences component */}
-            <CountryData />
+            {/* Rendering GBIFContinentOccurrences component */}
+            <ContinentData />
 
             <Link to="/home" style={{
                 marginTop: "20px",
