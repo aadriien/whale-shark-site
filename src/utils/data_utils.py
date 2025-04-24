@@ -100,6 +100,12 @@ def csv_to_json(input_csv_file: str, output_json_file: str, convert_types: Optio
     if convert_types:
         df = df.convert_dtypes()
 
+    for col in df.columns:
+        if pd.api.types.is_numeric_dtype(df[col]):
+            df[col] = df[col].fillna(0)
+        else:
+            df[col] = df[col].fillna("")
+
     json_data = df.to_dict(orient="records")
 
     # Create folder to hold files if doesn't already exist
