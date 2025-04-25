@@ -24,15 +24,16 @@ const SharkGenerator = () => {
         const nbsp = "\u00A0";
         const imagePrompt = `
             Whimsical cartoon of ${formData.name}, a filter-feeding whale shark.${nbsp}
-            This is *not* a scary shark (absolutely *no* pointy teeth)!${nbsp}
             It's a gentle giant with a huge flat mouth and soft, speckled skin with white dots.${nbsp}
             ${formData.name}, who goes by the nickname ${formData.nickname},${nbsp}
             is a playful, fun, and curious ${formData.age} year old whale shark.${nbsp}
-            ${formData.name} (AKA ${formData.nickname}) lives in ${formData.country},${nbsp}
+            ${formData.name} (AKA ${formData.nickname}) lives in quirky ${formData.country},${nbsp}
             but has big dreams of visiting ${formData.destinationCountry}!${nbsp}
             If a researcher described this whale shark, they would say '${formData.researcherPOV}'.${nbsp}
             Make the whimsical cartoon highly unique, expressive, and full of charm.${nbsp}
-            Do not include any text or letters in the image.\n
+            Add accessories based on how researchers describe ${formData.nickname}'s personality!${nbsp}
+            And get *CREATIVE*! Make it zesty. Make it interesting. Add background detail.${nbsp}
+            Do *NOT* include any text or letters in the image.\n
         `
 
         console.log("User form data:", formData);

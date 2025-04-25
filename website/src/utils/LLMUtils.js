@@ -1,5 +1,5 @@
 const apiImageParams = {
-    "width": 1280,
+    "width": 1080,
     "height": 720,
     "private": "true",
     "nologo": "true",
@@ -17,6 +17,10 @@ export async function fetchImageLLM(prompt, params = {}) {
 
     const url = `${urlBase}/${encodedPrompt}?${queryParams.toString()}`;
     console.log("Fetching image from:", url);
+
+    // Show spinner while image loading
+    const container = document.getElementById("generated-image-container");
+    container.innerHTML = `<div class="spinner"></div>`;
     
     try {
         const response = await fetch(url);
@@ -35,16 +39,15 @@ export async function fetchImageLLM(prompt, params = {}) {
         const img = document.createElement("img");
         img.src = imageUrl;
         img.alt = prompt;
+        img.loading = "lazy";
         
-        const container = document.getElementById("generated-image-container");
         container.innerHTML = ""; 
         container.appendChild(img);
-        
-        console.log("Image fetched and displayed.");
 
-    } 
-    catch (error) {
+    // Fill image container on error
+    } catch (error) {
         console.error("Error fetching image:", error);
+        container.innerHTML = `<p>Error loading image.. try submitting again!</p>`;
     }
 }
     

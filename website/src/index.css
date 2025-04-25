@@ -408,6 +408,33 @@ button.currentlyPlaying {
 
 }
 
+.spinner {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #f4a8c1,  /* deeper pink */
+        #fcbfa1,  /* peachy coral */
+        #ffe99c,  /* sunflower yellow */
+        #bfe7a4,  /* leafy mint */
+        #a7dcf0,  /* sky blue */
+        #bfaef2,  /* lavender */
+        #f4a8c1   /* looped pink */
+    );
+    -webkit-mask: radial-gradient(farthest-side, transparent 43%, black 44%);
+    mask: radial-gradient(farthest-side, transparent 43%, black 44%);
+    animation: spin 0.9s linear infinite;
+    margin: 30px auto;
+}
+    
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+  
+  
+  
+
   
   
 
