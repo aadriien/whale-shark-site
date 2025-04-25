@@ -384,6 +384,30 @@ button.currentlyPlaying {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 }
+
+
+
+.shark-generator {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+#generated-image-container {
+    margin-top: 20px; 
+    width: 50%;      
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#generated-image-container img {
+    max-width: 100%;
+    height: auto;
+
+}
+
   
   
 
