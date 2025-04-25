@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { fetchImageLLM } from "../utils/LLMUtils.js";
 
 const SharkGenerator = () => {
     const [formData, setFormData] = useState({
         name: "",
-        nickname: "",
         age: "",
         country: "",
-        destinationCountry: "",
         researcherPOV: ""
     });
+
+    useEffect(() => {
+        // Disable reload warning when component is mounted (refreshing page)
+        window.onbeforeunload = function () {
+            return null;
+        };
+        return () => {
+            window.onbeforeunload = null;
+        };
+    }, []);
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,6 +26,7 @@ const SharkGenerator = () => {
     };
     
     const handleFormSubmit = (e) => {
+        // Ensure form submission doesn't wipe inputs on page reload
         e.preventDefault();
 
         // Highlight key traits from user inputs to infuse personality
@@ -25,14 +34,13 @@ const SharkGenerator = () => {
         const imagePrompt = `
             Whimsical cartoon of ${formData.name}, a filter-feeding whale shark.${nbsp}
             It's a gentle giant with a huge flat mouth and soft, speckled skin with white dots.${nbsp}
-            ${formData.name}, who goes by the nickname ${formData.nickname},${nbsp}
-            is a playful, fun, and curious ${formData.age} year old whale shark.${nbsp}
-            ${formData.name} (AKA ${formData.nickname}) lives in quirky ${formData.country},${nbsp}
-            but has big dreams of visiting ${formData.destinationCountry}!${nbsp}
+            ${formData.name} is a playful, fun, quirky, and curious whale shark.${nbsp}
+            ${formData.name} is ${formData.age} years old and lives in ${formData.country}!${nbsp}
             If a researcher described this whale shark, they would say '${formData.researcherPOV}'.${nbsp}
             Make the whimsical cartoon highly unique, expressive, and full of charm.${nbsp}
-            Add accessories based on how researchers describe ${formData.nickname}'s personality!${nbsp}
+            Add accessories based on how researchers describe ${formData.name}'s personality!${nbsp}
             And get *CREATIVE*! Make it zesty. Make it interesting. Add background detail.${nbsp}
+            Maybe even add details for ${formData.name}'s country, ${formData.country}!${nbsp}
             Do *NOT* include any text or letters in the image.\n
         `
 
@@ -42,6 +50,14 @@ const SharkGenerator = () => {
         // Harness random each time (0 - 99999) to make images unique
         const seed = Math.floor(Math.random() * 1000000);
         fetchImageLLM(imagePrompt, {seed: seed});
+
+        // Clear form data after submission 
+        setFormData({
+            name: "",
+            age: "",
+            country: "",
+            researcherPOV: ""
+        });
     };
     
     return (
@@ -49,84 +65,63 @@ const SharkGenerator = () => {
             <form className="shark-generator-form" onSubmit={handleFormSubmit}>
 
                 <label>
-                    What's your name?
+                    <div className="label-text">
+                        What's your name?
+                        <div className="label-subtext">Or your nickname?</div>
+                    </div>
                     <input
                         type="text"
                         name="name"
                         value={formData.name}
+                        placeholder="e.g. Sharky McSharkface"
                         onChange={handleChange}
                     />
                 </label>
 
-                <br />
-
                 <label>
-                    Do you have a nickname?
-                    <input
-                        type="text"
-                        name="nickname"
-                        value={formData.nickname}
-                        onChange={handleChange}
-                    />
-                </label>
-
-                <br />
-
-                <label>
-                    How old are you?
+                    <div className="label-text">
+                        How old are you?
+                        <span className="label-subtext">(Don't worry, everyone's whale-come here!)</span>
+                    </div>
                     <input
                         type="number"
                         name="age"
                         value={formData.age}
+                        placeholder="e.g. 132"
                         onChange={handleChange}
                     />
                 </label>
-
-                <br />
                 
                 <label>
-                    What country do you live in?
+                    <div className="label-text">
+                        What's your home country? 
+                        <span className="label-subtext">Or, which country would you like to visit?</span>
+                    </div>
                     <select
                         name="country"
                         value={formData.country}
                         onChange={handleChange}
                     >
-                        <option value="">Select a country</option>
+                        <option value="" disabled>Select a country</option>
                         <option value="USA">USA</option>
                         <option value="Canada">Canada</option>
                         <option value="UK">UK</option>
                     </select>
                 </label>
 
-                <br />
-
                 <label>
-                    Which country would you like to visit?
-                    <select
-                        name="destinationCountry"
-                        value={formData.destinationCountry}
-                        onChange={handleChange}
-                    >
-                        <option value="">Select a country</option>
-                        <option value="USA">USA</option>
-                        <option value="Canada">Canada</option>
-                        <option value="UK">UK</option>
-                    </select>
-                </label>
-
-                <br />
-
-                <label>
-                    What would a researcher studying humans say about you?
+                    <div className="label-text">
+                        What would a researcher studying humans say about you?
+                        <span className="label-subtext"></span>
+                    </div>
                     <input
                         type="text"
                         name="researcherPOV"
                         value={formData.researcherPOV}
+                        placeholder="e.g. always wears a weird hat"
                         onChange={handleChange}
                     />
                 </label>
-
-                <br />
                 
                 <button type="submit">Submit</button>
 
