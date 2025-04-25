@@ -39,13 +39,13 @@ function Home() {
                 Go to DataVisuals Page
             </Link>
 
-            <Link to="/sharkgenerator" style={{
+            <Link to="/buildashark" style={{
                 marginTop: "20px",
                 fontSize: "18px",
                 textDecoration: "underline",
                 color: "blue"
             }}>
-                Go to SharkGenerator Page
+                Go to BuildAShark Page
             </Link>
 
             <Link to="/animation" style={{

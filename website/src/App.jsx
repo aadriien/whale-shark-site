@@ -3,7 +3,7 @@ import Home from "./pages/Home.jsx"
 import GlobeViews from "./pages/GlobeViews.jsx"
 import SharkTracker from "./pages/SharkTracker.jsx"
 import DataVisuals from "./pages/DataVisuals.jsx"
-import SharkGenerator from "./pages/SharkGenerator.jsx"
+import BuildAShark from "./pages/BuildAShark.jsx"
 import Animation from "./pages/Animation.jsx"
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
                 <Route path="/globeviews" element={<GlobeViews />} />
                 <Route path="/sharktracker" element={<SharkTracker />} />
                 <Route path="/datavisuals" element={<DataVisuals />} />
-                <Route path="/sharkgenerator" element={<SharkGenerator />} />
+                <Route path="/buildashark" element={<BuildAShark />} />
                 <Route path="/animation" element={<Animation />} />
             </Routes>
         </BrowserRouter>

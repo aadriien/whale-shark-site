@@ -10,7 +10,9 @@ function DataVisuals() {
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
-            textAlign: "center"
+            overflowY: "auto", 
+            textAlign: "center",
+            padding: "20px",
         }}>
             <h1>DataVisuals Page</h1>
             <p>Here's where we'll incorporate d3.js visualizations.</p>
@@ -45,13 +47,13 @@ function DataVisuals() {
                 Go to SharkTracker Page
             </Link>
 
-            <Link to="/sharkgenerator" style={{
+            <Link to="/buildashark" style={{
                 marginTop: "20px",
                 fontSize: "18px",
                 textDecoration: "underline",
                 color: "blue"
             }}>
-                Go to SharkGenerator Page
+                Go to BuildAShark Page
             </Link>
 
             <Link to="/animation" style={{

@@ -67,7 +67,7 @@ function SharkTracker() {
                 <Link to="/home" style={linkStyle}>Go back to Home Page</Link>
                 <Link to="/globeviews" style={linkStyle}>Go to GlobeViews Page</Link>
                 <Link to="/datavisuals" style={linkStyle}>Go to DataVisuals Page</Link>
-                <Link to="/sharkgenerator" style={linkStyle}>Go to SharkGenerator Page</Link>
+                <Link to="/buildashark" style={linkStyle}>Go to BuildAShark Page</Link>
                 <Link to="/animation" style={linkStyle}>Go to Animation Page</Link>
             </div>
         </div>
