@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+import { getNames } from "country-list";
+
 import { fetchImageLLM } from "../utils/LLMUtils.js";
+
+// Populate list of all countries from "country-list" npm package
+const countries = getNames();
 
 const SharkGenerator = () => {
     const [formData, setFormData] = useState({
@@ -103,9 +108,11 @@ const SharkGenerator = () => {
                         onChange={handleChange}
                     >
                         <option value="" disabled>Select a country</option>
-                        <option value="USA">USA</option>
-                        <option value="Canada">Canada</option>
-                        <option value="UK">UK</option>
+                        {countries.map((country) => (
+                            <option key={country} value={country}>
+                                {country}
+                            </option>
+                        ))}
                     </select>
                 </label>
 

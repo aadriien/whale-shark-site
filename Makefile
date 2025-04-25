@@ -94,6 +94,7 @@ setup_website:
 	npm install three three-globe d3 p5 react-router-dom && \
 	npm install @react-three/fiber @react-three/drei && \
 	npm install yuka @types/yuka && \
+	npm install country-list && \
 	echo "Checking npm version..." && \
 	npm install -g npm@latest
 

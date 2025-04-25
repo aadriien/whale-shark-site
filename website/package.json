@@ -10,13 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-three/drei": "^10.0.6",
+    "@react-three/drei": "^10.0.7",
     "@react-three/fiber": "^9.1.2",
+    "country-list": "^2.3.0",
     "d3": "^7.9.0",
-    "p5": "^1.11.3",
+    "p5": "^1.11.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.5.0",
+    "react-router-dom": "^7.5.2",
     "three": "^0.175.0",
     "three-globe": "^2.42.4"
   },
