@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
-function SharkGenerator() {
+import SharkGenerator from "../components/SharkGenerator.jsx";
+
+function BuildAShark() {
     return (
         <div style={{
             display: "flex",
@@ -8,10 +10,15 @@ function SharkGenerator() {
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
-            textAlign: "center"
+            overflowY: "auto", 
+            textAlign: "center",
+            padding: "20px",
         }}>
-            <h1>SharkGenerator Page</h1>
+            <h1>BuildAShark Page</h1>
             <p>Here's where users can create their own cartoon shark image.</p>
+
+            {/* Rendering SharkGenerator component */}
+            <SharkGenerator />
 
             <Link to="/home" style={{
                 marginTop: "20px",
@@ -62,6 +69,6 @@ function SharkGenerator() {
     );
 }
 
-export default SharkGenerator;
+export default BuildAShark;
 
 
