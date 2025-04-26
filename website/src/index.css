@@ -454,17 +454,32 @@ button.currentlyPlaying {
     box-sizing: border-box;
 }
 
+.shark-generator-form .button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
 .shark-generator-form button {
     padding: 12px 24px;
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 600;
     color: white;
     background-color: #6366f1;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
-    align-self: flex-start;
+    flex-grow: 1;
+    transition: background-color 0.3s;
+}
+
+/* Red color for reset button, green for submit button */
+.shark-generator-form button[type="button"] {
+    background-color: #ff4d4d; 
+}
+.shark-generator-form button[type="submit"] {
+    background-color: #4caf50; 
 }
 
 #generated-image-container {

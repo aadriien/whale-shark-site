@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-
 import { getNames } from "country-list";
-
 import { fetchImageLLM } from "../utils/LLMUtils.js";
 
 // Populate list of all countries from "country-list" npm package
@@ -15,6 +13,8 @@ const SharkGenerator = () => {
         researcherPOV: ""
     });
 
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
     useEffect(() => {
         // Disable reload warning when component is mounted (refreshing page)
         window.onbeforeunload = function () {
@@ -24,15 +24,15 @@ const SharkGenerator = () => {
             window.onbeforeunload = null;
         };
     }, []);
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
-    
+
     const handleFormSubmit = (e) => {
-        // Ensure form submission doesn't wipe inputs on page reload
         e.preventDefault();
+        setFormSubmitted(true);
 
         // Highlight key traits from user inputs to infuse personality
         const nbsp = "\u00A0";
@@ -54,17 +54,20 @@ const SharkGenerator = () => {
 
         // Harness random each time (0 - 99999) to make images unique
         const seed = Math.floor(Math.random() * 1000000);
-        fetchImageLLM(imagePrompt, {seed: seed});
+        fetchImageLLM(imagePrompt, { seed: seed });
+    };
 
-        // Clear form data after submission 
+    // Clear form data & reset status after submission
+    const handleReset = () => {
         setFormData({
             name: "",
             age: "",
             country: "",
             researcherPOV: ""
         });
+        setFormSubmitted(false); // Reset submission status
     };
-    
+
     return (
         <div className="shark-generator">
             <form className="shark-generator-form" onSubmit={handleFormSubmit}>
@@ -74,7 +77,7 @@ const SharkGenerator = () => {
                         What's your name?
                         <div className="label-subtext">Or your nickname?</div>
                     </div>
-                    <input
+                    <input disabled={formSubmitted}
                         type="text"
                         name="name"
                         value={formData.name}
@@ -88,7 +91,7 @@ const SharkGenerator = () => {
                         How old are you?
                         <span className="label-subtext">(Don't worry, everyone's whale-come here!)</span>
                     </div>
-                    <input
+                    <input disabled={formSubmitted}
                         type="number"
                         name="age"
                         value={formData.age}
@@ -102,18 +105,19 @@ const SharkGenerator = () => {
                         What's your home country? 
                         <span className="label-subtext">Or, which country would you like to visit?</span>
                     </div>
-                    <select
+                    <input disabled={formSubmitted}
+                        type="text"
                         name="country"
+                        list="country-options"
                         value={formData.country}
                         onChange={handleChange}
-                    >
-                        <option value="" disabled>Select a country</option>
+                        placeholder="e.g. Australia"
+                    />
+                    <datalist id="country-options">
                         {countries.map((country) => (
-                            <option key={country} value={country}>
-                                {country}
-                            </option>
+                            <option key={country} value={country} />
                         ))}
-                    </select>
+                    </datalist>
                 </label>
 
                 <label>
@@ -121,7 +125,7 @@ const SharkGenerator = () => {
                         What would a researcher studying humans say about you?
                         <span className="label-subtext"></span>
                     </div>
-                    <input
+                    <input disabled={formSubmitted}
                         type="text"
                         name="researcherPOV"
                         value={formData.researcherPOV}
@@ -129,8 +133,18 @@ const SharkGenerator = () => {
                         onChange={handleChange}
                     />
                 </label>
-                
-                <button type="submit">Submit</button>
+
+                <div className="button-container">
+                    {/* Reset all inputs button */}
+                    <button type="button" onClick={handleReset}>
+                        Reset
+                    </button>
+
+                    {/* Submit inputs button */}
+                    <button type="submit">
+                        Submit
+                    </button>
+                </div>
 
             </form>
 
@@ -141,4 +155,3 @@ const SharkGenerator = () => {
 };
 
 export default SharkGenerator;
-    
