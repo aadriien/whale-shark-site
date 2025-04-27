@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 import Home from "./pages/Home.jsx"
 import GlobeViews from "./pages/GlobeViews.jsx"
 import SharkTracker from "./pages/SharkTracker.jsx"
@@ -8,20 +8,22 @@ import Animation from "./pages/Animation.jsx"
 
 function App() {
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
-                <Route path="/" element={<Navigate to="/home" />} />  {/* Redirect root to /home */}
+                {/* Redirect root to /home */}
+                <Route path="/" element={<Navigate to="/home" />} />  
                 <Route path="/home" element={<Home />} />
+
                 <Route path="/globeviews" element={<GlobeViews />} />
                 <Route path="/sharktracker" element={<SharkTracker />} />
                 <Route path="/datavisuals" element={<DataVisuals />} />
                 <Route path="/buildashark" element={<BuildAShark />} />
                 <Route path="/animation" element={<Animation />} />
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 
-export default App
+export default App;
 
 
