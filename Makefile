@@ -108,3 +108,8 @@ deploy_website:
 	@cd website && npm run build && npm run deploy
 
 
+clean:
+	@echo "Removing virtual environment..."
+	@rm -rf .venv
+
+
