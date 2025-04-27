@@ -103,4 +103,8 @@ setup_website:
 run_website:
 	@cd website && npm run dev
 
+# Deploy live instance of newly-revised website
+deploy_website:
+	@cd website && npm run build && npm run deploy
+
 
