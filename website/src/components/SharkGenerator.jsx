@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+
 import { getNames } from "country-list";
+
 import { fetchImageLLM } from "../utils/LLMUtils.js";
 
 // Populate list of all countries from "country-list" npm package
@@ -31,6 +33,7 @@ const SharkGenerator = () => {
     };
 
     const handleFormSubmit = (e) => {
+        // Ensure form submission doesn't wipe inputs on page reload
         e.preventDefault();
         setFormSubmitted(true);
 

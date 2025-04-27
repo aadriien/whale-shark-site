@@ -95,6 +95,7 @@ setup_website:
 	npm install @react-three/fiber @react-three/drei && \
 	npm install yuka @types/yuka && \
 	npm install country-list && \
+	npm install gh-pages --save-dev && \
 	echo "Checking npm version..." && \
 	npm install -g npm@latest
 
