@@ -1,26 +1,30 @@
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
-import Home from "./pages/Home.jsx"
-import GlobeViews from "./pages/GlobeViews.jsx"
-import SharkTracker from "./pages/SharkTracker.jsx"
-import DataVisuals from "./pages/DataVisuals.jsx"
-import BuildAShark from "./pages/BuildAShark.jsx"
-import Animation from "./pages/Animation.jsx"
+import { Suspense, lazy } from "react";
+
+const Home = lazy(() => import("./pages/Home.jsx"));
+const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
+const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
+const DataVisuals = lazy(() => import("./pages/DataVisuals.jsx"));
+const BuildAShark = lazy(() => import("./pages/BuildAShark.jsx"));
+const Animation = lazy(() => import("./pages/Animation.jsx"));
 
 function App() {
     return (
-        <HashRouter>
-            <Routes>
-                {/* Redirect root to /home */}
-                <Route path="/" element={<Navigate to="/home" />} />  
-                <Route path="/home" element={<Home />} />
+        <Suspense fallback={<div>Loading...</div>}>
+            <HashRouter>
+                <Routes>
+                    {/* Redirect root to /home */}
+                    <Route path="/" element={<Navigate to="/home" />} />  
+                    <Route path="/home" element={<Home />} />
 
-                <Route path="/globeviews" element={<GlobeViews />} />
-                <Route path="/sharktracker" element={<SharkTracker />} />
-                <Route path="/datavisuals" element={<DataVisuals />} />
-                <Route path="/buildashark" element={<BuildAShark />} />
-                <Route path="/animation" element={<Animation />} />
-            </Routes>
-        </HashRouter>
+                    <Route path="/globeviews" element={<GlobeViews />} />
+                    <Route path="/sharktracker" element={<SharkTracker />} />
+                    <Route path="/datavisuals" element={<DataVisuals />} />
+                    <Route path="/buildashark" element={<BuildAShark />} />
+                    <Route path="/animation" element={<Animation />} />
+                </Routes>
+            </HashRouter>
+        </Suspense>
     )
 }
 
