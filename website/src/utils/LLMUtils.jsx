@@ -1,5 +1,5 @@
 const apiImageParams = {
-    "width": 1080,
+    "width": 960,
     "height": 720,
     "private": "true",
     "nologo": "true",
@@ -30,15 +30,10 @@ export async function fetchImageLLM(prompt, params = {}, updateImageContent) {
             );
         }
 
+        // Set up HTML for image display, then update state with image
         const imageBlob = await response.blob();
         const imageUrl = URL.createObjectURL(imageBlob);
-        
-        // Set up HTML for image display, then update state with image
-        const img = new Image();
-        img.src = imageUrl;
-        img.alt = prompt;
-        img.loading = "lazy";
-        
+
         updateImageContent(<img src={imageUrl} alt={prompt} loading="lazy" />);
 
     // Update image container on error

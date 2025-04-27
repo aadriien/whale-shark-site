@@ -10,6 +10,7 @@ function Animation() {
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
+            overflowY: "auto",
             textAlign: "center"
         }}>
             <h1>Animation Page</h1>
@@ -55,13 +56,13 @@ function Animation() {
                 Go to DataVisuals Page
             </Link>
 
-            <Link to="/buildashark" style={{
+            <Link to="/sharkgenerator" style={{
                 marginTop: "20px",
                 fontSize: "18px",
                 textDecoration: "underline",
                 color: "blue"
             }}>
-                Go to BuildAShark Page
+                Go to SharkGenerator Page
             </Link>
         
         </div>

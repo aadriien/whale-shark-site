@@ -393,7 +393,8 @@ button.currentlyPlaying {
     flex-direction: row; /* Arrange form & image side by side */
     justify-content: space-between;
     gap: 20px; 
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .shark-generator-form {
