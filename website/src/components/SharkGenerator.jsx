@@ -2,12 +2,23 @@ import React, { useState, useEffect } from "react";
 
 import { getNames } from "country-list";
 
-import { fetchImageLLM } from "../utils/LLMUtils.js";
+import { fetchImageLLM } from "../utils/LLMUtils.jsx";
 
 // Populate list of all countries from "country-list" npm package
 const countries = getNames();
-
+ 
 const SharkGenerator = () => {
+    // State to hold image content (or placeholder text)
+    const [imageContent, setImageContent] = useState(null); 
+
+    const defaultText = (
+        <p id="default-text">
+            🐋 Build-A-Whale-Shark 🦈
+            <br />
+            <em>your creation will appear here</em>
+        </p>
+    );
+
     const [formData, setFormData] = useState({
         name: "",
         age: "",
@@ -57,7 +68,7 @@ const SharkGenerator = () => {
 
         // Harness random each time (0 - 99999) to make images unique
         const seed = Math.floor(Math.random() * 1000000);
-        fetchImageLLM(imagePrompt, { seed: seed });
+        fetchImageLLM(imagePrompt, { seed: seed }, setImageContent);
     };
 
     // Clear form data & reset status after submission
@@ -68,7 +79,10 @@ const SharkGenerator = () => {
             country: "",
             researcherPOV: ""
         });
-        setFormSubmitted(false); // Reset submission status
+
+        // Reset submission status & image container
+        setFormSubmitted(false); 
+        setImageContent(null);
     };
 
     return (
@@ -78,7 +92,9 @@ const SharkGenerator = () => {
                 <label>
                     <div className="label-text">
                         What's your name?
-                        <div className="label-subtext">Or your nickname?</div>
+                        <div className="label-subtext">
+                            Or your nickname?
+                        </div>
                     </div>
                     <input disabled={formSubmitted}
                         type="text"
@@ -92,7 +108,9 @@ const SharkGenerator = () => {
                 <label>
                     <div className="label-text">
                         How old are you?
-                        <span className="label-subtext">(Don't worry, everyone's whale-come here!)</span>
+                        <div className="label-subtext">
+                            (Don't worry, everyone's whale-come here!)
+                        </div>
                     </div>
                     <input disabled={formSubmitted}
                         type="number"
@@ -106,7 +124,9 @@ const SharkGenerator = () => {
                 <label>
                     <div className="label-text">
                         What's your home country? 
-                        <span className="label-subtext">Or, which country would you like to visit?</span>
+                        <div className="label-subtext">
+                            Or, which country would you like to visit?
+                        </div>
                     </div>
                     <input disabled={formSubmitted}
                         type="text"
@@ -126,7 +146,7 @@ const SharkGenerator = () => {
                 <label>
                     <div className="label-text">
                         What would a researcher studying humans say about you?
-                        <span className="label-subtext"></span>
+                        <div className="label-subtext"></div>
                     </div>
                     <input disabled={formSubmitted}
                         type="text"
@@ -151,7 +171,10 @@ const SharkGenerator = () => {
 
             </form>
 
-            <div id="generated-image-container"></div>
+            <div id="generated-image-container">
+                {/* Conditionally render imageContent or defaultText */}
+                {imageContent || defaultText}
+            </div>
 
         </div>
     );

@@ -9,8 +9,7 @@ const apiImageParams = {
 const urlBase = `https://image.pollinations.ai/prompt`;
 
 
-
-export async function fetchImageLLM(prompt, params = {}) {
+export async function fetchImageLLM(prompt, params = {}, updateImageContent) {
     // Assemble query params & corresponding URL
     const queryParams = new URLSearchParams({ ...apiImageParams, ...params });
     const encodedPrompt = encodeURIComponent(prompt);
@@ -19,8 +18,7 @@ export async function fetchImageLLM(prompt, params = {}) {
     console.log("Fetching image from:", url);
 
     // Show spinner while image loading
-    const container = document.getElementById("generated-image-container");
-    container.innerHTML = `<div class="spinner"></div>`;
+    updateImageContent(<div className="spinner"></div>);
     
     try {
         const response = await fetch(url);
@@ -35,19 +33,18 @@ export async function fetchImageLLM(prompt, params = {}) {
         const imageBlob = await response.blob();
         const imageUrl = URL.createObjectURL(imageBlob);
         
-        // Set up HTML structure for image display
-        const img = document.createElement("img");
+        // Set up HTML for image display, then update state with image
+        const img = new Image();
         img.src = imageUrl;
         img.alt = prompt;
         img.loading = "lazy";
         
-        container.innerHTML = ""; 
-        container.appendChild(img);
+        updateImageContent(<img src={imageUrl} alt={prompt} loading="lazy" />);
 
-    // Fill image container on error
+    // Update image container on error
     } catch (error) {
         console.error("Error fetching image:", error);
-        container.innerHTML = `<p>Error loading image.. try submitting again!</p>`;
+        updateImageContent(<p>Error loading image.. try submitting again!</p>);
     }
 }
     
