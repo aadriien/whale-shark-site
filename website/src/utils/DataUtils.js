@@ -1,5 +1,5 @@
-import storySharkOptions from "../assets/data/gbif_story_sharks_named.json";
-import selectedStorySharks from "../assets/data/gbif_story_shark_images.json";
+import storySharkOptions from "../assets/data/json/gbif_story_sharks_named.json";
+import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.json";
 
 
 const sharksOfInterest = [

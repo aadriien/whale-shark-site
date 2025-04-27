@@ -31,10 +31,10 @@ GBIF_PUBLISHING_COUNTRY_STATS_CSV = "outputs/gbif_publishingCountry_stats.csv"
 GBIF_INDIVIDUAL_SHARKS_STATS_CSV = "outputs/gbif_individual_sharks_stats.csv"
 
 # Feeds as JSON into Three.js globe display on website
-GBIF_SHARK_TRACKING_JSON = "website/src/assets/data/gbif_shark_tracking.json"
+GBIF_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_shark_tracking.json"
 
 GBIF_STORY_SHARKS_CSV = "outputs/gbif_story_sharks.csv"
-GBIF_STORY_SHARK_TRACKING_JSON = "website/src/assets/data/gbif_story_shark_tracking.json"
+GBIF_STORY_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_story_shark_tracking.json"
 
 
 

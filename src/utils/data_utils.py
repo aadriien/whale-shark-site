@@ -89,7 +89,8 @@ def export_to_json(json_file: str, output_list: list) -> None:
     # Proceed with creating folder if doesn't exist, then export JSON
     _ = folder_exists(json_file, True)
     with open(json_file, "w") as f:
-        json.dump(output_list, f, indent=2)
+        # Remove all spaces to keep JSON as condensed as possible
+        json.dump(output_list, f, separators=(',', ':'))
 
     print(f"Exported {len(output_list)} entries to {json_file}")
 
