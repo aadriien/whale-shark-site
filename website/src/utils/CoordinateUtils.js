@@ -1,4 +1,4 @@
-import coordinatesData from '../assets/data/gbif_shark_tracking.json';
+import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
 
 
 export function getCoordinates(sharkDict, limit = Infinity) {
