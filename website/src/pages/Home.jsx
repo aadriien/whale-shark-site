@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import SharkAnimation from "../components/SharkAnimation.jsx";
+
 function Home() {
     return (
         <div style={{
@@ -11,6 +13,21 @@ function Home() {
             textAlign: "center"
         }}>
             <h1>Welcome to the Whale Shark Project</h1>
+
+            <div 
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '20vh',
+                    width: '100%',
+                    overflow: 'hidden',
+                    background: "#1a1a1a",
+                }}
+            >
+                {/* SharkAnimation component */}
+                <SharkAnimation />
+            </div>
 
             <Link to="/globeviews" style={{
                 marginTop: "20px",

@@ -51,7 +51,7 @@ function SharkModel({ sharkRef, setActions }) {
         }
     }, [sharkRef]);
     
-    return <primitive ref={sharkRef} object={scene} scale={0.5} />;
+    return <primitive ref={sharkRef} object={scene} scale={2.0} />;
 }
 
 
@@ -129,7 +129,12 @@ export default function SharkAnimation() {
     
     return (
         <Canvas 
-            style={{ width: "100vw", height: "70vh", background: "#1a1a1a" }} 
+            style={{ 
+                width: "100%", 
+                height: "100%", 
+                objectFit: "cover", 
+                position: "relative" 
+            }} 
             camera={{ position: [0, 5, 25], fov: 30 }}
         >
         <ambientLight />

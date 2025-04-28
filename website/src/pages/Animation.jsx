@@ -15,7 +15,7 @@ function Animation() {
         }}>
             <h1>Animation Page</h1>
 
-            <div>
+            <div style={{ width: "100vw", height: "70vh", background: "#1a1a1a" }} >
                 {/* SharkAnimation component */}
                 <SharkAnimation />
             </div>
