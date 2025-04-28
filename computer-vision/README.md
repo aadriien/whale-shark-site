@@ -11,7 +11,7 @@ Datasets from `training-data` and `extracted-data` are **NOT included** in the r
 
 1. Download a [dataset](#linked-datasets) (`.tar`) 
 2. Place `.tar` file in the `training-data` folder 
-3. Set `tar_file` (name / path) in `extract-tar-data.py`
+3. Set `tar_file` (name / path) in `extract_tar_data.py`
 4. Run `.tar` extraction with:
     ```sh
     # Assuming at root of whale-shark-site

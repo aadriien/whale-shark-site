@@ -76,7 +76,10 @@ generate_shark_images:
 
 # Open up tarfile to get .coco dataset (for Hugging Face computer vision model)
 extract_tar:
-	@$(POETRY) run python -m computer-vision.extract-tar-data
+	@$(POETRY) run python -m computer-vision.extract_tar_data
+
+prettify_coco_json:
+	@$(POETRY) run python -m computer-vision.process_annotations
 
 
 
