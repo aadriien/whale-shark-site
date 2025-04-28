@@ -133,6 +133,41 @@ def convert_all_csvs_to_json(input_folder_path: str = DATA_FOLDER_PY_CSV,
             csv_to_json(input_csv_file, output_json_file)
 
 
+def prettify_json(json_file: str, 
+                fields: Optional[list[str]] = None, 
+                limit: Optional[int] = None) -> str:
+    if not json_file:
+        raise ValueError("Error, must specify JSON file path")
+
+    with open(json_file, "r") as f:
+        data = json.load(f)
+    
+    if fields:
+        if not isinstance(data, dict):
+            raise ValueError("Error, JSON must be dict to specify fields")
+        filtered_data = {field: data.get(field) for field in fields}
+    else:
+        filtered_data = data
+
+    # Apply limit to the fields of interest
+    if limit is not None:
+        if isinstance(filtered_data, dict):
+            if len(filtered_data) == 1:
+                # If only one field selected, and it's a list, limit inside
+                key, value = next(iter(filtered_data.items()))
+                if isinstance(value, list):
+                    filtered_data[key] = value[:limit]
+            else:
+                # Otherwise limit top-level fields
+                filtered_data = dict(list(filtered_data.items())[:limit])
+        elif isinstance(filtered_data, list):
+            filtered_data = filtered_data[:limit]
+        else:
+            raise ValueError("Error, can only apply limit to dict or list")
+
+    return json.dumps(filtered_data, indent=4)
+
+
 #####
 ## JSON parsing helpers
 #####

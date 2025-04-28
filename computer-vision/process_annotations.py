@@ -6,7 +6,10 @@
 
 
 import json
-import uuid
+
+from src.utils.data_utils import (
+    prettify_json,
+)
 
 from .extract_tar_data import (
     EXTRACTED_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
@@ -75,18 +78,15 @@ LILA_NINGALOO_ANNOTATIONS = "whaleshark.coco/annotations/instances_train2020.jso
 
 
 
-def prettify_json() -> None:
-
+def print_annotations() -> None:
     json_file = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{LILA_NINGALOO_ANNOTATIONS}"
 
-    with open(json_file, "r") as f:
-        data = json.load(f)
-
-    # Pretty print to the console
-    print(json.dumps(data["annotations"][:1], indent=4))
+    # Pretty print JSON to console
+    clean_annotations = prettify_json(json_file, fields=["annotations"], limit=3)
+    print(clean_annotations)
 
 
 if __name__ == "__main__":
-    prettify_json()
+    print_annotations()
 
 

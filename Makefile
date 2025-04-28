@@ -78,7 +78,7 @@ generate_shark_images:
 extract_tar:
 	@$(POETRY) run python -m computer-vision.extract_tar_data
 
-prettify_coco_json:
+process_annotations:
 	@$(POETRY) run python -m computer-vision.process_annotations
 
 
