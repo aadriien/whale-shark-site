@@ -12,3 +12,5 @@ data/*
 
 computer-vision/training-data/*
 computer-vision/extracted-data/*
+!computer-vision/training-data/.gitkeep
+!computer-vision/extracted-data/.gitkeep
