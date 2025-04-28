@@ -73,6 +73,13 @@ generate_shark_images:
 	@$(POETRY) run python -c "from src.utils.llm_utils import handle_images; handle_images()"
 
 
+
+# Open up tarfile to get .coco dataset (for Hugging Face computer vision model)
+extract_tar:
+	@$(POETRY) run python -m computer-vision.extract-tar-data
+
+
+
 # Auto-format Python code
 format:
 	@which black > /dev/null || (echo "black not found. Installing..."; $(POETRY) add black)

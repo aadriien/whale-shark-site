@@ -10,3 +10,5 @@ __pycache__/
 data/*
 !data/data.zip
 
+computer-vision/training-data/*
+computer-vision/extracted-data/*
