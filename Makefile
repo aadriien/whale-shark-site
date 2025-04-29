@@ -115,7 +115,7 @@ run_website:
 
 # Deploy live instance of newly-revised website
 deploy_website:
-	@cd website && npm run build && npm run deploy
+	@cd website && rm -rf dist && npm run build && npm run deploy
 
 
 clean:

@@ -11,7 +11,7 @@ import * as THREE from "three";
 //      - "GLTF_SceneRootNode"
 // - has 1 animation:
 //      - "Swim Cycle" (duration: 5.25 sec)
-const SHARK_MODEL_99a = "/models/whale_shark_3D_model_99a.glb";
+const SHARK_MODEL_99a = "./models/whale_shark_3D_model_99a.glb";
 
 // SHARK_MODEL_fantasy: 
 // - has 3 children pieces: 
@@ -23,11 +23,11 @@ const SHARK_MODEL_99a = "/models/whale_shark_3D_model_99a.glb";
 //      - "Swimming_U" (duration: 1.208 sec), 
 //      - "Swimming_D" (duration: 1.208 sec), 
 //      - "Idle" (duration: 2.375 sec)
-const SHARK_MODEL_fantasy = "/models/whale_shark_3D_model_fantasy.glb";
+const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
 
 
 function SharkModel({ sharkRef, setActions }) {
-    // Filepath "/models/{modelName}.glb" works since models in "public" (root) dir
+    // Filepath "./models/{modelName}.glb" works since models in "public" (root) dir
     const { scene, animations } = useGLTF(SHARK_MODEL_fantasy); 
     const { actions: newActions } = useAnimations(animations, scene);
     
