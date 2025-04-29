@@ -6,7 +6,7 @@
   "homepage": "https://aadriien.github.io/whale-shark-site",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=./",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
