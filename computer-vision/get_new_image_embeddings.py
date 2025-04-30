@@ -26,9 +26,23 @@ from src.clean.gbif import (
     GBIF_MEDIA_CSV,
 )
 
+from .extract_tar_data import (
+    EXTRACTED_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
+)
+
+from .process_annotations import (
+    SPECIFIC_DATASET_FOLDER, ANNOTATIONS_PATH, 
+)
+
+from .coco_to_yolo import (
+    create_coco_to_yolo_labels, 
+)
+
 
 NEW_EMBEDDINGS_FOLDER = "computer-vision/new-embeddings"
 GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
+
+OUTPUT_LABELS_FOLDER = f"{SPECIFIC_DATASET_FOLDER}/labels/train2020"
 
 
 # `yolov8n.pt` is a tiny model, can also try `yolov8m.pt` for better accuracy
@@ -215,14 +229,28 @@ def view_npz_file() -> None:
 
 
 
+def train_YOLO_model() -> None:
+    # Translate COCO JSON data into format that YOLOv8 can understand
+    destination = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{OUTPUT_LABELS_FOLDER}"
+    create_coco_to_yolo_labels(
+        coco_json_path=ANNOTATIONS_PATH,
+        output_labels_dir=destination
+    )
+
+
+
+
+
 if __name__ == "__main__":
-    gbif_media_df = get_image_records()
+    # gbif_media_df = get_image_records()
 
-    test_df = gbif_media_df.head(5)
+    # test_df = gbif_media_df.head(5)
 
-    process_all_images(test_df)
+    # process_all_images(test_df)
 
-    view_npz_file()
+    # view_npz_file()
+
+    train_YOLO_model()
 
 
 

@@ -82,8 +82,10 @@ from .extract_tar_data import (
 ###############################################################################
 
 
-LILA_NINGALOO_ANNOTATIONS = "whaleshark.coco/annotations/instances_train2020.json"
-LILA_NINGALOO_IMAGE_FOLDER = "whaleshark.coco/images/train2020"
+SPECIFIC_DATASET_FOLDER = "whaleshark.coco"
+
+LILA_NINGALOO_ANNOTATIONS = f"{SPECIFIC_DATASET_FOLDER}/annotations/instances_train2020.json"
+LILA_NINGALOO_IMAGE_FOLDER = f"{SPECIFIC_DATASET_FOLDER}/images/train2020"
 
 ANNOTATIONS_PATH = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{LILA_NINGALOO_ANNOTATIONS}"
 IMAGES_PATH = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{LILA_NINGALOO_IMAGE_FOLDER}"
