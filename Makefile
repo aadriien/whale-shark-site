@@ -78,8 +78,13 @@ generate_shark_images:
 extract_tar:
 	@$(POETRY) run python -m computer-vision.extract_tar_data
 
+# Build source of truth whale shark library (embeddings x IDs)
 process_annotations:
 	@$(POETRY) run python -m computer-vision.process_annotations
+
+# Generate embeddings (+ BBOXes) for new images of unknown sharks
+identify_new_shark_media:
+	@$(POETRY) run python -m computer-vision.get_new_image_embeddings
 
 
 

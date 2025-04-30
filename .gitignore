@@ -12,9 +12,15 @@ data/*
 
 computer-vision/training-data/*
 computer-vision/extracted-data/*
+
 computer-vision/embeddings-database/*
+computer-vision/new-embeddings/*
 
 !computer-vision/training-data/.gitkeep
 !computer-vision/extracted-data/.gitkeep
+
 !computer-vision/embeddings-database/.gitkeep
+!computer-vision/new-embeddings/.gitkeep
+
+yolov8n.pt
 
