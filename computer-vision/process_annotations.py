@@ -10,6 +10,7 @@ import torch
 import warnings
 import numpy as np
 from PIL import Image
+
 import torchvision.transforms as transforms
 from transformers import AutoModel
 
@@ -88,7 +89,7 @@ ANNOTATIONS_PATH = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXT
 IMAGES_PATH = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{LILA_NINGALOO_IMAGE_FOLDER}"
 
 EMBEDDINGS_DATABASE_FOLDER = "computer-vision/embeddings-database"
-OUTPUT_NPZ_FILE = f"{EMBEDDINGS_DATABASE_FOLDER}/whaleshark-ningaloo-embeddings.npz"
+OUTPUT_NPZ_FILE = f"{EMBEDDINGS_DATABASE_FOLDER}/whaleshark_ningaloo_embeddings.npz"
 
 
 def print_annotations() -> None:
@@ -103,8 +104,8 @@ def populate_embeddings_database() -> None:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore")
 
-        MODEL_TAG = "conservationxlabs/miewid-msv3"
-        model = AutoModel.from_pretrained(MODEL_TAG, trust_remote_code=True)
+        MODEL_TAG_MiewIDmsv3 = "conservationxlabs/miewid-msv3"
+        model = AutoModel.from_pretrained(MODEL_TAG_MiewIDmsv3, trust_remote_code=True)
 
     # Prep for resizing of image to work with model (requires 440 x 440 pixels)
     preprocess = transforms.Compose([
@@ -140,11 +141,11 @@ def populate_embeddings_database() -> None:
 
         # Crop image using bounding box, then preprocess (as prepped above)
         x, y, w, h = bbox
-        crop = img.crop((x, y, x + w, y + h))
+        crop = img.crop((x, y, x + w, y + h)) # COCO-style BBOX + cropping
 
         input_tensor = preprocess(crop).unsqueeze(0)
 
-        # Extract embedding from model
+        # Extract embedding via model
         with torch.no_grad():
             output = model(input_tensor)
 
@@ -197,7 +198,7 @@ def view_npz_file() -> None:
 
     # Print first few values to inspect
     print("First 3 embeddings (+ their associated metadata):")
-    for i in range(3):  
+    for i in range(min(3, len(embeddings))):  
         print(f"Embedding {i+1}:")
         print(f"  Embedding: {embeddings[i]}")
         print(f"  Image ID: {image_ids[i]}")
