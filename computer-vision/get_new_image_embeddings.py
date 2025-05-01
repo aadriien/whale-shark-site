@@ -26,23 +26,22 @@ from src.clean.gbif import (
     GBIF_MEDIA_CSV,
 )
 
-from .extract_tar_data import (
-    EXTRACTED_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
-)
-
 from .process_annotations import (
-    SPECIFIC_DATASET_FOLDER, ANNOTATIONS_PATH, 
+    FULL_PATH_TO_DATASET_FOLDER, ANNOTATIONS_PATH, 
 )
 
 from .coco_to_yolo import (
-    create_coco_to_yolo_labels, 
+    create_coco_to_yolo_labels, create_data_yaml, 
 )
 
 
 NEW_EMBEDDINGS_FOLDER = "computer-vision/new-embeddings"
 GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
 
-OUTPUT_LABELS_FOLDER = f"{SPECIFIC_DATASET_FOLDER}/labels/train2020"
+OUTPUT_LABELS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/labels/train2020"
+
+YAML_FILE = f"{FULL_PATH_TO_DATASET_FOLDER}/data.yaml"
+TRAINING_RESULTS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/training-results"
 
 
 # `yolov8n.pt` is a tiny model, can also try `yolov8m.pt` for better accuracy
@@ -231,10 +230,28 @@ def view_npz_file() -> None:
 
 def train_YOLO_model() -> None:
     # Translate COCO JSON data into format that YOLOv8 can understand
-    destination = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{OUTPUT_LABELS_FOLDER}"
     create_coco_to_yolo_labels(
         coco_json_path=ANNOTATIONS_PATH,
-        output_labels_dir=destination
+        output_labels_dir=OUTPUT_LABELS_FOLDER
+    )
+
+    create_data_yaml(
+        base_dir=FULL_PATH_TO_DATASET_FOLDER,
+        output_yaml_path="data.yaml"
+    )
+
+    # Confirm folder for results of training model exists 
+    project_path = f"{TRAINING_RESULTS_FOLDER}/runs/train"
+    _ = folder_exists(project_path, True)
+
+    MODEL_YOLOv8.train(
+        data=YAML_FILE, 
+        epochs=50, 
+        batch=16, 
+        imgsz=640,  # YOLO recommends 640x640 image size
+        project=project_path,  # Where to store training results 
+        name="shark_detection",  # Name of experiment
+        device="cpu"  
     )
 
 

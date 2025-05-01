@@ -24,3 +24,5 @@ computer-vision/new-embeddings/*
 
 yolov8n.pt
 
+*.yaml
+

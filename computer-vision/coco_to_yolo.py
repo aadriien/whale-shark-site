@@ -7,6 +7,7 @@
 
 import os
 import json
+import yaml
 
 
 def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> None:
@@ -17,7 +18,7 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
         coco = json.load(f)
 
     images = {img["id"]: img for img in coco["images"]}
-    annotations = coco["annotations"][:5]
+    annotations = coco["annotations"][:160]
 
     for annotation in annotations:
         bbox = annotation["bbox"]  # [x_min, y_min, width, height]
@@ -52,7 +53,6 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
     print(f"YOLOv8 labels written to: {output_labels_dir}")
 
 
-
 ###############################################################################
 #
 # ——> EXAMPLE USE CASE:
@@ -61,6 +61,34 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
 #     coco_json_path="whaleshark.coco/annotations/instances_train2020.json",
 #     output_labels_dir="whaleshark.coco/labels/train2020"
 # )
+#
+###############################################################################
+
+
+
+def create_data_yaml(base_dir: str, output_yaml_path: str) -> None:
+    base_dir = os.path.abspath(base_dir)
+
+    data = {
+        "path": base_dir,
+        "train": f"{base_dir}/images/train2020",
+        "val": f"{base_dir}/images/train2020",
+        "names": {
+            0: "whale_shark"
+        },
+    }
+
+    with open(f"{base_dir}/{output_yaml_path}", "w") as f:
+        yaml.dump(data, f)
+
+    print(f"data.yaml written to: {base_dir}/{output_yaml_path}")
+
+
+###############################################################################
+#
+# ——> EXAMPLE USE CASE:
+#
+# create_data_yaml("whaleshark.coco", "data.yaml")
 #
 ###############################################################################
 
