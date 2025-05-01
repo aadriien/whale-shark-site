@@ -5,6 +5,8 @@
 ###############################################################################
 
 
+import os
+import re
 import torch
 import warnings
 import requests
@@ -42,10 +44,47 @@ OUTPUT_LABELS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/labels/train2020"
 
 YAML_FILE = f"{FULL_PATH_TO_DATASET_FOLDER}/data.yaml"
 TRAINING_RESULTS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/training-results"
+PROJECT_RUNS_TRAINS_PATH = f"{TRAINING_RESULTS_FOLDER}/runs/train"
+
+
+
+# Identify resume point for YOLOv8n model training
+def get_latest_experiment_folder(project_path: str, base_name: str = "shark_detection") -> str:
+    folders = [f for f in os.listdir(project_path) if f.startswith(base_name)]
+    if not folders:
+        return None  
+
+    folders_with_ids = [
+        (f, int(re.search(r'\d+$', f).group()) if re.search(r'\d+$', f) else 0)
+        for f in folders
+    ]
+    latest = max(folders_with_ids, key=lambda x: x[1])[0]
+
+    return os.path.join(project_path, latest)
+
 
 
 # `yolov8n.pt` is a tiny model, can also try `yolov8m.pt` for better accuracy
-MODEL_YOLOv8 = YOLO("yolov8n.pt")
+# MODEL_YOLOv8 = YOLO("yolov8n.pt")
+
+# Resume training at latest point if it exists! Otherwise start fresh
+latest_path = get_latest_experiment_folder(PROJECT_RUNS_TRAINS_PATH)
+
+weights_path = os.path.join(latest_path, "weights", "last.pt")
+print("Resuming training from:", weights_path)
+
+if latest_path is not None:
+    model_path = os.path.join(latest_path, "weights", "last.pt")
+    MODEL_YOLOv8 = YOLO(model_path)
+
+    resume_flag = True
+    experiment_name = os.path.basename(latest_path)
+else:
+    MODEL_YOLOv8 = YOLO("yolov8n.pt")
+
+    resume_flag = False
+    experiment_name = "shark_detection"
+
 
 # Also store MiewID-msv3 model as global to avoid reloading each time
 with warnings.catch_warnings():
@@ -230,27 +269,27 @@ def view_npz_file() -> None:
 
 def train_YOLO_model() -> None:
     # Translate COCO JSON data into format that YOLOv8 can understand
-    create_coco_to_yolo_labels(
-        coco_json_path=ANNOTATIONS_PATH,
-        output_labels_dir=OUTPUT_LABELS_FOLDER
-    )
+    # create_coco_to_yolo_labels(
+    #     coco_json_path=ANNOTATIONS_PATH,
+    #     output_labels_dir=OUTPUT_LABELS_FOLDER
+    # )
 
-    create_data_yaml(
-        base_dir=FULL_PATH_TO_DATASET_FOLDER,
-        output_yaml_path="data.yaml"
-    )
+    # create_data_yaml(
+    #     base_dir=FULL_PATH_TO_DATASET_FOLDER,
+    #     output_yaml_path="data.yaml"
+    # )
 
     # Confirm folder for results of training model exists 
-    project_path = f"{TRAINING_RESULTS_FOLDER}/runs/train"
-    _ = folder_exists(project_path, True)
+    _ = folder_exists(PROJECT_RUNS_TRAINS_PATH, True)
 
     MODEL_YOLOv8.train(
         data=YAML_FILE, 
         epochs=50, 
         batch=16, 
         imgsz=640,  # YOLO recommends 640x640 image size
-        project=project_path,  # Where to store training results 
-        name="shark_detection",  # Name of experiment
+        project=PROJECT_RUNS_TRAINS_PATH,  # Where to store training results 
+        name=experiment_name,  # Some variation of `shark_detection`
+        resume=resume_flag,
         device="cpu"  
     )
 

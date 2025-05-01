@@ -23,6 +23,7 @@ computer-vision/new-embeddings/*
 !computer-vision/new-embeddings/.gitkeep
 
 yolov8n.pt
+YOLOv8
 
 *.yaml
 
