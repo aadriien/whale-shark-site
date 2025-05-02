@@ -56,9 +56,26 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 - **P5.js + D3.js**: Interactive web + data visuals
 
+- **PyTorch**: Computer vision model training
+
+- **Pandas + NumPy**: Data pipelines + computer vision
+
+- **LLMs (Mistral, Gemma, OpenAI GPT)**: Generative AI (shark names + cartoons)
+
 - ...
 
 - others on the way, stay tuned :-) 
+
+
+### Computer Vision
+
+- **YOLOv8**: Ultralytics model for object detection — starting with COCO, & training model myself
+
+- **MiewID-msv3**: Hugging Face model to identify specific organism (who is this shark) — also training
+
+- ...
+
+- visit [`computer-vision` subfolder](./computer-vision/README.md) for additional details & acknowledgments!
 
 
 ## How It Works
@@ -90,9 +107,11 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 - **🌍 Realistic Earth models**: Three.js globes built for discovery, to explore the data.
 - **🛰️ Satellite tracking by tag**: Mapping of where the sharks have been, and where they are going.
 
-- **🦈 Individual shark views**: Personal detailing of various whale sharks worldwide.
+- **🦈 Individual shark cards**: Personal detailing of various whale sharks worldwide.
 - **🤿 Personal diver stories**: Records and takeaways from divers who have encountered them.
+
 - **💻 Computer vision matching**: Integration of a really neat open source Hugging Face model.
+- **🎨 Build-A-Shark LLM creation**: Unique customization of a whale shark cartoon using generative AI.
 
 - **📊 Historic data trends**: Holistic insights into the sharks (+ related factors) over time.
 - **📸 Real media and clean visuals**: Pictures, videos, and plenty of thoughtful visualizations.
@@ -121,6 +140,21 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 ![Example image of selected shark story in progress](./example-media/example-imgs/story-in-progress-example-img.png)  |  ![Example image of globe view with geo-mapped data](./example-media/example-imgs/globe-views-example-img.png)
 
 
+<table>
+    <tr>
+        <td colspan="3" style="text-align: center;">
+            <img src="./example-media/example-imgs/build-a-shark-empty.png" width="400"/>
+            <img src="./example-media/example-imgs/build-a-shark-filled.png" width="400"/>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="./example-media/example-imgs/gen-shark-1.png" width="250"/></td>
+        <td><img src="./example-media/example-imgs/gen-shark-2.png" width="250"/></td>
+        <td><img src="./example-media/example-imgs/gen-shark-3.png" width="250"/></td>
+    </tr>
+</table>
+
+
 ## Video Demos
 
 🌊 3D Model Swimming Animation   |   🌐 Tracker Page Globe Storytelling
@@ -133,6 +167,8 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 ### People
 
 A massive thank you to the wonderful community of builders, creators, and programmers at [the Recurse Center](https://www.recurse.com)! Much of this project has been developed during my time at RC, and I'm continually inspired by the energy and passion of those around me.
+
+Thank you to Anastasia from the [Wild Me](https://www.wildme.org) support team for chatting with me about [Sharkbook](https://www.sharkbook.ai) (Wildbook for Sharks), and for sharing open source resources like Wildbook's Image Analysis ([WBIA])(https://github.com/WildMeOrg/wildbook-ia) software!
 
 
 ### APIs & Data

@@ -99,7 +99,7 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
             </div>
 
             <div className="shark-regions">
-                <h3 className="shark-details">Countries Visited</h3>
+                <h3 className="shark-details">Places Visited</h3>
                 <ul className="timeline-list">
                     {shark.countries.split(",").map((country, index) => (
                         <li key={index} className="timeline-item">{country}</li>
