@@ -63,10 +63,6 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 - **LLMs (Mistral, Gemma, OpenAI GPT)**: Generative AI (shark names + cartoons)
 
-- ...
-
-- others on the way, stay tuned :-) 
-
 
 ### Computer Vision
 
@@ -74,9 +70,7 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 - **MiewID-msv3**: Hugging Face model to identify specific organism (who is this shark) — also training
 
-- ...
-
-- visit [computer-vision subfolder](./computer-vision/README.md) for additional details & acknowledgements!
+- Visit [computer-vision](./computer-vision/README.md) subfolder for additional details & acknowledgements!
 
 
 ## How It Works
@@ -165,9 +159,9 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 ## CV Model Training
 
-🧩 YOLOv8 model (baseline COCO)   |   🧠 YOLOv8 model (training runs)
+🧩 YOLOv8 Model (Baseline COCO)   |   🧠 YOLOv8 Model (Training Runs)
 :-------------------------------:|:-------------------------------:
-![Example image of YOLOv8 model with baseline COCO](./example-media/example-imgs/yolov8-coco-baseline.png)  |  ![Example image of YOLOv8 model training results](./example-media/example-imgs/yolov8-training-model.png)
+![Example image of YOLOv8 model with baseline COCO](./example-media/example-imgs/yolov8-coco-baseline.png)  |  ![Example image of YOLOv8 model training results](./example-media/example-imgs/yolov8-training-model.jpg)
 
 
 
