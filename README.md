@@ -19,8 +19,8 @@ For this project, `whale-shark-site`, I aim to bridge the gap between scientific
 - [How It Works](#how-it-works)
 - [Features](#features)
 - [Design Choices](#design-choices)
-- [Example Images](#example-images)
 - [Video Demos](#video-demos)
+- [Example Images](#example-images)
 - [Acknowledgements](#acknowledgements)
 
 
@@ -128,11 +128,18 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 - **Playful education**: Plenty to learn, but with exploration and engagement as the primary goal.
 
 
+## Video Demos
+
+🌊 3D Model Swimming Animation   |   🌐 Tracker Page Globe Storytelling
+:-------------------------------:|:-------------------------------:
+![Video demo of 3D whale shark animation](./example-media/video-demos/whale-shark-3Dmodel-demo.gif)  |  ![Video demo of tracker storytelling feature](./example-media/video-demos/whale-shark-tracker-demo.gif)
+
+
 ## Example Images
 
-🪪 Individual Shark Card   |   🪪 Individual Shark Card   |   📱 Story Shark Cards Grid
+📝 Shark Details   |   🪪 Individual Shark Card   |   📱 Story Sharks Grid
 :-------------------------:|:-------------------------:|:-------------------------:
-![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)  |  ![Example image of toggled shark card (scrolled)](./example-media/example-imgs/shark-card-toggled-example-img.png)  |  ![Example image of multiple shark cards in grid](./example-media/example-imgs/shark-cards-grid-example-img.png)
+![Example image of toggled shark card (scrolled)](./example-media/example-imgs/shark-card-toggled-example-img.png)  |  ![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)  |  ![Example image of multiple shark cards in grid](./example-media/example-imgs/shark-cards-grid-example-img.png)
 
 
 📖 Shark Story in Progress   |   📍 Geo-Mapping Globe View
@@ -153,13 +160,6 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
         <td><img src="./example-media/example-imgs/gen-shark-3.png" width="250"/></td>
     </tr>
 </table>
-
-
-## Video Demos
-
-🌊 3D Model Swimming Animation   |   🌐 Tracker Page Globe Storytelling
-:-------------------------------:|:-------------------------------:
-![Video demo of 3D whale shark animation](./example-media/video-demos/whale-shark-3Dmodel-demo.gif)  |  ![Video demo of tracker storytelling feature](./example-media/video-demos/whale-shark-tracker-demo.gif)
 
 
 ## Acknowledgements
