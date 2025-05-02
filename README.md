@@ -21,6 +21,7 @@ For this project, `whale-shark-site`, I aim to bridge the gap between scientific
 - [Design Choices](#design-choices)
 - [Video Demos](#video-demos)
 - [Example Images](#example-images)
+- [CV Model Training](#cv-model-training)
 - [Acknowledgements](#acknowledgements)
 
 
@@ -75,7 +76,7 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 - ...
 
-- visit [`computer-vision` subfolder](./computer-vision/README.md) for additional details & acknowledgments!
+- visit [computer-vision subfolder](./computer-vision/README.md) for additional details & acknowledgements!
 
 
 ## How It Works
@@ -162,13 +163,21 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 </table>
 
 
+## CV Model Training
+
+🧩 YOLOv8 model (baseline COCO)   |   🧠 YOLOv8 model (training runs)
+:-------------------------------:|:-------------------------------:
+![Example image of YOLOv8 model with baseline COCO](./example-media/example-imgs/yolov8-coco-baseline.png)  |  ![Example image of YOLOv8 model training results](./example-media/example-imgs/yolov8-training-model.png)
+
+
+
 ## Acknowledgements
 
 ### People
 
 A massive thank you to the wonderful community of builders, creators, and programmers at [the Recurse Center](https://www.recurse.com)! Much of this project has been developed during my time at RC, and I'm continually inspired by the energy and passion of those around me.
 
-Thank you to Anastasia from the [Wild Me](https://www.wildme.org) support team for chatting with me about [Sharkbook](https://www.sharkbook.ai) (Wildbook for Sharks), and for sharing open source resources like Wildbook's Image Analysis ([WBIA])(https://github.com/WildMeOrg/wildbook-ia) software!
+Thank you to Anastasia from the [Wild Me](https://www.wildme.org) support team for chatting with me about [Sharkbook](https://www.sharkbook.ai), and for sharing open source resources like Wildbook's [Image Analysis](https://github.com/WildMeOrg/wildbook-ia) software!
 
 
 ### APIs & Data
