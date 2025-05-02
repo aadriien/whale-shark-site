@@ -1,5 +1,10 @@
 # 🐋 🦈 Whale Shark Master Site
 
+May 2025 update.. this web app is now **LIVE**! Still a WIP, but feel free to start exploring!
+
+——>  **[https://aadriien.github.io/whale-shark-site](https://aadriien.github.io/whale-shark-site)**  <—— 
+
+
 ## Description
 
 Take a deep dive into the world of gentle giants with this **master website of whale shark data**! 
@@ -106,9 +111,14 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 ## Example Images
 
-🪪 Individual Shark Card   |   📍 Geo-Mapping Globe View
+🪪 Individual Shark Card   |   📱 Story Shark Cards Grid
 :-------------------------:|:-------------------------:
-![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)  |  ![Example image of globe view with geo-mapped data](./example-media/example-imgs/globe-views-example-img.png)
+![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)  |  ![Example image of multiple shark cards in grid](./example-media/example-imgs/shark-cards-grid-example-img.png)
+
+
+📖 Shark Story in Progress   |   📍 Geo-Mapping Globe View
+:-------------------------:|:-------------------------:
+![Example image of selected shark story in progress](./example-media/example-imgs/story-in-progress-example-img.png)  |  ![Example image of globe view with geo-mapped data](./example-media/example-imgs/globe-views-example-img.png)
 
 
 ## Video Demos
@@ -129,7 +139,7 @@ A massive thank you to the wonderful community of builders, creators, and progra
 
 I used biodiversity data from [GBIF](https://www.gbif.org) to access whale shark records.
 
-I used [Pollinations.AI](https://pollinations.ai)'s API to access OpenAI text generation.
+I used [Pollinations.AI](https://pollinations.ai)'s API to access OpenAI text + image generation.
 
 
 ### Libraries & Modules
