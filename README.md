@@ -130,9 +130,9 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 ## Example Images
 
-🪪 Individual Shark Card   |   📱 Story Shark Cards Grid
-:-------------------------:|:-------------------------:
-![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)  |  ![Example image of multiple shark cards in grid](./example-media/example-imgs/shark-cards-grid-example-img.png)
+🪪 Individual Shark Card   |   🪪 Individual Shark Card   |   📱 Story Shark Cards Grid
+:-------------------------:|:-------------------------:|:-------------------------:
+![Example image of toggled shark card](./example-media/example-imgs/shark-card-example-img.png)  |  ![Example image of toggled shark card (scrolled)](./example-media/example-imgs/shark-card-toggled-example-img.png)  |  ![Example image of multiple shark cards in grid](./example-media/example-imgs/shark-cards-grid-example-img.png)
 
 
 📖 Shark Story in Progress   |   📍 Geo-Mapping Globe View
@@ -143,8 +143,8 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 <table>
     <tr>
         <td colspan="3" style="text-align: center;">
-            <img src="./example-media/example-imgs/build-a-shark-empty.png" width="400"/>
-            <img src="./example-media/example-imgs/build-a-shark-filled.png" width="400"/>
+            <img src="./example-media/example-imgs/build-a-shark-empty.png" width="390"/>
+            <img src="./example-media/example-imgs/build-a-shark-filled.png" width="390"/>
         </td>
     </tr>
     <tr>
