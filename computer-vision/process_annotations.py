@@ -211,7 +211,7 @@ def view_npz_file() -> None:
 if __name__ == "__main__":
     # print_annotations()
 
-    populate_embeddings_database()
+    # populate_embeddings_database()
     view_npz_file()
 
 

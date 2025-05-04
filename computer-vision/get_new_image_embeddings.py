@@ -5,8 +5,6 @@
 ###############################################################################
 
 
-import os
-import re
 import torch
 import warnings
 import requests
@@ -14,7 +12,6 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 from io import BytesIO
-from ultralytics import YOLO
 
 import torchvision.transforms as transforms
 from transformers import AutoModel
@@ -28,65 +25,16 @@ from src.clean.gbif import (
     GBIF_MEDIA_CSV,
 )
 
-from .process_annotations import (
-    FULL_PATH_TO_DATASET_FOLDER, ANNOTATIONS_PATH, 
-)
-
-from .coco_to_yolo import (
-    create_coco_to_yolo_labels, create_data_yaml, 
+from .handle_yolo_model import (
+    get_yolo_model, train_YOLO_model,
 )
 
 
 NEW_EMBEDDINGS_FOLDER = "computer-vision/new-embeddings"
 GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
 
-OUTPUT_LABELS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/labels/train2020"
 
-YAML_FILE = f"{FULL_PATH_TO_DATASET_FOLDER}/data.yaml"
-TRAINING_RESULTS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/training-results"
-PROJECT_RUNS_TRAINS_PATH = f"{TRAINING_RESULTS_FOLDER}/runs/train"
-
-
-
-# Identify resume point for YOLOv8n model training
-def get_latest_experiment_folder(project_path: str, base_name: str = "shark_detection") -> str:
-    folders = [f for f in os.listdir(project_path) if f.startswith(base_name)]
-    if not folders:
-        return None  
-
-    folders_with_ids = [
-        (f, int(re.search(r'\d+$', f).group()) if re.search(r'\d+$', f) else 0)
-        for f in folders
-    ]
-    latest = max(folders_with_ids, key=lambda x: x[1])[0]
-
-    return os.path.join(project_path, latest)
-
-
-
-# `yolov8n.pt` is a tiny model, can also try `yolov8m.pt` for better accuracy
-# MODEL_YOLOv8 = YOLO("yolov8n.pt")
-
-# Resume training at latest point if it exists! Otherwise start fresh
-latest_path = get_latest_experiment_folder(PROJECT_RUNS_TRAINS_PATH)
-
-weights_path = os.path.join(latest_path, "weights", "last.pt")
-print("Resuming training from:", weights_path)
-
-if latest_path is not None:
-    model_path = os.path.join(latest_path, "weights", "last.pt")
-    MODEL_YOLOv8 = YOLO(model_path)
-
-    resume_flag = True
-    experiment_name = os.path.basename(latest_path)
-else:
-    MODEL_YOLOv8 = YOLO("yolov8n.pt")
-
-    resume_flag = False
-    experiment_name = "shark_detection"
-
-
-# Also store MiewID-msv3 model as global to avoid reloading each time
+# Store MiewID-msv3 model as global to avoid reloading each time
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore")
     MODEL_TAG_MiewIDmsv3 = "conservationxlabs/miewid-msv3"
@@ -121,14 +69,20 @@ def get_image_records() -> pd.DataFrame:
 
 def calculate_bbox(image: Image.Image) -> list[float]:
     # Visualize bounding box result (display image with cropped rectangle)
-    results = MODEL_YOLOv8(image)
-    results[0].show()  
+    model, _, _ = get_yolo_model()
+    results = model(image)
+    
+    # Try displaying image with BBOX 
+    try:
+        results[0].show()
+    except Exception as e:
+        print(f"Warning: Could not display image: {e}")
 
     # Access object detections
     for box in results[0].boxes:
         cls_id = int(box.cls[0]) # Class ID
         confidence = float(box.conf[0]) # Confidence score
-        label = MODEL_YOLOv8.names[cls_id] # Class label (e.g. "shark")
+        label = model.names[cls_id] # Class label (e.g. "shark")
 
         print(f"Detected: {label}, with confidence: {confidence}")
 
@@ -267,36 +221,6 @@ def view_npz_file() -> None:
 
 
 
-def train_YOLO_model() -> None:
-    # Translate COCO JSON data into format that YOLOv8 can understand
-    # create_coco_to_yolo_labels(
-    #     coco_json_path=ANNOTATIONS_PATH,
-    #     output_labels_dir=OUTPUT_LABELS_FOLDER
-    # )
-
-    # create_data_yaml(
-    #     base_dir=FULL_PATH_TO_DATASET_FOLDER,
-    #     output_yaml_path="data.yaml"
-    # )
-
-    # Confirm folder for results of training model exists 
-    _ = folder_exists(PROJECT_RUNS_TRAINS_PATH, True)
-
-    MODEL_YOLOv8.train(
-        data=YAML_FILE, 
-        epochs=50, 
-        batch=16, 
-        imgsz=640,  # YOLO recommends 640x640 image size
-        project=PROJECT_RUNS_TRAINS_PATH,  # Where to store training results 
-        name=experiment_name,  # Some variation of `shark_detection`
-        resume=resume_flag,
-        device="cpu"  
-    )
-
-
-
-
-
 if __name__ == "__main__":
     # gbif_media_df = get_image_records()
 
@@ -304,9 +228,9 @@ if __name__ == "__main__":
 
     # process_all_images(test_df)
 
-    # view_npz_file()
+    view_npz_file()
 
-    train_YOLO_model()
+    # train_YOLO_model()
 
 
 
