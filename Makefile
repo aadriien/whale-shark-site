@@ -86,6 +86,9 @@ process_annotations:
 identify_new_shark_media:
 	@$(POETRY) run python -m computer-vision.get_new_image_embeddings
 
+# Identify matches for unknown sharks based on source of truth
+match_shark_embeddings:
+	@$(POETRY) run python -m computer-vision.match_embeddings
 
 
 # Auto-format Python code
