@@ -34,11 +34,23 @@ NEW_EMBEDDINGS_FOLDER = "computer-vision/new-embeddings"
 GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
 
 
-# Store MiewID-msv3 model as global to avoid reloading each time
-with warnings.catch_warnings():
-    warnings.filterwarnings("ignore")
-    MODEL_TAG_MiewIDmsv3 = "conservationxlabs/miewid-msv3"
-    EMBEDDINGS_MODEL = AutoModel.from_pretrained(MODEL_TAG_MiewIDmsv3, trust_remote_code=True)
+_EMBEDDINGS_MODEL = None
+
+def get_embeddings_model():
+    global _EMBEDDINGS_MODEL
+
+    # Only load model once at start, then just reuse (lazy-loading pattern)
+    if _EMBEDDINGS_MODEL is None:
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore")
+            MODEL_TAG_MiewIDmsv3 = "conservationxlabs/miewid-msv3"
+
+            _EMBEDDINGS_MODEL = AutoModel.from_pretrained(
+                MODEL_TAG_MiewIDmsv3, 
+                trust_remote_code=True
+            )
+
+    return _EMBEDDINGS_MODEL
 
 
 
@@ -107,7 +119,8 @@ def compute_embedding(cropped_img: Image.Image) -> torch.Tensor:
     # Extract embedding via model
     input_tensor = preprocess(cropped_img).unsqueeze(0)
     with torch.no_grad():
-        output = EMBEDDINGS_MODEL(input_tensor)
+        model = get_embeddings_model()
+        output = model(input_tensor)
 
     return output.squeeze().cpu().numpy()
 
