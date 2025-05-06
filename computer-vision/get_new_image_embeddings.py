@@ -26,7 +26,7 @@ from src.clean.gbif import (
 )
 
 from .handle_yolo_model import (
-    get_yolo_model, train_YOLO_model,
+    get_yolo_model, 
 )
 
 
@@ -82,16 +82,23 @@ def get_image_records() -> pd.DataFrame:
 def calculate_bbox(image: Image.Image) -> list[float]:
     # Visualize bounding box result (display image with cropped rectangle)
     model, _, _ = get_yolo_model()
-    results = model(image)
+    results = model(image, conf=0.1, iou=0.4)
     
     # Try displaying image with BBOX 
-    try:
-        results[0].show()
-    except Exception as e:
-        print(f"Warning: Could not display image: {e}")
+    # try:
+    #     results[0].show()
+    # except Exception as e:
+    #     print(f"Warning: Could not display image: {e}")
+
+    boxes = results[0].boxes
+
+    # If nothing detected, leave empty
+    if not boxes:
+        print("No objects detected.")
+        return []
 
     # Access object detections
-    for box in results[0].boxes:
+    for box in boxes:
         cls_id = int(box.cls[0]) # Class ID
         confidence = float(box.conf[0]) # Confidence score
         label = model.names[cls_id] # Class label (e.g. "shark")
@@ -101,8 +108,12 @@ def calculate_bbox(image: Image.Image) -> list[float]:
         # Return BBOX coordinates (xyxy format, converting tensor to list)
         return box.xyxy[0].tolist()  
 
-    # If nothing detected, leave empty
-    return []
+    # Select box with highest confidence
+    best_idx = boxes.conf.argmax().item()
+    best_box = boxes.xyxy[best_idx].tolist()
+
+    print(f"Selected best BBOX: {best_box} (Confidence: {boxes.conf[best_idx]:.4f})")
+    return best_box
 
 
 
@@ -235,16 +246,14 @@ def view_npz_file() -> None:
 
 
 if __name__ == "__main__":
-    # gbif_media_df = get_image_records()
+    gbif_media_df = get_image_records()
+    # print(f"Size of media file: {gbif_media_df.shape[0]}")
 
-    # test_df = gbif_media_df.head(5)
+    test_df = gbif_media_df.head(1000)
 
-    # process_all_images(test_df)
+    process_all_images(test_df)
 
     view_npz_file()
-
-    # train_YOLO_model()
-
 
 
 
