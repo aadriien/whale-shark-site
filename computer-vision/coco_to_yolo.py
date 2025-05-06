@@ -20,6 +20,9 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
     images = {img["id"]: img for img in coco["images"]}
     annotations = coco["annotations"][:160]
 
+    # Group all labels for each image
+    labels_by_image = {}
+
     for annotation in annotations:
         bbox = annotation["bbox"]  # [x_min, y_min, width, height]
         image_id = annotation["image_id"]
@@ -33,6 +36,7 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
         img_width = image_info["width"]
         img_height = image_info["height"]
         file_name = image_info["file_name"]
+        image_basename = os.path.splitext(file_name)[0]
 
         # Normalize BBOX to YOLO format: x_center, y_center, w, h (all 0–1)
         x, y, w, h = bbox
@@ -43,14 +47,21 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
 
         yolo_label = f"{category_id} {x_center:.6f} {y_center:.6f} {w:.6f} {h:.6f}"
 
-        # Write to corresponding .txt file
-        image_basename = os.path.splitext(file_name)[0]
+        # Append to list of labels for this image
+        if image_basename not in labels_by_image:
+            labels_by_image[image_basename] = []
+        labels_by_image[image_basename].append(yolo_label)
+
+    # Write all labels for each image at once
+    for image_basename, labels in labels_by_image.items():
         label_file_path = os.path.join(output_labels_dir, f"{image_basename}.txt")
 
-        with open(label_file_path, "a") as label_file:
-            label_file.write(yolo_label + "\n")
+        # Overwrite file, NO appending (otherwise duplicates mess up model training)
+        with open(label_file_path, "w") as label_file:  
+            label_file.write("\n".join(labels) + "\n")
 
     print(f"YOLOv8 labels written to: {output_labels_dir}")
+
 
 
 ###############################################################################
