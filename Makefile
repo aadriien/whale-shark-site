@@ -82,6 +82,10 @@ extract_tar:
 process_annotations:
 	@$(POETRY) run python -m computer-vision.process_annotations
 
+# Train YOLOv8 CV model for improved shark object detection
+train_model:
+	@$(POETRY) run python -m computer-vision.handle_yolo_model
+
 # Generate embeddings (+ BBOXes) for new images of unknown sharks
 identify_new_shark_media:
 	@$(POETRY) run python -m computer-vision.get_new_image_embeddings
