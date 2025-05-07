@@ -10,6 +10,12 @@ __pycache__/
 data/*
 !data/data.zip
 
+website/public/models/*
+!website/public/models/whale_shark_3D_model_fantasy.glb
+
+website/public/videos/*
+!website/public/videos/whaleshark_960_540_30fps.mp4
+
 computer-vision/training-data/*
 computer-vision/extracted-data/*
 
