@@ -126,9 +126,16 @@ def train_yolo_model() -> None:
         device = "cpu"
         batch = 16
 
+    epochs = 50
+
+    print(f"Model training overview: ")
+    print(f"  Epochs: {epochs}")
+    print(f"  Batch: {batch}")
+    print(f"  Device: {device}")
+
     model.train(
         data=YAML_FILE, 
-        epochs=50, 
+        epochs=epochs, 
         batch=batch, 
         imgsz=640,  # YOLO recommends 640x640 image size
         project=PROJECT_RUNS_TRAINS_PATH,  # Where to store training results 
@@ -141,20 +148,24 @@ def train_yolo_model() -> None:
 
 def prep_data_for_yolo() -> None:
     # Translate COCO JSON data into format that YOLOv8 can understand
-    create_coco_to_yolo_labels(
-        coco_json_path=ANNOTATIONS_PATH,
-        output_labels_dir=OUTPUT_LABELS_FOLDER
-    )
+    # create_coco_to_yolo_labels(
+    #     coco_json_path=ANNOTATIONS_PATH,
+    #     output_labels_dir=OUTPUT_LABELS_FOLDER
+    # )
+
+    # Set working directory to script's location
+    current_working_dir = os.getcwd()
+    base_dir = os.path.join(current_working_dir, FULL_PATH_TO_DATASET_FOLDER)
 
     create_data_yaml(
-        base_dir=FULL_PATH_TO_DATASET_FOLDER,
+        base_dir=base_dir,
         output_yaml_path="data.yaml"
     )
 
 
 
 if __name__ == "__main__":
-    # prep_data_for_yolo()
+    prep_data_for_yolo()
 
     train_yolo_model()
 

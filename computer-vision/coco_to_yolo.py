@@ -77,13 +77,11 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
 
 
 
-def create_data_yaml(base_dir: str, output_yaml_path: str) -> None:
-    base_dir = os.path.abspath(base_dir)
-
+def create_data_yaml(base_dir: str, output_yaml_path: str) -> None: 
     data = {
         "path": base_dir,
-        "train": f"{base_dir}/images/train2020",
-        "val": f"{base_dir}/images/train2020",
+        "train": "images/train2020",
+        "val": "images/train2020",
         "names": {
             0: "whale_shark"
         },
