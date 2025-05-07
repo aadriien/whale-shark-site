@@ -1,4 +1,5 @@
 import ContinentData from "../components/ContinentData.jsx";
+import DataGrid from "../components/DataGrid.jsx";
 
 function DataVisuals() {
     return (
@@ -16,7 +17,14 @@ function DataVisuals() {
             <p>Here's where we'll incorporate d3.js visualizations.</p>
 
             {/* Rendering GBIFContinentOccurrences component */}
-            <ContinentData />
+            {/* <ContinentData /> */}
+
+            <DataGrid>
+                <div><ContinentData /></div>
+                <div><ContinentData /></div>
+                <div><ContinentData /></div>
+                <div><ContinentData /></div>
+            </DataGrid>
             
         </div>
     );

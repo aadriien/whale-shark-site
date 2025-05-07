@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-
 
 const RadialHeatmap = ({ 
     data,             
@@ -12,25 +11,44 @@ const RadialHeatmap = ({
     pieData = []      // Pie chart in center (e.g. "human/machine observation")
 }) => {
     const svgRef = useRef(null);
-    
+    const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
+
+    // Handle resizing of SVG container
+    const handleResize = () => {
+        if (svgRef.current) {
+            const { width, height } = svgRef.current.getBoundingClientRect();
+            setSvgDimensions({ width, height });
+        }
+    };
+
+    useEffect(() => {
+        // Resize chart on window resize
+        window.addEventListener("resize", handleResize);
+        handleResize();
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
     useEffect(() => {
         if (!data || data.length === 0) return;
+        if (svgDimensions.width === 0 || svgDimensions.height === 0) return;
+
+        const { width, height } = svgDimensions;
         
         // Clear any existing visual / renders
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
-        // Get container dimensions from actual rendered <svg>
-        const { width, height } = svgRef.current.getBoundingClientRect();
-
-        const margin = { top: 40, right: 120, bottom: 40, left: 40 };
         const innerRadius = Math.min(width, height) * 0.1;
-        const outerRadius = Math.min(width, height) / 2 - Math.max(...Object.values(margin));
+        const outerRadius = 0.7 * Math.min(width, height) / 2;
 
         // Create main chart group (radial heatmap + legend)
         const chartGroup = svg
             .append("g")
-            .attr("transform", `translate(${width / 2}, ${height / 2})`);
+            .attr("transform", `translate(${outerRadius}, ${height / 2})`);
+            // .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
         const segments = [...new Set(data.map(d => d[segmentField]))];
         const rings = [...new Set(data.map(d => d[ringField]))].sort();
@@ -64,8 +82,10 @@ const RadialHeatmap = ({
             const innerRad = radiusScale(ring);
             const outerRad = innerRad + radiusScale.bandwidth();
 
+            if (value <= 0) return;
+
             // Calculate angular width for segment based on total
-            const angleWidth = (value / total) * 2 * Math.PI; 
+            const angleWidth = Math.max((value / total) * 2 * Math.PI, 0.5);
 
             const startAngle = currentAngle;
             const endAngle = currentAngle + angleWidth;
@@ -96,9 +116,9 @@ const RadialHeatmap = ({
         // Title at top of chart
         svg.append("text")
             .attr("x", width / 2)
-            .attr("y", 20)
+            .attr("y", (height / 2) - outerRadius - 30)
             .attr("text-anchor", "middle")
-            .attr("font-size", "16px")
+            .attr("font-size", "14px")
             .attr("font-weight", "bold")
             .text(title);
 
@@ -106,7 +126,8 @@ const RadialHeatmap = ({
         if (pieData.length > 0) {
             const pieRadius = Math.min(width, height) * 0.2; 
             const pieGroup = svg.append("g")
-                .attr("transform", `translate(${width / 2}, ${height / 2})`);
+                .attr("transform", `translate(${outerRadius}, ${height / 2})`);
+                // .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
             // Define pie chart layout
             const pie = d3.pie().value(d => d.value);
@@ -133,27 +154,32 @@ const RadialHeatmap = ({
                 .append("text")
                 .attr("transform", d => `translate(${arc.centroid(d)})`)
                 .attr("text-anchor", "middle")
-                .attr("font-size", "12px")
+                .attr("font-size", "11px")
                 .attr("font-weight", "bold")
                 .text(d => d.data.label);
         }
 
+        // Have legend height roughly mirror available chart height
+        const chartHeight = Math.min(width, height);
+        const legendHeight = chartHeight * 0.7;
+
         // Create external legend to map segment colors (matches segmentField values)
         const legendGroup = svg.append("g")
-            .attr("transform", `translate(${width / 2 + 240}, ${height / 2 - 150})`);
+            .attr("transform", `translate(${2 * outerRadius + 20}, ${height / 2 - legendHeight / 2})`);
+            // .attr("transform", `translate(${width / 2 + (outerRadius + 20)}, ${height / 2 - legendHeight / 2})`);
 
         segments.forEach((segment, i) => {
             legendGroup.append("rect")
                 .attr("x", 0)
-                .attr("y", i * 26)
+                .attr("y", i * 18)
                 .attr("width", 14)
-                .attr("height", 14)
+                .attr("height", 12)
                 .attr("fill", segmentColorScale(segments.indexOf(segment))); 
 
             legendGroup.append("text")
                 .attr("x", 20)
-                .attr("y", i * 26 + 12)
-                .attr("font-size", "16px")
+                .attr("y", i * 18 + 12)
+                .attr("font-size", "12px")
                 .text(() => {
                     const totalForSegment = d3.sum(data.filter(
                         d => d[segmentField] === segment
@@ -162,7 +188,7 @@ const RadialHeatmap = ({
                 });
         });
         
-    }, [data, segmentField, ringField, valueField, title, pieData]);
+    }, [data, segmentField, ringField, valueField, title, pieData, svgDimensions]);
 
     return (
         <svg ref={svgRef} className={className} style={{ width: "100%", height: "100%" }} />

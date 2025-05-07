@@ -87,22 +87,22 @@ const GBIFContinentOccurrences = () => {
     }, [selectedContinent, reshapedData]);
 
     return (
-        <div
-            className="relative"
-            style={{
-                width: "800px",
-                height: "600px",
-                margin: "10px auto",
+        <div className="continent-occurrence-card" 
+            style={{ 
+                width: "100%", 
+                height: "100%",
+                minWidth: "300px",
+                minHeight: "300px",
+                padding: "0.5rem",
             }}
         >
-            <label htmlFor="continent-select" style={{ display: "block", marginBottom: "1rem" }}>
+            <label htmlFor="continent-select" style={{ display: "block" }}>
                 Select a continent:
             </label>
             <select
                 id="continent-select"
                 value={selectedContinent}
                 onChange={(e) => setSelectedContinent(e.target.value)}
-                style={{ padding: "0.5rem", marginBottom: "2rem", minWidth: "200px" }}
             >
                 <option value="">-- Choose a continent --</option>
                 {continentList.map((continent) => (
@@ -119,14 +119,14 @@ const GBIFContinentOccurrences = () => {
                         segmentField="month"
                         ringField="Avg Per Year (all)"
                         valueField="Total Occurrences"
-                        title={`Total Whale Shark Occurrences Per Month — ${selectedContinent}`}
+                        title={`Monthly Shark Records — ${selectedContinent}`}
                         monthOccurrences={monthOccurrences}  
                         pieData={pieData}  
                     />
                 </>
             ) : (
-                <p style={{ textAlign: "center", marginTop: "2rem" }}>
-                    {selectedContinent ? "No data available for this continent." : "Please select a continent to view data."}
+                <p style={{ textAlign: "center" }}>
+                    {selectedContinent ? "No data available for this continent." : "Select a continent to view data."}
                 </p>
             )}
         </div>
