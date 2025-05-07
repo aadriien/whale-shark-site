@@ -7,6 +7,7 @@
 
 import os
 import re
+import torch
 from typing import Tuple
 from ultralytics import YOLO
 
@@ -79,7 +80,7 @@ def get_yolo_model() -> Tuple[YOLO, bool, str]:
         _experiment_name = "shark_detection"
 
     # Override with basic / fresh model for testing
-    _MODEL_YOLOv8 = YOLO("yolov8n.pt")
+    # _MODEL_YOLOv8 = YOLO("yolov8n.pt")
 
     return _MODEL_YOLOv8, _resume_flag, _experiment_name
 
@@ -106,15 +107,34 @@ def train_yolo_model() -> None:
     # Confirm folder for results of training model exists 
     _ = folder_exists(PROJECT_RUNS_TRAINS_PATH, True)
 
+    # Attempt to check if CUDA is available, handle error if on Mac (no CUDA)
+    # Use Nvidia GPU where possible, otherwise just fall back to CPU 
+    try:
+        if torch.cuda.is_available():
+            # Use all available GPUs (2 for RC greene cluster)
+            num_gpus = torch.cuda.device_count()
+            if num_gpus > 1:
+                device = ",".join(str(i) for i in range(num_gpus))  # e.g., "0,1"
+            else:
+                device = "cuda"
+            batch = 32
+        else:
+            device = "cpu"
+            batch = 16
+    except Exception as e:
+        print(f"Error checking CUDA: {e}")
+        device = "cpu"
+        batch = 16
+
     model.train(
         data=YAML_FILE, 
-        epochs=10, 
-        batch=16, 
+        epochs=50, 
+        batch=batch, 
         imgsz=640,  # YOLO recommends 640x640 image size
         project=PROJECT_RUNS_TRAINS_PATH,  # Where to store training results 
         name=experiment_name,  # Some variation of `shark_detection`
         resume=resume_flag,
-        device="cpu"  
+        device=device  
     )
 
 
@@ -134,9 +154,9 @@ def prep_data_for_yolo() -> None:
 
 
 if __name__ == "__main__":
-    prep_data_for_yolo()
+    # prep_data_for_yolo()
 
-    # train_yolo_model()
+    train_yolo_model()
 
 
 

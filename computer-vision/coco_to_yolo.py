@@ -18,7 +18,7 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
         coco = json.load(f)
 
     images = {img["id"]: img for img in coco["images"]}
-    annotations = coco["annotations"][:160]
+    annotations = coco["annotations"]
 
     # Group all labels for each image
     labels_by_image = {}
