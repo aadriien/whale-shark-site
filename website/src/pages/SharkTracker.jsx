@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useState, useRef } from "react";
 
 import Globe from "../components/Globe.jsx";
@@ -30,7 +29,17 @@ function SharkTracker() {
     };
 
     return (
-        <div style={{ minHeight: "100vh", padding: "1rem", textAlign: "center" }}>
+        <div style={{ 
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            overflowY: "auto",
+            textAlign: "center",
+            paddingTop: "60px"
+            // minHeight: "100vh", padding: "1rem", textAlign: "center" 
+            }}>
             <h1>SharkTracker Page</h1>
             <p>Here's where we'll do whale shark storytelling.</p>
 
@@ -41,8 +50,8 @@ function SharkTracker() {
                     flexWrap: "wrap",
                     justifyContent: "center",
                     alignItems: "flex-start",
-                    gap: "1rem",
-                    marginTop: "3rem",
+                    // gap: "1rem",
+                    // marginTop: "3rem",
                     width: "100%",
                 }}
             >
@@ -62,25 +71,9 @@ function SharkTracker() {
                 </div>
             </div>
 
-            {/* Links */}
-            <div style={{ marginTop: "2rem" }}>
-                <Link to="/home" style={linkStyle}>Go back to Home Page</Link>
-                <Link to="/globeviews" style={linkStyle}>Go to GlobeViews Page</Link>
-                <Link to="/datavisuals" style={linkStyle}>Go to DataVisuals Page</Link>
-                <Link to="/buildashark" style={linkStyle}>Go to BuildAShark Page</Link>
-                <Link to="/animation" style={linkStyle}>Go to Animation Page</Link>
-            </div>
         </div>
     );
 }
-
-const linkStyle = {
-    fontSize: "18px",
-    textDecoration: "underline",
-    color: "blue",
-    display: "block",
-    margin: "0.5rem 0"
-};
 
 export default SharkTracker;
 

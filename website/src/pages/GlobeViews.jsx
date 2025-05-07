@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
 import Globe from "../components/Globe.jsx";
@@ -26,8 +25,10 @@ function GlobeViews() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: "100vh",
-            textAlign: "center"
+            height: "100vh",
+            overflowY: "auto",
+            textAlign: "center",
+            paddingTop: "60px"
         }}>
             <h1>GlobeViews Page</h1>
             <p>Here's where we'll visualize globe data.</p>
@@ -36,51 +37,6 @@ function GlobeViews() {
                 {/* Globe component */}
                 <Globe ref={globeRef} />
             </div>
-            
-            <Link to="/home" style={{
-                marginTop: "20px",
-                fontSize: "18px",
-                textDecoration: "underline",
-                color: "blue"
-            }}>
-                Go back to Home Page
-            </Link>
-
-            <Link to="/sharktracker" style={{
-                marginTop: "20px",
-                fontSize: "18px",
-                textDecoration: "underline",
-                color: "blue"
-            }}>
-                Go to SharkTracker Page
-            </Link>
-
-            <Link to="/datavisuals" style={{
-                marginTop: "20px",
-                fontSize: "18px",
-                textDecoration: "underline",
-                color: "blue"
-            }}>
-                Go to DataVisuals Page
-            </Link>
-
-            <Link to="/buildashark" style={{
-                marginTop: "20px",
-                fontSize: "18px",
-                textDecoration: "underline",
-                color: "blue"
-            }}>
-                Go to BuildAShark Page
-            </Link>
-
-            <Link to="/animation" style={{
-                marginTop: "20px",
-                fontSize: "18px",
-                textDecoration: "underline",
-                color: "blue"
-            }}>
-                Go to Animation Page
-            </Link>
 
         </div>
     );

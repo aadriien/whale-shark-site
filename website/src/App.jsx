@@ -1,6 +1,8 @@
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 import { Suspense, lazy } from "react";
 
+import Navbar from "./components/Navbar.jsx";
+
 const Home = lazy(() => import("./pages/Home.jsx"));
 const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
 const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
@@ -12,6 +14,8 @@ function App() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <HashRouter>
+                {/* Navbar outside Routes so it's always shown on pages */}
+                <Navbar />
                 <Routes>
                     {/* Redirect root to /home */}
                     <Route path="/" element={<Navigate to="/home" />} />  
