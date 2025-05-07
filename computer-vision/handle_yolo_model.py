@@ -111,6 +111,8 @@ def train_yolo_model() -> None:
     # Use Nvidia GPU where possible, otherwise just fall back to CPU 
     try:
         if torch.cuda.is_available():
+            print("Success, PyTorch with CUDA available!")
+
             # Use all available GPUs (2 for RC greene cluster)
             num_gpus = torch.cuda.device_count()
             if num_gpus > 1:
@@ -119,6 +121,7 @@ def train_yolo_model() -> None:
                 device = "cuda"
             batch = 32
         else:
+            print("PyTorch with CUDA is NOT available, defaulting to CPU")
             device = "cpu"
             batch = 16
     except Exception as e:
