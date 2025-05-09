@@ -20,9 +20,12 @@ from .process_annotations import (
 )
 
 from .get_new_image_embeddings import (
-    GBIF_OUTPUT_NPZ_FILE,
+    NEW_EMBEDDINGS_FOLDER, GBIF_OUTPUT_NPZ_FILE,
     get_image_records,
 )
+
+
+GBIF_MEDIA_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches.csv"
 
 
 # L2 DISTANCE SCALE (for normalized values, to judge match likelihood): 
@@ -103,9 +106,19 @@ if __name__ == "__main__":
     gbif_media_df = get_image_records()
     # print(f"Size of media file: {gbif_media_df.shape[0]}")
 
-    test_df = gbif_media_df.head(1000)
+    # test_df = gbif_media_df.head(10)
+    # enriched_df = test_df.reset_index(drop=True).join(results_df)
 
-    enriched_df = test_df.reset_index(drop=True).join(results_df)
-    export_to_csv("computer-vision/new-embeddings/TEST_match.csv", enriched_df)
+    # enriched_df = gbif_media_df.reset_index(drop=True).join(results_df)
+
+
+    # Add index used for matching explicitly & merge
+    results_df["query_index"] = results_df["query_index"].astype(int)
+    gbif_media_df = gbif_media_df.reset_index().rename(columns={"index": "query_index"})
+
+    enriched_df = pd.merge(gbif_media_df, results_df, on="query_index", how="inner")
+
+
+    export_to_csv(GBIF_MEDIA_MATCHES_FILE, enriched_df)
 
 
