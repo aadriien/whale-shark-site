@@ -168,9 +168,11 @@ def prep_data_for_yolo() -> None:
 
 
 if __name__ == "__main__":
-    prep_data_for_yolo()
+    # prep_data_for_yolo()
 
-    train_yolo_model()
+    # train_yolo_model()
+
+    print("Nothing running.. just a placeholder!")
 
 
 

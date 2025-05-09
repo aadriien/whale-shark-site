@@ -87,7 +87,7 @@ train_model:
 	@$(POETRY) run python -m computer-vision.handle_yolo_model
 
 # Generate embeddings (+ BBOXes) for new images of unknown sharks
-identify_new_shark_media:
+get_new_shark_embeddings:
 	@$(POETRY) run python -m computer-vision.get_new_image_embeddings
 
 # Identify matches for unknown sharks based on source of truth
