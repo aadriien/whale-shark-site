@@ -213,16 +213,21 @@ def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     # Work with copy to satisfy pandas DataFrame slice concerns
     df = occurrences_df.copy()
 
+    # Split entries with multiple IDs (multiple sharks) into separate rows
+    df["organismID"] = df["organismID"].str.split(';')
+    df = df.explode("organismID")
+
+    # Remove any spaces or weird formatting chars, e.g. "{"
+    df["organismID"] = df["organismID"].str.replace(r"[{} ]", "", regex=True)
+
+    # Repeat with identificationID field (just to be safe)
+    df["identificationID"] = df["identificationID"].str.split(';')
+    df = df.explode("identificationID")
+    df["identificationID"] = df["identificationID"].str.replace(r"[{} ]", "", regex=True)
+
     # Consolidate organismID / identificationID into 1 column (whaleSharkID)
     df["whaleSharkID"] = df["organismID"].combine_first(df["identificationID"])
     df = move_column_after(df, col_to_move="whaleSharkID", after_col="identificationID")
-
-    # Split entries with multiple IDs (multiple sharks) into separate rows
-    df["whaleSharkID"] = df["whaleSharkID"].str.split(';')
-    df = df.explode("whaleSharkID")
-
-    # Remove any spaces or weird formatting chars, e.g. "{"
-    df["whaleSharkID"] = df["whaleSharkID"].str.replace(r"[{} ]", "", regex=True)
 
     df = df.reset_index(drop=True)
     return df

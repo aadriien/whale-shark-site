@@ -495,7 +495,7 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, na_subset=["whaleSharkID"])
 
     # Now focus on clean entries & map info (sex, lifeStage, etc) where available
-    individual_sharks = occurrences_df[["whaleSharkID"]].drop_duplicates().reset_index(drop=True)
+    individual_sharks = occurrences_df[["whaleSharkID", "organismID", "identificationID"]].drop_duplicates().reset_index(drop=True)
     individual_sharks.set_index("whaleSharkID", inplace=True)
 
     individual_sharks = add_totals_column(
