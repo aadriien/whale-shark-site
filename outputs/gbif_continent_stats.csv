@@ -1,8 +1,8 @@
 continent,Total Occurrences,Unique Sharks (with ID),Top 3 Publishing Countries,Avg Per Year (all),Avg Per Year (after 2020),Avg Per Year (2010 - 2020),Avg Per Year (2000 - 2010),Avg Per Year (before 2000),Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,HUMAN_OBSERVATION,MACHINE_OBSERVATION,Oldest Occurrence,Newest Occurrence
 AFRICA,149,83,United States > United Kingdom > Mexico,5.96,4.8,8.82,8.57,1.33,29,3,5,8,4,3,10,5,5,19,12,17,106,0,1973-01,2025-02-28
 ANTARCTICA,11,0,Netherlands,5.5,,5.5,,,0,0,0,11,0,0,0,0,0,0,0,0,11,0,2017-04-16,2018-04-20
-ASIA,382,183,United States > United Kingdom > France,9.55,20.6,21.18,2.62,1.82,26,33,38,27,30,33,58,30,19,25,24,18,279,3,1929,2025-04-05
-EUROPE,2,1,Portugal,1.0,,1.0,1.0,,0,0,0,0,0,0,0,0,0,2,0,0,2,0,2008-10-18,2020-10-17
-NORTH_AMERICA,389,344,United States > Mexico > France,13.14,24.8,21.36,4.5,1.0,36,24,37,23,16,23,43,40,30,25,34,31,344,38,1858,2025-01-07
+ASIA,384,185,United States > United Kingdom > France,9.6,21.0,21.18,2.62,1.82,26,33,38,27,32,33,58,30,19,25,24,18,281,3,1929,2025-05-02
+EUROPE,3,2,Portugal > United States,1.5,,2.0,1.0,,0,0,0,0,0,0,0,0,0,3,0,0,3,0,2008-10-18,2020-10-17
+NORTH_AMERICA,390,345,United States > Mexico > France,13.17,25.0,21.36,4.5,1.0,36,24,37,24,16,23,43,40,30,25,34,31,345,38,1858,2025-04-21
 OCEANIA,767,117,Australia > United States > United Kingdom,28.35,8.2,61.73,4.29,1.5,31,23,49,62,87,75,98,21,68,97,76,28,160,587,1964-04,2025-03-16
 SOUTH_AMERICA,37,13,Ecuador > United States > France,1.85,1.8,2.14,2.25,1.0,1,0,4,5,2,4,1,4,4,5,1,2,26,6,1984-03-24,2025-03-04
