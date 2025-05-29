@@ -1,3 +1,4 @@
+import CalendarData from "../components/CalendarData.jsx";
 import ContinentData from "../components/ContinentData.jsx";
 import DataGrid from "../components/DataGrid.jsx";
 
@@ -19,7 +20,7 @@ function DataVisuals() {
             {/* <ContinentData /> */}
 
             <DataGrid>
-                <div><ContinentData /></div>
+                <div><CalendarData /></div>
                 <div><ContinentData /></div>
                 <div><ContinentData /></div>
                 <div><ContinentData /></div>
