@@ -37,7 +37,7 @@ const RadialHeatmap = ({
 
         const { width, height } = svgDimensions;
         
-        // Clear any existing visual / renders
+        // Clear any existing visuals / renders
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 

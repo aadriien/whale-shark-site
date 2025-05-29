@@ -93,7 +93,7 @@ const GBIFContinentOccurrences = () => {
                 height: "100%",
                 minWidth: "300px",
                 minHeight: "300px",
-                padding: "0.5rem",
+                padding: "1rem",
             }}
         >
             <label htmlFor="continent-select" style={{ display: "block" }}>
