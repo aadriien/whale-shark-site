@@ -38,8 +38,7 @@ function SharkTracker() {
             overflowY: "auto",
             textAlign: "center",
             paddingTop: "60px"
-            // minHeight: "100vh", padding: "1rem", textAlign: "center" 
-            }}>
+        }}>
             <h1>SharkTracker Page</h1>
             <p>Here's where we'll do whale shark storytelling.</p>
 
@@ -50,8 +49,6 @@ function SharkTracker() {
                     flexWrap: "wrap",
                     justifyContent: "center",
                     alignItems: "flex-start",
-                    // gap: "1rem",
-                    // marginTop: "3rem",
                     width: "100%",
                 }}
             >

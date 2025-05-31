@@ -116,7 +116,7 @@ const RadialHeatmap = ({
         // Title at top of chart
         svg.append("text")
             .attr("x", width / 2)
-            .attr("y", (height / 2) - outerRadius - 30)
+            .attr("y", 25)
             .attr("text-anchor", "middle")
             .attr("font-size", "14px")
             .attr("font-weight", "bold")

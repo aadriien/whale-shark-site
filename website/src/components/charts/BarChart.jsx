@@ -79,12 +79,13 @@ const BarChart = ({
             .attr("height", d => innerHeight - y(d.value))
             .attr("fill", (d, i) => barColorScale(i));
         
-        // Title
+        // Title at top of chart
         svg.append("text")
             .attr("x", width / 2)
-            .attr("y", 20)
+            .attr("y", 25)
             .attr("text-anchor", "middle")
-            .style("font-size", "16px")
+            .style("font-size", "14px")
+            .attr("font-weight", "bold")
             .text(title);
     }, [data, title]);
     
