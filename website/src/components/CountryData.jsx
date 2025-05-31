@@ -2,14 +2,14 @@ import React, { useState, useMemo } from "react";
 import * as d3 from "d3";
 
 import RadialHeatmap from "./charts/RadialHeatmap.jsx";
-import continentStatsGBIF from "../assets/data/json/gbif_continent_stats.json";
+import countryStatsGBIF from "../assets/data/json/gbif_country_stats.json";
 
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 
-const reshapeContinentData = (rawData) => {
+const reshapeCountryData = (rawData) => {
     const reshaped = [];
 
     rawData.forEach(row => {
@@ -19,7 +19,7 @@ const reshapeContinentData = (rawData) => {
 
             if (totalOccurrences != null && !Number.isNaN(+totalOccurrences)) {
                 reshaped.push({
-                    continent: row["continent"],
+                    country: row["country"],
                     month,
                     "Total Occurrences": +totalOccurrences,
                     "Avg Per Year (all)": +row["Avg Per Year (all)"],
@@ -34,22 +34,22 @@ const reshapeContinentData = (rawData) => {
 };
                 
 
-const GBIFContinentOccurrences = () => {
-    const reshapedData = useMemo(() => reshapeContinentData(continentStatsGBIF), []);
-    const [selectedContinent, setSelectedContinent] = useState("");
+const GBIFCountryOccurrences = () => {
+    const reshapedData = useMemo(() => reshapeCountryData(countryStatsGBIF), []);
+    const [selectedCountry, setSelectedCountry] = useState("");
 
-    // Prep list of continent options / views for selection
-    const continentList = useMemo(() => {
-        return [...new Set(reshapedData.map(d => d.continent))].sort();
+    // Prep list of country options / views for selection
+    const countryList = useMemo(() => {
+        return [...new Set(reshapedData.map(d => d.country))].sort();
     }, [reshapedData]);
 
     const filteredData = useMemo(() => {
-        return reshapedData.filter(d => d.continent === selectedContinent);
-    }, [reshapedData, selectedContinent]);
+        return reshapedData.filter(d => d.country === selectedCountry);
+    }, [reshapedData, selectedCountry]);
 
     // Get human vs machine observation percentages as pie chart data
-    const getObservationTypeData = (selectedContinent) => {
-        const entries = reshapedData.filter(d => d.continent === selectedContinent);
+    const getObservationTypeData = (selectedCountry) => {
+        const entries = reshapedData.filter(d => d.country === selectedCountry);
     
         if (!entries.length) return [];
     
@@ -64,12 +64,12 @@ const GBIFContinentOccurrences = () => {
     };
     
     const pieData = useMemo(() => {
-        return getObservationTypeData(selectedContinent);
-    }, [selectedContinent, reshapedData]);
+        return getObservationTypeData(selectedCountry);
+    }, [selectedCountry, reshapedData]);
 
     // Calculate total occurrences per month
-    const getMonthOccurrences = (continent) => {
-        return reshapedData.filter(d => d.continent === continent)
+    const getMonthOccurrences = (country) => {
+        return reshapedData.filter(d => d.country === country)
             .reduce((accum, curr) => {
                 months.forEach(month => {
                     accum[month] = (accum[month] || 0) + (curr[month] || 0);
@@ -78,16 +78,16 @@ const GBIFContinentOccurrences = () => {
             }, {});
     };
 
-    // Get occurrences for selected continent
+    // Get occurrences for selected country
     const monthOccurrences = useMemo(() => {
-        if (selectedContinent) {
-            return getMonthOccurrences(selectedContinent);
+        if (selectedCountry) {
+            return getMonthOccurrences(selectedCountry);
         }
         return {};
-    }, [selectedContinent, reshapedData]);
+    }, [selectedCountry, reshapedData]);
 
     return (
-        <div className="continent-occurrence-card" 
+        <div className="country-occurrence-card" 
             style={{ 
                 width: "100%", 
                 height: "100%",
@@ -96,18 +96,18 @@ const GBIFContinentOccurrences = () => {
                 padding: "1rem",
             }}
         >
-            <label htmlFor="continent-select" style={{ display: "block" }}>
-                Select a continent:
+            <label htmlFor="country-select" style={{ display: "block" }}>
+                Select a country:
             </label>
             <select
-                id="continent-select"
-                value={selectedContinent}
-                onChange={(e) => setSelectedContinent(e.target.value)}
+                id="country-select"
+                value={selectedCountry}
+                onChange={(e) => setSelectedCountry(e.target.value)}
             >
-                <option value="">-- Choose a continent --</option>
-                {continentList.map((continent) => (
-                    <option key={continent} value={continent}>
-                        {continent}
+                <option value="">-- Choose a country --</option>
+                {countryList.map((country) => (
+                    <option key={country} value={country}>
+                        {country}
                     </option>
                 ))}
             </select>
@@ -119,19 +119,19 @@ const GBIFContinentOccurrences = () => {
                         segmentField="month"
                         ringField="Avg Per Year (all)"
                         valueField="Total Occurrences"
-                        title={`Total Shark Records — ${selectedContinent}`}
+                        title={`Total Monthly Records — ${selectedCountry}`}
                         monthOccurrences={monthOccurrences}  
                         pieData={pieData}  
                     />
                 </>
             ) : (
                 <p style={{ textAlign: "center" }}>
-                    {selectedContinent ? "No data available for this continent." : "Select a continent to view data."}
+                    {selectedCountry ? "No data available for this country." : "Select a country to view data."}
                 </p>
             )}
         </div>
     );
 };
 
-export default GBIFContinentOccurrences;
+export default GBIFCountryOccurrences;
 
