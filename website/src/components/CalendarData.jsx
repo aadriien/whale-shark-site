@@ -36,22 +36,22 @@ const GBIFCalendarOccurrences = () => {
                 minHeight: "300px",
                 padding: "1rem" 
             }}>
-        <label htmlFor="year-select" style={{ display: "block" }}>
-            Select a year:
-        </label>
-        <select
-            id="year-select"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-        >
-            <option value="">-- Choose a year --</option>
-            {years.map((year) => (
-                <option key={year} value={year}>
-                    {year}
-                </option>
+            <label htmlFor="year-select" style={{ display: "block" }}>
+                Select a year:
+            </label>
+            <select
+                id="year-select"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+            >
+                <option value="">-- Choose a year --</option>
+                {years.map((year) => (
+                    <option key={year} value={year}>
+                        {year}
+                    </option>
                 ))}
             </select>
-            
+                
             {monthlyData.length > 0 ? (
                 <BarChart
                     data={monthlyData}
@@ -59,7 +59,7 @@ const GBIFCalendarOccurrences = () => {
                 />
             ) : (
                 <p style={{ textAlign: "center" }}>
-                    No data available for {selectedYear}.
+                    {selectedYear ? "No data available for this year." : "Select a year to view data."}
                 </p>
             )}
         </div>
