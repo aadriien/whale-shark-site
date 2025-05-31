@@ -34,10 +34,10 @@ const GBIFCalendarOccurrences = () => {
                 height: "100%", 
                 minWidth: "300px",
                 minHeight: "300px",
-                padding: "1rem" 
+                padding: "1rem 0.5rem", 
             }}>
             <label htmlFor="year-select" style={{ display: "block" }}>
-                Select a year:
+                Select a <span style={{ fontWeight: "bold" }}>year</span>:
             </label>
             <select
                 id="year-select"

@@ -10,7 +10,7 @@ const GBIFContinentOccurrences = () => {
                 height: "100%",
                 minWidth: "300px",
                 minHeight: "300px",
-                padding: "1rem",
+                padding: "1rem 0.5rem",
             }}
         >
             <GBIFRegionOccurrences 

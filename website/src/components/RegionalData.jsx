@@ -8,6 +8,18 @@ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 
+const capitalizeWords = (dataStr) => {
+    const lowercase = dataStr.toLowerCase().replace(/_/g, " ").split(" ");
+    const capitalizedWords = lowercase.map((word) => {
+        if (word === "and") {
+            return word;
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizedWords.join(" ");
+};
+
+
 const reshapeRegionData = (rawData, metric) => {
     const reshaped = [];
 
@@ -18,7 +30,7 @@ const reshapeRegionData = (rawData, metric) => {
 
             if (totalOccurrences != null && !Number.isNaN(+totalOccurrences)) {
                 reshaped.push({
-                    region: row[metric],
+                    region: capitalizeWords(row[metric]),
                     month,
                     "Total Occurrences": +totalOccurrences,
                     "Avg Per Year (all)": +row["Avg Per Year (all)"],
@@ -93,7 +105,7 @@ const GBIFRegionOccurrences = ({ regionData, metric }) => {
             }}
         >
             <label htmlFor="region-select" style={{ display: "block" }}>
-                Select a {metric}:
+                Select a <span style={{ fontWeight: "bold" }}>{metric}</span>:
             </label>
             <select
                 id="region-select"
