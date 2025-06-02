@@ -1,5 +1,5 @@
 countryCode,country,Total Occurrences,Unique Sharks (with ID),Top 3 Publishing Countries,Avg Per Year (all),Avg Per Year (after 2020),Avg Per Year (2010 - 2020),Avg Per Year (2000 - 2010),Avg Per Year (before 2000),Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,HUMAN_OBSERVATION,MACHINE_OBSERVATION,Oldest Occurrence,Newest Occurrence
-AU,Australia,1383,252,Australia > United States > United Kingdom,42.89,24.4,95.64,5.0,1.5,46,31,90,92,104,124,165,35,118,120,102,32,314,1046,1964-04,2025-05-13
+AU,Australia,1386,255,Australia > United States > United Kingdom,43.0,25.0,95.64,5.0,1.5,46,31,90,93,106,124,165,35,118,120,102,32,317,1046,1964-04,2025-05-19
 BS,Bahamas,8,0,United States,4.0,,4.0,7.0,,1,0,0,0,0,0,0,0,0,0,0,0,0,8,2010-10-25,2011-01-28
 BH,Bahrain,1,1,United States,1.0,,1.0,,,0,0,0,0,0,0,0,0,0,1,0,0,1,0,2020-10-23,2020-10-23
 BZ,Belize,15,2,United States > France,3.75,,4.67,1.0,,0,0,0,0,3,4,0,0,0,0,0,0,3,12,2006-05-18,2018-05-07
@@ -16,7 +16,7 @@ CO,Colombia,95,7,Ecuador > Colombia > United States,9.5,1.67,12.86,1.0,,36,0,1,2
 CR,Costa Rica,165,9,Ecuador > Costa Rica > France,16.5,1.33,23.0,1.0,,0,3,3,0,0,2,1,1,26,4,48,77,12,153,2010-09-22,2024-02-10
 CU,Cuba,20,5,United States > Mexico,5.0,1.0,9.0,17.0,,0,1,0,0,0,1,0,1,1,6,3,0,3,17,2010-09-27,2024-06-02
 DJ,Djibouti,31,2,United States,15.5,,,15.5,,29,0,0,0,0,0,0,0,0,0,0,2,2,29,2007-12-11,2009-01
-EC,Ecuador,1040,77,Ecuador > United States > Australia,54.74,3.25,101.7,1.83,,14,0,3,4,2,11,61,51,400,307,185,2,61,979,2001-10-28,2024-06-19
+EC,Ecuador,1042,79,Ecuador > United States > Australia,52.1,3.0,101.7,1.83,,14,0,3,4,4,11,61,51,400,307,185,2,63,979,2001-10-28,2025-05-26
 EG,Egypt,13,7,France > United States > United Kingdom,1.44,1.67,1.5,1.25,,0,0,2,0,0,0,3,1,0,0,6,1,13,0,2004-11-15,2023-11-14
 GQ,Equatorial Guinea,2,0,France,2.0,,,2.0,,0,0,0,0,0,0,0,2,0,0,0,0,2,0,2009-08-01,2009-08-01
 FJ,Fiji,1,1,United States,1.0,,,1.0,,0,0,0,0,0,0,0,0,1,0,0,0,1,0,2003-09-16,2003-09-16
@@ -33,11 +33,11 @@ IL,Israel,9,0,Israel,1.8,1.33,2.5,,,0,0,1,1,2,0,1,1,0,2,0,1,9,0,2019-04-26,2024-
 JP,Japan,29,0,United Kingdom > Japan,2.23,,3.0,1.8,1.33,0,0,1,2,8,2,5,2,3,1,2,3,4,0,1993-05-05,2017-10-06
 KE,Kenya,4,4,United States,1.0,1.0,,1.0,,0,1,0,1,0,0,0,0,0,0,1,1,4,0,2009-11-27,2024-02-20
 MG,Madagascar,38,18,United States > Israel > Canada,3.45,3.0,3.33,9.0,,7,5,0,0,0,1,0,0,1,9,6,9,38,0,2009-12-24,2024-10-12
-MY,Malaysia,19,13,United States > France > Germany,1.58,1.33,2.0,1.0,1.0,0,1,3,0,2,3,3,1,1,3,0,0,17,0,1931,2024-10-20
+MY,Malaysia,18,12,United States > France > Germany,1.5,1.33,1.83,1.0,1.0,0,1,3,0,2,3,3,1,0,3,0,0,16,0,1931,2024-10-20
 MV,Maldives,91,67,United States > France > United Kingdom,5.35,9.4,4.1,2.33,,3,14,11,14,3,2,1,2,8,6,15,9,88,0,2007-04-04,2025-04-05
 MQ,Martinique,1,0,France,1.0,,,1.0,,0,0,0,0,1,0,0,0,0,0,0,0,1,0,2007-05-19,2007-05-19
 YT,Mayotte,2,1,France > United States,1.0,,1.0,1.0,,0,0,0,0,0,0,0,0,1,0,0,0,2,0,2010,2015-09-03
-MX,Mexico,680,501,United States > Mexico > Spain,20.04,33.0,33.45,9.29,1.17,42,24,41,27,12,38,89,104,44,35,44,40,497,175,1858,2025-02-14
+MX,Mexico,681,502,United States > Mexico > Spain,20.07,33.2,33.45,9.29,1.17,42,24,41,27,12,38,89,105,44,35,44,40,498,175,1858,2025-02-14
 MZ,Mozambique,42,21,United Kingdom > United States > Spain,3.23,1.33,3.75,7.67,,2,1,1,0,0,3,9,3,2,3,2,0,25,0,2007-03-11,2025-02-28
 MM,Myanmar,3,3,United States,1.0,1.0,1.0,1.0,,1,0,1,0,0,0,0,0,0,0,1,0,3,0,2010-01-28,2023-11-18
 NR,Nauru,1,0,France,1.0,,,,1.0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1989-11-29,1989-11-29
@@ -67,7 +67,7 @@ TL,Timor-Leste,4,4,United States,2.0,2.0,,,,0,0,0,2,0,0,0,0,0,1,0,1,4,0,2024-10-
 TT,Trinidad and Tobago,2,2,United States,2.0,,2.0,,,0,0,0,2,0,0,0,0,0,0,0,0,0,2,2011-04-27,2011-04-27
 TC,Turks and Caicos Islands,1,0,United States,1.0,,1.0,1.0,,0,0,0,0,0,0,0,0,0,0,1,0,0,1,2010-11-30,2010-11-30
 AE,United Arab Emirates,6,1,France > United States > United Kingdom,1.5,1.0,1.67,1.0,,1,2,1,0,0,0,0,0,0,0,2,0,4,0,2010-03-13,2021-11-04
-US,United States,147,36,United States > France > Canada,4.93,6.0,8.0,4.33,1.71,7,5,4,2,17,5,15,30,11,11,7,5,91,53,1902-01-25,2024-12-30
+US,United States,148,36,United States > France > Canada,4.96,6.0,8.09,4.33,1.71,7,5,4,2,17,5,15,30,11,11,7,5,91,53,1902-01-25,2024-12-30
 UM,United States Minor Outlying Islands,1,1,United States,1.0,1.0,,,,0,1,0,0,0,0,0,0,0,0,0,0,1,0,2025-02-03,2025-02-03
 VE,Venezuela,2,2,United States,1.0,,,1.0,,0,0,0,0,0,0,0,0,0,0,0,2,2,0,2008-12-14,2009-12-26
 VN,Vietnam,5,0,Philippines > Netherlands,1.0,,,,1.0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1934,1994-06-21
