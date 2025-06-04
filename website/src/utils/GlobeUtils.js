@@ -126,6 +126,14 @@ export function addRingsDataStatic(globe, pointsData) {
 };
 
 
+export function clearRingsData(globe) {
+    if (!globe) return;
+
+    // Clear all rings by passing empty data
+    globe.ringsData([]); 
+}
+  
+
 export async function resetGlobe(camera, pitchRef, yawRef) {
     // Start with camera zooming out.. far!
     new JEasing(camera.position)
