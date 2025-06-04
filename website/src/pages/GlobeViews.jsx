@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import Globe from "../components/Globe.jsx";
+import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 
 import { getAllCoordinates } from "../utils/CoordinateUtils.js";
 import { addRingsData, addRingsDataStatic } from "../utils/GlobeUtils.js";
@@ -33,9 +34,29 @@ function GlobeViews() {
             <h1>GlobeViews Page</h1>
             <p>Here's where we'll visualize globe data.</p>
 
-            <div className="globe-container" style={{ maxWidth: "80%", maxHeight: "80%" }}>
+            <div className="globe-views-container"
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "stretch",
+                    maxWidth: "95%",
+                    height: "30rem",
+                    gap: "1rem",
+                }}
+            >
+                {/* Shark info panel on left */}
+                <div className="info-sidebar">
+                    <SharkInfoPanel />
+                </div>
+
                 {/* Globe component */}
-                <Globe ref={globeRef} />
+                <div className="globe-container">
+                    <Globe ref={globeRef} />
+                </div>
+
+                {/* Holistic view button + shark dropdown on right */}
+
             </div>
 
         </div>
