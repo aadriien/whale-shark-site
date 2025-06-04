@@ -223,4 +223,31 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
 };
 
 
+export async function highlightSharkMode(globe, controls, camera, pitchRef, yawRef, sharkID) {
+    const sortedPointsData = getSharkCoordinates(sharkID);
+    if (!globe || !sortedPointsData.length) return;
+
+    // If highlight mode, briefly disable orbit controls (user can't move globe)
+    controls.enabled = false;
+    
+    // Have camera zoom into globe gradually, over 2.5 sec period
+    new JEasing(camera.position)
+        .to({ z: 150 }, 2500) 
+        .easing(Cubic.InOut)
+        .start();
+
+    console.log(`Highlighting shark ID: ${sharkID}`);
+
+    // Show ripples for just this whale shark
+    addRingsData(globe, sortedPointsData);
+    const point = sortedPointsData[0];
+    goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
+
+    // Restore orbit controls
+    setTimeout(() => {
+        controls.enabled = true;
+    }, 1000);
+};
+
+
 

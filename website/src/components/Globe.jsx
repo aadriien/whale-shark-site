@@ -6,7 +6,7 @@ import JEASINGS from "../utils/JEasings/JEasings.ts";
 
 import { 
     createGlobe, createLights, createCamera, createControls,
-    setupCameraAngles, resetGlobe, playStoryMode 
+    setupCameraAngles, resetGlobe, playStoryMode, highlightSharkMode, 
 } from "../utils/GlobeUtils.js";
 
 
@@ -39,6 +39,25 @@ const Globe = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         getGlobe: () => globeRef.current,
         playStory
+    }));
+
+
+    const highlightShark = async (sharkID) => {
+        if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
+        
+        resetGlobe(cameraRef.current, pitchRef, yawRef);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        await highlightSharkMode(
+            globeRef.current, controlsRef.current, cameraRef.current, 
+            pitchRef, yawRef, sharkID
+        );
+    };
+        
+    // Expose globe instance & highlightShark method to parent
+    useImperativeHandle(ref, () => ({
+        getGlobe: () => globeRef.current,
+        highlightShark
     }));
     
     
