@@ -53,7 +53,7 @@ function GlobeViews() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "stretch",
             height: "100vh",
             overflowY: "auto",
             textAlign: "center",
@@ -62,17 +62,7 @@ function GlobeViews() {
             <h1>GlobeViews Page</h1>
             <p>Here's where we'll visualize globe data.</p>
 
-            <div className="globe-views-container"
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "stretch",
-                    maxWidth: "95%",
-                    height: "30rem",
-                    gap: "1rem",
-                }}
-            >
+            <div className="globe-views-container">
                 {/* Shark info panel on left */}
                 <div className="info-sidebar">
                     <SharkInfoPanel />
