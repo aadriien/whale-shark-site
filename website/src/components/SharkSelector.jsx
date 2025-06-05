@@ -1,6 +1,6 @@
 function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     return (
-        <div>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }} >
             <button 
                 onClick={onReset}
                 className={selectedSharkId == null ? "active" : ""}
@@ -14,7 +14,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                         key={shark.id}
                         onClick={() => onSelect(shark.id)}
                     >
-                        {shark.name}
+                        {shark.id}
                     </div>
                 ))}
             </div>
