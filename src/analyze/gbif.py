@@ -36,6 +36,8 @@ GBIF_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_shark_tracking.jso
 GBIF_STORY_SHARKS_CSV = "outputs/gbif_story_sharks.csv"
 GBIF_STORY_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_story_shark_tracking.json"
 
+GBIF_MEDIA_SHARKS_CSV = "outputs/gbif_media_sharks.csv"
+GBIF_MEDIA_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_media_shark_tracking.json"
 
 
 #####
@@ -539,6 +541,7 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     # Also build & export datasets for globe / storytelling
     export_shark_tracking_json(shark_df=individual_sharks, json_file=GBIF_SHARK_TRACKING_JSON)
     export_story_sharks(individual_sharks)
+    export_media_sharks(individual_sharks)
 
 
 
@@ -608,6 +611,13 @@ def export_story_sharks(individual_sharks: pd.DataFrame) -> None:
     export_to_csv(GBIF_STORY_SHARKS_CSV, frequently_sighted)
     export_shark_tracking_json(shark_df=frequently_sighted, json_file=GBIF_STORY_SHARK_TRACKING_JSON)
 
+
+def export_media_sharks(individual_sharks: pd.DataFrame) -> None:
+    has_media = individual_sharks.loc[individual_sharks["imageURL (license, creator)"] != "Unknown"]
+    valid = has_media.loc[has_media["lat:decimalLatitude long:decimalLongitude (eventDate)"] != "Unknown"]
+
+    export_to_csv(GBIF_MEDIA_SHARKS_CSV, valid)
+    export_shark_tracking_json(shark_df=valid, json_file=GBIF_MEDIA_SHARK_TRACKING_JSON)
 
 
 def export_all_analyses(dataframe: pd.DataFrame) -> None:
