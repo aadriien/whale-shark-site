@@ -1,5 +1,6 @@
 import storySharkOptions from "../assets/data/json/gbif_story_sharks_named.json";
 import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.json";
+import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
 
 
 const sharksOfInterest = [
@@ -39,12 +40,27 @@ const keyMap = {
     "stateProvince - verbatimLocality (month year)": "regions",
 };
 
+const keyMapHasMedia = {
+    "whaleSharkID": "id",
+    "Total Occurrences": "occurrences",
+    "Oldest Occurrence": "oldest",
+    "Newest Occurrence": "newest",
+    "HUMAN_OBSERVATION": "human",
+    "MACHINE_OBSERVATION": "machine",
+    "lifeStage (year)": "lifeStage",
+    "publishingCountry (year)": "publishing",
+    "country (year)": "countries",
+    "stateProvince - verbatimLocality (month year)": "regions",
+    "imageURL (license, creator)": "image",
+};
+
 
 const storySharksRaw = selectedStorySharks.filter(
     shark => selectedSharkIDs.includes(shark.whaleSharkID)
 );
 
 export const storySharks = storySharksRaw.map(obj => formatKeyVals(obj, keyMap));
+export const mediaSharks = hasMediaSharks.map(obj => formatKeyVals(obj, keyMapHasMedia));
 
 
 function cleanLifestage(obj) {

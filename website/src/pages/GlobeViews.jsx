@@ -6,14 +6,14 @@ import SharkSelector from "../components/SharkSelector.jsx";
 
 import { getAllCoordinates } from "../utils/CoordinateUtils.js";
 import { addRingsData, addRingsDataStatic, clearRingsData } from "../utils/GlobeUtils.js";
-import { storySharks } from "../utils/DataUtils.js";
+import { storySharks, mediaSharks } from "../utils/DataUtils.js";
 
 
 function GlobeViews() {
     const [selectedSharkId, setSelectedSharkId] = useState(null);
     const globeRef = useRef();
 
-    const sharks = storySharks;
+    const sharks = mediaSharks;
 
     useEffect(() => {
         if (!selectedSharkId) {
