@@ -17,16 +17,16 @@ function GlobeViews() {
 
     useEffect(() => {
         if (!selectedSharkId) {
-          // Show all sharks if nothing selected
-          if (globeRef.current) {
-            const globeInstance = globeRef.current.getGlobe();
-            clearRingsData(globeInstance);
-            const pointsData = getAllCoordinates();
-            addRingsDataStatic(globeInstance, pointsData);
-          }
+            // Show all sharks if nothing selected
+            if (globeRef.current) {
+                const globeInstance = globeRef.current.getGlobe();
+                clearRingsData(globeInstance);
+                const pointsData = getAllCoordinates();
+                addRingsDataStatic(globeInstance, pointsData);
+            }
         } else {
-          // Highlight selected shark
-          globeRef.current?.highlightShark(selectedSharkId);
+            // Highlight selected shark
+            globeRef.current?.highlightShark(selectedSharkId);
         }
     }, [selectedSharkId]);
 
@@ -41,10 +41,10 @@ function GlobeViews() {
     // Initial load: plot all sharks on mount
     useEffect(() => {
         if (globeRef.current) {
-          const globeInstance = globeRef.current.getGlobe();
-          clearRingsData(globeInstance);
-          const pointsData = getAllCoordinates();
-          addRingsDataStatic(globeInstance, pointsData);
+            const globeInstance = globeRef.current.getGlobe();
+            clearRingsData(globeInstance);
+            const pointsData = getAllCoordinates();
+            addRingsDataStatic(globeInstance, pointsData);
         }
     }, []);
 

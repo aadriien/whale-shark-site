@@ -34,12 +34,6 @@ const Globe = forwardRef((props, ref) => {
             pitchRef, yawRef, sharkID
         );
     };
-        
-    // Expose globe instance & playStory method to parent
-    useImperativeHandle(ref, () => ({
-        getGlobe: () => globeRef.current,
-        playStory
-    }));
 
 
     const highlightShark = async (sharkID) => {
@@ -54,10 +48,12 @@ const Globe = forwardRef((props, ref) => {
         );
     };
         
-    // Expose globe instance & highlightShark method to parent
+    
+    // Expose globe instance, playStory, highlightShark methods to parent
     useImperativeHandle(ref, () => ({
         getGlobe: () => globeRef.current,
-        highlightShark
+        playStory,
+        highlightShark,
     }));
     
     
