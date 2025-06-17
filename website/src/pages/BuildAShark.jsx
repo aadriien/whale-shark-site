@@ -13,7 +13,6 @@ function BuildAShark() {
             paddingTop: "60px"
         }}>
             <h1>BuildAShark Page</h1>
-            <p>Here's where users can create their own cartoon shark image.</p>
 
             {/* Rendering SharkGenerator component */}
             <SharkGenerator />

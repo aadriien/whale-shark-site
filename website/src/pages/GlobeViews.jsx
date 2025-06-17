@@ -62,7 +62,6 @@ function GlobeViews() {
             paddingTop: "60px"
         }}>
             <h1>GlobeViews Page</h1>
-            <p>Here's where we'll visualize globe data.</p>
 
             <div className="globe-views-container">
                 {/* Shark info panel on left */}

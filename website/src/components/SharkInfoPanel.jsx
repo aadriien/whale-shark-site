@@ -54,7 +54,7 @@ const SharkInfoPanel = ({ shark }) => {
                         <div key={idx} className="shark-image-card">
                             <img src={img.url} alt={`Shark image ${idx}`} />
                             <p className="shark-image-meta">
-                                <small>📸 {img.creator} | {img.license}</small>
+                                <small>📸 Creator: {img.creator} | {img.license}</small>
                             </p>
                         </div>
                     ))}

@@ -40,7 +40,6 @@ function SharkTracker() {
             paddingTop: "60px"
         }}>
             <h1>SharkTracker Page</h1>
-            <p>Here's where we'll do whale shark storytelling.</p>
 
             <div className="globe-cards-container"
                 style={{
