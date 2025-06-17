@@ -1,4 +1,4 @@
-import { getDate, parseSpecificRegion, parseImageField } from "../utils/DataUtils.js";
+import { getDate, parseSpecificRegion, parseRemarks, parseImageField } from "../utils/DataUtils.js";
 
 const SharkInfoPanel = ({ shark }) => {
     if (!shark) {
@@ -45,6 +45,7 @@ const SharkInfoPanel = ({ shark }) => {
                         {shark.countries.split(",").map((country, index) => {
                             const regionEntry = shark.regions || "";
                             const publishingEntry = shark.publishing || "";
+                            const remarksEntry = shark.remarks || "";
 
                             const regionDate = getDate(regionEntry);
                             const fallbackDate = getDate(country);
@@ -53,14 +54,24 @@ const SharkInfoPanel = ({ shark }) => {
                             return (
                                 <li key={index} className="timeline-item">
                                     <div className="timeline-header">
-                                        <strong>{parseSpecificRegion(country)}</strong>{" "}
+                                        <strong>{parseSpecificRegion(country)}</strong>
+                                        {" "}
                                         <span className="timeline-date">({displayDate})</span>
                                     </div>
                                     <div className="timeline-region">
-                                        Region: {regionEntry !== "Unknown" ? parseSpecificRegion(regionEntry) : "Unspecified"}
+                                        <span className="timeline-label">Region:</span>
+                                        {" "}
+                                        <em>{regionEntry !== "Unknown" ? parseSpecificRegion(regionEntry) : "Unspecified"}</em>
                                     </div>
                                     <div className="timeline-meta">
-                                        Published by: {parseSpecificRegion(publishingEntry)}
+                                        <span className="timeline-label">Published by:</span>
+                                        {" "}
+                                        <em>{parseSpecificRegion(publishingEntry)}</em>
+                                    </div>
+                                    <div className="timeline-remarks">
+                                        <span className="timeline-label">Sighting remarks:</span> 
+                                        {" "}
+                                        <em>{remarksEntry !== "Unknown" ? parseRemarks(remarksEntry)  : "None"}</em>
                                     </div>
                                 </li>
                             );

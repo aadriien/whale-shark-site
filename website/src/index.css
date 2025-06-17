@@ -712,6 +712,26 @@ button.currentlyPlaying {
     transition: box-shadow 0.3s ease;
 }
 
+.shark-panel-details .timeline-header,
+.shark-panel-details .timeline-date {
+    font-size: 16px;
+    margin-bottom: 0.3rem;
+}
+
+.shark-panel-details .timeline-label {
+    font-weight: 600;
+    color: #25417d;
+}
+
+.timeline-item > div {
+    margin-bottom: 0.5rem;
+}
+
+.timeline-item > div:last-child {
+    /* Avoid extra spacing at the end */
+    margin-bottom: 0; 
+}
+
 .shark-images-container {
     display: flex;
     flex-direction: column;

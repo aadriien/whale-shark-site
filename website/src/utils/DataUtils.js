@@ -92,6 +92,12 @@ export function parseSpecificRegion(regionEntry = "") {
 }
 
 
+export function parseRemarks(str = "") {
+    // Match everything up to & including date in parentheses
+    return str.match(/.*?\(\d{4}-\d{2}-\d{2}\)/g) || [];
+} 
+
+
 export function parseImageField(imageField = "") {
     // Split on comma that separates entries, not commas inside parentheses
     const entries = imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/g) || [];
