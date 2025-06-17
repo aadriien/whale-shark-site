@@ -1,4 +1,4 @@
-import { parseImageField } from "../utils/DataUtils.js";
+import { getDate, parseSpecificRegion, parseImageField } from "../utils/DataUtils.js";
 
 const SharkInfoPanel = ({ shark }) => {
     if (!shark) {
@@ -42,9 +42,29 @@ const SharkInfoPanel = ({ shark }) => {
                 <div className="shark-regions">
                     <h3 className="shark-details">Places Visited</h3>
                     <ul className="timeline-list">
-                        {shark.countries.split(",").map((country, index) => (
-                            <li key={index} className="timeline-item">{country}</li>
-                        ))}
+                        {shark.countries.split(",").map((country, index) => {
+                            const regionEntry = shark.regions || "";
+                            const publishingEntry = shark.publishing || "";
+
+                            const regionDate = getDate(regionEntry);
+                            const fallbackDate = getDate(country);
+                            const displayDate = regionDate !== "Unknown" ? regionDate : fallbackDate;
+
+                            return (
+                                <li key={index} className="timeline-item">
+                                    <div className="timeline-header">
+                                        <strong>{parseSpecificRegion(country)}</strong>{" "}
+                                        <span className="timeline-date">({displayDate})</span>
+                                    </div>
+                                    <div className="timeline-region">
+                                        Region: {regionEntry !== "Unknown" ? parseSpecificRegion(regionEntry) : "Unspecified"}
+                                    </div>
+                                    <div className="timeline-meta">
+                                        Published by: {parseSpecificRegion(publishingEntry)}
+                                    </div>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
 

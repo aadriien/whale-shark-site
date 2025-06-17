@@ -55,7 +55,7 @@ function GlobeViews() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "stretch",
+            alignItems: "center",
             height: "100vh",
             overflowY: "auto",
             textAlign: "center",

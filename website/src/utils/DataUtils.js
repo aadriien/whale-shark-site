@@ -51,6 +51,7 @@ const keyMapHasMedia = {
     "publishingCountry (year)": "publishing",
     "country (year)": "countries",
     "stateProvince - verbatimLocality (month year)": "regions",
+    "occurrenceRemarks (eventDate)": "remarks",
     "imageURL (license, creator)": "image",
 };
 
@@ -74,6 +75,20 @@ function cleanLifestage(obj) {
             ?.replace(/\s*\(\d{4}\)/, "") || "Unknown";
   
     return cleanedLifeStage;
+}
+
+
+export function getDate(region = "") {
+    // Match text inside parentheses
+    const match = region.match(/\(([^)]+)\)/); 
+    return match ? match[1] : "Unknown";
+}
+
+
+export function parseSpecificRegion(regionEntry = "") {
+    // Everything before the date
+    const match = regionEntry.match(/^(.+?)\s*\([^)]*\)$/); 
+    return match ? match[1].trim() : regionEntry;
 }
 
 
