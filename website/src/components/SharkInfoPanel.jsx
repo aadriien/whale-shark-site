@@ -12,9 +12,9 @@ const SharkInfoPanel = ({ shark }) => {
     
     return (
         <div className="shark-info-panel">
-            <div className="shark-panel-details">
-                <h2>{shark.id}</h2>
+            <h2>ID: {shark.id}</h2>
 
+            <div className="shark-panel-details">
                 <div className="shark-traits">
                     <p className="shark-details"><strong>Sex:</strong>&nbsp; {shark.sex}</p>
                     <p className="shark-details"><strong>Life Stage:</strong>&nbsp; {shark.lifeStage}</p>
