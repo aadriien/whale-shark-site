@@ -693,6 +693,38 @@ button.currentlyPlaying {
     background-color: #479bf5;
 }
 
+.shark-images-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.shark-image-card {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.shark-image-card img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.shark-image-meta {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.5rem;
+}
+
+
+
   
   
   

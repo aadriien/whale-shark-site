@@ -48,6 +48,8 @@ function GlobeViews() {
         }
     }, []);
 
+    const selectedShark = sharks.find(shark => shark.id === selectedSharkId) || null;
+
     return (
         <div style={{
             display: "flex",
@@ -65,7 +67,7 @@ function GlobeViews() {
             <div className="globe-views-container">
                 {/* Shark info panel on left */}
                 <div className="info-sidebar">
-                    <SharkInfoPanel />
+                    <SharkInfoPanel shark={selectedShark} />
                 </div>
 
                 {/* Globe component */}

@@ -77,6 +77,27 @@ function cleanLifestage(obj) {
 }
 
 
+export function parseImageField(imageField = "") {
+    // Split on comma that separates entries, not commas inside parentheses
+    const entries = imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/g) || [];
+
+    return entries.map((entry) => {
+        const [urlPart, metaPart] = entry.split(/\s*\(/);
+        const url = urlPart.trim();
+        const meta = metaPart ? metaPart.replace(/\)$/, "") : "";
+
+        const licenseMatch = meta.match(/license:\s*([^,]+)/i);
+        const creatorMatch = meta.match(/creator:\s*([^,]+)/i);
+
+        return {
+            url,
+            license: licenseMatch ? licenseMatch[1].trim() : "Unknown",
+            creator: creatorMatch ? creatorMatch[1].trim() : "Unknown"
+        };
+    });
+}
+
+
 function formatKeyVals(obj, keyMap) {
     // Adjust column names for easier access in shark card
     const renamed = Object.fromEntries(
