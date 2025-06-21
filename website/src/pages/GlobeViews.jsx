@@ -11,6 +11,7 @@ import { mediaSharks } from "../utils/DataUtils.js";
 
 function GlobeViews() {
     const [selectedShark, setSelectedShark] = useState(null);
+    const [allSharksVisible, setAllSharksVisible] = useState(true);
     const globeRef = useRef();
 
     const pointsData = getAllCoordinates();
@@ -25,9 +26,12 @@ function GlobeViews() {
                 clearRingsData(globeInstance);
                 addRingsDataStatic(globeInstance, pointsData);
             }
-        } else {
+            setAllSharksVisible(true);
+        } 
+        else {
             // When shark selected, highlight it via globe's method
             globeRef.current?.highlightShark(selectedShark.id);
+            setAllSharksVisible(false);
         }
     }, [selectedShark]);
     
@@ -41,34 +45,50 @@ function GlobeViews() {
     }, []);
     
     // Handle shark selection from dropdown or globe click
-    const handleSelectShark = ({ lat, lng }) => {
-        console.log("Clicked at lat/lng:", lat, lng);
-      
-        const tolerance = 3.0;
-        const found = pointsData.find(s => {
-            const dLat = Math.abs(s.lat - lat);
-            const dLng = Math.abs(s.lng - lng);
-            return dLat < tolerance && dLng < tolerance;
-        });
-      
-        if (found) {
-            const cleanID = found.id.split("-")[0];
-            console.log("Matched shark:", found.id, " with ID: ", cleanID);
+    const handleSelectShark = (arg) => {
+        // Check if arg is object (from globe click) or string (from dropdown)
+        if (typeof arg === "object" && arg.lat !== undefined && arg.lng !== undefined) {
+            if (!allSharksVisible) {
+                console.log("Ignoring click because not all sharks are visible.");
+                return;
+            }
+            
+            const { lat, lng } = arg;
+            console.log("Clicked at lat/lng:", lat, lng);
+    
+            const tolerance = 3.0;
+            const found = pointsData.find(s => {
+                const dLat = Math.abs(s.lat - lat);
+                const dLng = Math.abs(s.lng - lng);
 
-            // Using "==" instead of "===" in case different types for ID
-            const foundShark = sharks.find(shark => shark.id == cleanID) || null;
+                return dLat < tolerance && dLng < tolerance;
+            });
+    
+            if (found) {
+                const cleanID = found.id.split("-")[0];
+                console.log("Matched shark:", found.id, " with ID: ", cleanID);
 
-            console.log("Sending shark obect:", foundShark);
-            setSelectedShark(foundShark);
+                // Using "==" instead of "===" in case different types for ID
+                const foundShark = sharks.find(shark => shark.id == cleanID) || null;
+
+                console.log("Sending shark obect:", foundShark);
+                setSelectedShark(foundShark);
+            } 
+            else {
+                console.log("No nearby shark found.");
+                setSelectedShark(null);
+            }
         } 
         else {
-            console.log("No nearby shark found.");
-            setSelectedShark(null);
+            // Coming from dropdown (arg = sharkId or null)
+            const foundShark = sharks.find(shark => shark.id == arg) || null;
+            setSelectedShark(foundShark);
         }
     };
       
     const handleReset = () => {
         setSelectedShark(null);
+        setAllSharksVisible(true);
     };
     
     
