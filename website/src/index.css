@@ -699,12 +699,40 @@ button.currentlyPlaying {
 }
 
 .shark-selector-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     color: #000;
     height: 1.5rem;
     border-radius: 3px;
     border-bottom: 1px solid #ddd;
     padding: 8px 10px;
     user-select: none;
+}
+
+.shark-selector-item img.flag-icon {
+    width: 24px;
+    height: 18px;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+.flag-and-code {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.flag-icon {
+    width: 24px;
+    height: 18px;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+.country-code {
+    font-size: 0.8rem;
+    color: #666;
 }
 
 .shark-selector-item:hover:not(.selected) {

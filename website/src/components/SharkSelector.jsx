@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { extractContinents } from "../utils/DataUtils.js";
+
+import { extractContinents, getCountryCode, parseSpecificRegion } from "../utils/DataUtils.js";
 
 const VALID_CONTINENTS = new Set([
     "Africa",
@@ -68,7 +69,32 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                                             className={`shark-selector-item ${shark.id === selectedSharkId ? "selected" : ""}`}
                                             onClick={() => onSelect(shark.id)}
                                         >
-                                            {shark.id}
+                                            {(() => {
+                                                const countryName = parseSpecificRegion(shark.countries.trim());
+                                                const code = getCountryCode(countryName);
+
+                                                return (
+                                                    <>
+                                                    {code ? (
+                                                        <div className="flag-and-code">
+                                                            <img
+                                                                src={`https://flagcdn.com/24x18/${code}.png`}
+                                                                alt={countryName}
+                                                                title={countryName}
+                                                                className="flag-icon"
+                                                                loading="lazy"
+                                                            />
+                                                            <span className="country-code">{code.toUpperCase()}</span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="flag-and-code" title={countryName} role="img" aria-label="unknown country">
+                                                            🌍 <span className="country-code">N/A</span>
+                                                        </span>
+                                                    )}
+                                                    {shark.id}
+                                                    </>
+                                                );
+                                            })()}
                                         </div>
                                     ))}
                                 </div>

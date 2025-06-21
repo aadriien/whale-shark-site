@@ -1,3 +1,5 @@
+import { getCode } from "country-list";
+
 import storySharkOptions from "../assets/data/json/gbif_story_sharks_named.json";
 import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.json";
 import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
@@ -91,6 +93,14 @@ export function extractContinents(continent) {
             return c;
         });
 }
+
+
+export function getCountryCode(countryName) {
+    const trimmed = countryName.trim();
+    const code = getCode(trimmed);
+    
+    return code ? code.toLowerCase() : null;
+};  
 
 
 export function getDate(region = "") {
