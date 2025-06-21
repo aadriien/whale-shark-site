@@ -9,6 +9,7 @@ import {
     setupCameraAngles, resetGlobe, playStoryMode, highlightSharkMode, 
 } from "../utils/GlobeUtils.js";
 
+import { getAllCoordinates } from "../utils/CoordinateUtils.js";
 
 const Globe = forwardRef((props, ref) => {
     const mountRef = useRef(null);
@@ -21,8 +22,13 @@ const Globe = forwardRef((props, ref) => {
     const pivotRef = useRef(null);
     const yawRef = useRef(null);
     const pitchRef = useRef(null);
-    
-    
+
+    const raycaster = useRef(new THREE.Raycaster());
+    const mouse = useRef(new THREE.Vector2());
+
+    const allCoords = useRef(getAllCoordinates());
+
+
     const playStory = async (sharkID) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
@@ -47,7 +53,7 @@ const Globe = forwardRef((props, ref) => {
             pitchRef, yawRef, sharkID
         );
     };
-        
+
     
     // Expose globe instance, playStory, highlightShark methods to parent
     useImperativeHandle(ref, () => ({
@@ -55,7 +61,7 @@ const Globe = forwardRef((props, ref) => {
         playStory,
         highlightShark,
     }));
-    
+
     
     useEffect(() => {
         const globeContainer = mountRef.current;
@@ -99,7 +105,7 @@ const Globe = forwardRef((props, ref) => {
             camera.aspect = containerWidth / containerHeight;
             camera.updateProjectionMatrix();
         };
-        
+
         // Attach renderer to DOM after size is set
         const initGlobe = () => {
             if (!globeContainer.contains(renderer.domElement)) {
@@ -112,52 +118,98 @@ const Globe = forwardRef((props, ref) => {
         initGlobe();
         
         window.addEventListener("resize", resizeCanvas);
-        
-        
+
+
         // OrbitControls setup
         const controls = createControls(camera, renderer);
-        
-        
+            
+            
         // Set for playStory
         globeRef.current = globe;
         cameraRef.current = camera;
         controlsRef.current = controls;
-        
-        
-        // Animation loop
-        const animate = () => {
-            controls.update();
-            
-            JEASINGS.update();
-            
-            renderer.render(scene, camera);
-            requestAnimationFrame(animate);
-        };
-        
-        animate();
-        
-        // Cleanup on component unmount
-        return () => {
-            window.removeEventListener("resize", resizeCanvas);
-            
-            // Remove renderer's canvas
-            if (globeContainer.contains(renderer.domElement)) {
-                globeContainer.removeChild(renderer.domElement);
-            }
-            renderer.dispose();
-        };
-    }, []); 
-    
-    return (
-        <div
-            ref={mountRef}
-            style={{
-                width: "100%",
-                height: "100%",
-            }}
-        />
-    );
+
+
+    const handleClick = (event) => {
+      if (!mountRef.current || !globeRef.current) return;
+
+      const rect = mountRef.current.getBoundingClientRect();
+      mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.current.setFromCamera(mouse.current, cameraRef.current);
+      const intersects = raycaster.current.intersectObject(globeRef.current);
+
+      if (intersects.length > 0) {
+        const intersect = intersects[0];
+        const point = intersect.point.clone();
+
+        const globeRadius = globeRef.current.scale.x || 1;
+        const normalizedPoint = point.clone().normalize();
+
+        const lat = Math.asin(normalizedPoint.y / globeRadius) * (180 / Math.PI);
+        const lng = Math.atan2(normalizedPoint.x, normalizedPoint.z) * (180 / Math.PI);
+
+        console.log(`Clicked at lat: ${lat.toFixed(4)}, lng: ${lng.toFixed(4)}`);
+
+        if (props.onSharkClick) {
+            props.onSharkClick({ lat, lng });
+        }
+          
+
+        // Find nearby shark from coordinates
+        // const tolerance = 2.0; // degrees
+        // const match = allCoords.current.find(p => {
+        //   const dLat = Math.abs(p.lat - lat);
+        //   const dLng = Math.abs(p.lng - lng);
+        //   return dLat < tolerance && dLng < tolerance;
+        // });
+
+        // if (match && props.onSharkClick) {
+        //   console.log("Matched shark:", match.id);
+        //   props.onSharkClick(match.id.split("-")[0]); // Extract shark ID
+        // } else {
+        //   console.log("No nearby shark found.");
+        // }
+
+      } else {
+        console.log("No intersection with globe.");
+      }
+    };
+
+    mountRef.current.addEventListener("click", handleClick);
+
+    const animate = () => {
+      controls.update();
+      JEASINGS.update();
+      
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+    animate();
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      
+      // Remove renderer's canvas
+      if (mountRef.current) mountRef.current.removeEventListener("click", handleClick);
+      if (globeContainer.contains(renderer.domElement)) {
+        globeContainer.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+    };
+  }, []);
+
+  return (
+    <div
+      ref={mountRef}
+      style={{ 
+          width: "100%", 
+          height: "100%", 
+        }}
+    />
+  );
 });
-        
+
 export default Globe;
-        
