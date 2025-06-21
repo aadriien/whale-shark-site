@@ -392,6 +392,7 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
 
 def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
     occurrences_df = validate_and_dropna(occurrences_df, na_subset=["continent", "eventDate"])
+    occurrences_df = occurrences_df[occurrences_df["continent"] != "Unknown"]
 
     # Get data for continent, basisOfRecord, eventDate
     continent_counts = make_region_df(occurrences_df, index=["continent"])
