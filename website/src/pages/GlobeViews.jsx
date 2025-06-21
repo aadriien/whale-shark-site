@@ -4,9 +4,10 @@ import Globe from "../components/Globe.jsx";
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
 
-import { getAllCoordinates } from "../utils/CoordinateUtils.js";
 import { addRingsDataStatic, clearRingsData } from "../utils/GlobeUtils.js";
+import { getAllCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
+
 
 function GlobeViews() {
     const [selectedShark, setSelectedShark] = useState(null);
@@ -22,7 +23,6 @@ function GlobeViews() {
             if (globeRef.current) {
                 const globeInstance = globeRef.current.getGlobe();
                 clearRingsData(globeInstance);
-
                 addRingsDataStatic(globeInstance, pointsData);
             }
         } else {
@@ -36,7 +36,6 @@ function GlobeViews() {
         if (globeRef.current) {
             const globeInstance = globeRef.current.getGlobe();
             clearRingsData(globeInstance);
-
             addRingsDataStatic(globeInstance, pointsData);
         }
     }, []);
@@ -47,35 +46,31 @@ function GlobeViews() {
       
         const tolerance = 3.0;
         const found = pointsData.find(s => {
-          const dLat = Math.abs(s.lat - lat);
-          const dLng = Math.abs(s.lng - lng);
-          return dLat < tolerance && dLng < tolerance;
+            const dLat = Math.abs(s.lat - lat);
+            const dLng = Math.abs(s.lng - lng);
+            return dLat < tolerance && dLng < tolerance;
         });
       
         if (found) {
-          console.log("Matched shark:", found.id);
+            const cleanID = found.id.split("-")[0];
+            console.log("Matched shark:", found.id, " with ID: ", cleanID);
 
-          const cleanID = found.id.split("-")[0];
-          console.log("Matched shark:", cleanID);
+            // Using "==" instead of "===" in case different types for ID
+            const foundShark = sharks.find(shark => shark.id == cleanID) || null;
 
-          // Using "==" instead of "===" in case different types for ID
-          const foundShark = sharks.find(shark => shark.id == cleanID) || null;
-
-          console.log("Sending shark obect:", foundShark);
-          setSelectedShark(foundShark);
-        } else {
-          console.log("No nearby shark found.");
-          setSelectedShark(null);
+            console.log("Sending shark obect:", foundShark);
+            setSelectedShark(foundShark);
+        } 
+        else {
+            console.log("No nearby shark found.");
+            setSelectedShark(null);
         }
-      };
+    };
       
-    
     const handleReset = () => {
         setSelectedShark(null);
     };
     
-    // Log what is passed for debug
-    console.log("Passing to SharkInfoPanel:", selectedShark);
     
     return (
         <div style={{
@@ -91,6 +86,7 @@ function GlobeViews() {
             <h1>GlobeViews Page</h1>
             
             <div className="globe-views-container">
+
                 {/* Shark info panel on left */}
                 <div className="info-sidebar" >
                     <SharkInfoPanel shark={selectedShark} onReset={handleReset} />
@@ -110,11 +106,13 @@ function GlobeViews() {
                         selectedSharkId={selectedShark ? selectedShark.id : null}
                     />
                 </div>
+
             </div>
 
         </div>
-        );
-    }
+    );
+}
     
-    export default GlobeViews;
+export default GlobeViews;
+
     
