@@ -9,7 +9,7 @@ import pandas as pd
 
 from src.config import (
     MONTH_NAMES,
-    convert_ISO_code_to_country,
+    convert_ISO_code_to_country, convert_country_to_continent,
 )
 
 from src.utils.data_utils import (
@@ -125,6 +125,29 @@ def export_gbif_occurrences() -> pd.DataFrame:
 #####
 ## Format & standardize DataFrames
 #####
+
+def format_continents(occurrences_df: pd.DataFrame) -> pd.DataFrame:
+    if not isinstance(occurrences_df, pd.DataFrame):
+        raise ValueError("Error, must specify occurrences_df")
+
+    def standardize_continent(row: pd.Series) -> str:
+        raw_continent = (row.get("continent") or "").strip()
+
+        if raw_continent:
+            # Standardize (e.g. NORTH_AMERICA -> North America)
+            clean = raw_continent.replace("_", " ").title()
+            return clean
+
+        # Step 2: Try using the 'country' field
+        country = row.get("country")
+        if country:
+            return convert_country_to_continent(country)
+
+        return "Unknown"
+
+    occurrences_df["continent"] = occurrences_df.apply(standardize_continent, axis=1)
+    return occurrences_df
+
     
 def map_codes_to_countries(occurrences_df: pd.DataFrame, code_column: str) -> dict:
     if not isinstance(code_column, str):
@@ -236,6 +259,8 @@ def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 def refactor_field_values(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     if not isinstance(occurrences_df, pd.DataFrame):
         raise ValueError("Error, must specify occurrences_df")
+
+    occurrences_df = format_continents(occurrences_df)
 
     occurrences_df = format_country_names(occurrences_df)
     occurrences_df = format_publishingCountry(occurrences_df)
