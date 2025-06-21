@@ -48,6 +48,7 @@ const keyMapHasMedia = {
     "HUMAN_OBSERVATION": "human",
     "MACHINE_OBSERVATION": "machine",
     "lifeStage (year)": "lifeStage",
+    "continent (year)": "continent",
     "publishingCountry (year)": "publishing",
     "country (year)": "countries",
     "stateProvince - verbatimLocality (month year)": "regions",
@@ -75,6 +76,20 @@ function cleanLifestage(obj) {
             ?.replace(/\s*\(\d{4}\)/, "") || "Unknown";
   
     return cleanedLifeStage;
+}
+
+
+export function extractContinents(continent) {
+    if (!continent) return [];
+    
+    return continent
+        .split(",")
+        .map(c => c.trim().replace(/\s*\(.*?\)/, "")) // Remove date like (2025)
+        .map(c => {
+            const parts = c.split(" ");
+            if (parts[0] === "North" || parts[0] === "South") return parts[0] + " America";
+            return c;
+        });
 }
 
 
