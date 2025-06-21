@@ -139,7 +139,7 @@ def format_continents(occurrences_df: pd.DataFrame) -> pd.DataFrame:
             return clean
 
         # Step 2: Try using the 'country' field
-        country = row.get("country")
+        country = (row.get("country") or "").strip()
         if country:
             return convert_country_to_continent(country)
 
@@ -261,7 +261,7 @@ def refactor_field_values(occurrences_df: pd.DataFrame) -> pd.DataFrame:
         raise ValueError("Error, must specify occurrences_df")
 
     occurrences_df = format_continents(occurrences_df)
-
+    
     occurrences_df = format_country_names(occurrences_df)
     occurrences_df = format_publishingCountry(occurrences_df)
     

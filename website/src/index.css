@@ -678,7 +678,6 @@ button.currentlyPlaying {
     flex-shrink: 0; 
 }
 
-
 .continent-header:hover {
     background-color: #d4e8f8;
 }
@@ -688,8 +687,6 @@ button.currentlyPlaying {
     overflow-y: auto;
     padding: 0.5rem;
 }
-
-
 
 .shark-selector-list {
     width: 100%;
@@ -721,6 +718,7 @@ button.currentlyPlaying {
     color: white;
     background-color: #479bf5;
 }
+
 
 .shark-info-panel {
     width: 100%;

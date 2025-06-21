@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { extractContinents } from "../utils/DataUtils.js";
 
+const VALID_CONTINENTS = new Set([
+    "Africa",
+    "Antarctica",
+    "Asia",
+    "Europe",
+    "North America",
+    "Oceania",
+    "South America",
+]);
+
 function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     // Track which continents are expanded & group sharks by continent
     const [openContinents, setOpenContinents] = useState({});
@@ -11,11 +21,13 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
 
         // Handle sharks associated with multiple continents
         continents.forEach(continent => {
-            if (!sharksByContinent[continent]) {
-                sharksByContinent[continent] = [];
+            if (VALID_CONTINENTS.has(continent)) {
+                if (!sharksByContinent[continent]) {
+                    sharksByContinent[continent] = [];
+                }
+                sharksByContinent[continent].push(shark);
             }
-            sharksByContinent[continent].push(shark);
-        });
+        });        
     });
 
     const toggleContinent = (continent) => {
@@ -35,7 +47,9 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
             </button>
 
             <div className="shark-selector-list">
-                {Object.entries(sharksByContinent).map(([continent, sharks]) => {
+                {Object.entries(sharksByContinent)
+                    .sort(([a], [b]) => a.localeCompare(b))
+                    .map(([continent, sharks]) => {
                     const isOpen = openContinents[continent];
                     
                     return (  
