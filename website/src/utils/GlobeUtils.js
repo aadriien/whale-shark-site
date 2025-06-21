@@ -73,9 +73,9 @@ export function createControls(camera, renderer) {
 
 export function setupCameraAngles(scene, camera) {
     // Euler angles for managing globe storytelling
-    const pivot = new THREE.Object3D() // point around which globe rotates
-    const yaw = new THREE.Object3D() // y-axis (vertical), turn left/right
-    const pitch = new THREE.Object3D() // x-axis (horizontal), tilt up/down
+    const pivot = new THREE.Object3D(); // point around which globe rotates
+    const yaw = new THREE.Object3D(); // y-axis (vertical), turn left/right
+    const pitch = new THREE.Object3D(); // x-axis (horizontal), tilt up/down
   
     scene.add(pivot);
     pivot.add(yaw);

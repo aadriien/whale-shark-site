@@ -12,7 +12,7 @@ export function getCoordinates(sharkDict, limit = Infinity) {
     const baseDelay = Math.random() * 2000;
 
     return {
-        id: `${coord.whaleSharkID}-${coord.lat}-${coord.long}`,
+        id: `${sharkDict.whaleSharkID}-${coord.lat}-${coord.long}`,
         lat: coord.lat,
         lng: coord.long,
         date: coord.eventDate,
