@@ -268,6 +268,14 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
         column_name="lifeStage (year)"
     )
 
+    # Build "continent (year)" metric
+    individual_sharks = make_individual_metric_df(
+        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        metric_subset=["continent"], metric_timing=["year"],
+        format_str="{0} ({1})", # == f"{continent} ({year})"
+        column_name="continent (year)"
+    )
+
     # Build "publishingCountry (year)" metric
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
