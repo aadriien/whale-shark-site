@@ -618,6 +618,7 @@ button.currentlyPlaying {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .shark-selector button {
@@ -749,7 +750,6 @@ button.currentlyPlaying {
 
 
 .shark-info-panel {
-    width: 100%;
     height: 100%;
     padding: 10px;
     background-color: white;
@@ -757,6 +757,13 @@ button.currentlyPlaying {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     overflow-y: scroll;
+}
+
+.shark-info-panel,
+.shark-info-panel * {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
     box-sizing: border-box;
 }
 
