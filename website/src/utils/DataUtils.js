@@ -3,6 +3,7 @@ import { getCode } from "country-list";
 import storySharkOptions from "../assets/data/json/gbif_story_sharks_named.json";
 import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.json";
 import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
+import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json";
 
 
 const sharksOfInterest = [
@@ -64,7 +65,7 @@ const storySharksRaw = selectedStorySharks.filter(
 );
 
 export const storySharks = storySharksRaw.map(obj => formatKeyVals(obj, keyMap));
-export const mediaSharks = hasMediaSharks.map(obj => formatKeyVals(obj, keyMapHasMedia));
+export const mediaSharks = allSharkData.map(obj => formatKeyVals(obj, keyMapHasMedia));
 
 
 function cleanLifestage(obj) {
@@ -98,7 +99,7 @@ export function extractContinents(continent) {
 export function getCountryCode(countryName) {
     const trimmed = countryName.trim();
     const code = getCode(trimmed);
-    
+
     return code ? code.toLowerCase() : null;
 };  
 
@@ -118,9 +119,18 @@ export function parseSpecificRegion(regionEntry = "") {
 
 
 export function parseRemarks(str = "") {
+    if (!str || str === "Unknown") return "None";
+
     // Match everything up to & including date in parentheses
-    return str.match(/.*?\(\d{4}-\d{2}-\d{2}\)/g) || [];
-} 
+    const matches = str.match(/[^,]*?\(\d{4}-\d{2}-\d{2}\)/g) || [];
+
+    // Filter out telemetry aggregation remarks
+    const filtered = matches.filter(
+        remark => !remark.trim().startsWith("Telemetry locations aggregated per species per 1-degree cell")
+    );
+
+    return filtered.length > 0 ? filtered.join(", ") : "None";
+}
 
 
 export function parseImageField(imageField = "") {

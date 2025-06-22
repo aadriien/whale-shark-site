@@ -9,6 +9,13 @@ const SharkInfoPanel = ({ shark }) => {
             </div>
         );
     }
+
+    const images = shark.image === "Unknown" ? [] : parseImageField(shark.image);
+
+    const countries = shark.countries.split(",").map(s => s.trim());
+    const regions = shark.regions ? shark.regions.split(",").map(s => s.trim()) : [];
+    const publishing = shark.publishing ? shark.publishing.split(",").map(s => s.trim()) : [];
+    const remarks = shark.remarks ? shark.remarks.split(",").map(s => s.trim()) : [];
     
     return (
         <div className="shark-info-panel">
@@ -42,11 +49,11 @@ const SharkInfoPanel = ({ shark }) => {
                 <div className="shark-regions">
                     <h3 className="shark-details">Places Visited</h3>
                     <ul className="timeline-list">
-                        {shark.countries.split(",").map((country, index) => {
-                            const regionEntry = shark.regions || "";
-                            const publishingEntry = shark.publishing || "";
-                            const remarksEntry = shark.remarks || "";
-
+                        {countries.map((country, index) => {
+                            const regionEntry = regions[index] || "Unknown";
+                            const publishingEntry = publishing[index] || "Unspecified";
+                            const remarksEntry = remarks[index] || "None";
+                      
                             const regionDate = getDate(regionEntry);
                             const fallbackDate = getDate(country);
                             const displayDate = regionDate !== "Unknown" ? regionDate : fallbackDate;
@@ -66,7 +73,7 @@ const SharkInfoPanel = ({ shark }) => {
                                     <div className="timeline-meta">
                                         <span className="timeline-label">Published by:</span>
                                         {" "}
-                                        <em>{parseSpecificRegion(publishingEntry)}</em>
+                                        <em>{publishingEntry !== "Unknown" ? publishingEntry : "Unspecified"}</em>
                                     </div>
                                     <div className="timeline-remarks">
                                         <span className="timeline-label">Sighting remarks:</span> 
@@ -79,7 +86,7 @@ const SharkInfoPanel = ({ shark }) => {
                     </ul>
                 </div>
 
-                <div className="shark-images-container">
+                {/* <div className="shark-images-container">
                     <h3>Media Gallery</h3>
                     {parseImageField(shark.image).map((img, idx) => (
                         <div key={idx} className="shark-image-card">
@@ -89,7 +96,24 @@ const SharkInfoPanel = ({ shark }) => {
                             </p>
                         </div>
                     ))}
+                </div> */}
+
+                <div className="shark-images-container">
+                    <h3>Media Gallery</h3>
+                    {images.length > 0 ? (
+                        images.map((img, idx) => (
+                            <div key={idx} className="shark-image-card">
+                                <img src={img.url} alt={`Shark image ${idx}`} />
+                                <p className="shark-image-meta">
+                                    <small>📸 Creator: {img.creator} | {img.license}</small>
+                                </p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No media available.</p>
+                    )}
                 </div>
+
             </div>
         </div>
     );
