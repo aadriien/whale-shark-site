@@ -24,7 +24,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
         : sharks;
 
 
-        filteredSharks.forEach(shark => {
+    filteredSharks.forEach(shark => {
         const continents = extractContinents(shark.continent); 
 
         // Handle sharks associated with multiple continents
