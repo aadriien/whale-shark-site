@@ -85,14 +85,17 @@ function cleanLifestage(obj) {
 export function extractContinents(continent) {
     if (!continent) return [];
     
-    return continent
+    const continents = continent
         .split(",")
-        .map(c => c.trim().replace(/\s*\(.*?\)/, "")) // Remove date like (2025)
+        .map(c => c.trim().replace(/\s*\(.*?\)/, "")) // Remove dates in parentheses
         .map(c => {
             const parts = c.split(" ");
             if (parts[0] === "North" || parts[0] === "South") return parts[0] + " America";
             return c;
         });
+        
+    // Removed duplicate continents before returning
+    return [...new Set(continents)];
 }
 
 

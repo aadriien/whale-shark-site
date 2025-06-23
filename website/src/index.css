@@ -695,8 +695,23 @@ button.currentlyPlaying {
     border: 1px solid #ccc;
     border-radius: 6px;
     padding: 0.5rem;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     box-sizing: border-box;
+}
+
+.media-toggle-container {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+}
+  
+.scrollable-sharks-list {
+    padding-top: 0.5rem;
+    max-height: calc(100% - 3rem); /* can adjust to approx height of toggle */
+    overflow-y: auto;
 }
 
 .shark-selector-item {
