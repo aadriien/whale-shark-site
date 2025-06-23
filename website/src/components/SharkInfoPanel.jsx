@@ -86,18 +86,6 @@ const SharkInfoPanel = ({ shark }) => {
                     </ul>
                 </div>
 
-                {/* <div className="shark-images-container">
-                    <h3>Media Gallery</h3>
-                    {parseImageField(shark.image).map((img, idx) => (
-                        <div key={idx} className="shark-image-card">
-                            <img src={img.url} alt={`Shark image ${idx}`} />
-                            <p className="shark-image-meta">
-                                <small>📸 Creator: {img.creator} | {img.license}</small>
-                            </p>
-                        </div>
-                    ))}
-                </div> */}
-
                 <div className="shark-images-container">
                     <h3>Media Gallery</h3>
                     {images.length > 0 ? (

@@ -695,7 +695,6 @@ button.currentlyPlaying {
     border: 1px solid #ccc;
     border-radius: 6px;
     padding: 0.5rem;
-    /* overflow-y: scroll; */
     box-sizing: border-box;
 }
 
