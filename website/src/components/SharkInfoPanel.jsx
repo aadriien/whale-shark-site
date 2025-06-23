@@ -1,6 +1,10 @@
+import React, { useState } from "react";
+
 import { getDate, parseSpecificRegion, parseRemarks, parseImageField } from "../utils/DataUtils.js";
 
 const SharkInfoPanel = ({ shark }) => {
+    const [expandedImage, setExpandedImage] = useState(null);
+
     if (!shark) {
         return (
             <div className="shark-info-panel">
@@ -91,7 +95,12 @@ const SharkInfoPanel = ({ shark }) => {
                     {images.length > 0 ? (
                         images.map((img, idx) => (
                             <div key={idx} className="shark-image-card">
-                                <img src={img.url} alt={`Shark image ${idx}`} />
+                                <img 
+                                    src={img.url} 
+                                    alt={`Shark image ${idx}`} 
+                                    onClick={() => setExpandedImage(img)}
+                                    style={{ cursor: "pointer" }}
+                                />
                                 <p className="shark-image-meta">
                                     <small>📸 Creator: {img.creator} | {img.license}</small>
                                 </p>
@@ -103,6 +112,19 @@ const SharkInfoPanel = ({ shark }) => {
                 </div>
 
             </div>
+
+            {expandedImage && (
+                <div className="image-overlay" onClick={() => setExpandedImage(null)}>
+                    <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
+                        <img src={expandedImage.url} alt="Expanded shark" />
+                        <p className="overlay-meta">
+                            📸 Creator: {expandedImage.creator} | {expandedImage.license}
+                        </p>
+                        <button className="close-button" onClick={() => setExpandedImage(null)}>X</button>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
