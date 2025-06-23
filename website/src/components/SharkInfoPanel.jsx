@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { getDate, parseSpecificRegion, parseRemarks, parseImageField } from "../utils/DataUtils.js";
 
 const SharkInfoPanel = ({ shark }) => {
-    const [expandedImage, setExpandedImage] = useState(null);
+    const [expandedImageIndex, setExpandedImageIndex] = useState(null);
 
     if (!shark) {
         return (
@@ -98,7 +98,7 @@ const SharkInfoPanel = ({ shark }) => {
                                 <img 
                                     src={img.url} 
                                     alt={`Shark image ${idx}`} 
-                                    onClick={() => setExpandedImage(img)}
+                                    onClick={() => setExpandedImageIndex(idx)}
                                     style={{ cursor: "pointer" }}
                                 />
                                 <p className="shark-image-meta">
@@ -113,14 +113,36 @@ const SharkInfoPanel = ({ shark }) => {
 
             </div>
 
-            {expandedImage && (
-                <div className="image-overlay" onClick={() => setExpandedImage(null)}>
+            {expandedImageIndex !== null && (
+                <div className="image-overlay" onClick={() => setExpandedImageIndex(null)}>
                     <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
-                        <img src={expandedImage.url} alt="Expanded shark" />
-                        <p className="overlay-meta">
-                            📸 Creator: {expandedImage.creator} | {expandedImage.license}
-                        </p>
-                        <button className="close-button" onClick={() => setExpandedImage(null)}>X</button>
+                        <button
+                            className="carousel-button left"
+                            onClick={() => setExpandedImageIndex(prev => Math.max(prev - 1, 0))}
+                            disabled={expandedImageIndex === 0}
+                        >
+                            ‹
+                        </button>
+
+                        <div className="overlay-image-wrapper">
+                            <img 
+                                src={images[expandedImageIndex].url} 
+                                alt={`Expanded shark image ${expandedImageIndex}`} 
+                            />
+                            <p className="overlay-meta">
+                                📸 Creator: {images[expandedImageIndex].creator} | {images[expandedImageIndex].license}
+                            </p>
+                        </div>
+
+                        <button
+                            className="carousel-button right"
+                            onClick={() => setExpandedImageIndex(prev => Math.min(prev + 1, images.length - 1))}
+                            disabled={expandedImageIndex === images.length - 1}
+                        >
+                            ›
+                        </button>
+
+                        <button className="close-button" onClick={() => setExpandedImageIndex(null)}>X</button>
                     </div>
                 </div>
             )}
