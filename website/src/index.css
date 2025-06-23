@@ -723,6 +723,7 @@ button.currentlyPlaying {
     border-bottom: 1px solid #ddd;
     padding: 8px 10px;
     user-select: none;
+    overflow: hidden;
 }
 
 .shark-selector-item img.flag-icon {
