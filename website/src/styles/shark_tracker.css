@@ -1,0 +1,271 @@
+/* Basic card styling */
+.shark-card {
+    background-color: #f5fffd;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 90%; 
+    height: auto;
+    min-width: 200px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Individual card styling either on hover or click (toggle open / expand) */
+.shark-card:hover:not(.anyPlaying),
+.shark-card.expanded:not(.anyPlaying) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.shark-card.anyPlaying:hover,
+.shark-card.expanded.anyPlaying {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual card styling for shark whose story is actively playing */
+.shark-card.currentlyPlaying {
+    border: 2px solid black;
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Tags to label regions for a given shark's card view */
+.shark-country-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+    grid-column: span 2;
+    justify-content: center;
+}
+
+.country-tag {
+    background-color: #d3e1f5;
+    color: #0c5a50;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 0 0 1px #0c5a5079;
+    transition: background-color 0.2s ease;
+}
+
+.country-tag:hover {
+    background-color: #b2ebf2;
+}
+
+  
+/* Styling for image placeholder */
+.shark-card-image {
+    width: 100%;
+    height: 95px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+  
+.shark-card-image span {
+    font-size: 16px;
+    color: #888;
+}
+
+.shark-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+/* If some story is playing, but not THIS shark, then grayscale image */
+.shark-card.anyPlaying:not(.currentlyPlaying) .shark-card-image img {
+    filter: grayscale(100%) brightness(80%);
+    opacity: 0.6;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+  
+.shark-card-content {
+    margin-bottom: 0px;
+}
+
+
+.shark-card-details {
+    background: #f9fbfd; 
+    padding: 0; 
+    border-radius: 5px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+    margin-top: 16px;
+    font-size: 13px; 
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 7px; 
+    max-height: 300px;
+    overflow-y: auto;
+    transition: box-shadow 0.3s ease;
+}
+
+.shark-card-details:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Each category (div section) gets its own color band with left strip */
+.shark-id {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 8px 12px;
+    background-color: #dbd9f7;
+    border-left: 6px solid #7a7de0; 
+}
+
+.shark-nicknames {
+    padding: 8px 12px;
+    background-color: #e0f7fa;
+    border-left: 6px solid #2093a2; 
+}
+
+.shark-traits {
+    padding: 8px 12px;
+    background-color: #e3f4cf;
+    border-left: 6px solid #66bb6a; 
+}
+
+.shark-records {
+    padding: 8px 12px;
+    background-color: #fefcd5;
+    border-left: 6px solid #f2d251; 
+}
+
+.shark-regions {
+    padding: 8px 12px;
+    background-color: #fff3e0;
+    border-left: 6px solid #ff7043; 
+}
+
+
+/* Category Headers */
+.shark-nicknames h3,
+.shark-traits h3,
+.shark-records h3,
+.shark-observation h3,
+.shark-regions h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #25417d;
+    margin-bottom: 6px; 
+}
+
+/* Category Items */
+.shark-nicknames p,
+.shark-traits p,
+.shark-records p,
+.shark-observation p,
+.shark-regions p {
+    font-size: 13px; 
+    color: #444;
+    margin: 0; 
+}
+
+/* Center text vertically & align to left */
+.shark-nicknames p,
+.shark-traits p,
+.shark-records p,
+.shark-observation p,
+.shark-regions p,
+.shark-nicknames h3,
+.shark-traits h3,
+.shark-records h3,
+.shark-observation h3,
+.shark-regions h3 {
+    text-align: left; 
+    margin: 0;
+    margin-bottom: 8px;
+} 
+
+/* Timeline list styling for regions by date */
+.shark-regions ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.timeline-list {
+    padding-left: 30px; 
+    position: relative;
+}
+
+.timeline-item {
+    padding-left: 25px; 
+    position: relative;
+    text-align: left;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Timeline circle */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    background-color: #eaa089; 
+    border-radius: 50%; 
+    border: 2px solid #fff; 
+}
+
+/* Vertical line connecting items via circles */
+.timeline-list::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #eaa089; 
+}
+
+
+/* Styling for grid layout */
+.shark-grid {
+    display: grid; 
+    gap: 16px; 
+    padding: 0 16px;
+    justify-items: center; 
+    align-items: start; 
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
+
+    /* Automatically adjusts columns based on the screen size */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+  
+  
+/* Medium screens (tablet) */
+@media (min-width: 640px) {
+    .shark-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+}
+  
+/* Large screens (desktop) */
+@media (min-width: 1024px) {
+    .shark-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+

@@ -1,0 +1,369 @@
+.globe-views-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; 
+    justify-content: center; 
+    height: 30rem;
+    width: 100%;
+    gap: 1rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+  
+.info-sidebar,
+.shark-selector {
+    flex: 0 0 16rem; 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.shark-selector button {
+    font-size: 18px;
+    border: 2px solid #000;
+    width: 100%;
+    height: 4rem;
+    margin-bottom: 1rem;
+}
+
+.shark-selector button:hover {
+    font-weight: bold;
+    background-color: #a8e8ea;
+}
+
+.shark-selector button.active,
+.shark-selector button:focus {
+    font-weight: 600;
+    color: white;
+    background-color: #7e58f0;
+}
+
+.all-sharks-button-text {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    transform-origin: center;
+}
+
+.shark-selector button:hover .all-sharks-button-text,
+.shark-selector button.active .all-sharks-button-text,
+.shark-selector button:focus .all-sharks-button-text {
+    transform: scale(1.1);
+}
+
+.continent-dropdown {
+    margin-bottom: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f2f8fc;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.continent-header {
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #e1effc;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+
+    display: flex;
+    align-items: center;
+    min-height: 1.9rem; 
+    line-height: 1.1;
+    flex-shrink: 0; 
+}
+
+.continent-header:hover {
+    background-color: #d4e8f8;
+}
+
+.continent-shark-list {
+    max-height: 200px; 
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+.shark-selector-list {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.media-toggle-container {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+}
+  
+.scrollable-sharks-list {
+    padding-top: 0.5rem;
+    max-height: calc(100% - 3rem); /* can adjust to approx height of toggle */
+    overflow-y: auto;
+}
+
+.shark-selector-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #000;
+    height: 1.5rem;
+    border-radius: 3px;
+    border-bottom: 1px solid #ddd;
+    padding: 8px 10px;
+    user-select: none;
+    overflow: hidden;
+}
+
+.shark-selector-item img.flag-icon {
+    width: 24px;
+    height: 18px;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+.flag-and-code {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.flag-icon {
+    width: 24px;
+    height: 18px;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+.country-code {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.shark-selector-item:hover:not(.selected) {
+    cursor: pointer;
+    background-color: #a8e8ea;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.shark-selector-item.selected {
+    font-weight: 600;
+    color: white;
+    background-color: #479bf5;
+}
+
+
+.shark-info-panel {
+    height: 100%;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow-y: scroll;
+}
+
+.shark-info-panel,
+.shark-info-panel * {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.shark-info-panel h2 {
+    font-weight: bold;
+    margin: 0.8rem;
+}
+
+.shark-panel-details {
+    display: flex;
+    flex-direction: column;
+    background: #f9fbfd; 
+    border-radius: 5px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+    color: #333;
+    gap: 7px; 
+    overflow-y: auto;
+    transition: box-shadow 0.3s ease;
+}
+
+.shark-panel-details .timeline-header,
+.shark-panel-details .timeline-date {
+    font-size: 16px;
+    margin-bottom: 0.3rem;
+}
+
+.shark-panel-details .timeline-label {
+    font-weight: 600;
+    color: #25417d;
+}
+
+.timeline-item > div {
+    margin-bottom: 0.5rem;
+}
+
+.timeline-item > div:last-child {
+    /* Avoid extra spacing at the end */
+    margin-bottom: 0; 
+}
+
+.shark-images-container {
+    display: flex;
+    flex-direction: column;
+    border-top: 3px solid #000;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.shark-images-container h3 {
+    font-weight: bold;
+    margin-top: 0.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.shark-image-card {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.shark-image-card img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.shark-image-meta {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.2rem;
+    margin-bottom: 0.1rem;
+}
+
+
+.image-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 1rem;
+}
+  
+.overlay-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: hidden;
+}
+  
+.overlay-image-wrapper {
+    text-align: center;
+    max-height: 80vh;
+    position: relative; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.overlay-image-wrapper img {
+    max-height: 70vh;
+    max-width: 80vw;
+    object-fit: contain;
+    border-radius: 6px 6px 0 0;
+    display: block;
+}
+  
+/* White slip for credits background below image */
+.overlay-meta {
+    background: white;
+    width: 100%;
+    padding: 0.3rem 0.5rem;
+    color: #444;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    user-select: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-top: 0; 
+}
+  
+/* Carousel buttons to move between shark's images */
+.carousel-button {
+    font-size: 3rem;
+    color: #fff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0;
+
+    /* To avoid image shift, reserve space or overlay absolutely */
+    position: relative;
+    z-index: 10;
+}
+
+.carousel-button:hover {
+    background-color: #666 !important;
+}
+  
+/* Disable carousel opacity & cursor if no other images */
+.carousel-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+  
+.close-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 2rem;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+  
+    /* Center X perfectly */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    cursor: pointer;
+    line-height: normal; /* reset line height */
+    padding: 0;
+    user-select: none;
+}
+
+.close-button:hover {
+    background-color: #666 !important;
+}
+
+

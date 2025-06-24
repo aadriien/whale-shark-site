@@ -1,0 +1,29 @@
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+/* Style for each card */
+.data-grid > * {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    /* padding: 1rem;
+    height: 100%;
+    min-height: 400px; */
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    width: 100%;
+    aspect-ratio: 1; /* Make the card square */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
