@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar.jsx";
 
 const Home = lazy(() => import("./pages/Home.jsx"));
+const About = lazy(() => import("./pages/About.jsx"));
 const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
 const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
 const DataVisuals = lazy(() => import("./pages/DataVisuals.jsx"));
@@ -20,6 +21,8 @@ function App() {
                     {/* Redirect root to /home */}
                     <Route path="/" element={<Navigate to="/home" />} />  
                     <Route path="/home" element={<Home />} />
+
+                    <Route path="/about" element={<About />} />
 
                     <Route path="/globeviews" element={<GlobeViews />} />
                     <Route path="/sharktracker" element={<SharkTracker />} />

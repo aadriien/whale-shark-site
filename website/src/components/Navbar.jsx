@@ -19,6 +19,7 @@ function Navbar() {
         }}>
             {/* Links */}
             <Link to="/home" style={getLinkStyle(location.pathname, "/home")}>Home</Link>
+            <Link to="/about" style={getLinkStyle(location.pathname, "/about")}>About</Link>
             <Link to="/globeviews" style={getLinkStyle(location.pathname, "/globeviews")}>Globe Views</Link>
             <Link to="/sharktracker" style={getLinkStyle(location.pathname, "/sharktracker")}>Shark Tracker</Link>
             <Link to="/datavisuals" style={getLinkStyle(location.pathname, "/datavisuals")}>Data Visuals</Link>
