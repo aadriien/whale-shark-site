@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import BarChart from "./charts/BarChart.jsx";
-import calendarStatsGBIF from "../assets/data/json/gbif_calendar_stats.json"; 
+import BarChart from "../charts/BarChart.jsx";
+import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json"; 
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

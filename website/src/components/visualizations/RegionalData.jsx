@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import * as d3 from "d3";
 
-import RadialHeatmap from "./charts/RadialHeatmap.jsx";
+import RadialHeatmap from "../charts/RadialHeatmap.jsx";
 
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 

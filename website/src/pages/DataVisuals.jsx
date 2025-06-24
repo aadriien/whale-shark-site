@@ -1,6 +1,6 @@
-import CalendarData from "../components/CalendarData.jsx";
-import ContinentData from "../components/ContinentData.jsx";
-import CountryData from "../components/CountryData.jsx";
+import CalendarData from "../components/visualizations/CalendarData.jsx";
+import ContinentData from "../components/visualizations/ContinentData.jsx";
+import CountryData from "../components/visualizations/CountryData.jsx";
 import DataGrid from "../components/DataGrid.jsx";
 
 function DataVisuals() {

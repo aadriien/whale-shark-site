@@ -1,10 +1,10 @@
 import GBIFRegionOccurrences from "./RegionalData.jsx";
-import countryStatsGBIF from "../assets/data/json/gbif_country_stats.json";
+import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";
   
 
-const GBIFCountryOccurrences = () => {
+const GBIFContinentOccurrences = () => {
     return (
-        <div className="country-occurrence-card" 
+        <div className="continent-occurrence-card" 
             style={{ 
                 width: "100%", 
                 height: "100%",
@@ -14,12 +14,12 @@ const GBIFCountryOccurrences = () => {
             }}
         >
             <GBIFRegionOccurrences 
-                regionData={countryStatsGBIF} 
-                metric={"country"} 
+                regionData={continentStatsGBIF} 
+                metric={"continent"} 
             />
         </div>
     );
 };
 
-export default GBIFCountryOccurrences;
+export default GBIFContinentOccurrences;
 
