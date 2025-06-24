@@ -1,0 +1,133 @@
+/* Hero intro section */
+.hero-intro {
+    width: 100%;
+}
+
+.hero {
+    height: 60vh;
+    background: url('/images/whale-shark-hero.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.hero-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+}
+
+.intro {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.intro-text {
+    flex: 1;
+}
+
+.intro-image {
+    flex: 1;
+    text-align: center;
+}
+
+.intro-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (min-width: 768px) {
+    .intro {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+
+
+/* Habitat map section */
+.habitat-map {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.map-container img {
+    max-width: 100%;
+    height: auto;
+    margin: 2rem 0;
+}
+
+
+
+/* Conservation status section */
+.conservation-status {
+    padding: 3rem 1.5rem;
+    background-color: #ffeaea;
+    text-align: center;
+}
+
+
+
+/* Fun facts section */
+.fun-facts {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.facts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.fact-card {
+    padding: 1rem;
+    background: #e0f7ff;
+    border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+    .facts-list {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .fact-card {
+        width: 250px;
+    }
+}  
+
+
+
+/* FAQ accordion section */
+.faq-accordion {
+    padding: 3rem 1.5rem;
+}
+
+.faq-item {
+    margin-bottom: 1rem;
+}
+
+.faq-item button {
+    background: none;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+}
+
+.faq-item p {
+    margin-top: 0.5rem;
+}
+
+
+
+
+
