@@ -1,11 +1,16 @@
 import React, { useState, useMemo } from "react";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
+import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";
+import countryStatsGBIF from "../../assets/data/json/gbif_country_stats.json";
+import publishingCountryStatsGBIF from "../../assets/data/json/gbif_publishingCountry_stats.json";
 
 
 const datasets = {
     "calendar": calendarStatsGBIF,
-    
+    "continent": continentStatsGBIF,
+    "country": countryStatsGBIF,
+    "publishingCountry": publishingCountryStatsGBIF
 }
 
 

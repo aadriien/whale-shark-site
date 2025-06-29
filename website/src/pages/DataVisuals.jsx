@@ -23,9 +23,6 @@ function DataVisuals() {
         }}>
             <h1>DataVisuals Page</h1>
 
-            {/* Rendering GBIFContinentOccurrences component */}
-            {/* <ContinentData /> */}
-
             <DataGrid>
                 <div>
                     <DataOverview 
@@ -39,9 +36,46 @@ function DataVisuals() {
                     />
                 </div>
 
+                <div>
+                    <DataOverview 
+                        dataset="continent" 
+                        filterField="continent" 
+                        displayFields={[
+                            { label: "Total Occurrences", field: "Total Occurrences" },
+                            { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
+                            { label: "Top 3 Publishing Countries", field: "Top 3 Publishing Countries" }
+                        ]}
+                    />
+                </div>
+
+                <div>
+                    <DataOverview 
+                        dataset="country" 
+                        filterField="country" 
+                        displayFields={[
+                            { label: "Total Occurrences", field: "Total Occurrences" },
+                            { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
+                            { label: "Top 3 Publishing Countries", field: "Top 3 Publishing Countries" }
+                        ]}
+                    />
+                </div>
+
+                <div>
+                    <DataOverview 
+                        dataset="publishingCountry" 
+                        filterField="publishingCountry" 
+                        displayFields={[
+                            { label: "Total Occurrences", field: "Total Occurrences" },
+                            { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
+                            { label: "Top 3 Countries Visited", field: "Top 3 Countries Visited" }
+                        ]}
+                    />
+                </div>
+
                 <div><CalendarData variant="bar" /></div>
                 <div><CalendarData variant="heatmap" /></div>
                 <div><SexLifeStageData /></div>
+
                 <div><CountryData /></div>
                 <div><PublishingCountryData /></div>
                 <div><ContinentData /></div>
