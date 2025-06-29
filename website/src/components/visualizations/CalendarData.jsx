@@ -1,41 +1,146 @@
 import React, { useState, useMemo } from "react";
 import BarChart from "../charts/BarChart.jsx";
-import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json"; 
+import Heatmap from "../charts/Heatmap.jsx";
+import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-
+    
 const reshapeYearData = (rawData) => {
     const byYear = {};
-    rawData.forEach(row => {
+    rawData.forEach((row) => {
         const year = row["year"];
-        byYear[year] = months.map(month => ({
+        byYear[year] = months.map((month) => ({
             label: month,
-            value: +row[month] || 0
+            value: +row[month] || 0,
         }));
     });
-    return byYear; // { 2025: [...], 2024: [...] }
+    return byYear;
 };
-
-const GBIFCalendarOccurrences = () => {
+    
+const flattenToHeatmapFormat = (rawData) => {
+    const heatmapData = [];
+    rawData.forEach((row) => {
+        const year = row["year"];
+        months.forEach((month) => {
+            heatmapData.push({
+                year: year,
+                month: month,
+                value: +row[month] || 0,
+            });
+        });
+    });
+    return heatmapData;
+};
+    
+const getDecadeTickFormatter = (yearsArray) => {
+    const decadesShown = new Set();
+    
+    return (year) => {
+        const yNum = +year;
+        const decade = Math.floor(yNum / 10) * 10;
+        if (!decadesShown.has(decade)) {
+            decadesShown.add(decade);
+            return `${decade}`;
+        }
+        return "";
+    };
+};
+    
+const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
     const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);
     const years = useMemo(() => Object.keys(reshaped).sort((a, b) => b - a), [reshaped]);
     const [selectedYear, setSelectedYear] = useState(years[0] || "");
     
+    const heatmapData = useMemo(() => flattenToHeatmapFormat(calendarStatsGBIF), []);
+    
     const monthlyData = useMemo(() => {
         return reshaped[selectedYear] || [];
     }, [selectedYear, reshaped]);
-    
+        
+    if (variant === "heatmap") {
+        const [selectedDecade, setSelectedDecade] = useState("All");
+        
+        const decadeGroups = useMemo(() => {
+            const byDecade = {};
+
+            // Organize heatmap display by decade (group years)
+            years.forEach((year) => {
+                const decade = Math.floor(year / 10) * 10;
+                const key = `${decade}s`;
+
+                if (!byDecade[key]) byDecade[key] = [];
+                byDecade[key].push(year);
+            });
+            return byDecade;
+        }, [years]);
+        
+        const filteredHeatmapData = useMemo(() => {
+            if (selectedDecade === "All") return heatmapData;
+
+            const decadeYears = decadeGroups[selectedDecade] || [];
+            return heatmapData.filter((d) => decadeYears.includes(String(d.year)));
+        }, [selectedDecade, heatmapData, decadeGroups]);
+        
+        const yTickFormatter =
+            selectedDecade === "All"
+            ? getDecadeTickFormatter(filteredHeatmapData.map((d) => +d.year))
+            : undefined;
+        
+        return (
+            <div className="decades-heatmap"
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    minWidth: "300px",
+                    minHeight: "300px",
+                    padding: "1rem 0.5rem",
+                }}
+            >
+                <label htmlFor="heatmap-decade-select" style={{ display: "block" }}>
+                    Select a <strong>decade</strong>:
+                </label>
+                <select
+                    id="heatmap-decade-select"
+                    value={selectedDecade}
+                    onChange={(e) => setSelectedDecade(e.target.value)}
+                >
+                    <option value="All">All Years</option>
+                    {Object.keys(decadeGroups)
+                        // Ensure chronological display with most recent at top
+                        .sort((a, b) => b.localeCompare(a))
+                        .map((decade) => (
+                            <option key={decade} value={decade}>
+                                {decade}
+                            </option>
+                    ))}
+                </select>
+                    
+                <Heatmap
+                    data={filteredHeatmapData}
+                    title={
+                        selectedDecade === "All"
+                        ? "Monthly Records Heatmap (All Years)"
+                        : `Monthly Records Heatmap — ${selectedDecade}`
+                    }
+                    yTickFormatter={yTickFormatter}
+                />
+            </div>
+        );
+    }
+            
+    // Default bar chart mode
     return (
-        <div className="yearly-bar-chart" 
-            style={{ 
-                width: "100%", 
-                height: "100%", 
+        <div
+            className="yearly-bar-chart"
+            style={{
+                width: "100%",
+                height: "100%",
                 minWidth: "300px",
                 minHeight: "300px",
-                padding: "1rem 0.5rem", 
-            }}>
+                padding: "1rem 0.5rem",
+            }}
+        >
             <label htmlFor="year-select" style={{ display: "block" }}>
                 Select a <span style={{ fontWeight: "bold" }}>year</span>:
             </label>
@@ -51,7 +156,7 @@ const GBIFCalendarOccurrences = () => {
                     </option>
                 ))}
             </select>
-                
+            
             {monthlyData.length > 0 ? (
                 <BarChart
                     data={monthlyData}
@@ -67,5 +172,3 @@ const GBIFCalendarOccurrences = () => {
 };
 
 export default GBIFCalendarOccurrences;
-
-                
