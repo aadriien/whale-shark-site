@@ -47,8 +47,8 @@ const BarChart = ({
             .range([innerHeight, 0]);
 
         const barColorScale = d3.scaleSequential()
-            .domain([0, data.length - 1])  
-            .interpolator(d3.interpolateSpectral);  
+            .domain([0, d3.max(data, d => d.value) || 0])  
+            .interpolator(d3.interpolateYlGnBu);  
         
         const g = svg.append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -72,7 +72,7 @@ const BarChart = ({
             .attr("y", d => y(d.value))
             .attr("width", x.bandwidth())
             .attr("height", d => innerHeight - y(d.value))
-            .attr("fill", (d, i) => barColorScale(i));
+            .attr("fill", d => barColorScale(d.value));
         
         // Title at top of chart
         svg.append("text")

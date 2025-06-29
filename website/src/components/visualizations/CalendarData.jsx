@@ -50,7 +50,7 @@ const getDecadeTickFormatter = (yearsArray) => {
 const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
     const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);
     const years = useMemo(() => Object.keys(reshaped).sort((a, b) => b - a), [reshaped]);
-    const [selectedYear, setSelectedYear] = useState(years[0] || "");
+    const [selectedYear, setSelectedYear] = useState("");
     
     const heatmapData = useMemo(() => flattenToHeatmapFormat(calendarStatsGBIF), []);
     
