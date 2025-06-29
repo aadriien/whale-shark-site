@@ -70,47 +70,45 @@ const RadialHeatmap = ({
             .domain([0, segments.length - 1])  
             .interpolator(d3.interpolateSpectral);  
 
-        // Draw cells (segments in heatmap)
-        let currentAngle = 0;
-
-        data.forEach(d => {
-            const segment = d[segmentField];
-            const ring = d[ringField];
-            const value = +d[valueField] || 0;
-            
-            // Calculate dimensions
+        // Draw each ring segment independently by portion of total
+        rings.forEach((ring) => {
+            const ringData = data.filter(d => d[ringField] === ring);
             const innerRad = radiusScale(ring);
             const outerRad = innerRad + radiusScale.bandwidth();
 
-            if (value <= 0) return;
+            const ringTotal = d3.sum(ringData, d => d[valueField]);
+            let currentAngle = 0;
 
-            // Calculate angular width for segment based on total
-            const angleWidth = Math.max((value / total) * 2 * Math.PI, 0.5);
+            ringData.forEach((d) => {
+                const value = +d[valueField] || 0;
+                if (value <= 0) return;
 
-            const startAngle = currentAngle;
-            const endAngle = currentAngle + angleWidth;
-            currentAngle = endAngle; 
+                const angleWidth = (value / ringTotal) * 2 * Math.PI;
 
-            if (startAngle === undefined || innerRad === undefined) return;
-            
-            // Create arc
-            const arc = d3.arc()
-                .innerRadius(innerRad)
-                .outerRadius(outerRad)
-                .startAngle(startAngle)
-                .endAngle(endAngle);
-            
-            const group = chartGroup.append("g");
+                // Allocate proportional space for each ring segment
+                const startAngle = currentAngle;
+                const endAngle = currentAngle + angleWidth;
 
-            group.append("path")
-                .attr("d", arc)
-                .attr("fill", segmentColorScale(segments.indexOf(segment)))
-                .attr("stroke", "#fff")
-                .attr("stroke-width", 0.5);
+                currentAngle = endAngle;
 
-            // This label only appears on hover
-            group.append("title")
-                .text(`${segment}: ${value}`);
+                const arc = d3.arc()
+                    .innerRadius(innerRad)
+                    .outerRadius(outerRad)
+                    .startAngle(startAngle)
+                    .endAngle(endAngle);
+
+                const segment = d[segmentField];
+
+                const group = chartGroup.append("g");
+                group.append("path")
+                    .attr("d", arc)
+                    .attr("fill", segmentColorScale(segments.indexOf(segment)))
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 0.5);
+
+                group.append("title")
+                    .text(`${ring} • ${segment}: ${value.toFixed(2)}`);
+            });
         });
         
         // Title at top of chart

@@ -96,7 +96,7 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
                 }}
             >
                 <label htmlFor="heatmap-decade-select" style={{ display: "block" }}>
-                    Select a <strong>decade</strong>:
+                    Select a <span style={{ fontWeight: "bold" }}>decade</span>:
                 </label>
                 <select
                     id="heatmap-decade-select"
