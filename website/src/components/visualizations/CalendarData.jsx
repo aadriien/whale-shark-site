@@ -59,7 +59,7 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
     }, [selectedYear, reshaped]);
         
     if (variant === "heatmap") {
-        const [selectedDecade, setSelectedDecade] = useState("All");
+        const [selectedDecade, setSelectedDecade] = useState("");
         
         const decadeGroups = useMemo(() => {
             const byDecade = {};
@@ -82,11 +82,6 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
             return heatmapData.filter((d) => decadeYears.includes(String(d.year)));
         }, [selectedDecade, heatmapData, decadeGroups]);
         
-        const yTickFormatter =
-            selectedDecade === "All"
-            ? getDecadeTickFormatter(filteredHeatmapData.map((d) => +d.year))
-            : undefined;
-        
         return (
             <div className="decades-heatmap"
                 style={{
@@ -105,6 +100,7 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
                     value={selectedDecade}
                     onChange={(e) => setSelectedDecade(e.target.value)}
                 >
+                    <option value="">-- Choose a decade --</option>
                     <option value="All">All Years</option>
                     {Object.keys(decadeGroups)
                         // Ensure chronological display with most recent at top
@@ -115,16 +111,32 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
                             </option>
                     ))}
                 </select>
-                    
-                <Heatmap
-                    data={filteredHeatmapData}
-                    title={
-                        selectedDecade === "All"
-                        ? "Monthly Records Heatmap (All Years)"
-                        : `Monthly Records Heatmap — ${selectedDecade}`
-                    }
-                    yTickFormatter={yTickFormatter}
-                />
+
+                {(selectedDecade && (selectedDecade === "All" || decadeGroups[selectedDecade])) ? (
+                    <Heatmap
+                        data={
+                            selectedDecade === "All"
+                            ? heatmapData
+                            : heatmapData.filter(
+                                d => decadeGroups[selectedDecade].includes(String(d.year))
+                            )
+                        }
+                        title={
+                            selectedDecade === "All"
+                            ? "Monthly Records Heatmap (All Years)"
+                            : `Monthly Records Heatmap — ${selectedDecade}`
+                        }
+                        yTickFormatter={
+                            selectedDecade === "All"
+                            ? getDecadeTickFormatter(heatmapData.map(d => +d.year))
+                            : undefined
+                        }
+                    />
+                ) : (
+                    <p style={{ textAlign: "center" }}>
+                        Select a decade to view heatmap data.
+                    </p>
+                )}
             </div>
         );
     }
