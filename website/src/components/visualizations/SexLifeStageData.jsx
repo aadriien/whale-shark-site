@@ -4,14 +4,14 @@ import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
 // Define Sex & Life Stage keys
 const sexOptions = ["Sex: Female", "Sex: Male", "Sex: Unknown"];
-const lifeStageOptions = [
-    "Life Stage: Adult",
-    "Life Stage: Immature",
-    "Life Stage: Juvenile",
-    "Life Stage: Mature",
-    "Life Stage: Subadult",
-    "Life Stage: Unknown"
-];
+const lifeStageOptions = {
+    "Life Stage: Adult": "Adl",
+    "Life Stage: Immature": "Imm",
+    "Life Stage: Juvenile": "Juv",
+    "Life Stage: Mature": "Mat",
+    "Life Stage: Subadult": "Sub",
+    "Life Stage: Unknown": "Unk"
+};
 
 
 const reshapeSexLifeStageData = (rawData, selectedYear) => {
@@ -19,11 +19,11 @@ const reshapeSexLifeStageData = (rawData, selectedYear) => {
     if (!row) return { ringsData: [], pieData: [] };
     
     // Outer ring data: ring = "Life Stage", segments = each life stage category
-    const ringsData = lifeStageOptions
-        .map(lsKey => ({
-            lifeStageCategory: "Life Stage",                     // ring name
-            lifeStageSegment: lsKey.replace("Life Stage: ", ""), // segment name
-            lifeStageCount: +row[lsKey] || 0                     // value
+    const ringsData = Object.entries(lifeStageOptions)
+        .map(([fullKey, shortLabel]) => ({
+            lifeStageCategory: "Life Stage",       // constant ring name
+            lifeStageSegment: shortLabel,          // truncated segment label
+            lifeStageCount: +row[fullKey] || 0     // value from raw data
         }))
         .filter(d => d.lifeStageCount > 0);
     

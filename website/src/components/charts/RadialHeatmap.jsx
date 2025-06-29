@@ -163,7 +163,7 @@ const RadialHeatmap = ({
 
         // Create external legend to map segment colors (matches segmentField values)
         const legendGroup = svg.append("g")
-            .attr("transform", `translate(${2 * outerRadius + 20}, ${height / 2 - legendHeight / 2})`);
+            .attr("transform", `translate(${2 * outerRadius + 15}, ${height / 2 - legendHeight / 2})`);
             // .attr("transform", `translate(${width / 2 + (outerRadius + 20)}, ${height / 2 - legendHeight / 2})`);
 
         segments.forEach((segment, i) => {
