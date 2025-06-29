@@ -10,6 +10,7 @@ const reshapeYearData = (rawData) => {
     const byYear = {};
     rawData.forEach((row) => {
         const year = row["year"];
+        
         byYear[year] = months.map((month) => ({
             label: month,
             value: +row[month] || 0,
@@ -22,6 +23,7 @@ const flattenToHeatmapFormat = (rawData) => {
     const heatmapData = [];
     rawData.forEach((row) => {
         const year = row["year"];
+
         months.forEach((month) => {
             heatmapData.push({
                 year: year,
@@ -39,6 +41,7 @@ const getDecadeTickFormatter = (yearsArray) => {
     return (year) => {
         const yNum = +year;
         const decade = Math.floor(yNum / 10) * 10;
+
         if (!decadesShown.has(decade)) {
             decadesShown.add(decade);
             return `${decade}`;

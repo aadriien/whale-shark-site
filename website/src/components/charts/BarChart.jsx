@@ -31,7 +31,7 @@ const BarChart = ({
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
-        const margin = { top: 40, right: 30, bottom: 60, left: 60 };
+        const margin = { top: 40, right: 5, bottom: 60, left: 30 };
 
         const innerWidth = width - margin.left - margin.right;
         const innerHeight = height - margin.top - margin.bottom;
