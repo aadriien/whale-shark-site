@@ -9,21 +9,16 @@ const BarChart = ({
     const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
 
     // Handle resizing of SVG container
-    const handleResize = () => {
-        if (svgRef.current) {
-            const { width, height } = svgRef.current.getBoundingClientRect();
-            setSvgDimensions({ width, height });
-        }
-    };
-
     useEffect(() => {
-        // Resize chart on window resize
+        const handleResize = () => {
+            if (svgRef.current) {
+                const { width, height } = svgRef.current.getBoundingClientRect();
+                setSvgDimensions({ width, height });
+            }
+        };
         window.addEventListener("resize", handleResize);
         handleResize();
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
     
     useEffect(() => {
@@ -87,7 +82,7 @@ const BarChart = ({
             .style("font-size", "14px")
             .attr("font-weight", "bold")
             .text(title);
-    }, [data, title]);
+    }, [data, title, svgDimensions]);
     
     return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 };
