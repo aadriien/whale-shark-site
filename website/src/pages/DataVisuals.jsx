@@ -1,5 +1,8 @@
+import DataOverview from "../components/charts/DataOverview.jsx";
+
 import CalendarData from "../components/visualizations/CalendarData.jsx";
 import SexLifeStageData from "../components/visualizations/SexLifeStageData.jsx";
+
 import ContinentData from "../components/visualizations/ContinentData.jsx";
 import CountryData from "../components/visualizations/CountryData.jsx";
 import PublishingCountryData from "../components/visualizations/PublishingCountryData.jsx";
@@ -24,6 +27,18 @@ function DataVisuals() {
             {/* <ContinentData /> */}
 
             <DataGrid>
+                <div>
+                    <DataOverview 
+                        dataset="calendar" 
+                        filterField="year" 
+                        displayFields={[
+                            { label: "Total Occurrences", field: "Total Occurrences" },
+                            { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
+                            { label: "Top 3 Publishing Countries", field: "Top 3 Publishing Countries" }
+                        ]}
+                    />
+                </div>
+
                 <div><CalendarData variant="bar" /></div>
                 <div><CalendarData variant="heatmap" /></div>
                 <div><SexLifeStageData /></div>
