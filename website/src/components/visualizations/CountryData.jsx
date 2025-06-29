@@ -4,7 +4,7 @@ import countryStatsGBIF from "../../assets/data/json/gbif_country_stats.json";
 
 const GBIFCountryOccurrences = () => {
     return (
-        <div className="country-occurrence-card" 
+        <div className="card-data-wrapper" 
             style={{ 
                 width: "100%", 
                 height: "100%",

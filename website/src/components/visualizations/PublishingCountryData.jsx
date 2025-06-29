@@ -4,7 +4,7 @@ import publishingCountryStatsGBIF from "../../assets/data/json/gbif_publishingCo
 
 const GBIFPublishingCountryOccurrences = () => {
     return (
-        <div className="publishing-country-occurrence-card" 
+        <div className="card-data-wrapper" 
             style={{ 
                 width: "100%", 
                 height: "100%",

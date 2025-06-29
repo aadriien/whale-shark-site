@@ -86,7 +86,7 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
         }, [selectedDecade, heatmapData, decadeGroups]);
         
         return (
-            <div className="decades-heatmap"
+            <div className="card-data-wrapper"
                 style={{
                     width: "100%",
                     height: "100%",
@@ -147,7 +147,7 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
     // Default bar chart mode
     return (
         <div
-            className="yearly-bar-chart"
+            className="card-data-wrapper"
             style={{
                 width: "100%",
                 height: "100%",

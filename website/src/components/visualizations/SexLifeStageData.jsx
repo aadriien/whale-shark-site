@@ -51,7 +51,7 @@ const GBIFSexLifeStageOccurrences = () => {
     );
     
     return (
-        <div className="yearly-sex-lifeStage-chart"
+        <div className="card-data-wrapper"
             style={{
                 width: "100%",
                 height: "100%",
