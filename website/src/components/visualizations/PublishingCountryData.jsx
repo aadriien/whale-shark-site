@@ -15,7 +15,7 @@ const GBIFPublishingCountryOccurrences = () => {
         >
             <GBIFRegionOccurrences 
                 regionData={publishingCountryStatsGBIF} 
-                metric={"publishing country"} 
+                metric={"publishingCountry"} 
             />
         </div>
     );

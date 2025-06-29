@@ -23,7 +23,8 @@ function DataVisuals() {
             {/* <ContinentData /> */}
 
             <DataGrid>
-                <div><CalendarData /></div>
+                <div><CalendarData variant="bar" /></div>
+                <div><CalendarData variant="heatmap" /></div>
                 <div><CountryData /></div>
                 <div><PublishingCountryData /></div>
                 <div><ContinentData /></div>
