@@ -28,10 +28,19 @@ const GBIFRegionAverages = ({ regionData, metric }) => {
         if (!regionRow) return [];
 
         // Map each avg column to { label, value }
-        return AVG_COLUMNS.map((col) => ({
-            label: col,
-            value: Number(regionRow[col]) || 0,
-        }));
+        return AVG_COLUMNS.map((col) => {
+            // Ensure returned data has time range extracted, e.g. 2010 - 2020
+            const match = col.match(/\((.*?)\)/);
+            let label = match ? match[1] : col;
+
+            if (label.toLowerCase() === "all") {
+                label = "all time";
+            }
+            return {
+                label: label,
+                value: Number(regionRow[col]) || 0,
+            };
+        });
     }, [selectedRegion]);
 
     return (
