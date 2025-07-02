@@ -63,6 +63,24 @@ def make_calendar_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return calendar_counts
 
 
+def make_year_total_df(occurrences_df: pd.DataFrame, groupby: list[str]) -> pd.DataFrame:
+    occurrences_df = occurrences_df.dropna(subset=["year"])
+    counts = occurrences_df.groupby(groupby + ["year"]).size().reset_index(name="count")
+
+    # Get str of total counts per year for given metric, e.g. "56 (2017), 39 (2021)"
+    year_counts = (
+        counts.sort_values("year")
+            .groupby(groupby)
+            .apply(lambda x: ", ".join(
+                f"{row['count']} ({int(row['year'])})" 
+                for _, row 
+                in x.iterrows()
+            ), include_groups=False)
+            .reset_index(name="occurrences (year)")
+    )
+    return year_counts
+
+
 def make_sex_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
@@ -382,9 +400,16 @@ def export_country_stats(occurrences_df: pd.DataFrame) -> None:
         groupby=["countryCode", "country"]
     )
 
+    # Get total occurrences per year for that country
+    country_year_summary = make_year_total_df(
+        occurrences_df=occurrences_df,
+        groupby=["countryCode", "country"]
+    )
+
     # Merge DataFrames
     country_stats = country_stats.merge(basisOfRecord_counts, on=["countryCode", "country"], how="left")
     country_stats = country_stats.merge(date_min_max, on=["countryCode", "country"], how="left")
+    country_stats = country_stats.merge(country_year_summary, on=["countryCode", "country"], how="left")
 
     country_stats = country_stats.sort_values(by="country", ascending=True).reset_index()
     export_to_csv(GBIF_COUNTRY_STATS_CSV, country_stats)
@@ -415,9 +440,16 @@ def export_continent_stats(occurrences_df: pd.DataFrame) -> None:
         groupby=["continent"]
     )
 
+    # Get total occurrences per year for that continent
+    continent_year_summary = make_year_total_df(
+        occurrences_df=occurrences_df,
+        groupby=["continent"]
+    )
+
     # Merge DataFrames
     continent_stats = continent_stats.merge(basisOfRecord_counts, on=["continent"], how="left")
     continent_stats = continent_stats.merge(date_min_max, on=["continent"], how="left")
+    continent_stats = continent_stats.merge(continent_year_summary, on=["continent"], how="left")
 
     continent_stats = continent_stats.sort_values(by="continent", ascending=True).reset_index()
     export_to_csv(GBIF_CONTINENT_STATS_CSV, continent_stats)
@@ -456,6 +488,12 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
         groupby=["publishingCountryCode", "publishingCountry"]
     )
 
+    # Get total occurrences per year for that publishingCountry
+    publishingCountry_year_summary = make_year_total_df(
+        occurrences_df=occurrences_df,
+        groupby=["publishingCountryCode", "publishingCountry"]
+    )
+
     # Merge DataFrames
     publishingCountry_stats = publishingCountry_stats.merge(
         basisOfRecord_counts, 
@@ -464,6 +502,12 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
     )
     publishingCountry_stats = publishingCountry_stats.merge(
         date_min_max, 
+        on=["publishingCountryCode", "publishingCountry"], 
+        how="left"
+    )
+
+    publishingCountry_stats = publishingCountry_stats.merge(
+        publishingCountry_year_summary, 
         on=["publishingCountryCode", "publishingCountry"], 
         how="left"
     )
