@@ -74,9 +74,12 @@ function DataVisuals() {
 
                 <div><CalendarData variant="bar" /></div>
                 <div><CalendarData variant="heatmap" /></div>
+                
                 <div><SexLifeStageData /></div>
 
-                <div><CountryData /></div>
+                <div><CountryData variant="region" /></div>
+                <div><CountryData variant="bar" /></div>
+
                 <div><PublishingCountryData /></div>
                 <div><ContinentData /></div>
             </DataGrid>
