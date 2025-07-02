@@ -80,8 +80,11 @@ function DataVisuals() {
                 <div><CountryData variant="radial-heatmap" /></div>
                 <div><CountryData variant="bar" /></div>
 
-                <div><PublishingCountryData /></div>
-                <div><ContinentData /></div>
+                <div><PublishingCountryData variant="radial-heatmap" /></div>
+                <div><PublishingCountryData variant="bar" /></div>
+
+                <div><ContinentData variant="radial-heatmap" /></div>
+                <div><ContinentData variant="bar" /></div>
             </DataGrid>
             
         </div>
