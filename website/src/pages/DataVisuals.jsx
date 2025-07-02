@@ -77,7 +77,7 @@ function DataVisuals() {
                 
                 <div><SexLifeStageData /></div>
 
-                <div><CountryData variant="region" /></div>
+                <div><CountryData variant="radial-heatmap" /></div>
                 <div><CountryData variant="bar" /></div>
 
                 <div><PublishingCountryData /></div>
