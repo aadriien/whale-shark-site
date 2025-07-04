@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&family=Lato:wght@400&display=swap');
+
+body {
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 0.02em;
+}
+
+h1, h2 {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+
+
 /* Reset default margins */
 * {
     margin: 0;
@@ -12,22 +27,45 @@ html, body {
 
 
 /* Shared section layout for alternating image x text */
+/* Used for intro & habitat sections */
 .section-layout {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
-    max-width: 1000px;
+    gap: 3rem;
+    max-width: 90vw;
     margin: 0 auto;
-    padding: 3rem 1.5rem;
+    padding: 3rem 1.5rem 1rem 1.5rem;
     text-align: center;
+}
+
+.section-layout > .section-text {
+    text-align: justify;
+    text-justify: inter-word;
+    flex: 1;
+}
+
+.section-text h2 {
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+}
+
+.section-text p {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.7;
+}
+
+.section-layout > .section-image {
+    flex: 1.2;  
 }
 
 .section-layout img {
     max-width: 100%;
     height: auto;
+    border: 1px solid #000;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 @media (min-width: 768px) {
@@ -40,9 +78,12 @@ html, body {
         flex-direction: row-reverse;
     }
 
-    .section-layout > .section-image,
-    .section-layout > .section-text {
-        flex: 1;
+    .section-layout.reverse .section-text {
+        text-align: right;
+    }
+
+    .section-layout > .section-text,
+    .section-layout > .section-image {
         padding: 0 1rem;
     }
 }
@@ -84,93 +125,12 @@ html, body {
 .hero-content h1 {
     font-size: 6rem; 
     font-weight: 700;
-    letter-spacing: 0.03em;
     margin-bottom: 0.7rem;
 }
 
 .hero-content p {
     font-size: 1.7rem;
     font-weight: 500;
-    letter-spacing: 0.01em;
-}
-
-
-.intro {
-    display: flex;
-    flex-direction: column;
-    padding: 3rem 1.5rem;
-    max-width: 1000px;
-    margin: 0 auto;
-    gap: 2rem;
-}
-
-.intro-text {
-    flex: 1;
-}
-
-.intro-image {
-    flex: 1;
-    text-align: center;
-}
-
-.intro-image img {
-    max-width: 100%;
-    height: auto;
-}
-
-@media (min-width: 768px) {
-    .intro {
-        flex-direction: row;
-        align-items: center;
-    }
-}
-
-
-
-/* Habitat map section */
-.habitat-map {
-    padding: 3rem 1.5rem;
-    text-align: center;
-}
-
-/* Layout for image + text side by side */
-.map-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.map-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.map-text {
-    padding: 1rem;
-}
-
-/* On wider screens, show them side by side */
-@media (min-width: 768px) {
-    .map-layout {
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .map-image,
-    .map-text {
-        flex: 1;
-    }
-
-    .map-image {
-        padding-right: 2rem;
-    }
-
-    .map-text {
-        text-align: left;
-    }
 }
 
 
