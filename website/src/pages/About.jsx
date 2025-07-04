@@ -15,7 +15,7 @@ function About() {
             height: "100vh",
             overflowY: "auto",
             textAlign: "center",
-            paddingTop: "60px"
+            paddingTop: "0px"
         }}>
             <h1>About Page</h1>
 

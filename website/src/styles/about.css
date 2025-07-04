@@ -1,22 +1,99 @@
-/* Hero intro section */
-.hero-intro {
-    width: 100%;
+/* Reset default margins */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.hero {
-    height: 60vh;
-    background: url('/images/whale-shark-hero.jpg') center/cover no-repeat;
+html, body {
+    height: 100%;
+}
+
+
+
+/* Shared section layout for alternating image x text */
+.section-layout {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: white;
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
     text-align: center;
 }
 
-.hero-content {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 2rem;
+.section-layout img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+@media (min-width: 768px) {
+    .section-layout {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .section-layout.reverse {
+        flex-direction: row-reverse;
+    }
+
+    .section-layout > .section-image,
+    .section-layout > .section-text {
+        flex: 1;
+        padding: 0 1rem;
+    }
+}
+
+
+
+/* Hero intro section */
+.hero-intro {
+    margin-top: 0;
+}
+
+.hero {
+    width: 100vw;
+    height: 40vh;
+    overflow-x: hidden;
+    display: flex;
+    color: white;
+    text-align: center;
+    justify-content: center;
+    align-items: flex-end; /* push text content to bottom */
+    padding-bottom: 0.1rem;
+    background: url('./whale-shark-hero.jpg') center/cover no-repeat;
+    border-bottom: 4px solid #42a9d1;
+}
+
+.hero-content {
+    padding: 2rem;
+
+}
+
+.hero-content h1, 
+.hero-content p {
+    color: #fffeab;
+    text-shadow:
+        3px 3px 6px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.hero-content h1 {
+    font-size: 6rem; 
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.7rem;
+}
+
+.hero-content p {
+    font-size: 1.7rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
 
 .intro {
     display: flex;
@@ -56,10 +133,44 @@
     text-align: center;
 }
 
-.map-container img {
+/* Layout for image + text side by side */
+.map-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.map-image img {
     max-width: 100%;
     height: auto;
-    margin: 2rem 0;
+    border-radius: 8px;
+}
+
+.map-text {
+    padding: 1rem;
+}
+
+/* On wider screens, show them side by side */
+@media (min-width: 768px) {
+    .map-layout {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .map-image,
+    .map-text {
+        flex: 1;
+    }
+
+    .map-image {
+        padding-right: 2rem;
+    }
+
+    .map-text {
+        text-align: left;
+    }
 }
 
 
