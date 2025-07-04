@@ -3,7 +3,14 @@
 POETRY = poetry
 VENV_DIR = .venv
 
-.PHONY: setup run fetch_data clean_data analyze_data zip_data format setup_website run_website
+.PHONY: setup run \
+		fetch_data clean_data analyze_data \
+		convert_csv_json zip_data \
+		generate_shark_names_images generate_shark_names generate_shark_images \
+		extract_tar process_annotations train_model \
+		get_new_shark_embeddings match_shark_embeddings \
+		format clean \
+		setup_website run_website deploy_website clean_website
 
 all: setup run zip_data
 
@@ -100,12 +107,16 @@ format:
 	@which black > /dev/null || (echo "black not found. Installing..."; $(POETRY) add black)
 	$(POETRY) run black src/
 
+clean:
+	@echo "Removing virtual environment..."
+	@rm -rf .venv
+
 
 # Setup frontend env (Vite + React) inside website folder
 setup_website:
 	@which npm > /dev/null || (echo "npm not found. Please install Node.js and npm." && exit 1)
 	@cd website && \
-	if [ ! -d "node_modules" ]; then \
+	if [ ! -f "package.json" ]; then \
 		echo "Setting up frontend with Vite + React..."; \
 		npx create-vite@latest . --template react; \
 	else \
@@ -129,9 +140,10 @@ run_website:
 deploy_website:
 	@cd website && rm -rf dist && npm run build && npm run deploy
 
-
-clean:
-	@echo "Removing virtual environment..."
-	@rm -rf .venv
+# Clear away npm for web rebuild
+clean_website:
+	@echo "Cleaning website build, node_modules, and caches..."
+	@cd website && \
+	rm -rf node_modules dist .vite package-lock.json yarn.lock pnpm-lock.yaml
 
 
