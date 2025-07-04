@@ -12,8 +12,8 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@react-three/drei": "^10.3.0",
-    "@react-three/fiber": "^9.1.4",
+    "@react-three/drei": "^10.4.2",
+    "@react-three/fiber": "^9.2.0",
     "country-list": "^2.3.0",
     "d3": "^7.9.0",
     "p5": "^1.11.8",
