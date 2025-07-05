@@ -17,9 +17,9 @@ function About() {
             height: "100vh",
             overflowY: "auto",
             textAlign: "center",
-            paddingTop: "0px"
+            paddingTop: "60px"
         }}>
-            <h1>About Page</h1>
+            {/* <h1>About Page</h1> */}
 
             <HeroIntro />
             <HabitatMap />

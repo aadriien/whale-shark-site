@@ -105,7 +105,6 @@ html, body {
     justify-content: center;
     align-items: flex-end; /* push text content to bottom */
     padding-bottom: 0.1rem;
-    background: url('./whale-shark-hero.jpg') center/cover no-repeat;
     border-bottom: 4px solid #42a9d1;
 }
 

@@ -2,7 +2,12 @@ const HeroIntro = () => {
     return (
         <div className="hero-intro">
 
-            <section className="hero">
+            <section
+                className="hero"
+                style={{
+                    background: `url(./whale-shark-hero.jpg) center/cover no-repeat`
+                }}
+            >
                 <div className="hero-content">
                     <h1>Meet the Whale Shark</h1>
                     <p>The ocean's largest fish — and one of its most peaceful.</p>
