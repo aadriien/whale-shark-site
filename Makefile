@@ -147,3 +147,9 @@ clean_website:
 	rm -rf node_modules dist .vite package-lock.json yarn.lock pnpm-lock.yaml
 
 
+
+fetch_copernicus:
+	@$(POETRY) run python -m src.fetch.copernicus
+
+
+
