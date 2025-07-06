@@ -20,6 +20,72 @@ from src.fetch.copernicus import (
 
 COPERNICUS_CHLOROPHYLL_CSV = "data/copernicus_chlorophyll.csv"
 
+# LME == Large Marine Ecosystem (total == 66 for global oceans)
+# Focusing here on regional bounding boxes (BBOXes) relevant to whale sharks
+# LMEs usually precise polygons, but here using BBOX rectangles to encapsulate
+LME_BOUNDS = {
+    "Gulf of Mexico": {
+        "lat_range": (18, 30),
+        "lon_range": (-98, -80),
+        "notes": "Western Atlantic hotspot"
+    },
+    "Caribbean Sea": {
+        "lat_range": (10, 20),
+        "lon_range": (-90, -75),
+        "notes": "Central American tropical waters"
+    },
+    "Canary Current": {
+        "lat_range": (20, 35),
+        "lon_range": (-25, -10),
+        "notes": "Eastern Atlantic subtropics"
+    },
+    "Guinea Current": {
+        "lat_range": (0, 15),
+        "lon_range": (-20, 10),
+        "notes": "Tropical West African coast"
+    },
+    "Agulhas Current": {
+        "lat_range": (-40, -25),
+        "lon_range": (15, 35),
+        "notes": "Southwest Indian Ocean"
+    },
+    "Somali Coastal Current": {
+        "lat_range": (-5, 15),
+        "lon_range": (45, 60),
+        "notes": "NW Indian Ocean"
+    },
+    "Red Sea": {
+        "lat_range": (12, 30),
+        "lon_range": (32, 45),
+        "notes": "Key corridor, nursery habitat"
+    },
+    "Arabian Sea": {
+        "lat_range": (10, 25),
+        "lon_range": (50, 75),
+        "notes": "Major plankton blooms"
+    },
+    "Bay of Bengal": {
+        "lat_range": (5, 20),
+        "lon_range": (80, 95),
+        "notes": "NE Indian Ocean"
+    },
+    "South China Sea": {
+        "lat_range": (5, 25),
+        "lon_range": (105, 120),
+        "notes": "High biodiversity hotspot"
+    },
+    "East China Sea": {
+        "lat_range": (20, 35),
+        "lon_range": (120, 130),
+        "notes": "Subtropical Pacific adjacent area"
+    },
+    "Coral Triangle": {
+        "lat_range": (-10, 10),
+        "lon_range": (115, 155),
+        "notes": "Indonesia, Philippines, Papua New Guinea"
+    }
+}
+
 
 # Helper function for spatial aggregation (binning approach) to reduce 
 # granularity in lat/lon coordinates for higher-level (condensed) data
