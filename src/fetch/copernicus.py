@@ -29,7 +29,7 @@ def get_copernicus_data(dataset_id: str, **kwargs) -> xr.Dataset:
 
 
 def get_chlorophyll_data(variables: list[str] = ["CHL"],
-                         start_date: str = "2024-12-01",
+                         start_date: str = "2024-01-01",
                          end_date: str = "2024-12-31",
                          lat_range: Optional[tuple[float, float]] = None,
                          lon_range: Optional[tuple[float, float]] = None,
@@ -64,8 +64,6 @@ def get_chlorophyll_data(variables: list[str] = ["CHL"],
 
     # Load full Xarray dataset & return
     chlorophyll_ds = get_copernicus_data(dataset_id, **fetch_params)
-    print(chlorophyll_ds.time)
-
     return chlorophyll_ds
 
 
