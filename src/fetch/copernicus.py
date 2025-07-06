@@ -36,26 +36,28 @@ def get_copernicus_data(dataset_id: str,
     return dataset
 
 
-def get_chlorophyll_data() -> xr.Dataset:
-    # Global chlorophyll indicator (GLOBAL_ANALYSISFORECAST_BGC_001_028)
-    dataset_id = "cmems_mod_glo_bgc-pft_anfc_0.25deg_P1M-m"  
+def get_chlorophyll_data(variables: list[str] = ["CHL"],
+                         start_date: str = "2024-01-01",
+                         end_date: str = "2024-12-31"
+                         ) -> xr.Dataset:
+    # Global chlorophyll indicator (OCEANCOLOUR_GLO_BGC_L4_MY_009_104)
+    # Full name: 
+    #   Global Ocean Colour (Copernicus-GlobColour), Bio-Geo-Chemical, 
+    #   L4 (monthly and interpolated) from Satellite Observations (1997-ongoing)
+    # Variables of interest:
+    #   - Chlorophyll-a (CHL)
+    #   - Phytoplankton Functional types and sizes (PFT)
+    # Documentation: https://documentation.marine.copernicus.eu/PUM/CMEMS-OC-PUM.pdf
+    dataset_id = "cmems_obs-oc_glo_bgc-plankton_my_l4-multi-4km_P1M"  
 
-    variables = []
-    start_date = "2023-01-01"
-    end_date = "2023-12-31"
-
-    # Load North Atlantic chlorophyll time series
+    # Load full Xarray dataset & return
     chlorophyll_ds = get_copernicus_data(dataset_id, variables, start_date, end_date)
     return chlorophyll_ds
 
 
 
 if __name__ == "__main__":
-    chlorophyll_ds = get_chlorophyll_data()
-    print(chlorophyll_ds)
-    
-
-
+    chlorophyll_ds = get_chlorophyll_data()    
 
 
 
