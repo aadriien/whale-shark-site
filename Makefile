@@ -149,7 +149,7 @@ clean_website:
 
 
 fetch_copernicus:
-	@$(POETRY) run python -m src.fetch.copernicus
+	@$(POETRY) run python -m src.clean.copernicus
 
 
 
