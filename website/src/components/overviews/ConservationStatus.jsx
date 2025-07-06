@@ -56,6 +56,12 @@ async function getSpeciesKey(name = speciesName) {
 
 
 async function getRedListIUCN() {
+    // Fall back on known status when GBIF has CORS issues
+    const defaultStatus = {
+        category: "ENDANGERED",
+        code: "EN",
+    };
+
     const keyStr = await getSpeciesKey();
     const usageKey = parseInt(keyStr, 10);
 
@@ -73,16 +79,13 @@ async function getRedListIUCN() {
         
         const data = await response.json();
         return {
-            category: data.category || "(category not found)",
-            code: data.code || "(code not found)",
+            category: data.category || defaultStatus.category,
+            code: data.code || defaultStatus.code,
         };
 
     } catch (error) {
         console.error("Error retrieving IUCN Red List status: ", error);
-        return {
-            category: "(category not found)",
-            code: "(code not found)",
-        };
+        return defaultStatus;
     }
 }
 
