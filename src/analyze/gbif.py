@@ -8,6 +8,7 @@
 import re
 import pandas as pd
 from datetime import datetime
+from typing import Union, Callable
 
 from src.config import (
     MONTH_NAMES,
@@ -16,6 +17,10 @@ from src.config import (
 from src.utils.data_utils import (
     read_csv, export_to_csv, export_to_json, validate_and_dropna, move_column_after, 
     standardize_column_vals, add_totals_column, add_avg_per_year, add_top_x_metric,
+)
+
+from src.utils.geomap_utils import (
+    get_LME_from_coords,
 )
 
 from src.clean.gbif import (
@@ -231,7 +236,7 @@ def make_media_conditions(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_media, individual_sharks=individual_sharks,
         metric_subset=["identifier"], metric_timing=["license", "creator"],
-        format_str="{0} (license: {1}, creator: {2})", # == f"{identifier} (license: {license}, creator: {creator})"
+        format_str_or_func="{0} (license: {1}, creator: {2})", # == f"{identifier} (license: {license}, creator: {creator})"
         column_name="imageURL (license, creator)"
     )
 
@@ -242,7 +247,7 @@ def make_individual_metric_df(occurrences_df: pd.DataFrame,
                             individual_sharks: pd.DataFrame,
                             metric_subset: list[str],
                             metric_timing: list[str],
-                            format_str: str,
+                            format_str_or_func: Union[str, Callable],
                             column_name: str) -> pd.DataFrame:
 
     # Combine metrics (e.g. ["decimalLatitude", "decimalLongitude"] + ["eventDate"])
@@ -259,11 +264,18 @@ def make_individual_metric_df(occurrences_df: pd.DataFrame,
                 .fillna(f"{time_view} Unknown").astype(str)
             )
 
+    # Allow passing of str OR formatting function (e.g. lat/lon region retrieval)
+    def format_row(vals):
+        if callable(format_str_or_func):
+            return format_str_or_func(*vals)
+        else:
+            return format_str_or_func.format(*vals)
+
     # Assemble specific metric values over time per shark ID (e.g. lifeStage)
     valid_metric = valid_metric.groupby("whaleSharkID").apply(
         lambda x: ", ".join(sorted(set(
             # Example: zip occurrenceRemarks with eventDate
-            format_str.format(*vals) 
+            format_row(vals) 
             for vals in 
             zip(*(x[col] for col in all_metric_vals))
         ))), 
@@ -282,7 +294,7 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
         metric_subset=["lifeStage"], metric_timing=["year"],
-        format_str="{0} ({1})", # == f"{stage} ({year})"
+        format_str_or_func="{0} ({1})", # == f"{stage} ({year})"
         column_name="lifeStage (year)"
     )
 
@@ -290,7 +302,7 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
         metric_subset=["continent"], metric_timing=["year"],
-        format_str="{0} ({1})", # == f"{continent} ({year})"
+        format_str_or_func="{0} ({1})", # == f"{continent} ({year})"
         column_name="continent (year)"
     )
 
@@ -298,7 +310,7 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
         metric_subset=["publishingCountry"], metric_timing=["year"],
-        format_str="{0} ({1})", # == f"{publishingCountry} ({year})"
+        format_str_or_func="{0} ({1})", # == f"{publishingCountry} ({year})"
         column_name="publishingCountry (year)"
     )
 
@@ -306,7 +318,7 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
         metric_subset=["country"], metric_timing=["year"],
-        format_str="{0} ({1})", # == f"{country} ({year})"
+        format_str_or_func="{0} ({1})", # == f"{country} ({year})"
         column_name="country (year)"
     )
 
@@ -314,7 +326,7 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
         metric_subset=["stateProvince", "verbatimLocality"], metric_timing=["month", "year"],
-        format_str="{0} - {1} ({2} {3})", # == f"{state} - {locality} ({month} {year})"
+        format_str_or_func="{0} - {1} ({2} {3})", # == f"{state} - {locality} ({month} {year})"
         column_name="stateProvince - verbatimLocality (month year)"
     )
 
@@ -322,7 +334,7 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
         metric_subset=["occurrenceRemarks"], metric_timing=["eventDate"],
-        format_str="{0} ({1})", # == f"{occurrenceRemarks} ({eventDate})"
+        format_str_or_func="{0} ({1})", # == f"{occurrenceRemarks} ({eventDate})"
         column_name="occurrenceRemarks (eventDate)"
     )
 
@@ -330,7 +342,7 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     individual_sharks = make_individual_metric_df(
         occurrences_df=occurrences_df, individual_sharks=individual_sharks,
         metric_subset=["decimalLatitude", "decimalLongitude"], metric_timing=["eventDate"],
-        format_str="lat:{0} long:{1} ({2})", # == f"lat:{latitude} long:{longitude} ({eventDate})"
+        format_str_or_func=latlon_region_formatter, # == f"lat:{latitude} long:{longitude} ({region}, {eventDate})"
         column_name="lat:decimalLatitude long:decimalLongitude (eventDate)"
     )
 
@@ -598,22 +610,31 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 
+def latlon_region_formatter(lat, long, eventDate):
+    region = get_LME_from_coords(lat, long)
+
+    if region is None:
+        region = "Unknown"
+    return f"lat:{lat} long:{long} ({region} {eventDate})"
+
+
 def parse_coordinates_history(coordinates_str_list: str) -> list[dict]:
     if coordinates_str_list == "Unknown" or not isinstance(coordinates_str_list, str):
         return []
     
     entries = coordinates_str_list.split(", ")
     parsed = []
+
     for entry in entries:
-        match = re.match(r"lat:([-\d.]+) long:([-\d.]+) \(([^)]+)\)", entry)
+        match = re.match(r"lat:([-\d.]+) long:([-\d.]+) \(([^,]+) ([^)]+)\)", entry)
         if match:
-            lat, long, eventDate = match.groups()
+            lat, long, region, eventDate = match.groups()
 
             # Try parsing in order: full date, year-month, year
             for time_format in ("%Y-%m-%d", "%Y-%m", "%Y"):
                 try:
                     # e.g. "2024" defaults to "2024-01-01"
-                    parsed_date = datetime.strptime(eventDate, time_format)
+                    parsed_date = datetime.strptime(eventDate.strip(), time_format)
                     break
                 except ValueError:
                     continue
@@ -624,8 +645,9 @@ def parse_coordinates_history(coordinates_str_list: str) -> list[dict]:
             parsed.append({
                 "lat": float(lat),
                 "long": float(long),
+                "region": region.strip(),
                 "eventDate": eventDate,
-                "parsedDate": parsed_date  # temp field for sort & display on globe
+                "parsedDate": parsed_date # temp field for sort & display on globe
             })
 
     # Sort chronologically, then convert to str before return (avoid JSON errors)
