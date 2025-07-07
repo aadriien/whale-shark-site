@@ -151,5 +151,8 @@ clean_website:
 fetch_copernicus:
 	@$(POETRY) run python -m src.clean.copernicus
 
+test_LME:
+	@$(POETRY) run python -m src.utils.geomap_utils
+
 
 
