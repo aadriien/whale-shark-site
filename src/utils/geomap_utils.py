@@ -24,7 +24,8 @@ def get_LME_from_coords(lat: float, lon: float) -> str:
         lme_name = lme_match.iloc[0]["LME_NAME"]
         return lme_name
     else:
-        print(f"Point ({lat},{lon}) is not inside any LME boundary.")
+        # print(f"Point ({lat},{lon}) is not inside any LME boundary.")
+        return "Unknown"
 
 
 
@@ -45,9 +46,9 @@ if __name__ == "__main__":
         "Coral Triangle": (-1.5, 130.0)           # Inside Coral Triangle
     }
 
-    for region, (lat, lon) in examples.items():
-        lme_result = get_LME_from_coords(lat=lat, lon=lon)
-        print(f"{region}: {lme_result}")
+    # for region, (lat, lon) in examples.items():
+    #     lme_result = get_LME_from_coords(lat=lat, lon=lon)
+    #     print(f"{region}: {lme_result}")
 
 
 
