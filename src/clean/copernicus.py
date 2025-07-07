@@ -5,12 +5,13 @@
 ###############################################################################
 
 
+import os
 import pandas as pd
 import xarray as xr
 from typing import Union 
 
 from src.utils.data_utils import (
-    export_to_csv, 
+    folder_exists, export_to_csv, 
 )
 
 from src.fetch.copernicus import (
@@ -18,7 +19,7 @@ from src.fetch.copernicus import (
 )
 
 
-COPERNICUS_CHLOROPHYLL_CSV = "data/copernicus_chlorophyll.csv"
+COPERNICUS_CHLOROPHYLL_DIR = "data/copernicus/chlorophyll"
 
 # LME == Large Marine Ecosystem (total == 66 for global oceans)
 # Focusing here on regional bounding boxes (BBOXes) relevant to whale sharks
@@ -131,23 +132,84 @@ def convert_xarray_to_df(dataset: xr.Dataset,
     return new_df 
 
 
-def export_copernicus_analyses() -> pd.DataFrame:
+def export_region_chlorophyll(region_name: str,
+                              lat_range: tuple[float, float],
+                              lon_range: tuple[float, float],
+                              start_year: int = 1997,
+                              end_year: int = 2024,
+                              variables: list[str] = ["CHL"],
+                              output_folder: str = COPERNICUS_CHLOROPHYLL_DIR
+                             ) -> pd.DataFrame:
+    print(f"\nExporting chlorophyll for region: {region_name}")
+
+    # Split data fetches into yearly chunks to reduce load & minimize error
+    region_dfs = []
+    for year in range(start_year, end_year + 1):
+        start_date = f"{year}-01-01"
+        end_date = f"{year}-12-31"
+
+        try:
+            # Fetch & process data, then append to overall view
+            dataset = get_chlorophyll_data(
+                variables=variables,
+                start_date=start_date,
+                end_date=end_date,
+                lat_range=lat_range,
+                lon_range=lon_range,
+            )
+            chlorophyll_df = convert_xarray_to_df(dataset, variable_names=variables)
+            aggregated_df = aggregate_data_coords(chlorophyll_df, variables)
+
+            region_dfs.append(aggregated_df)
+
+        except Exception as e:
+            print(f"Skipping {region_name} {year}: {e}")
+
+    if not region_dfs:
+        print(f"No data for {region_name}")
+        return pd.DataFrame()
+
+    # Combine across years
+    full_region_df = pd.concat(region_dfs, ignore_index=True)
+
+    # Name each CSV by region & complete export 
+    filename = f"{region_name.lower().replace(' ', '_')}_chlorophyll.csv"
+    export_path = os.path.join(output_folder, filename)
+
+    _ = folder_exists(export_path, True)
+    export_to_csv(export_path, full_region_df)
+
+    return full_region_df
+
+
+def export_all_regions_chlorophyll(lme_bounds: dict,
+                                   start_year: int = 1997,
+                                   end_year: int = 2024,
+                                   output_folder: str = COPERNICUS_CHLOROPHYLL_DIR,
+                                   variables: list[str] = ["CHL"]
+                                  ) -> None:
+    # Loop through all relevant LMEs for whale shark areas
+    for region_name, region_info in lme_bounds.items():
+        export_region_chlorophyll(
+            region_name=region_name,
+            lat_range=region_info["lat_range"],
+            lon_range=region_info["lon_range"],
+            start_year=start_year,
+            end_year=end_year,
+            variables=variables,
+            output_folder=output_folder
+        )
+
+
+def export_copernicus_analyses() -> None:
     # Chlorophyll data (monthly, 1997 - ongoing)
     # Since monthly, datetime will reflect 1st of each month
     # Unit for CLH (chlorophyll-a concentration) is mg/m^3 (milligrams per cubic meter)
-    chlorophyll_xarray = get_chlorophyll_data(lat_range=(-10, 10),lon_range=(110, 130))
-    chlorophyll_vars = ["CHL"]
-
-    chlorophyll_df = convert_xarray_to_df(chlorophyll_xarray, chlorophyll_vars)
-    aggregated_chlorophyll_df = aggregate_data_coords(chlorophyll_df, chlorophyll_vars)
-
-    export_to_csv(COPERNICUS_CHLOROPHYLL_CSV, aggregated_chlorophyll_df)
-
-    return chlorophyll_df
+    export_all_regions_chlorophyll(LME_BOUNDS, start_year=1997, end_year=2025)
 
 
 
 if __name__ == "__main__":
-    chlorophyll_df = export_copernicus_analyses()
+    export_copernicus_analyses()
 
 
