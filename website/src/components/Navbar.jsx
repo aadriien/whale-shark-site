@@ -23,6 +23,7 @@ function Navbar() {
             <Link to="/globeviews" style={getLinkStyle(location.pathname, "/globeviews")}>Globe Views</Link>
             <Link to="/sharktracker" style={getLinkStyle(location.pathname, "/sharktracker")}>Shark Tracker</Link>
             <Link to="/datavisuals" style={getLinkStyle(location.pathname, "/datavisuals")}>Data Visuals</Link>
+            <Link to="/environment" style={getLinkStyle(location.pathname, "/environment")}>Environment</Link>
             <Link to="/buildashark" style={getLinkStyle(location.pathname, "/buildashark")}>Build-A-Shark</Link>
             <Link to="/animation" style={getLinkStyle(location.pathname, "/animation")}>Animation</Link>
         </nav>

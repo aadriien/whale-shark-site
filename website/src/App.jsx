@@ -8,6 +8,7 @@ const About = lazy(() => import("./pages/About.jsx"));
 const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
 const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
 const DataVisuals = lazy(() => import("./pages/DataVisuals.jsx"));
+const Environment = lazy(() => import("./pages/Environment.jsx"));
 const BuildAShark = lazy(() => import("./pages/BuildAShark.jsx"));
 const Animation = lazy(() => import("./pages/Animation.jsx"));
 
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/globeviews" element={<GlobeViews />} />
                     <Route path="/sharktracker" element={<SharkTracker />} />
                     <Route path="/datavisuals" element={<DataVisuals />} />
+                    <Route path="/environment" element={<Environment />} />
                     <Route path="/buildashark" element={<BuildAShark />} />
                     <Route path="/animation" element={<Animation />} />
                 </Routes>
