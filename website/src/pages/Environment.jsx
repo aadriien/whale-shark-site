@@ -8,12 +8,13 @@ function Environment() {
             height: "100vh",
             overflowY: "auto",
             textAlign: "center",
-            paddingTop: "60px"
+            // paddingTop: "60px"
         }}>
-            {/* <h1>Environment Page</h1> */}
+            <h1>Copernicus Marine Data Viewer</h1>
 
-            
-        
+            <div className="copernicus-visual">
+                <iframe src="https://data.marine.copernicus.eu/-/kob6a042j8" width="100%" height="100%"></iframe>
+            </div>
         </div>
     );
 }
