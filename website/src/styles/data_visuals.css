@@ -1,3 +1,25 @@
+.grid-section {
+    width: 100%;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-sizing: border-box;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.section-calendar {
+    background: linear-gradient(to bottom right, #ffe8ec, #f9f0ff);
+}
+.section-continent {
+    background: linear-gradient(to bottom right, #e0fff7, #d0f0ff);
+}
+.section-country {
+    background: linear-gradient(to bottom right, #fff5e1, #fce8d8);
+}
+.section-publishing {
+    background: linear-gradient(to bottom right, #e2f3ff, #d9e8ff);
+}
+
 .data-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
