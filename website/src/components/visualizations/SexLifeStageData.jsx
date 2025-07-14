@@ -92,7 +92,7 @@ const GBIFSexLifeStageOccurrences = () => {
                 selectedYear ? (
                     <p style={{ textAlign: "center" }}>No data available for this year.</p>
                 ) : (
-                    <ChartPlaceholder type="radialHeatmap" message="Select a year to preview records for sex and life stage" />
+                    <ChartPlaceholder type="radialHeatmap" message="Select a year to see lifeStage and sex" />
                 )
             )}
         </div>

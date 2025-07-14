@@ -142,7 +142,7 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
                     selectedDecade ? (
                         <p style={{ textAlign: "center" }}>No data available for this decade.</p>
                     ) : (
-                        <ChartPlaceholder type="heatmap" message="Select a decade to preview heatmap" />
+                        <ChartPlaceholder type="heatmap" message="Select a decade to see heatmap" />
                     )
                 )}
             </div>
