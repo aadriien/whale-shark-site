@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from "react";
+
+import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import RadialHeatmap from "../charts/RadialHeatmap.jsx";
+
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
 // Define Sex & Life Stage keys
@@ -86,9 +89,11 @@ const GBIFSexLifeStageOccurrences = () => {
                     title={`Sharks by Life Stage & Sex — ${selectedYear}`}
                 />
             ) : (
-                <p style={{ textAlign: "center" }}>
-                    {selectedYear ? "No data available for this year." : "Select a year to view data."}
-                </p>
+                selectedYear ? (
+                    <p style={{ textAlign: "center" }}>No data available for this year.</p>
+                ) : (
+                    <ChartPlaceholder type="radialHeatmap" message="Select a year to preview records for sex and life stage" />
+                )
             )}
         </div>
     );

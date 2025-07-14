@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from "react";
+
+import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import BarChart from "../charts/BarChart.jsx";
 import Heatmap from "../charts/Heatmap.jsx";
+
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
@@ -136,9 +139,11 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
                         }
                     />
                 ) : (
-                    <p style={{ textAlign: "center" }}>
-                        Select a decade to view heatmap data.
-                    </p>
+                    selectedDecade ? (
+                        <p style={{ textAlign: "center" }}>No data available for this decade.</p>
+                    ) : (
+                        <ChartPlaceholder type="heatmap" message="Select a decade to preview heatmap" />
+                    )
                 )}
             </div>
         );
@@ -178,9 +183,11 @@ const GBIFCalendarOccurrences = ({ variant = "bar" }) => {
                     title={`Shark Records by Month — ${selectedYear}`}
                 />
             ) : (
-                <p style={{ textAlign: "center" }}>
-                    {selectedYear ? "No data available for this year." : "Select a year to view data."}
-                </p>
+                selectedYear ? (
+                    <p style={{ textAlign: "center" }}>No data available for this year.</p>
+                ) : (
+                    <ChartPlaceholder type="bar" message="Select a year to see monthly records" />
+                )
             )}
         </div>
     );

@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from "react";
 
+import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
+
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";
 import countryStatsGBIF from "../../assets/data/json/gbif_country_stats.json";
@@ -92,9 +94,11 @@ const DataOverview = ({
                     })}
                 </div>
             ) : (
-                <p style={{ textAlign: "center" }}>
-                    Select a {filterField} to view data.
-                </p>
+                selectedFilter ? (
+                    <p style={{ textAlign: "center" }}>No data available for this {filterField}.</p>
+                ) : (
+                    <ChartPlaceholder type="overview" message={`Select a ${filterField} to see data overview`} />
+                )
             )}
         </div>
     );

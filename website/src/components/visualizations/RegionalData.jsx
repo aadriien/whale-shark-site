@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import * as d3 from "d3";
 
+import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import RadialHeatmap from "../charts/RadialHeatmap.jsx";
 
 
@@ -133,9 +134,11 @@ const GBIFRegionOccurrences = ({ regionData, metric }) => {
                     />
                 </>
             ) : (
-                <p style={{ textAlign: "center" }}>
-                    {selectedRegion ? `No data available for this ${metric}.` : `Select a ${metric} to view data.`}
-                </p>
+                selectedRegion ? (
+                    <p style={{ textAlign: "center" }}>No data available for this ${metric}.</p>
+                ) : (
+                    <ChartPlaceholder type="radialHeatmap" message={`Select a ${metric} to see monthly records`} />
+                )
             )}
         </div>
     );

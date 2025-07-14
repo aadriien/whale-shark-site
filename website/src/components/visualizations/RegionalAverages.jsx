@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from "react";
+
+import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import BarChart from "../charts/BarChart.jsx";
 
 
@@ -72,9 +74,11 @@ const GBIFRegionAverages = ({ regionData, metric }) => {
                     title={`Mean Occurrences by Decade — ${selectedRegion}`}
                 />
             ) : (
-                <p style={{ textAlign: "center" }}>
-                    {selectedRegion ? `No data available for this ${metric}.` : `Select a ${metric} to view data.`}
-                </p>
+                selectedRegion ? (
+                    <p style={{ textAlign: "center" }}>No data available for this ${metric}.</p>
+                ) : (
+                    <ChartPlaceholder type="bar" message={`Select a ${metric} to see records by decade`} />
+                )
             )}
         </div>
     );
