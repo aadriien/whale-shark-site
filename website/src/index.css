@@ -115,6 +115,7 @@ button {
 button:hover:not(.anyPlaying) {
     background-color: #b2ebf2;
     border: 2px solid black;
+    color: black;
 }
 
 button:focus:not(.anyPlaying),

@@ -4,8 +4,7 @@
     flex-direction: row; /* Arrange form & image side by side */
     justify-content: space-between;
     gap: 20px; 
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .shark-generator-form {
@@ -21,7 +20,6 @@
     gap: 24px;
     box-sizing: border-box; /* Ensure padding included in height calculation */
 
-    height: auto; 
     min-height: 80px;
     max-height: 600px; 
     overflow-y: auto;
@@ -83,8 +81,9 @@
     font-weight: 600;
     color: white;
     background-color: #6366f1;
-    border: none;
+    border: 2px solid transparent; /* keep border width consistent */
     border-radius: 8px;
+    box-sizing: border-box;
     cursor: pointer;
     flex-grow: 1;
     transition: background-color 0.3s;

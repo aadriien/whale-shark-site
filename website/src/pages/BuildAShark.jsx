@@ -10,7 +10,7 @@ function BuildAShark() {
             height: "100vh",
             overflowY: "auto", 
             textAlign: "center",
-            paddingTop: "60px"
+            padding: "30px 16px"
         }}>
             <h1>BuildAShark Page</h1>
 

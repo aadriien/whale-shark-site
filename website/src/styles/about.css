@@ -88,6 +88,13 @@ html, body {
     }
 }
 
+@media (max-width: 767px) {
+    .section-text h2 {
+        text-align: left !important;
+        font-size: 1.5rem;
+    }
+}
+
 
 
 /* Hero intro section */
@@ -130,6 +137,20 @@ html, body {
 .hero-content p {
     font-size: 1.7rem;
     font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 35vh; 
+    }
+
+    .hero-content h1 {
+        font-size: 3.5rem; 
+    }
+
+    .hero-content p {
+        font-size: 1.3rem;
+    }
 }
 
 
