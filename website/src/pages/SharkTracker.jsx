@@ -29,49 +29,29 @@ function SharkTracker() {
     };
 
     return (
-        <div style={{ 
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-            overflowY: "auto",
-            textAlign: "center",
-            paddingTop: "60px"
-        }}>
+        <div className="sharktracker-wrapper">
             <h1>SharkTracker Page</h1>
 
-            <div className="globe-cards-container"
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    justifyContent: "center",
-                    alignItems: "flex-start",
-                    width: "100%",
-                }}
-            >
+            <div className="globe-cards-container">
                 {/* Left Shark Cards */}
-                <div style={{ flex: "0.1", height: "35rem" }}>
+                <div className="side-column">
                     <SharkGrid sharks={leftSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} playingSharkId={playingSharkId} />
                 </div>
 
                 {/* Globe */}
-                <div className="globe-container" style={{ flex: "0.8", height: "40rem" }}>
+                <div className="globe-container">
                     <Globe ref={globeRef} />
                 </div>
 
                 {/* Right Shark Cards */}
-                <div style={{ flex: "0.1", height: "35rem" }}>
+                <div className="side-column">
                     <SharkGrid sharks={rightSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} playingSharkId={playingSharkId} />
                 </div>
             </div>
-
         </div>
     );
 }
 
 export default SharkTracker;
 
-  
 
