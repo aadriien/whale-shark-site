@@ -14,8 +14,8 @@ from PIL import Image
 from io import BytesIO
 
 import torchvision.transforms as transforms
-from transformers import AutoModel  # For MiewID
-from transformers import AutoImageProcessor, AutoModel as HF_AutoModel  # For DINOv2
+from transformers import AutoModel # For MiewID
+from transformers import AutoImageProcessor, AutoModel as HF_AutoModel # For DINOv2
 
 
 from src.utils.data_utils import (

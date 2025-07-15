@@ -60,10 +60,14 @@ def perform_search(known_embeddings: np.ndarray,
 
 
 def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:
-    known_embeddings = known_data["embeddings"]
-    query_embeddings = new_data["embeddings"]
+    known_miewid = known_data["miewid_embeddings"]
+    query_miewid = new_data["miewid_embeddings"]
     
-    distances, indices = perform_search(known_embeddings, query_embeddings)
+    known_dino = known_data["dinov2_embeddings"]
+    query_dino = new_data["dinov2_embeddings"]
+
+    distances_miewid, indices_miewid = perform_search(known_miewid, query_miewid)
+    distances_dino, indices_dino = perform_search(known_dino, query_dino)
 
     whale_shark_names = known_data["whale_shark_names"]
     image_ids = known_data["image_ids"]
@@ -72,19 +76,31 @@ def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:
     results = []
 
     # Map back to "source of truth" metadata
-    for i, (dist, idx) in enumerate(zip(distances, indices)):
-        matched_idx = idx[0]
+    for i in range(len(query_miewid)):
+        idx_miewid = indices_miewid[i][0]
+        dist_miewid = distances_miewid[i][0]
+
+        idx_dino = indices_dino[i][0]
+        dist_dino = distances_dino[i][0]
+
         result = {
             "query_index": i,
-            "closest_whale_shark_id": whale_shark_names[matched_idx],
-            "matched_image_id": image_ids[matched_idx],
-            "matched_annotation_id": annotation_ids[matched_idx],
-            "distance": round(float(dist[0]), 4)
+
+            # MIEWID match
+            "miewid_closest_whale_shark_id": whale_shark_names[idx_miewid],
+            "miewid_matched_image_id": image_ids[idx_miewid],
+            "miewid_matched_annotation_id": annotation_ids[idx_miewid],
+            "miewid_distance": round(float(dist_miewid), 4),
+
+            # DINOv2 match
+            "dinov2_closest_whale_shark_id": whale_shark_names[idx_dino],
+            "dinov2_matched_image_id": image_ids[idx_dino],
+            "dinov2_matched_annotation_id": annotation_ids[idx_dino],
+            "dinov2_distance": round(float(dist_dino), 4),
         }
         results.append(result)
 
     return results
-
 
 
 def validate_matches(media_matches_df: pd.DataFrame) -> None:
@@ -104,28 +120,49 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
     individual_sharks = media_sharks_df.dropna(subset=RELEVANT_COLUMNS).copy()
     individual_sharks.reset_index(drop=True, inplace=True)
 
-
-    format_str = "closest_whale_shark_id: {0} (matched_image_id: {1}, distance: {2})"
-    column_name = "closest_whale_shark_id (matched_image_id, distance)"
-    all_metric_vals = [
-        "closest_whale_shark_id",
-        "matched_image_id",
-        "distance"
-    ]
-
     individual_sharks["identificationID"] = individual_sharks["identificationID"].astype(str)
     media_matches_df["identificationID"] = media_matches_df["identificationID"].astype(str)
 
-    media_matches_df = media_matches_df.groupby("identificationID").apply(
-        lambda x: ", ".join(sorted(set(
-            format_str.format(*vals) 
-            for vals in 
-            zip(*(x[col] for col in all_metric_vals))
-        ))), 
-        include_groups=False
-    ).reset_index(name=column_name)
+    # --- FORMAT & GROUP FOR MIEWID ---
+    miewid_fmt = "MIEWID: {0} ({1}, {2})"
+    miewid_cols = [
+        "miewid_closest_whale_shark_id",
+        "miewid_matched_image_id",
+        "miewid_distance"
+    ]
+    miewid_colname = "MIEWID: closest_whale_shark_id (matched_image_id, distance)"
 
-    individual_sharks = individual_sharks.merge(media_matches_df, on="identificationID", how="left")
+    miewid_df = media_matches_df.groupby("identificationID").apply(
+        lambda x: ", ".join(sorted(set(
+            miewid_fmt.format(*vals)
+            for vals in zip(*(x[col] for col in miewid_cols))
+        ))),
+        include_groups=False
+    ).reset_index(name=miewid_colname)
+
+    # --- FORMAT & GROUP FOR DINOV2 ---
+    dino_fmt = "DINOV2: {0} ({1}, {2})"
+    dino_cols = [
+        "dinov2_closest_whale_shark_id",
+        "dinov2_matched_image_id",
+        "dinov2_distance"
+    ]
+    dino_colname = "DINOV2: closest_whale_shark_id (matched_image_id, distance)"
+
+    dino_df = media_matches_df.groupby("identificationID").apply(
+        lambda x: ", ".join(sorted(set(
+            dino_fmt.format(*vals)
+            for vals in zip(*(x[col] for col in dino_cols))
+        ))),
+        include_groups=False
+    ).reset_index(name=dino_colname)
+
+    # --- Merge all formatted columns ---
+    individual_sharks = (
+        individual_sharks
+        .merge(miewid_df, on="identificationID", how="left")
+        .merge(dino_df, on="identificationID", how="left")
+    )
 
     export_to_csv(GBIF_INDIVIDUAL_MATCHES_FILE, individual_sharks)
 

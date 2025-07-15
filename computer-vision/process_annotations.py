@@ -12,7 +12,8 @@ import numpy as np
 from PIL import Image
 
 import torchvision.transforms as transforms
-from transformers import AutoModel
+from transformers import AutoModel # For MiewID & DINOv2
+from transformers import AutoImageProcessor # For DINOv2
 
 
 from src.utils.data_utils import (
@@ -104,8 +105,12 @@ def populate_embeddings_database() -> None:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore")
 
-        MODEL_TAG_MiewIDmsv3 = "conservationxlabs/miewid-msv3"
-        model = AutoModel.from_pretrained(MODEL_TAG_MiewIDmsv3, trust_remote_code=True)
+        MODEL_TAG_MIEWID = "conservationxlabs/miewid-msv3"
+        MODEL_TAG_DINOV2 = "facebook/dinov2-base"
+
+        miewid_model = AutoModel.from_pretrained(MODEL_TAG_MIEWID, trust_remote_code=True)
+        dinov2_model = AutoModel.from_pretrained(MODEL_TAG_DINOV2)
+        dinov2_processor = AutoImageProcessor.from_pretrained(MODEL_TAG_DINOV2)
 
     # Prep for resizing of image to work with model (requires 440 x 440 pixels)
     preprocess = transforms.Compose([
@@ -114,8 +119,9 @@ def populate_embeddings_database() -> None:
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    # Prepare list to store embeddings, IDs, etc (building reference library)
-    embeddings = []
+    # Prepare lists to store embeddings, IDs, etc (building reference library)
+    miewid_embeddings = []
+    dinov2_embeddings = []
     image_ids = []
     annotation_ids = []
     whale_shark_names = []
@@ -143,15 +149,24 @@ def populate_embeddings_database() -> None:
         x, y, w, h = bbox
         crop = img.crop((x, y, x + w, y + h)) # COCO-style BBOX + cropping
 
+        # Prepare MIEWID input
         input_tensor = preprocess(crop).unsqueeze(0)
 
-        # Extract embedding via model
         with torch.no_grad():
-            output = model(input_tensor)
+            # MIEWID embedding extraction 
+            miewid_output = miewid_model(input_tensor)
+            # `output.shape` == `torch.Size([1, 2152])`, so just use output as embedding
+            miewid_embedding = miewid_output.squeeze().cpu().numpy()
 
-        # `output.shape` == `torch.Size([1, 2152])`, so just use output as embedding
-        embedding = output.squeeze().cpu().numpy()
-        embeddings.append(embedding)
+            # DINOv2 embedding extraction 
+            dino_inputs = dinov2_processor(images=crop, return_tensors="pt")
+            dino_output = dinov2_model(**dino_inputs)
+            # Average pooling over last hidden states (mean over sequence length dimension)
+            dinov2_embedding = dino_output.last_hidden_state.mean(dim=1).squeeze().cpu().numpy()
+
+        # Append embeddings for both MIEWID & DINOv2 
+        miewid_embeddings.append(miewid_embedding)
+        dinov2_embeddings.append(dinov2_embedding)
 
         image_ids.append(image_id)
         annotation_ids.append(annotation_id)
@@ -161,10 +176,12 @@ def populate_embeddings_database() -> None:
         if image_id % 1000 == 0:
             print(f"Checkpoint: Processed image_id: {image_id}")
 
-    print(f"Processed {len(image_ids)} image_ids, all with embedding shape: {embedding.shape}")
+    print(f"Processed {len(image_ids)} image_ids, with MIEWID embedding shape: {miewid_embedding.shape}")
 
     # Convert lists to numpy arrays for .npz file
-    embeddings = np.array(embeddings)
+    miewid_embeddings = np.array(miewid_embeddings)
+    dinov2_embeddings = np.array(dinov2_embeddings)
+
     image_ids = np.array(image_ids)
     annotation_ids = np.array(annotation_ids)
     whale_shark_names = np.array(whale_shark_names)
@@ -172,8 +189,11 @@ def populate_embeddings_database() -> None:
     # Confirm folder to hold embeddings exists, then save to .npz file
     _ = folder_exists(OUTPUT_NPZ_FILE, True)
     np.savez(
-        OUTPUT_NPZ_FILE, embeddings=embeddings, 
-        image_ids=image_ids, annotation_ids=annotation_ids, 
+        OUTPUT_NPZ_FILE, 
+        miewid_embeddings=miewid_embeddings,
+        dinov2_embeddings=dinov2_embeddings,
+        image_ids=image_ids, 
+        annotation_ids=annotation_ids, 
         whale_shark_names=whale_shark_names
     )
 
@@ -188,19 +208,23 @@ def view_npz_file() -> None:
     print("Keys in the .npz file:", data.keys())
 
     # Access arrays from .npz file
-    embeddings = data["embeddings"]
+    miewid_embeddings = data["miewid_embeddings"]
+    dinov2_embeddings = data["dinov2_embeddings"]
+
     image_ids = data["image_ids"]
     annotation_ids = data["annotation_ids"]
     whale_shark_names = data["whale_shark_names"]
 
     # Check shape of embeddings (how many)
-    print("Embeddings shape:", embeddings.shape)
+    print("MIEWID Embeddings shape:", miewid_embeddings.shape)
+    print("DINOv2 Embeddings shape:", dinov2_embeddings.shape)
 
     # Print first few values to inspect
     print("First 3 embeddings (+ their associated metadata):")
-    for i in range(min(3, len(embeddings))):  
+    for i in range(min(3, len(miewid_embeddings))):  
         print(f"Embedding {i+1}:")
-        print(f"  Embedding: {embeddings[i]}")
+        print(f"  MIEWID embedding: {miewid_embeddings[i]}")
+        print(f"  DINOv2 embedding: {dinov2_embeddings[i]}")
         print(f"  Image ID: {image_ids[i]}")
         print(f"  Annotation ID: {annotation_ids[i]}")
         print(f"  Whale Shark Name: {whale_shark_names[i]}")
