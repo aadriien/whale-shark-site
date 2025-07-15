@@ -14,7 +14,8 @@ from PIL import Image
 from io import BytesIO
 
 import torchvision.transforms as transforms
-from transformers import AutoModel
+from transformers import AutoModel  # For MiewID
+from transformers import AutoImageProcessor, AutoModel as HF_AutoModel  # For DINOv2
 
 
 from src.utils.data_utils import (
@@ -34,6 +35,8 @@ NEW_EMBEDDINGS_FOLDER = "computer-vision/new-embeddings"
 GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
 
 
+# ---------- MiewID embeddings model ----------
+
 _EMBEDDINGS_MODEL = None
 
 def get_embeddings_model():
@@ -52,6 +55,20 @@ def get_embeddings_model():
 
     return _EMBEDDINGS_MODEL
 
+
+# ---------- DINOv2 embeddings model ----------
+
+_DINOV2_MODEL = None
+_DINOV2_PROCESSOR = None
+
+def get_dinov2_model():
+    global _DINOV2_MODEL, _DINOV2_PROCESSOR
+
+    if _DINOV2_MODEL is None:
+        _DINOV2_PROCESSOR = AutoImageProcessor.from_pretrained("facebook/dinov2-base")
+        _DINOV2_MODEL = HF_AutoModel.from_pretrained("facebook/dinov2-base")
+
+    return _DINOV2_PROCESSOR, _DINOV2_MODEL
 
 
 # Step 1: Open gbif_media.csv & read all entries (grab images)
@@ -117,9 +134,9 @@ def calculate_bbox(image: Image.Image) -> list[float]:
 
 
 
-# Step 3: Use Hugging Face MiewID-msv3 model to generate image embedding 
+# Step 3a: Use Hugging Face MiewID-msv3 model to generate image embedding 
 
-def compute_embedding(cropped_img: Image.Image) -> torch.Tensor:
+def compute_embedding(cropped_img: Image.Image) -> np.ndarray:
     # Load preprocessing pipeline
     preprocess = transforms.Compose([
         transforms.Resize((440, 440)),
@@ -135,6 +152,19 @@ def compute_embedding(cropped_img: Image.Image) -> torch.Tensor:
 
     return output.squeeze().cpu().numpy()
 
+
+# Step 3b: Use Hugging Face DINOv2 model to generate image embedding
+
+def compute_dinov2_embedding(cropped_img: Image.Image) -> np.ndarray:
+    processor, model = get_dinov2_model()
+    inputs = processor(images=cropped_img, return_tensors="pt")
+
+    with torch.no_grad():
+        outputs = model(**inputs)
+        # Use mean pooling on last hidden states to get embedding vector
+        embedding = outputs.last_hidden_state.mean(dim=1)  
+
+    return embedding.squeeze().cpu().numpy()
 
 
 # Intermediate steps: Handle media records iteration, temp image download, etc
@@ -164,10 +194,14 @@ def process_single_image(row) -> dict:
         ]
 
         cropped = image.crop((x1, y1, x2, y2))
-        embedding = compute_embedding(cropped)
+
+        # Calculate both embeddings
+        miewid_embedding = compute_embedding(cropped)
+        dinov2_embedding = compute_dinov2_embedding(cropped)
 
         return {
-            "embedding": embedding,
+            "miewid_embedding": miewid_embedding,
+            "dinov2_embedding": dinov2_embedding,
             "bbox": bbox,
             "image_id (GBIF key)": row["key"],
             "occurrenceID (GBIF)": row["occurrenceID"],
@@ -184,14 +218,15 @@ def process_single_image(row) -> dict:
 def process_all_images(media_df: pd.DataFrame) -> None:
     results = []
 
-    # Calculate BBOX + embedding for each image in media records
+    # Calculate BBOX + embeddings for each image in media records
     for _, row in media_df.iterrows():
         result = process_single_image(row)
         if result:
             results.append(result)
 
     # Extract fields & assemble for full export
-    embeddings = np.array([r["embedding"] for r in results])
+    miewid_embeddings = np.array([r["miewid_embedding"] for r in results])
+    dinov2_embeddings = np.array([r["dinov2_embedding"] for r in results])
     bboxes = np.array([r["bbox"] for r in results])
     image_id_keys = np.array([r["image_id (GBIF key)"] for r in results])
     occurrenceIDs = np.array([r["occurrenceID (GBIF)"] for r in results])
@@ -202,7 +237,8 @@ def process_all_images(media_df: pd.DataFrame) -> None:
     _ = folder_exists(GBIF_OUTPUT_NPZ_FILE, True)
     np.savez(
         GBIF_OUTPUT_NPZ_FILE,
-        embeddings=embeddings,
+        miewid_embeddings=miewid_embeddings,
+        dinov2_embeddings=dinov2_embeddings,
         bboxes=bboxes,
         image_id_keys=image_id_keys,
         occurrenceIDs=occurrenceIDs,
@@ -210,7 +246,7 @@ def process_all_images(media_df: pd.DataFrame) -> None:
         image_url_identifiers=image_url_identifiers
     )
 
-    print(f"Saved {len(embeddings)} embeddings to: {GBIF_OUTPUT_NPZ_FILE}")
+    print(f"Saved {len(miewid_embeddings)} embeddings (MiewID + DINOv2) to: {GBIF_OUTPUT_NPZ_FILE}")
 
 
 
@@ -221,7 +257,8 @@ def view_npz_file() -> None:
     print("Keys in the .npz file:", data.keys())
 
     # Access arrays from .npz file
-    embeddings = data["embeddings"]
+    miewid_embeddings = data["miewid_embeddings"]
+    dinov2_embeddings = data["dinov2_embeddings"]
     bboxes = data["bboxes"]
     image_id_keys = data["image_id_keys"]
     occurrenceIDs = data["occurrenceIDs"]
@@ -229,13 +266,15 @@ def view_npz_file() -> None:
     image_url_identifiers = data["image_url_identifiers"]
 
     # Check shape of embeddings (how many)
-    print("Embeddings shape:", embeddings.shape)
+    print("MiewID Embeddings shape:", miewid_embeddings.shape)
+    print("DINOv2 Embeddings shape:", dinov2_embeddings.shape)
 
     # Print first few values to inspect
     print("First 3 embeddings (+ their associated metadata):")
-    for i in range(min(3, len(embeddings))):  
+    for i in range(min(3, len(miewid_embeddings))):  
         print(f"Embedding {i+1}:")
-        print(f"  Embedding: {embeddings[i]}")
+        print(f"  MiewID Embedding: {miewid_embeddings[i]}")
+        print(f"  DINOv2 Embedding: {dinov2_embeddings[i]}")
         print(f"  BBOX: {bboxes[i]}")
         print(f"  Image ID (GBIF key): {image_id_keys[i]}")
         print(f"  Occurrence ID (GBIF): {occurrenceIDs[i]}")
