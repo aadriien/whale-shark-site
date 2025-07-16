@@ -1,10 +1,21 @@
-/* @import "./styles/about.css"; */
+@import "./styles/about.css";
 @import "./styles/globe_views.css";
 @import "./styles/shark_tracker.css";
 @import "./styles/data_visuals.css";
 @import "./styles/environment.css";
 @import "./styles/build_a_shark.css";
 
+
+/* Global reset of default margins */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
 
 :root {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -83,12 +94,20 @@ nav a.active {
     }
 }
 
+.page-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    text-align: center;
+    padding-top: 60px;
+    padding-bottom: 30px;
+}
+
 
 body {
-    margin: 0;
-    display: flex;
-    justify-content: center;  
-    align-items: center;     
+    margin: 0; 
     min-width: 320px;
     min-height: 100vh;       
 }

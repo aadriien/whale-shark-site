@@ -10,15 +10,7 @@ function Home() {
             {/* BackgroundVideo component of whale shark swimming */}
             <BackgroundVideo />
 
-            <div style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-                overflowY: "auto",
-                textAlign: "center"
-            }}>
+            <div className="page-content">
                 <h1>Welcome to the Whale Shark Project</h1>
 
                 {/* <div 

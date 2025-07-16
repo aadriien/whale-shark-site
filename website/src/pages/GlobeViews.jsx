@@ -93,15 +93,7 @@ function GlobeViews() {
     
     
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            overflowY: "auto",
-            textAlign: "center",
-            padding: "30px 0"
-        }}>
+        <div className="page-content">
             <h1>GlobeViews Page</h1>
             
             <div className="globe-views-container">

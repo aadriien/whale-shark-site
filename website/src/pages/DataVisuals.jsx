@@ -11,15 +11,7 @@ import DataGrid from "../components/DataGrid.jsx";
 
 function DataVisuals() {
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            width: "100%",
-            overflowY: "auto", 
-            textAlign: "center",
-            paddingTop: "60px"
-        }}>
+        <div className="page-content">
             {/* <h1>DataVisuals Page</h1> */}
 
             <div className="full-data-grid">

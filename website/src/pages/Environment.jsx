@@ -1,15 +1,6 @@
 function Environment() {
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-            overflowY: "auto",
-            textAlign: "center",
-            // paddingTop: "60px"
-        }}>
+        <div className="page-content">
             <h1>Copernicus Marine Data Viewer</h1>
 
             <div className="copernicus-visual">

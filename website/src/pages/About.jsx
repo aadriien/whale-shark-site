@@ -9,14 +9,7 @@ import FAQAccordion from "../components/overviews/FAQAccordion.jsx";
 
 function About() {
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            paddingTop: "20px"
-        }}>
+        <div className="page-content about-page-wrapper">
             {/* <h1>About Page</h1> */}
 
             <HeroIntro />

@@ -29,7 +29,7 @@ function SharkTracker() {
     };
 
     return (
-        <div className="sharktracker-wrapper">
+        <div className="page-content sharktracker-wrapper">
             <h1>SharkTracker Page</h1>
 
             <div className="globe-cards-container">

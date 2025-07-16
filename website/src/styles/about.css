@@ -1,29 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&family=Lato:wght@400&display=swap');
 
-body {
+.about-page-wrapper {
     font-family: 'Lato', sans-serif;
     letter-spacing: 0.02em;
+    padding-top: 30px !important;
 }
 
-h1, h2 {
+.about-page-wrapper h1, 
+.about-page-wrapper h2 {
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 600;
     letter-spacing: 0.03em;
 }
-
-
-
-/* Reset default margins */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    height: 100%;
-}
-
 
 
 /* Shared section layout for alternating image x text */
