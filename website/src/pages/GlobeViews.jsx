@@ -98,10 +98,9 @@ function GlobeViews() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh",
             overflowY: "auto",
             textAlign: "center",
-            paddingTop: "60px"
+            padding: "30px 0"
         }}>
             <h1>GlobeViews Page</h1>
             
