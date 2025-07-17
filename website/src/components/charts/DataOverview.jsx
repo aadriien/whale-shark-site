@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 
@@ -24,25 +24,12 @@ const DataOverview = ({
         { label: "Total Occurrences", field: "Total Occurrences" },
         { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
         { label: "Top 3 Publishing Countries", field: "Top 3 Publishing Countries" }
-    ]
+    ],
+    selectedFilter = "", // expect selectedFilter from parent now
 }) => {
     const data = datasets[dataset] || [];
     
-    // Extract unique filter options from dataset for dropdown
-    const filterOptions = useMemo(() => {
-        const uniqueValues = Array.from(new Set(data.map(d => d[filterField])));
-
-        return uniqueValues.sort((a, b) => {
-            // Maintain descending order if numeric
-            if (typeof a === "number" && typeof b === "number") {
-                return b - a;
-            } 
-            // Otherwise string alpha
-            return String(a).localeCompare(String(b));
-        });
-    }, [data, filterField]);
-
-    const [selectedFilter, setSelectedFilter] = useState("");
+    // NOTE: Removed filter dropdown and its state
 
     const selectedData = useMemo(() => {
         // Force both to type string when comparing for search
@@ -59,22 +46,8 @@ const DataOverview = ({
                 padding: "1rem 1rem",
             }}
         >
-            <label htmlFor="filter-select" style={{ display: "block" }}>
-                Select a <span style={{ fontWeight: "bold" }}>{filterField}</span>:
-            </label>
-            <select
-                id="filter-select"
-                value={selectedFilter}
-                onChange={e => setSelectedFilter(e.target.value)}
-            >
-                <option value="">-- Choose a {filterField} --</option>
-                {filterOptions.map(opt => (
-                    <option key={String(opt)} value={String(opt)}>
-                        {opt}
-                    </option>
-                ))}
-            </select>
-            
+            {/* Filter dropdown removed - controlled externally */}
+
             {selectedData ? (
                 <div className="data-overview-panel">
                     {displayFields.map(({ label, field, formatter }, i) => {

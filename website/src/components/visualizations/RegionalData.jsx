@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import * as d3 from "d3";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
@@ -46,14 +46,9 @@ const reshapeRegionData = (rawData, metric) => {
 };
                 
 
-const GBIFRegionOccurrences = ({ regionData, metric }) => {
-    const reshapedData = useMemo(() => reshapeRegionData(regionData, metric), []);
-    const [selectedRegion, setSelectedRegion] = useState("");
-
-    // Prep list of region options / views for selection
-    const regionList = useMemo(() => {
-        return [...new Set(reshapedData.map(d => d.region))].sort();
-    }, [reshapedData]);
+const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion, onRegionChange }) => {
+    // Reshape data once on mount or when regionData / metric change
+    const reshapedData = useMemo(() => reshapeRegionData(regionData, metric), [regionData, metric]);
 
     const filteredData = useMemo(() => {
         return reshapedData.filter(d => d.region === selectedRegion);
@@ -105,21 +100,7 @@ const GBIFRegionOccurrences = ({ regionData, metric }) => {
                 height: "100%",
             }}
         >
-            <label htmlFor="region-select" style={{ display: "block" }}>
-                Select a <span style={{ fontWeight: "bold" }}>{metric}</span>:
-            </label>
-            <select
-                id="region-select"
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-            >
-                <option value="">-- Choose a {metric} --</option>
-                {regionList.map((region) => (
-                    <option key={region} value={region}>
-                        {region}
-                    </option>
-                ))}
-            </select>
+            {/* Filter select moved to parent. This component just displays the data */}
 
             {filteredData.length > 0 ? (
                 <>
@@ -135,7 +116,7 @@ const GBIFRegionOccurrences = ({ regionData, metric }) => {
                 </>
             ) : (
                 selectedRegion ? (
-                    <p style={{ textAlign: "center" }}>No data available for this ${metric}.</p>
+                    <p style={{ textAlign: "center" }}>No data available for this {metric}.</p>
                 ) : (
                     <ChartPlaceholder type="radialHeatmap" message={`Select a ${metric} to see monthly records`} />
                 )
@@ -145,4 +126,3 @@ const GBIFRegionOccurrences = ({ regionData, metric }) => {
 };
 
 export default GBIFRegionOccurrences;
-

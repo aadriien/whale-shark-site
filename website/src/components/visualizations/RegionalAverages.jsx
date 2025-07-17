@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import BarChart from "../charts/BarChart.jsx";
@@ -13,13 +13,7 @@ const AVG_COLUMNS = [
 ];
 
 
-const GBIFRegionAverages = ({ regionData, metric }) => {
-    const [selectedRegion, setSelectedRegion] = useState("");
-
-    const regionList = useMemo(() => {
-        return regionData.map((row) => row[metric]).sort();
-    }, [regionData, metric]);
-
+const GBIFRegionAverages = ({ regionData, metric, selectedRegion }) => {
     const barChartData = useMemo(() => {
         if (!selectedRegion) return [];
 
@@ -52,21 +46,7 @@ const GBIFRegionAverages = ({ regionData, metric }) => {
                 height: "100%",
             }}
         >
-            <label htmlFor="region-select" style={{ display: "block" }}>
-                Select a <span style={{ fontWeight: "bold" }}>{metric}</span>:
-            </label>
-            <select
-                id="region-select"
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-            >
-                <option value="">-- Choose a {metric} --</option>
-                    {regionList.map((region) => (
-                        <option key={region} value={region}>
-                            {region}
-                        </option>
-                    ))}
-            </select>
+            {/* Filter handled in parent */}
 
             {selectedRegion && barChartData.length > 0 ? (
                 <BarChart

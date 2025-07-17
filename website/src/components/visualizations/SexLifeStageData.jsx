@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import RadialHeatmap from "../charts/RadialHeatmap.jsx";
@@ -41,13 +41,7 @@ const reshapeSexLifeStageData = (rawData, selectedYear) => {
 };
 
 
-const GBIFSexLifeStageOccurrences = () => {
-    const yearOptions = useMemo(() => {
-        return [...new Set(calendarStatsGBIF.map(d => d.year))].sort((a, b) => b - a);
-    }, []);
-    
-    const [selectedYear, setSelectedYear] = useState("");
-    
+const GBIFSexLifeStageOccurrences = ({ selectedYear }) => {
     const { ringsData, pieData } = useMemo(() => 
         reshapeSexLifeStageData(calendarStatsGBIF, selectedYear),
         [selectedYear]
@@ -62,23 +56,7 @@ const GBIFSexLifeStageOccurrences = () => {
                 minHeight: "300px",
                 padding: "1rem 0.5rem",
             }}
-        >
-            <label htmlFor="year-select" style={{ display: "block" }}>
-                Select a <span style={{ fontWeight: "bold" }}>year</span>:
-            </label>
-            <select
-                id="year-select"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-            >
-                <option value="">-- Choose a year --</option>
-                {yearOptions.map(year => (
-                    <option key={year} value={year}>
-                        {year}
-                    </option>
-                ))}
-            </select>
-            
+        >   
             {ringsData.length > 0 ? (
                 <RadialHeatmap
                     data={ringsData}
