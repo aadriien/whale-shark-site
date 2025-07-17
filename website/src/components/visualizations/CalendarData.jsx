@@ -39,14 +39,15 @@ const flattenToHeatmapFormat = (rawData) => {
 };
     
 const getDecadeTickFormatter = (yearsArray) => {
-    const decadesShown = new Set();
-    
-    return (year) => {
-        const yNum = +year;
-        const decade = Math.floor(yNum / 10) * 10;
+    const shown = new Set();
+    const validDecades = new Set(
+        yearsArray.map((y) => Math.floor(y / 10) * 10)
+    );
 
-        if (!decadesShown.has(decade)) {
-            decadesShown.add(decade);
+    return (year) => {
+        const decade = Math.floor(+year / 10) * 10;
+        if (validDecades.has(decade) && !shown.has(decade)) {
+            shown.add(decade);
             return `${decade}`;
         }
         return "";

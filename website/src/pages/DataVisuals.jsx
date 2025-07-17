@@ -1,4 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
+
+import DataMetricFilter from "../components/visualizations/DataMetricFilter.jsx";
 
 import DataOverview from "../components/charts/DataOverview.jsx";
 import CalendarData from "../components/visualizations/CalendarData.jsx";
@@ -19,36 +21,7 @@ function DataVisuals() {
     const [selectedContinent, setSelectedContinent] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
     const [selectedPublisher, setSelectedPublisher] = useState("");
-    const [selectedYear, setSelectedYear] = useState(""); // for calendar filter
-
-    const renderFilter = ({ label, field, data, selectedValue, onChange }) => {
-        const options = useMemo(() => {
-            const uniqueValues = Array.from(new Set(data.map(d => d[field])));
-            // Sort numeric descending or string ascending
-            return uniqueValues.sort((a, b) => {
-                if (typeof a === "number" && typeof b === "number") return b - a;
-                return String(a).localeCompare(String(b));
-            });
-        }, [data, field]);
-
-        return (
-            <div style={{ marginBottom: "1rem" }}>
-                <label htmlFor={`${field}-select`} style={{ fontWeight: "bold" }}>
-                    Select a {label.toLowerCase()}:
-                </label>
-                <select
-                    id={`${field}-select`}
-                    value={selectedValue}
-                    onChange={(e) => onChange(e.target.value)}
-                >
-                    <option value="">-- Choose a {label.toLowerCase()} --</option>
-                    {options.map((val) => (
-                        <option key={val} value={val}>{val}</option>
-                    ))}
-                </select>
-            </div>
-        );
-    };
+    const [selectedYear, setSelectedYear] = useState(""); 
 
     return (
         <div className="page-content">
@@ -57,7 +30,7 @@ function DataVisuals() {
                 <div className="grid-section section-calendar">
                     <h1 className="section-title">Calendar Data Metrics</h1>
 
-                    {renderFilter({
+                    {DataMetricFilter({
                         label: "Year",
                         field: "year",
                         data: calendarStatsGBIF,
@@ -88,7 +61,7 @@ function DataVisuals() {
                 <div className="grid-section section-continent">
                     <h1 className="section-title">Continent Data Metrics</h1>
 
-                    {renderFilter({
+                    {DataMetricFilter({
                         label: "Continent",
                         field: "continent",
                         data: continentStats,
@@ -118,7 +91,7 @@ function DataVisuals() {
                 <div className="grid-section section-country">
                     <h1 className="section-title">Country Data Metrics</h1>
 
-                    {renderFilter({
+                    {DataMetricFilter({
                         label: "Country",
                         field: "country",
                         data: countryStats,
@@ -148,7 +121,7 @@ function DataVisuals() {
                 <div className="grid-section section-publishing">
                     <h1 className="section-title">Publishing Country Data Metrics</h1>
 
-                    {renderFilter({
+                    {DataMetricFilter({
                         label: "Publishing Country",
                         field: "publishingCountry",
                         data: publishingStats,
