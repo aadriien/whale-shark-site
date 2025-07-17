@@ -48,15 +48,7 @@ const GBIFSexLifeStageOccurrences = ({ selectedYear }) => {
     );
     
     return (
-        <div className="card-data-wrapper"
-            style={{
-                width: "100%",
-                height: "100%",
-                minWidth: "300px",
-                minHeight: "300px",
-                padding: "1rem 0.5rem",
-            }}
-        >   
+        <>   
             {ringsData.length > 0 ? (
                 <RadialHeatmap
                     data={ringsData}
@@ -73,7 +65,7 @@ const GBIFSexLifeStageOccurrences = ({ selectedYear }) => {
                     <ChartPlaceholder type="radialHeatmap" message="Select a year to see lifeStage and sex" />
                 )
             )}
-        </div>
+        </>
     );
 };
 

@@ -72,9 +72,9 @@
     aspect-ratio: 1; /* Make the card square */
     box-sizing: border-box;
 
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
 }
 
 /* Ensure all data visual cards are contained */
@@ -82,6 +82,10 @@
     flex: 1 1 auto; 
     overflow: auto;
     padding: 1rem;
+    width: 100%;
+    height: 100%;
+    min-width: 300px;
+    min-height: 300px;
 }
 
 /* Style for each data overview by metric */

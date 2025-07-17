@@ -37,15 +37,7 @@ const DataOverview = ({
     }, [data, filterField, selectedFilter]);
     
     return (
-        <div className="card-data-wrapper" 
-            style={{ 
-                width: "100%",
-                height: "100%",
-                minWidth: "300px",
-                minHeight: "300px",
-                padding: "1rem 1rem",
-            }}
-        >
+        <>
             {/* Filter dropdown removed - controlled externally */}
 
             {selectedData ? (
@@ -73,7 +65,7 @@ const DataOverview = ({
                     <ChartPlaceholder type="overview" message={`Select a ${filterField} to see data overview`} />
                 )
             )}
-        </div>
+        </>
     );
 };
 
