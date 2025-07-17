@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BackgroundVideo-DwvPBsvq.js","assets/index-qeHyFqfj.js","assets/index-CQvc8cq3.css"])))=>i.map(i=>d[i]);
+import{j as e,r as t,_ as o}from"./index-qeHyFqfj.js";const r=t.lazy(()=>o(()=>import("./BackgroundVideo-DwvPBsvq.js"),__vite__mapDeps([0,1,2])));function s(){return e.jsxs("div",{style:{position:"relative",height:"100vh",overflow:"hidden"},children:[e.jsx(r,{}),e.jsx("div",{className:"page-content",children:e.jsx("h1",{children:"Welcome to the Whale Shark Project"})})]})}export{s as default};
