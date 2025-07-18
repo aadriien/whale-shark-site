@@ -187,9 +187,6 @@ export function goToCoordinates(lat, long, pitchRef, yawRef) {
 export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, sharkID) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
-
-    // If story mode, disable orbit controls (user can't move globe)
-    controls.enabled = false;
     
     // Have camera zoom into globe gradually, over 2.5 sec period
     new JEasing(camera.position)
@@ -226,9 +223,6 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
 export async function highlightSharkMode(globe, controls, camera, pitchRef, yawRef, sharkID) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
-
-    // If highlight mode, briefly disable orbit controls (user can't move globe)
-    controls.enabled = false;
     
     // Have camera zoom into globe gradually, over 2.5 sec period
     new JEasing(camera.position)

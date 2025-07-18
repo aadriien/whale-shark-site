@@ -29,6 +29,9 @@ const Globe = forwardRef((props, ref) => {
     const playStory = async (sharkID) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
+        // Disable orbit controls BEFORE any animation (to be resumed once finished)
+        controlsRef.current.enabled = false;
+        
         resetGlobe(cameraRef.current, pitchRef, yawRef);
         await new Promise(resolve => setTimeout(resolve, 1000));
         
@@ -42,6 +45,9 @@ const Globe = forwardRef((props, ref) => {
     const highlightShark = async (sharkID) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
+        // Disable orbit controls BEFORE any animation (to be resumed once finished)
+        controlsRef.current.enabled = false;
+
         resetGlobe(cameraRef.current, pitchRef, yawRef);
         await new Promise(resolve => setTimeout(resolve, 1000));
         
