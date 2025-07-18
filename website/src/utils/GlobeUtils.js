@@ -240,7 +240,7 @@ export async function highlightSharkMode(globe, controls, camera, pitchRef, yawR
     // Restore orbit controls
     setTimeout(() => {
         controls.enabled = true;
-    }, 1000);
+    }, 2500);
 };
 
 

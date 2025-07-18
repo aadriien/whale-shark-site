@@ -202,8 +202,8 @@ const Globe = forwardRef((props, ref) => {
     return (
         <div ref={mountRef}
             style={{ 
-            width: "100%", 
-            height: "100%", 
+                width: "100%", 
+                height: "100%", 
             }}
         />
     );

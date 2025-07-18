@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 
 import Globe from "../components/Globe.jsx";
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
@@ -14,7 +14,7 @@ function GlobeViews() {
     const [allSharksVisible, setAllSharksVisible] = useState(true);
     const globeRef = useRef();
 
-    const pointsData = getAllCoordinates();
+    const pointsData = useMemo(() => getAllCoordinates(), []);
     
     const sharks = mediaSharks;
     
@@ -100,7 +100,7 @@ function GlobeViews() {
 
                 {/* Shark info panel on left */}
                 <div className="info-sidebar" >
-                    <SharkInfoPanel shark={selectedShark} onReset={handleReset} />
+                    <SharkInfoPanel shark={selectedShark} />
                 </div>
                 
                 {/* Globe component */}
