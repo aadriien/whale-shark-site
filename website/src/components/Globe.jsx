@@ -25,6 +25,7 @@ const Globe = forwardRef((props, ref) => {
     const raycaster = useRef(new THREE.Raycaster());
     const mouse = useRef(new THREE.Vector2());
 
+    const allowClicksRef = useRef(props.allowClicks);
 
     const playStory = async (sharkID) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
@@ -64,6 +65,12 @@ const Globe = forwardRef((props, ref) => {
         playStory,
         highlightShark,
     }));
+
+
+    // Keep track of whether open clicking allowed (shark selected in globe views?)
+    useEffect(() => {
+        allowClicksRef.current = props.allowClicks;
+    }, [props.allowClicks]);
 
     
     useEffect(() => {
@@ -130,6 +137,12 @@ const Globe = forwardRef((props, ref) => {
 
         const handleClick = (event) => {
             if (!mountRef.current || !globeRef.current) return;
+
+            // Prevent override of selected shark in globe clicking 
+            if (!allowClicksRef.current) {
+                console.log("Click ignored: allowClicks is false (shark already highlighted).");
+                return;
+            }
 
             const rect = mountRef.current.getBoundingClientRect();
             mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;

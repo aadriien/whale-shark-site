@@ -105,7 +105,11 @@ function GlobeViews() {
                 
                 {/* Globe component */}
                 <div className="globe-container">
-                    <Globe ref={globeRef} onSharkClick={handleSelectShark} />
+                    <Globe 
+                        ref={globeRef} 
+                        onSharkClick={handleSelectShark} 
+                        allowClicks={!selectedShark}
+                    />
                 </div>
                 
                 {/* Shark selector dropdown on right */}
