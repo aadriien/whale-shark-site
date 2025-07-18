@@ -17,16 +17,21 @@ const GBIFPublishingCountryOccurrences = ({ selectedRegion, onChange }) => {
     };
     return (
         <>
-            {DataMetricFilter({
-                label: "Publishing Country",
-                field: "publishingCountry",
-                data: publishingCountryStatsGBIF,
-                selectedValue: selectedRegion,
-                onChange: onChange
-            })}
+            <div className="section-header">
+                <h1 className="section-title">Publishing Country Data Metrics</h1>
+
+                <DataMetricFilter
+                    label="Publishing Country"
+                    field="publishingCountry"
+                    data={publishingCountryStatsGBIF}
+                    selectedValue={selectedRegion}
+                    onChange={onChange}
+                    inline={true} /* toggles display of "select a publishing country" */
+                />
+            </div>
 
             <DataGrid>
-                <div>
+                <div className="card-data-wrapper">
                     <DataOverview 
                         dataset="publishingCountry" 
                         filterField="publishingCountry"

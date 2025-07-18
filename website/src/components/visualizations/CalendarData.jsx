@@ -36,13 +36,18 @@ const GBIFCalendarOccurrences = ({ selectedYear, onChange }) => {
         
     return (
         <>
-            {DataMetricFilter({
-                label: "Year",
-                field: "year",
-                data: calendarStatsGBIF,
-                selectedValue: selectedYear,
-                onChange: onChange
-            })}
+            <div className="section-header">
+                <h1 className="section-title">Calendar Data Metrics</h1>
+
+                <DataMetricFilter
+                    label="Year"
+                    field="year"
+                    data={calendarStatsGBIF}
+                    selectedValue={selectedYear}
+                    onChange={onChange}
+                    inline={true} /* toggles display of "select a year" */
+                />
+            </div>
 
             <DataGrid>
                 <div className="card-data-wrapper">

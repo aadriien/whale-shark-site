@@ -18,13 +18,18 @@ const GBIFContinentOccurrences = ({ selectedRegion, onChange }) => {
 
     return (
         <>
-            {DataMetricFilter({
-                label: "Continent",
-                field: "continent",
-                data: continentStatsGBIF,
-                selectedValue: selectedRegion,
-                onChange: onChange
-            })}
+            <div className="section-header">
+                <h1 className="section-title">Continent Data Metrics</h1>
+
+                <DataMetricFilter
+                    label="Continent"
+                    field="continent"
+                    data={continentStatsGBIF}
+                    selectedValue={selectedRegion}
+                    onChange={onChange}
+                    inline={true} /* toggles display of "select a continent" */
+                />
+            </div>
 
             <DataGrid>
                 <div className="card-data-wrapper">
