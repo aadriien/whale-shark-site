@@ -17,8 +17,6 @@ function DataVisuals() {
             <div className="full-data-grid">
 
                 <div className="grid-section section-calendar">
-                    <h1 className="section-title">Calendar Data Metrics</h1>
-
                     <CalendarData
                         selectedYear={selectedYear}
                         onChange={setSelectedYear}
@@ -26,8 +24,6 @@ function DataVisuals() {
                 </div>
 
                 <div className="grid-section section-continent">
-                    <h1 className="section-title">Continent Data Metrics</h1>
-
                     <ContinentData
                         selectedRegion={selectedContinent}
                         onChange={setSelectedContinent}
@@ -35,8 +31,6 @@ function DataVisuals() {
                 </div>
 
                 <div className="grid-section section-country">
-                    <h1 className="section-title">Country Data Metrics</h1>
-
                     <CountryData
                         selectedRegion={selectedCountry}
                         onChange={setSelectedCountry}
@@ -44,8 +38,6 @@ function DataVisuals() {
                 </div>
 
                 <div className="grid-section section-publishing">
-                    <h1 className="section-title">Publishing Country Data Metrics</h1>
-
                     <PublishingCountryData
                         selectedRegion={selectedPublishingCountry}
                         onChange={setSelectedPublishingCountry}

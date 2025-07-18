@@ -24,28 +24,80 @@
     background: linear-gradient(to bottom right, #e2f3ff, #d9e8ff);
 }
 
-.section-title {
-    margin: 0rem 1rem;
-    text-align: left;
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 2rem;
-    font-weight: bold;
-}
-
 /* Slightly darker header bands for each section */
-.section-calendar > .section-title {
+.section-calendar .section-header {
     background-color: #f7d8e1;
 }
-.section-continent > .section-title {
+.section-continent .section-header {
     background-color: #ccefee;
 }
-.section-country > .section-title {
+.section-country .section-header {
     background-color: #f5dbba;
 }
-.section-publishing > .section-title {
+.section-publishing .section-header {
     background-color: #cbe2ff;
 }
+
+
+.section-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 0rem 1rem;
+    border-radius: 8px;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: left;
+    margin: 0rem 1rem;
+}
+
+.data-metric-filter-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.data-metric-filter-select {
+    min-width: 250px;
+    max-width: 100%;
+    font-size: 1.05rem;
+    font-weight: 500;
+    background-color: white;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    margin: 0rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 600px) {
+    .section-header {
+        flex-direction: column;
+        align-items: center;
+        margin: 0.5rem;
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+    
+    .section-title {
+        text-align: center;
+        width: auto;
+    }
+    
+    .data-metric-filter-select {
+        width: 100%;
+        max-width: calc(100% - 2rem); /* account for horizontal margin */
+        min-width: 140px;
+        box-sizing: border-box;
+        font-size: 0.9rem;
+    }
+}
+
 
 .data-grid {
     display: grid;
