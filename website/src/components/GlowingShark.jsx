@@ -1,12 +1,55 @@
 import React, { useRef, useEffect } from "react";
 import p5 from "p5";
 
+import SharkModelPoints from "../assets/data/json/shark_fantasy_model_extracted_points.json";
 
 function GlowingShark() {
     const containerRef = useRef(null);
 
-    const totalDots = 30;
+    // Recreate whale shark by plotting points extracted from 3D model 
+    // 3660 total from full .glb, or 2275 for just "WhaleSharkRigging" (no "ocean" or "particles")
+    const pointsArray = Object.values(SharkModelPoints);
+    const totalDots = pointsArray.length;
 
+    // Precompute min / max for normalization
+    const xValues = pointsArray.map(p => p.x);
+    const yValues = pointsArray.map(p => p.y);
+
+    const minX = Math.min(...xValues);
+    const maxX = Math.max(...xValues);
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+
+    // Add small padding to zoom out so shape doesn't touch edges
+    const padding = 0.05;
+
+    // Compute aspect ratio to center properly (preserve proportions)
+    const dataWidth = maxX - minX;
+    const dataHeight = maxY - minY;
+    const dataAspect = dataWidth / dataHeight;
+
+    function normalize(pointX, pointY, canvasAspect) {
+        // Normalize X, Y between 0, 1
+        const normX = (pointX - minX) / dataWidth;
+        const normY = (pointY - minY) / dataHeight;
+
+        if (canvasAspect > dataAspect) {
+            // Canvas wider than data, so add horizontal margin
+            const scaledWidth = dataAspect / canvasAspect;
+            return {
+                x: padding + normX * scaledWidth * (1 - 2 * padding) + (1 - scaledWidth) / 2,
+                y: padding + normY * (1 - 2 * padding)
+            };
+        } 
+        else {
+            // Canvas taller than data, so add vertical margin
+            const scaledHeight = canvasAspect / dataAspect;
+            return {
+                x: padding + normX * (1 - 2 * padding),
+                y: padding + normY * scaledHeight * (1 - 2 * padding) + (1 - scaledHeight) / 2
+            };
+        }
+    }
 
     useEffect(() => {
         let canvasWidth = 0;
@@ -23,24 +66,24 @@ function GlowingShark() {
             };
 
             p.draw = () => {
-                // Normalized frame ratio to loop every 900 frames (~30 sec)
-                const animationProgress = (p.frameCount % 900) / 900;
-
                 p.blendMode(p.BLEND);
                 p.background(200, 100, 30, 100);
 
+                const canvasAspect = canvasWidth / canvasHeight;
+
+                // Draw all dots to reconstruct shark shape in full
                 for (let i = 0; i < totalDots; i++) {
-                    // Adjust animation progress per dot 
-                    const phaseOffset = i / totalDots;
-                    const dotProgress = (animationProgress + phaseOffset) % 1;
+                    const point = pointsArray[i];
 
-                    // Time-based animation factor per dot (sin + noise for pulsing)
-                    const pulse = p.sin(p.PI * ((dotProgress + p.noise(30, i)) % 1));
-                    
-                    // Dot hue changes over time (+ noise randomness)
-                    const hue = (360 * dotProgress + p.noise(50, i) * 240) % 360;
+                    const { x: normX, y: normY } = normalize(point.x, point.y, canvasAspect);
 
-                    drawGlowingDot(i / totalDots, p.noise(i * 10, i), pulse, hue);
+                    // Stable pulse for glow 
+                    const pulse = 0.5 + 0.5 * p.sin(p.millis() / 1000 + i);
+
+                    // Stable hue cycling over time
+                    const hue = (360 * (p.millis() / 5000) + i) % 360;
+
+                    drawGlowingDot(normX, normY, pulse, hue);
                 }
             };
 
@@ -60,13 +103,13 @@ function GlowingShark() {
                 let posY = normY * canvasHeight;
 
                 // Increasing size == decreasing opacity for glow layers
-                for (let radiusFactor = 0.0; radiusFactor < 0.2; radiusFactor += 0.004) {
+                for (let radiusFactor = 0.0; radiusFactor < 0.012; radiusFactor += 0.0015) {
                     // Outer glow (increase brightness with radius)
-                    p.fill(hue, 100, radiusFactor * 3, 100); 
-                    p.circle(posX, posY, canvasWidth * radiusFactor * 0.5);
+                    p.fill(hue, 100, radiusFactor * 25, 60);
+                    p.circle(posX, posY, canvasWidth * radiusFactor * 0.45);
 
                     // Inner glow (inverse brightness + pulse with time)
-                    p.fill(hue, pulseAmount * 100, (1.0 - radiusFactor) * 3, 100);
+                    p.fill(hue, pulseAmount * 100, (1.0 - radiusFactor) * 30, 60);
                     p.circle(posX, posY, canvasWidth * radiusFactor);
                 }
             };

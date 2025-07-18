@@ -2,12 +2,14 @@ import { useEffect } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 
+const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
+
 function ExtractPointsOnce() {
     useEffect(() => {
         const loader = new GLTFLoader();
 
         loader.load(
-            "./models/whale_shark_3D_model_fantasy.glb",
+            SHARK_MODEL_fantasy,
             (gltf) => {
                 const vertices3D = [];
 

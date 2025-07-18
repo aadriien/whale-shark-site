@@ -3,13 +3,17 @@ import { Suspense, lazy } from "react";
 import SharkAnimation from "../components/SharkAnimation.jsx";
 import GlowingShark from "../components/GlowingShark.jsx";
 
+import ExtractPointsOnce from "../utils/ModelUtils.jsx";
+
 const BackgroundVideo = lazy(() => import("../components/BackgroundVideo.jsx"));
 
 function Home() {
     return (
-        <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
+        <div style={{ position: "relative", height: "100vh", overflow: "hidden", paddingTop: "40px" }}>
             {/* BackgroundVideo component of whale shark swimming */}
             {/* <BackgroundVideo /> */}
+
+            {/* <ExtractPointsOnce /> */}
 
             <GlowingShark />
 
