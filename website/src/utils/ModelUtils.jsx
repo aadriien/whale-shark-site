@@ -37,23 +37,52 @@ function ExtractPointsOnce() {
                     }
                 });
 
+                // ==== 2D NORMALIZATION ====
+
                 const points2D = vertices3D.map(({ x, y }) => ({ x, y }));
 
-                const minX = Math.min(...points2D.map((p) => p.x));
-                const maxX = Math.max(...points2D.map((p) => p.x));
-                const minY = Math.min(...points2D.map((p) => p.y));
-                const maxY = Math.max(...points2D.map((p) => p.y));
+                const minX2D = Math.min(...points2D.map((p) => p.x));
+                const maxX2D = Math.max(...points2D.map((p) => p.x));
+                const minY2D = Math.min(...points2D.map((p) => p.y));
+                const maxY2D = Math.max(...points2D.map((p) => p.y));
+
+                const rangeX2D = maxX2D - minX2D || 1;
+                const rangeY2D = maxY2D - minY2D || 1;
+
+                const normalizedPoints2D = points2D.map((p) => ({
+                    x: (p.x - minX2D) / rangeX2D,
+                    y: (p.y - minY2D) / rangeY2D,
+                }));
+
+
+                // ==== 3D NORMALIZATION (preserves aspect ratio using largest axis range) ====
+
+                const minX = Math.min(...vertices3D.map((p) => p.x));
+                const maxX = Math.max(...vertices3D.map((p) => p.x));
+                const minY = Math.min(...vertices3D.map((p) => p.y));
+                const maxY = Math.max(...vertices3D.map((p) => p.y));
+                const minZ = Math.min(...vertices3D.map((p) => p.z));
+                const maxZ = Math.max(...vertices3D.map((p) => p.z));
 
                 const rangeX = maxX - minX || 1;
                 const rangeY = maxY - minY || 1;
+                const rangeZ = maxZ - minZ || 1;
 
-                const normalizedPoints = points2D.map((p) => ({
-                    x: (p.x - minX) / rangeX,
-                    y: (p.y - minY) / rangeY,
+                const maxRange = Math.max(rangeX, rangeY, rangeZ);
+
+                const normalizedPoints3D = vertices3D.map((p) => ({
+                    x: (p.x - minX) / maxRange,
+                    y: (p.y - minY) / maxRange,
+                    z: (p.z - minZ) / maxRange,
                 }));
 
-                // Output JSON in console - copy from there!
-                console.log(JSON.stringify(normalizedPoints));
+
+                // Output JSON in console (2D + 3D versions)
+                console.log("Normalized 2D Points:");
+                console.log(JSON.stringify(normalizedPoints2D));
+
+                console.log("Normalized 3D Points:");
+                console.log(JSON.stringify(normalizedPoints3D));
             },
             undefined,
             (error) => {
