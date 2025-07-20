@@ -77,8 +77,10 @@ function ResearchReef() {
                 {pages.map(({ path, title, description, image }) => (
                     <Link key={path} to={path} className="reef-card">
                         <img src={image} alt={title} className="reef-image" />
-                        <h3>{title}</h3>
-                        <p>{description}</p>
+                        <div className="reef-card-content">
+                            <h3>{title}</h3>
+                            <p>{description}</p>
+                        </div>
                     </Link>
                 ))}
             </div>
