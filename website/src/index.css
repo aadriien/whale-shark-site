@@ -87,7 +87,7 @@ nav a.active {
     display: flex;
     margin-right: auto; /* push toggles to left */
     padding-right: 10px;
-    gap: 14px; 
+    gap: 16px; 
 }
 
 .version-toggle a {
@@ -116,7 +116,7 @@ nav a.active {
 
 .version-toggle a.active-version {
     background-color: #00aaff; 
-    color: rgb(220, 250, 239); 
+    color: rgb(193, 255, 207); 
     box-shadow: 0 0 6px rgba(168, 230, 207, 0.8);
     border: 1.5px solid #a8e6cf;
 }

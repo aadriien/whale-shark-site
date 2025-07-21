@@ -6,25 +6,25 @@ import SharkAnimation from "../components/SharkAnimation.jsx";
 function ResearchReef() {
     const pages = [
         {
-            path: "/globeviews",
+            path: "/research/globeviews",
             title: "Globe Views",
             description: "Explore global oceanographic patterns and satellite visualizations.",
             image: "/images/globeviews.jpg",
         },
         {
-            path: "/sharktracker",
+            path: "/research/sharktracker",
             title: "Shark Tracker",
             description: "Track real shark movement data in real time and historical views.",
             image: "/images/sharktracker.jpg",
         },
         {
-            path: "/datavisuals",
+            path: "/research/datavisuals",
             title: "Data Visuals",
             description: "Dive into interactive charts and datasets about marine life and climate.",
             image: "/images/datavisuals.jpg",
         },
         {
-            path: "/environment",
+            path: "/research/environment",
             title: "Environment",
             description: "Learn about key environmental indicators affecting ocean health.",
             image: "/images/environment.jpg",
@@ -32,7 +32,7 @@ function ResearchReef() {
     ];
 
     return (
-        <div className="page-content research-reef-wrapper">
+        <div className="page-content research-creative-wrapper">
             {/* <div style={{ overflow: 'hidden', width: '100%' }}>
                 <div 
                     style={{
@@ -51,12 +51,12 @@ function ResearchReef() {
             </div> */}
 
             {/* <section
-                className="reef-hero"
+                className="research-creative-hero"
                 style={{
-                    backgroundImage: `url(/images/researchreef-hero.jpg)`,
+                    backgroundImage: `url(/images/research-reef-hero.jpg)`,
                 }}
             > */}
-                <div className="reef-hero-content">
+                <div className="research-creative-hero-content">
                     <h1>Welcome to the Research Reef</h1>
                     <p>
                         Dive into data. Track real-time movements. Visualize our oceans.
@@ -64,7 +64,7 @@ function ResearchReef() {
                 </div>
             {/* </section> */}
 
-            <div className="reef-intro">
+            <div className="research-creative-intro">
                 <p>
                     Research Reef is the science and data hub of our whale shark experience.
                     Here you'll find real-time tracking, global environmental insights, and
@@ -73,11 +73,11 @@ function ResearchReef() {
                 </p>
             </div>
 
-            <div className="reef-grid">
+            <div className="research-creative-grid">
                 {pages.map(({ path, title, description, image }) => (
-                    <Link key={path} to={path} className="reef-card">
-                        <img src={image} alt={title} className="reef-image" />
-                        <div className="reef-card-content">
+                    <Link key={path} to={path} className="research-creative-card">
+                        <img src={image} alt={title} className="research-creative-image" />
+                        <div className="research-creative-card-content">
                             <h3>{title}</h3>
                             <p>{description}</p>
                         </div>

@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&family=Lato:wght@400&display=swap');
 
-.research-reef-wrapper {
+.research-creative-wrapper {
     font-family: 'Lato', sans-serif;
-    padding-top: 30px;
     color: #e3f7ff;
+    padding-top: 30px;
 }
 
-.reef-hero {
+.research-creative-hero {
     width: 100%;
     height: 40vh;
     background-size: cover;
@@ -18,7 +18,7 @@
     text-align: center;
 }
 
-.reef-hero-content {
+.research-creative-hero-content {
     background: linear-gradient(
         to right,
         rgba(249, 196, 180, 0.4) 0%,     
@@ -31,29 +31,30 @@
     );
     padding: 1.5rem 2rem;
     width: 100%;
+    border-bottom: 4px solid #acdcfc;
 }
 
-.reef-hero-content h1, 
-.reef-hero-content p {
+.research-creative-hero-content h1, 
+.research-creative-hero-content p {
     color: #fffeab;
     text-shadow:
         3px 3px 6px rgba(0, 0, 0, 0.9),
         0 0 10px rgba(0, 0, 0, 0.7);
 }
 
-.reef-hero-content h1 {
+.research-creative-hero-content h1 {
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-size: 5rem; 
     font-weight: 600;
     margin-bottom: 0.7rem;
 }
 
-.reef-hero-content p {
+.research-creative-hero-content p {
     font-size: 1.7rem;
     font-weight: 500;
 }
 
-.reef-intro {
+.research-creative-intro {
     max-width: 80vw;
     margin: 2rem auto 3rem auto;
     font-size: 1.6rem;
@@ -64,7 +65,7 @@
 }
 
 
-.reef-grid {
+.research-creative-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 30px;
@@ -73,7 +74,7 @@
     margin: 0 auto;
 }
 
-.reef-card {
+.research-creative-card {
     height: 400px; 
     background: linear-gradient(
         145deg,
@@ -88,7 +89,7 @@
     display: block;
 }
 
-.reef-card:hover {
+.research-creative-card:hover {
     transform: translateY(-6px) scale(1.02);
     box-shadow: 0 12px 28px rgba(0, 128, 192, 0.5);
     background: linear-gradient(
@@ -98,7 +99,7 @@
     );
 }
 
-.reef-image {
+.research-creative-image {
     height: 60%; 
     width: 100%;
     object-fit: cover;
@@ -106,14 +107,14 @@
     display: block;
 }
 
-.reef-card-content {
+.research-creative-card-content {
     height: 40%; 
     padding: 1rem;
     overflow-y: auto; 
     box-sizing: border-box;
 }
 
-.reef-card h3 {
+.research-creative-card h3 {
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-size: 1.7rem;
     color: #bba9ef;
@@ -121,7 +122,7 @@
     margin: 0 0 0.5rem 0;
 }
 
-.reef-card p {
+.research-creative-card p {
     font-size: 1.2rem;
     line-height: 1.6;
     color: #d6f8ff;
