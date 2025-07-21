@@ -20,7 +20,7 @@ function CreativeCurrent() {
         <div className="page-content research-creative-wrapper">
             {/* <section className="research-creative-hero"> */}
                 <div className="research-creative-hero-content">
-                    <h1>Welcome to the Creative Current!</h1>
+                    <h1>Welcome to the Creative Current</h1>
                     <p>Build sharks, watch animations, and dive into creativity.</p>
                 </div>
             {/* </section> */}

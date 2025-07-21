@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 
 import SharkAnimation from "../components/SharkAnimation.jsx";
 import GlowingShark from "../components/GlowingShark.jsx";
+import GlowSharkAnimated from "../components/GlowSharkAnimated.jsx";
 
 import ExtractPointsOnce from "../utils/ModelUtils.jsx";
 
@@ -15,7 +16,8 @@ function Home() {
 
             {/* <ExtractPointsOnce /> */}
 
-            <GlowingShark />
+            {/* <GlowingShark /> */}
+            <GlowSharkAnimated />
 
             <div className="page-content">
                 <h1>Welcome to the Whale Shark Project</h1>
