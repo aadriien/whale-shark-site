@@ -4,7 +4,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import SharkModelPoints3D from "../assets/data/json/shark_model_extracted_points_3d.json";
 
-
 function GlowSharkAnimated() {
     const containerRef = useRef();
 
@@ -17,9 +16,9 @@ function GlowSharkAnimated() {
             75,
             container.clientWidth / container.clientHeight,
             0.1,
-            1000
+            2000
         );
-        camera.position.z = 300;
+        camera.position.z = 800; 
 
         // Set up renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -86,15 +85,34 @@ function GlowSharkAnimated() {
         });
 
         const shark = new THREE.Points(geometry, material);
-        shark.rotation.set(-Math.PI / 2, 0, -Math.PI / 2); 
+        // Shark facing front means nose to left side of user (sideways)
+        shark.rotation.set(-Math.PI / 2, 0, Math.PI / 2);
         scene.add(shark);
 
-        // Animation loop
+        // Define control points for the path that go around the screen bounds
+        const pathPoints = [
+            new THREE.Vector3(600, 200, 0),
+            new THREE.Vector3(-600, 100, -300),
+            new THREE.Vector3(-400, -250, 400),
+            new THREE.Vector3(500, -300, 300),
+            new THREE.Vector3(600, 100, -200),
+        ];
+
+        // Create a smooth curve path (looped for continuous movement)
+        const curve = new THREE.CatmullRomCurve3(pathPoints);
+        curve.closed = true; 
+
+        // Show curve as a line in scene
+        const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(200));
+        const curveMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.3, transparent: true });
+        const curveLine = new THREE.Line(curveGeometry, curveMaterial);
+        scene.add(curveLine);
+
         const clock = new THREE.Clock();
 
         const animate = () => {
             requestAnimationFrame(animate);
-            const time = clock.getElapsedTime();            
+            const time = clock.getElapsedTime();
 
             // Hue shift + pulse
             const colors = geometry.attributes.color.array;
@@ -108,6 +126,21 @@ function GlowSharkAnimated() {
             }
             geometry.attributes.color.needsUpdate = true;
 
+            // Move shark along curve (20 sec to complete 1 loop)
+            const loopDuration = 20; 
+            const t = (time % loopDuration) / loopDuration; // normalized time [0,1]
+            const nextT = (t + 0.01) % 1; 
+            const currentPos = curve.getPointAt(t);
+            const nextPos = curve.getPointAt(nextT);
+
+            shark.position.copy(currentPos);
+            shark.up.set(0, 1, 0); // keep consistent up vector
+            shark.lookAt(nextPos);
+
+            // Ensure "front" of shark == nose facing "lookAt"
+            shark.rotateX(-Math.PI / 2);
+            shark.rotateZ(Math.PI);
+
             controls.update();
             renderer.render(scene, camera);
         };
@@ -119,6 +152,8 @@ function GlowSharkAnimated() {
             container.removeChild(renderer.domElement);
             geometry.dispose();
             material.dispose();
+            curveGeometry.dispose();
+            curveMaterial.dispose();
         };
     }, []);
 
