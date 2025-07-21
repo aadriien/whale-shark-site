@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import p5 from "p5";
 
-import SharkModelPoint2D from "../assets/data/json/shark_model_extracted_points_2d.json";
+import SharkModelPoints2D from "../assets/data/json/shark_model_extracted_points_2d.json";
 import SharkModelPoints3D from "../assets/data/json/shark_model_extracted_points_3d.json";
 
 function GlowingShark() {
@@ -9,7 +9,6 @@ function GlowingShark() {
 
     // Recreate whale shark by plotting points extracted from 3D model 
     // 3660 total from full .glb, or 2275 for just "WhaleSharkRigging" (no "ocean" or "particles")
-
     const rawPoints = Object.values(SharkModelPoints3D);
 
     // Compute bounds to center & scale shark
@@ -29,7 +28,7 @@ function GlowingShark() {
     const centerZ = (minZ + maxZ) / 2;
 
     const maxSpan = Math.max(maxX - minX, maxY - minY, maxZ - minZ);
-    const targetSpan = 300;
+    const targetSpan = 500;
     const scaleFactor = targetSpan / maxSpan;
 
     console.log("Sample point:", rawPoints[0]);
@@ -77,7 +76,8 @@ function GlowingShark() {
                 drawBoundingBox(p);
 
                 // Draw all dots to reconstruct shark shape in full
-                for (let i = 0; i < totalDots; i++) {
+                const stride = 1;
+                for (let i = 0; i < totalDots; i += stride) {
                     const point = pointsArray[i];
 
                     // Stable pulse for glow 
@@ -107,11 +107,11 @@ function GlowingShark() {
 
                 for (let radiusFactor = 0.0; radiusFactor < 0.025; radiusFactor += 0.0025) {
                     // Outer glow (brightness with radius)
-                    p.fill(hue, 100, radiusFactor * 60, 100); 
+                    p.fill(hue, 100, radiusFactor * 200, 100); 
                     p.sphere(p.width * radiusFactor * 0.3, 3);
 
                     // Inner glow (pulse + inverse brightness)
-                    p.fill(hue, pulseAmount * 100, (1.0 - radiusFactor) * 40, 100);
+                    p.fill(hue, pulseAmount * 100, (1.0 - radiusFactor) * 150, 100);
                     p.sphere(p.width * radiusFactor * 0.15, 3);
                 }
 
