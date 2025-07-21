@@ -4,6 +4,7 @@ import p5 from "p5";
 import SharkModelPoints2D from "../assets/data/json/shark_model_extracted_points_2d.json";
 import SharkModelPoints3D from "../assets/data/json/shark_model_extracted_points_3d.json";
 
+
 function GlowingShark() {
     const containerRef = useRef(null);
 
