@@ -130,7 +130,7 @@ function GlowSharkAnimated() {
     useEffect(() => {
         const container = containerRef.current;
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x042a3b); // dark blue-green
+        // scene.background = new THREE.Color(0x042a3b); // dark blue-green
         
         const camera = new THREE.PerspectiveCamera(
             75,

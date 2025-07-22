@@ -4,6 +4,8 @@ import SharkAnimation from "../components/SharkAnimation.jsx";
 import GlowingShark from "../components/GlowingShark.jsx";
 import GlowSharkAnimated from "../components/GlowSharkAnimated.jsx";
 
+import GalacticOcean from "../components/GalacticOcean.jsx";
+
 import ExtractPointsOnce from "../utils/ModelUtils.jsx";
 
 const BackgroundVideo = lazy(() => import("../components/BackgroundVideo.jsx"));
@@ -14,7 +16,13 @@ function Home() {
             {/* BackgroundVideo component of whale shark swimming */}
             {/* <BackgroundVideo /> */}
 
+            <div className="page-content">
+                <h1>Welcome to the Whale Shark Project</h1>
+            </div>
+
             {/* <ExtractPointsOnce /> */}
+
+            <GalacticOcean />
 
             {/* <GlowingShark /> */}
             <GlowSharkAnimated />
