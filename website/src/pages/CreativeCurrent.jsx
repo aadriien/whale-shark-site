@@ -6,13 +6,13 @@ function CreativeCurrent() {
             path: "/creative/buildashark",
             title: "Build-A-Shark",
             description: "Create your own virtual shark with custom features and colors.",
-            image: "/images/buildashark.jpg",
+            image: "./build-a-shark.png",
         },
         {
             path: "/creative/animation",
             title: "Animation",
             description: "Watch beautiful ocean animations and learn how they're made.",
-            image: "/images/animation.jpg",
+            image: "./animation.png",
         },
     ];
 

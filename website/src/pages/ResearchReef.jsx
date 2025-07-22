@@ -9,25 +9,25 @@ function ResearchReef() {
             path: "/research/globeviews",
             title: "Globe Views",
             description: "Explore global oceanographic patterns and satellite visualizations.",
-            image: "/images/globeviews.jpg",
+            image: "./globe-views.png",
         },
         {
             path: "/research/sharktracker",
             title: "Shark Tracker",
             description: "Track real shark movement data in real time and historical views.",
-            image: "/images/sharktracker.jpg",
+            image: "./shark-tracker.png",
         },
         {
             path: "/research/datavisuals",
             title: "Data Visuals",
             description: "Dive into interactive charts and datasets about marine life and climate.",
-            image: "/images/datavisuals.jpg",
+            image: "./data-visuals.png",
         },
         {
             path: "/research/environment",
             title: "Environment",
             description: "Learn about key environmental indicators affecting ocean health.",
-            image: "/images/environment.jpg",
+            image: "./environment.png",
         },
     ];
 
@@ -53,7 +53,7 @@ function ResearchReef() {
             {/* <section
                 className="research-creative-hero"
                 style={{
-                    backgroundImage: `url(/images/research-reef-hero.jpg)`,
+                    backgroundImage: `url(/images/research-reef-hero.png)`,
                 }}
             > */}
                 <div className="research-creative-hero-content">
