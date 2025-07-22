@@ -356,7 +356,7 @@ positionAttr.needsUpdate = true;
 
     const oceanPlane = new THREE.Mesh(oceanGeometry, oceanMaterial);
     oceanPlane.rotation.x = -Math.PI / 2; // horizontal plane
-    oceanPlane.position.y = 60; // below ripple line
+    oceanPlane.position.y = 130; // switch between 130 & 50 to toggle upside down ocean
     scene.add(oceanPlane);
 
     const oceanMesh = new THREE.Mesh(oceanGeometry, oceanMaterial);
