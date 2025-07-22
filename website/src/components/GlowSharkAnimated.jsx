@@ -124,6 +124,35 @@ function applyRipple({
 }
 
 
+function createCircleTexture() {
+    // Use bigger canvas for smoother gradient in sprites
+    const size = 128; 
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    
+    ctx.clearRect(0, 0, size, size);
+
+    // Create radial gradient with multiple stops for smooth falloff
+    const gradient = ctx.createRadialGradient(
+        size / 2, size / 2, size * 0.05,  // inner radius (bright core)
+        size / 2, size / 2, size / 2      // outer radius (fade out)
+    );
+
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');      // bright center
+    gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.3)');  // soft middle glow
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');      // transparent edge
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+
+    const texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+    return texture;
+}
+
+
 function GlowSharkAnimated() {
     const containerRef = useRef();
     
@@ -200,13 +229,25 @@ function GlowSharkAnimated() {
         geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
         
+        // const material = new THREE.PointsMaterial({
+        //     size: 3,
+        //     vertexColors: true,
+        //     transparent: true,
+        //     opacity: 0.85,
+        //     blending: THREE.AdditiveBlending,
+        //     depthWrite: false,
+        // });
+
+        const sprite = createCircleTexture();
         const material = new THREE.PointsMaterial({
-            size: 3,
+            size: 8.5, 
+            map: sprite,
             vertexColors: true,
             transparent: true,
-            opacity: 0.85,
+            opacity: 0.9,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
+            sizeAttenuation: true,
         });
         
         const shark = new THREE.Points(geometry, material);
