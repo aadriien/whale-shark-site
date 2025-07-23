@@ -276,6 +276,18 @@ export function createReef() {
     ];
     
     const blobReefGroup = createBlobParticles(coralColors, 300, 2, 13);
+
+    // Add a clickable invisible mesh
+    const clickable = new THREE.Mesh(
+        new THREE.SphereGeometry(20, 16, 16), // size based on blob spread
+        new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true, opacity: 0.5, transparent: true })
+    );
+    clickable.name = "reef";
+
+    // Store reference to clickable in userData for easy access when animating
+    blobReefGroup.userData.clickable = clickable;
+    blobReefGroup.add(clickable);
+
     return blobReefGroup;
 }
 
@@ -288,8 +300,37 @@ export function animateReef(reefGroup) {
             axis1: 'z', amplitude1: 0.025, frequency1: 0.12, 
             axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
         },
-        bounds: { minX: -60, maxX: 60, minY: 0, maxY: 50, minZ: -60, maxZ: 60 },
+        bounds: { minX: -30, maxX: 30, minY: 0, maxY: 50, minZ: -60, maxZ: 60 },
     });
+
+    // Find points object inside reefGroup
+    let points = null;
+    reefGroup.traverse(child => {
+        if (child.isPoints && child.userData.positions) {
+            points = child;
+        }
+    });
+
+    if (!points) return;
+
+    // Calculate average center of particles
+    const { positions, particleCount } = points.userData;
+    let avgX = 0, avgY = 0, avgZ = 0;
+
+    for (let i = 0; i < particleCount; i++) {
+        avgX += positions[i * 3];
+        avgY += positions[i * 3 + 1];
+        avgZ += positions[i * 3 + 2];
+    }
+    avgX /= particleCount;
+    avgY /= particleCount;
+    avgZ /= particleCount;
+
+    // Move clickable sphere mesh to average center (follow particle blob)
+    const clickable = reefGroup.userData.clickable;
+    if (clickable) {
+        clickable.position.set(avgX, avgY, avgZ);
+    }
 }
 
 
@@ -304,6 +345,18 @@ export function createCurrent() {
     ];
     
     const blobCurrentGroup = createBlobParticles(currentColors, 300, 2, 13);
+
+    // Add a clickable invisible mesh
+    const clickable = new THREE.Mesh(
+        new THREE.SphereGeometry(20, 16, 16), // size based on blob spread
+        new THREE.MeshBasicMaterial({ color: 0x4fa35d, wireframe: true, opacity: 0.5, transparent: true })
+    );
+    clickable.name = "current";
+
+    // Store reference to clickable in userData for easy access when animating
+    blobCurrentGroup.userData.clickable = clickable;
+    blobCurrentGroup.add(clickable);
+    
     return blobCurrentGroup;
 }
 
@@ -316,8 +369,37 @@ export function animateCurrent(currentGroup) {
             axis1: 'z', amplitude1: 0.02, frequency1: 0.1,
             axis2: 'y', amplitude2: 0.005, frequency2: 0.05,
         },
-        bounds: { minX: -60, maxX: 60, minY: 0, maxY: 50, minZ: -60, maxZ: 60 }
+        bounds: { minX: -30, maxX: 30, minY: 0, maxY: 50, minZ: -30, maxZ: 30 }
     });
+
+    // Find points object inside reefGroup
+    let points = null;
+    currentGroup.traverse(child => {
+        if (child.isPoints && child.userData.positions) {
+            points = child;
+        }
+    });
+
+    if (!points) return;
+
+    // Calculate average center of particles
+    const { positions, particleCount } = points.userData;
+    let avgX = 0, avgY = 0, avgZ = 0;
+
+    for (let i = 0; i < particleCount; i++) {
+        avgX += positions[i * 3];
+        avgY += positions[i * 3 + 1];
+        avgZ += positions[i * 3 + 2];
+    }
+    avgX /= particleCount;
+    avgY /= particleCount;
+    avgZ /= particleCount;
+
+    // Move clickable sphere mesh to average center (follow particle blob)
+    const clickable = currentGroup.userData.clickable;
+    if (clickable) {
+        clickable.position.set(avgX, avgY, avgZ);
+    }
 }
 
 
