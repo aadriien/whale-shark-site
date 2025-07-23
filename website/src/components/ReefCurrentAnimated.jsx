@@ -5,43 +5,65 @@ function createBlobParticles(baseColors, particleCount = 500, spaceScale = 2, po
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colorsArray = new Float32Array(particleCount * 3);
-    
-    // Increase placement range by spaceScale
-    const rangeX = 120 * spaceScale;
-    const rangeY = 40 * spaceScale;
-    const rangeZ = 120 * spaceScale;
-    
+
+    // Define ellipsoid radii for distribution (scaled), should match x/y/z bounds
+    const radiusX = 60 * spaceScale;
+    const radiusY = 35 * spaceScale;
+    const radiusZ = 60 * spaceScale;
+
+    // Helper function to add smooth noise offset based on index & coords
+    function noiseOffset(x, y, z, i) {
+        return (
+            // Higher values == more spiky / misshapen / blobby shape
+            Math.sin(x * 7 + i) * 3.2 + 
+            Math.cos(y * 9 + i * 1.5) * 2.7 +
+            Math.sin(z * 8 + i * 0.7) * 3.2
+        );
+    }
+
     for (let i = 0; i < particleCount; i++) {
-        positions[i * 3] = Math.random() * rangeX - rangeX / 2;
-        positions[i * 3 + 1] = Math.random() * rangeY;
-        positions[i * 3 + 2] = Math.random() * rangeZ - rangeZ / 2;
-        
+        let x, y, z;
+        do {
+            x = (Math.random() * 2 - 1) * radiusX;
+            y = (Math.random() * 2 - 1) * radiusY;
+            z = (Math.random() * 2 - 1) * radiusZ;
+        } while ((x * x) / (radiusX * radiusX) + (y * y) / (radiusY * radiusY) + (z * z) / (radiusZ * radiusZ) > 1);
+
+        // Apply noise offset on each axis separately to get irregular shape
+        x += noiseOffset(x, y, z, i) * 0.5; 
+        y += noiseOffset(y, z, x, i + 1000) * 0.4; 
+        z += noiseOffset(z, x, y, i + 2000) * 0.5;
+
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y + radiusY * 0.4; // slight upward shift bias
+        positions[i * 3 + 2] = z;
+
         const c = baseColors[Math.floor(Math.random() * baseColors.length)];
         colorsArray[i * 3] = c.r;
         colorsArray[i * 3 + 1] = c.g;
         colorsArray[i * 3 + 2] = c.b;
     }
-    
+
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute("color", new THREE.BufferAttribute(colorsArray, 3));
-    
+
     // Create smooth radial gradient texture for points 
     const size = 128;
     const canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext("2d");
-    
+
     const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
     gradient.addColorStop(0, "rgba(255, 255, 255, 0.9)");
     gradient.addColorStop(0.6, "rgba(255, 255, 255, 0.3)");
     gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-    
+
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, size, size);
-    
+
     const texture = new THREE.CanvasTexture(canvas);
-    
+
     const material = new THREE.PointsMaterial({
         vertexColors: true,
         map: texture,
@@ -51,9 +73,9 @@ function createBlobParticles(baseColors, particleCount = 500, spaceScale = 2, po
         blending: THREE.AdditiveBlending,
         alphaTest: 0.01,
     });
-    
+
     const points = new THREE.Points(geometry, material);
-    
+
     // Store data for animation
     points.userData = { positions, particleCount, geometry, spaceScale };
     return points;
@@ -61,46 +83,65 @@ function createBlobParticles(baseColors, particleCount = 500, spaceScale = 2, po
 
 
 function animateBlobParticles(blobGroup, options = {}) {
+    // Base steady movements per frame
     const {
-        moveVector = new THREE.Vector3(0.05, 0, 0), // base steady movement per frame
+        moveVector = new THREE.Vector3(0.05, 0, 0),
         oscillation = {
             axis1: 'z', amplitude1: 0.02, frequency1: 0.1,
             axis2: 'y', amplitude2: 0.005, frequency2: 0.05
         },
         bounds = { minX: -60, maxX: 60, minY: 0, maxY: 40, minZ: -60, maxZ: 60 },
     } = options;
-    
-    // Helper to get attribute index by axis letter
+
     const axisIndex = { x: 0, y: 1, z: 2 };
-    
+    const rangeX = bounds.maxX - bounds.minX;
+
     blobGroup.traverse(child => {
         if (child.isPoints && child.userData.positions) {
             const { positions, particleCount, geometry } = child.userData;
-            
+
+            // Initialize velocity array if not present
+            if (!child.userData.velocities) {
+                const velocities = new Float32Array(particleCount * 3);
+                for (let i = 0; i < particleCount; i++) {
+                    velocities[i * 3]     = moveVector.x * (0.8 + 0.4 * Math.random());
+                    velocities[i * 3 + 1] = moveVector.y;
+                    velocities[i * 3 + 2] = moveVector.z;
+                }
+                child.userData.velocities = velocities;
+            }
+
+            const velocities = child.userData.velocities;
+
             for (let i = 0; i < particleCount; i++) {
-                // Steady movement
-                positions[i * 3] += moveVector.x;
-                positions[i * 3 + 1] += moveVector.y;
-                positions[i * 3 + 2] += moveVector.z;
-                
-                // Oscillations
+                // Smoothly adjust velocities toward target moveVector
+                velocities[i * 3] = THREE.MathUtils.lerp(velocities[i * 3], moveVector.x, 0.05);
+                velocities[i * 3 + 1] = THREE.MathUtils.lerp(velocities[i * 3 + 1], moveVector.y, 0.05);
+                velocities[i * 3 + 2] = THREE.MathUtils.lerp(velocities[i * 3 + 2], moveVector.z, 0.05);
+
+                // Apply velocity to position
+                positions[i * 3] += velocities[i * 3];
+                positions[i * 3 + 1] += velocities[i * 3 + 1];
+                positions[i * 3 + 2] += velocities[i * 3 + 2];
+
+                // Apply oscillations
                 if (oscillation.axis1) {
                     positions[i * 3 + axisIndex[oscillation.axis1]] +=
-                    Math.sin(positions[i * 3] * oscillation.frequency1 + i) * oscillation.amplitude1;
+                        Math.sin(positions[i * 3] * oscillation.frequency1 + i) * oscillation.amplitude1;
                 }
                 if (oscillation.axis2) {
                     positions[i * 3 + axisIndex[oscillation.axis2]] +=
-                    Math.sin(positions[i * 3] * oscillation.frequency2 + i) * oscillation.amplitude2;
+                        Math.sin(positions[i * 3] * oscillation.frequency2 + i) * oscillation.amplitude2;
                 }
-                
-                // Looping on X axis (can be extended or customized)
-                if (positions[i * 3] > bounds.maxX) {
-                    positions[i * 3] = bounds.minX;
-                    positions[i * 3 + 1] = Math.random() * (bounds.maxY - bounds.minY) + bounds.minY;
-                    positions[i * 3 + 2] = Math.random() * (bounds.maxZ - bounds.minZ) + bounds.minZ;
-                }
+
+                // Smooth modular wrap on X axis
+                positions[i * 3] = ((positions[i * 3] - bounds.minX) % rangeX + rangeX) % rangeX + bounds.minX;
+
+                // Softly jitter Y & Z toward bounds on wrap (not strictly needed here anymore)
+                positions[i * 3 + 1] = THREE.MathUtils.clamp(positions[i * 3 + 1], bounds.minY, bounds.maxY);
+                positions[i * 3 + 2] = THREE.MathUtils.clamp(positions[i * 3 + 2], bounds.minZ, bounds.maxZ);
             }
-            
+
             geometry.attributes.position.needsUpdate = true;
         }
     });
@@ -300,7 +341,7 @@ export function animateReef(reefGroup) {
             axis1: 'z', amplitude1: 0.025, frequency1: 0.12, 
             axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
         },
-        bounds: { minX: -30, maxX: 30, minY: 0, maxY: 50, minZ: -60, maxZ: 60 },
+        bounds: { minX: -60, maxX: 60, minY: 0, maxY: 70, minZ: -60, maxZ: 60 },
     });
 
     // Find points object inside reefGroup
@@ -364,12 +405,12 @@ export function createCurrent() {
 // Helper which gets sent up to GalacticOcean parent for use in scene
 export function animateCurrent(currentGroup) {
     animateBlobParticles(currentGroup, {
-        moveVector: new THREE.Vector3(0.05, 0, 0), 
+        moveVector: new THREE.Vector3(0.015, 0, 0), 
         oscillation: {
-            axis1: 'z', amplitude1: 0.02, frequency1: 0.1,
-            axis2: 'y', amplitude2: 0.005, frequency2: 0.05,
+            axis1: 'z', amplitude1: 0.025, frequency1: 0.12, 
+            axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
         },
-        bounds: { minX: -30, maxX: 30, minY: 0, maxY: 50, minZ: -30, maxZ: 30 }
+        bounds: { minX: -60, maxX: 60, minY: 0, maxY: 70, minZ: -60, maxZ: 60 }
     });
 
     // Find points object inside reefGroup
