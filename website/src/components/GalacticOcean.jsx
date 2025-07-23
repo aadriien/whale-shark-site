@@ -415,6 +415,26 @@ function GalacticOcean() {
             if (child.isMesh && child.name === "current") clickableMeshes.current.push(child);
         });
 
+        // Store particle blobs + their original material states
+        const particleBlobs = {
+        reef: { blob: null, original: {} },
+        current: { blob: null, original: {} },
+        };
+
+        reef.traverse((child) => {
+        if (child.isPoints) {
+            particleBlobs.reef.blob = child;
+            particleBlobs.reef.original.opacity = child.material.opacity;
+            particleBlobs.reef.original.size = child.material.size;
+        }
+        });
+        current.traverse((child) => {
+        if (child.isPoints) {
+            particleBlobs.current.blob = child;
+            particleBlobs.current.original.opacity = child.material.opacity;
+            particleBlobs.current.original.size = child.material.size;
+        }
+        });
 
         // Reusable helper function for mouse click & hover detection
         function getIntersectedClickable(event) {
@@ -447,13 +467,57 @@ function GalacticOcean() {
         mountRef.current.addEventListener("click", handleClick);
 
 
+        let currentHovered = null;
+
         const handleHover = (event) => {
             const intersect = getIntersectedClickable(event);
+
             if (intersect) {
-                document.body.style.cursor = "pointer";
+                // Only enable changes if hovered object different
+                const hoveredName = intersect.object.name;
+
+                if (hoveredName !== currentHovered) {
+                    // Reset all particles first
+                    Object.values(particleBlobs).forEach(({ blob, original }) => {
+                        if (blob) {
+                            blob.material.opacity = original.opacity;
+                            blob.material.size = original.size;
+                            blob.material.needsUpdate = true;
+                        }
+                    });
+
+                    // Glow only hovered one (reef vs current)
+                    if (hoveredName === "reef" && particleBlobs.reef.blob) {
+                        const blob = particleBlobs.reef.blob;
+                        blob.material.opacity = 1.0;
+                        blob.material.size = particleBlobs.reef.original.size * 1.5;
+                        blob.material.needsUpdate = true;
+                    } 
+                    else if (hoveredName === "current" && particleBlobs.current.blob) {
+                        const blob = particleBlobs.current.blob;
+                        blob.material.opacity = 1.0;
+                        blob.material.size = particleBlobs.current.original.size * 1.5;
+                        blob.material.needsUpdate = true;
+                    }
+
+                    document.body.style.cursor = "pointer";
+                    currentHovered = hoveredName;
+                }
             } 
             else {
-                document.body.style.cursor = "default";
+                if (currentHovered !== null) {
+                    // Reset all particles only once when hover ends
+                    Object.values(particleBlobs).forEach(({ blob, original }) => {
+                        if (blob) {
+                            blob.material.opacity = original.opacity;
+                            blob.material.size = original.size;
+                            blob.material.needsUpdate = true;
+                        }
+                    });
+
+                    document.body.style.cursor = "default";
+                    currentHovered = null;
+                }
             }
         };
         mountRef.current.addEventListener("mousemove", handleHover);
