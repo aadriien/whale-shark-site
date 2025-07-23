@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -7,6 +8,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 
 import { createReef, animateReef, createCurrent, animateCurrent } from "./ReefCurrentAnimated.jsx";
+import GlowSharkAnimated from "./GlowSharkAnimated.jsx";
 
 
 function createNebula(scene) {
@@ -346,6 +348,14 @@ function createOcean(scene) {
 
 function GalacticOcean() {
     const mountRef = useRef();
+    const cameraRef = useRef();
+
+    // Store for clickable Research Reef & Creative Current particle blobs
+    const navigate = useNavigate();
+    const raycaster = useRef(new THREE.Raycaster());
+    const mouse = useRef(new THREE.Vector2());
+    const clickableMeshes = useRef([]);
+
 
     useEffect(() => {
         if (!mountRef.current) return;
@@ -361,6 +371,7 @@ function GalacticOcean() {
             4000
         );
         camera.position.set(0, 100, 400);
+        cameraRef.current = camera;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -395,6 +406,40 @@ function GalacticOcean() {
 
         reef.position.set(-450, -130, 0); 
         current.position.set(450, -130, 0); 
+
+        // Add their invisible meshes to clickable list
+        reef.traverse((child) => {
+            if (child.isMesh && child.name === "reef") clickableMeshes.current.push(child);
+        });
+        current.traverse((child) => {
+            if (child.isMesh && child.name === "current") clickableMeshes.current.push(child);
+        });
+
+        const handleClick = (event) => {
+            if (!mountRef.current) return;
+
+            console.log("click detected!");
+
+            const rect = mountRef.current.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.current.setFromCamera(mouse, camera);
+            const intersects = raycaster.current.intersectObjects(clickableMeshes.current, true);
+
+            if (intersects.length > 0) {
+                const clickedName = intersects[0].object.name;
+                if (clickedName === "reef") {
+                    navigate("/research");
+                } 
+                else if (clickedName === "current") {
+                    navigate("/creative");
+                }
+            }
+        };
+
+        mountRef.current.addEventListener("click", handleClick);
+
 
 
         // Post-processing setup
@@ -438,15 +483,17 @@ function GalacticOcean() {
         // Cleanup on unmount
         return () => {
             window.removeEventListener("resize", onResize);
+
             if (
                 mountRef.current &&
                 renderer.domElement.parentElement === mountRef.current
             ) {
                 mountRef.current.removeChild(renderer.domElement);
+                mountRef.current.removeEventListener("click", handleClick);
             }
             renderer.dispose();
         };
-    }, []);
+    }, [navigate]);
 
     return (
         <div
@@ -457,10 +504,27 @@ function GalacticOcean() {
                 left: 0,
                 width: "100vw",
                 height: "100vh",
-                zIndex: -10,
+                zIndex: 1,
                 backgroundColor: "#000010",
             }}
-        />
+        >
+            {/* Render whale shark on top but in same layer */}
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    zIndex: 10,
+
+                    // Let mouse through for blob clicks (blocks orbit controls!!)
+                    pointerEvents: "none", 
+                }}
+            >
+                <GlowSharkAnimated />
+            </div>
+        </div>
     );
 }
 

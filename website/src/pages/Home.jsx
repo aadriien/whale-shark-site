@@ -16,7 +16,7 @@ function Home() {
             {/* BackgroundVideo component of whale shark swimming */}
             {/* <BackgroundVideo /> */}
 
-            <div className="page-content" style={{ color: "#b2ebf2" }}>
+            <div className="page-content" style={{ color: "#b2ebf2", position: "relative", zIndex: 5 }}>
                 <h1>Welcome to the Whale Shark Project</h1>
             </div>
 
@@ -25,7 +25,7 @@ function Home() {
             <GalacticOcean />
 
             {/* <GlowingShark /> */}
-            <GlowSharkAnimated />
+            {/* <GlowSharkAnimated /> */}
 
             <div className="page-content">
                 <h1>Welcome to the Whale Shark Project</h1>
