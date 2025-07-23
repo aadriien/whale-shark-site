@@ -418,8 +418,6 @@ function GalacticOcean() {
         const handleClick = (event) => {
             if (!mountRef.current) return;
 
-            console.log("click detected!");
-
             const rect = mountRef.current.getBoundingClientRect();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -437,9 +435,7 @@ function GalacticOcean() {
                 }
             }
         };
-
         mountRef.current.addEventListener("click", handleClick);
-
 
 
         // Post-processing setup
@@ -480,7 +476,7 @@ function GalacticOcean() {
         }
         window.addEventListener("resize", onResize);
 
-        // Cleanup on unmount
+        // Clean up on unmount
         return () => {
             window.removeEventListener("resize", onResize);
 
@@ -516,7 +512,7 @@ function GalacticOcean() {
                     left: 0,
                     width: "100%",
                     height: "100%",
-                    zIndex: 10,
+                    zIndex: 8,
 
                     // Let mouse through for blob clicks (blocks orbit controls!!)
                     pointerEvents: "none", 
