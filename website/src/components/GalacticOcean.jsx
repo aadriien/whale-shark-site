@@ -415,8 +415,10 @@ function GalacticOcean() {
             if (child.isMesh && child.name === "current") clickableMeshes.current.push(child);
         });
 
-        const handleClick = (event) => {
-            if (!mountRef.current) return;
+
+        // Reusable helper function for mouse click & hover detection
+        function getIntersectedClickable(event) {
+            if (!mountRef.current) return null;
 
             const rect = mountRef.current.getBoundingClientRect();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -425,17 +427,36 @@ function GalacticOcean() {
             raycaster.current.setFromCamera(mouse, camera);
             const intersects = raycaster.current.intersectObjects(clickableMeshes.current, true);
 
-            if (intersects.length > 0) {
-                const clickedName = intersects[0].object.name;
-                if (clickedName === "reef") {
+            return intersects.length > 0 ? intersects[0] : null;
+        }
+
+
+        const handleClick = (event) => {
+            const intersect = getIntersectedClickable(event);
+            if (intersect) {
+                const name = intersect.object.name;
+
+                if (name === "reef") {
                     navigate("/research");
                 } 
-                else if (clickedName === "current") {
+                else if (name === "current") {
                     navigate("/creative");
                 }
             }
         };
         mountRef.current.addEventListener("click", handleClick);
+
+
+        const handleHover = (event) => {
+            const intersect = getIntersectedClickable(event);
+            if (intersect) {
+                document.body.style.cursor = "pointer";
+            } 
+            else {
+                document.body.style.cursor = "default";
+            }
+        };
+        mountRef.current.addEventListener("mousemove", handleHover);
 
 
         // Post-processing setup
@@ -486,6 +507,7 @@ function GalacticOcean() {
             ) {
                 mountRef.current.removeChild(renderer.domElement);
                 mountRef.current.removeEventListener("click", handleClick);
+                mountRef.current.removeEventListener("mousemove", handleHover);
             }
             renderer.dispose();
         };

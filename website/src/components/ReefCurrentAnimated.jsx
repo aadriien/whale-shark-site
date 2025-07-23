@@ -320,7 +320,7 @@ export function createReef() {
 
     // Add a clickable invisible mesh
     const clickable = new THREE.Mesh(
-        new THREE.SphereGeometry(20, 16, 16), // size based on blob spread
+        new THREE.SphereGeometry(45, 16, 16), // size based on blob spread
         new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true, opacity: 0.5, transparent: true })
     );
     clickable.name = "reef";
@@ -389,7 +389,7 @@ export function createCurrent() {
 
     // Add a clickable invisible mesh
     const clickable = new THREE.Mesh(
-        new THREE.SphereGeometry(20, 16, 16), // size based on blob spread
+        new THREE.SphereGeometry(45, 16, 16), // size based on blob spread
         new THREE.MeshBasicMaterial({ color: 0x4fa35d, wireframe: true, opacity: 0.5, transparent: true })
     );
     clickable.name = "current";
