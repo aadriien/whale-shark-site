@@ -6,6 +6,8 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 
+import { createReef, animateReef, createCurrent, animateCurrent } from "./ReefCurrentAnimated.jsx";
+
 
 function createNebula(scene) {
     // Stars particle system
@@ -382,6 +384,19 @@ function GalacticOcean() {
         const oceanMaterial = createOcean(scene);
 
 
+        // Create research reef & creative current objects
+        const reef = createReef();
+        reef.scale.set(2, 2, 2);
+        scene.add(reef);
+
+        const current = createCurrent();
+        current.scale.set(2, 2, 2);
+        scene.add(current);
+
+        reef.position.set(-450, -90, 0); 
+        current.position.set(450, -90, 0); 
+
+
         // Post-processing setup
         const composer = new EffectComposer(renderer);
         composer.addPass(new RenderPass(scene, camera));
@@ -402,6 +417,9 @@ function GalacticOcean() {
             nebula.rotation.y = elapsed * 0.008;
             // rippleMaterial.uniforms.time.value = elapsed;
             oceanMaterial.uniforms.time.value = elapsed;
+
+            animateReef(reef, elapsed);
+            animateCurrent(current);
 
             composer.render();
         }
