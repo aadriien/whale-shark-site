@@ -176,6 +176,7 @@ function GlowSharkAnimated() {
         container.appendChild(renderer.domElement);
         
         const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enabled = false;
         
         const handleResize = () => {
             camera.aspect = container.clientWidth / container.clientHeight;
@@ -323,7 +324,7 @@ function GlowSharkAnimated() {
             shark.rotateX(-Math.PI / 2);
             shark.rotateZ(Math.PI);
             
-            controls.update();
+            if (controls.enabled) controls.update();
             renderer.render(scene, camera);
         };
         
