@@ -393,8 +393,8 @@ function GalacticOcean() {
         current.scale.set(2, 2, 2);
         scene.add(current);
 
-        reef.position.set(-450, -90, 0); 
-        current.position.set(450, -90, 0); 
+        reef.position.set(-450, -130, 0); 
+        current.position.set(450, -130, 0); 
 
 
         // Post-processing setup
@@ -418,7 +418,7 @@ function GalacticOcean() {
             // rippleMaterial.uniforms.time.value = elapsed;
             oceanMaterial.uniforms.time.value = elapsed;
 
-            animateReef(reef, elapsed);
+            animateReef(reef);
             animateCurrent(current);
 
             composer.render();
