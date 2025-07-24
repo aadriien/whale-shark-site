@@ -416,8 +416,13 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     const [showFilters, setShowFilters] = useState(true);
 
     const handleReset = () => {
+        // Reset filters & close all continent tabs
         setFilters(defaultFilters);
-        if (onReset) onReset(); // float back up to parent's reset
+        setShowFilters(false);
+        setOpenContinents({});
+
+        // Float cue back up to parent's reset
+        if (onReset) onReset(); 
     };
 
     // Track which continents are expanded & group sharks by continent
@@ -460,7 +465,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                     onClick={handleReset}
                     className={`show-all-button ${selectedSharkId == null ? "active" : ""}`}
                 >
-                    Reset All Sharks
+                    Show All Sharks
                 </button>
 
                 <div className="filter-toggle-container">
