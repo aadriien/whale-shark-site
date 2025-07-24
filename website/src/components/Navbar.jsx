@@ -10,10 +10,10 @@ function Navbar() {
     return (
         <nav>
             <div className="version-toggle">
-                <Link to="/research" className={isResearchReef ? "active-version" : ""}>
+                <Link to="/research" className={isResearchReef ? "active-version reef" : "reef"}>
                     Research Reef
                 </Link>
-                <Link to="/creative" className={isCreativeCurrent ? "active-version" : ""}>
+                <Link to="/creative" className={isCreativeCurrent ? "active-version current" : "current"}>
                     Creative Current
                 </Link>
             </div>

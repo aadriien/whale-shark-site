@@ -74,7 +74,7 @@ nav a {
 }
 
 nav a:hover {
-    color: #fff41dcb !important; 
+    color: #fff41dcb; 
     transform: scale(1.05) !important;
 }
 
@@ -96,10 +96,11 @@ nav a.active {
     justify-content: center; 
     padding: 6px 16px;
     margin: 0;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
-    color: #cce7ff;
-    background-color: #005f8f; 
+    color: #c1ffec;
+    /* color: #cce7ff; */
+    /* background-color: #005f8f;  */
     border-radius: 16px;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
@@ -109,16 +110,25 @@ nav a.active {
 }
 
 .version-toggle a:hover {
-    background-color: #008fdf; 
-    color: #fff;
+    /* background-color: #008fdf;  */
+    /* color: #fff; */
+    color: #000;
     box-shadow: 0 4px 12px rgba(0, 143, 223, 0.6);
 }
 
 .version-toggle a.active-version {
-    background-color: #00aaff; 
-    color: rgb(193, 255, 207); 
+    /* background-color: #00aaff;  */
+    color: #000; 
     box-shadow: 0 0 6px rgba(168, 230, 207, 0.8);
     border: 1.5px solid #a8e6cf;
+}
+
+.reef {
+    background-color: #faa290ff;
+}
+
+.current {
+    background-color: #50ab5fff;
 }
 
 /* Smaller font and margin on small screens */
