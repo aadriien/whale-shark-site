@@ -12,7 +12,7 @@
 
 .info-sidebar,
 .shark-selector {
-    flex: 0 0 16rem; 
+    flex: 0 0 17rem; 
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -46,37 +46,67 @@
     }
 }
 
-.shark-selector button {
-    font-size: 18px;
-    border: 2px solid #000;
+
+.shark-selector-list {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    height: 4rem;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.scrollable-filters {
+    max-height: 250px; 
+    overflow-y: auto;
+    padding-right: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.shark-selector button:hover {
-    font-weight: bold;
+
+.show-all-button,
+.toggle-filter-button {
+    font-size: 1.1rem !important;
+    line-height: 1.4 !important;
+    font-weight: 600 !important;
+    width: 100%;
+    height: 2.8rem;
+    border: 2px solid #000;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    box-sizing: border-box;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    color: #000;
+    background-color: #f0e8ff;
+}
+
+.show-all-button {
+    margin-bottom: 0.5rem;
+}
+
+.toggle-filter-button {
+    margin-bottom: 1rem;
+}
+
+/* Shared hover/focus */
+.show-all-button:hover,
+.toggle-filter-button:hover,
+.show-all-button:focus,
+.toggle-filter-button:focus {
     background-color: #a8e8ea;
 }
 
-.shark-selector button.active,
-.shark-selector button:focus {
-    font-weight: 600;
+/* Shared active/focus */
+.show-all-button.active,
+.toggle-filter-button.active {
     color: white;
     background-color: #7e58f0;
 }
 
-.all-sharks-button-text {
-    display: inline-block;
-    transition: transform 0.2s ease;
-    transform-origin: center;
-}
-
-.shark-selector button:hover .all-sharks-button-text,
-.shark-selector button.active .all-sharks-button-text,
-.shark-selector button:focus .all-sharks-button-text {
-    transform: scale(1.1);
-}
 
 .continent-dropdown {
     margin-bottom: 0.5rem;
@@ -114,16 +144,6 @@
     padding: 0.5rem;
 }
 
-.shark-selector-list {
-    width: 100%;
-    height: 100%;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 0.5rem;
-    box-sizing: border-box;
-    overflow: auto;
-}
-
 
 .shark-filters {
     display: grid;
@@ -137,7 +157,7 @@
     background: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 0.5rem;
+    padding: 0.3rem 0.5rem 0.7rem 0.5rem;
 }
 
 .filter-group legend {
@@ -145,6 +165,7 @@
     font-size: 0.95rem;
     padding: 0 0.5rem;
     margin: -0.5rem;
+    color: #063f8e;
 }
 
 .filter-label {
@@ -167,6 +188,10 @@
 .range-inputs {
     display: flex;
     align-items: center;
+}
+
+.filter-label input[type="checkbox"] {
+    margin-right: 0.5rem; 
 }
   
 

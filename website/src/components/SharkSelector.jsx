@@ -152,6 +152,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
         publishingCountry: "", 
         observationType: "", 
     });
+    const [showFilters, setShowFilters] = useState(true);
 
     // Track which continents are expanded & group sharks by continent
     const [openContinents, setOpenContinents] = useState({});
@@ -183,250 +184,260 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100%" }} >
-            <button 
-                onClick={onReset}
-                className={selectedSharkId == null ? "active" : ""}
-            >
-                <span className="all-sharks-button-text">Show All Sharks</span>
-            </button>
-
             <div className="shark-selector-list">
+                <button 
+                    onClick={onReset}
+                    className={`show-all-button ${selectedSharkId == null ? "active" : ""}`}
+                >
+                    Show All Sharks
+                </button>
 
-                <div className="shark-filters">
-                    {/* Media Filter */}
-                    <fieldset className="filter-group">
-                        <legend>Media</legend>
-                        <label className="filter-label">
-                            <input
-                                type="checkbox"
-                                checked={filters.showOnlyWithMedia}
-                                onChange={() =>
-                                    setFilters((f) => ({ 
-                                        ...f, 
-                                        showOnlyWithMedia: !f.showOnlyWithMedia 
-                                    }))
-                                }
-                            />
-                            Show only sharks with <strong>MEDIA</strong>
-                        </label>
-                    </fieldset>
+                <div className="filter-toggle-container">
+                    <button 
+                        onClick={() => setShowFilters((prev) => !prev)}
+                        className={`toggle-filter-button ${showFilters ? "active" : ""}`}
+                    >
+                        {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
+                    </button>
 
-                    {/* Location Filters */}
-                    <fieldset className="filter-group">
-                        <legend>Location</legend>
-
-                        <label className="filter-label">
-                            Country:
-                            <select
-                                value={filters.country}
-                                onChange={(e) =>
-                                    setFilters((f) => ({ ...f, country: e.target.value }))
-                                }
-                                className="filter-select"
-                            >
-                                <option value="">All</option>
-                                {COUNTRIES.map((country) => (
-                                    <option key={country} value={country}>
-                                        {country}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
-
-                        <label className="filter-label">
-                            Publishing Country:
-                            <select
-                                value={filters.publishingCountry}
-                                onChange={(e) =>
-                                    setFilters((f) => ({ ...f, publishingCountry: e.target.value }))
-                                }
-                                className="filter-select"
-                            >
-                                <option value="">All</option>
-                                {PUBLISHING_COUNTRIES.map((publishing) => (
-                                    <option key={publishing} value={publishing}>
-                                        {publishing}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
-                    </fieldset>
-
-                    {/* Time Filter */}
-                    <fieldset className="filter-group">
-                        <legend>Time</legend>
-
-                        <label className="filter-label">
-                            Year Range:
-                            <div className="range-inputs">
-                                <input
-                                    type="number"
-                                    value={filters.yearRange[0]}
-                                    onChange={(e) => {
-                                        const val = e.target.value;
-                                        setFilters(f => ({ 
-                                            ...f, 
-                                            yearRange: [val, f.yearRange[1]] 
-                                        }));
-                                    }}
-                                    // Validate int min bounds on click away 
-                                    onBlur={() => {
-                                        setFilters(f => {
-                                            const num = parseInt(f.yearRange[0]);
-                                            const safe = (
-                                                isNaN(num) ? 
-                                                MIN_YEAR : 
-                                                Math.max(
-                                                    MIN_YEAR, Math.min(
-                                                        num, parseInt(f.yearRange[1])
-                                                    )
-                                                )
-                                            );
-                                            return { 
+                    {showFilters && (
+                        <div className="shark-filters scrollable-filters">
+                            {/* Media Filter */}
+                            <fieldset className="filter-group">
+                                <legend>Media</legend>
+                                <label className="filter-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={filters.showOnlyWithMedia}
+                                        onChange={() =>
+                                            setFilters((f) => ({ 
                                                 ...f, 
-                                                yearRange: [String(safe), f.yearRange[1]] 
-                                            };
-                                        });
-                                    }}
-                                    className="filter-input"
-                                />
-                                <span style={{ margin: '0 0.25rem' }}>to</span>
-                                <input
-                                    type="number"
-                                    value={filters.yearRange[1]}
-                                    onChange={(e) => {
-                                        const val = e.target.value;
-                                        setFilters(f => ({ 
-                                            ...f, 
-                                            yearRange: [f.yearRange[0], val] 
-                                        }));
-                                    }}
-                                    // Validate int max bounds on click away 
-                                    onBlur={() => {
-                                        setFilters(f => {
-                                            const num = parseInt(f.yearRange[1]);
-                                            const safe = (
-                                                isNaN(num) ? 
-                                                MAX_YEAR : 
-                                                Math.min(
-                                                    MAX_YEAR, Math.max(
-                                                        num, parseInt(f.yearRange[0])
+                                                showOnlyWithMedia: !f.showOnlyWithMedia 
+                                            }))
+                                        }
+                                    />
+                                    Sharks with real-world images
+                                </label>
+                            </fieldset>
+
+                            {/* Location Filters */}
+                            <fieldset className="filter-group">
+                                <legend>Location</legend>
+
+                                <label className="filter-label">
+                                    Country:
+                                    <select
+                                        value={filters.country}
+                                        onChange={(e) =>
+                                            setFilters((f) => ({ ...f, country: e.target.value }))
+                                        }
+                                        className="filter-select"
+                                    >
+                                        <option value="">All</option>
+                                        {COUNTRIES.map((country) => (
+                                            <option key={country} value={country}>
+                                                {country}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+
+                                <label className="filter-label">
+                                    Publishing Country:
+                                    <select
+                                        value={filters.publishingCountry}
+                                        onChange={(e) =>
+                                            setFilters((f) => ({ ...f, publishingCountry: e.target.value }))
+                                        }
+                                        className="filter-select"
+                                    >
+                                        <option value="">All</option>
+                                        {PUBLISHING_COUNTRIES.map((publishing) => (
+                                            <option key={publishing} value={publishing}>
+                                                {publishing}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                            </fieldset>
+
+                            {/* Time Filter */}
+                            <fieldset className="filter-group">
+                                <legend>Time</legend>
+
+                                <label className="filter-label">
+                                    Year Range:
+                                    <div className="range-inputs">
+                                        <input
+                                            type="number"
+                                            value={filters.yearRange[0]}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                setFilters(f => ({ 
+                                                    ...f, 
+                                                    yearRange: [val, f.yearRange[1]] 
+                                                }));
+                                            }}
+                                            // Validate int min bounds on click away 
+                                            onBlur={() => {
+                                                setFilters(f => {
+                                                    const num = parseInt(f.yearRange[0]);
+                                                    const safe = (
+                                                        isNaN(num) ? 
+                                                        MIN_YEAR : 
+                                                        Math.max(
+                                                            MIN_YEAR, Math.min(
+                                                                num, parseInt(f.yearRange[1])
+                                                            )
+                                                        )
+                                                    );
+                                                    return { 
+                                                        ...f, 
+                                                        yearRange: [String(safe), f.yearRange[1]] 
+                                                    };
+                                                });
+                                            }}
+                                            className="filter-input"
+                                        />
+                                        <span style={{ margin: '0 0.25rem' }}>to</span>
+                                        <input
+                                            type="number"
+                                            value={filters.yearRange[1]}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                setFilters(f => ({ 
+                                                    ...f, 
+                                                    yearRange: [f.yearRange[0], val] 
+                                                }));
+                                            }}
+                                            // Validate int max bounds on click away 
+                                            onBlur={() => {
+                                                setFilters(f => {
+                                                    const num = parseInt(f.yearRange[1]);
+                                                    const safe = (
+                                                        isNaN(num) ? 
+                                                        MAX_YEAR : 
+                                                        Math.min(
+                                                            MAX_YEAR, Math.max(
+                                                                num, parseInt(f.yearRange[0])
+                                                            )
+                                                        )
+                                                    );
+                                                    return { 
+                                                        ...f, 
+                                                        yearRange: [f.yearRange[0], String(safe)] 
+                                                    };
+                                                });
+                                            }}
+                                            className="filter-input"
+                                        />
+                                    </div>
+                                </label>
+                            </fieldset>
+
+                            {/* Metadata Filters */}
+                            <fieldset className="filter-group">
+                                <legend>Metadata</legend>
+
+                                <label className="filter-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={filters.hasOccurrenceNotes}
+                                        onChange={() =>
+                                        setFilters((f) => ({ ...f, hasOccurrenceNotes: !f.hasOccurrenceNotes }))
+                                        }
+                                    />
+                                    Sharks with occurrence notes
+                                </label>
+
+                                <label className="filter-label">
+                                    Min Records:
+                                    <input
+                                        type="number"
+                                        min={MIN_RECORDS}
+                                        max={MAX_RECORDS}
+                                        value={filters.minRecords}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setFilters((f) => ({ ...f, minRecords: val }));
+                                        }}
+                                        // Validate min records bounds on click away
+                                        onBlur={() => {
+                                            setFilters((f) => {
+                                                const num = parseInt(f.minRecords, 10);
+                                                if (isNaN(num)) return { 
+                                                    ...f, 
+                                                    minRecords: MIN_RECORDS 
+                                                };
+                                                const clamped = Math.max(
+                                                    MIN_RECORDS, Math.min(
+                                                        num, 
+                                                        MAX_RECORDS
                                                     )
-                                                )
-                                            );
-                                            return { 
-                                                ...f, 
-                                                yearRange: [f.yearRange[0], String(safe)] 
-                                            };
-                                        });
-                                    }}
-                                    className="filter-input"
-                                />
-                            </div>
-                        </label>
-                    </fieldset>
+                                                );
+                                                return { ...f, minRecords: clamped };
+                                            });
+                                        }}
+                                        className="filter-input"
+                                    />
+                                </label>
+                            </fieldset>
 
-                    {/* Metadata Filters */}
-                    <fieldset className="filter-group">
-                        <legend>Metadata</legend>
+                            {/* Biological Filters */}
+                            <fieldset className="filter-group">
+                                <legend>Biological</legend>
 
-                        <label className="filter-label">
-                            <input
-                                type="checkbox"
-                                checked={filters.hasOccurrenceNotes}
-                                onChange={() =>
-                                setFilters((f) => ({ ...f, hasOccurrenceNotes: !f.hasOccurrenceNotes }))
-                                }
-                            />
-                            Has occurrence remarks
-                        </label>
+                                <label className="filter-label">
+                                    Sex:
+                                    <select
+                                        value={filters.sex}
+                                        onChange={(e) =>
+                                            setFilters((f) => ({ ...f, sex: e.target.value }))
+                                        }
+                                        className="filter-select"
+                                    >
+                                        <option value="">All</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Unknown">Unknown</option>
+                                    </select>
+                                </label>
 
-                        <label className="filter-label">
-                            Min Records:
-                            <input
-                                type="number"
-                                min={MIN_RECORDS}
-                                max={MAX_RECORDS}
-                                value={filters.minRecords}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    setFilters((f) => ({ ...f, minRecords: val }));
-                                }}
-                                // Validate min records bounds on click away
-                                onBlur={() => {
-                                    setFilters((f) => {
-                                        const num = parseInt(f.minRecords, 10);
-                                        if (isNaN(num)) return { 
-                                            ...f, 
-                                            minRecords: MIN_RECORDS 
-                                        };
-                                        const clamped = Math.max(
-                                            MIN_RECORDS, Math.min(
-                                                num, 
-                                                MAX_RECORDS
-                                            )
-                                        );
-                                        return { ...f, minRecords: clamped };
-                                    });
-                                }}
-                                className="filter-input"
-                            />
-                        </label>
-                    </fieldset>
+                                <label className="filter-label">
+                                    Life Stage:
+                                    <select
+                                        value={filters.lifeStage}
+                                        onChange={(e) =>
+                                            setFilters((f) => ({ ...f, lifeStage: e.target.value }))
+                                        }
+                                        className="filter-select"
+                                    >
+                                        <option value="">All</option>
+                                        <option value="Juvenile">Juvenile</option>
+                                        <option value="Subadult">Subadult</option>
+                                        <option value="Adult">Adult</option>
+                                        <option value="Unknown">Unknown</option>
+                                    </select>
+                                </label>
 
-                    {/* Biological Filters */}
-                    <fieldset className="filter-group">
-                        <legend>Biological</legend>
+                                <label className="filter-label">
+                                    Observation Type:
+                                    <select
+                                        value={filters.observationType}
+                                        onChange={(e) =>
+                                            setFilters((f) => ({ ...f, observationType: e.target.value }))
+                                        }
+                                        className="filter-select"
+                                    >
+                                        <option value="">All</option>
+                                        <option value="Satellite">Satellite Tracking</option>
+                                        <option value="Human">Human Sightings</option>
+                                    </select>
+                                </label>
+                            </fieldset>
 
-                        <label className="filter-label">
-                            Sex:
-                            <select
-                                value={filters.sex}
-                                onChange={(e) =>
-                                    setFilters((f) => ({ ...f, sex: e.target.value }))
-                                }
-                                className="filter-select"
-                            >
-                                <option value="">All</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Unknown">Unknown</option>
-                            </select>
-                        </label>
-
-                        <label className="filter-label">
-                            Life Stage:
-                            <select
-                                value={filters.lifeStage}
-                                onChange={(e) =>
-                                    setFilters((f) => ({ ...f, lifeStage: e.target.value }))
-                                }
-                                className="filter-select"
-                            >
-                                <option value="">All</option>
-                                <option value="Juvenile">Juvenile</option>
-                                <option value="Subadult">Subadult</option>
-                                <option value="Adult">Adult</option>
-                                <option value="Unknown">Unknown</option>
-                            </select>
-                        </label>
-
-                        <label className="filter-label">
-                            Observation Type:
-                            <select
-                                value={filters.observationType}
-                                onChange={(e) =>
-                                    setFilters((f) => ({ ...f, observationType: e.target.value }))
-                                }
-                                className="filter-select"
-                            >
-                                <option value="">All</option>
-                                <option value="Satellite">Satellite Tracking</option>
-                                <option value="Human">Human Sightings</option>
-                            </select>
-                        </label>
-                    </fieldset>
-
+                        </div>
+                    )}
                 </div>
 
                 <div className="scrollable-sharks-list">
