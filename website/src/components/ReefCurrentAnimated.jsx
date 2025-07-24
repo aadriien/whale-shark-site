@@ -316,12 +316,13 @@ export function createReef() {
         new THREE.Color("#ff6845"),  // deeper coral orange
     ];
     
-    const blobReefGroup = createBlobParticles(coralColors, 300, 2, 13);
+    const blobReefGroup = createBlobParticles(coralColors, 250, 2.6, 13);
 
     // Add a clickable invisible mesh
     const clickable = new THREE.Mesh(
-        new THREE.SphereGeometry(45, 16, 16), // size based on blob spread
-        new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true, opacity: 0.5, transparent: true })
+        new THREE.SphereGeometry(50, 16, 16), // size based on blob spread
+        new THREE.MeshBasicMaterial({ visible: false })
+        // new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true, opacity: 0.5, transparent: true })
     );
     clickable.name = "reef";
 
@@ -385,12 +386,13 @@ export function createCurrent() {
         new THREE.Color("#90e17d"),  // fresh bright fern green (accent)
     ];
     
-    const blobCurrentGroup = createBlobParticles(currentColors, 300, 2, 13);
+    const blobCurrentGroup = createBlobParticles(currentColors, 250, 2.6, 13);
 
     // Add a clickable invisible mesh
     const clickable = new THREE.Mesh(
-        new THREE.SphereGeometry(45, 16, 16), // size based on blob spread
-        new THREE.MeshBasicMaterial({ color: 0x4fa35d, wireframe: true, opacity: 0.5, transparent: true })
+        new THREE.SphereGeometry(50, 16, 16), // size based on blob spread
+        new THREE.MeshBasicMaterial({ visible: false })
+        // new THREE.MeshBasicMaterial({ color: 0x4fa35d, wireframe: true, opacity: 0.5, transparent: true })
     );
     clickable.name = "current";
 

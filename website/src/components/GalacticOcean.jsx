@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
 
@@ -347,6 +347,9 @@ function createOcean(scene) {
 
 
 function GalacticOcean() {
+    const [hoveredBlob, setHoveredBlob] = useState(null); // "reef" | "current" | null
+    const [hoveredScreenPos, setHoveredScreenPos] = useState({ x: 0, y: 0 });
+
     const mountRef = useRef();
     const cameraRef = useRef();
 
@@ -404,8 +407,11 @@ function GalacticOcean() {
         current.scale.set(2, 2, 2);
         scene.add(current);
 
-        reef.position.set(-450, -130, 0); 
-        current.position.set(450, -130, 0); 
+        reef.position.set(-450, -200, 0); 
+        current.position.set(450, -200, 0); 
+
+        reef.rotateX(0.5);
+        current.rotateX(0.5);
 
         // Add their invisible meshes to clickable list
         reef.traverse((child) => {
@@ -502,6 +508,18 @@ function GalacticOcean() {
 
                     document.body.style.cursor = "pointer";
                     currentHovered = hoveredName;
+                    setHoveredBlob(hoveredName);
+
+                    // Project blob group’s position to screen space (for div text)
+                    const blobGroup = intersect.object.parent; 
+                    const vector = new THREE.Vector3();
+                    vector.setFromMatrixPosition(blobGroup.matrixWorld); 
+                    vector.project(cameraRef.current); 
+
+                    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                    const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+
+                    setHoveredScreenPos({ x, y });
                 }
             } 
             else {
@@ -517,6 +535,7 @@ function GalacticOcean() {
 
                     document.body.style.cursor = "default";
                     currentHovered = null;
+                    setHoveredBlob(null);
                 }
             }
         };
@@ -605,6 +624,78 @@ function GalacticOcean() {
                 }}
             >
                 <GlowSharkAnimated />
+
+                {hoveredBlob && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '170px',
+                            left: hoveredBlob === 'reef' ? '60px' : 'auto',
+                            right: hoveredBlob === 'current' ? '60px' : 'auto',
+                            fontFamily: "'Poppins', 'Montserrat', sans-serif",
+                            fontStyle: 'italic',
+                            fontWeight: 500,
+                            fontSize: '2rem',
+                            textTransform: 'lowercase',
+                            whiteSpace: 'nowrap',
+                            pointerEvents: 'none',
+                            userSelect: 'none',
+                            margin: 0,
+                            padding: 0,
+                            letterSpacing: '0.2em',
+                            zIndex: 1000,
+                            background: 'transparent',
+                            color: '#fff',
+                            textShadow: hoveredBlob === 'reef'
+                                ? `
+                                    0 0 3px #fff,
+                                    0 0 8px #ff7e5f,
+                                    0 0 15px #feb47b,
+                                    0 0 30px #feb47b,
+                                    0 0 50px #feb47b
+                                `
+                                : `
+                                    0 0 3px #fff,
+                                    0 0 8px #4caf50,
+                                    0 0 15px #1de9b6,
+                                    0 0 30px #1de9b6,
+                                    0 0 50px #1de9b6
+                                `,
+                            filter: 'blur(1.2px)',
+                            opacity: 1,
+                            transition: 'opacity 0.6s ease, text-shadow 0.8s ease',
+                            textAlign: hoveredBlob === 'reef' ? 'left' : 'right',
+                            display: 'inline-block',
+                            transformOrigin: 'center',
+                            transform: 'scaleX(1.5) scaleY(0.7)', // wider & shorter letters
+                            animation: 'wave 3.5s ease-in-out infinite',
+                        }}
+                    >
+                        {[...(hoveredBlob === 'reef' ? 'research reef' : 'creative current')].map((char, i) => (
+                            <span
+                                key={i}
+                                style={{
+                                display: 'inline-block',
+                                transform: `translateY(${Math.sin(i * 1.3) * 3}px)`,
+                                transition: 'transform 0.5s ease-in-out',
+                                willChange: 'transform',
+                                }}
+                            >
+                                {char}
+                            </span>
+                        ))}
+
+                        <style>
+                        {`
+                            @keyframes wave {
+                            0%, 100% { transform: translateY(0); }
+                            50% { transform: translateY(-6px); }
+                            }
+                        `}
+                        </style>
+                    </div>
+                )}
+
             </div>
         </div>
     );
