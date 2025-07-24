@@ -78,11 +78,13 @@ function filterSharks(sharks, filters) {
         if (filters.yearRange) {
             const yearMin = parseInt(shark.oldest);
             const yearMax = parseInt(shark.newest);
+            const filterMin = parseInt(filters.yearRange[0]);
+            const filterMax = parseInt(filters.yearRange[1]);
 
             if (
                 isNaN(yearMin) || isNaN(yearMax) ||
-                yearMax < filters.yearRange[0] ||
-                yearMin > filters.yearRange[1]
+                yearMax < filterMin ||
+                yearMin > filterMax
             ) {
                 return false;
             }
@@ -156,24 +158,29 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
 
     // Track which continents are expanded & group sharks by continent
     const [openContinents, setOpenContinents] = useState({});
-    const sharksByContinent = {};
 
 
-    const filteredSharks = filterSharks(sharks, filters);
+    const filteredSharks = React.useMemo(
+        () => filterSharks(sharks, filters), [sharks, filters]
+    );
 
-    filteredSharks.forEach(shark => {
-        const continents = extractContinents(shark.continent); 
-
-        // Handle sharks associated with multiple continents
-        continents.forEach(continent => {
-            if (VALID_CONTINENTS.has(continent)) {
-                if (!sharksByContinent[continent]) {
-                    sharksByContinent[continent] = [];
+    const sharksByContinent = React.useMemo(() => {
+        const byContinent = {};
+        
+        filteredSharks.forEach(shark => {
+            const continents = extractContinents(shark.continent);
+            
+            continents.forEach(continent => {
+                if (VALID_CONTINENTS.has(continent)) {
+                    if (!byContinent[continent]) {
+                        byContinent[continent] = [];
+                    }
+                    byContinent[continent].push(shark);
                 }
-                sharksByContinent[continent].push(shark);
-            }
-        });        
-    });
+            });
+        });
+        return byContinent;
+    }, [filteredSharks]);
 
     const toggleContinent = (continent) => {
         setOpenContinents(prev => ({
@@ -344,7 +351,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                                         type="checkbox"
                                         checked={filters.hasOccurrenceNotes}
                                         onChange={() =>
-                                        setFilters((f) => ({ ...f, hasOccurrenceNotes: !f.hasOccurrenceNotes }))
+                                            setFilters((f) => ({ ...f, hasOccurrenceNotes: !f.hasOccurrenceNotes }))
                                         }
                                     />
                                     Sharks with occurrence notes

@@ -114,7 +114,7 @@ const SharkInfoPanel = ({ shark }) => {
                                     <div className="timeline-remarks">
                                         <span className="timeline-label">Sighting remarks:</span> 
                                         {" "}
-                                        <em>{remarksEntry !== "Unknown" ? parseRemarks(remarksEntry)  : "None"}</em>
+                                        <em>{remarksEntry !== "Unknown" ? parseRemarks(remarksEntry) : "None"}</em>
                                     </div>
                                 </li>
                             );
