@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-import { getDate, parseSpecificRegion, parseRemarks, parseImageField } from "../utils/DataUtils.js";
+import { 
+    getDate, 
+    parseSpecificRegion, 
+    parseRemarks, 
+    parseImageField 
+} from "../utils/DataUtils.js";
+
 
 const SharkInfoPanel = ({ shark }) => {
     const [expandedImageIndex, setExpandedImageIndex] = useState(null);

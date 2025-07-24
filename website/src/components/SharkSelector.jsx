@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-import { extractContinents, getCountryCode, parseSpecificRegion } from "../utils/DataUtils.js";
+import { 
+    cleanLifestage, 
+    extractContinents, 
+    getCountryCode, 
+    parseSpecificRegion, 
+    parseRemarks, 
+} from "../utils/DataUtils.js";
+
 
 const VALID_CONTINENTS = new Set([
     "Africa",
@@ -12,17 +19,136 @@ const VALID_CONTINENTS = new Set([
     "South America",
 ]);
 
+
+// Helper to extract all regional options for filter (e.g. country, publishingCountry)
+function extractUniqueSortedRegions(items, key) {
+    return Array.from(
+        new Set(
+            items.flatMap(item =>
+                item[key]
+                    ?.split(",")
+                    .map(c => parseSpecificRegion(c).trim())
+                    .filter(Boolean) || []
+            )
+        )
+    ).sort((a, b) => a.localeCompare(b));
+};
+
+
+function filterSharks(sharks, filters) {
+    return sharks.filter((shark) => {
+        // ---------- MEDIA PRESENCE ----------
+        if (filters.showOnlyWithMedia) {
+            const hasMedia = (
+                shark.image && 
+                shark.image.trim() !== "" && 
+                shark.image !== "Unknown"
+            );
+            if (!hasMedia) return false;
+        }
+
+        // ---------- LOCATION ----------
+        if (filters.country) {
+            const countries = (shark.countries || "")
+                .split(",")
+                .map(c => parseSpecificRegion(c).toLowerCase().trim());
+
+            const match = countries.some(
+                c => c.includes(
+                    filters.country.toLowerCase()
+                )
+            );
+            if (!match) return false;
+        }
+
+        if (filters.publishingCountry) {
+            const publishingCountries = (shark.publishing || "")
+                .split(",")
+                .map(c => parseSpecificRegion(c).toLowerCase().trim());
+
+            const match = publishingCountries.some(
+                c => c.includes(
+                    filters.publishingCountry.toLowerCase()
+                )
+            );
+            if (!match) return false;
+        }
+
+        // ---------- TIME RANGE ----------
+        if (filters.yearRange) {
+            const yearMin = parseInt(shark.oldest);
+            const yearMax = parseInt(shark.newest);
+
+            if (
+                isNaN(yearMin) || isNaN(yearMax) ||
+                yearMax < filters.yearRange[0] ||
+                yearMin > filters.yearRange[1]
+            ) {
+                return false;
+            }
+        }
+
+        // ---------- METADATA ----------
+        if (filters.hasOccurrenceNotes) {
+            const remarks = parseRemarks(shark.remarks);
+            if (remarks === "None") return false;
+        }
+
+        if (filters.minRecords > 0 && shark.occurrences < filters.minRecords) {
+            return false;
+        }
+
+        // ---------- TAXONOMIC & BIO ----------
+        if (filters.sex) {
+            const sex = shark.sex?.toLowerCase() || "";
+            if (sex !== filters.sex.toLowerCase()) return false;
+        }
+
+        if (filters.lifeStage) {
+            const stage = cleanLifestage(shark).toLowerCase();
+            if (stage !== filters.lifeStage.toLowerCase()) return false;
+        }
+
+        if (filters.observationType) {
+            let hasType = true;
+            if (filters.observationType == "Satellite") {
+                hasType = shark.machine > 0 ? true : false;
+            }
+            else if (filters.observationType == "Human") {
+                hasType = shark.human > 0 ? true : false;
+            }
+            if (!hasType) return false;
+        }
+
+        // PASSES ALL FILTERS
+        return true;
+    });
+}
+
+
 function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
+    const [filters, setFilters] = useState({
+        showOnlyWithMedia: false,
+        country: "",
+        yearRange: [2000, 2025],
+        hasOccurrenceNotes: false,
+        minRecords: 1,
+        sex: "",
+        lifeStage: "",  
+        publishingCountry: "", 
+        observationType: "", 
+    });
+
     // Track which continents are expanded & group sharks by continent
     const [openContinents, setOpenContinents] = useState({});
     const sharksByContinent = {};
 
-    // Filter sharks by media presence if toggle is on
-    const [showOnlyWithMedia, setShowOnlyWithMedia] = useState(false);
-    const filteredSharks = showOnlyWithMedia
-        ? sharks.filter(shark => shark.image && shark.image !== "Unknown" && shark.image.trim() !== "")
-        : sharks;
 
+    // Populate filter dropdown options
+    const COUNTRIES = extractUniqueSortedRegions(sharks, "countries");
+    const PUBLISHING_COUNTRIES = extractUniqueSortedRegions(sharks, "publishing");
+
+    const filteredSharks = filterSharks(sharks, filters);
 
     filteredSharks.forEach(shark => {
         const continents = extractContinents(shark.continent); 
@@ -55,17 +181,185 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
             </button>
 
             <div className="shark-selector-list">
-                <div className="media-toggle-container">
-                    {/* Checkbox toggle for showing only sharks with media */}
-                    <label style={{ margin: "0.5rem 0 1rem", fontSize: "0.9rem", cursor: "pointer" }}>
-                        <input
-                            type="checkbox"
-                            checked={showOnlyWithMedia}
-                            onChange={() => setShowOnlyWithMedia(!showOnlyWithMedia)}
-                            style={{ marginRight: "0.5rem" }}
-                        />
-                        Show only sharks with <strong>MEDIA</strong>
-                    </label>
+
+                <div className="shark-filters">
+                    {/* Media Filter */}
+                    <fieldset className="filter-group">
+                        <legend>Media</legend>
+                        <label className="filter-label">
+                            <input
+                                type="checkbox"
+                                checked={filters.showOnlyWithMedia}
+                                onChange={() =>
+                                    setFilters((f) => ({ 
+                                        ...f, 
+                                        showOnlyWithMedia: !f.showOnlyWithMedia 
+                                    }))
+                                }
+                            />
+                            Show only sharks with <strong>MEDIA</strong>
+                        </label>
+                    </fieldset>
+
+                    {/* Location Filters */}
+                    <fieldset className="filter-group">
+                        <legend>Location</legend>
+
+                        <label className="filter-label">
+                            Country:
+                            <select
+                                value={filters.country}
+                                onChange={(e) =>
+                                    setFilters((f) => ({ ...f, country: e.target.value }))
+                                }
+                                className="filter-select"
+                            >
+                                <option value="">All</option>
+                                {COUNTRIES.map((country) => (
+                                    <option key={country} value={country}>
+                                        {country}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <label className="filter-label">
+                            Publishing Country:
+                            <select
+                                value={filters.publishingCountry}
+                                onChange={(e) =>
+                                    setFilters((f) => ({ ...f, publishingCountry: e.target.value }))
+                                }
+                                className="filter-select"
+                            >
+                                <option value="">All</option>
+                                {PUBLISHING_COUNTRIES.map((publishing) => (
+                                    <option key={publishing} value={publishing}>
+                                        {publishing}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </fieldset>
+
+                    {/* Time Filter */}
+                    <fieldset className="filter-group">
+                        <legend>Time</legend>
+
+                        <label className="filter-label">
+                            Year Range:
+                            <div className="range-inputs">
+                                <input
+                                    type="number"
+                                    value={filters.yearRange[0]}
+                                    onChange={(e) =>
+                                        setFilters((f) => ({
+                                            ...f,
+                                            yearRange: [parseInt(e.target.value), f.yearRange[1]],
+                                        }))
+                                    }
+                                    className="filter-input"
+                                />
+                                <span style={{ margin: '0 0.25rem' }}>to</span>
+                                <input
+                                    type="number"
+                                    value={filters.yearRange[1]}
+                                    onChange={(e) =>
+                                        setFilters((f) => ({
+                                            ...f,
+                                            yearRange: [f.yearRange[0], parseInt(e.target.value)],
+                                        }))
+                                    }
+                                    className="filter-input"
+                                />
+                            </div>
+                        </label>
+                    </fieldset>
+
+                    {/* Metadata Filters */}
+                    <fieldset className="filter-group">
+                        <legend>Metadata</legend>
+
+                        <label className="filter-label">
+                            <input
+                                type="checkbox"
+                                checked={filters.hasOccurrenceNotes}
+                                onChange={() =>
+                                setFilters((f) => ({ ...f, hasOccurrenceNotes: !f.hasOccurrenceNotes }))
+                                }
+                            />
+                            Has occurrence remarks
+                        </label>
+
+                        <label className="filter-label">
+                            Min Records:
+                            <input
+                                type="number"
+                                value={filters.minRecords}
+                                onChange={(e) =>
+                                    setFilters((f) => ({ 
+                                        ...f, 
+                                        minRecords: parseInt(e.target.value) || 0 
+                                    }))
+                                }
+                                className="filter-input"
+                            />
+                        </label>
+                    </fieldset>
+
+                    {/* Biological Filters */}
+                    <fieldset className="filter-group">
+                        <legend>Biological</legend>
+
+                        <label className="filter-label">
+                            Sex:
+                            <select
+                                value={filters.sex}
+                                onChange={(e) =>
+                                    setFilters((f) => ({ ...f, sex: e.target.value }))
+                                }
+                                className="filter-select"
+                            >
+                                <option value="">All</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Unknown">Unknown</option>
+                            </select>
+                        </label>
+
+                        <label className="filter-label">
+                            Life Stage:
+                            <select
+                                value={filters.lifeStage}
+                                onChange={(e) =>
+                                    setFilters((f) => ({ ...f, lifeStage: e.target.value }))
+                                }
+                                className="filter-select"
+                            >
+                                <option value="">All</option>
+                                <option value="Juvenile">Juvenile</option>
+                                <option value="Subadult">Subadult</option>
+                                <option value="Adult">Adult</option>
+                                <option value="Unknown">Unknown</option>
+                            </select>
+                        </label>
+
+                        <label className="filter-label">
+                            Observation Type:
+                            <select
+                                value={filters.observationType}
+                                onChange={(e) =>
+                                    setFilters((f) => ({ ...f, observationType: e.target.value }))
+                                }
+                                className="filter-select"
+                            >
+                                <option value="">All</option>
+                                <option value="Satellite">Satellite Tracking</option>
+                                <option value="Human">Human Sightings</option>
+                            </select>
+                        </label>
+                    </fieldset>
+
                 </div>
 
                 <div className="scrollable-sharks-list">

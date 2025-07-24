@@ -68,7 +68,7 @@ export const storySharks = storySharksRaw.map(obj => formatKeyVals(obj, keyMap))
 export const mediaSharks = allSharkData.map(obj => formatKeyVals(obj, keyMapHasMedia));
 
 
-function cleanLifestage(obj) {
+export function cleanLifestage(obj) {
     const rawLifeStage = obj.lifeStage;
   
     const cleanedLifeStage =
