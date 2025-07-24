@@ -143,7 +143,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     const MAX_YEAR = Math.max(...ALL_YEARS);
 
 
-    const [filters, setFilters] = useState({
+    const defaultFilters = {
         showOnlyWithMedia: false,
         country: "",
         yearRange: [String(MIN_YEAR), String(MAX_YEAR)],
@@ -153,8 +153,14 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
         lifeStage: "",  
         publishingCountry: "", 
         observationType: "", 
-    });
+    };
+    const [filters, setFilters] = React.useState(defaultFilters);
     const [showFilters, setShowFilters] = useState(true);
+
+    const handleReset = () => {
+        setFilters(defaultFilters);
+        if (onReset) onReset(); // float back up to parent's reset
+    };
 
     // Track which continents are expanded & group sharks by continent
     const [openContinents, setOpenContinents] = useState({});
@@ -193,10 +199,10 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
         <div style={{ display: "flex", flexDirection: "column", height: "100%" }} >
             <div className="shark-selector-list">
                 <button 
-                    onClick={onReset}
+                    onClick={handleReset}
                     className={`show-all-button ${selectedSharkId == null ? "active" : ""}`}
                 >
-                    Show All Sharks
+                    Reset All Sharks
                 </button>
 
                 <div className="filter-toggle-container">
@@ -448,7 +454,12 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                 </div>
 
                 <div className="scrollable-sharks-list">
-                    {Object.entries(sharksByContinent)
+                    {Object.keys(sharksByContinent).length === 0 ? (
+                        <div className="no-sharks-message">
+                            Sorry! No whale sharks match your current filters.
+                        </div>
+                    ) : (
+                    Object.entries(sharksByContinent)
                         .sort(([a], [b]) => a.localeCompare(b))
                         .map(([continent, sharks]) => {
                         const isOpen = openContinents[continent];
@@ -501,7 +512,8 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                                 )}
                             </div>
                         );
-                    })}
+                    })
+                    )}
                 </div>
             </div>
         </div>

@@ -202,6 +202,12 @@
     overflow-y: auto;
 }
 
+.no-sharks-message {
+    font-style: italic;
+    font-size: 1rem;
+    padding: 1rem;
+}
+
 .shark-selector-item {
     display: flex;
     align-items: center;
