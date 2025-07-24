@@ -127,10 +127,24 @@ function filterSharks(sharks, filters) {
 
 
 function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
+    // Populate & constrain filter dropdown options
+    const COUNTRIES = extractUniqueSortedRegions(sharks, "countries");
+    const PUBLISHING_COUNTRIES = extractUniqueSortedRegions(sharks, "publishing");
+
+    const MIN_RECORDS = Math.min(...sharks.map(s => s.occurrences || 1));
+    const MAX_RECORDS = Math.max(...sharks.map(s => s.occurrences || 1));
+
+    const ALL_YEARS = sharks.flatMap(
+        s => [parseInt(s.oldest), parseInt(s.newest)]
+    ).filter(y => !isNaN(y));
+    const MIN_YEAR = Math.min(...ALL_YEARS);
+    const MAX_YEAR = Math.max(...ALL_YEARS);
+
+
     const [filters, setFilters] = useState({
         showOnlyWithMedia: false,
         country: "",
-        yearRange: [2000, 2025],
+        yearRange: [String(MIN_YEAR), String(MAX_YEAR)],
         hasOccurrenceNotes: false,
         minRecords: 1,
         sex: "",
@@ -143,10 +157,6 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     const [openContinents, setOpenContinents] = useState({});
     const sharksByContinent = {};
 
-
-    // Populate filter dropdown options
-    const COUNTRIES = extractUniqueSortedRegions(sharks, "countries");
-    const PUBLISHING_COUNTRIES = extractUniqueSortedRegions(sharks, "publishing");
 
     const filteredSharks = filterSharks(sharks, filters);
 
@@ -252,24 +262,64 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                                 <input
                                     type="number"
                                     value={filters.yearRange[0]}
-                                    onChange={(e) =>
-                                        setFilters((f) => ({
-                                            ...f,
-                                            yearRange: [parseInt(e.target.value), f.yearRange[1]],
-                                        }))
-                                    }
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setFilters(f => ({ 
+                                            ...f, 
+                                            yearRange: [val, f.yearRange[1]] 
+                                        }));
+                                    }}
+                                    // Validate int min bounds on click away 
+                                    onBlur={() => {
+                                        setFilters(f => {
+                                            const num = parseInt(f.yearRange[0]);
+                                            const safe = (
+                                                isNaN(num) ? 
+                                                MIN_YEAR : 
+                                                Math.max(
+                                                    MIN_YEAR, Math.min(
+                                                        num, parseInt(f.yearRange[1])
+                                                    )
+                                                )
+                                            );
+                                            return { 
+                                                ...f, 
+                                                yearRange: [String(safe), f.yearRange[1]] 
+                                            };
+                                        });
+                                    }}
                                     className="filter-input"
                                 />
                                 <span style={{ margin: '0 0.25rem' }}>to</span>
                                 <input
                                     type="number"
                                     value={filters.yearRange[1]}
-                                    onChange={(e) =>
-                                        setFilters((f) => ({
-                                            ...f,
-                                            yearRange: [f.yearRange[0], parseInt(e.target.value)],
-                                        }))
-                                    }
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setFilters(f => ({ 
+                                            ...f, 
+                                            yearRange: [f.yearRange[0], val] 
+                                        }));
+                                    }}
+                                    // Validate int max bounds on click away 
+                                    onBlur={() => {
+                                        setFilters(f => {
+                                            const num = parseInt(f.yearRange[1]);
+                                            const safe = (
+                                                isNaN(num) ? 
+                                                MAX_YEAR : 
+                                                Math.min(
+                                                    MAX_YEAR, Math.max(
+                                                        num, parseInt(f.yearRange[0])
+                                                    )
+                                                )
+                                            );
+                                            return { 
+                                                ...f, 
+                                                yearRange: [f.yearRange[0], String(safe)] 
+                                            };
+                                        });
+                                    }}
                                     className="filter-input"
                                 />
                             </div>
@@ -295,13 +345,30 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                             Min Records:
                             <input
                                 type="number"
+                                min={MIN_RECORDS}
+                                max={MAX_RECORDS}
                                 value={filters.minRecords}
-                                onChange={(e) =>
-                                    setFilters((f) => ({ 
-                                        ...f, 
-                                        minRecords: parseInt(e.target.value) || 0 
-                                    }))
-                                }
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setFilters((f) => ({ ...f, minRecords: val }));
+                                }}
+                                // Validate min records bounds on click away
+                                onBlur={() => {
+                                    setFilters((f) => {
+                                        const num = parseInt(f.minRecords, 10);
+                                        if (isNaN(num)) return { 
+                                            ...f, 
+                                            minRecords: MIN_RECORDS 
+                                        };
+                                        const clamped = Math.max(
+                                            MIN_RECORDS, Math.min(
+                                                num, 
+                                                MAX_RECORDS
+                                            )
+                                        );
+                                        return { ...f, minRecords: clamped };
+                                    });
+                                }}
                                 className="filter-input"
                             />
                         </label>
