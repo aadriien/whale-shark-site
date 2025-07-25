@@ -1,6 +1,6 @@
 function SavedSharks () {
     return (
-        <div>
+        <div className="logbook-section saved-sharks">
             <p>Saved content here</p>
         </div>
     );

@@ -46,18 +46,34 @@
 /* Floating logbook UI */
 .logbook-container {
     position: fixed;
-    top: 80px;
-    right: 20px;
+    top: 90px;
+    left: 20px;
+
     width: 320px;
     height: 240px;
-    background-color: #ffffff;
+
+    min-width: 280px;
+    min-height: 200px;
+    max-width: 35vw;
+    max-height: 75vh;
+
+    resize: both;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+
+    background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 16px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     z-index: 9999;
+}
+
+.logbook-inner {
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .logbook-header {
