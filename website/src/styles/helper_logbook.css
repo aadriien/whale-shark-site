@@ -1,0 +1,87 @@
+/* Override global button width for logbook toggle */
+.logbook-button {
+    width: 40px !important; 
+    height: 40px !important;
+    min-width: 40px !important;
+    padding: 0 !important;
+    margin-right: 20px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    font-size: 1.1rem;
+    cursor: pointer;
+    
+    /* Center shark helper icon */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logbook-button:hover {
+    background-color: #ddd;
+}
+
+.logbook-close-button {
+    all: unset; /* resets almost all inherited index.css styles */
+    cursor: pointer;
+    
+    font-size: 1.1rem;
+    line-height: 1;
+    color: #333;
+    
+    width: auto !important;
+    height: auto !important;
+    padding: 4px !important;
+    margin: 0 !important;
+}
+
+.logbook-close-button:hover,
+.logbook-close-button:focus {
+    color: #000;
+    outline: none;
+    border-radius: 6px;
+}
+
+
+/* Floating logbook UI */
+.logbook-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 320px;
+    height: 240px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+.logbook-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+.logbook-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0; /* reset default margin on h2 */
+}
+
+.logbook-body {
+    flex: 1;
+    margin-top: 12px;
+    overflow-y: auto;
+    font-size: 1rem;
+    color: #333;
+}
+
+
+

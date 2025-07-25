@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 import { Suspense, lazy } from "react";
 
 import Navbar from "./components/Navbar.jsx";
+import Logbook from "./components/HelperLogbook.jsx";
 
 const ResearchReef = lazy(() => import("./pages/ResearchReef.jsx"));
 const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent.jsx"));
@@ -16,12 +17,17 @@ const Environment = lazy(() => import("./pages/Environment.jsx"));
 const BuildAShark = lazy(() => import("./pages/BuildAShark.jsx"));
 const Animation = lazy(() => import("./pages/Animation.jsx"));
 
+
 function App() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <HashRouter>
                 {/* Navbar outside Routes so it's always shown on pages */}
                 <Navbar />
+
+                {/* Logbook overlay (always there but conditionally rendered) */}
+                <Logbook />
+
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />
                     <Route path="/home" element={<Home />} />

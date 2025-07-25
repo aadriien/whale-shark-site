@@ -1,14 +1,30 @@
 import { Link, useLocation } from "react-router-dom";
 
+
 function Navbar() {
     // Get current route (page), so user knows where they are
     const location = useLocation(); 
 
     const isResearchReef = location.pathname.startsWith("/research");
     const isCreativeCurrent = location.pathname.startsWith("/creative");
-    
+
+    const handleLogbookClick = () => {
+        const event = new CustomEvent("toggleLogbook");
+        window.dispatchEvent(event);
+    };
+
     return (
         <nav>
+            <button
+                onClick={handleLogbookClick}
+                className="logbook-button"
+                title="Open Logbook"
+                aria-label="Open Logbook" // for accessibility, e.g. screen readers
+                type="button"
+            >
+                🧾
+            </button>
+
             <div className="version-toggle">
                 <Link to="/research" className={isResearchReef ? "active-version reef" : "reef"}>
                     Research Reef
