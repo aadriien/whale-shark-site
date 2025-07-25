@@ -19,7 +19,7 @@ function Logbook() {
     const SECTION_COMPONENTS = {
         overview: <PageOverview currentPage={pageSlug} />,
         faq: <PageFAQ currentPage={pageSlug} />,
-        stamps: <VisitedStamps />,
+        stamps: <VisitedStamps currentPage={pageSlug} />,
         saved: <SavedSharks />
     };
 
