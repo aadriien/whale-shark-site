@@ -209,6 +209,10 @@ function GalacticOcean() {
     const [hoveredBlob, setHoveredBlob] = useState(null); // "reef" | "current" | null
     const [hoveredScreenPos, setHoveredScreenPos] = useState({ x: 0, y: 0 });
 
+    const currentHovered = useRef(null);
+const currentColliding = useRef(null);
+
+
     const mountRef = useRef();
     const cameraRef = useRef();
 
@@ -217,6 +221,42 @@ function GalacticOcean() {
     const raycaster = useRef(new THREE.Raycaster());
     const mouse = useRef(new THREE.Vector2());
     const clickableMeshes = useRef([]);
+
+
+    // Reusable helper to activate particle blob glow on mouse hover or shark collision
+    function setActiveBlob(particleBlobs, activeName, sourceObject = null) {
+        // Reset all particles first
+        Object.entries(particleBlobs).forEach(([name, { blob, original }]) => {
+            if (!blob) return;
+
+            const isActive = name === activeName;
+
+            // Glow only for hovered blob (reef vs current)
+            blob.material.opacity = isActive ? 1.0 : original.opacity;
+            blob.material.size = isActive ? original.size * 1.5 : original.size;
+            blob.material.needsUpdate = true;
+        });
+
+        // Update blob name for external state
+        setHoveredBlob(activeName ?? null);
+
+        // Optional: Update blob group's screen position if source object provided
+        if (sourceObject && cameraRef.current) {
+            const blobGroup = sourceObject.parent;
+            const vector = new THREE.Vector3();
+            vector.setFromMatrixPosition(blobGroup.matrixWorld);
+            vector.project(cameraRef.current);
+
+            const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+            setHoveredScreenPos({ x, y });
+        }
+
+        // Cursor handling (optional: only do this for mouse hover)
+        if (typeof window !== "undefined") {
+            document.body.style.cursor = activeName ? "pointer" : "default";
+        }
+    }
 
 
     useEffect(() => {
@@ -303,6 +343,7 @@ function GalacticOcean() {
 
         reef.traverse((child) => {
             if (child.isPoints) {
+                child.material.transparent = true;
                 particleBlobs.reef.blob = child;
                 particleBlobs.reef.original.opacity = child.material.opacity;
                 particleBlobs.reef.original.size = child.material.size;
@@ -310,6 +351,7 @@ function GalacticOcean() {
         });
         current.traverse((child) => {
             if (child.isPoints) {
+                child.material.transparent = true;
                 particleBlobs.current.blob = child;
                 particleBlobs.current.original.opacity = child.material.opacity;
                 particleBlobs.current.original.size = child.material.size;
@@ -347,8 +389,6 @@ function GalacticOcean() {
         mountRef.current.addEventListener("click", handleClick);
 
 
-        let currentHovered = null;
-
         const handleHover = (event) => {
             const intersect = getIntersectedClickable(event);
 
@@ -356,69 +396,22 @@ function GalacticOcean() {
                 // Only enable changes if hovered object different
                 const hoveredName = intersect.object.name;
 
-                if (hoveredName !== currentHovered) {
-                    // Reset all particles first
-                    Object.values(particleBlobs).forEach(({ blob, original }) => {
-                        if (blob) {
-                            blob.material.opacity = original.opacity;
-                            blob.material.size = original.size;
-                            blob.material.needsUpdate = true;
-                        }
-                    });
-
-                    // Glow only hovered one (reef vs current)
-                    if (hoveredName === "reef" && particleBlobs.reef.blob) {
-                        const blob = particleBlobs.reef.blob;
-                        blob.material.opacity = 1.0;
-                        blob.material.size = particleBlobs.reef.original.size * 1.5;
-                        blob.material.needsUpdate = true;
-                    } 
-                    else if (hoveredName === "current" && particleBlobs.current.blob) {
-                        const blob = particleBlobs.current.blob;
-                        blob.material.opacity = 1.0;
-                        blob.material.size = particleBlobs.current.original.size * 1.5;
-                        blob.material.needsUpdate = true;
-                    }
-
-                    document.body.style.cursor = "pointer";
-                    currentHovered = hoveredName;
-                    setHoveredBlob(hoveredName);
-
-                    // Project blob group’s position to screen space (for div text)
-                    const blobGroup = intersect.object.parent; 
-                    const vector = new THREE.Vector3();
-                    vector.setFromMatrixPosition(blobGroup.matrixWorld); 
-                    vector.project(cameraRef.current); 
-
-                    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
-                    const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
-
-                    setHoveredScreenPos({ x, y });
+                if (hoveredName !== currentHovered.current) {
+                    setActiveBlob(particleBlobs, hoveredName, intersect.object);
+                    currentHovered.current = hoveredName;
                 }
             } 
             else {
-                if (currentHovered !== null) {
-                    // Reset all particles only once when hover ends
-                    Object.values(particleBlobs).forEach(({ blob, original }) => {
-                        if (blob) {
-                            blob.material.opacity = original.opacity;
-                            blob.material.size = original.size;
-                            blob.material.needsUpdate = true;
-                        }
-                    });
-
-                    document.body.style.cursor = "default";
-                    currentHovered = null;
-                    setHoveredBlob(null);
+                if (currentHovered.current !== null) {
+                    setActiveBlob(particleBlobs, null);
+                    currentHovered.current = null;
                 }
             }
         };
         mountRef.current.addEventListener("mousemove", handleHover);
 
 
-        // Also active glowing particle effect when shark swims through blob
-        let currentColliding = null;
-
+        // Activate glowing particle effect when shark swims through blob
         function checkSharkCollision() {
             requestAnimationFrame(checkSharkCollision);
 
@@ -445,25 +438,9 @@ function GalacticOcean() {
                 }
             }
 
-            if (collidedName !== currentColliding) {
-                // Reset both blobs
-                Object.values(particleBlobs).forEach(({ blob, original }) => {
-                    if (blob) {
-                        blob.material.opacity = original.opacity;
-                        blob.material.size = original.size;
-                        blob.material.needsUpdate = true;
-                    }
-                });
-
-                // Apply glow to the one shark collided with
-                if (collidedName && particleBlobs[collidedName]?.blob) {
-                    const blob = particleBlobs[collidedName].blob;
-                    blob.material.opacity = 1.0;
-                    blob.material.size = particleBlobs[collidedName].original.size * 1.5;
-                    blob.material.needsUpdate = true;
-                }
-
-                currentColliding = collidedName;
+            if (collidedName !== currentColliding.current) {
+                setActiveBlob(particleBlobs, collidedName); // no need for screen project
+                currentColliding.current = collidedName;
             }
         }
         checkSharkCollision();
