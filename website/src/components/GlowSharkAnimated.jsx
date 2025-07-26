@@ -159,7 +159,6 @@ function GlowSharkAnimated() {
     useEffect(() => {
         const container = containerRef.current;
         const scene = new THREE.Scene();
-        // scene.background = new THREE.Color(0x042a3b); // dark blue-green
         
         const camera = new THREE.PerspectiveCamera(
             75,
@@ -229,15 +228,6 @@ function GlowSharkAnimated() {
         const geometry = new THREE.BufferGeometry();
         geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-        
-        // const material = new THREE.PointsMaterial({
-        //     size: 3,
-        //     vertexColors: true,
-        //     transparent: true,
-        //     opacity: 0.85,
-        //     blending: THREE.AdditiveBlending,
-        //     depthWrite: false,
-        // });
 
         const sprite = createCircleTexture();
         const material = new THREE.PointsMaterial({
