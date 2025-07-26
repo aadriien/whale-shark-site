@@ -223,8 +223,8 @@ export function createReef() {
     ];
     return createBlobGroup({
         baseColors: coralColors,
-        particleCount: 250,
-        spaceScale: 2.6,
+        particleCount: 160,
+        spaceScale: 1.2,
         pointSize: 13,
         clickableRadius: 50,
         name: "reef"
@@ -234,7 +234,7 @@ export function createReef() {
 
 export function animateReef(reefGroup) {
     animateBlobGroup(reefGroup, {
-        moveVector: new THREE.Vector3(-0.015, 0, 0),
+        moveVector: new THREE.Vector3(0.035, 0, 0),
         oscillation: {
             axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
             axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
@@ -253,8 +253,8 @@ export function createCurrent() {
     ];
     return createBlobGroup({
         baseColors: currentColors,
-        particleCount: 250,
-        spaceScale: 2.6,
+        particleCount: 160,
+        spaceScale: 1.2,
         pointSize: 13,
         clickableRadius: 50,
         name: "current"
@@ -264,7 +264,7 @@ export function createCurrent() {
 
 export function animateCurrent(currentGroup) {
     animateBlobGroup(currentGroup, {
-        moveVector: new THREE.Vector3(0.015, 0, 0),
+        moveVector: new THREE.Vector3(-0.035, 0, 0),
         oscillation: {
             axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
             axis2: 'y', amplitude2: 0.006, frequency2: 0.06,

@@ -224,7 +224,7 @@ function GalacticOcean() {
 
     const isReefActive = hoveredBlob === "reef" || hoveredText === "reef";
     const isCurrentActive = hoveredBlob === "current" || hoveredText === "current";
-    
+
 
     // Reusable helper to activate particle blob glow on mouse hover or shark collision
     function setActiveBlob(particleBlobs, activeName, sourceObject = null) {
@@ -323,18 +323,18 @@ function GalacticOcean() {
 
         // Create research reef & creative current objects
         const reef = createReef();
-        reef.scale.set(2, 2, 2);
+        reef.scale.set(1.8, 1.8, 1.8);
         scene.add(reef);
 
         const current = createCurrent();
-        current.scale.set(2, 2, 2);
+        current.scale.set(1.8, 1.8, 1.8);
         scene.add(current);
 
-        reef.position.set(-450, -200, 0); 
-        current.position.set(450, -200, 0); 
+        reef.position.set(-530, -210, 0); 
+        current.position.set(530, -210, 0); 
 
-        reef.rotateX(0.5);
-        current.rotateX(0.5);
+        reef.rotation.set(Math.PI / 2.7, 0.9, 0);
+        current.rotation.set(Math.PI / 2.7, -0.9, 0);
 
         // Add their invisible meshes to clickable list
         reef.traverse((child) => {
