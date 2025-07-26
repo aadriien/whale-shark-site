@@ -104,7 +104,7 @@ function animateBlobParticles(blobGroup, options = {}) {
             if (!child.userData.velocities) {
                 const velocities = new Float32Array(particleCount * 3);
                 for (let i = 0; i < particleCount; i++) {
-                    velocities[i * 3]     = moveVector.x * (0.8 + 0.4 * Math.random());
+                    velocities[i * 3] = moveVector.x * (0.8 + 0.4 * Math.random());
                     velocities[i * 3 + 1] = moveVector.y;
                     velocities[i * 3 + 2] = moveVector.z;
                 }
@@ -148,6 +148,72 @@ function animateBlobParticles(blobGroup, options = {}) {
 }
 
 
+function createBlobGroup({
+    baseColors,
+    particleCount = 250,
+    spaceScale = 2.6,
+    pointSize = 13,
+    clickableRadius = 50,
+    name = "blob"
+} = {}) {
+    const blobGroup = createBlobParticles(baseColors, particleCount, spaceScale, pointSize);
+
+    // Add a clickable invisible mesh
+    const clickable = new THREE.Mesh(
+        new THREE.SphereGeometry(clickableRadius, 16, 16), // size based on blob spread
+        new THREE.MeshBasicMaterial({ visible: false })
+        // new THREE.MeshBasicMaterial({ color: baseColors[0].getHex(), wireframe: true, opacity: 0.5, transparent: true })
+    );
+    clickable.name = name;
+
+    // Store reference to clickable in userData for easy access when animating
+    blobGroup.userData.clickable = clickable;
+    blobGroup.add(clickable);
+
+    return blobGroup;
+}
+
+
+function animateBlobGroup(blobGroup, {
+    moveVector = new THREE.Vector3(0, 0, 0),
+    oscillation = {
+        axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
+        axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
+    },
+    bounds = { minX: -60, maxX: 60, minY: 0, maxY: 70, minZ: -60, maxZ: 60 }
+} = {}) {
+    animateBlobParticles(blobGroup, { moveVector, oscillation, bounds });
+
+    // Find points object inside blobGroup
+    let points = null;
+    blobGroup.traverse(child => {
+        if (child.isPoints && child.userData.positions) {
+            points = child;
+        }
+    });
+    if (!points) return;
+
+    // Calculate average center of particles
+    const { positions, particleCount } = points.userData;
+    let avgX = 0, avgY = 0, avgZ = 0;
+
+    for (let i = 0; i < particleCount; i++) {
+        avgX += positions[i * 3];
+        avgY += positions[i * 3 + 1];
+        avgZ += positions[i * 3 + 2];
+    }
+    avgX /= particleCount;
+    avgY /= particleCount;
+    avgZ /= particleCount;
+
+    // Move clickable sphere mesh to average center (follow particle blob)
+    const clickable = blobGroup.userData.clickable;
+    if (clickable) {
+        clickable.position.set(avgX, avgY, avgZ);
+    }
+}
+
+
 export function createReef() {
     const coralColors = [
         new THREE.Color("#ff775c"),  // vibrant coral
@@ -155,134 +221,57 @@ export function createReef() {
         new THREE.Color("#fcb1a0"),  // soft coral pink
         new THREE.Color("#ff6845"),  // deeper coral orange
     ];
-    
-    const blobReefGroup = createBlobParticles(coralColors, 250, 2.6, 13);
-
-    // Add a clickable invisible mesh
-    const clickable = new THREE.Mesh(
-        new THREE.SphereGeometry(50, 16, 16), // size based on blob spread
-        new THREE.MeshBasicMaterial({ visible: false })
-        // new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true, opacity: 0.5, transparent: true })
-    );
-    clickable.name = "reef";
-
-    // Store reference to clickable in userData for easy access when animating
-    blobReefGroup.userData.clickable = clickable;
-    blobReefGroup.add(clickable);
-
-    return blobReefGroup;
+    return createBlobGroup({
+        baseColors: coralColors,
+        particleCount: 250,
+        spaceScale: 2.6,
+        pointSize: 13,
+        clickableRadius: 50,
+        name: "reef"
+    });
 }
 
 
-// Helper which gets sent up to GalacticOcean parent for use in scene
 export function animateReef(reefGroup) {
-    animateBlobParticles(reefGroup, {
-        moveVector: new THREE.Vector3(-0.015, 0, 0), 
+    animateBlobGroup(reefGroup, {
+        moveVector: new THREE.Vector3(-0.015, 0, 0),
         oscillation: {
-            axis1: 'z', amplitude1: 0.025, frequency1: 0.12, 
+            axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
             axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
         },
         bounds: { minX: -60, maxX: 60, minY: 0, maxY: 70, minZ: -60, maxZ: 60 },
     });
-
-    // Find points object inside reefGroup
-    let points = null;
-    reefGroup.traverse(child => {
-        if (child.isPoints && child.userData.positions) {
-            points = child;
-        }
-    });
-
-    if (!points) return;
-
-    // Calculate average center of particles
-    const { positions, particleCount } = points.userData;
-    let avgX = 0, avgY = 0, avgZ = 0;
-
-    for (let i = 0; i < particleCount; i++) {
-        avgX += positions[i * 3];
-        avgY += positions[i * 3 + 1];
-        avgZ += positions[i * 3 + 2];
-    }
-    avgX /= particleCount;
-    avgY /= particleCount;
-    avgZ /= particleCount;
-
-    // Move clickable sphere mesh to average center (follow particle blob)
-    const clickable = reefGroup.userData.clickable;
-    if (clickable) {
-        clickable.position.set(avgX, avgY, avgZ);
-    }
 }
 
 
-
-// Ocean current with particle system that animates flow
 export function createCurrent() {
     const currentColors = [
         new THREE.Color("#1e4023"),  // deep forest green
         new THREE.Color("#2e6b3b"),  // mossy earth green
         new THREE.Color("#4fa35d"),  // medium leafy green
-        new THREE.Color("#90e17d"),  // fresh bright fern green (accent)
+        new THREE.Color("#90e17d"),  // bright fern green 
     ];
-    
-    const blobCurrentGroup = createBlobParticles(currentColors, 250, 2.6, 13);
-
-    // Add a clickable invisible mesh
-    const clickable = new THREE.Mesh(
-        new THREE.SphereGeometry(50, 16, 16), // size based on blob spread
-        new THREE.MeshBasicMaterial({ visible: false })
-        // new THREE.MeshBasicMaterial({ color: 0x4fa35d, wireframe: true, opacity: 0.5, transparent: true })
-    );
-    clickable.name = "current";
-
-    // Store reference to clickable in userData for easy access when animating
-    blobCurrentGroup.userData.clickable = clickable;
-    blobCurrentGroup.add(clickable);
-    
-    return blobCurrentGroup;
+    return createBlobGroup({
+        baseColors: currentColors,
+        particleCount: 250,
+        spaceScale: 2.6,
+        pointSize: 13,
+        clickableRadius: 50,
+        name: "current"
+    });
 }
 
 
-// Helper which gets sent up to GalacticOcean parent for use in scene
 export function animateCurrent(currentGroup) {
-    animateBlobParticles(currentGroup, {
-        moveVector: new THREE.Vector3(0.015, 0, 0), 
+    animateBlobGroup(currentGroup, {
+        moveVector: new THREE.Vector3(0.015, 0, 0),
         oscillation: {
-            axis1: 'z', amplitude1: 0.025, frequency1: 0.12, 
+            axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
             axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
         },
-        bounds: { minX: -60, maxX: 60, minY: 0, maxY: 70, minZ: -60, maxZ: 60 }
+        bounds: { minX: -60, maxX: 60, minY: 0, maxY: 70, minZ: -60, maxZ: 60 },
     });
-
-    // Find points object inside reefGroup
-    let points = null;
-    currentGroup.traverse(child => {
-        if (child.isPoints && child.userData.positions) {
-            points = child;
-        }
-    });
-
-    if (!points) return;
-
-    // Calculate average center of particles
-    const { positions, particleCount } = points.userData;
-    let avgX = 0, avgY = 0, avgZ = 0;
-
-    for (let i = 0; i < particleCount; i++) {
-        avgX += positions[i * 3];
-        avgY += positions[i * 3 + 1];
-        avgZ += positions[i * 3 + 2];
-    }
-    avgX /= particleCount;
-    avgY /= particleCount;
-    avgZ /= particleCount;
-
-    // Move clickable sphere mesh to average center (follow particle blob)
-    const clickable = currentGroup.userData.clickable;
-    if (clickable) {
-        clickable.position.set(avgX, avgY, avgZ);
-    }
 }
+
 
 
