@@ -529,13 +529,13 @@ function GalacticOcean() {
                     pointerEvents: "none", 
                 }}
             >
-                {hoveredBlob && (
+                <>
+                    {/* Left Text - "research reef" */}
                     <div
                         style={{
                             position: 'absolute',
                             top: '170px',
-                            left: hoveredBlob === 'reef' ? '60px' : 'auto',
-                            right: hoveredBlob === 'current' ? '60px' : 'auto',
+                            left: '60px',
                             fontFamily: "'Poppins', 'Montserrat', sans-serif",
                             fontStyle: 'italic',
                             fontWeight: 500,
@@ -549,7 +549,11 @@ function GalacticOcean() {
                             letterSpacing: '0.2em',
                             zIndex: 1000,
                             background: 'transparent',
-                            color: '#fff',
+
+                            // Bright white on hover, faint coral otherwise
+                            color: hoveredBlob === 'reef' ? '#fff' : 'rgba(255, 192, 203, 0.3)', 
+                            filter: 'blur(1.2px)',
+                            opacity: 1,
                             textShadow: hoveredBlob === 'reef'
                                 ? `
                                     0 0 3px #fff,
@@ -559,46 +563,102 @@ function GalacticOcean() {
                                     0 0 50px #feb47b
                                 `
                                 : `
-                                    0 0 3px #fff,
-                                    0 0 8px #4caf50,
-                                    0 0 15px #1de9b6,
-                                    0 0 30px #1de9b6,
-                                    0 0 50px #1de9b6
+                                    0 0 1px #ff7e5f88,
+                                    0 0 3px #feb47b44,
+                                    0 0 6px #feb47b22
                                 `,
-                            filter: 'blur(1.2px)',
-                            opacity: 1,
-                            transition: 'opacity 0.6s ease, text-shadow 0.8s ease',
-                            textAlign: hoveredBlob === 'reef' ? 'left' : 'right',
+                            transition: 'color 0.6s ease, text-shadow 0.8s ease',
+                            textAlign: 'left',
                             display: 'inline-block',
                             transformOrigin: 'center',
-                            transform: 'scaleX(1.5) scaleY(0.7)', // wider & shorter letters
+                            transform: 'scaleX(1.5) scaleY(0.7)',
                             animation: 'wave 3.5s ease-in-out infinite',
                         }}
                     >
-                        {[...(hoveredBlob === 'reef' ? 'research reef' : 'creative current')].map((char, i) => (
+                        {[..."research reef"].map((char, i) => (
                             <span
                                 key={i}
                                 style={{
-                                display: 'inline-block',
-                                transform: `translateY(${Math.sin(i * 1.3) * 3}px)`,
-                                transition: 'transform 0.5s ease-in-out',
-                                willChange: 'transform',
+                                    display: 'inline-block',
+                                    transform: `translateY(${Math.sin(i * 1.3) * 3}px)`,
+                                    transition: 'transform 0.5s ease-in-out',
+                                    willChange: 'transform',
                                 }}
                             >
                                 {char}
                             </span>
                         ))}
+                    </div>
 
-                        <style>
+                    {/* Right Text - "creative current" */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '170px',
+                            right: '60px',
+                            fontFamily: "'Poppins', 'Montserrat', sans-serif",
+                            fontStyle: 'italic',
+                            fontWeight: 500,
+                            fontSize: '2rem',
+                            textTransform: 'lowercase',
+                            whiteSpace: 'nowrap',
+                            pointerEvents: 'none',
+                            userSelect: 'none',
+                            margin: 0,
+                            padding: 0,
+                            letterSpacing: '0.2em',
+                            zIndex: 1000,
+                            background: 'transparent',
+
+                            // Bright white on hover, faint green otherwise
+                            color: hoveredBlob === 'current' ? '#fff' : 'rgba(152, 251, 152, 0.3)', 
+                            filter: 'blur(1.2px)',
+                            opacity: 1,
+                            textShadow: hoveredBlob === 'current'
+                                ? `
+                                    0 0 3px #fff,
+                                    0 0 8px #4caf50,
+                                    0 0 15px #1de9b6,
+                                    0 0 30px #1de9b6,
+                                    0 0 50px #1de9b6
+                                `
+                                : `
+                                    0 0 1px #4caf5088,
+                                    0 0 3px #1de9b644,
+                                    0 0 6px #1de9b622
+                                `,
+                            transition: 'color 0.6s ease, text-shadow 0.8s ease',
+                            textAlign: 'right',
+                            display: 'inline-block',
+                            transformOrigin: 'center',
+                            transform: 'scaleX(1.5) scaleY(0.7)',
+                            animation: 'wave 3.5s ease-in-out infinite',
+                        }}
+                    >
+                        {[..."creative current"].map((char, i) => (
+                            <span
+                                key={i}
+                                style={{
+                                    display: 'inline-block',
+                                    transform: `translateY(${Math.sin(i * 1.3) * 3}px)`,
+                                    transition: 'transform 0.5s ease-in-out',
+                                    willChange: 'transform',
+                                }}
+                            >
+                                {char}
+                            </span>
+                        ))}
+                    </div>
+
+                    <style>
                         {`
                             @keyframes wave {
-                            0%, 100% { transform: translateY(0); }
-                            50% { transform: translateY(-6px); }
+                                0%, 100% { transform: translateY(0); }
+                                50% { transform: translateY(-6px); }
                             }
                         `}
-                        </style>
-                    </div>
-                )}
+                    </style>
+                </>
 
             </div>
         </div>
