@@ -1,16 +1,20 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 
 const pageMap = {
-    home: "Home",
-    about: "About",
-    research: "Research Reef",
-    creative: "Creative Current",
-    globeviews: "Globe Views",
-    sharktracker: "Shark Tracker",
-    datavisuals: "Data Visuals",
-    environment: "Environment",
-    buildashark: "Build-A-Shark",
-    animation: "Animation",
+    home: { label: "Home", path: "/" },
+    about: { label: "About", path: "/about" },
+
+    research: { label: "Research Reef", path: "/research" },
+    creative: { label: "Creative Current", path: "/creative" },
+    
+    globeviews: { label: "Globe Views", path: "/research/globeviews" },
+    sharktracker: { label: "Shark Tracker", path: "/research/sharktracker" },
+    datavisuals: { label: "Data Visuals", path: "/research/datavisuals" },
+    environment: { label: "Environment", path: "/research/environment" },
+
+    buildashark: { label: "Build-A-Shark", path: "/creative/buildashark" },
+    animation: { label: "Animation", path: "/creative/animation" },
 };
 
 const STORAGE_KEY = "visitedPages";
@@ -76,25 +80,42 @@ function VisitedStamps({ currentPage }) {
             </div>
 
             <div className="stamp-grid">
-                {Object.entries(pageMap).map(([path, label], idx) => {
-                    const isStamped = visited.has(path);
+                {Object.entries(pageMap).map(([slug, { label, path }], idx) => {
+                    const isStamped = visited.has(slug);
                     const { hue, borderRadius } = blobStyles[idx];
-                    
-                    return (
-                        <div
-                            key={path}
-                            className={`stamp ${isStamped ? "stamped" : ""}`}
-                        >
+
+                    const stampContent = (
+                        <>
                             <div
                                 className="stamp-blob"
                                 style={{ "--hue": hue, borderRadius }}
-
                             />
                             <span className="stamp-label">{label}</span>
-                                {isStamped && (
+                            {isStamped && (
                                 <span className="stamp-insignia" aria-label="Visited mark" role="img">
                                     ✔️
                                 </span>
+                            )}
+                        </>
+                    );
+
+                    return (
+                        <div
+                            key={slug}
+                            className={`stamp ${isStamped ? "stamped" : ""}`}
+                        >
+                            {/* Allow users to revisit stamped pages */}
+                            {isStamped ? (
+                                <Link
+                                    to={path}
+                                    className="stamp-link"
+                                    tabIndex={0}
+                                    aria-label={`Go to ${label} page`}
+                                >
+                                    {stampContent}
+                                </Link>
+                            ) : (
+                                stampContent
                             )}
                         </div>
                     );

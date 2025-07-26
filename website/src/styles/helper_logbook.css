@@ -235,7 +235,6 @@
 
 .stamp:hover {
     animation: wobble 0.4s ease-in-out;
-    cursor: pointer;
 }
 
 .stamp-blob {
@@ -278,6 +277,26 @@
     color: #222;
     text-align: center;
     max-width: 130px;
+}
+
+.stamp-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: inherit; /* keep text color */
+    text-decoration: none;
+    pointer-events: none;
+    cursor: default;
+}
+
+.stamp.stamped .stamp-link {
+    pointer-events: auto; /* re-enable pointer for stamped ones */
+    cursor: pointer;
+}
+
+.stamp-link:hover .stamp-blob {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.35));
 }
 
 @keyframes wobble {
