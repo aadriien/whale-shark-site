@@ -8,7 +8,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 
 import { createReef, animateReef, createCurrent, animateCurrent } from "./ReefCurrentAnimated.jsx";
-import GlowSharkAnimated from "./GlowSharkAnimated.jsx";
+import { GlowSharkAnimated } from "./GlowSharkAnimated.jsx";
 
 
 function createNebula(scene) {
@@ -257,6 +257,21 @@ function GalacticOcean() {
         const oceanMaterial = createOcean(scene);
 
 
+        // Create glowing whale shark & add to scene
+        const { shark, curve, update: updateShark } = GlowSharkAnimated();
+        scene.add(shark);
+
+        // Use shark's curve to render traced path
+        const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(200));
+        const curveMaterial = new THREE.LineBasicMaterial({
+            color: 0xffffff,
+            opacity: 0.4,
+            transparent: true,
+        });
+        const curveLine = new THREE.Line(curveGeometry, curveMaterial);
+        scene.add(curveLine);
+
+
         // Create research reef & creative current objects
         const reef = createReef();
         reef.scale.set(2, 2, 2);
@@ -422,6 +437,8 @@ function GalacticOcean() {
             // rippleMaterial.uniforms.time.value = elapsed;
             oceanMaterial.uniforms.time.value = elapsed;
 
+            updateShark(elapsed);
+
             animateReef(reef);
             animateCurrent(current);
 
@@ -482,8 +499,6 @@ function GalacticOcean() {
                     pointerEvents: "none", 
                 }}
             >
-                <GlowSharkAnimated />
-
                 {hoveredBlob && (
                     <div
                         style={{
