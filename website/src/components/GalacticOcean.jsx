@@ -210,8 +210,7 @@ function GalacticOcean() {
     const [hoveredScreenPos, setHoveredScreenPos] = useState({ x: 0, y: 0 });
 
     const currentHovered = useRef(null);
-const currentColliding = useRef(null);
-
+    const currentColliding = useRef(null);
 
     const mountRef = useRef();
     const cameraRef = useRef();
@@ -298,7 +297,13 @@ const currentColliding = useRef(null);
 
 
         // Create glowing whale shark & add to scene
-        const { shark, geometry, basePositions, curve, update: updateShark } = GlowSharkAnimated();
+        const { 
+            shark, 
+            geometry, 
+            basePositions, 
+            curve, 
+            update: updateShark 
+        } = GlowSharkAnimated();
         scene.add(shark);
 
         // Use shark's curve to render traced path
@@ -341,21 +346,16 @@ const currentColliding = useRef(null);
             current: { blob: null, original: {} },
         };
 
-        reef.traverse((child) => {
-            if (child.isPoints) {
-                child.material.transparent = true;
-                particleBlobs.reef.blob = child;
-                particleBlobs.reef.original.opacity = child.material.opacity;
-                particleBlobs.reef.original.size = child.material.size;
-            }
-        });
-        current.traverse((child) => {
-            if (child.isPoints) {
-                child.material.transparent = true;
-                particleBlobs.current.blob = child;
-                particleBlobs.current.original.opacity = child.material.opacity;
-                particleBlobs.current.original.size = child.material.size;
-            }
+        ["reef", "current"].forEach((keyName) => {
+            const parentObject = keyName === "reef" ? reef : current;
+            parentObject.traverse((child) => {
+                if (child.isPoints) {
+                    child.material.transparent = true;
+                    particleBlobs[keyName].blob = child;
+                    particleBlobs[keyName].original.opacity = child.material.opacity;
+                    particleBlobs[keyName].original.size = child.material.size;
+                }
+            });
         });
 
         // Reusable helper function for mouse click & hover detection
