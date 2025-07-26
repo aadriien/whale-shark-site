@@ -275,7 +275,7 @@ function GalacticOcean() {
             0.1,
             4000
         );
-        camera.position.set(0, 100, 400);
+        camera.position.set(0, 75, 450);
         cameraRef.current = camera;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -308,13 +308,14 @@ function GalacticOcean() {
             curve, 
             update: updateShark 
         } = GlowSharkAnimated();
+        shark.scale.set(1, 1, 1);
         scene.add(shark);
 
         // Use shark's curve to render traced path
         const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(200));
         const curveMaterial = new THREE.LineBasicMaterial({
             color: 0xffffff,
-            opacity: 0.4,
+            opacity: 0.03,
             transparent: true,
         });
         const curveLine = new THREE.Line(curveGeometry, curveMaterial);

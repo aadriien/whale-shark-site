@@ -168,7 +168,7 @@ export function GlowSharkAnimated() {
         Math.max(...ys) - Math.min(...ys),
         Math.max(...zs) - Math.min(...zs)
     );
-    const scaleFactor = 400 / maxSpan;
+    const scaleFactor = 200 / maxSpan;
     
     const positions = new Float32Array(rawPoints.length * 3);
     const basePositions = new Float32Array(rawPoints.length * 3); // store original layout
@@ -202,7 +202,7 @@ export function GlowSharkAnimated() {
 
     const sprite = createCircleTexture();
     const material = new THREE.PointsMaterial({
-        size: 8.5, 
+        size: 4.5, 
         map: sprite,
         vertexColors: true,
         transparent: true,
@@ -217,13 +217,31 @@ export function GlowSharkAnimated() {
     // Shark facing front means nose to left side of user (sideways)
     shark.rotation.set(-Math.PI / 2, 0, Math.PI / 2);
     
-    // Define control points for the path that go around the screen bounds
+    // Define control points for shark path around screen bounds
     const pathPoints = [
-        new THREE.Vector3(600, 200, 0),
-        new THREE.Vector3(-500, 100, -300),
-        new THREE.Vector3(-400, -250, 400),
-        new THREE.Vector3(400, -300, 300),
-        new THREE.Vector3(600, 100, -200),
+        new THREE.Vector3(-650, -250, -100),    // start far left, low deep
+        new THREE.Vector3(-440, -210, 0),       // combined gentle rise & rightward start
+        new THREE.Vector3(-210, -80, 70),       // sweeping right & up
+        new THREE.Vector3(290, 40, 170),        // far right peak, higher up 
+        new THREE.Vector3(10, 0, 340),           // close to camera peak
+        new THREE.Vector3(-150, 40, 200),  
+        new THREE.Vector3(-370, -50, -70),      // prepping descent
+        new THREE.Vector3(-320, -150, -70),
+        new THREE.Vector3(-250, -280, 120),     // deep dive start + deep dip bottom merged
+        new THREE.Vector3(-10, -150, 270),      // upward diagonal toward camera
+        new THREE.Vector3(40, 160, 340),        // approaching camera, gentle rise
+        new THREE.Vector3(90, 220, 350),        // near top, capped y, diagonal swim
+        new THREE.Vector3(170, 110, 360),
+        new THREE.Vector3(280, 55, 150),        // softened right sweep & descend
+        new THREE.Vector3(180, -180, -140),     // deep dive bottom
+        new THREE.Vector3(-150, -120, -60),     // gentle pull back left & up
+        new THREE.Vector3(-600, -200, 20),      // reef blob anchor far left
+        new THREE.Vector3(-400, -310, 60),      // softened intermediate reef point
+        new THREE.Vector3(150, -210, 110),  
+        new THREE.Vector3(600, -180, 80),       // current blob anchor far right
+        new THREE.Vector3(500, -100, 120),     // widened loop back point, more right and back
+        new THREE.Vector3(-110, -180, 160), 
+        new THREE.Vector3(-500, -250, -90),    // curl back to start area
     ];
     
     // Create a smooth curve path (looped for continuous movement)
@@ -264,8 +282,8 @@ export function GlowSharkAnimated() {
             });
             geometry.attributes.position.needsUpdate = true;
             
-            // Move shark along curve (20 sec to complete 1 loop)
-            const loopDuration = 20; 
+            // Move shark along curve (40 sec to complete 1 loop)
+            const loopDuration = 40; 
             const t = (time % loopDuration) / loopDuration; // normalized time [0,1]
             const nextT = (t + 0.01) % 1; 
             const currentPos = curve.getPointAt(t);
