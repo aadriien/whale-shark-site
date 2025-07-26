@@ -258,7 +258,7 @@ function GalacticOcean() {
 
 
         // Create glowing whale shark & add to scene
-        const { shark, curve, update: updateShark } = GlowSharkAnimated();
+        const { shark, geometry, basePositions, curve, update: updateShark } = GlowSharkAnimated();
         scene.add(shark);
 
         // Use shark's curve to render traced path
@@ -297,23 +297,23 @@ function GalacticOcean() {
 
         // Store particle blobs + their original material states
         const particleBlobs = {
-        reef: { blob: null, original: {} },
-        current: { blob: null, original: {} },
+            reef: { blob: null, original: {} },
+            current: { blob: null, original: {} },
         };
 
         reef.traverse((child) => {
-        if (child.isPoints) {
-            particleBlobs.reef.blob = child;
-            particleBlobs.reef.original.opacity = child.material.opacity;
-            particleBlobs.reef.original.size = child.material.size;
-        }
+            if (child.isPoints) {
+                particleBlobs.reef.blob = child;
+                particleBlobs.reef.original.opacity = child.material.opacity;
+                particleBlobs.reef.original.size = child.material.size;
+            }
         });
         current.traverse((child) => {
-        if (child.isPoints) {
-            particleBlobs.current.blob = child;
-            particleBlobs.current.original.opacity = child.material.opacity;
-            particleBlobs.current.original.size = child.material.size;
-        }
+            if (child.isPoints) {
+                particleBlobs.current.blob = child;
+                particleBlobs.current.original.opacity = child.material.opacity;
+                particleBlobs.current.original.size = child.material.size;
+            }
         });
 
         // Reusable helper function for mouse click & hover detection
@@ -414,6 +414,59 @@ function GalacticOcean() {
             }
         };
         mountRef.current.addEventListener("mousemove", handleHover);
+
+
+        // Also active glowing particle effect when shark swims through blob
+        let currentColliding = null;
+
+        function checkSharkCollision() {
+            requestAnimationFrame(checkSharkCollision);
+
+            const sharkSphere = new THREE.Sphere();
+            if (!geometry.boundingSphere) {
+                geometry.computeBoundingSphere();
+            }
+
+            sharkSphere.copy(geometry.boundingSphere);
+            sharkSphere.applyMatrix4(shark.matrixWorld);
+
+            let collidedName = null;
+
+            // Check for interceptions / collisions with reef or current blobs
+            for (const mesh of clickableMeshes.current) {
+                if (!mesh.geometry.boundingSphere) continue;
+
+                const blobSphere = new THREE.Sphere().copy(mesh.geometry.boundingSphere);
+                blobSphere.applyMatrix4(mesh.matrixWorld);
+
+                if (sharkSphere.intersectsSphere(blobSphere)) {
+                    collidedName = mesh.name; // "reef" or "current"
+                    break;
+                }
+            }
+
+            if (collidedName !== currentColliding) {
+                // Reset both blobs
+                Object.values(particleBlobs).forEach(({ blob, original }) => {
+                    if (blob) {
+                        blob.material.opacity = original.opacity;
+                        blob.material.size = original.size;
+                        blob.material.needsUpdate = true;
+                    }
+                });
+
+                // Apply glow to the one shark collided with
+                if (collidedName && particleBlobs[collidedName]?.blob) {
+                    const blob = particleBlobs[collidedName].blob;
+                    blob.material.opacity = 1.0;
+                    blob.material.size = particleBlobs[collidedName].original.size * 1.5;
+                    blob.material.needsUpdate = true;
+                }
+
+                currentColliding = collidedName;
+            }
+        }
+        checkSharkCollision();
 
 
         // Post-processing setup

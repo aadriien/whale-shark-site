@@ -220,9 +220,9 @@ export function GlowSharkAnimated() {
     // Define control points for the path that go around the screen bounds
     const pathPoints = [
         new THREE.Vector3(600, 200, 0),
-        new THREE.Vector3(-600, 100, -300),
+        new THREE.Vector3(-500, 100, -300),
         new THREE.Vector3(-400, -250, 400),
-        new THREE.Vector3(500, -300, 300),
+        new THREE.Vector3(400, -300, 300),
         new THREE.Vector3(600, 100, -200),
     ];
     
