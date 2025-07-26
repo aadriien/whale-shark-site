@@ -206,6 +206,7 @@ function createOcean(scene) {
 
 
 function GalacticOcean() {
+    const [hoveredText, setHoveredText] = useState(null); // "reef" | "current" | null
     const [hoveredBlob, setHoveredBlob] = useState(null); // "reef" | "current" | null
     const [hoveredScreenPos, setHoveredScreenPos] = useState({ x: 0, y: 0 });
 
@@ -221,6 +222,9 @@ function GalacticOcean() {
     const mouse = useRef(new THREE.Vector2());
     const clickableMeshes = useRef([]);
 
+    const isReefActive = hoveredBlob === "reef" || hoveredText === "reef";
+    const isCurrentActive = hoveredBlob === "current" || hoveredText === "current";
+    
 
     // Reusable helper to activate particle blob glow on mouse hover or shark collision
     function setActiveBlob(particleBlobs, activeName, sourceObject = null) {
@@ -515,23 +519,12 @@ function GalacticOcean() {
                 backgroundColor: "#000010",
             }}
         >
-            {/* Render whale shark on top but in same layer */}
-            <div
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    zIndex: 8,
-
-                    // Let mouse through for blob clicks (blocks orbit controls!!)
-                    pointerEvents: "none", 
-                }}
-            >
                 <>
                     {/* Left Text - "research reef" */}
                     <div
+                        onClick={() => navigate("/research")}
+                        onMouseEnter={() => setHoveredText("reef")}
+                        onMouseLeave={() => setHoveredText(null)}
                         style={{
                             position: 'absolute',
                             top: '170px',
@@ -542,8 +535,11 @@ function GalacticOcean() {
                             fontSize: '2rem',
                             textTransform: 'lowercase',
                             whiteSpace: 'nowrap',
-                            pointerEvents: 'none',
+
+                            pointerEvents: 'auto',
+                            cursor: 'pointer',
                             userSelect: 'none',
+
                             margin: 0,
                             padding: 0,
                             letterSpacing: '0.2em',
@@ -551,10 +547,10 @@ function GalacticOcean() {
                             background: 'transparent',
 
                             // Bright white on hover, faint coral otherwise
-                            color: hoveredBlob === 'reef' ? '#fff' : 'rgba(255, 192, 203, 0.3)', 
+                            color: isReefActive ? '#fff' : 'rgba(255, 192, 203, 0.3)', 
                             filter: 'blur(1.2px)',
                             opacity: 1,
-                            textShadow: hoveredBlob === 'reef'
+                            textShadow: isReefActive
                                 ? `
                                     0 0 3px #fff,
                                     0 0 8px #ff7e5f,
@@ -592,6 +588,9 @@ function GalacticOcean() {
 
                     {/* Right Text - "creative current" */}
                     <div
+                        onClick={() => navigate("/creative")}
+                        onMouseEnter={() => setHoveredText("current")}
+                        onMouseLeave={() =>  setHoveredText(null)}
                         style={{
                             position: 'absolute',
                             top: '170px',
@@ -602,8 +601,11 @@ function GalacticOcean() {
                             fontSize: '2rem',
                             textTransform: 'lowercase',
                             whiteSpace: 'nowrap',
-                            pointerEvents: 'none',
+                            
+                            pointerEvents: 'auto',
+                            cursor: 'pointer',
                             userSelect: 'none',
+
                             margin: 0,
                             padding: 0,
                             letterSpacing: '0.2em',
@@ -611,10 +613,10 @@ function GalacticOcean() {
                             background: 'transparent',
 
                             // Bright white on hover, faint green otherwise
-                            color: hoveredBlob === 'current' ? '#fff' : 'rgba(152, 251, 152, 0.3)', 
+                            color: isCurrentActive ? '#fff' : 'rgba(152, 251, 152, 0.3)', 
                             filter: 'blur(1.2px)',
                             opacity: 1,
-                            textShadow: hoveredBlob === 'current'
+                            textShadow: isCurrentActive
                                 ? `
                                     0 0 3px #fff,
                                     0 0 8px #4caf50,
@@ -661,7 +663,6 @@ function GalacticOcean() {
                 </>
 
             </div>
-        </div>
     );
 }
 
