@@ -223,11 +223,11 @@ export function GlowSharkAnimated() {
         new THREE.Vector3(-440, -210, 0),       // combined gentle rise & rightward start
         new THREE.Vector3(-210, -80, 70),       // sweeping right & up
         new THREE.Vector3(290, 40, 170),        // far right peak, higher up 
-        new THREE.Vector3(10, 0, 340),           // close to camera peak
+        new THREE.Vector3(10, 0, 340),          // close to camera peak
         new THREE.Vector3(-150, 40, 200),  
         new THREE.Vector3(-370, -50, -70),      // prepping descent
         new THREE.Vector3(-320, -150, -70),
-        new THREE.Vector3(-250, -280, 120),     // deep dive start + deep dip bottom merged
+        new THREE.Vector3(-250, -280, 120),     // deep dive start & dip 
         new THREE.Vector3(-10, -150, 270),      // upward diagonal toward camera
         new THREE.Vector3(40, 160, 340),        // approaching camera, gentle rise
         new THREE.Vector3(90, 220, 350),        // near top, capped y, diagonal swim
@@ -239,9 +239,9 @@ export function GlowSharkAnimated() {
         new THREE.Vector3(-400, -310, 60),      // softened intermediate reef point
         new THREE.Vector3(150, -210, 110),  
         new THREE.Vector3(600, -180, 80),       // current blob anchor far right
-        new THREE.Vector3(500, -100, 120),     // widened loop back point, more right and back
-        new THREE.Vector3(-110, -180, 160), 
-        new THREE.Vector3(-500, -250, -90),    // curl back to start area
+        new THREE.Vector3(500, -100, 90),       // widened loop back point
+        new THREE.Vector3(-110, -180, 150), 
+        new THREE.Vector3(-500, -250, -90),     // curl back to start area
     ];
     
     // Create a smooth curve path (looped for continuous movement)

@@ -235,8 +235,8 @@ function GalacticOcean() {
             const isActive = name === activeName;
 
             // Glow only for hovered blob (reef vs current)
-            blob.material.opacity = isActive ? 1.0 : original.opacity;
-            blob.material.size = isActive ? original.size * 1.5 : original.size;
+            blob.material.opacity = isActive ? 1.2 : original.opacity;
+            blob.material.size = isActive ? original.size * 1.6 : original.size;
             blob.material.needsUpdate = true;
         });
 
@@ -314,8 +314,8 @@ function GalacticOcean() {
         // Use shark's curve to render traced path
         const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(200));
         const curveMaterial = new THREE.LineBasicMaterial({
-            color: 0xffffff,
-            opacity: 0.03,
+            color: 0x5b9bd5,
+            opacity: 0.05,
             transparent: true,
         });
         const curveLine = new THREE.Line(curveGeometry, curveMaterial);
@@ -528,12 +528,12 @@ function GalacticOcean() {
                         onMouseLeave={() => setHoveredText(null)}
                         style={{
                             position: 'absolute',
-                            top: '170px',
+                            top: '190px',
                             left: '60px',
                             fontFamily: "'Poppins', 'Montserrat', sans-serif",
                             fontStyle: 'italic',
                             fontWeight: 500,
-                            fontSize: '2rem',
+                            fontSize: '2.2rem',
                             textTransform: 'lowercase',
                             whiteSpace: 'nowrap',
 
@@ -594,12 +594,12 @@ function GalacticOcean() {
                         onMouseLeave={() =>  setHoveredText(null)}
                         style={{
                             position: 'absolute',
-                            top: '170px',
+                            top: '190px',
                             right: '60px',
                             fontFamily: "'Poppins', 'Montserrat', sans-serif",
                             fontStyle: 'italic',
                             fontWeight: 500,
-                            fontSize: '2rem',
+                            fontSize: '2.2rem',
                             textTransform: 'lowercase',
                             whiteSpace: 'nowrap',
                             
