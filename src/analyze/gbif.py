@@ -273,12 +273,13 @@ def make_individual_metric_df(occurrences_df: pd.DataFrame,
 
     # Assemble specific metric values over time per shark ID (e.g. lifeStage)
     valid_metric = valid_metric.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
+        # Use `dict.fromkeys` instead of `sorted(set` to preserve original order
+        lambda x: ", ".join(dict.fromkeys(
             # Example: zip occurrenceRemarks with eventDate
             format_row(vals) 
             for vals in 
             zip(*(x[col] for col in all_metric_vals))
-        ))), 
+        )), 
         include_groups=False
     ).reset_index(name=column_name)
 
