@@ -54,7 +54,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #333;
+    background-color: #041533;
     padding: 15px;
     position: fixed;
     top: 0;
@@ -99,37 +99,54 @@ nav a.active {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
+
     color: #c1ffec;
-    /* color: #cce7ff; */
-    /* background-color: #005f8f;  */
+    background-color: #a8e6cf33; /* subtle pastel highlight */
     border-radius: 16px;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 6px rgba(0, 119, 190, 0.4);
+    
     cursor: pointer;
     user-select: none;
 }
 
 .version-toggle a:hover {
-    /* background-color: #008fdf;  */
-    /* color: #fff; */
-    color: #000;
     box-shadow: 0 4px 12px rgba(0, 143, 223, 0.6);
 }
 
-.version-toggle a.active-version {
-    /* background-color: #00aaff;  */
-    color: #000; 
-    box-shadow: 0 0 6px rgba(168, 230, 207, 0.8);
-    border: 1.5px solid #a8e6cf;
+.reef {
+    border: 2px solid #f5a089; 
 }
 
-.reef {
-    background-color: #faa290ff;
+.reef:hover {
+    color: #3a1e19;
+    background-color: #f5927a; 
+    border-color: #f07a56;
+}
+
+.reef.active-version {
+    color: #3a1e19; 
+    background-color: #f7b7a3; 
+    border-color: #f5a089; 
+    box-shadow: 0 0 10px rgba(247, 183, 163, 0.9);
 }
 
 .current {
-    background-color: #50ab5fff;
+    border: 2px solid #94c57a; 
+}
+
+.current:hover {
+    color: #223613;
+    background-color: #88bb5a; 
+    border-color: #6fa23f;
+}
+
+.current.active-version {
+    color: #223613; 
+    background-color: #a8d5a3;  
+    border-color: #94c57a; 
+    box-shadow: 0 0 10px rgba(168, 213, 163, 0.9);
 }
 
 /* Smaller font and margin on small screens */
