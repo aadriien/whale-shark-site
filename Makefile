@@ -29,20 +29,20 @@ run: analyze_data
 
 # Fetch data from APIs (NOTE: returned data don't really "go" anywhere)
 fetch_data:
-	@$(POETRY) run python -m src.fetch.nasa
-	@$(POETRY) run python -m src.fetch.copernicus
+# 	@$(POETRY) run python -m src.fetch.nasa
+# 	@$(POETRY) run python -m src.fetch.copernicus
 	@$(POETRY) run python -m src.fetch.gbif
 
 # Clean, format, & organize raw data from queries
 clean_data:
-	@$(POETRY) run python -m src.clean.nasa
-	@$(POETRY) run python -m src.clean.copernicus
+# 	@$(POETRY) run python -m src.clean.nasa
+# 	@$(POETRY) run python -m src.clean.copernicus
 	@$(POETRY) run python -m src.clean.gbif
 
 # Analyze cleaned data
 analyze_data:
-	@$(POETRY) run python -m src.analyze.nasa
-	@$(POETRY) run python -m src.analyze.copernicus
+# 	@$(POETRY) run python -m src.analyze.nasa
+# 	@$(POETRY) run python -m src.analyze.copernicus
 	@$(POETRY) run python -m src.analyze.gbif
 
 
