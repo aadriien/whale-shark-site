@@ -1,6 +1,11 @@
+.environment-wrapper {
+    padding-top: 90px !important;
+}
+
 .copernicus-visual {
     width: 90%;
-    height: 500px;
+    height: 600px;
+    padding-top: 20px;
 }
 
 

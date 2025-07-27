@@ -93,8 +93,8 @@ function GlobeViews() {
     
     
     return (
-        <div className="page-content">
-            <h1>GlobeViews Page</h1>
+        <div className="page-content globeviews-wrapper">
+            {/* <h1>GlobeViews Page</h1> */}
             
             <div className="globe-views-container">
 

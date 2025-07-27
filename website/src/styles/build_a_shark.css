@@ -1,11 +1,15 @@
+.buildashark-wrapper {
+    padding-top: 90px !important;
+}
+
 .shark-generator {
     width: 100%;
     display: flex;
     flex-direction: row; /* Arrange form & image side by side */
     justify-content: space-between;
     gap: 20px; 
-    margin: 20px 0;
-    padding: 20px 16px;
+    margin: 10px 0;
+    padding: 16px;
 }
 
 .shark-generator-form {

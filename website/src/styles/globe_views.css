@@ -1,3 +1,7 @@
+.globeviews-wrapper {
+    padding-top: 100px !important;
+}
+
 .globe-views-container {
     display: flex;
     flex-direction: row;

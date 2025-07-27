@@ -1,6 +1,6 @@
 function Environment() {
     return (
-        <div className="page-content">
+        <div className="page-content environment-wrapper">
             <h1>Copernicus Marine Data Viewer</h1>
 
             <div className="copernicus-visual">
