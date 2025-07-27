@@ -1,4 +1,4 @@
-import{r as F,u as w0,j as _}from"./index-DmONCrTI.js";import{M as K,O as b0,B as I,F as l0,S as k,U as y0,V as B,W as q,H as Z,N as M0,C as h0,a as P,b as p,A as X,c as f0,d as C0,e as D,f as S0,P as z0,g as $,h as O,i as T0,j as _0,T as P0,R as A0,k as R0,l as B0,m as F0,n as D0,o as U0,L as E0,p as k0,q as L0,D as H0,r as c0}from"./three.module-BY-9PNfi.js";import{O as j0}from"./OrbitControls-DpXFg4GH.js";const N={name:"CopyShader",uniforms:{tDiffuse:{value:null},opacity:{value:1}},vertexShader:`
+import{r as F,u as w0,j as _}from"./index-CkKqsPlm.js";import{M as K,O as b0,B as I,F as l0,S as k,U as y0,V as B,W as q,H as Z,N as M0,C as h0,a as P,b as p,A as X,c as f0,d as C0,e as D,f as S0,P as z0,g as $,h as O,i as T0,j as _0,T as P0,R as A0,k as R0,l as B0,m as F0,n as D0,o as U0,L as E0,p as k0,q as L0,D as H0,r as c0}from"./three.module-BY-9PNfi.js";import{O as j0}from"./OrbitControls-DpXFg4GH.js";const N={name:"CopyShader",uniforms:{tDiffuse:{value:null},opacity:{value:1}},vertexShader:`
 
 		varying vec2 vUv;
 
