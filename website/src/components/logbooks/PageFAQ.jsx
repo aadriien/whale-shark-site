@@ -1,14 +1,11 @@
-import { pageMap, pageContent } from "./LogbookContent.js";
+import { pageContent } from "./LogbookContent.js";
 
 
 function PageFAQ ({ currentPage }) {
-    const pageLabelPath = pageMap[currentPage];
     const pageOverviewFAQs = pageContent[currentPage];
 
     return (
-        <div className="logbook-section page-faq">
-            <h4>Welcome to the <span className="logbook-page-name">{pageLabelPath.label}</span> page!</h4>
-            
+        <div className="logbook-section page-faq">            
             <div className="faqBox">
                 {pageOverviewFAQs.faqs.map(({ q, a }, idx) => {
                     return (
@@ -19,7 +16,6 @@ function PageFAQ ({ currentPage }) {
                     );
                 })}
             </div>
-
         </div>
     );
 } 

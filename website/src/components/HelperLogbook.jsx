@@ -6,6 +6,8 @@ import PageFAQ from "./logbooks/PageFAQ.jsx";
 import VisitedStamps from "./logbooks/VisitedStamps.jsx";
 import SavedSharks from "./logbooks/SavedSharks.jsx";
 
+import { pageMap } from "./logbooks/LogbookContent.js";
+
 
 function Logbook() {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +17,8 @@ function Logbook() {
     const location = useLocation();
     const currentPath = location.pathname;
     const pageSlug = currentPath.split("/").filter(Boolean).pop(); 
+
+    const pageLabelPath = pageMap[pageSlug];
 
     const SECTION_COMPONENTS = {
         overview: <PageOverview currentPage={pageSlug} />,
@@ -51,7 +55,7 @@ function Logbook() {
                         </div>
 
                         <div className="logbook-body">
-                            <p>Whale shark helper logs will go here</p>
+                            <h4>📍 <span className="logbook-page-name">{pageLabelPath.label}</span> page</h4>
                             {/* Logs, sections, etc go here */}
                             {SECTION_COMPONENTS[activeSection]}
                         </div>
