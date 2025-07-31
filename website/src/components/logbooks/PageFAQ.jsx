@@ -7,17 +7,14 @@ function PageFAQ ({ currentPage }) {
 
     return (
         <div className="logbook-section page-faq">
-            <p>Welcome to the <span className="logbook-page-name">{pageLabelPath.label}</span> page!</p>
-
-            <br/>
+            <h4>Welcome to the <span className="logbook-page-name">{pageLabelPath.label}</span> page!</h4>
             
-            <div>
+            <div className="faqBox">
                 {pageOverviewFAQs.faqs.map(({ q, a }, idx) => {
                     return (
-                        <div key={idx}>
-                            <p>{q}</p>
-                            <p>{a}</p>
-                            <br/>
+                        <div key={idx} className="faqItem">
+                            <p className="faq-question">{q}</p>
+                            <p className="faq-answer">{a}</p>
                         </div>
                     );
                 })}

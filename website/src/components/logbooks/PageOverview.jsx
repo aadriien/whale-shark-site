@@ -7,11 +7,9 @@ function PageOverview ({ currentPage }) {
 
     return (
         <div className="logbook-section page-overview">
-            <p>Welcome to the <span className="logbook-page-name">{pageLabelPath.label}</span> page!</p>
+            <h4>Welcome to the <span className="logbook-page-name">{pageLabelPath.label}</span> page!</h4>
 
-            <br/>
-
-            <div>
+            <div className="overview-box">
                 <p>{pageOverviewFAQs.overview}</p>
             </div>
         </div>
