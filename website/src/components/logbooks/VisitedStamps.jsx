@@ -1,24 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
-const pageMap = {
-    home: { label: "Home", path: "/" },
-    about: { label: "About", path: "/about" },
+import { pageMap } from "./LogbookContent.js"
 
-    research: { label: "Research Reef", path: "/research" },
-    creative: { label: "Creative Current", path: "/creative" },
-    
-    globeviews: { label: "Globe Views", path: "/research/globeviews" },
-    sharktracker: { label: "Shark Tracker", path: "/research/sharktracker" },
-    datavisuals: { label: "Data Visuals", path: "/research/datavisuals" },
-    environment: { label: "Environment", path: "/research/environment" },
-
-    buildashark: { label: "Build-A-Shark", path: "/creative/buildashark" },
-    animation: { label: "Animation", path: "/creative/animation" },
-};
 
 const STORAGE_KEY = "visitedPages";
-
 
 function VisitedStamps({ currentPage }) {
     // Initialize from localStorage or empty set
