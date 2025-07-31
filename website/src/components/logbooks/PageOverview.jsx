@@ -1,8 +1,19 @@
+import { pageMap, pageContent } from "./LogbookContent.js";
+
+
 function PageOverview ({ currentPage }) {
+    const pageLabelPath = pageMap[currentPage];
+    const pageOverviewFAQs = pageContent[currentPage];
+
     return (
         <div className="logbook-section page-overview">
-            <p>Overview content here</p>
-            <p>You are on page: {currentPage}</p>
+            <p>Welcome to the <span className="logbook-page-name">{pageLabelPath.label}</span> page!</p>
+
+            <br/>
+
+            <div>
+                <p>{pageOverviewFAQs.overview}</p>
+            </div>
         </div>
     );
 } 
