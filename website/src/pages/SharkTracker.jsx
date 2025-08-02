@@ -39,8 +39,30 @@ function SharkTracker() {
                 </div>
 
                 {/* Globe */}
-                <div className="globe-container">
+                <div className="globe-container" style={{ position: "relative" }}>
                     <Globe ref={globeRef} />
+                    <div 
+                        style={{
+                            position: "absolute",
+                            bottom: 10,
+                            width: "100%",
+                            textAlign: "center",
+                            color: "white",
+                            fontSize: "0.85rem",
+                            fontFamily: "sans-serif",
+                            padding: "2px 0",
+
+                            // Fully transparent (no strip blocking globe, but can maybe add shadow later)
+                            backgroundColor: "rgba(0, 0, 0, 0)", 
+
+                            // Ensure clicks pass through to globe canvas
+                            pointerEvents: "none",  
+                            userSelect: "none",
+                        }}
+                    >
+                        {/* Placeholder text - can replace with any dynamic content */}
+                        Story playback info will appear here
+                    </div>
                 </div>
 
                 {/* Right Shark Cards */}
