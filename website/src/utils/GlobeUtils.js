@@ -200,10 +200,6 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
         const point = sortedPointsData[i];
         console.log(point);
 
-        if (onPointChange) {
-            onPointChange(point);
-        }
-
         goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
 
         // Wait 2 sec after zoom in before starting story
@@ -213,7 +209,14 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
     
         // Show ripple for this current singular point
         addRingsData(globe, [point]);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // Align text display of coords (+ timestamp) with ripple plotting
+        await new Promise(resolve => setTimeout(resolve, 500));
+        if (onPointChange) {
+            onPointChange(point);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // Restore orbit controls after story told
