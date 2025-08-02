@@ -184,7 +184,7 @@ export function goToCoordinates(lat, long, pitchRef, yawRef) {
 };
 
 
-export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, sharkID) {
+export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, sharkID, onPointChange) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
     
@@ -198,8 +198,11 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
 
     for (let i = 0; i < sortedPointsData.length; i++) {
         const point = sortedPointsData[i];
-
         console.log(point);
+
+        if (onPointChange) {
+            onPointChange(point);
+        }
 
         goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
 

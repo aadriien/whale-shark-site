@@ -27,7 +27,7 @@ const Globe = forwardRef((props, ref) => {
 
     const allowClicksRef = useRef(props.allowClicks);
 
-    const playStory = async (sharkID) => {
+    const playStory = async (sharkID, onPointChange) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
@@ -38,7 +38,7 @@ const Globe = forwardRef((props, ref) => {
         
         await playStoryMode(
             globeRef.current, controlsRef.current, cameraRef.current, 
-            pitchRef, yawRef, sharkID
+            pitchRef, yawRef, sharkID, onPointChange
         );
     };
 

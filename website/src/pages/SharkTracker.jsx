@@ -8,6 +8,8 @@ import { storySharks } from "../utils/DataUtils.js";
 function SharkTracker() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [playingSharkId, setPlayingSharkId] = useState(null);
+    const [currentPoint, setCurrentPoint] = useState(null);
+
     const globeRef = useRef();
 
     const sharks = storySharks;
@@ -22,9 +24,13 @@ function SharkTracker() {
 
         // Reset isPlaying state when story finished
         // (buttons disabled while story playing)
-        globeRef.current?.playStory(sharkId).finally(() => {
+        globeRef.current?.playStory(sharkId, (point) => {
+            setCurrentPoint(point);
+        }).finally(() => {
+            // Clear after story ends
             setIsPlaying(false);  
             setPlayingSharkId(null);
+            setCurrentPoint(null); 
         });
     };
 
@@ -60,8 +66,15 @@ function SharkTracker() {
                             userSelect: "none",
                         }}
                     >
-                        {/* Placeholder text - can replace with any dynamic content */}
-                        Story playback info will appear here
+                        {
+                            currentPoint 
+                            ? `
+                                Lat: ${currentPoint.lat.toFixed(3)}, 
+                                Lng: ${currentPoint.lng.toFixed(3)} — 
+                                Date: ${currentPoint.date || "N/A"}
+                              `
+                            : "Story playback info will appear here"
+                        }
                     </div>
                 </div>
 
