@@ -58,23 +58,24 @@ function SharkTracker() {
                             fontFamily: "sans-serif",
                             padding: "2px 0",
 
-                            // Fully transparent (no strip blocking globe, but can maybe add shadow later)
+                            // Fully transparent (no strip blocking globe), but soft highlight
                             backgroundColor: "rgba(0, 0, 0, 0)", 
+                            textShadow: "0 0 8px rgba(0, 255, 255, 0.9)",
 
                             // Ensure clicks pass through to globe canvas
                             pointerEvents: "none",  
                             userSelect: "none",
                         }}
                     >
-                        {
-                            currentPoint 
-                            ? `
-                                Lat: ${currentPoint.lat.toFixed(3)}, 
-                                Lng: ${currentPoint.lng.toFixed(3)} — 
-                                Date: ${currentPoint.date || "N/A"}
-                              `
-                            : "Story playback info will appear here"
-                        }
+                        {currentPoint ? (
+                            <>
+                                Lat: <span style={{ fontWeight: "bold" }}>{currentPoint.lat.toFixed(3)}</span>,{" "}
+                                Lng: <span style={{ fontWeight: "bold" }}>{currentPoint.lng.toFixed(3)}</span> —{" "}
+                                Date: <span style={{ fontWeight: "bold" }}>{currentPoint.date || "N/A"}</span>
+                            </>
+                        ) : (
+                            "Story playback info will appear here"
+                        )}
                     </div>
                 </div>
 
