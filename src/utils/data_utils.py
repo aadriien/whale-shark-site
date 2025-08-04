@@ -76,23 +76,24 @@ def export_to_csv(csv_file: str, dataframe: pd.DataFrame) -> None:
     print(f"Exported {len(dataframe)} entries to {csv_file}")
 
 
-def export_to_json(json_file: str, output_list: list) -> None:
+def export_to_json(json_file: str, output_item: Union[list, dict]) -> None:
     if not json_file:
         raise ValueError("Error, must specify JSON file path")
+    
+    if not isinstance(output_item, (list, dict)):
+        raise ValueError("Error, must export a valid list or dict")
 
-    if not isinstance(output_list, list):
-        raise ValueError("Error, must specify a valid list to export")
-
-    if not output_list:
+    if isinstance(output_item, list) and not output_item:
         raise ValueError("Error, must specify a non-empty list to export")
 
     # Proceed with creating folder if doesn't exist, then export JSON
     _ = folder_exists(json_file, True)
     with open(json_file, "w") as f:
         # Remove all spaces to keep JSON as condensed as possible
-        json.dump(output_list, f, separators=(',', ':'))
+        json.dump(output_item, f, separators=(',', ':'))
 
-    print(f"Exported {len(output_list)} entries to {json_file}")
+    description = f"entries: {len(output_item)}" if isinstance(output_item, list) else "object"
+    print(f"Exported JSON to {json_file} ({description})")
 
 
 def csv_to_json(input_csv_file: str, output_json_file: str, convert_types: Optional[bool] = False) -> None:
