@@ -38,6 +38,9 @@ GBIF_INDIVIDUAL_SHARKS_STATS_CSV = "outputs/gbif_individual_sharks_stats.csv"
 # Feeds as JSON into Three.js globe display on website
 GBIF_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_shark_tracking.json"
 
+# Maintains special GeoJSON format for integration into Copernicus Marine as data layer 
+GBIF_SHARK_TRACKING_GEOJSON_JSON = "website/src/assets/data/json/gbif_shark_tracking_geojson.json"
+
 GBIF_STORY_SHARKS_CSV = "outputs/gbif_story_sharks.csv"
 GBIF_STORY_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_story_shark_tracking.json"
 
@@ -606,6 +609,7 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
 
     # Also build & export datasets for globe / storytelling
     export_shark_tracking_json(shark_df=individual_sharks, json_file=GBIF_SHARK_TRACKING_JSON)
+    export_shark_tracking_geojson(shark_df=individual_sharks, geojson_file=GBIF_SHARK_TRACKING_GEOJSON_JSON)
     export_story_sharks(individual_sharks)
     export_media_sharks(individual_sharks)
 
@@ -674,6 +678,35 @@ def export_shark_tracking_json(shark_df: pd.DataFrame, json_file: str) -> None:
             })
 
     export_to_json(json_file, output)
+
+
+# Function to get coords data in GeoJSON format for Copernicus Marine MyOcean layer
+def export_shark_tracking_geojson(shark_df: pd.DataFrame, geojson_file: str) -> None:
+    features = []
+
+    for _, row in shark_df.iterrows():
+        coords = parse_coordinates_history(row["lat:decimalLatitude long:decimalLongitude (eventDate)"])
+        
+        for point in coords:
+            features.append({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [point["long"], point["lat"]]  # GeoJSON uses [lon, lat]
+                },
+                "properties": {
+                    "whaleSharkID": row["whaleSharkID"],
+                    "region": point["region"],
+                    "eventDate": point["eventDate"]
+                }
+            })
+
+    geojson_data = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    export_to_json(geojson_file, geojson_data)
 
 
 def export_story_sharks(individual_sharks: pd.DataFrame) -> None:
