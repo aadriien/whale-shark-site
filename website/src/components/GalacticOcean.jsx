@@ -205,7 +205,7 @@ function createOcean(scene) {
 }
 
 
-function GalacticOcean() {
+function GalacticOcean({ isMobile }) {
     const [hoveredText, setHoveredText] = useState(null); // "reef" | "current" | null
     const [hoveredBlob, setHoveredBlob] = useState(null); // "reef" | "current" | null
     const [hoveredScreenPos, setHoveredScreenPos] = useState({ x: 0, y: 0 });
@@ -520,6 +520,8 @@ function GalacticOcean() {
                 backgroundColor: "#000010",
             }}
         >
+            {/* Don't show research / current text on mobile view */}
+            {!isMobile && (
                 <>
                     {/* Left Text - "research reef" */}
                     <div
@@ -662,8 +664,8 @@ function GalacticOcean() {
                         `}
                     </style>
                 </>
-
-            </div>
+            )}
+        </div>
     );
 }
 
