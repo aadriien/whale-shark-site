@@ -686,20 +686,29 @@ def export_shark_tracking_geojson(shark_df: pd.DataFrame, geojson_file: str) -> 
 
     for _, row in shark_df.iterrows():
         coords = parse_coordinates_history(row["lat:decimalLatitude long:decimalLongitude (eventDate)"])
-        
-        for point in coords:
-            features.append({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [point["long"], point["lat"]]  # GeoJSON uses [lon, lat]
-                },
-                "properties": {
-                    "whaleSharkID": row["whaleSharkID"],
-                    "region": point["region"],
-                    "eventDate": point["eventDate"]
-                }
-            })
+
+        if not coords:
+            continue
+
+        # Prepare MultiPoint coords (+ metadata), given that GeoJSON uses [lon, lat]
+        coordinates = [[point["long"], point["lat"]] for point in coords]
+        event_dates = [point["eventDate"] for point in coords]
+
+        # Remove duplicates by creating a set, then restore to list for GeoJSON
+        regions = list({point["region"] for point in coords}) 
+
+        features.append({
+            "type": "Feature",
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": coordinates
+            },
+            "properties": {
+                "whaleSharkID": row["whaleSharkID"],
+                "eventDates": event_dates,
+                "regions": regions
+            }
+        })
 
     geojson_data = {
         "type": "FeatureCollection",
