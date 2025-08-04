@@ -38,11 +38,12 @@ GBIF_INDIVIDUAL_SHARKS_STATS_CSV = "outputs/gbif_individual_sharks_stats.csv"
 # Feeds as JSON into Three.js globe display on website
 GBIF_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_shark_tracking.json"
 
-# Maintains special GeoJSON format for integration into Copernicus Marine as data layer 
-GBIF_SHARK_TRACKING_GEOJSON_JSON = "website/src/assets/data/json/gbif_shark_tracking_geojson.json"
-
 GBIF_STORY_SHARKS_CSV = "outputs/gbif_story_sharks.csv"
 GBIF_STORY_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_story_shark_tracking.json"
+
+# Maintains special GeoJSON format for integration into Copernicus Marine as data layer 
+GBIF_SHARK_TRACKING_MULTI_GEOJSON = "website/src/assets/data/json/gbif_shark_tracking_multipoint_geojson.json"
+GBIF_SHARK_TRACKING_LINE_GEOJSON = "website/src/assets/data/json/gbif_shark_tracking_linestring_geojson.json"
 
 GBIF_MEDIA_SHARKS_CSV = "outputs/gbif_media_sharks.csv"
 GBIF_MEDIA_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_media_shark_tracking.json"
@@ -609,10 +610,20 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
 
     # Also build & export datasets for globe / storytelling
     export_shark_tracking_json(shark_df=individual_sharks, json_file=GBIF_SHARK_TRACKING_JSON)
-    export_shark_tracking_geojson(shark_df=individual_sharks, geojson_file=GBIF_SHARK_TRACKING_GEOJSON_JSON)
     export_story_sharks(individual_sharks)
     export_media_sharks(individual_sharks)
 
+    # Extract tracking coords as GeoJSON (all at once + chronological sequence)
+    export_shark_tracking_geojson(
+        shark_df=individual_sharks, 
+        geojson_file=GBIF_SHARK_TRACKING_MULTI_GEOJSON, 
+        geometry_type="MultiPoint"
+    )
+    export_shark_tracking_geojson(
+        shark_df=individual_sharks, 
+        geojson_file=GBIF_SHARK_TRACKING_LINE_GEOJSON, 
+        geometry_type="LineString"
+    )
 
 
 def latlon_region_formatter(lat, long, eventDate):
@@ -681,7 +692,9 @@ def export_shark_tracking_json(shark_df: pd.DataFrame, json_file: str) -> None:
 
 
 # Function to get coords data in GeoJSON format for Copernicus Marine MyOcean layer
-def export_shark_tracking_geojson(shark_df: pd.DataFrame, geojson_file: str) -> None:
+def export_shark_tracking_geojson(shark_df: pd.DataFrame, 
+                                  geojson_file: str, 
+                                  geometry_type: str = "MultiPoint") -> None:
     features = []
 
     for _, row in shark_df.iterrows():
@@ -700,7 +713,7 @@ def export_shark_tracking_geojson(shark_df: pd.DataFrame, geojson_file: str) -> 
         features.append({
             "type": "Feature",
             "geometry": {
-                "type": "MultiPoint",
+                "type": geometry_type, # e.g. "MultiPoint" or "LineString"
                 "coordinates": coordinates
             },
             "properties": {
