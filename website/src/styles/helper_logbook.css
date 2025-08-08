@@ -464,13 +464,24 @@
 
 .condensed-media {
     flex-shrink: 0;
-    background: #dde6f1; 
     border-radius: 6px;
     height: 85px;
+    font-weight: 600;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+
+    /* background: #dde6f1;  */
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            #dde6f1,
+            #dde6f1 5px,
+            #cbd6e7 5px,
+            #cbd6e7 10px
+        ),
+        linear-gradient(135deg, #e6efff, #cbd6e7);
 }
 
 .condensed-media img {
