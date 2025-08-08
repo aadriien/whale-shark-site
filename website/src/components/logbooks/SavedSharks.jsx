@@ -21,7 +21,6 @@ function SavedSharks () {
         setSaved(new Set());
     };
 
-
     return (
         <div className="logbook-section saved-sharks">
             <div className="saved-sharks-header">
@@ -29,6 +28,19 @@ function SavedSharks () {
                 <button onClick={clearSaved} className="clear-button">
                     Clear All
                 </button>
+            </div>
+
+            <div className="saved-grid">
+                {saved.size > 0 ? (
+                    // `[...saved]` syntax to expand set into list for mapping
+                    [...saved].map((sharkID, idx) => (
+                        <div key={idx} className="saved-shark-item">
+                            <p>{sharkID}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No whale sharks saved</p>
+                )}
             </div>
         </div>
     );
