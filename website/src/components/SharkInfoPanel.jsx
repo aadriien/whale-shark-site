@@ -7,8 +7,13 @@ import {
     parseImageField 
 } from "../utils/DataUtils.js";
 
+import { toggleFavorite, isFavorite } from "../utils/FavoritesUtils.js";
+
 
 const SharkInfoPanel = ({ shark }) => {
+    // Purely for forcing re-render on shark favoriting / saving
+    const [_, forceRender] = useState({}); 
+
     const [expandedImageIndex, setExpandedImageIndex] = useState(null);
 
     const images = shark && shark.image !== "Unknown" ? parseImageField(shark.image) : [];
@@ -55,7 +60,20 @@ const SharkInfoPanel = ({ shark }) => {
     
     return (
         <div className="shark-info-panel">
-            <h2>ID: {shark.id}</h2>
+            <h2>
+                ID: {shark.id}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(shark.id);
+
+                        // Force re-render to make UI update immediately
+                        forceRender({});
+                    }}
+                >
+                    {isFavorite(shark.id) ? "★" : "☆"}
+                </button>
+            </h2>
 
             <div className="shark-panel-details">
                 <div className="shark-traits">
