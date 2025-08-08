@@ -4,6 +4,16 @@ import { parseImageField } from "../../utils/DataUtils.js";
 import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils.js";
 
 
+function formatYearMonth(dateString) {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date)) return "";
+    
+    const options = { year: "numeric", month: "short" };
+    return date.toLocaleDateString(undefined, options); // e.g. "Jan 2025"
+}
+
+
 const CondensedSharkCard = ({ shark }) => {
     // Purely for forcing re-render on shark favoriting / saving
     const [_, forceRender] = useState({}); 
@@ -13,20 +23,42 @@ const CondensedSharkCard = ({ shark }) => {
     const sexKnown = shark.sex && shark.sex !== "Unknown";
     const stageKnown = shark.lifeStage && shark.lifeStage !== "Unknown";
 
-    // Build description line 
-    let description = "Whale shark: ";
+    // Build traits description line 
+    let traitsDescription;
     if (sexKnown && stageKnown) {
-        description += ` ${shark.sex.toLowerCase()} ${shark.lifeStage.toLowerCase()}`;
+        traitsDescription = ` ${shark.sex.toLowerCase()} ${shark.lifeStage.toLowerCase()}`;
     } 
     else if (sexKnown) {
-        description += ` ${shark.sex.toLowerCase()} (life stage unknown)`;
+        traitsDescription = ` ${shark.sex.toLowerCase()} (life stage unknown)`;
     } 
     else if (stageKnown) {
-        description += ` ${shark.lifeStage.toLowerCase()} (sex unknown)`;
+        traitsDescription = ` ${shark.lifeStage.toLowerCase()} (sex unknown)`;
     } 
     else {
-        description += ` (sex & life stage unknown)`;
+        traitsDescription = ` (sex & life stage unknown)`;
     }
+
+    let dateRange = "";
+    const oldestFormatted = formatYearMonth(shark.oldest);
+    const newestFormatted = formatYearMonth(shark.newest);
+
+    // Build dated records line
+    if (oldestFormatted && newestFormatted) {
+        dateRange = `(${oldestFormatted} .. ${newestFormatted})`;
+    } 
+    else if (oldestFormatted) {
+        dateRange = `from ${oldestFormatted}`;
+    } 
+    else if (newestFormatted) {
+        dateRange = `until ${newestFormatted}`;
+    } 
+    else {
+        dateRange = "(date unknown)";
+    }
+
+    let recordsDescription = `${shark.occurrences} `;
+    recordsDescription += shark.occurrences === 1 ? "record " : "records ";
+    recordsDescription += dateRange;
 
     // Extract unique countries
     const uniqueCountries = Array.from(
@@ -67,12 +99,10 @@ const CondensedSharkCard = ({ shark }) => {
             </div>
 
             {/* Sex + life stage */}
-            <p className="condensed-traits">{description}</p>
+            <p className="condensed-traits">{traitsDescription}</p>
 
             {/* Records summary */}
-            <p className="condensed-records">
-                {shark.occurrences} total records between {shark.oldest} &nbsp;...&nbsp; {shark.newest}
-            </p>
+            <p className="condensed-records">{recordsDescription}</p>
 
             {/* Places visited */}
             <p className="condensed-places">
