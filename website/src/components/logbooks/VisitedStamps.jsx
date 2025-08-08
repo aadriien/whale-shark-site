@@ -58,7 +58,7 @@ function VisitedStamps({ currentPage }) {
     
     return (
         <div className="logbook-section visited-stamps">
-            <div className="visited-stamps-header">
+            <div className="visited-saved-header">
                 <h3>Visited Stamps</h3>
                 <button onClick={clearVisited} className="clear-button">
                     Clear All

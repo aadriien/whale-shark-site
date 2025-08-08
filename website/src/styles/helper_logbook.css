@@ -160,13 +160,17 @@
     flex: 0 0 auto;
 }
 
-
-/* OVERVIEW SECTION */
-.page-overview {
+/* ALL LOGBOOK SECTIONS */
+.logbook-section {
     padding: 12px 0px;
     font-size: 1rem;
     color: #333;
     line-height: 1.5;
+}
+
+
+/* OVERVIEW SECTION */
+.page-overview {
     overflow-y: auto;
 }
 
@@ -194,10 +198,6 @@
 
 /* FAQ SECTION */
 .page-faq {
-    padding: 12px 0;
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.5;
     overflow-y: auto;
 }
 
@@ -281,7 +281,7 @@
     flex-direction: column;
 }
 
-.visited-stamps-header {
+.visited-saved-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -289,7 +289,7 @@
     gap: 8px;
 }
 
-.visited-stamps-header h3 {
+.visited-saved-header h3 {
     margin: 0;
     font-weight: 600;
     color: #222;

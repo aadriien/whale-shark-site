@@ -23,7 +23,7 @@ function SavedSharks () {
 
     return (
         <div className="logbook-section saved-sharks">
-            <div className="saved-sharks-header">
+            <div className="visited-saved-header">
                 <h3>Saved Sharks</h3>
                 <button onClick={clearSaved} className="clear-button">
                     Clear All
