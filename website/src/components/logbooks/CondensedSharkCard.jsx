@@ -42,18 +42,31 @@ const CondensedSharkCard = ({ shark }) => {
     const oldestFormatted = formatYearMonth(shark.oldest);
     const newestFormatted = formatYearMonth(shark.newest);
 
-    // Build dated records line
-    if (oldestFormatted && newestFormatted) {
-        dateRange = `(${oldestFormatted} .. ${newestFormatted})`;
-    } 
-    else if (oldestFormatted) {
-        dateRange = `from ${oldestFormatted}`;
-    } 
-    else if (newestFormatted) {
-        dateRange = `until ${newestFormatted}`;
+    // Build dated records line (single date if just 1 occurrence)
+    if (shark.occurrences === 1) {
+        if (oldestFormatted) {
+            dateRange = `in ${oldestFormatted}`;
+        } 
+        else if (newestFormatted) {
+            dateRange = `in ${newestFormatted}`;
+        } 
+        else {
+            dateRange = "(date unknown)";
+        }
     } 
     else {
-        dateRange = "(date unknown)";
+        if (oldestFormatted && newestFormatted) {
+            dateRange = `between ${oldestFormatted} - ${newestFormatted}`;
+        } 
+        else if (oldestFormatted) {
+            dateRange = `from ${oldestFormatted}`;
+        } 
+        else if (newestFormatted) {
+            dateRange = `until ${newestFormatted}`;
+        } 
+        else {
+            dateRange = "(date unknown)";
+        }
     }
 
     let recordsDescription = `${shark.occurrences} `;
@@ -67,7 +80,7 @@ const CondensedSharkCard = ({ shark }) => {
                 .split(",")
                 .map((entry) => entry.trim().split(" (")[0])
         )
-    );
+    ).sort();
 
     return (
         <div className="condensed-shark-card">
@@ -106,7 +119,7 @@ const CondensedSharkCard = ({ shark }) => {
 
             {/* Places visited */}
             <p className="condensed-places">
-                Visited {uniqueCountries.join(", ")}
+                Visited: {uniqueCountries.join(", ")}
             </p>
         </div>
     );
