@@ -1,7 +1,37 @@
 import React, { useEffect, useState } from "react";
 
+import CondensedSharkCard from "./CondensedSharkCard";
+import { mediaSharks } from "../../utils/DataUtils.js";
+
 
 const STORAGE_KEY = "savedSharks";
+
+
+function RetrieveSharks(saved) {
+    if (!saved || saved.size === 0) return [];
+    
+    // Build lookup map for fast retrieval: { sharkID -> sharkObject }
+    const sharkMap = new Map(mediaSharks.map(shark => [shark.id, shark]));
+
+    // Convert set of saved IDs into shark objects, filtering out any missing
+    return [...saved]
+        .map(id => sharkMap.get(id) || null)
+        .filter(Boolean);
+}
+
+
+const CondensedGrid = ({ saved }) => {
+    const sharks = RetrieveSharks(saved);
+    console.log(sharks)
+
+    return (
+        <div className="condensed-shark-grid">
+            {sharks.map((shark) => (
+                <CondensedSharkCard key={shark.id} shark={shark} />
+            ))}
+        </div>
+    );
+};
 
 
 function SavedSharks () {
@@ -32,12 +62,7 @@ function SavedSharks () {
 
             <div className="saved-grid">
                 {saved.size > 0 ? (
-                    // `[...saved]` syntax to expand set into list for mapping
-                    [...saved].map((sharkID, idx) => (
-                        <div key={idx} className="saved-shark-item">
-                            <p>{sharkID}</p>
-                        </div>
-                    ))
+                    <CondensedGrid saved={saved} />
                 ) : (
                     <p>No whale sharks saved</p>
                 )}
