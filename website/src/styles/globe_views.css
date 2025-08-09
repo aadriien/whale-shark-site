@@ -287,8 +287,12 @@
 }
 
 .shark-info-panel h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
     font-weight: bold;
-    margin: 0.8rem;
+    margin: 0.5rem;
 }
 
 .shark-panel-details {
@@ -449,6 +453,8 @@
 
     width: 3rem;
     height: 3rem;
+    padding: 6px 8px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;

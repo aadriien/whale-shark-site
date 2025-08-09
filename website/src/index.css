@@ -189,41 +189,6 @@ h1 {
     line-height: 1.1;
 }
 
-button {
-    border-radius: 8px;
-    border: 1px solid black;
-    padding: 6px 8px;
-    color: black;
-    font-size: 15px;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover:not(.anyPlaying) {
-    background-color: #b2ebf2;
-    border: 2px solid black;
-    color: black;
-}
-
-button:focus:not(.anyPlaying),
-button:focus-visible:not(.anyPlaying) {
-    background-color: #b2ebf2;
-    border: 1px solid black;
-    outline: 4px auto -webkit-focus-ring-color;
-}
-
-/* Individual button styling for shark whose story is actively playing */
-button.currentlyPlaying {
-    background-color: #b2ebf2;
-    border: 1.5px solid black;
-    color: #25417d;
-    font-weight: bold;
-}
-
 
 @media (prefers-color-scheme: light) {
     :root {
@@ -232,9 +197,6 @@ button.currentlyPlaying {
     }
     a:hover {
         color: #747bff;
-    }
-    button {
-        background-color: #f9f9f9;
     }
 }
 

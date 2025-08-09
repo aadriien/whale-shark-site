@@ -85,13 +85,17 @@
     font-size: 16px;
     font-weight: 600;
     color: white;
-    background-color: #6366f1;
     border: 2px solid transparent; /* keep border width consistent */
     border-radius: 8px;
     box-sizing: border-box;
     cursor: pointer;
     flex-grow: 1;
     transition: background-color 0.3s;
+}
+
+.shark-generator-form button:hover {
+    background-color: #6366f1 !important;
+    border: 2px solid black;
 }
 
 /* Red color for reset button, green for submit button */

@@ -63,6 +63,7 @@ const SharkInfoPanel = ({ shark }) => {
             <h2>
                 ID: {shark.id}
                 <button
+                    className="favorite-button"
                     onClick={(e) => {
                         e.stopPropagation();
                         toggleFavorite(shark.id);

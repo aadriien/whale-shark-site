@@ -48,7 +48,7 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
             <div className="shark-card-content">
                 {/* Play Story button */}
                 <button
-                    className={`
+                    className={`play-story-button
                         ${playingSharkId === shark.id && isPlaying ? " currentlyPlaying" : ""}
                         ${isPlaying ? " anyPlaying" : ""}
                     `}

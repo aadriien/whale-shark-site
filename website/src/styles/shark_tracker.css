@@ -189,6 +189,48 @@
 }
 
 
+.play-story-button {
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 6px 8px;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.play-story-button:hover:not(.anyPlaying) {
+    background-color: #b2ebf2;
+    border: 2px solid black;
+    color: black;
+}
+
+.play-story-button:focus:not(.anyPlaying),
+.play-story-button:focus-visible:not(.anyPlaying) {
+    background-color: #b2ebf2;
+    border: 1px solid black;
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Individual button styling for shark whose story is actively playing */
+.play-story-button.currentlyPlaying {
+    background-color: #b2ebf2;
+    border: 1.5px solid black;
+    color: #25417d;
+    font-weight: bold;
+}
+
+@media (prefers-color-scheme: light) {
+    .play-story-button {
+        background-color: #f9f9f9;
+    }
+}
+
+
 /* Tags to label regions for a given shark's card view */
 .shark-country-tags {
     display: flex;
@@ -275,7 +317,10 @@
 
 /* Each category (div section) gets its own color band with left strip */
 .shark-id {
-    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
     font-weight: bold;
     margin: 0;
     padding: 8px 12px;
