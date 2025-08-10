@@ -133,7 +133,7 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 <table>
     <tr>
         <td colspan="1" style="text-align: center;">
-            <img src="./example-media/video-demos/home-page-demo.gif" width="100%"/>
+            <img src="./example-media/video-demos/home-page-demo.gif" width="800"/>
         </td>
     </tr>
 </table>
