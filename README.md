@@ -130,13 +130,9 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 ![Video demo of 3D whale shark animation](./example-media/video-demos/whale-shark-3Dmodel-demo.gif)  |  ![Video demo of tracker storytelling feature](./example-media/video-demos/whale-shark-tracker-demo.gif)
 
 
-<table>
-    <tr>
-        <td colspan="1" style="text-align: center;">
-            <img src="./example-media/video-demos/home-page-demo.gif" width="800"/>
-        </td>
-    </tr>
-</table>
+🌌 Whale Shark Home Page Welcome   |   🪐 Pulsing 3D Shark
+:-------------------------------:|:-------------------------------:
+![Video demo of home page](./example-media/video-demos/home-page-demo.gif)   |  ![Video demo of pulsing 3D shark model](./example-media/video-demos/pulsing-shark-model-demo.gif)
 
 
 ## Example Images
