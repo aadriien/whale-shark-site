@@ -132,7 +132,7 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 🌌 Whale Shark Home Page Welcome   |   🪐 Pulsing 3D Shark
 :-------------------------------:|:-------------------------------:
-![Video demo of home page](./example-media/video-demos/home-page-demo.gif)   |  ![Video demo of pulsing 3D shark model](./example-media/video-demos/pulsing-shark-model-demo.gif)
+<img src="./example-media/video-demos/home-page-demo.gif" height="400"/>   |  <img src="./example-media/video-demos/pulsing-shark-model-demo.gif" height="400"/>
 
 
 ## Example Images
