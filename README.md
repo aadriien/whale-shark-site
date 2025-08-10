@@ -130,6 +130,11 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 ![Video demo of 3D whale shark animation](./example-media/video-demos/whale-shark-3Dmodel-demo.gif)  |  ![Video demo of tracker storytelling feature](./example-media/video-demos/whale-shark-tracker-demo.gif)
 
 
+🌌 Home Page Welcome 
+:-------------------------------:
+![Video demo of home page](./example-media/video-demos/home-page-demo.gif) 
+
+
 ## Example Images
 
 📝 Shark Details   |   🪪 Individual Shark Card   |   📱 Story Sharks Grid
@@ -182,6 +187,8 @@ Thank you to Anastasia from the [Wild Me](https://www.wildme.org) support team f
 ### APIs & Data
 
 I used biodiversity data from [GBIF](https://www.gbif.org) to access whale shark records.
+
+I used the MyOcean Pro embedded viewer from [Copernicus Marine](https://marine.copernicus.eu) to visualize ocean data.
 
 I used [Pollinations.AI](https://pollinations.ai)'s API to access OpenAI text + image generation.
 
