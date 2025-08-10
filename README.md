@@ -142,6 +142,11 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 ![Example image of selected shark story in progress](./example-media/example-imgs/story-in-progress-example-img.png)  |  ![Example image of globe view with geo-mapped data](./example-media/example-imgs/globe-views-example-img.png)
 
 
+⭐️ Saved Sharks in Logbook   |   💾 Condensed Helper Logbook
+:-------------------------:|:-------------------------:
+![Example image of expanded helper logbook with saved sharks](./example-media/example-imgs/favorites-expanded-example-img.png)  |  ![Example image of condensed helper logbook with saved sharks](./example-media/example-imgs/favorites-condensed-example-img.png)
+
+
 <table>
     <tr>
         <td colspan="3" style="text-align: center;">
