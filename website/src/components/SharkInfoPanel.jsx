@@ -56,7 +56,9 @@ const SharkInfoPanel = ({ shark }) => {
     const countries = shark.countries.split(",").map(s => s.trim());
     const regions = shark.regions ? shark.regions.split(",").map(s => s.trim()) : [];
     const publishing = shark.publishing ? shark.publishing.split(",").map(s => s.trim()) : [];
-    const remarks = shark.remarks ? shark.remarks.split(",").map(s => s.trim()) : [];
+    
+    // Don't split remarks by comma - show full remarks for all locations
+    const fullRemarks = shark.remarks || "";
     
     return (
         <div className="shark-info-panel">
@@ -107,7 +109,8 @@ const SharkInfoPanel = ({ shark }) => {
                         {countries.map((country, index) => {
                             const regionEntry = regions[index] || "Unknown";
                             const publishingEntry = publishing[index] || "Unspecified";
-                            const remarksEntry = remarks[index] || "None";
+                            // Show full remarks for all locations (don't split by comma)
+                            const remarksEntry = fullRemarks || "None";
                       
                             const regionDate = getDate(regionEntry);
                             const fallbackDate = getDate(country);

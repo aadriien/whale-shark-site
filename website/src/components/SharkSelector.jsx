@@ -400,8 +400,8 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     const MIN_YEAR = Math.min(...ALL_YEARS);
     const MAX_YEAR = Math.max(...ALL_YEARS);
 
-
-    const defaultFilters = {
+    // Memoize default filters to prevent unnecessary re-initializations
+    const defaultFilters = React.useMemo(() => ({
         showOnlyWithMedia: false,
         country: "",
         yearRange: [String(MIN_YEAR), String(MAX_YEAR)],
@@ -411,9 +411,17 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
         lifeStage: "",  
         publishingCountry: "", 
         observationType: "", 
-    };
-    const [filters, setFilters] = React.useState(defaultFilters);
+    }), [MIN_YEAR, MAX_YEAR]);
+    
+    const [filters, setFilters] = React.useState(() => defaultFilters);
     const [showFilters, setShowFilters] = useState(true);
+    
+    // Debug logging
+    React.useEffect(() => {
+        console.log("SharkSelector filters updated:", filters);
+        const testFiltered = filterSharks(sharks, filters);
+        console.log(`Filtered ${testFiltered.length}/${sharks.length} sharks`);
+    }, [filters, sharks]);
 
     const handleReset = () => {
         // Reset filters & close all continent tabs
@@ -429,12 +437,18 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     const [openContinents, setOpenContinents] = useState({});
 
 
-    const filteredSharks = React.useMemo(
-        () => filterSharks(sharks, filters), [sharks, filters]
-    );
+    const filteredSharks = React.useMemo(() => {
+        console.log("Computing filteredSharks with filters:", filters);
+        const result = filterSharks(sharks, filters);
+        
+        console.log(`filterSharks result: ${result.length}/${sharks.length} sharks`);
+        return result;
+    }, [sharks, filters]);
 
     const sharksByContinent = React.useMemo(() => {
         const byContinent = {};
+        
+        console.log(`Grouping ${filteredSharks.length} filtered sharks by continent`);
         
         filteredSharks.forEach(shark => {
             const continents = extractContinents(shark.continent);
@@ -448,6 +462,11 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                 }
             });
         });
+        
+        console.log("Sharks by continent:", Object.keys(byContinent).map(c => 
+            `${c}: ${byContinent[c].length}`
+        ).join(', '));
+        
         return byContinent;
     }, [filteredSharks]);
 
