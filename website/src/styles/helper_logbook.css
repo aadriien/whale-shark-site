@@ -149,8 +149,13 @@
 }
 
 .logbook-nav a:hover {
-    color: #003f5f;
     text-decoration: underline;
+}
+
+.logbook-nav a.active {
+    color: #1385ff; 
+    text-decoration: underline;
+    font-weight: bold;
 }
 
 .logbook-nav span {

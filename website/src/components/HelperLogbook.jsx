@@ -61,21 +61,41 @@ function Logbook() {
                         </div>
 
                         <div className="logbook-nav">
-                            <h4><a onClick={() => setActiveSection("overview")}>
-                                Page Overview
-                            </a></h4>
+                            <h4>
+                                <a 
+                                    onClick={() => setActiveSection("overview")}
+                                    className={activeSection === "overview" ? "active" : ""}
+                                >
+                                    Page Overview
+                                </a>
+                            </h4>
                             <span>|</span>
-                            <h4><a onClick={() => setActiveSection("faq")}>
-                                Page FAQs
-                            </a></h4>
+                            <h4>
+                                <a 
+                                    onClick={() => setActiveSection("faq")}
+                                    className={activeSection === "faq" ? "active" : ""}
+                                >
+                                    Page FAQs
+                                </a>
+                            </h4>
                             <span>|</span>
-                            <h4><a onClick={() => setActiveSection("stamps")}>
-                                Visited Stamps
-                            </a></h4>
+                            <h4>
+                                <a 
+                                    onClick={() => setActiveSection("stamps")}
+                                    className={activeSection === "stamps" ? "active" : ""}
+                                >
+                                    Visited Stamps
+                                </a>
+                            </h4>
                             <span>|</span>
-                            <h4><a onClick={() => setActiveSection("saved")}>
-                                Saved Sharks
-                            </a></h4>
+                            <h4>
+                                <a 
+                                    onClick={() => setActiveSection("saved")}
+                                    className={activeSection === "saved" ? "active" : ""}
+                                >
+                                    Saved Sharks
+                                </a>
+                            </h4>
                         </div>
 
                     </div>
