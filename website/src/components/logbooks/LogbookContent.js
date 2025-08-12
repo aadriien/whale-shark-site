@@ -7,6 +7,7 @@ export const pageMap = {
     
     globeviews: { label: "Globe Views", path: "/research/globeviews" },
     sharktracker: { label: "Shark Tracker", path: "/research/sharktracker" },
+    geolabs: { label: "Geo Labs", path: "/research/geolabs" },
     datavisuals: { label: "Data Visuals", path: "/research/datavisuals" },
     environment: { label: "Environment", path: "/research/environment" },
 
@@ -84,6 +85,19 @@ export const pageContent = {
         ]
     },
     sharktracker: {
+        overview: "This is a storytelling experience where you can see the real movements over time of specific whale sharks!",
+        faqs: [
+            { 
+                q: "Why are there cartoon images and funny names?", 
+                a: "None of these sharks have real-world images, since their data comes from satellite tracking. The cartoons and names are there to give them personality!" 
+            },
+            { 
+                q: "Why are there only a handful of whale sharks here?", 
+                a: "These sharks have been highlighted because they have interesting and varied data. It can be difficult to find whale sharks with multiple records and known information." 
+            }
+        ]
+    },
+    geolabs: {
         overview: "This is a storytelling experience where you can see the real movements over time of specific whale sharks!",
         faqs: [
             { 
