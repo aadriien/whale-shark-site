@@ -12,8 +12,10 @@ const About = lazy(() => import("./pages/About.jsx"));
 
 const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
 const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
+const GeoLabs = lazy(() => import("./pages/GeoLabs.jsx"));
 const DataVisuals = lazy(() => import("./pages/DataVisuals.jsx"));
 const Environment = lazy(() => import("./pages/Environment.jsx"));
+
 const BuildAShark = lazy(() => import("./pages/BuildAShark.jsx"));
 const Animation = lazy(() => import("./pages/Animation.jsx"));
 
@@ -39,6 +41,7 @@ function App() {
                     {/* Research Reef */}
                     <Route path="/research/globeviews" element={<GlobeViews />} />
                     <Route path="/research/sharktracker" element={<SharkTracker />} />
+                    <Route path="/research/geolabs" element={<GeoLabs />} />
                     <Route path="/research/datavisuals" element={<DataVisuals />} />
                     <Route path="/research/environment" element={<Environment />} />
 

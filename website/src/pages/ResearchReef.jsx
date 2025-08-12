@@ -18,6 +18,12 @@ function ResearchReef() {
             image: "./shark-tracker.png",
         },
         {
+            path: "/research/geolabs",
+            title: "Geo Labs",
+            description: "Experiment with favorited sharks and map their connections.",
+            image: "./globe-views.png",
+        },
+        {
             path: "/research/datavisuals",
             title: "Data Visuals",
             description: "Dive into interactive charts and datasets about marine life and climate.",

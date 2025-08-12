@@ -43,6 +43,7 @@ function Navbar() {
                 <>
                     <Link to="/research/globeviews" className={location.pathname === "/research/globeviews" ? "active" : ""}>Globe Views</Link>
                     <Link to="/research/sharktracker" className={location.pathname === "/research/sharktracker" ? "active" : ""}>Shark Tracker</Link>
+                    <Link to="/research/geolabs" className={location.pathname === "/research/geolabs" ? "active" : ""}>Geo Labs</Link>
                     <Link to="/research/datavisuals" className={location.pathname === "/research/datavisuals" ? "active" : ""}>Data Visuals</Link>
                     <Link to="/research/environment" className={location.pathname === "/research/environment" ? "active" : ""}>Environment</Link>
                 </>
