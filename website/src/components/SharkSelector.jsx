@@ -415,13 +415,6 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
     
     const [filters, setFilters] = React.useState(() => defaultFilters);
     const [showFilters, setShowFilters] = useState(true);
-    
-    // Debug logging
-    React.useEffect(() => {
-        console.log("SharkSelector filters updated:", filters);
-        const testFiltered = filterSharks(sharks, filters);
-        console.log(`Filtered ${testFiltered.length}/${sharks.length} sharks`);
-    }, [filters, sharks]);
 
     const handleReset = () => {
         // Reset filters & close all continent tabs
@@ -447,9 +440,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
 
     const sharksByContinent = React.useMemo(() => {
         const byContinent = {};
-        
-        console.log(`Grouping ${filteredSharks.length} filtered sharks by continent`);
-        
+                
         filteredSharks.forEach(shark => {
             const continents = extractContinents(shark.continent);
             
