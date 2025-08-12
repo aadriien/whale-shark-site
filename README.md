@@ -183,6 +183,8 @@ A massive thank you to the wonderful community of builders, creators, and progra
 
 Thank you to Anastasia from the [Wild Me](https://www.wildme.org) support team for chatting with me about [Sharkbook](https://www.sharkbook.ai), and for sharing open source resources like Wildbook's [Image Analysis](https://github.com/WildMeOrg/wildbook-ia) software!
 
+Thank you to Leïla from the [Copernicus Marine](https://marine.copernicus.eu) support team for helping me troubleshoot the capabilities of the [MyOcean Pro Viewer](https://marine.copernicus.eu/access-data/ocean-visualisation-tools) in relation to 3rd party data imports!
+
 
 ### APIs & Data
 
