@@ -132,6 +132,30 @@ export function clearRingsData(globe) {
     // Clear all rings by passing empty data
     globe.ringsData([]); 
 }
+
+
+export function addPointsData(globe, pointsData) {
+    if (!globe) return;
+    
+    globe.pointsData(pointsData)
+        .pointColor(() => 'rgba(255, 255, 0, 0.8)')
+        .pointRadius(0.3)
+        .pointResolution(6)
+        .pointAltitude(0.02);
+}
+
+
+export function clearPointsData(globe) {
+    if (!globe) return;
+    globe.pointsData([]);
+}
+
+
+export function clearAllData(globe) {
+    if (!globe) return;
+    globe.ringsData([]);
+    globe.pointsData([]);
+}
   
 
 export async function resetGlobe(camera, pitchRef, yawRef) {
