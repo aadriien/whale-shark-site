@@ -23,6 +23,10 @@ export function toggleFavorite(sharkId) {
     }
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...favorites]));
+    
+    // Dispatch event to notify components that favorites changed
+    window.dispatchEvent(new CustomEvent('favoritesChanged'));
+    
     return favorites;
 }
 

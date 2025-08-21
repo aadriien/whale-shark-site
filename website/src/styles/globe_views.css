@@ -142,14 +142,14 @@
     background-color: #d4e8f8;
 }
 
-.continent-shark-list {
+.scrollable-shark-list {
     max-height: 200px; 
     overflow-y: auto;
     padding: 0.5rem;
     scrollbar-width: none; /* for Firefox */
 }
 
-.continent-shark-list::-webkit-scrollbar {
+.scrollable-shark-list::-webkit-scrollbar {
     display: none; /* for Chrome/Safari */
 }
 
