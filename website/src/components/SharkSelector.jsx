@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
 import SharkFilter from "./SharkFilter.jsx";
-import ContinentDisplay from "./ContinentDisplay.jsx";
 import { filterSharks, extractUniqueSortedRegions } from "../utils/FilterSharks.jsx";
 
 
-function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
+function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComponent }) {
     // Compute filter options from data
     const countries = extractUniqueSortedRegions(sharks, "countries");
     const publishingCountries = extractUniqueSortedRegions(sharks, "publishing");
@@ -91,7 +90,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId }) {
                     )}
                 </div>
 
-                <ContinentDisplay 
+                <DisplayComponent 
                     sharks={filteredSharks}
                     onSelect={onSelect}
                     selectedSharkId={selectedSharkId}

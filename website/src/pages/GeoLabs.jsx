@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Globe from "../components/Globe.jsx";
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
+import ContinentDisplay from "../components/ContinentDisplay.jsx";
 
 import { addRingsDataStatic, clearRingsData } from "../utils/GlobeUtils.js";
 import { getAllCoordinates } from "../utils/CoordinateUtils.js";
@@ -119,6 +120,7 @@ function GeoLabs() {
                         onSelect={handleSelectShark}
                         onReset={handleReset}
                         selectedSharkId={selectedShark ? selectedShark.id : null}
+                        DisplayComponent={ContinentDisplay}
                     />
                 </div>
 
