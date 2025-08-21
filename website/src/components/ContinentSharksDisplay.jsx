@@ -72,7 +72,7 @@ function ContinentDisplay({ sharks, onSelect, selectedSharkId }) {
                                 {continent} {isOpen ? "▾" : "▸"}
                             </div>
                             {isOpen && (
-                                <div className="continent-shark-list">
+                                <div className="scrollable-shark-list">
                                     {continentSharks.map((shark) => (
                                         <div
                                             key={shark.id}
