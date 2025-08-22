@@ -37,6 +37,25 @@ export function getAllCoordinates() {
 };
 
 
+export function getGroupCoordinates(allSharkIDs) {
+    let groupResult = [];
+    const limitResults = 10;
+
+    // If no IDs provided, plot nothing
+    if (!allSharkIDs) {
+        return [];
+    }
+
+    coordinatesData.forEach(sharkDict => {
+        if (allSharkIDs.includes(sharkDict.whaleSharkID)) {
+            let currResult = getCoordinates(sharkDict, limitResults);
+            groupResult.push(...currResult); // Fixed: was using fullResult instead of groupResult
+        }
+    });
+    return groupResult;
+};
+
+
 export function getSharkCoordinates(sharkID) {
     if (!sharkID) return [];
 

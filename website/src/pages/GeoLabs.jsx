@@ -6,16 +6,42 @@ import SharkSelector from "../components/SharkSelector.jsx";
 import SavedDisplay from "../components/SavedSharksDisplay.jsx";
 
 import { addRingsDataStatic, clearRingsData } from "../utils/GlobeUtils.js";
-import { getAllCoordinates } from "../utils/CoordinateUtils.js";
+import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
+import { getGroupCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
 
 
 function GeoLabs() {
     const [selectedShark, setSelectedShark] = useState(null);
     const [allSharksVisible, setAllSharksVisible] = useState(true);
+    const [savedIds, setSavedIds] = useState(new Set());
     const globeRef = useRef();
 
-    const pointsData = useMemo(() => getAllCoordinates(), []);
+    // Update saved IDs when favorites change
+    useEffect(() => {
+        const updateSavedIds = () => {
+            setSavedIds(getFavorites());
+        };
+        
+        // Initial load
+        updateSavedIds();
+        
+        // Listen for changes
+        window.addEventListener('storage', updateSavedIds);
+        window.addEventListener('favoritesChanged', updateSavedIds);
+        
+        return () => {
+            window.removeEventListener('storage', updateSavedIds);
+            window.removeEventListener('favoritesChanged', updateSavedIds);
+        };
+    }, []);
+
+    // Get coordinates for saved sharks only
+    const pointsData = useMemo(() => {
+        const savedSharkIds = getSavedSharkIds();
+        console.log('Plotting saved sharks on globe:', savedSharkIds);
+        return getGroupCoordinates(savedSharkIds);
+    }, [savedIds]);
     
     const sharks = mediaSharks;
     
@@ -34,16 +60,16 @@ function GeoLabs() {
             globeRef.current?.highlightShark(selectedShark.id);
             setAllSharksVisible(false);
         }
-    }, [selectedShark]);
+    }, [selectedShark, pointsData]); 
     
-    // Initial setup to show all sharks on mount
+    // Update globe when pointsData changes (saved sharks change)
     useEffect(() => {
-        if (globeRef.current) {
+        if (globeRef.current && !selectedShark) {
             const globeInstance = globeRef.current.getGlobe();
             clearRingsData(globeInstance);
             addRingsDataStatic(globeInstance, pointsData);
         }
-    }, []);
+    }, [pointsData]); // react to changes in saved sharks
     
     // Handle shark selection from dropdown or globe click
     const handleSelectShark = (arg) => {

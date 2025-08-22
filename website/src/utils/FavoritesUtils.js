@@ -41,3 +41,24 @@ export function clearFavorites() {
 }
 
 
+export function getSavedSharks(sharks) {
+    const savedIds = getFavorites();
+    
+    if (savedIds.size === 0) return [];
+    
+    // Build lookup map for performance
+    const sharkMap = new Map(sharks.map(shark => [shark.id, shark]));
+    
+    // Get saved sharks that exist in provided array
+    return [...savedIds]
+        .map(id => sharkMap.get(id))
+        .filter(Boolean) 
+        .sort((a, b) => a.id.localeCompare(b.id)); 
+}
+
+
+export function getSavedSharkIds() {
+    return [...getFavorites()];
+}
+
+
