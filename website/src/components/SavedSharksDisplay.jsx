@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-import CondensedSharkCard from "./logbooks/CondensedSharkCard.jsx";
+import SharkBanner from "./logbooks/SharkBanner.jsx";
 import { getFavorites } from "../utils/FavoritesUtils.js";
 
 
@@ -67,7 +67,7 @@ function SavedSharksDisplay({ sharks, onSelect, selectedSharkId }) {
                                 }`}
                                 onClick={() => handleCardClick(shark)}
                             >
-                                <CondensedSharkCard shark={shark} />
+                                <SharkBanner shark={shark} />
                             </div>
                         ))}
                     </div>
