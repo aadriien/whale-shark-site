@@ -5,7 +5,7 @@ import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
 import SavedDisplay from "../components/SavedSharksDisplay.jsx";
 
-import { addRingsDataStatic, clearRingsData } from "../utils/GlobeUtils.js";
+import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
 import { getGroupCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
@@ -50,14 +50,18 @@ function GeoLabs() {
         if (!selectedShark) {
             if (globeRef.current) {
                 const globeInstance = globeRef.current.getGlobe();
-                clearRingsData(globeInstance);
-                addRingsDataStatic(globeInstance, pointsData);
+                clearAllData(globeInstance);
+                addPointsData(globeInstance, pointsData);
             }
             setAllSharksVisible(true);
         } 
         else {
-            // When shark selected, highlight it via globe's method
-            globeRef.current?.highlightShark(selectedShark.id);
+            // When shark selected, clear points & show rings for individual
+            if (globeRef.current) {
+                const globeInstance = globeRef.current.getGlobe();
+                clearAllData(globeInstance); // Clear both points & rings
+                globeRef.current.highlightShark(selectedShark.id);
+            }
             setAllSharksVisible(false);
         }
     }, [selectedShark, pointsData]); 
@@ -66,8 +70,8 @@ function GeoLabs() {
     useEffect(() => {
         if (globeRef.current && !selectedShark) {
             const globeInstance = globeRef.current.getGlobe();
-            clearRingsData(globeInstance);
-            addRingsDataStatic(globeInstance, pointsData);
+            clearAllData(globeInstance);
+            addPointsData(globeInstance, pointsData);
         }
     }, [pointsData]); // react to changes in saved sharks
     

@@ -27,7 +27,7 @@ export function getCoordinates(sharkDict, limit = Infinity) {
 
 export function getAllCoordinates() {
     let fullResult = [];
-    const limitResults = 5;
+    const limitResults = 25;
 
     coordinatesData.forEach(sharkDict => {
         let currResult = getCoordinates(sharkDict, limitResults);
@@ -39,7 +39,7 @@ export function getAllCoordinates() {
 
 export function getGroupCoordinates(allSharkIDs) {
     let groupResult = [];
-    const limitResults = 10;
+    const limitResults = 300;
 
     // If no IDs provided, plot nothing
     if (!allSharkIDs) {

@@ -5,7 +5,7 @@ import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
 import ContinentDisplay from "../components/ContinentSharksDisplay.jsx";
 
-import { addRingsDataStatic, clearRingsData, addPointsData, clearAllData } from "../utils/GlobeUtils.js";
+import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getAllCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
 
