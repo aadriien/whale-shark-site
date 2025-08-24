@@ -9,8 +9,13 @@ const StoryStepSlider = ({ shark, onStepChange, currentStepIndex, isVisible }) =
         if (shark) {
             const coordinates = getSharkCoordinates(shark.id);
             setStoryData(coordinates);
+            
+            // Handle single data point case immediately when data loads
+            if (isVisible && coordinates.length === 1) {
+                onStepChange(0, coordinates[0]);
+            }
         }
-    }, [shark]);
+    }, [shark, isVisible, onStepChange]);
 
     if (!isVisible || !shark || storyData.length === 0) return null;
 

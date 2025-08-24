@@ -1,0 +1,218 @@
+.story-controls-container {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f9ff;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.story-controls-container .play-story-section {
+    margin: 0;
+    padding: 0;
+}
+
+/* Step-through story button styling */
+.play-story-button {
+    border-radius: 8px 8px 0 0; /* rounded only on top when slider visible */
+    border: none;
+    border-bottom: 1px solid #ddd;
+    padding: 0.75rem 1rem;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    background-color: #e8f0ff;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.play-story-button:hover {
+    background-color: #d4e8f8;
+    color: #0066cc;
+}
+
+.play-story-button.step-mode-active {
+    background-color: #7e58f0;
+    color: white;
+    border-bottom-color: #6b47d9;
+}
+
+.play-story-button.step-mode-active:hover {
+    background-color: #6b47d9;
+}
+
+/* Timeline slider container */
+.story-step-container {
+    padding: 1rem;
+    background-color: #f8f9ff;
+    border-top: none;
+}
+
+.story-slider-section h4 {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Custom slider styling */
+.story-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #ddd 0%, #ddd 100%);
+    outline: none;
+    margin: 0.5rem 0 1rem 0;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.story-slider::-webkit-slider-track {
+    height: 6px;
+    background: linear-gradient(to right, #4CAF50 0%, #2196F3 50%, #9C27B0 100%);
+    border-radius: 3px;
+}
+
+.story-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #7e58f0;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.story-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.story-slider::-moz-range-track {
+    height: 6px;
+    background: linear-gradient(to right, #4CAF50 0%, #2196F3 50%, #9C27B0 100%);
+    border-radius: 3px;
+    border: none;
+}
+
+.story-slider::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #7e58f0;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Step info styling */
+.step-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.step-info span:first-child {
+    font-weight: 600;
+    color: #333;
+}
+
+.step-date {
+    font-style: italic;
+    color: #7e58f0;
+}
+
+/* Single data point styling */
+.story-step-container[data-single-point="true"] .story-slider {
+    background: #7e58f0;
+    cursor: default;
+}
+
+.story-step-container[data-single-point="true"] .story-slider::-webkit-slider-thumb,
+.story-step-container[data-single-point="true"] .story-slider::-moz-range-thumb {
+    background: #7e58f0;
+    border-color: #6b47d9;
+}
+
+/* Animation for smooth transitions */
+.story-controls-container.entering {
+    animation: slideDown 0.3s ease-out;
+}
+
+.story-controls-container.exiting {
+    animation: slideUp 0.2s ease-in;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        max-height: 200px;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 1;
+        max-height: 200px;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Coordinate display positioning (matches SharkTracker exactly) */
+.geo-labs-coordinate-display {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 0.85rem;
+    font-family: sans-serif;
+    padding: 2px 0;
+    background-color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.9);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+    .story-controls-container {
+        margin-bottom: 0.5rem;
+    }
+    
+    .play-story-button {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .story-step-container {
+        padding: 0.8rem;
+    }
+    
+    .story-slider-section h4 {
+        font-size: 0.85rem;
+    }
+}

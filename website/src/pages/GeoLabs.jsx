@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 
 import Globe from "../components/Globe.jsx";
 import PlayStoryButton from "../components/PlayStoryButton.jsx";
@@ -162,14 +162,14 @@ function GeoLabs() {
         }
     };
     
-    const handleStepChange = (stepIndex, point) => {
+    const handleStepChange = useCallback((stepIndex, point) => {
         setCurrentStepIndex(stepIndex);
         setCurrentPoint(point);
         
         if (globeRef.current && point) {
             globeRef.current.showSinglePoint(point);
         }
-    };
+    }, []); // No dependencies since using refs & state setters
     
     
     return (
@@ -210,12 +210,12 @@ function GeoLabs() {
                         onSharkClick={handleSelectShark} 
                         allowClicks={!selectedShark}
                     />
-                    {/* Coordinate display like SharkTracker */}
+                    {/* Coordinate display to match SharkTracker positioning */}
                     {isStepMode && currentPoint && (
                         <div 
                             style={{
                                 position: "absolute",
-                                bottom: 80,
+                                bottom: 10,
                                 width: "100%",
                                 textAlign: "center",
                                 color: "white",
