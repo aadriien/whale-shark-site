@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 
 import Globe from "../components/Globe.jsx";
+import PlayStoryButton from "../components/PlayStoryButton.jsx";
+
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
 import SavedDisplay from "../components/SavedSharksDisplay.jsx";
@@ -15,6 +17,11 @@ function GeoLabs() {
     const [selectedShark, setSelectedShark] = useState(null);
     const [allSharksVisible, setAllSharksVisible] = useState(true);
     const [savedIds, setSavedIds] = useState(new Set());
+
+    // Allow Play Story functionality
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [playingSharkId, setPlayingSharkId] = useState(null);
+    const [currentPoint, setCurrentPoint] = useState(null);
     const globeRef = useRef();
 
     // Update saved IDs when favorites change
@@ -122,6 +129,22 @@ function GeoLabs() {
         setAllSharksVisible(true);
     };
     
+    const handlePlayStory = (sharkId) => {
+        setIsPlaying(true);
+        setPlayingSharkId(sharkId);
+
+        // Reset isPlaying state when story finished
+        // (buttons disabled while story playing)
+        globeRef.current?.playStory(sharkId, (point) => {
+            setCurrentPoint(point);
+        }).finally(() => {
+            // Clear after story ends
+            setIsPlaying(false);  
+            setPlayingSharkId(null);
+            setCurrentPoint(null); 
+        });
+    };
+    
     
     return (
         <div className="page-content globeviews-wrapper">
@@ -131,6 +154,15 @@ function GeoLabs() {
 
                 {/* Shark info panel on left */}
                 <div className="info-sidebar" >
+                    {/* Play Story Button - only shown when shark is selected */}
+                    {selectedShark && (
+                        <PlayStoryButton 
+                            shark={selectedShark} 
+                            onPlayStory={handlePlayStory} 
+                            isPlaying={isPlaying} 
+                            playingSharkId={playingSharkId} 
+                        />
+                    )}
                     <SharkInfoPanel shark={selectedShark} />
                 </div>
                 
