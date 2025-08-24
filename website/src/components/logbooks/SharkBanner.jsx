@@ -1,13 +1,8 @@
-import React, { useState } from "react";
-
 import { parseImageField } from "../../utils/DataUtils.js";
-import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils.js";
+import FavoriteButton from "../FavoriteButton.jsx";
 
 
 const SharkBanner = ({ shark }) => {
-    // Purely for forcing re-render on shark favoriting / saving
-    const [_, forceRender] = useState({}); 
-
     const images = shark.image !== "Unknown" ? parseImageField(shark.image) : [];
 
     return (
@@ -27,19 +22,11 @@ const SharkBanner = ({ shark }) => {
             {/* ID + favorite toggle */}
             <div className="tiny-id-row">
                 <strong>{shark.id}</strong>
-                <button
-                    className="favorite-button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(shark.id);
-                        forceRender({});
-                    }}
-                >
-                    {isFavorite(shark.id) ? "★" : "☆"}
-                </button>
+                <FavoriteButton sharkId={shark.id} />
             </div>
         </div>
     );
 };
 
 export default SharkBanner;
+
