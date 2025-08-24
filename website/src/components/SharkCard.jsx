@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 
-import { toggleFavorite, isFavorite } from "../utils/FavoritesUtils.js";
+import FavoriteButton from "./FavoriteButton.jsx";
+import PlayStoryButton from "./PlayStoryButton.jsx";
 
 
 const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
-    // Purely for forcing re-render on shark favoriting / saving
-    const [_, forceRender] = useState({}); 
-
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpand = () => {
@@ -46,26 +44,12 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
             </div>
 
             <div className="shark-card-content">
-                {/* Play Story button */}
-                <button
-                    className={`play-story-button
-                        ${playingSharkId === shark.id && isPlaying ? " currentlyPlaying" : ""}
-                        ${isPlaying ? " anyPlaying" : ""}
-                    `}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onPlayStory(shark.id);
-                    }}
-                    disabled={isPlaying}
-                >
-                    {isPlaying ? (
-                        "Story in Progress..."
-                    ) : (
-                        <>
-                        Play <strong>{shark.name}</strong>'s Story
-                        </>
-                    )}
-                </button> 
+                <PlayStoryButton 
+                    shark={shark} 
+                    onPlayStory={onPlayStory} 
+                    isPlaying={isPlaying} 
+                    playingSharkId={playingSharkId} 
+                />
             </div>
 
         {/* Expandable content */}
@@ -74,18 +58,7 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
 
                 <h2 className="shark-id">
                     ID:&nbsp; {shark.id}
-                    <button
-                        className="favorite-button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const updated = toggleFavorite(shark.id);
-
-                            // Force re-render to make UI update immediately
-                            forceRender({});
-                        }}
-                    >
-                        {isFavorite(shark.id) ? "★" : "☆"}
-                    </button>
+                    <FavoriteButton sharkId={shark.id} />
                 </h2>
 
                 <div className="shark-nicknames">
@@ -134,3 +107,4 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
 };
 
 export default SharkCard;
+
