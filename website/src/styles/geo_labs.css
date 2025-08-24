@@ -1,9 +1,9 @@
 .story-controls-container {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f8f9ff;
-    overflow: hidden;
+    overflow: visible; 
     transition: all 0.3s ease;
 }
 
@@ -12,14 +12,12 @@
     padding: 0;
 }
 
-/* Step-through story button styling */
-.play-story-button {
-    border-radius: 8px 8px 0 0; /* rounded only on top when slider visible */
-    border: none;
-    border-bottom: 1px solid #ddd;
+.geo-labs-step-button {
+    border-radius: 8px; /* all corners rounded by default */
+    border: 1px solid #000; 
     padding: 0.75rem 1rem;
     color: #333;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     font-family: inherit;
     background-color: #e8f0ff;
@@ -30,26 +28,32 @@
     box-sizing: border-box;
 }
 
-.play-story-button:hover {
+.geo-labs-step-button:hover {
     background-color: #d4e8f8;
     color: #0066cc;
+    font-weight: 700;
 }
 
-.play-story-button.step-mode-active {
+.geo-labs-step-button.step-mode-active {
+    border-radius: 8px 8px 0 0; /* only top corners rounded when open */
     background-color: #7e58f0;
     color: white;
-    border-bottom-color: #6b47d9;
+    border-bottom: 1px solid #6b47d9; /* purple bottom border when open */
 }
 
-.play-story-button.step-mode-active:hover {
+.geo-labs-step-button.step-mode-active:hover {
     background-color: #6b47d9;
 }
 
 /* Timeline slider container */
 .story-step-container {
     padding: 1rem;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #ddd;
     background-color: #f8f9ff;
     border-top: none;
+    min-height: auto; /* ensure full height */
+    overflow: visible; /* prevent clipping */
 }
 
 .story-slider-section h4 {
@@ -60,14 +64,56 @@
     text-align: center;
 }
 
+.step-date-header {
+    font-style: italic;
+    color: #7e58f0;
+    font-weight: normal;
+}
+
+/* Slider controls container */
+.slider-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Step buttons */
+.step-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #7e58f0;
+    background-color: #fff;
+    color: #7e58f0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 1; 
+    padding: 0 0 0.1rem 0; 
+    margin: 0; 
+}
+
+.step-button:hover:not(:disabled) {
+    background-color: #7e58f0;
+    color: white;
+}
+
+.step-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 /* Custom slider styling */
 .story-slider {
-    width: 100%;
+    flex: 1;
     height: 6px;
     border-radius: 3px;
-    background: linear-gradient(to right, #ddd 0%, #ddd 100%);
     outline: none;
-    margin: 0.5rem 0 1rem 0;
     cursor: pointer;
     -webkit-appearance: none;
     appearance: none;
@@ -114,105 +160,3 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Step info styling */
-.step-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 0.5rem;
-}
-
-.step-info span:first-child {
-    font-weight: 600;
-    color: #333;
-}
-
-.step-date {
-    font-style: italic;
-    color: #7e58f0;
-}
-
-/* Single data point styling */
-.story-step-container[data-single-point="true"] .story-slider {
-    background: #7e58f0;
-    cursor: default;
-}
-
-.story-step-container[data-single-point="true"] .story-slider::-webkit-slider-thumb,
-.story-step-container[data-single-point="true"] .story-slider::-moz-range-thumb {
-    background: #7e58f0;
-    border-color: #6b47d9;
-}
-
-/* Animation for smooth transitions */
-.story-controls-container.entering {
-    animation: slideDown 0.3s ease-out;
-}
-
-.story-controls-container.exiting {
-    animation: slideUp 0.2s ease-in;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        max-height: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        max-height: 200px;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 1;
-        max-height: 200px;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        max-height: 0;
-        transform: translateY(-10px);
-    }
-}
-
-/* Coordinate display positioning (matches SharkTracker exactly) */
-.geo-labs-coordinate-display {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 0.85rem;
-    font-family: sans-serif;
-    padding: 2px 0;
-    background-color: rgba(0, 0, 0, 0);
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.9);
-    pointer-events: none;
-    user-select: none;
-}
-
-/* Responsive adjustments */
-@media (max-width: 960px) {
-    .story-controls-container {
-        margin-bottom: 0.5rem;
-    }
-    
-    .play-story-button {
-        font-size: 0.9rem;
-        padding: 0.6rem 0.8rem;
-    }
-    
-    .story-step-container {
-        padding: 0.8rem;
-    }
-    
-    .story-slider-section h4 {
-        font-size: 0.85rem;
-    }
-}
