@@ -11,7 +11,7 @@ const PlayStoryButton = ({
         return (
             <div className="play-story-section">
                 <button
-                    className={`play-story-button
+                    className={`geo-labs-step-button
                         ${isStepMode ? " step-mode-active" : ""}
                     `}
                     onClick={(e) => {

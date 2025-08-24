@@ -24,28 +24,58 @@ const StoryStepSlider = ({ shark, onStepChange, currentStepIndex, isVisible }) =
         const point = storyData[stepIndex];
         onStepChange(stepIndex, point);
     };
+    
+    const handlePrevious = () => {
+        if (currentStepIndex > 0) {
+            const newIndex = currentStepIndex - 1;
+            onStepChange(newIndex, storyData[newIndex]);
+        }
+    };
+    
+    const handleNext = () => {
+        if (currentStepIndex < storyData.length - 1) {
+            const newIndex = currentStepIndex + 1;
+            onStepChange(newIndex, storyData[newIndex]);
+        }
+    };
 
     const currentPoint = storyData[currentStepIndex];
 
     return (
         <div className="story-step-container">
             <div className="story-slider-section">
-                <h4>Timeline: {shark.name || shark.id}</h4>
-                <input
-                    type="range"
-                    min="0"
-                    max={storyData.length - 1}
-                    value={currentStepIndex}
-                    onChange={handleSliderChange}
-                    className="story-slider"
-                />
-                <div className="step-info">
-                    <span>Point {currentStepIndex + 1} of {storyData.length} </span>
+                <h4>
+                    Point {currentStepIndex + 1} of {storyData.length}
                     {currentPoint && (
-                        <span className="step-date">
-                            ... {currentPoint.date || "Unknown date"}
-                        </span>
+                        <span className="step-date-header"> ... {currentPoint.date || "Unknown date"}</span>
                     )}
+                </h4>
+                
+                <div className="slider-controls">
+                    <button 
+                        className="step-button" 
+                        onClick={handlePrevious} 
+                        disabled={currentStepIndex === 0}
+                    >
+                        -
+                    </button>
+                    
+                    <input
+                        type="range"
+                        min="0"
+                        max={storyData.length - 1}
+                        value={currentStepIndex}
+                        onChange={handleSliderChange}
+                        className="story-slider"
+                    />
+                    
+                    <button 
+                        className="step-button" 
+                        onClick={handleNext} 
+                        disabled={currentStepIndex === storyData.length - 1}
+                    >
+                        +
+                    </button>
                 </div>
             </div>
         </div>
