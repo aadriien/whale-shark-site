@@ -4,7 +4,7 @@ import SharkFilter from "./SharkFilter.jsx";
 import { filterSharks, extractUniqueSortedRegions } from "../utils/FilterSharks.jsx";
 
 
-function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComponent }) {
+function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComponent, disabled = false }) {
     // Compute filter options from data
     const countries = extractUniqueSortedRegions(sharks, "countries");
     const publishingCountries = extractUniqueSortedRegions(sharks, "publishing");
@@ -64,11 +64,18 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComp
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ 
+            display: "flex", 
+            flexDirection: "column", 
+            height: "100%",
+            opacity: disabled ? 0.6 : 1,
+            pointerEvents: disabled ? "none" : "auto"
+        }}>
             <div className="shark-selector-list">
                 <button 
                     onClick={handleReset}
                     className={`show-all-button ${selectedSharkId == null ? "active" : ""}`}
+                    disabled={disabled}
                 >
                     Show All Sharks
                 </button>
@@ -77,6 +84,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComp
                     <button 
                         onClick={() => setShowFilters((prev) => !prev)}
                         className={`toggle-filter-button ${showFilters ? "active" : ""}`}
+                        disabled={disabled}
                     >
                         {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
                     </button>
@@ -86,6 +94,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComp
                             criteria={criteria} 
                             onChange={setCriteria} 
                             options={filterOptions}
+                            disabled={disabled}
                         />
                     )}
                 </div>
@@ -94,6 +103,7 @@ function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComp
                     sharks={filteredSharks}
                     onSelect={onSelect}
                     selectedSharkId={selectedSharkId}
+                    disabled={disabled}
                 />
             </div>
         </div>

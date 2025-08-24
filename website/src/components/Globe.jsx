@@ -6,7 +6,7 @@ import JEASINGS from "../utils/JEasings/JEasings.ts";
 
 import { 
     createGlobe, createLights, createCamera, createControls,
-    setupCameraAngles, resetGlobe, playStoryMode, highlightSharkMode, 
+    setupCameraAngles, resetGlobe, playStoryMode, highlightSharkMode, goToCoordinates
 } from "../utils/GlobeUtils.js";
 
 
@@ -41,9 +41,24 @@ const Globe = forwardRef((props, ref) => {
             pitchRef, yawRef, sharkID, onPointChange
         );
     };
+    
+
+    // GeoLabs version: don't reset globe if shark already selected
+    const playStoryFromSelection = async (sharkID, onPointChange) => {
+        if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
+        
+        // Disable orbit controls BEFORE any animation (to be resumed once finished)
+        controlsRef.current.enabled = false;
+        
+        // Skip reset (globe already positioned correctly)
+        await playStoryMode(
+            globeRef.current, controlsRef.current, cameraRef.current, 
+            pitchRef, yawRef, sharkID, onPointChange
+        );
+    };
 
 
-    const highlightShark = async (sharkID) => {
+    const highlightShark = async (sharkID, usePoints = false) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
@@ -54,16 +69,69 @@ const Globe = forwardRef((props, ref) => {
         
         await highlightSharkMode(
             globeRef.current, controlsRef.current, cameraRef.current, 
-            pitchRef, yawRef, sharkID
+            pitchRef, yawRef, sharkID, usePoints
         );
+    };
+    
+
+    const interruptStory = () => {
+        // Clear all ongoing JEASINGS animations
+        JEASINGS.removeAll();
+        
+        // Clear all data from globe
+        if (globeRef.current) {
+            globeRef.current.ringsData([]);
+            globeRef.current.pointsData([]);
+        }
+        
+        // Re-enable controls immediately
+        if (controlsRef.current) {
+            controlsRef.current.enabled = true;
+        }
+    };
+    
+    const showSinglePoint = (point, disableControls = true) => {
+        if (!globeRef.current || !point) return;
+        
+        // Disable orbit controls for step mode
+        if (disableControls && controlsRef.current) {
+            controlsRef.current.enabled = false;
+        }
+        
+        // Clear existing data
+        globeRef.current.ringsData([]);
+        globeRef.current.pointsData([]);
+        
+        // Show single point with ripple effect
+        globeRef.current.ringsData([point])
+            .ringColor(() => 'rgba(255, 255, 0, 0.8)')
+            .ringMaxRadius(3)
+            .ringPropagationSpeed(1)
+            .ringRepeatPeriod(1000);
+        
+        // Also orient to this point
+        if (pitchRef && yawRef) {
+            goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
+        }
+    };
+    
+    
+    const enableControls = () => {
+        if (controlsRef.current) {
+            controlsRef.current.enabled = true;
+        }
     };
 
     
-    // Expose globe instance, playStory, highlightShark methods to parent
+    // Expose globe instance, playStory, highlightShark, interruptStory methods to parent
     useImperativeHandle(ref, () => ({
         getGlobe: () => globeRef.current,
         playStory,
+        playStoryFromSelection,
         highlightShark,
+        interruptStory,
+        showSinglePoint,
+        enableControls,
     }));
 
 

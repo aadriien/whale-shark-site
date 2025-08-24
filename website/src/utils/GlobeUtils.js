@@ -243,14 +243,15 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
         await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
-    // Restore orbit controls after story told
+    // Clear final ripple & restore orbit controls after story told
     setTimeout(() => {
+        clearAllData(globe);
         controls.enabled = true;
     }, 1000);
 };
 
 
-export async function highlightSharkMode(globe, controls, camera, pitchRef, yawRef, sharkID) {
+export async function highlightSharkMode(globe, controls, camera, pitchRef, yawRef, sharkID, usePoints = false) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
     
@@ -260,10 +261,15 @@ export async function highlightSharkMode(globe, controls, camera, pitchRef, yawR
         .easing(Cubic.InOut)
         .start();
 
-    console.log(`Highlighting shark ID: ${sharkID}`);
+    console.log(`Highlighting shark ID: ${sharkID} with ${usePoints ? 'points' : 'ripples'}`);
 
-    // Show ripples for just this whale shark
-    addRingsData(globe, sortedPointsData);
+    // Show either points or ripples for this whale shark
+    if (usePoints) {
+        addPointsData(globe, sortedPointsData);
+    } else {
+        addRingsData(globe, sortedPointsData);
+    }
+    
     const point = sortedPointsData[0];
     goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 
 import Globe from "../components/Globe.jsx";
 import PlayStoryButton from "../components/PlayStoryButton.jsx";
+import StoryStepSlider from "../components/StoryStepSlider.jsx";
 
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
@@ -9,7 +10,7 @@ import SavedDisplay from "../components/SavedSharksDisplay.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
-import { getGroupCoordinates } from "../utils/CoordinateUtils.js";
+import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
 
 
@@ -18,9 +19,9 @@ function GeoLabs() {
     const [allSharksVisible, setAllSharksVisible] = useState(true);
     const [savedIds, setSavedIds] = useState(new Set());
 
-    // Allow Play Story functionality
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [playingSharkId, setPlayingSharkId] = useState(null);
+    // Step-through story functionality
+    const [isStepMode, setIsStepMode] = useState(false);
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [currentPoint, setCurrentPoint] = useState(null);
     const globeRef = useRef();
 
@@ -63,11 +64,11 @@ function GeoLabs() {
             setAllSharksVisible(true);
         } 
         else {
-            // When shark selected, clear points & show rings for individual
+            // When shark selected, clear all data & show points for individual
             if (globeRef.current) {
                 const globeInstance = globeRef.current.getGlobe();
                 clearAllData(globeInstance); // Clear both points & rings
-                globeRef.current.highlightShark(selectedShark.id);
+                globeRef.current.highlightShark(selectedShark.id, true); // Use points instead of ripples
             }
             setAllSharksVisible(false);
         }
@@ -129,20 +130,45 @@ function GeoLabs() {
         setAllSharksVisible(true);
     };
     
-    const handlePlayStory = (sharkId) => {
-        setIsPlaying(true);
-        setPlayingSharkId(sharkId);
-
-        // Reset isPlaying state when story finished
-        // (buttons disabled while story playing)
-        globeRef.current?.playStory(sharkId, (point) => {
-            setCurrentPoint(point);
-        }).finally(() => {
-            // Clear after story ends
-            setIsPlaying(false);  
-            setPlayingSharkId(null);
-            setCurrentPoint(null); 
-        });
+    const handleToggleStepMode = () => {
+        if (isStepMode) {
+            // Exit step mode, i.e. clear data & re-enable controls (no reorientation needed)
+            setIsStepMode(false);
+            setCurrentStepIndex(0);
+            setCurrentPoint(null);
+            
+            if (globeRef.current) {
+                const globeInstance = globeRef.current.getGlobe();
+                clearAllData(globeInstance);
+                
+                globeRef.current.enableControls();
+                
+                // Show static points for selected shark without reorienting
+                if (selectedShark) {
+                    const coordinates = getSharkCoordinates(selectedShark.id);
+                    addPointsData(globeInstance, coordinates);
+                }
+            }
+        } else {
+            // Enter step mode
+            setIsStepMode(true);
+            setCurrentStepIndex(0);
+            
+            // Clear current points and prepare for step-through
+            if (globeRef.current) {
+                const globeInstance = globeRef.current.getGlobe();
+                clearAllData(globeInstance);
+            }
+        }
+    };
+    
+    const handleStepChange = (stepIndex, point) => {
+        setCurrentStepIndex(stepIndex);
+        setCurrentPoint(point);
+        
+        if (globeRef.current && point) {
+            globeRef.current.showSinglePoint(point);
+        }
     };
     
     
@@ -154,15 +180,26 @@ function GeoLabs() {
 
                 {/* Shark info panel on left */}
                 <div className="info-sidebar" >
-                    {/* Play Story Button - only shown when shark is selected */}
+                    {/* Step Through Story Controls */}
                     {selectedShark && (
-                        <PlayStoryButton 
-                            shark={selectedShark} 
-                            onPlayStory={handlePlayStory} 
-                            isPlaying={isPlaying} 
-                            playingSharkId={playingSharkId} 
-                        />
+                        <div className="story-controls-container">
+                            <PlayStoryButton 
+                                shark={selectedShark} 
+                                onToggleStepMode={handleToggleStepMode}
+                                isStepMode={isStepMode}
+                                showPauseForGeoLabs={true}
+                            />
+                            
+                            {/* Story step slider positioned below button */}
+                            <StoryStepSlider 
+                                shark={selectedShark}
+                                onStepChange={handleStepChange}
+                                currentStepIndex={currentStepIndex}
+                                isVisible={isStepMode}
+                            />
+                        </div>
                     )}
+                    
                     <SharkInfoPanel shark={selectedShark} />
                 </div>
                 
@@ -173,6 +210,29 @@ function GeoLabs() {
                         onSharkClick={handleSelectShark} 
                         allowClicks={!selectedShark}
                     />
+                    {/* Coordinate display like SharkTracker */}
+                    {isStepMode && currentPoint && (
+                        <div 
+                            style={{
+                                position: "absolute",
+                                bottom: 80,
+                                width: "100%",
+                                textAlign: "center",
+                                color: "white",
+                                fontSize: "0.85rem",
+                                fontFamily: "sans-serif",
+                                padding: "2px 0",
+                                backgroundColor: "rgba(0, 0, 0, 0)", 
+                                textShadow: "0 0 8px rgba(0, 255, 255, 0.9)",
+                                pointerEvents: "none",  
+                                userSelect: "none",
+                            }}
+                        >
+                            Lat: <span style={{ fontWeight: "bold" }}>{currentPoint.lat.toFixed(3)}</span>,{" "}
+                            Lng: <span style={{ fontWeight: "bold" }}>{currentPoint.lng.toFixed(3)}</span> —{" "}
+                            Date: <span style={{ fontWeight: "bold" }}>{currentPoint.date || "N/A"}</span>
+                        </div>
+                    )}
                 </div>
                 
                 {/* Shark selector dropdown on right */}
@@ -183,6 +243,7 @@ function GeoLabs() {
                         onReset={handleReset}
                         selectedSharkId={selectedShark ? selectedShark.id : null}
                         DisplayComponent={SavedDisplay}
+                        disabled={isStepMode} // Disable selector while in step mode
                     />
                 </div>
 

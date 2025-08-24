@@ -1,6 +1,37 @@
-const PlayStoryButton = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
+const PlayStoryButton = ({ 
+    shark, 
+    onPlayStory, isPlaying, playingSharkId, 
+    showPauseForGeoLabs = false, 
+    onToggleStepMode, isStepMode = false 
+}) => {
     if (!shark) return null;
 
+    // GeoLabs version with step-through functionality
+    if (showPauseForGeoLabs) {
+        return (
+            <div className="play-story-section">
+                <button
+                    className={`play-story-button
+                        ${isStepMode ? " step-mode-active" : ""}
+                    `}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleStepMode();
+                    }}
+                >
+                    {isStepMode ? (
+                        "Exit Story Mode"
+                    ) : (
+                        <>
+                        Step Through <strong>{shark.name || shark.id}</strong>'s Story
+                        </>
+                    )}
+                </button>
+            </div>
+        );
+    }
+
+    // SharkTracker version with original play story functionality
     return (
         <div className="play-story-section">
             <button
