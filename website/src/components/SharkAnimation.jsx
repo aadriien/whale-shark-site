@@ -17,6 +17,21 @@ import * as THREE from "three";
 const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
 
 
+// Shark model (simplified for curve editor)
+function SharkModel() {
+    const { scene } = useGLTF(SHARK_MODEL_fantasy);
+    
+    // IF DESIRED: can remove other things from root object (Sketchfab_model -> Root)
+    const root = scene.children[0].children[0]; 
+    
+    // E.g. remove "ocean" (sand floor) from SHARK_MODEL_fantasy
+    const ocean = root.children.find(child => child.name === "ocean");
+    if (ocean) ocean.visible = false;
+    
+    return <primitive object={scene} scale={1.0} position={[0, -2, 0]} />;
+}
+
+
 // Control point component with draggable sphere
 function ControlPoint({ position, onDrag, isSelected, onSelect, index }) {
     const meshRef = useRef();
@@ -63,9 +78,9 @@ function CurveVisualization({ controlPoints }) {
         
         // Create Catmull-Rom curve from control points
         const curve = new THREE.CatmullRomCurve3(controlPoints);
-        curve.closed = false; // Can be toggled later
+        curve.closed = false; // REVISIT: Can be toggled later
         
-        // Generate points along the curve for visualization
+        // Generate points along curve for visualization
         const points = curve.getPoints(100);
         const geometry = new THREE.BufferGeometry().setFromPoints(points);
         
@@ -86,23 +101,8 @@ function CurveVisualization({ controlPoints }) {
 }
 
 
-// Shark model (simplified for curve editor)
-function SharkModel() {
-    const { scene } = useGLTF(SHARK_MODEL_fantasy);
-    
-    // IF DESIRED: can remove other things - from root object (Sketchfab_model -> Root)
-    const root = scene.children[0].children[0]; 
-    
-    // E.g. remove "ocean" (sand floor) from SHARK_MODEL_fantasy
-    const ocean = root.children.find(child => child.name === "ocean");
-    if (ocean) ocean.visible = false;
-    
-    return <primitive object={scene} scale={1.0} position={[0, -2, 0]} />;
-}
-
-
 export default function SharkAnimation() {
-    // State for managing control points and selection
+    // State for managing control points & selection
     const [controlPoints, setControlPoints] = useState([
         new THREE.Vector3(-10, 0, -5),
         new THREE.Vector3(-5, 3, 0),
@@ -150,8 +150,8 @@ export default function SharkAnimation() {
             {/* UI Controls */}
             <div style={{
                 position: "absolute",
-                top: "20px",
-                left: "20px",
+                top: "85px",
+                left: "15px",
                 zIndex: 100,
                 background: "rgba(0,0,0,0.7)",
                 padding: "15px",
@@ -198,6 +198,10 @@ export default function SharkAnimation() {
                     width: "100%", 
                     height: "100%" 
                 }} 
+                onPointerMissed={(event) => {
+                    // Fires when user clicked but no object hit (done editing point)
+                    setSelectedPointIndex(null);
+                }}
                 camera={{ position: [15, 10, 15], fov: 50 }}
             >
                 <ambientLight intensity={0.6} />
@@ -226,12 +230,12 @@ export default function SharkAnimation() {
                     <SharkModel />
                 </Suspense>
                 
-                {/* Orbit controls for camera */}
+                {/* Orbit controls for camera (disabled when dragging points) */}
                 <OrbitControls 
                     ref={orbitControlsRef}
                     enableDamping
                     dampingFactor={0.05}
-                    enabled={selectedPointIndex === null} // Disable when dragging points
+                    enabled={selectedPointIndex === null} 
                 />
             </Canvas>
         </div>
