@@ -1,17 +1,8 @@
 import React, { Suspense, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF, useAnimations } from "@react-three/drei";
+import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-// import SharkAI from "./SharkAI.js";
-
-
-// SHARK_MODEL_99a: 
-// - has 1 children piece: 
-//      - "GLTF_SceneRootNode"
-// - has 1 animation:
-//      - "Swim Cycle" (duration: 5.25 sec)
-const SHARK_MODEL_99a = "./models/whale_shark_3D_model_99a.glb";
 
 // SHARK_MODEL_fantasy: 
 // - has 3 children pieces: 
@@ -55,62 +46,54 @@ function SharkModel({ sharkRef, setActions }) {
 }
 
 
-function rotateShark(sharkRef, targetRotation, setIsRotating) {
+function moveSharkTo(sharkRef, currentPos, nextPos) {
     if (!sharkRef.current) return;
     
-    // Gradually rotate towards target rotation
-    function rotateStep() {
-        const currentRotation = sharkRef.current.rotation.y;
-        const rotationDiff = targetRotation - currentRotation;
-        
-        // If difference small enough, stop rotating
-        if (Math.abs(rotationDiff) < 0.01) {
-            sharkRef.current.rotation.y = targetRotation;
-            setIsRotating(false); 
-            return;
-        }
-        
-        // Update rotation gradually
-        const step = rotationDiff * 0.02;
-        sharkRef.current.rotation.y += step;
-        
-        // Call again for next frame to continue smooth rotation
-        requestAnimationFrame(rotateStep);
-    }
-    rotateStep();
+    sharkRef.current.position.copy(currentPos);
+    
+    // Set up vector & look at next position 
+    sharkRef.current.up.set(0, 1, 0);
+    sharkRef.current.lookAt(nextPos);
 }
 
 
-
 function SharkMovement({ sharkRef, actions }) {
-    const directionRef = useRef(1);  
-    const [isRotating, setIsRotating] = useState(false); 
+    const directionRef = useRef(1);
+    const speedRef = useRef(0.05);
     
-    const [bounds] = useState({
+    const bounds = {
         x: [-10, 10],
-        z: [-10, 10],
-    });
+        y: [0, 0],  // keep y constant for simple horizontal movement
+        z: [0, 0]   // keep z constant for simple horizontal movement
+    };
     
-    // Apply continuous movement to shark with useFrame
     useFrame(() => {
         if (!sharkRef.current || !actions) return;
         
-        // Only move if not currently rotating
-        if (!isRotating) {
-            sharkRef.current.position.x += 0.05 * directionRef.current;
-            
-            const pos = sharkRef.current.position;
-            const nearEdge = pos.x < bounds.x[0] + 1 || pos.x > bounds.x[1] - 1;
-            
-            // Adjust direction (rotation) when turning away from edge
-            if (nearEdge) {
-                directionRef.current *= -1;
-                const degree = directionRef.current * 90;
-                
-                setIsRotating(true); 
-                rotateShark(sharkRef, THREE.MathUtils.degToRad(degree), setIsRotating);
-            }
+        const currentPos = sharkRef.current.position.clone();
+        
+        // Calculate next position
+        const nextX = currentPos.x + (speedRef.current * directionRef.current);
+        const nextPos = new THREE.Vector3(
+            nextX,
+            currentPos.y, 
+            currentPos.z 
+        );
+        
+        // Check bounds & reverse direction
+        if (nextX >= bounds.x[1] || nextX <= bounds.x[0]) {
+            directionRef.current *= -1;
+            nextPos.x = currentPos.x + (speedRef.current * directionRef.current);
         }
+        
+        // Calculate look-ahead position to face correct direction
+        const lookAheadPos = new THREE.Vector3(
+            nextPos.x + (directionRef.current * 2), 
+            nextPos.y,
+            nextPos.z
+        );
+        
+        moveSharkTo(sharkRef, nextPos, lookAheadPos);
     });
     
     useEffect(() => {
@@ -147,12 +130,6 @@ export default function SharkAnimation() {
         
         {/* Handle movement */}
         <SharkMovement sharkRef={sharkRef} actions={actions} />
-        
-        {/* Shark AI for wandering movement */}
-        {/* <SharkAI sharkRef={sharkRef} actions={actions} /> */}
-        
-        {/* OrbitControls so user can adjust camera, zoom, etc */}
-        {/* <OrbitControls ref={cameraRef} /> */}
         
         </Canvas>
     );
