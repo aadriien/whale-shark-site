@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { OrbitControls, useGLTF, useAnimations, TransformControls } from "@react-three/drei";
 import * as THREE from "three";
 
 
@@ -17,10 +17,78 @@ import * as THREE from "three";
 const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
 
 
-function SharkModel({ sharkRef, setActions }) {
-    // Filepath "./models/{modelName}.glb" works since models in "public" (root) dir
-    const { scene, animations } = useGLTF(SHARK_MODEL_fantasy); 
-    const { actions: newActions } = useAnimations(animations, scene);
+// Control point component with draggable sphere
+function ControlPoint({ position, onDrag, isSelected, onSelect, index }) {
+    const meshRef = useRef();
+    
+    return (
+        <group>
+            {/* Visible sphere for control point */}
+            <mesh
+                ref={meshRef}
+                position={position}
+                onClick={onSelect}
+            >
+                <sphereGeometry args={[0.3, 16, 16]} />
+                <meshBasicMaterial 
+                    color={isSelected ? '#ff6b6b' : '#4ecdc4'} 
+                    transparent
+                    opacity={0.8}
+                />
+            </mesh>
+            
+            {/* Transform controls for dragging when selected */}
+            {isSelected && (
+                <TransformControls
+                    object={meshRef}
+                    mode="translate"
+                    onObjectChange={(e) => {
+                        if (meshRef.current) {
+                            onDrag(index, meshRef.current.position.clone());
+                        }
+                    }}
+                />
+            )}
+        </group>
+    );
+}
+
+
+// Curve visualization component
+function CurveVisualization({ controlPoints }) {
+    const lineRef = useRef();
+    
+    useEffect(() => {
+        if (controlPoints.length < 2) return;
+        
+        // Create Catmull-Rom curve from control points
+        const curve = new THREE.CatmullRomCurve3(controlPoints);
+        curve.closed = false; // Can be toggled later
+        
+        // Generate points along the curve for visualization
+        const points = curve.getPoints(100);
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        
+        if (lineRef.current) {
+            lineRef.current.geometry.dispose();
+            lineRef.current.geometry = geometry;
+        }
+    }, [controlPoints]);
+    
+    if (controlPoints.length < 2) return null;
+    
+    return (
+        <line ref={lineRef}>
+            <bufferGeometry />
+            <lineBasicMaterial color="#ffffff" linewidth={2} />
+        </line>
+    );
+}
+
+
+// Shark model (simplified for curve editor)
+function SharkModel() {
+    const { scene } = useGLTF(SHARK_MODEL_fantasy);
     
     // IF DESIRED: can remove other things - from root object (Sketchfab_model -> Root)
     const root = scene.children[0].children[0]; 
@@ -29,109 +97,144 @@ function SharkModel({ sharkRef, setActions }) {
     const ocean = root.children.find(child => child.name === "ocean");
     if (ocean) ocean.visible = false;
     
-    
-    // Set actions in parent component (SharkAnimation) to control animation externally
-    useEffect(() => {
-        setActions(newActions);
-    }, [newActions, setActions]);
-    
-    // Begin with shark facing to the right (match x plane movement)
-    useEffect(() => {
-        if (sharkRef.current) {
-            sharkRef.current.rotation.y = THREE.MathUtils.degToRad(90); 
-        }
-    }, [sharkRef]);
-    
-    return <primitive ref={sharkRef} object={scene} scale={2.0} />;
-}
-
-
-function moveSharkTo(sharkRef, currentPos, nextPos) {
-    if (!sharkRef.current) return;
-    
-    sharkRef.current.position.copy(currentPos);
-    
-    // Set up vector & look at next position 
-    sharkRef.current.up.set(0, 1, 0);
-    sharkRef.current.lookAt(nextPos);
-}
-
-
-function SharkMovement({ sharkRef, actions }) {
-    const directionRef = useRef(1);
-    const speedRef = useRef(0.05);
-    
-    const bounds = {
-        x: [-10, 10],
-        y: [0, 0],  // keep y constant for simple horizontal movement
-        z: [0, 0]   // keep z constant for simple horizontal movement
-    };
-    
-    useFrame(() => {
-        if (!sharkRef.current || !actions) return;
-        
-        const currentPos = sharkRef.current.position.clone();
-        
-        // Calculate next position
-        const nextX = currentPos.x + (speedRef.current * directionRef.current);
-        const nextPos = new THREE.Vector3(
-            nextX,
-            currentPos.y, 
-            currentPos.z 
-        );
-        
-        // Check bounds & reverse direction
-        if (nextX >= bounds.x[1] || nextX <= bounds.x[0]) {
-            directionRef.current *= -1;
-            nextPos.x = currentPos.x + (speedRef.current * directionRef.current);
-        }
-        
-        // Calculate look-ahead position to face correct direction
-        const lookAheadPos = new THREE.Vector3(
-            nextPos.x + (directionRef.current * 2), 
-            nextPos.y,
-            nextPos.z
-        );
-        
-        moveSharkTo(sharkRef, nextPos, lookAheadPos);
-    });
-    
-    useEffect(() => {
-        if (actions && actions["Swimming"]) {
-            actions["Swimming"].play();
-        }
-    }, [actions]);
+    return <primitive object={scene} scale={1.0} position={[0, -2, 0]} />;
 }
 
 
 export default function SharkAnimation() {
-    // Use ref to track position on page (+ store actions for movement / animation)
-    // Create in parent (SharkAnimation) so children (SharkModel, SharkMovement) can use
-    const sharkRef = useRef();
-    const [actions, setActions] = useState(null); 
+    // State for managing control points and selection
+    const [controlPoints, setControlPoints] = useState([
+        new THREE.Vector3(-10, 0, -5),
+        new THREE.Vector3(-5, 3, 0),
+        new THREE.Vector3(0, -2, 5),
+        new THREE.Vector3(5, 1, 0),
+        new THREE.Vector3(10, 0, -3)
+    ]);
+    const [selectedPointIndex, setSelectedPointIndex] = useState(null);
+    const orbitControlsRef = useRef();
+    
+    // Handle control point dragging
+    const handlePointDrag = (index, newPosition) => {
+        setControlPoints(prev => {
+            const updated = [...prev];
+            updated[index] = newPosition;
+            return updated;
+        });
+    };
+    
+    // Handle control point selection
+    const handlePointSelect = (index) => {
+        setSelectedPointIndex(index);
+    };
+    
+    // Add new control point
+    const addControlPoint = () => {
+        const newPoint = new THREE.Vector3(
+            Math.random() * 10 - 5,
+            Math.random() * 6 - 3,
+            Math.random() * 10 - 5
+        );
+        setControlPoints(prev => [...prev, newPoint]);
+    };
+    
+    // Remove selected control point
+    const removeControlPoint = () => {
+        if (selectedPointIndex !== null && controlPoints.length > 2) {
+            setControlPoints(prev => prev.filter((_, i) => i !== selectedPointIndex));
+            setSelectedPointIndex(null);
+        }
+    };
     
     return (
-        <Canvas 
-            style={{ 
-                width: "100%", 
-                height: "100%", 
-                objectFit: "cover", 
-                position: "relative" 
-            }} 
-            camera={{ position: [0, 5, 25], fov: 30 }}
-        >
-        <ambientLight />
-        <directionalLight position={[2, 2, 5]} />
-        
-        {/* Suspense allows React to wait until 3D model loaded before render */}
-        <Suspense fallback={null}>
-            <SharkModel sharkRef={sharkRef} setActions={setActions} />
-        </Suspense>
-        
-        {/* Handle movement */}
-        <SharkMovement sharkRef={sharkRef} actions={actions} />
-        
-        </Canvas>
+        <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
+            {/* UI Controls */}
+            <div style={{
+                position: "absolute",
+                top: "20px",
+                left: "20px",
+                zIndex: 100,
+                background: "rgba(0,0,0,0.7)",
+                padding: "15px",
+                borderRadius: "8px",
+                color: "white",
+                fontFamily: "Arial, sans-serif"
+            }}>
+                <h3 style={{ margin: "0 0 10px 0", fontSize: "16px" }}>Shark Path Editor</h3>
+                <button 
+                    onClick={addControlPoint}
+                    style={{
+                        marginRight: "10px",
+                        padding: "8px 12px",
+                        background: "#4ecdc4",
+                        border: "none",
+                        borderRadius: "4px",
+                        color: "white",
+                        cursor: "pointer"
+                    }}
+                >
+                    Add Point
+                </button>
+                <button 
+                    onClick={removeControlPoint}
+                    disabled={selectedPointIndex === null || controlPoints.length <= 2}
+                    style={{
+                        padding: "8px 12px",
+                        background: selectedPointIndex !== null ? "#ff6b6b" : "#666",
+                        border: "none",
+                        borderRadius: "4px",
+                        color: "white",
+                        cursor: selectedPointIndex !== null ? "pointer" : "not-allowed"
+                    }}
+                >
+                    Remove Point
+                </button>
+                <p style={{ margin: "10px 0 0 0", fontSize: "12px", opacity: 0.8 }}>
+                    Click spheres to select, drag to move
+                </p>
+            </div>
+            
+            <Canvas 
+                style={{ 
+                    width: "100%", 
+                    height: "100%" 
+                }} 
+                camera={{ position: [15, 10, 15], fov: 50 }}
+            >
+                <ambientLight intensity={0.6} />
+                <directionalLight position={[10, 10, 5]} intensity={0.8} />
+                
+                {/* Grid helper for reference */}
+                <gridHelper args={[30, 30]} position={[0, -5, 0]} />
+                
+                {/* Control points */}
+                {controlPoints.map((point, index) => (
+                    <ControlPoint
+                        key={index}
+                        index={index}
+                        position={point}
+                        isSelected={selectedPointIndex === index}
+                        onSelect={() => handlePointSelect(index)}
+                        onDrag={handlePointDrag}
+                    />
+                ))}
+                
+                {/* Curve visualization */}
+                <CurveVisualization controlPoints={controlPoints} />
+                
+                {/* Shark model for reference */}
+                <Suspense fallback={null}>
+                    <SharkModel />
+                </Suspense>
+                
+                {/* Orbit controls for camera */}
+                <OrbitControls 
+                    ref={orbitControlsRef}
+                    enableDamping
+                    dampingFactor={0.05}
+                    enabled={selectedPointIndex === null} // Disable when dragging points
+                />
+            </Canvas>
+        </div>
     );
 }
     
