@@ -63,6 +63,11 @@ nav {
     z-index: 10;
     overflow-x: auto; /* allow horizontal scroll on small screens */
     white-space: nowrap; /* prevent links from wrapping */
+    scrollbar-width: none; /* for Firefox */
+}
+
+nav::-webkit-scrollbar {
+    display: none; /* for Chrome/Safari */
 }
 
 /* Link styling */
