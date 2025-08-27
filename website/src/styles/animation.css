@@ -1,3 +1,20 @@
+.animation-controls {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.animation-controls h3 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+}
+
+.animation-controls p {
+    margin: 10px 0 0 0;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
 .animation-points-container {
     position: absolute;
     top: 85px !important;
@@ -7,23 +24,25 @@
     padding: 15px;
     border-radius: 8px;
     color: #fff;
-    font-family: Arial, sans-serif
+    font-family: Arial, sans-serif;
+}
+
+.add-point-button,
+.remove-point-button {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
 }
 
 .add-point-button {
     margin-right: 10px;
-    padding: 8px 12px;
     background: #4ecdc4;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer
+    color: #000;
+    cursor: pointer;
 }
 
 .remove-point-button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    color: #fff
+    color: #fff;
 }
 

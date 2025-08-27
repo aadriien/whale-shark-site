@@ -146,10 +146,10 @@ export default function SharkAnimation() {
     };
     
     return (
-        <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
+        <div className="animation-controls">
             {/* UI Controls */}
             <div className="animation-points-container">
-                <h3 style={{ margin: "0 0 10px 0", fontSize: "16px" }}>Shark Path Editor</h3>
+                <h3>Shark Path Editor</h3>
                 <button 
                     className="add-point-button"
                     onClick={addControlPoint}
@@ -167,16 +167,11 @@ export default function SharkAnimation() {
                 >
                     Remove Point
                 </button>
-                <p style={{ margin: "10px 0 0 0", fontSize: "12px", opacity: 0.8 }}>
-                    Click spheres to select, drag to move
-                </p>
+                <p>Click spheres to select, drag to move</p>
             </div>
             
             <Canvas 
-                style={{ 
-                    width: "100%", 
-                    height: "100%" 
-                }} 
+                style={{ width: "100%", height: "100%" }} 
                 onPointerMissed={(event) => {
                     // Fires when user clicked but no object hit (done editing point)
                     setSelectedPointIndex(null);
