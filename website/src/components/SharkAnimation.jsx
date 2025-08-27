@@ -148,41 +148,20 @@ export default function SharkAnimation() {
     return (
         <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
             {/* UI Controls */}
-            <div style={{
-                position: "absolute",
-                top: "85px",
-                left: "15px",
-                zIndex: 100,
-                background: "rgba(0,0,0,0.7)",
-                padding: "15px",
-                borderRadius: "8px",
-                color: "white",
-                fontFamily: "Arial, sans-serif"
-            }}>
+            <div className="animation-points-container">
                 <h3 style={{ margin: "0 0 10px 0", fontSize: "16px" }}>Shark Path Editor</h3>
                 <button 
+                    className="add-point-button"
                     onClick={addControlPoint}
-                    style={{
-                        marginRight: "10px",
-                        padding: "8px 12px",
-                        background: "#4ecdc4",
-                        border: "none",
-                        borderRadius: "4px",
-                        color: "white",
-                        cursor: "pointer"
-                    }}
                 >
                     Add Point
                 </button>
                 <button 
+                    className="remove-point-button"
                     onClick={removeControlPoint}
                     disabled={selectedPointIndex === null || controlPoints.length <= 2}
                     style={{
-                        padding: "8px 12px",
                         background: selectedPointIndex !== null ? "#ff6b6b" : "#666",
-                        border: "none",
-                        borderRadius: "4px",
-                        color: "white",
                         cursor: selectedPointIndex !== null ? "pointer" : "not-allowed"
                     }}
                 >
