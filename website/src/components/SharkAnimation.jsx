@@ -17,9 +17,11 @@ import * as THREE from "three";
 const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
 
 
-// Shark model (simplified for curve editor)
-function SharkModel() {
-    const { scene } = useGLTF(SHARK_MODEL_fantasy);
+// Shark model with animation support
+function SharkModel({ isAnimating, controlPoints, tetherPosition }) {
+    const { scene, animations } = useGLTF(SHARK_MODEL_fantasy);
+    const { actions } = useAnimations(animations, scene);
+    const sharkRef = useRef();
     
     // IF DESIRED: can remove other things from root object (Sketchfab_model -> Root)
     const root = scene.children[0].children[0]; 
@@ -28,7 +30,78 @@ function SharkModel() {
     const ocean = root.children.find(child => child.name === "ocean");
     if (ocean) ocean.visible = false;
     
-    return <primitive object={scene} scale={1.0} position={[0, -2, 0]} />;
+    // Set initial shark orientation to face right 
+    useEffect(() => {
+        if (sharkRef.current) {
+            sharkRef.current.rotation.y = THREE.MathUtils.degToRad(90);
+        }
+    }, []);
+    
+    // Start swimming animation when animating
+    useEffect(() => {
+        if (isAnimating && actions?.Swimming) {
+            actions.Swimming.play();
+            actions.Swimming.setLoop(THREE.LoopRepeat);
+        } 
+        else if (actions?.Swimming) {
+            actions.Swimming.stop();
+        }
+        
+        return () => {
+            if (actions?.Swimming) {
+                actions.Swimming.stop();
+            }
+        };
+    }, [isAnimating, actions]);
+    
+    // Position shark on curve 
+    useFrame((state) => {
+        if (!sharkRef.current || controlPoints.length < 3) return;
+        
+        const curve = new THREE.CatmullRomCurve3(controlPoints);
+        curve.closed = true;
+        
+        let t, nextT;
+        
+        if (isAnimating) {
+            // Animation mode: move along curve over time
+            // Adaptive timing based on number of points 
+            const baseTime = 5;
+            const timePerPoint = 2;
+            const loopDuration = Math.max(
+                10, 
+                Math.min(
+                    30, 
+                    baseTime + (controlPoints.length * timePerPoint)
+                )
+            );
+            
+            const time = state.clock.getElapsedTime();
+            t = (time % loopDuration) / loopDuration;
+            nextT = (t + 0.01) % 1;
+        } 
+        else {
+            // Editing mode: stay at tether position
+            t = tetherPosition;
+            nextT = (tetherPosition + 0.01) % 1;
+        }
+        
+        const currentPos = curve.getPointAt(t);
+        const nextPos = curve.getPointAt(nextT);
+        
+        // Position & orient shark
+        sharkRef.current.position.copy(currentPos);
+        sharkRef.current.up.set(0, 1, 0);
+        sharkRef.current.lookAt(nextPos);
+    });
+    
+    return (
+        <primitive 
+            ref={sharkRef} 
+            object={scene} 
+            scale={0.6} 
+        />
+    );
 }
 
 
@@ -69,16 +142,45 @@ function ControlPoint({ position, onDrag, isSelected, onSelect, index }) {
 }
 
 
+// Tether point for shark to remain on curve while editing
+function TetherPoint({ controlPoints, tetherPosition, curveClosed }) {
+    const meshRef = useRef();
+    
+    useFrame(() => {
+        if (!meshRef.current || controlPoints.length < 3) return;
+        
+        // Create curve & position tether point
+        const curve = new THREE.CatmullRomCurve3(controlPoints);
+        curve.closed = curveClosed;
+        
+        const position = curve.getPointAt(tetherPosition);
+        meshRef.current.position.copy(position);
+    });
+    
+    if (controlPoints.length < 3) return null;
+    
+    return (
+        <mesh ref={meshRef}>
+            <sphereGeometry args={[0.2, 16, 16]} />
+            <meshBasicMaterial 
+                color="#ffff00" 
+                transparent
+                opacity={0.9}
+            />
+        </mesh>
+    );
+}
+
 // Curve visualization component
-function CurveVisualization({ controlPoints }) {
+function CurveVisualization({ controlPoints, curveClosed }) {
     const lineRef = useRef();
     
     useEffect(() => {
-        if (controlPoints.length < 2) return;
+        if (controlPoints.length < 3) return;
         
-        // Create Catmull-Rom curve from control points
+        // Always show as closed curve for visualization
         const curve = new THREE.CatmullRomCurve3(controlPoints);
-        curve.closed = false; // REVISIT: Can be toggled later
+        curve.closed = true; 
         
         // Generate points along curve for visualization
         const points = curve.getPoints(100);
@@ -88,14 +190,19 @@ function CurveVisualization({ controlPoints }) {
             lineRef.current.geometry.dispose();
             lineRef.current.geometry = geometry;
         }
-    }, [controlPoints]);
+    }, [controlPoints, curveClosed]);
     
-    if (controlPoints.length < 2) return null;
+    if (controlPoints.length < 3) return null;
     
     return (
         <line ref={lineRef}>
             <bufferGeometry />
-            <lineBasicMaterial color="#ffffff" linewidth={2} />
+            <lineBasicMaterial 
+                color={curveClosed ? "#ffffff" : "#888888"} 
+                linewidth={2} 
+                opacity={curveClosed ? 1.0 : 0.6}
+                transparent
+            />
         </line>
     );
 }
@@ -111,6 +218,11 @@ export default function SharkAnimation() {
         new THREE.Vector3(10, 0, -3)
     ]);
     const [selectedPointIndex, setSelectedPointIndex] = useState(null);
+
+    const [curveClosed, setCurveClosed] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [tetherPosition, setTetherPosition] = useState(0); 
+
     const orbitControlsRef = useRef();
     
     // Handle control point dragging
@@ -139,9 +251,23 @@ export default function SharkAnimation() {
     
     // Remove selected control point
     const removeControlPoint = () => {
-        if (selectedPointIndex !== null && controlPoints.length > 2) {
+        if (selectedPointIndex !== null && controlPoints.length > 3) {
             setControlPoints(prev => prev.filter((_, i) => i !== selectedPointIndex));
             setSelectedPointIndex(null);
+        }
+    };
+    
+    const toggleAnimation = () => {
+        if (isAnimating) {
+            // Stop animation & return to editing mode
+            setIsAnimating(false);
+            setCurveClosed(false);
+        } 
+        else {
+            // Start animation mode
+            setIsAnimating(true);
+            setCurveClosed(true);
+            setSelectedPointIndex(null); 
         }
     };
     
@@ -149,25 +275,49 @@ export default function SharkAnimation() {
         <div className="animation-controls">
             {/* UI Controls */}
             <div className="animation-points-container">
-                <h3>Shark Path Editor</h3>
+                <h3>{isAnimating ? "Shark Swimming Animation" : "Shark Path Editor"}</h3>
+                
+                {/* Show editing controls only when not animating */}
+                {!isAnimating && (
+                    <>
+                        <button 
+                            className="add-point-button"
+                            onClick={addControlPoint}
+                        >
+                            Add Point
+                        </button>
+                        <button 
+                            className="remove-point-button"
+                            onClick={removeControlPoint}
+                            disabled={selectedPointIndex === null || controlPoints.length <= 3}
+                            style={{
+                                background: selectedPointIndex !== null && controlPoints.length > 3 ? "#ff6b6b" : "#666",
+                                cursor: selectedPointIndex !== null && controlPoints.length > 3 ? "pointer" : "not-allowed"
+                            }}
+                        >
+                            Remove Point
+                        </button>
+                    </>
+                )}
+                
+                {/* Main toggle button */}
                 <button 
-                    className="add-point-button"
-                    onClick={addControlPoint}
-                >
-                    Add Point
-                </button>
-                <button 
-                    className="remove-point-button"
-                    onClick={removeControlPoint}
-                    disabled={selectedPointIndex === null || controlPoints.length <= 2}
+                    className="run-points-button"
+                    onClick={toggleAnimation}
                     style={{
-                        background: selectedPointIndex !== null ? "#ff6b6b" : "#666",
-                        cursor: selectedPointIndex !== null ? "pointer" : "not-allowed"
+                        background: isAnimating ? "#ff6b6b" : "#4ecd83",
+                        color: isAnimating ? "#300a0aff" : "#0a2609",
                     }}
                 >
-                    Remove Point
+                    {isAnimating ? "Stop & Edit Loop" : "Finish & Run"}
                 </button>
-                <p>Click spheres to select, drag to move</p>
+                
+                {/* Instructions */}
+                {isAnimating ? (
+                    <p>Readjust path in editing mode.</p>
+                ) : (
+                    <p>Click spheres, drag to move. Run to see whale shark swim.</p>
+                )}
             </div>
             
             <Canvas 
@@ -184,8 +334,8 @@ export default function SharkAnimation() {
                 {/* Grid helper for reference */}
                 <gridHelper args={[30, 30]} position={[0, -5, 0]} />
                 
-                {/* Control points */}
-                {controlPoints.map((point, index) => (
+                {/* Control points (only show while editing) */}
+                {!isAnimating && controlPoints.map((point, index) => (
                     <ControlPoint
                         key={index}
                         index={index}
@@ -197,11 +347,25 @@ export default function SharkAnimation() {
                 ))}
                 
                 {/* Curve visualization */}
-                <CurveVisualization controlPoints={controlPoints} />
+                <CurveVisualization controlPoints={controlPoints} curveClosed={curveClosed} />
                 
-                {/* Shark model for reference */}
+                {/* Tether point */}
+                {!isAnimating && (
+                    <TetherPoint 
+                        controlPoints={controlPoints} 
+                        tetherPosition={tetherPosition}
+                        curveClosed={true} 
+                    />
+                )}
+                
+                {/* Shark model */}
                 <Suspense fallback={null}>
-                    <SharkModel />
+                    <SharkModel 
+                        isAnimating={isAnimating}
+                        controlPoints={controlPoints}
+                        curveClosed={curveClosed}
+                        tetherPosition={tetherPosition}
+                    />
                 </Suspense>
                 
                 {/* Orbit controls for camera (disabled when dragging points) */}
