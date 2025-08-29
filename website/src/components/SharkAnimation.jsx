@@ -242,9 +242,9 @@ export default function SharkAnimation() {
     // Add new control point
     const addControlPoint = () => {
         const newPoint = new THREE.Vector3(
-            Math.random() * 10 - 5,
-            Math.random() * 6 - 3,
-            Math.random() * 10 - 5
+            Math.random() * 25 - 5,
+            Math.random() * 9 - 3,
+            Math.random() * 15 - 5
         );
         setControlPoints(prev => [...prev, newPoint]);
     };
