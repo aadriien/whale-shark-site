@@ -179,7 +179,7 @@ function GeoLabs() {
             <div className="globe-views-container">
 
                 {/* Shark info panel on left */}
-                <div className="info-sidebar" >
+                <div className="info-sidebar">
                     {/* Step Through Story Controls */}
                     {selectedShark && (
                         <div className="story-controls-container">

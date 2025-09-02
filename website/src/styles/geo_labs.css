@@ -1,3 +1,7 @@
+.saved-shark-card-wrapper.selected .shark-banner {
+    background-color: #ccece5;
+}
+
 .story-controls-container {
     margin-bottom: 0.75rem;
     border: 1px solid #ddd;

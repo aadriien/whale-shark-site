@@ -151,6 +151,7 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 :-------------------------:|:-------------------------:
 ![Example image of expanded helper logbook with saved sharks](./example-media/example-imgs/favorites-expanded-example-img.png)  |  ![Example image of condensed helper logbook with saved sharks](./example-media/example-imgs/favorites-condensed-example-img.png)
 
+
 🎢 Animation Path Creation 
 :-------------------------:
 ![Example image of animation path creation process](./example-media/example-imgs/animation-path.png) 
