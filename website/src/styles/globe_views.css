@@ -143,7 +143,8 @@
 }
 
 .scrollable-shark-list {
-    max-height: 200px; 
+    flex: 1;
+    min-height: 0; 
     overflow-y: auto;
     padding: 0.5rem;
     scrollbar-width: none; /* for Firefox */

@@ -17,7 +17,9 @@ import { mediaSharks } from "../utils/DataUtils.js";
 function GeoLabs() {
     const [selectedShark, setSelectedShark] = useState(null);
     const [allSharksVisible, setAllSharksVisible] = useState(true);
+    
     const [savedIds, setSavedIds] = useState(new Set());
+    const [viewMode, setViewMode] = useState('multiple'); // 'individual' or 'multiple'
 
     // Step-through story functionality
     const [isStepMode, setIsStepMode] = useState(false);
@@ -171,6 +173,10 @@ function GeoLabs() {
         }
     }, []); // No dependencies since using refs & state setters
     
+    const handleToggleViewMode = () => {
+        setViewMode(prev => prev === 'individual' ? 'multiple' : 'individual');
+    };
+    
     
     return (
         <div className="page-content globeviews-wrapper">
@@ -180,6 +186,17 @@ function GeoLabs() {
 
                 {/* Shark info panel on left */}
                 <div className="info-sidebar">
+                    {/* View Mode Toggle Button */}
+                    <button 
+                        className={`view-mode-toggle ${viewMode}`}
+                        onClick={handleToggleViewMode}
+                    >
+                        {viewMode === 'individual' 
+                            ? 'Switch to Multiple Sharks View' 
+                            : 'Switch to Individual Shark View'
+                        }
+                    </button>
+                    
                     {/* Step Through Story Controls */}
                     {selectedShark && (
                         <div className="story-controls-container">

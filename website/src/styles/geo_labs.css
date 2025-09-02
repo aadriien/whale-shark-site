@@ -1,6 +1,48 @@
+/* View mode toggle button */
+.view-mode-toggle {
+    background-color: #e8f0ff;
+    border: 2px solid #7e58f0;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #7e58f0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.view-mode-toggle:hover {
+    background-color: #d4e8f8;
+    color: #0066cc;
+}
+
+.view-mode-toggle.individual {
+    background-color: #7e58f0;
+    color: white;
+}
+
+.view-mode-toggle.individual:hover {
+    background-color: #6b47d9;
+}
+
+
+.saved-sharks-display {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.saved-sharks-header {
+    flex-shrink: 0;
+}
+
 .saved-shark-card-wrapper.selected .shark-banner {
     background-color: #ccece5;
 }
+
 
 .story-controls-container {
     margin-bottom: 0.75rem;
@@ -163,4 +205,5 @@
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 
