@@ -7,11 +7,13 @@ import StoryStepSlider from "../components/StoryStepSlider.jsx";
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
 import SavedDisplay from "../components/SavedSharksDisplay.jsx";
+import DataOverview from "../components/charts/DataOverview.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
 import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
+import { createDataOverviewDataset, createSummaryDataset } from "../utils/SelectedSharksData.js";
 
 
 function GeoLabs() {
@@ -293,7 +295,18 @@ function GeoLabs() {
                         </div>
                     )}
                     
-                    <SharkInfoPanel shark={selectedShark} />
+                    {/* Show DataOverview in multi-shark view mode, SharkInfoPanel in individual mode */}
+                    {viewMode === 'multiple' ? (
+                        <div className="shark-info-panel">
+                            <DataOverview 
+                                dataset="calendar"
+                                filterField="year"
+                                selectedFilter={selectedSharksForLab.size > 0 ? "2024" : ""}
+                            />
+                        </div>
+                    ) : (
+                        <SharkInfoPanel shark={selectedShark} />
+                    )}
                 </div>
                 
                 {/* Globe component */}
