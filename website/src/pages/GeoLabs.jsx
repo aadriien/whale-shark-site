@@ -55,37 +55,53 @@ function GeoLabs() {
         return getGroupCoordinates(savedSharkIds);
     }, [savedIds]);
     
+    // Get coordinates for selected lab sharks (multi-select mode)
+    const selectedLabPointsData = useMemo(() => {
+        if (selectedSharksForLab.size === 0) return [];
+        const labSharkIds = Array.from(selectedSharksForLab);
+        
+        console.log('Plotting selected lab sharks on globe:', labSharkIds);
+        return getGroupCoordinates(labSharkIds);
+    }, [selectedSharksForLab]);
+    
     const sharks = mediaSharks;
     
     useEffect(() => {
-        // Show all sharks if nothing selected
-        if (!selectedShark) {
-            if (globeRef.current) {
-                const globeInstance = globeRef.current.getGlobe();
-                clearAllData(globeInstance);
+        if (!globeRef.current) return;
+        
+        const globeInstance = globeRef.current.getGlobe();
+        clearAllData(globeInstance);
+        
+        // Nothing plotted during step mode 
+        if (isStepMode) {
+            setAllSharksVisible(false);
+            return;
+        }
+        
+        if (viewMode === 'individual') {
+            if (selectedShark) {
+                // Individual mode with shark selected - show only that shark's points
+                globeRef.current.highlightShark(selectedShark.id, true);
+                setAllSharksVisible(false);
+            } 
+            else {
+                // Individual mode with no shark selected - show all saved sharks
                 addPointsData(globeInstance, pointsData);
+                setAllSharksVisible(true);
             }
-            setAllSharksVisible(true);
         } 
         else {
-            // When shark selected, clear all data & show points for individual
-            if (globeRef.current) {
-                const globeInstance = globeRef.current.getGlobe();
-                clearAllData(globeInstance); // Clear both points & rings
-                globeRef.current.highlightShark(selectedShark.id, true); // Use points instead of ripples
+            if (selectedSharksForLab.size > 0) {
+                // Show only selected lab sharks
+                addPointsData(globeInstance, selectedLabPointsData);
+                setAllSharksVisible(true);
+            } else {
+                // No lab sharks selected, show all saved sharks (default state)
+                addPointsData(globeInstance, pointsData);
+                setAllSharksVisible(true);
             }
-            setAllSharksVisible(false);
         }
-    }, [selectedShark, pointsData]); 
-    
-    // Update globe when pointsData changes (saved sharks change)
-    useEffect(() => {
-        if (globeRef.current && !selectedShark) {
-            const globeInstance = globeRef.current.getGlobe();
-            clearAllData(globeInstance);
-            addPointsData(globeInstance, pointsData);
-        }
-    }, [pointsData]); // react to changes in saved sharks
+    }, [viewMode, selectedShark, pointsData, selectedLabPointsData, isStepMode]);
     
     // Handle shark selection from dropdown or globe click
     const handleSelectShark = (arg) => {
@@ -100,7 +116,12 @@ function GeoLabs() {
             console.log("Clicked at lat/lng:", lat, lng);
     
             const tolerance = 3.0;
-            const found = pointsData.find(s => {
+      
+            const currentPointsData = viewMode === 'multiple' && selectedSharksForLab.size > 0 
+                ? selectedLabPointsData 
+                : pointsData;
+                
+            const found = currentPointsData.find(s => {
                 const dLat = Math.abs(s.lat - lat);
                 const dLng = Math.abs(s.lng - lng);
 
