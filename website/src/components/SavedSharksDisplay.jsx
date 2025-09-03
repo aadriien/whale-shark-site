@@ -11,12 +11,13 @@ function SavedSharksDisplay({
     selectedSharksForLab, onLabSelectionChange 
 }) {
     const [savedIds, setSavedIds] = useState(new Set());
-    const [isLoading, setIsLoading] = useState(true);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     // Load saved shark IDs from localStorage
     useEffect(() => {
         const updateSavedIds = () => {
             setSavedIds(getFavorites());
+            setIsInitialized(true);
         };
         
         updateSavedIds();
@@ -47,7 +48,7 @@ function SavedSharksDisplay({
     const handleCardClick = (shark) => {
         if (viewMode === 'multiple') {
             // In multi-select mode, toggle selection for lab
-            handleCheckboxToggle(shark.id);
+            handleLabToggle(shark.id);
         } else {
             // In individual mode, select for viewing in info panel
             if (onSelect) {
@@ -56,7 +57,7 @@ function SavedSharksDisplay({
         }
     };
 
-    const handleCheckboxToggle = React.useCallback((sharkId) => {
+    const handleLabToggle = React.useCallback((sharkId) => {
         if (onLabSelectionChange && selectedSharksForLab) {
             const newSelection = new Set(selectedSharksForLab);
             if (newSelection.has(sharkId)) {
@@ -68,24 +69,13 @@ function SavedSharksDisplay({
         }
     }, [onLabSelectionChange, selectedSharksForLab]);
 
-    const handleCheckboxClick = (e, sharkId) => {
-        e.stopPropagation(); // prevent card click
-        handleCheckboxToggle(sharkId);
-    };
-
     return (
         <div className="saved-sharks-display">
             <div className="saved-sharks-header">
                 <h3>Saved Sharks ({savedSharks.length})</h3>
             </div>
             
-            {savedSharks.length === 0 && sharks.length > 0 ? (
-                <div className="no-sharks-message">
-                    Sorry! No whale sharks match your current filters.
-                    <br/><br/>
-                    Use the ⭐ button to save sharks while browsing!
-                </div>
-            ) : savedSharks.length > 0 ? (
+            {savedSharks.length > 0 ? (
                 <div className="scrollable-shark-list">
                     <div className="saved-sharks-grid">
                         {savedSharks.map((shark) => {
@@ -97,27 +87,24 @@ function SavedSharksDisplay({
                                         viewMode === 'individual' && shark.id === selectedSharkId ? "selected" : ""
                                     } ${
                                         viewMode === 'multiple' && isSelectedForLab ? "selected-for-lab" : ""
-                                    } ${
-                                        viewMode === 'multiple' ? "multi-select-mode" : ""
                                     }`}
                                     onClick={() => handleCardClick(shark)}
                                 >
-                                    {viewMode === 'multiple' && (
-                                        <input 
-                                            type="checkbox" 
-                                            className="shark-card-checkbox"
-                                            checked={isSelectedForLab}
-                                            onChange={(e) => handleCheckboxClick(e, shark.id)}
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
-                                    )}
                                     <SharkBanner shark={shark} />
                                 </div>
                             );
                         })}
                     </div>
                 </div>
-            ) : null}
+            ) : (
+                isInitialized && savedIds.size === 0 ? (
+                    <div className="no-sharks-message">
+                        Sorry! No whale sharks match your current filters.
+                        <br/><br/>
+                        Use the ⭐ button to save sharks while browsing!
+                    </div>
+                ) : null
+            )}
         </div>
     );
 }

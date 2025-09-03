@@ -208,32 +208,6 @@
 }
 
 
-/* Multi-select checkbox styling */
-.saved-shark-card-wrapper.multi-select-mode {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.shark-card-checkbox {
-    width: 1.2rem;
-    height: 1.2rem;
-    cursor: pointer;
-    accent-color: #7e58f0;
-    flex-shrink: 0; /* prevent checkbox shrinkage */
-}
-
-.shark-banner.multi-select {
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    border: 2px solid transparent;
-}
-
-.shark-banner.multi-select:hover {
-    background-color: #f0f8ff;
-    border-color: #e0e8ff;
-}
-
 .saved-shark-card-wrapper.selected-for-lab .shark-banner {
     background-color: #ccece5;
 }
