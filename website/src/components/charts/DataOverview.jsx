@@ -27,10 +27,8 @@ const DataOverview = ({
     ],
     selectedFilter = "", // expect selectedFilter from parent now
 }) => {
-    const data = datasets[dataset] || [];
+    const data = Array.isArray(dataset) ? dataset : (datasets[dataset] || []);
     
-    // NOTE: Removed filter dropdown and its state
-
     const selectedData = useMemo(() => {
         // Force both to type string when comparing for search
         return data.find(d => String(d[filterField]) === String(selectedFilter));

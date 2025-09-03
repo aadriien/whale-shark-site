@@ -11,9 +11,10 @@ import DataOverview from "../components/charts/DataOverview.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
+
 import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
-import { createDataOverviewDataset, createSummaryDataset } from "../utils/SelectedSharksData.js";
+import { createSummaryDataset } from "../utils/SelectedSharksData.js";
 
 
 function GeoLabs() {
@@ -67,6 +68,16 @@ function GeoLabs() {
     }, [selectedSharksForLab]);
     
     const sharks = mediaSharks;
+    
+    // Create dataset for selected sharks in lab
+    const selectedSharksDataset = useMemo(() => {
+        if (selectedSharksForLab.size === 0) return [];
+
+        const selectedIds = Array.from(selectedSharksForLab);
+        const selectedSharks = sharks.filter(shark => selectedIds.includes(shark.id));
+
+        return createSummaryDataset(selectedSharks);
+    }, [selectedSharksForLab, sharks]);
     
     useEffect(() => {
         if (!globeRef.current) return;
@@ -295,13 +306,29 @@ function GeoLabs() {
                         </div>
                     )}
                     
-                    {/* Show DataOverview in multi-shark view mode, SharkInfoPanel in individual mode */}
+                    {/* DataOverview in multi-shark mode, SharkInfoPanel in individual mode */}
                     {viewMode === 'multiple' ? (
                         <div className="shark-info-panel">
                             <DataOverview 
-                                dataset="calendar"
-                                filterField="year"
-                                selectedFilter={selectedSharksForLab.size > 0 ? "2024" : ""}
+                                dataset={selectedSharksDataset}
+                                filterField="Summary"
+                                selectedFilter={
+                                    selectedSharksForLab.size > 0 
+                                    ? 
+                                    `${selectedSharksForLab.size} Selected Sharks` 
+                                    : 
+                                    ""
+                                }
+                                displayFields={[
+                                    { 
+                                        label: "Total Occurrences", 
+                                        field: "Total Occurrences" 
+                                    },
+                                    { 
+                                        label: "Top 3 Publishing Countries", 
+                                        field: "Top 3 Publishing Countries" 
+                                    }
+                                ]}
                             />
                         </div>
                     ) : (
