@@ -197,14 +197,31 @@ function GeoLabs() {
     }, []); // No dependencies since using refs & state setters
     
     const handleToggleViewMode = () => {
-        setViewMode(prev => {
-            const newMode = prev === 'individual' ? 'multiple' : 'individual';
-            // Clear selected shark when switching to multiple view
-            if (newMode === 'multiple') {
-                setSelectedShark(null);
+        // Complete reset when switching view modes
+        setSelectedShark(null);
+        setSelectedSharksForLab(new Set());
+        setAllSharksVisible(true);
+        
+        // Exit step mode if active
+        if (isStepMode) {
+            setIsStepMode(false);
+            setCurrentStepIndex(0);
+            setCurrentPoint(null);
+            
+            if (globeRef.current) {
+                globeRef.current.enableControls();
             }
-            return newMode;
-        });
+        }
+        
+        // Clear globe & reset to default state
+        if (globeRef.current) {
+            const globeInstance = globeRef.current.getGlobe();
+            clearAllData(globeInstance);
+            // Points will be replotted by main useEffect
+        }
+        
+        // Switch mode
+        setViewMode(prev => prev === 'individual' ? 'multiple' : 'individual');
     };
     
     
