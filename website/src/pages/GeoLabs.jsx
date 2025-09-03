@@ -114,14 +114,9 @@ function GeoLabs() {
             
             const { lat, lng } = arg;
             console.log("Clicked at lat/lng:", lat, lng);
-    
+            
             const tolerance = 3.0;
-      
-            const currentPointsData = viewMode === 'multiple' && selectedSharksForLab.size > 0 
-                ? selectedLabPointsData 
-                : pointsData;
-                
-            const found = currentPointsData.find(s => {
+            const found = pointsData.find(s => {
                 const dLat = Math.abs(s.lat - lat);
                 const dLng = Math.abs(s.lng - lng);
 
@@ -306,7 +301,7 @@ function GeoLabs() {
                     <Globe 
                         ref={globeRef} 
                         onSharkClick={handleSelectShark} 
-                        allowClicks={!selectedShark}
+                        allowClicks={viewMode === 'individual' && !selectedShark}
                     />
                     {/* Coordinate display to match SharkTracker positioning */}
                     {isStepMode && currentPoint && (
