@@ -4,8 +4,14 @@ import SharkBanner from "./logbooks/SharkBanner.jsx";
 import { getFavorites, clearFavorites, getSavedSharks } from "../utils/FavoritesUtils.js";
 
 
-function SavedSharksDisplay({ sharks, onSelect, selectedSharkId }) {
+function SavedSharksDisplay({ 
+    sharks, 
+    onSelect, selectedSharkId, 
+    viewMode, 
+    selectedSharksForLab, onLabSelectionChange 
+}) {
     const [savedIds, setSavedIds] = useState(new Set());
+    const [isLoading, setIsLoading] = useState(true);
 
     // Load saved shark IDs from localStorage
     useEffect(() => {
@@ -39,9 +45,32 @@ function SavedSharksDisplay({ sharks, onSelect, selectedSharkId }) {
     }, [sharks, savedIds]);
 
     const handleCardClick = (shark) => {
-        if (onSelect) {
-            onSelect(shark.id);
+        if (viewMode === 'multiple') {
+            // In multi-select mode, toggle selection for lab
+            handleCheckboxToggle(shark.id);
+        } else {
+            // In individual mode, select for viewing in info panel
+            if (onSelect) {
+                onSelect(shark.id);
+            }
         }
+    };
+
+    const handleCheckboxToggle = React.useCallback((sharkId) => {
+        if (onLabSelectionChange && selectedSharksForLab) {
+            const newSelection = new Set(selectedSharksForLab);
+            if (newSelection.has(sharkId)) {
+                newSelection.delete(sharkId);
+            } else {
+                newSelection.add(sharkId);
+            }
+            onLabSelectionChange(newSelection);
+        }
+    }, [onLabSelectionChange, selectedSharksForLab]);
+
+    const handleCheckboxClick = (e, sharkId) => {
+        e.stopPropagation(); // prevent card click
+        handleCheckboxToggle(sharkId);
     };
 
     return (
@@ -50,29 +79,45 @@ function SavedSharksDisplay({ sharks, onSelect, selectedSharkId }) {
                 <h3>Saved Sharks ({savedSharks.length})</h3>
             </div>
             
-            {savedSharks.length === 0 ? (
+            {savedSharks.length === 0 && sharks.length > 0 ? (
                 <div className="no-sharks-message">
                     Sorry! No whale sharks match your current filters.
                     <br/><br/>
                     Use the ⭐ button to save sharks while browsing!
                 </div>
-            ) : (
+            ) : savedSharks.length > 0 ? (
                 <div className="scrollable-shark-list">
                     <div className="saved-sharks-grid">
-                        {savedSharks.map((shark) => (
-                            <div 
-                                key={shark.id}
-                                className={`saved-shark-card-wrapper ${
-                                    shark.id === selectedSharkId ? "selected" : ""
-                                }`}
-                                onClick={() => handleCardClick(shark)}
-                            >
-                                <SharkBanner shark={shark} />
-                            </div>
-                        ))}
+                        {savedSharks.map((shark) => {
+                            const isSelectedForLab = selectedSharksForLab && selectedSharksForLab.has(shark.id);
+                            return (
+                                <div 
+                                    key={shark.id}
+                                    className={`saved-shark-card-wrapper ${
+                                        viewMode === 'individual' && shark.id === selectedSharkId ? "selected" : ""
+                                    } ${
+                                        viewMode === 'multiple' && isSelectedForLab ? "selected-for-lab" : ""
+                                    } ${
+                                        viewMode === 'multiple' ? "multi-select-mode" : ""
+                                    }`}
+                                    onClick={() => handleCardClick(shark)}
+                                >
+                                    {viewMode === 'multiple' && (
+                                        <input 
+                                            type="checkbox" 
+                                            className="shark-card-checkbox"
+                                            checked={isSelectedForLab}
+                                            onChange={(e) => handleCheckboxClick(e, shark.id)}
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
+                                    )}
+                                    <SharkBanner shark={shark} />
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }

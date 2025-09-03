@@ -20,6 +20,8 @@ function GeoLabs() {
     
     const [savedIds, setSavedIds] = useState(new Set());
     const [viewMode, setViewMode] = useState('multiple'); // 'individual' or 'multiple'
+    
+    const [selectedSharksForLab, setSelectedSharksForLab] = useState(new Set()); // for multi-select mode
 
     // Step-through story functionality
     const [isStepMode, setIsStepMode] = useState(false);
@@ -174,7 +176,14 @@ function GeoLabs() {
     }, []); // No dependencies since using refs & state setters
     
     const handleToggleViewMode = () => {
-        setViewMode(prev => prev === 'individual' ? 'multiple' : 'individual');
+        setViewMode(prev => {
+            const newMode = prev === 'individual' ? 'multiple' : 'individual';
+            // Clear selected shark when switching to multiple view
+            if (newMode === 'multiple') {
+                setSelectedShark(null);
+            }
+            return newMode;
+        });
     };
     
     
@@ -214,6 +223,16 @@ function GeoLabs() {
                                 currentStepIndex={currentStepIndex}
                                 isVisible={isStepMode}
                             />
+                        </div>
+                    )}
+                    
+                    {/* Multi-select info panel */}
+                    {viewMode === 'multiple' && selectedSharksForLab.size > 0 && (
+                        <div className="multi-select-info">
+                            <h4>Selected for Lab ({selectedSharksForLab.size}):</h4>
+                            <div className="selected-sharks-list">
+                                {Array.from(selectedSharksForLab).join(', ')}
+                            </div>
                         </div>
                     )}
                     
@@ -259,7 +278,17 @@ function GeoLabs() {
                         onSelect={handleSelectShark}
                         onReset={handleReset}
                         selectedSharkId={selectedShark ? selectedShark.id : null}
-                        DisplayComponent={SavedDisplay}
+                        DisplayComponent={(props) => (
+                            <SavedDisplay
+                                {...props}
+                                viewMode={viewMode}
+                                selectedSharksForLab={selectedSharksForLab}
+                                onLabSelectionChange={setSelectedSharksForLab}
+
+                                // Disable onSelect in multiple mode
+                                onSelect={viewMode === 'multiple' ? null : props.onSelect} 
+                            />
+                        )}
                         disabled={isStepMode} // Disable selector while in step mode
                     />
                 </div>

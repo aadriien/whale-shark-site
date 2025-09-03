@@ -31,8 +31,8 @@
 
 .saved-sharks-display {
     display: flex;
-    flex: 1;
     flex-direction: column;
+    flex: 1;
     min-height: 0;
 }
 
@@ -207,4 +207,58 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+
+/* Multi-select checkbox styling */
+.saved-shark-card-wrapper.multi-select-mode {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.shark-card-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    accent-color: #7e58f0;
+    flex-shrink: 0; /* prevent checkbox shrinkage */
+}
+
+.shark-banner.multi-select {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.shark-banner.multi-select:hover {
+    background-color: #f0f8ff;
+    border-color: #e0e8ff;
+}
+
+.saved-shark-card-wrapper.selected-for-lab .shark-banner {
+    background-color: #ccece5;
+}
+
+.multi-select-info {
+    padding: 1rem;
+    background-color: #f8f9ff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.multi-select-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: #7e58f0;
+    font-size: 1rem;
+}
+
+.selected-sharks-list {
+    font-family: monospace;
+    background-color: white;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-height: 2rem;
+    font-size: 0.9rem;
+}
 
