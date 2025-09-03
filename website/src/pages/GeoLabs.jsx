@@ -59,7 +59,7 @@ function GeoLabs() {
     const selectedLabPointsData = useMemo(() => {
         if (selectedSharksForLab.size === 0) return [];
         const labSharkIds = Array.from(selectedSharksForLab);
-        
+
         console.log('Plotting selected lab sharks on globe:', labSharkIds);
         return getGroupCoordinates(labSharkIds);
     }, [selectedSharksForLab]);
@@ -196,6 +196,16 @@ function GeoLabs() {
         }
     }, []); // No dependencies since using refs & state setters
     
+    const handleSelectAllToggle = () => {
+        if (selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))) {
+            // All saved sharks are selected, so clear selection
+            setSelectedSharksForLab(new Set());
+        } else {
+            // Not all saved sharks are selected, so select all
+            setSelectedSharksForLab(new Set(savedIds));
+        }
+    };
+    
     const handleToggleViewMode = () => {
         // Complete reset when switching view modes
         setSelectedShark(null);
@@ -239,8 +249,8 @@ function GeoLabs() {
                         onClick={handleToggleViewMode}
                     >
                         {viewMode === 'individual' 
-                            ? 'Switch to Multiple Sharks View' 
-                            : 'Switch to Individual Shark View'
+                            ? 'Switch to Multi Shark View' 
+                            : 'Switch to Single Shark View'
                         }
                     </button>
                     
@@ -265,11 +275,25 @@ function GeoLabs() {
                     )}
                     
                     {/* Multi-select info panel */}
-                    {viewMode === 'multiple' && selectedSharksForLab.size > 0 && (
+                    {viewMode === 'multiple' && (
                         <div className="multi-select-info">
-                            <h4>Selected for Lab ({selectedSharksForLab.size}):</h4>
+                            <div className="multi-select-header">
+                                <h4>Selected for Lab ({selectedSharksForLab.size}):</h4>
+                                <label className="select-all-container">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))}
+                                        onChange={handleSelectAllToggle}
+                                        className="select-all-checkbox"
+                                    />
+                                    Add all saved whale sharks
+                                </label>
+                            </div>
                             <div className="selected-sharks-list">
-                                {Array.from(selectedSharksForLab).join(', ')}
+                                {selectedSharksForLab.size > 0 
+                                    ? Array.from(selectedSharksForLab).join(', ') 
+                                    : 'None in lab'
+                                }
                             </div>
                         </div>
                     )}
