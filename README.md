@@ -111,6 +111,9 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 - **📊 Historic data trends**: Holistic insights into the sharks (+ related factors) over time.
 - **📸 Real media and clean visuals**: Pictures, videos, and plenty of thoughtful visualizations.
 
+- **📐 Dynamic animation sandbox**: Creative playground to experiment with swimming models.
+- **🧪 Hands-on geomapping lab**: Opportunity to save favorite whale sharks for custom insights.
+
 
 ## Design Choices
 
