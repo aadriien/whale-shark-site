@@ -290,33 +290,32 @@ function GeoLabs() {
                         </div>
                     )}
                     
-                    {/* Multi-select info panel */}
-                    {viewMode === 'multiple' && (
-                        <div className="multi-select-info">
-                            <div className="multi-select-header">
-                                <h4>Selected for Lab ({selectedSharksForLab.size}):</h4>
-                                <label className="select-all-container">
-                                    <input 
-                                        type="checkbox" 
-                                        checked={selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))}
-                                        onChange={handleSelectAllToggle}
-                                        className="select-all-checkbox"
-                                    />
-                                    Add all saved whale sharks
-                                </label>
-                            </div>
-                            <div className="selected-sharks-list">
-                                {selectedSharksForLab.size > 0 
-                                    ? Array.from(selectedSharksForLab).join(', ') 
-                                    : 'None in lab'
-                                }
-                            </div>
-                        </div>
-                    )}
-                    
-                    {/* DataOverview and Heatmap in multi-shark mode, SharkInfoPanel in individual mode */}
+                    {/* Data visuals in multi-shark mode, SharkInfoPanel in individual mode */}
                     {viewMode === 'multiple' ? (
                         <div className="shark-info-panel">
+
+                            {/* Selected whale sharks for lab */}
+                            <div className="multi-select-info">
+                                <div className="multi-select-header">
+                                    <h4>Selected for Lab ({selectedSharksForLab.size}):</h4>
+                                    <label className="select-all-container">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))}
+                                            onChange={handleSelectAllToggle}
+                                            className="select-all-checkbox"
+                                        />
+                                        Add all saved whale sharks
+                                    </label>
+                                </div>
+                                <div className="selected-sharks-list">
+                                    {selectedSharksForLab.size > 0 
+                                        ? Array.from(selectedSharksForLab).join(', ') 
+                                        : 'None in lab'
+                                    }
+                                </div>
+                            </div>
+
                             <DataOverview 
                                 dataset={selectedSharksDataset}
                                 filterField="Summary"
