@@ -1,4 +1,5 @@
 import { parseSpecificRegion, getDate } from './DataUtils.js';
+import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
 
 
 function extractCountry(shark) {
@@ -137,6 +138,55 @@ export function createSummaryDataset(selectedSharks, allSharksData = []) {
         'Year Range': yearsArray.length > 0 ? Math.max(...yearsArray) - Math.min(...yearsArray) + 1 : 0,
         'Top 3 Publishing Countries': top3Publishing || 'Unknown'
     }];
+}
+
+// Create calendar heatmap data from selected sharks using coordinate data
+export function createCalendarHeatmapData(selectedSharkIds, allSharksData = []) {
+    if (!selectedSharkIds || selectedSharkIds.length === 0) {
+        return [];
+    }
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+    // Map to count occurrences by year-month
+    const yearMonthCounts = new Map();
+    
+    // Convert selectedSharkIds to array if it's a set
+    const sharkIdsArray = Array.isArray(selectedSharkIds) ? selectedSharkIds : Array.from(selectedSharkIds);
+    
+    sharkIdsArray.forEach(sharkId => {
+        const sharkCoordData = coordinatesData.find(shark => shark.whaleSharkID === sharkId);
+        
+        if (sharkCoordData && sharkCoordData.coordinates) {
+            // Process each coordinate/occurrence for given shark
+            sharkCoordData.coordinates.forEach(coord => {
+                if (coord.eventDate) {
+                    const date = new Date(coord.eventDate);
+                    if (!isNaN(date.getTime())) {
+                        const year = date.getFullYear();
+                        const month = months[date.getMonth()];
+                        const key = `${year}-${month}`;
+                        
+                        yearMonthCounts.set(key, (yearMonthCounts.get(key) || 0) + 1);
+                    }
+                }
+            });
+        }
+    });
+    
+    // Convert map to heatmap format
+    const heatmapData = [];
+    for (const [key, count] of yearMonthCounts.entries()) {
+        const [year, month] = key.split('-');
+        heatmapData.push({
+            year: parseInt(year),
+            month: month,
+            value: count
+        });
+    }
+    
+    return heatmapData;
 }
 
 export default createSummaryDataset;

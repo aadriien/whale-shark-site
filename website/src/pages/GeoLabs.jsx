@@ -8,13 +8,15 @@ import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
 import SavedDisplay from "../components/SavedSharksDisplay.jsx";
 import DataOverview from "../components/charts/DataOverview.jsx";
+import Heatmap from "../components/charts/Heatmap.jsx";
+import ChartPlaceholder from "../components/charts/ChartPlaceholder.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
 
 import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
-import { createSummaryDataset } from "../utils/SelectedSharksData.js";
+import { createSummaryDataset, createCalendarHeatmapData } from "../utils/SelectedSharksData.js";
 
 
 function GeoLabs() {
@@ -78,6 +80,12 @@ function GeoLabs() {
 
         return createSummaryDataset(selectedSharks);
     }, [selectedSharksForLab, sharks]);
+    
+    // Create calendar heatmap data for selected sharks
+    const selectedSharksHeatmapData = useMemo(() => {
+        if (selectedSharksForLab.size === 0) return [];
+        return createCalendarHeatmapData(selectedSharksForLab);
+    }, [selectedSharksForLab]);
     
     useEffect(() => {
         if (!globeRef.current) return;
@@ -306,7 +314,7 @@ function GeoLabs() {
                         </div>
                     )}
                     
-                    {/* DataOverview in multi-shark mode, SharkInfoPanel in individual mode */}
+                    {/* DataOverview and Heatmap in multi-shark mode, SharkInfoPanel in individual mode */}
                     {viewMode === 'multiple' ? (
                         <div className="shark-info-panel">
                             <DataOverview 
@@ -330,6 +338,21 @@ function GeoLabs() {
                                     }
                                 ]}
                             />
+                            
+                            {/* Calendar heatmap */}
+                            <div className="heatmap-container" style={{ marginTop: '20px', height: '300px' }}>
+                                {selectedSharksForLab.size > 0 && selectedSharksHeatmapData.length > 0 ? (
+                                    <Heatmap 
+                                        data={selectedSharksHeatmapData}
+                                        title={`Occurrence Timeline — ${selectedSharksForLab.size} Selected Sharks`}
+                                    />
+                                ) : (
+                                    <ChartPlaceholder 
+                                        type="heatmap" 
+                                        message="Select sharks for lab to see occurrence timeline heatmap" 
+                                    />
+                                )}
+                            </div>
                         </div>
                     ) : (
                         <SharkInfoPanel shark={selectedShark} />
