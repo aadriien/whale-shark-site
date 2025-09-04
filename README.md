@@ -2,7 +2,7 @@
 
 May 2025 update.. this web app is now **LIVE**! Still a WIP, but feel free to start exploring!
 
-——>  **[https://aadriien.github.io/whale-shark-site](https://aadriien.github.io/whale-shark-site)**  <—— 
+——>  **[https://helloadrien.dev/whale-shark-site](https://aadriien.github.io/whale-shark-site)**  <—— 
 
 
 ## Description
@@ -66,9 +66,9 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 ### Computer Vision
 
-- **YOLOv8**: Ultralytics model for object detection — starting with COCO, & training model myself
+- **YOLOv8**: Ultralytics model for object detection — starting with COCO, & fine-tuning model 
 
-- **MiewID-msv3**: Hugging Face model to identify specific organism (who is this shark) — also training
+- **MiewID-msv3**: Hugging Face model to identify specific organism (who is this shark) 
 
 - Visit [computer-vision](./computer-vision/README.md) subfolder for additional details & acknowledgements!
 
@@ -124,6 +124,8 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 - **Functional scalability**: Efficient data storage and web organization for long-term expansion.
 
 - **Playful education**: Plenty to learn, but with exploration and engagement as the primary goal.
+
+- **Content segmentation**: Logical division of web zones for a cohesive user experience.
 
 
 ## Video Demos
