@@ -7,16 +7,13 @@ import StoryStepSlider from "../components/StoryStepSlider.jsx";
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
 import SavedDisplay from "../components/SavedSharksDisplay.jsx";
-import DataOverview from "../components/charts/DataOverview.jsx";
-import Heatmap from "../components/charts/Heatmap.jsx";
-import ChartPlaceholder from "../components/charts/ChartPlaceholder.jsx";
+import LabSelectionPanel from "../components/LabSelectionPanel.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
 
 import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
-import { createSummaryDataset, createCalendarHeatmapData } from "../utils/SelectedSharksData.js";
 
 
 function GeoLabs() {
@@ -70,22 +67,6 @@ function GeoLabs() {
     }, [selectedSharksForLab]);
     
     const sharks = mediaSharks;
-    
-    // Create dataset for selected sharks in lab
-    const selectedSharksDataset = useMemo(() => {
-        if (selectedSharksForLab.size === 0) return [];
-
-        const selectedIds = Array.from(selectedSharksForLab);
-        const selectedSharks = sharks.filter(shark => selectedIds.includes(shark.id));
-
-        return createSummaryDataset(selectedSharks);
-    }, [selectedSharksForLab, sharks]);
-    
-    // Create calendar heatmap data for selected sharks
-    const selectedSharksHeatmapData = useMemo(() => {
-        if (selectedSharksForLab.size === 0) return [];
-        return createCalendarHeatmapData(selectedSharksForLab);
-    }, [selectedSharksForLab]);
     
     useEffect(() => {
         if (!globeRef.current) return;
@@ -290,68 +271,14 @@ function GeoLabs() {
                         </div>
                     )}
                     
-                    {/* Data visuals in multi-shark mode, SharkInfoPanel in individual mode */}
                     {viewMode === 'multiple' ? (
                         <div className="shark-info-panel">
-
-                            {/* Selected whale sharks for lab */}
-                            <div className="multi-select-info">
-                                <div className="multi-select-header">
-                                    <h4>Selected for Lab ({selectedSharksForLab.size}):</h4>
-                                    <label className="select-all-container">
-                                        <input 
-                                            type="checkbox" 
-                                            checked={selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))}
-                                            onChange={handleSelectAllToggle}
-                                            className="select-all-checkbox"
-                                        />
-                                        Add all saved whale sharks
-                                    </label>
-                                </div>
-                                <div className="selected-sharks-list">
-                                    {selectedSharksForLab.size > 0 
-                                        ? Array.from(selectedSharksForLab).join(', ') 
-                                        : 'None in lab'
-                                    }
-                                </div>
-                            </div>
-
-                            <DataOverview 
-                                dataset={selectedSharksDataset}
-                                filterField="Summary"
-                                selectedFilter={
-                                    selectedSharksForLab.size > 0 
-                                    ? 
-                                    `${selectedSharksForLab.size} Selected Sharks` 
-                                    : 
-                                    ""
-                                }
-                                displayFields={[
-                                    { 
-                                        label: "Total Occurrences", 
-                                        field: "Total Occurrences" 
-                                    },
-                                    { 
-                                        label: "Top 3 Publishing Countries", 
-                                        field: "Top 3 Publishing Countries" 
-                                    }
-                                ]}
+                            <LabSelectionPanel 
+                                selectedSharksForLab={selectedSharksForLab}
+                                savedIds={savedIds}
+                                sharks={sharks}
+                                onSelectAllToggle={handleSelectAllToggle}
                             />
-                            
-                            {/* Calendar heatmap */}
-                            <div className="heatmap-container" style={{ marginTop: '20px', height: '300px' }}>
-                                {selectedSharksForLab.size > 0 && selectedSharksHeatmapData.length > 0 ? (
-                                    <Heatmap 
-                                        data={selectedSharksHeatmapData}
-                                        title={`Occurrence Timeline — ${selectedSharksForLab.size} Selected Sharks`}
-                                    />
-                                ) : (
-                                    <ChartPlaceholder 
-                                        type="heatmap" 
-                                        message="Select sharks for lab to see occurrence timeline heatmap" 
-                                    />
-                                )}
-                            </div>
                         </div>
                     ) : (
                         <SharkInfoPanel shark={selectedShark} />
