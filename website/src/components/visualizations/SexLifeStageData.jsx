@@ -115,7 +115,7 @@ const SexLifeStageData = ({
     // Determine appropriate title
     const chartTitle = title ||
         (sharks 
-            ? `Sex & Life Stage — ${sharks.length} Selected Sharks`
+            ? `Lab Sharks Life Stage & Sex`
             : `Sharks by Life Stage & Sex — ${selectedYear}`);
     
     return (
@@ -135,7 +135,7 @@ const SexLifeStageData = ({
                     sharks.length === 0 ? (
                         <ChartPlaceholder 
                             type="radialHeatmap" 
-                            message="Select sharks to see sex and life stage" 
+                            message="Add sharks for lifeStage and sex" 
                         />
                     ) : (
                         <p style={{ textAlign: "center" }}>
