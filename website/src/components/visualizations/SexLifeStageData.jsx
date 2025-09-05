@@ -3,8 +3,6 @@ import React, { useMemo } from "react";
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import RadialHeatmap from "../charts/RadialHeatmap.jsx";
 
-import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
-
 // Define Sex & Life Stage keys
 const sexOptions = ["Sex: Female", "Sex: Male", "Sex: Unknown"];
 const lifeStageOptions = {
@@ -41,10 +39,10 @@ const reshapeSexLifeStageData = (rawData, selectedYear) => {
 };
 
 
-const GBIFSexLifeStageOccurrences = ({ selectedYear }) => {
+const GBIFSexLifeStageOccurrences = ({ selectedYear, dataset }) => {
     const { ringsData, pieData } = useMemo(() => 
-        reshapeSexLifeStageData(calendarStatsGBIF, selectedYear),
-        [selectedYear]
+        reshapeSexLifeStageData(dataset, selectedYear),
+        [selectedYear, dataset]
     );
     
     return (

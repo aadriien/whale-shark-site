@@ -83,7 +83,7 @@ const GBIFCalendarOccurrences = ({ selectedYear, onChange }) => {
                 </div>
 
                 <div className="card-data-wrapper">
-                    <SexLifeStageData selectedYear={selectedYear} />
+                    <SexLifeStageData selectedYear={selectedYear} dataset={calendarStatsGBIF} />
                 </div>
             </DataGrid>
         </>
