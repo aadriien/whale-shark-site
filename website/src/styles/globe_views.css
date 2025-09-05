@@ -161,6 +161,14 @@
     gap: 0.25rem;
     padding-bottom: 1rem;
     margin-bottom: 0.5rem;
+
+    /* Hide scrollbar */
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+}
+
+.shark-filters::-webkit-scrollbar {
+    display: none; 
 }
 
 .filter-group {
@@ -277,6 +285,14 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     overflow-y: scroll;
+
+    /* Hide scrollbar */
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+}
+
+.shark-info-panel::-webkit-scrollbar {
+    display: none; 
 }
 
 .shark-info-panel,

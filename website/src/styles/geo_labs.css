@@ -48,7 +48,7 @@
 .story-controls-container {
     margin-bottom: 0.75rem;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
     background-color: #f8f9ff;
     overflow: visible; 
     transition: all 0.3s ease;
@@ -277,34 +277,33 @@
 
 .overview-container {
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Remove margin-top from data-overview-panel in GeoLabs context */
+.overview-container .data-overview-panel {
+    margin-top: 0;
+    border-radius: 12px;
 }
 
 .heatmap-container {
     width: 100%;
     height: 280px;
-    margin-top: 20px;
-    box-sizing: border-box;
-    padding: 0;
-    margin-left: 0;
-    margin-right: 0;
+    margin-top: 10px;
     background-color: white;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
 }
 
 .radial-heatmap-container {
     width: 100%;
     height: 260px;
-    margin-top: 20px;
-    box-sizing: border-box;
-    padding: 0;
-    margin-left: 0;
-    margin-right: 0;
+    margin-top: 10px;
     background-color: white;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
 }
 
