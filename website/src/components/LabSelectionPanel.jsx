@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 
+import ChartPlaceholder from './charts/ChartPlaceholder.jsx';
+
 import DataOverview from './charts/DataOverview.jsx';
 import Heatmap from './charts/Heatmap.jsx';
-import ChartPlaceholder from './charts/ChartPlaceholder.jsx';
+import SexLifeStageData from './visualizations/SexLifeStageData.jsx';
 
 import { createSummaryDataset, createCalendarHeatmapData } from '../utils/SelectedSharksData.js';
 
@@ -26,6 +28,12 @@ function LabSelectionPanel({
         if (selectedSharksForLab.size === 0) return [];
         return createCalendarHeatmapData(selectedSharksForLab);
     }, [selectedSharksForLab]);
+    
+    const selectedSharks = useMemo(() => {
+        if (selectedSharksForLab.size === 0) return [];
+        const selectedIds = Array.from(selectedSharksForLab);
+        return sharks.filter(shark => selectedIds.includes(shark.id));
+    }, [selectedSharksForLab, sharks]);
 
     return (
         <>
@@ -87,6 +95,12 @@ function LabSelectionPanel({
                         message="Add sharks to lab for heatmap" 
                     />
                 )}
+            </div>
+            
+            <div className="radial-heatmap-container">
+                <SexLifeStageData 
+                    sharks={selectedSharks}
+                />
             </div>
         </>
     );
