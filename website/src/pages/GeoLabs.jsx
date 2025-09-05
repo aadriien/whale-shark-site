@@ -97,7 +97,8 @@ function GeoLabs() {
                 // Show only selected lab sharks
                 addPointsData(globeInstance, selectedLabPointsData);
                 setAllSharksVisible(true);
-            } else {
+            } 
+            else {
                 // No lab sharks selected, show all saved sharks (default state)
                 addPointsData(globeInstance, pointsData);
                 setAllSharksVisible(true);
@@ -171,7 +172,8 @@ function GeoLabs() {
                     addPointsData(globeInstance, coordinates);
                 }
             }
-        } else {
+        } 
+        else {
             // Enter step mode
             setIsStepMode(true);
             setCurrentStepIndex(0);
@@ -197,7 +199,8 @@ function GeoLabs() {
         if (selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))) {
             // All saved sharks are selected, so clear selection
             setSelectedSharksForLab(new Set());
-        } else {
+        } 
+        else {
             // Not all saved sharks are selected, so select all
             setSelectedSharksForLab(new Set(savedIds));
         }
