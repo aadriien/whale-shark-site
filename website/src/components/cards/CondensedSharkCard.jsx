@@ -126,3 +126,4 @@ const CondensedSharkCard = ({ shark }) => {
 };
 
 export default CondensedSharkCard;
+

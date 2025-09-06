@@ -5,7 +5,7 @@ import {
 } from "../../utils/DataUtils.js";
 
 import FavoriteButton from "../controls/FavoriteButton.jsx";
-import SharkMediaGallery from "../SharkMediaGallery.jsx";
+import SharkMediaGallery from "../cards/SharkMediaGallery.jsx";
 
 
 const SharkInfoPanel = ({ shark }) => {

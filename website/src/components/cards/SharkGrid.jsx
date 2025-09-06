@@ -1,4 +1,5 @@
-import SharkCard from "./SharkCard";
+import SharkCard from "./SharkCard.jsx";
+
 
 const SharkGrid = ({ sharks, onPlayStory, isPlaying, playingSharkId }) => {
     return (

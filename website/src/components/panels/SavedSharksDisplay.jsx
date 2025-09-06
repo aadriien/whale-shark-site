@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-import SharkBanner from "../logbooks/SharkBanner.jsx";
+import SharkBanner from "../cards/SharkBanner.jsx";
 import { getFavorites } from "../../utils/FavoritesUtils.js";
 
 

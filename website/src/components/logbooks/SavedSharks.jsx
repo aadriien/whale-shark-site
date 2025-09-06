@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import CondensedSharkCard from "./CondensedSharkCard";
+import CondensedSharkCard from "../cards/CondensedSharkCard.jsx";
 import { mediaSharks } from "../../utils/DataUtils.js";
 
 

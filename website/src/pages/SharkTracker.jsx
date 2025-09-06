@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 import Globe from "../components/Globe.jsx";
-import SharkGrid from "../components/SharkGrid.jsx";
+import SharkGrid from "../components/cards/SharkGrid.jsx";
 
 import { storySharks } from "../utils/DataUtils.js";
 
