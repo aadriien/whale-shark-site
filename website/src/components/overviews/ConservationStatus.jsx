@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+
 const speciesName = "rhincodon typus";
 
 const urlBase = `https://api.gbif.org/v1/species`;

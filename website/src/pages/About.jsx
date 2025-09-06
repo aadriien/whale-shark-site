@@ -1,5 +1,3 @@
-import "../styles/about.css";
-
 import HeroIntro from "../components/overviews/HeroIntro.jsx";
 import HabitatMap from "../components/overviews/HabitatMap.jsx";
 import FunFacts from "../components/overviews/FunFacts.jsx";

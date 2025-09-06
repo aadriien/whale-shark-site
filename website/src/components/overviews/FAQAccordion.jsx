@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 const faqs = [
     { 
         question: "Are whale sharks dangerous?", 

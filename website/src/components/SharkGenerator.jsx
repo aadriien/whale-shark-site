@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 import { getNames } from "country-list";
 
 import { fetchImageLLM } from "../utils/LLMUtils.jsx";
+
 
 // Populate list of all countries from "country-list" npm package
 const countries = getNames();
