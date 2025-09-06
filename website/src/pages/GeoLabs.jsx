@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import Globe from "../components/Globe.jsx";
 import PlayStoryButton from "../components/PlayStoryButton.jsx";
 import StoryStepSlider from "../components/StoryStepSlider.jsx";
+import TimelineControls from "../components/TimelineControls.jsx";
 
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";
@@ -12,7 +13,11 @@ import LabSelectionPanel from "../components/LabSelectionPanel.jsx";
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
 
-import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils.js";
+import { 
+    getGroupCoordinates, 
+    getSharkCoordinates, 
+    getGroupCoordinatesByTimeline 
+} from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
 
 
@@ -30,6 +35,11 @@ function GeoLabs() {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [currentPoint, setCurrentPoint] = useState(null);
     const globeRef = useRef();
+    
+    // Timeline mode functionality
+    const [isTimelineMode, setIsTimelineMode] = useState(false);
+    const [selectedMonth, setSelectedMonth] = useState(null);
+    const [selectedYear, setSelectedYear] = useState(null);
 
     // Update saved IDs when favorites change
     useEffect(() => {
@@ -63,8 +73,15 @@ function GeoLabs() {
         const labSharkIds = Array.from(selectedSharksForLab);
 
         console.log('Plotting selected lab sharks on globe:', labSharkIds);
+        
+        // Use timeline filtering if timeline mode active
+        if (isTimelineMode && selectedMonth && selectedYear) {
+            return getGroupCoordinatesByTimeline(labSharkIds, selectedMonth, selectedYear);
+        }
+        
         return getGroupCoordinates(labSharkIds);
-    }, [selectedSharksForLab]);
+    }, [selectedSharksForLab, isTimelineMode, selectedMonth, selectedYear]);
+    
     
     const sharks = mediaSharks;
     
@@ -76,6 +93,12 @@ function GeoLabs() {
         
         // Nothing plotted during step mode 
         if (isStepMode) {
+            setAllSharksVisible(false);
+            return;
+        }
+        
+        // Nothing plotted during timeline mode initially 
+        if (isTimelineMode) {
             setAllSharksVisible(false);
             return;
         }
@@ -223,6 +246,13 @@ function GeoLabs() {
             }
         }
         
+        // Exit timeline mode if active
+        if (isTimelineMode) {
+            setIsTimelineMode(false);
+            setSelectedMonth(null);
+            setSelectedYear(null);
+        }
+        
         // Clear globe & reset to default state
         if (globeRef.current) {
             const globeInstance = globeRef.current.getGlobe();
@@ -233,6 +263,45 @@ function GeoLabs() {
         // Switch mode
         setViewMode(prev => prev === 'individual' ? 'multiple' : 'individual');
     };
+    
+    const handleToggleTimelineMode = () => {
+        if (isTimelineMode) {
+            // Exit timeline mode
+            setIsTimelineMode(false);
+            setSelectedMonth(null);
+            setSelectedYear(null);
+        } 
+        else {
+            // Enter timeline mode
+            setIsTimelineMode(true);
+        }
+    };
+    
+    const handleTimelineChange = useCallback((month, year) => {
+        setSelectedMonth(month);
+        setSelectedYear(year);
+        console.log(`Timeline changed to: ${month}/${year}`);
+        
+        // Show filtered timeline data on globe
+        if (globeRef.current && month && year) {
+            const globeInstance = globeRef.current.getGlobe();
+            clearAllData(globeInstance);
+            
+            const savedSharkIds = getSavedSharkIds();
+            let dataToShow;
+            
+            if (selectedSharksForLab.size > 0) {
+                // Show selected lab sharks with timeline filtering
+                dataToShow = getGroupCoordinatesByTimeline(Array.from(selectedSharksForLab), month, year);
+            } 
+            else {
+                // Show all saved sharks with timeline filtering
+                dataToShow = getGroupCoordinatesByTimeline(savedSharkIds, month, year);
+            }
+            
+            addPointsData(globeInstance, dataToShow);
+        }
+    }, [selectedSharksForLab]);
     
     
     return (
@@ -272,6 +341,16 @@ function GeoLabs() {
                                 isVisible={isStepMode}
                             />
                         </div>
+                    )}
+                    
+                    {/* Timeline Mode Controls shown in multiple view */}
+                    {viewMode === 'multiple' && (
+                        <TimelineControls 
+                            globeRef={globeRef}
+                            selectedSharksForLab={selectedSharksForLab}
+                            onToggleTimelineMode={handleToggleTimelineMode}
+                            isTimelineMode={isTimelineMode}
+                        />
                     )}
                     
                     {viewMode === 'multiple' ? (
@@ -338,7 +417,7 @@ function GeoLabs() {
                                 onSelect={viewMode === 'multiple' ? null : props.onSelect} 
                             />
                         )}
-                        disabled={isStepMode} // Disable selector while in step mode
+                        disabled={isStepMode || isTimelineMode} // Disable selector while in step or timeline mode
                     />
                 </div>
 

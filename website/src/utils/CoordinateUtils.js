@@ -65,3 +65,44 @@ export function getSharkCoordinates(sharkID) {
     return getCoordinates(sharkDict);
 };
 
+
+// Filter coordinates by month & year
+export function filterCoordinatesByDate(coordinates, month, year) {
+    if (!coordinates || coordinates.length === 0) return [];
+    
+    return coordinates.filter(coord => {
+        if (!coord.date) return false;
+        
+        const coordDate = new Date(coord.date);
+        if (isNaN(coordDate.getTime())) return false;
+        
+        const coordMonth = coordDate.getMonth() + 1; // getMonth() returns 0-11
+        const coordYear = coordDate.getFullYear();
+        
+        return coordMonth === month && coordYear === year;
+    });
+}
+
+
+// Get group coordinates filtered by timeline
+export function getGroupCoordinatesByTimeline(allSharkIDs, month, year) {
+    if (!allSharkIDs) return [];
+    
+    let groupResult = [];
+    const limitResults = 300;
+
+    coordinatesData.forEach(sharkDict => {
+        if (allSharkIDs.includes(sharkDict.whaleSharkID)) {
+            let currResult = getCoordinates(sharkDict, limitResults);
+            
+            // Filter by timeline if month & year provided
+            if (month && year) {
+                currResult = filterCoordinatesByDate(currResult, month, year);
+            }
+            
+            groupResult.push(...currResult);
+        }
+    });
+    return groupResult;
+}
+
