@@ -1,4 +1,4 @@
-import SharkAnimation from "../components/SharkAnimation.jsx";
+import SharkAnimation from "../components/animations/SharkAnimation.jsx";
 
 function Animation() {
     return (

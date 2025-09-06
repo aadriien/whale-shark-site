@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import SharkModelPoints3D from "../assets/data/json/shark_model_extracted_points_3d.json";
+import SharkModelPoints3D from "../../assets/data/json/shark_model_extracted_points_3d.json";
 
 
 function computeWave(basePositions, time, wavelength, speed) {

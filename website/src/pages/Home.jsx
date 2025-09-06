@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import ExtractPointsOnce from "../utils/ModelUtils.jsx";
-import GalacticOcean from "../components/GalacticOcean.jsx";
+import GalacticOcean from "../components/animations/GalacticOcean.jsx";
 
 
 function Home() {
