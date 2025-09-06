@@ -4,7 +4,7 @@ import {
     parseRemarks, 
 } from "../utils/DataUtils.js";
 
-import FavoriteButton from "./FavoriteButton.jsx";
+import FavoriteButton from "./controls/FavoriteButton.jsx";
 import SharkMediaGallery from "./SharkMediaGallery.jsx";
 
 

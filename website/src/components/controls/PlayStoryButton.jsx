@@ -23,7 +23,7 @@ const PlayStoryButton = ({
                         "Exit Story Mode"
                     ) : (
                         <>
-                        Step Through <strong>{shark.name || shark.id}</strong>'s Story
+                            Step Through <strong>{shark.name || shark.id}</strong>'s Story
                         </>
                     )}
                 </button>
@@ -49,7 +49,7 @@ const PlayStoryButton = ({
                     "Story in Progress..."
                 ) : (
                     <>
-                    Play <strong>{shark.name || shark.id}</strong>'s Story
+                        Play <strong>{shark.name || shark.id}</strong>'s Story
                     </>
                 )}
             </button>

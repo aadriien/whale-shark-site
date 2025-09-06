@@ -1,5 +1,6 @@
 import SharkAnimation from "../components/animations/SharkAnimation.jsx";
 
+
 function Animation() {
     return (
         <div className="animation-wrapper">

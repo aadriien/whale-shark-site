@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { toggleFavorite, isFavorite } from "../utils/FavoritesUtils.js";
+import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils.js";
 
 
 const FavoriteButton = ({ sharkId, className = "favorite-button" }) => {

@@ -3,9 +3,9 @@ import React, { useState, useCallback } from "react";
 import TimelineButton from "./TimelineButton.jsx";
 import TimelineSelector from "./TimelineSelector.jsx";
 
-import { getGroupCoordinatesByTimeline } from "../utils/CoordinateUtils.js";
-import { getSavedSharkIds } from "../utils/FavoritesUtils.js";
-import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
+import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils.js";
+import { getSavedSharkIds } from "../../utils/FavoritesUtils.js";
+import { addPointsData, clearAllData } from "../../utils/GlobeUtils.js";
 
 
 const TimelineControls = ({ 

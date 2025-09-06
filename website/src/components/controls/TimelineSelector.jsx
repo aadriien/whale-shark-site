@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
+import coordinatesData from '../../assets/data/json/gbif_shark_tracking.json';
 
 
 const TimelineSelector = ({ 

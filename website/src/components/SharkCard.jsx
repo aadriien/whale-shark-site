@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import FavoriteButton from "./FavoriteButton.jsx";
-import PlayStoryButton from "./PlayStoryButton.jsx";
+import FavoriteButton from "./controls/FavoriteButton.jsx";
+import PlayStoryButton from "./controls/PlayStoryButton.jsx";
 
 
 const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {

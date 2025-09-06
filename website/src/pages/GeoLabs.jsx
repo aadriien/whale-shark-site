@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 
 import Globe from "../components/Globe.jsx";
-import PlayStoryButton from "../components/PlayStoryButton.jsx";
-import StoryStepSlider from "../components/StoryStepSlider.jsx";
-import TimelineControls from "../components/TimelineControls.jsx";
+import PlayStoryButton from "../components/controls/PlayStoryButton.jsx";
+import StoryStepSlider from "../components/controls/StoryStepSlider.jsx";
+import TimelineControls from "../components/controls/TimelineControls.jsx";
 
 import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
 import SharkSelector from "../components/SharkSelector.jsx";

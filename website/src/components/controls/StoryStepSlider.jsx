@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getSharkCoordinates } from "../utils/CoordinateUtils.js";
+import { getSharkCoordinates } from "../../utils/CoordinateUtils.js";
 
 
 const StoryStepSlider = ({ shark, onStepChange, currentStepIndex, isVisible }) => {
