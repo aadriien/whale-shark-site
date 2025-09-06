@@ -2,10 +2,10 @@ import {
     getDate, 
     parseSpecificRegion, 
     parseRemarks, 
-} from "../utils/DataUtils.js";
+} from "../../utils/DataUtils.js";
 
-import FavoriteButton from "./controls/FavoriteButton.jsx";
-import SharkMediaGallery from "./SharkMediaGallery.jsx";
+import FavoriteButton from "../controls/FavoriteButton.jsx";
+import SharkMediaGallery from "../SharkMediaGallery.jsx";
 
 
 const SharkInfoPanel = ({ shark }) => {

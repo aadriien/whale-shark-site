@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 
 import Globe from "../components/Globe.jsx";
-import SharkInfoPanel from "../components/SharkInfoPanel.jsx";
-import SharkSelector from "../components/SharkSelector.jsx";
-import ContinentDisplay from "../components/ContinentSharksDisplay.jsx";
+import SharkInfoPanel from "../components/panels/SharkInfoPanel.jsx";
+import SharkSelector from "../components/panels/SharkSelector.jsx";
+import ContinentDisplay from "../components/panels/ContinentSharksDisplay.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getAllCoordinates } from "../utils/CoordinateUtils.js";

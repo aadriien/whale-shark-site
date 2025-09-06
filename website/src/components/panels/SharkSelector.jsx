@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import SharkFilter from "./SharkFilter.jsx";
-import { filterSharks, extractUniqueSortedRegions } from "../utils/FilterSharks.jsx";
+import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks.jsx";
 
 
 function SharkSelector({ sharks, onReset, onSelect, selectedSharkId, DisplayComponent, disabled = false }) {

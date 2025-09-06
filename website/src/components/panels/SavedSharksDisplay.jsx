@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-import SharkBanner from "./logbooks/SharkBanner.jsx";
-import { getFavorites, clearFavorites, getSavedSharks } from "../utils/FavoritesUtils.js";
+import SharkBanner from "../logbooks/SharkBanner.jsx";
+import { getFavorites } from "../../utils/FavoritesUtils.js";
 
 
 function SavedSharksDisplay({ 
@@ -49,7 +49,8 @@ function SavedSharksDisplay({
         if (viewMode === 'multiple') {
             // In multi-select mode, toggle selection for lab
             handleLabToggle(shark.id);
-        } else {
+        } 
+        else {
             // In individual mode, select for viewing in info panel
             if (onSelect) {
                 onSelect(shark.id);
@@ -62,7 +63,8 @@ function SavedSharksDisplay({
             const newSelection = new Set(selectedSharksForLab);
             if (newSelection.has(sharkId)) {
                 newSelection.delete(sharkId);
-            } else {
+            } 
+            else {
                 newSelection.add(sharkId);
             }
             onLabSelectionChange(newSelection);

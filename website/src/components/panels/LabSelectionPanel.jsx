@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
-import ChartPlaceholder from './charts/ChartPlaceholder.jsx';
+import ChartPlaceholder from '../charts/ChartPlaceholder.jsx';
 
-import DataOverview from './charts/DataOverview.jsx';
-import Heatmap from './charts/Heatmap.jsx';
-import SexLifeStageData from './visualizations/SexLifeStageData.jsx';
+import DataOverview from '../charts/DataOverview.jsx';
+import Heatmap from '../charts/Heatmap.jsx';
+import SexLifeStageData from '../visualizations/SexLifeStageData.jsx';
 
-import { createSummaryDataset, createCalendarHeatmapData } from '../utils/SelectedSharksData.js';
+import { createSummaryDataset, createCalendarHeatmapData } from '../../utils/SelectedSharksData.js';
 
 
 function LabSelectionPanel({ 

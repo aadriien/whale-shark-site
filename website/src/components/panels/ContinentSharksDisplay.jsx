@@ -4,7 +4,7 @@ import {
     extractContinents, 
     getCountryCode, 
     parseSpecificRegion 
-} from "../utils/DataUtils.js";
+} from "../../utils/DataUtils.js";
 
 
 const VALID_CONTINENTS = new Set([
