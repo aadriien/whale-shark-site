@@ -17,12 +17,14 @@ const TimelineControls = ({
 }) => {
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
+    const [plottedCoordinates, setPlottedCoordinates] = useState([]);
 
     const handleToggleTimelineMode = () => {
         if (isTimelineMode) {
             // Exit timeline mode
             setSelectedMonth(null);
             setSelectedYear(null);
+            setPlottedCoordinates([]);
         }
         onToggleTimelineMode();
         onTimelineStateChange?.(false);
@@ -50,6 +52,8 @@ const TimelineControls = ({
                 dataToShow = getGroupCoordinatesByTimeline(savedSharkIds, month, year);
             }
             
+            // Store plotted coordinates for display in TimelineSelector
+            setPlottedCoordinates(dataToShow);
             addPointsData(globeInstance, dataToShow);
         }
     }, [globeRef, selectedSharksForLab]);
@@ -77,6 +81,7 @@ const TimelineControls = ({
                 currentYear={selectedYear}
                 isVisible={isTimelineMode}
                 availableSharks={getAvailableSharks()}
+                plottedCoordinates={plottedCoordinates}
             />
         </div>
     );

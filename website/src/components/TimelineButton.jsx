@@ -17,7 +17,7 @@ const TimelineButton = ({
                     "Exit Timeline Mode"
                 ) : (
                     <>
-                        Filter by <strong>Timeline</strong>
+                        Explore Shark Data <strong>Timeline</strong>
                     </>
                 )}
             </button>

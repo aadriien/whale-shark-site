@@ -6,7 +6,8 @@ const TimelineSelector = ({
     onTimelineChange, 
     currentMonth, currentYear, 
     isVisible, 
-    availableSharks = [] 
+    availableSharks = [],
+    plottedCoordinates = []
 }) => {
     // Get all available month-year combinations from sharks in lab
     const getAvailableMonthYears = () => {
@@ -64,6 +65,22 @@ const TimelineSelector = ({
     };
     
     const currentMonthYear = getCurrentMonthYear(sliderIndex);
+    
+    // Extract unique shark IDs from plotted coordinates
+    const plottedSharkIds = useMemo(() => {
+        if (!plottedCoordinates || plottedCoordinates.length === 0) return [];
+        
+        const sharkIds = new Set();
+        plottedCoordinates.forEach(coord => {
+            if (coord.id) {
+                // Extract shark ID from coordinate ID (format: "sharkID-lat-lng")
+                const sharkId = coord.id.split('-')[0];
+                sharkIds.add(sharkId);
+            }
+        });
+        
+        return Array.from(sharkIds).sort((a, b) => a.localeCompare(b));
+    }, [plottedCoordinates]);
 
     useEffect(() => {
         if (isVisible && availableMonthYears.length > 0) {
@@ -96,9 +113,8 @@ const TimelineSelector = ({
 
     return (
         <div className="timeline-selector-container">
-            <div className="timeline-controls">
-                <h4>Timeline Filter</h4>
-                
+            <div className="timeline-controls"> 
+
                 <div className="timeline-navigation">
                     <button 
                         className="timeline-nav-button" 
@@ -135,8 +151,25 @@ const TimelineSelector = ({
                 </div>
                 
                 <div className="timeline-info">
-                    Showing coordinates from {months[currentMonthYear.month - 1]} {currentMonthYear.year}
+                    Showing map data from {months[currentMonthYear.month - 1]} {currentMonthYear.year}
                 </div>
+                
+                {/* Display plotted shark IDs */}
+                {plottedSharkIds.length > 0 && (
+                    <div className="timeline-sharks-display">
+                        <div className="sharks-list-title">
+                            Plotting {plottedSharkIds.length} whale shark{plottedSharkIds.length !== 1 ? 's' : ''}:
+                        </div>
+                        <div className="sharks-list">
+                            {plottedSharkIds.map(sharkId => (
+                                <span key={sharkId} className="timeline-shark-id">
+                                    {sharkId}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
             </div>
         </div>
     );

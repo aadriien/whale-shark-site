@@ -367,14 +367,6 @@
     overflow: visible;
 }
 
-.timeline-controls h4 {
-    margin: 0 0 1rem 0;
-    font-size: 0.9rem;
-    color: #555;
-    font-weight: 600;
-    text-align: center;
-}
-
 .timeline-navigation {
     display: flex;
     align-items: center;
@@ -479,5 +471,31 @@
     font-size: 0.85rem;
     text-align: center;
     font-style: italic;
+}
+
+/* Timeline Shark IDs display */
+.timeline-sharks-display {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.sharks-list-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.sharks-list {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.timeline-shark-id {
+    margin-right: 0.5rem;
 }
 
