@@ -21,7 +21,7 @@ function ResearchReef() {
             path: "/research/geolabs",
             title: "Geo Labs",
             description: "Experiment with favorited sharks and map their connections.",
-            image: "./globe-views.png",
+            image: "./geo-labs.png",
         },
         {
             path: "/research/datavisuals",
