@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import PageOverview from "./logbooks/PageOverview.jsx";
@@ -9,8 +9,7 @@ import SavedSharks from "./logbooks/SavedSharks.jsx";
 import { pageMap } from "./logbooks/LogbookContent.js";
 
 
-function Logbook() {
-    const [isOpen, setIsOpen] = useState(false);
+function Logbook({ isLogbookOpen, setIsLogbookOpen }) {
     const [activeSection, setActiveSection] = useState("overview");
 
     // Figure out which page user is on & update logbook display
@@ -28,16 +27,11 @@ function Logbook() {
     };
 
 
-    useEffect(() => {
-        const toggle = () => setIsOpen((prev) => !prev);
-        window.addEventListener("toggleLogbook", toggle);
-        return () => window.removeEventListener("toggleLogbook", toggle);
-    }, []);
 
     return (
         <>
             {/* This part is invisible when closed */}
-            {isOpen && (
+            {isLogbookOpen && (
                 <div className="logbook-container">
                     <div className="logbook-inner">
 
@@ -45,7 +39,7 @@ function Logbook() {
                             {/* Add id to h2 elem for aria-label accessibility  */}
                             <h2 id="logbook-title" className="logbook-title">Shark Helper Logbook</h2>
                             <button
-                                onClick={() => setIsOpen(false)}
+                                onClick={() => setIsLogbookOpen(false)}
                                 className="logbook-close-button"
                                 aria-label="Close Logbook"
                                 type="button"

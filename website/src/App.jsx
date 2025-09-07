@@ -1,5 +1,5 @@
+import { Suspense, lazy, useState } from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
-import { Suspense, lazy } from "react";
 
 import Navbar from "./components/Navbar.jsx";
 import Logbook from "./components/HelperLogbook.jsx";
@@ -21,14 +21,22 @@ const Animation = lazy(() => import("./pages/Animation.jsx"));
 
 
 function App() {
+    const [isLogbookOpen, setIsLogbookOpen] = useState(false);
+
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <HashRouter>
                 {/* Navbar outside Routes so it's always shown on pages */}
-                <Navbar />
+                <Navbar 
+                    isLogbookOpen={isLogbookOpen}
+                    setIsLogbookOpen={setIsLogbookOpen}
+                />
 
                 {/* Logbook overlay (always there but conditionally rendered) */}
-                <Logbook />
+                <Logbook 
+                    isLogbookOpen={isLogbookOpen}
+                    setIsLogbookOpen={setIsLogbookOpen}
+                />
 
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />
