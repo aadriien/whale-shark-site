@@ -6,7 +6,6 @@ import { mediaSharks } from "../../utils/DataUtils.js";
 
 const STORAGE_KEY = "savedSharks";
 
-
 function RetrieveSharks(saved) {
     if (!saved || saved.size === 0) return [];
     
@@ -47,8 +46,15 @@ function SavedSharks () {
 
     // Allow user to reset saved whale sharks
     const clearSaved = () => {
-        localStorage.removeItem(STORAGE_KEY);
-        setSaved(new Set());
+        const isConfirmed = confirm("STOP! WAIT!\n\nAre you sure you want to erase all of your saved whale sharks? This cannot be undone.");
+        const isConfirmedAgain = confirm("Seriously, last chance!");
+
+        if (isConfirmed) {
+            if (isConfirmedAgain) {
+                localStorage.removeItem(STORAGE_KEY);
+                setSaved(new Set());
+            }
+        }
     };
 
     return (
