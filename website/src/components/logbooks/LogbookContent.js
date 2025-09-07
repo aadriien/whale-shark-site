@@ -98,15 +98,15 @@ export const pageContent = {
         ]
     },
     geolabs: {
-        overview: "This is a storytelling experience where you can see the real movements over time of specific whale sharks!",
+        overview: "This is an interactive page that allows you to explore your favorite whale sharks in greater depth.",
         faqs: [
             { 
-                q: "Why are there cartoon images and funny names?", 
-                a: "None of these sharks have real-world images, since their data comes from satellite tracking. The cartoons and names are there to give them personality!" 
+                q: "What is the difference between single and multi shark view?", 
+                a: "The single viewer shows one shark in detail, with a story stepping feature. The multi viewer allows you to engage with many sharks, offering a timeline slider for the globe." 
             },
             { 
-                q: "Why are there only a handful of whale sharks here?", 
-                a: "These sharks have been highlighted because they have interesting and varied data. It can be difficult to find whale sharks with multiple records and known information." 
+                q: "Why am I not seeing much, and how many sharks do I need?", 
+                a: "To use this page, you must first save whale sharks via the gold star. You can then add as many of them to the lab as you want!" 
             }
         ]
     },
@@ -151,11 +151,11 @@ export const pageContent = {
         ]
     },
     animation: {
-        overview: "This is a swimming 3D model of a whale shark.",
+        overview: "This is a sandbox for creating your own custom swimming path for a 3D model of a whale shark.",
         faqs: [
             { 
-                q: "Why is the shark only moving back and forth right now?", 
-                a: "This site is a work in progress, and cool features take time! Stay tuned for more to come." 
+                q: "How do I interact with the objects on this page?", 
+                a: "Click and drag the spheres to move them around. Add new ones into the path, or otherwise delete existing ones. When you are ready, the shark will swim along the path you built!" 
             },
             { 
                 q: "Is there something familiar about this whale shark?", 
