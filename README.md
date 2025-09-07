@@ -2,7 +2,12 @@
 
 May 2025 update.. this web app is now **LIVE**! Still a WIP, but feel free to start exploring!
 
-——>  **[https://helloadrien.dev/whale-shark-site](https://aadriien.github.io/whale-shark-site)**  <—— 
+——>  **[https://thewhaleshark.org](https://thewhaleshark.org)**  <—— 
+
+*(site also accessible at [https://rhincodontypus.com](https://rhincodontypus.com))*
+
+
+Questions? Comments? Reach out to either **info@thewhaleshark.org** or **info@rhincodontypus.com**
 
 
 ## Description
