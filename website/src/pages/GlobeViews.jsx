@@ -6,26 +6,39 @@ import SharkSelector from "../components/panels/SharkSelector.jsx";
 import ContinentDisplay from "../components/panels/ContinentSharksDisplay.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
-import { getAllCoordinates } from "../utils/CoordinateUtils.js";
+import { getAllCoordinates, getGroupCoordinates } from "../utils/CoordinateUtils.js";
 import { mediaSharks } from "../utils/DataUtils.js";
 
 
 function GlobeViews() {
     const [selectedShark, setSelectedShark] = useState(null);
     const [allSharksVisible, setAllSharksVisible] = useState(true);
+    const [filteredSharks, setFilteredSharks] = useState(mediaSharks); // track filtered sharks
     const globeRef = useRef();
 
-    const pointsData = useMemo(() => getAllCoordinates(), []);
+    // Get coordinates for all sharks (fallback)
+    const allPointsData = useMemo(() => getAllCoordinates(), []);
+    
+    // Get coordinates for filtered sharks only
+    const filteredPointsData = useMemo(() => {
+        if (filteredSharks.length === mediaSharks.length) {
+            return allPointsData;
+        }
+        
+        // Extract IDs from filtered sharks
+        const filteredSharkIds = filteredSharks.map(shark => shark.id);
+        return getGroupCoordinates(filteredSharkIds);
+    }, [filteredSharks, allPointsData]);
     
     const sharks = mediaSharks;
     
     useEffect(() => {
-        // Show all sharks if nothing selected
+        // Show filtered sharks if nothing selected
         if (!selectedShark) {
             if (globeRef.current) {
                 const globeInstance = globeRef.current.getGlobe();
                 clearAllData(globeInstance);
-                addPointsData(globeInstance, pointsData);
+                addPointsData(globeInstance, filteredPointsData);
             }
             setAllSharksVisible(true);
         } 
@@ -38,16 +51,16 @@ function GlobeViews() {
             }
             setAllSharksVisible(false);
         }
-    }, [selectedShark]);
+    }, [selectedShark, filteredPointsData]);
     
-    // Initial setup to show all sharks on mount
+    // Initial setup to show sharks on mount
     useEffect(() => {
         if (globeRef.current) {
             const globeInstance = globeRef.current.getGlobe();
             clearAllData(globeInstance);
-            addPointsData(globeInstance, pointsData);
+            addPointsData(globeInstance, filteredPointsData);
         }
-    }, []);
+    }, [filteredPointsData]);
     
     // Handle shark selection from dropdown or globe click
     const handleSelectShark = (arg) => {
@@ -62,7 +75,7 @@ function GlobeViews() {
             console.log("Clicked at lat/lng:", lat, lng);
     
             const tolerance = 3.0;
-            const found = pointsData.find(s => {
+            const found = filteredPointsData.find(s => {
                 const dLat = Math.abs(s.lat - lat);
                 const dLng = Math.abs(s.lng - lng);
 
@@ -125,6 +138,7 @@ function GlobeViews() {
                         onReset={handleReset}
                         selectedSharkId={selectedShark ? selectedShark.id : null}
                         DisplayComponent={ContinentDisplay}
+                        onFilteredSharksChange={setFilteredSharks}
                     />
                 </div>
 

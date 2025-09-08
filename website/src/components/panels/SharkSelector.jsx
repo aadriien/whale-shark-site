@@ -10,7 +10,8 @@ function SharkSelector({
     onReset, onSelect, 
     selectedSharkId, 
     DisplayComponent, 
-    disabled = false 
+    disabled = false,
+    onFilteredSharksChange 
 }) {
     // Compute filter options from data
     const countries = extractUniqueSortedRegions(sharks, "countries");
@@ -59,6 +60,13 @@ function SharkSelector({
         console.log(`filterSharks result: ${result.length}/${sharks.length} sharks`);
         return result;
     }, [sharks, criteria]);
+    
+    // Notify parent of filtered sharks changes
+    React.useEffect(() => {
+        if (onFilteredSharksChange) {
+            onFilteredSharksChange(filteredSharks);
+        }
+    }, [filteredSharks, onFilteredSharksChange]);
 
     // Prepare filter options for SharkFilter component
     const filterOptions = {
