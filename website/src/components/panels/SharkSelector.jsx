@@ -44,9 +44,8 @@ function SharkSelector({
     const [showFilters, setShowFilters] = useState(true);
 
     const handleReset = () => {
-        // Reset filters & close all continent tabs 
+        // Reset filters (but keep toggle state) & close all continent tabs
         setCriteria(defaultCriteria);
-        setShowFilters(false);
 
         // Float cue back up to parent's reset
         if (onReset) onReset(); 
