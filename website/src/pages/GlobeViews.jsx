@@ -6,7 +6,8 @@ import SharkSelector from "../components/panels/SharkSelector.jsx";
 import ContinentDisplay from "../components/panels/ContinentSharksDisplay.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
-import { getAllCoordinates, getGroupCoordinates } from "../utils/CoordinateUtils.js";
+import { getGroupCoordinates } from "../utils/CoordinateUtils.js";
+import { useGlobeClick } from "../utils/GlobeClick.jsx";
 import { mediaSharks } from "../utils/DataUtils.js";
 
 
@@ -15,20 +16,13 @@ function GlobeViews() {
     const [allSharksVisible, setAllSharksVisible] = useState(true);
     const [filteredSharks, setFilteredSharks] = useState(mediaSharks); // track filtered sharks
     const globeRef = useRef();
-
-    // Get coordinates for all sharks (fallback)
-    const allPointsData = useMemo(() => getAllCoordinates(), []);
     
     // Get coordinates for filtered sharks only
     const filteredPointsData = useMemo(() => {
-        if (filteredSharks.length === mediaSharks.length) {
-            return allPointsData;
-        }
-        
-        // Extract IDs from filtered sharks
+        // Always use getGroupCoordinates to ensure consistency between sharks and coordinates
         const filteredSharkIds = filteredSharks.map(shark => shark.id);
         return getGroupCoordinates(filteredSharkIds);
-    }, [filteredSharks, allPointsData]);
+    }, [filteredSharks]);
     
     const sharks = mediaSharks;
     
@@ -62,47 +56,13 @@ function GlobeViews() {
         }
     }, [filteredPointsData]);
     
-    // Handle shark selection from dropdown or globe click
-    const handleSelectShark = (arg) => {
-        // Check if arg is object (from globe click) or string (from dropdown)
-        if (typeof arg === "object" && arg.lat !== undefined && arg.lng !== undefined) {
-            if (!allSharksVisible) {
-                console.log("Ignoring click because not all sharks are visible.");
-                return;
-            }
-            
-            const { lat, lng } = arg;
-            console.log("Clicked at lat/lng:", lat, lng);
-    
-            const tolerance = 3.0;
-            const found = filteredPointsData.find(s => {
-                const dLat = Math.abs(s.lat - lat);
-                const dLng = Math.abs(s.lng - lng);
-
-                return dLat < tolerance && dLng < tolerance;
-            });
-    
-            if (found) {
-                const cleanID = found.id.split("-")[0];
-                console.log("Matched shark:", found.id, " with ID: ", cleanID);
-
-                // Using "==" instead of "===" in case different types for ID
-                const foundShark = sharks.find(shark => shark.id == cleanID) || null;
-
-                console.log("Sending shark object:", foundShark);
-                setSelectedShark(foundShark);
-            } 
-            else {
-                console.log("No nearby shark found.");
-                setSelectedShark(null);
-            }
-        } 
-        else {
-            // Coming from dropdown (arg = sharkId or null)
-            const foundShark = sharks.find(shark => shark.id == arg) || null;
-            setSelectedShark(foundShark);
-        }
-    };
+    // Direct call to useGlobeClick (with filtered sharks)
+    const handleSelectShark = useGlobeClick({
+        sharks: filteredSharks,
+        pointsData: filteredPointsData, 
+        allSharksVisible: !selectedShark,
+        onSharkSelect: setSelectedShark
+    });
       
     const handleReset = () => {
         setSelectedShark(null);
