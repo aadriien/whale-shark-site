@@ -89,7 +89,7 @@ function GlobeViews() {
                 // Using "==" instead of "===" in case different types for ID
                 const foundShark = sharks.find(shark => shark.id == cleanID) || null;
 
-                console.log("Sending shark obect:", foundShark);
+                console.log("Sending shark object:", foundShark);
                 setSelectedShark(foundShark);
             } 
             else {

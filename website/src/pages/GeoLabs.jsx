@@ -12,6 +12,7 @@ import LabSelectionPanel from "../components/panels/LabSelectionPanel.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
+import { useGlobeClick } from "../utils/GlobeClick.jsx";
 
 import { 
     getGroupCoordinates, 
@@ -129,47 +130,13 @@ function GeoLabs() {
         }
     }, [viewMode, selectedShark, pointsData, selectedLabPointsData, isStepMode]);
     
-    // Handle shark selection from dropdown or globe click
-    const handleSelectShark = (arg) => {
-        // Check if arg is object (from globe click) or string (from dropdown)
-        if (typeof arg === "object" && arg.lat !== undefined && arg.lng !== undefined) {
-            if (!allSharksVisible) {
-                console.log("Ignoring click because not all sharks are visible.");
-                return;
-            }
-            
-            const { lat, lng } = arg;
-            console.log("Clicked at lat/lng:", lat, lng);
-            
-            const tolerance = 3.0;
-            const found = pointsData.find(s => {
-                const dLat = Math.abs(s.lat - lat);
-                const dLng = Math.abs(s.lng - lng);
-
-                return dLat < tolerance && dLng < tolerance;
-            });
-    
-            if (found) {
-                const cleanID = found.id.split("-")[0];
-                console.log("Matched shark:", found.id, " with ID: ", cleanID);
-
-                // Using "==" instead of "===" in case different types for ID
-                const foundShark = sharks.find(shark => shark.id == cleanID) || null;
-
-                console.log("Sending shark obect:", foundShark);
-                setSelectedShark(foundShark);
-            } 
-            else {
-                console.log("No nearby shark found.");
-                setSelectedShark(null);
-            }
-        } 
-        else {
-            // Coming from dropdown (arg = sharkId or null)
-            const foundShark = sharks.find(shark => shark.id == arg) || null;
-            setSelectedShark(foundShark);
-        }
-    };
+    // Leverage reusable globe click handler
+    const handleSelectShark = useGlobeClick({
+        sharks,
+        pointsData,
+        allSharksVisible,
+        onSharkSelect: setSelectedShark
+    });
       
     const handleReset = () => {
         setSelectedShark(null);
