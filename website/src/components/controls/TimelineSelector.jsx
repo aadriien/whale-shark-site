@@ -114,64 +114,57 @@ const TimelineSelector = ({
 
     return (
         <div className="timeline-selector-container">
-            <div className="timeline-controls"> 
-
-                <div className="timeline-navigation">
-                    <button 
-                        className="timeline-nav-button" 
-                        onClick={handlePrevMonth}
-                        disabled={!canGoPrev}
-                        title="Previous month"
-                    >
-                        ←
-                    </button>
-                    
-                    <div className="timeline-date-display">
-                        {months[currentMonthYear.month - 1]} {currentMonthYear.year}
-                    </div>
-                    
-                    <button 
-                        className="timeline-nav-button" 
-                        onClick={handleNextMonth}
-                        disabled={!canGoNext}
-                        title="Next month"
-                    >
-                        →
-                    </button>
+            <div className="timeline-navigation">
+                <button 
+                    className="timeline-nav-button" 
+                    onClick={handlePrevMonth}
+                    disabled={!canGoPrev}
+                    title="Previous month"
+                >
+                    ←
+                </button>
+                
+                <div className="timeline-date-display">
+                    {months[currentMonthYear.month - 1]} {currentMonthYear.year}
                 </div>
                 
-                <div className="timeline-slider-section">
-                    <input
-                        type="range"
-                        min="0"
-                        max={availableMonthYears.length - 1}
-                        value={sliderIndex}
-                        onChange={handleSliderChange}
-                        className="timeline-slider"
-                    />
-                </div>
-                
-                <div className="timeline-info">
-                    Showing map data from {months[currentMonthYear.month - 1]} {currentMonthYear.year}
-                </div>
-                
-                {/* Display plotted shark IDs */}
-                {plottedSharkIds.length > 0 && (
-                    <div className="timeline-sharks-display">
-                        <div className="sharks-list-title">
-                            Plotting {plottedSharkIds.length} whale shark{plottedSharkIds.length !== 1 ? 's' : ''}:
-                        </div>
-                        <div className="sharks-list">
-                            {plottedSharkIds.map(sharkId => (
-                                <span key={sharkId} className="timeline-shark-id">
-                                    {sharkId}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
+                <button 
+                    className="timeline-nav-button" 
+                    onClick={handleNextMonth}
+                    disabled={!canGoNext}
+                    title="Next month"
+                >
+                    →
+                </button>
             </div>
+            
+            <div className="timeline-slider-section">
+                <input
+                    type="range"
+                    min="0"
+                    max={availableMonthYears.length - 1}
+                    value={sliderIndex}
+                    onChange={handleSliderChange}
+                    className="timeline-slider"
+                />
+            </div>
+            
+            <div className="timeline-info">
+                Showing map data from {months[currentMonthYear.month - 1]} {currentMonthYear.year}
+            </div>
+            
+            {/* Display plotted shark IDs */}
+            {plottedSharkIds.length > 0 && (
+                <div className="timeline-sharks-display">
+                    <div className="sharks-list-title">
+                        Plotting {plottedSharkIds.length} whale shark{plottedSharkIds.length !== 1 ? 's' : ''}:
+                    </div>
+                    <div className="selected-sharks-list">
+                        {Array.from(plottedSharkIds).join(', ')}
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

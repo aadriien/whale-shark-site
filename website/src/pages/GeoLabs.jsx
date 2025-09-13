@@ -244,32 +244,6 @@ function GeoLabs() {
         }
     };
     
-    const handleTimelineChange = useCallback((month, year) => {
-        setSelectedMonth(month);
-        setSelectedYear(year);
-        console.log(`Timeline changed to: ${month}/${year}`);
-        
-        // Show filtered timeline data on globe
-        if (globeRef.current && month && year) {
-            const globeInstance = globeRef.current.getGlobe();
-            clearAllData(globeInstance);
-            
-            const savedSharkIds = getSavedSharkIds();
-            let dataToShow;
-            
-            if (selectedSharksForLab.size > 0) {
-                // Show selected lab sharks with timeline filtering
-                dataToShow = getGroupCoordinatesByTimeline(Array.from(selectedSharksForLab), month, year);
-            } 
-            else {
-                // Show all saved sharks with timeline filtering
-                dataToShow = getGroupCoordinatesByTimeline(savedSharkIds, month, year);
-            }
-            
-            addPointsData(globeInstance, dataToShow);
-        }
-    }, [selectedSharksForLab]);
-    
     
     return (
         <div className="page-content globeviews-wrapper">

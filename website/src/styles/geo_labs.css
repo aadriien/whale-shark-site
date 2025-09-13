@@ -241,13 +241,18 @@
 }
 
 .selected-sharks-list {
+    /* Don't participate in flex growth/shrink */
+    flex: none;
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    height: 2rem;
+
     font-family: monospace;
     background-color: white;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    height: 2rem;
-    max-width: 14rem;
     font-size: 0.9rem;
     line-height: 0.95rem;
 
@@ -255,6 +260,8 @@
     overflow-x: auto;
     overflow-y: hidden;
     box-sizing: border-box;
+
+    contain: layout size !important;
     
     /* Hide scrollbar */
     scrollbar-width: none; 
@@ -300,6 +307,7 @@
 
 /* Timeline Controls */
 .timeline-controls-container {
+    width: 100%;
     margin-bottom: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -348,13 +356,14 @@
 
 /* Timeline Selector */
 .timeline-selector-container {
+    width: 100%;
     padding: 1rem;
     border-radius: 0 0 8px 8px;
     border: 1px solid #ddd;
     background-color: #f8f9ff;
     border-top: none;
     min-height: auto;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .timeline-navigation {
@@ -465,9 +474,11 @@
 
 /* Timeline Shark IDs display */
 .timeline-sharks-display {
+    width: 100%;
     margin-top: 0.75rem;
     padding-top: 0.75rem;
     border-top: 1px solid #e0e0e0;
+    overflow: hidden;
 }
 
 .sharks-list-title {
@@ -476,16 +487,8 @@
     color: #555;
     margin-bottom: 0.5rem;
     text-align: center;
-}
-
-.sharks-list {
-    font-size: 0.8rem;
-    color: #666;
-    text-align: center;
-    line-height: 1.3;
-}
-
-.timeline-shark-id {
-    margin-right: 0.5rem;
+    flex: none; 
+    width: 100%;
+    box-sizing: border-box;
 }
 
