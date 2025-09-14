@@ -3,7 +3,7 @@
 POETRY = poetry
 VENV_DIR = .venv
 
-.PHONY: setup run \
+.PHONY: setup refresh_all_data \
 		fetch_data clean_data analyze_data \
 		convert_csv_json zip_data \
 		generate_shark_names_images generate_shark_names generate_shark_images \
@@ -12,7 +12,7 @@ VENV_DIR = .venv
 		format clean \
 		setup_website run_website deploy_website clean_website
 
-all: setup run zip_data
+all: setup refresh_all_data zip_data
 
 # Install Poetry dependencies & set up venv
 setup:
@@ -24,25 +24,21 @@ setup:
 		$(POETRY) install --no-root --quiet; \
 	fi
 
-# Run full pipeline (for now, just fetch & clean data)
-run: analyze_data
 
-# Fetch data from APIs (NOTE: returned data don't really "go" anywhere)
+# Run full ETL pipeline for latest data
+refresh_all_data: clean_data analyze_data convert_csv_json
+
+
+# Fetch data from API (NOTE: returned data don't really "go" anywhere)
 fetch_data:
-# 	@$(POETRY) run python -m src.fetch.nasa
-# 	@$(POETRY) run python -m src.fetch.copernicus
 	@$(POETRY) run python -m src.fetch.gbif
 
 # Clean, format, & organize raw data from queries
 clean_data:
-# 	@$(POETRY) run python -m src.clean.nasa
-# 	@$(POETRY) run python -m src.clean.copernicus
 	@$(POETRY) run python -m src.clean.gbif
 
 # Analyze cleaned data
 analyze_data:
-# 	@$(POETRY) run python -m src.analyze.nasa
-# 	@$(POETRY) run python -m src.analyze.copernicus
 	@$(POETRY) run python -m src.analyze.gbif
 
 

@@ -1,16 +1,16 @@
 year,Total Occurrences,Unique Sharks (with ID),Top 3 Publishing Countries,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,HUMAN_OBSERVATION,MACHINE_OBSERVATION,Sex: Female,Sex: Male,Sex: Unknown,Life Stage: Adult,Life Stage: Immature,Life Stage: Juvenile,Life Stage: Mature,Life Stage: Subadult,Life Stage: Unknown
-2025,76,74,United States > Australia > Mexico,9,9,6,14,9,12,11,6,0,0,0,0,76,0,1,1,74,8,0,0,0,0,68
-2024,185,181,United States > Australia > Mexico,15,14,17,13,9,23,25,25,8,13,6,17,185,0,5,1,179,6,0,10,0,0,169
-2023,162,158,United States > Mexico > Australia,7,5,16,17,7,16,22,26,19,10,12,5,162,0,1,2,159,13,0,14,0,0,135
+2025,86,84,United States > Australia > Mexico,9,9,6,14,9,14,13,12,0,0,0,0,86,0,1,1,84,9,0,0,0,0,77
+2024,186,182,United States > Australia > Mexico,15,14,17,14,9,23,25,25,8,13,6,17,186,0,5,1,180,6,0,10,0,0,170
+2023,164,160,United States > Mexico > Australia,7,5,16,17,7,16,22,26,19,11,13,5,164,0,1,2,161,14,0,14,0,0,136
 2022,105,90,United States > Mexico > Australia,4,8,9,11,3,7,9,8,12,10,15,9,105,0,3,0,102,6,0,5,0,0,94
-2021,76,53,United States > Australia > Mexico,5,4,5,14,6,4,8,7,2,8,4,9,71,1,4,2,70,8,0,8,0,0,60
+2021,77,54,United States > Australia > Mexico,5,4,5,14,6,4,8,8,2,8,4,9,72,1,4,2,71,9,0,8,0,0,60
 2020,77,68,United States > Mexico > Australia,11,13,14,0,1,3,7,7,5,11,4,1,75,0,4,1,72,4,0,4,0,0,69
-2019,139,111,United States > Mexico > Colombia,11,7,10,14,9,11,16,24,15,9,6,7,134,5,9,4,126,14,0,10,0,0,115
+2019,140,112,United States > Mexico > Colombia,11,7,10,15,9,11,16,24,15,9,6,7,135,5,9,4,127,15,0,10,0,0,115
 2018,209,90,United States > Netherlands > Australia,11,16,7,32,8,20,26,29,19,22,9,10,140,69,48,36,125,24,0,10,8,44,123
 2017,494,108,Australia > Ecuador > United States,143,14,53,18,21,12,89,32,53,21,28,10,153,337,65,159,270,10,6,8,12,8,450
-2016,1480,127,Ecuador > Australia > United States,175,91,47,17,16,43,18,24,298,285,339,127,128,1350,82,62,1336,16,2,10,8,2,1442
+2016,1481,128,Ecuador > Australia > United States,175,91,47,17,16,43,18,24,298,286,339,127,129,1350,82,62,1337,16,2,10,8,2,1443
 2015,1343,89,Ecuador > Australia > United States,26,4,6,8,3,33,265,224,264,235,104,171,116,1222,13,98,1232,7,2,22,6,0,1306
-2014,348,40,Ecuador > United States > United Kingdom,5,2,8,4,7,6,9,101,81,80,24,21,85,242,14,7,327,2,0,0,2,0,344
+2014,349,41,Ecuador > United States > United Kingdom,5,2,8,4,7,6,10,101,81,80,24,21,86,242,14,7,328,2,0,0,2,0,345
 2013,373,36,Australia > Ecuador > United States,8,7,3,45,76,47,76,27,7,62,10,5,59,294,5,60,308,6,0,0,3,23,341
 2012,151,46,Australia > United States > France,22,6,5,9,9,11,21,8,21,30,7,2,82,50,6,46,99,2,0,1,3,0,145
 2011,297,33,Australia > United States > Ecuador,13,9,16,8,1,21,42,12,38,56,64,17,49,209,6,188,103,10,0,10,1,0,276
