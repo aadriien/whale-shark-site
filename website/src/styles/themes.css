@@ -1,0 +1,166 @@
+/* ===== THEME SYSTEM - CSS CUSTOM PROPERTIES ===== */
+
+
+/* Light Theme (Default) */
+:root {
+    /* Primary Colors */
+    --primary-blue: #479bf5;
+    --primary-purple: #7e58f0;
+    --primary-teal: #a8e8ea;
+    --primary-green: #ccece5;
+    
+    /* Background Colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9f9f9;
+    --bg-tertiary: #f8f9ff;
+    --bg-quaternary: #f2f8fc;
+    --bg-overlay: rgba(0, 0, 0, 0.8);
+    
+    /* Surface Colors */
+    --surface-primary: #ffffff;
+    --surface-secondary: #f9fbfd;
+    --surface-tertiary: #e1effc;
+    --surface-quaternary: #d4e8f8;
+    
+    /* Text Colors */
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --text-tertiary: #555555;
+    --text-quaternary: #666666;
+    --text-muted: #999999;
+    --text-light: #aaaaaa;
+    
+    /* Accent Colors */
+    --accent-blue: #0066cc;
+    --accent-purple: #6b47d9;
+    --accent-dark-blue: #25417d;
+    --accent-navy: #063f8e;
+    
+    /* Border Colors */
+    --border-primary: #000000;
+    --border-secondary: #cccccc;
+    --border-tertiary: #dddddd;
+    --border-quaternary: #e0e0e0;
+    --border-light: #eeeeee;
+    
+    /* Status Colors */
+    --success: #4CAF50;
+    --info: #2196F3;
+    --warning: #FF9800;
+    --error: #f44336;
+    
+    /* Interactive Colors */
+    --hover-bg: #f5f5f5;
+    --active-bg: #e8f0ff;
+    --focus-ring: rgba(66, 153, 225, 0.5);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 4px 12px rgba(0, 0, 0, 0.2);
+    
+    /* Navbar Specific */
+    --navbar-bg: #041533;
+    --navbar-text: #ffffff;
+    --navbar-text-hover: #fff41dcb;
+    --navbar-text-active: #fff41d;
+    
+    /* Page Specific Colors */
+    --conservation-bg: #ffeaea;
+    --fact-card-bg: #e0f7ff;
+    
+    /* Globe and Map Specific */
+    --globe-glow: #FFD700;
+    --globe-points: rgba(255, 255, 0, 0.8);
+    --globe-rings: rgba(255, 255, 0, 0.9);
+    --coordinate-text: rgba(0, 255, 255, 0.9);
+}
+
+
+/* Dark Theme */
+[data-theme="dark"] {
+    /* Primary Colors - Adjusted for dark mode */
+    --primary-blue: #5aa7f7;
+    --primary-purple: #9370f2;
+    --primary-teal: #7dd3d6;
+    --primary-green: #a8d4c8;
+    
+    /* Background Colors */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #1e1e2e;
+    --bg-quaternary: #2a2a3a;
+    --bg-overlay: rgba(0, 0, 0, 0.9);
+    
+    /* Surface Colors */
+    --surface-primary: #2d2d2d;
+    --surface-secondary: #3a3a3a;
+    --surface-tertiary: #404040;
+    --surface-quaternary: #4a4a4a;
+    
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+    --text-tertiary: #cccccc;
+    --text-quaternary: #b0b0b0;
+    --text-muted: #888888;
+    --text-light: #666666;
+    
+    /* Accent Colors */
+    --accent-blue: #4da6ff;
+    --accent-purple: #8b6df4;
+    --accent-dark-blue: #5a7bc4;
+    --accent-navy: #4a6fa5;
+    
+    /* Border Colors */
+    --border-primary: #555555;
+    --border-secondary: #444444;
+    --border-tertiary: #333333;
+    --border-quaternary: #2a2a2a;
+    --border-light: #222222;
+    
+    /* Status Colors - Adjusted for better contrast in dark mode */
+    --success: #66bb6a;
+    --info: #42a5f5;
+    --warning: #ffa726;
+    --error: #ef5350;
+    
+    /* Interactive Colors */
+    --hover-bg: #3a3a3a;
+    --active-bg: #2a2a4a;
+    --focus-ring: rgba(138, 180, 248, 0.5);
+    
+    /* Shadows - Darker and more pronounced */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 4px 12px rgba(0, 0, 0, 0.6);
+    
+    /* Navbar Specific */
+    --navbar-bg: #1a1a2e;
+    --navbar-text: #ffffff;
+    --navbar-text-hover: #7dd3d6;
+    --navbar-text-active: #9370f2;
+    
+    /* Page Specific Colors */
+    --conservation-bg: #3a2d2d;
+    --fact-card-bg: #2d3a3a;
+    
+    /* Globe and Map Specific - Brighter for visibility */
+    --globe-glow: #FFE135;
+    --globe-points: rgba(255, 255, 50, 0.9);
+    --globe-rings: rgba(255, 255, 50, 1.0);
+    --coordinate-text: rgba(0, 255, 255, 1.0);
+}
+
+
+/* Transition for smooth theme switching */
+.theme-transition {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Disable transitions during theme switch to prevent flashing */
+.theme-transitioning * {
+    transition: none !important;
+}

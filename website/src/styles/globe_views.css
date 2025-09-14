@@ -56,7 +56,7 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-secondary);
     border-radius: 6px;
     padding: 0.5rem;
     box-sizing: border-box;
@@ -78,14 +78,14 @@
     font-weight: 600 !important;
     width: 100%;
     height: 2.8rem;
-    border: 2px solid #000;
+    border: 2px solid var(--border-primary);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     box-sizing: border-box;
     border-radius: 4px;
     transition: all 0.2s ease;
-    color: #000;
-    background-color: #f0e8ff;
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
 }
 
 .show-all-button {
@@ -101,23 +101,23 @@
 .toggle-filter-button:hover,
 .show-all-button:focus,
 .toggle-filter-button:focus {
-    background-color: #a8e8ea;
+    background-color: var(--primary-teal);
 }
 
 /* Shared active/focus */
 .show-all-button.active,
 .toggle-filter-button.active {
     color: white;
-    background-color: #7e58f0;
+    background-color: var(--primary-purple);
 }
 
 
 .continent-dropdown {
     margin-bottom: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-secondary);
     border-radius: 6px;
-    background-color: #f2f8fc;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    background-color: var(--bg-quaternary);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
 }
 
@@ -125,11 +125,12 @@
     font-weight: bold;
     font-size: 1rem;
     padding: 0.5rem 0.75rem;
-    background-color: #e1effc;
-    border-bottom: 1px solid #ccc;
+    background-color: var(--surface-tertiary);
+    border-bottom: 1px solid var(--border-secondary);
     cursor: pointer;
     user-select: none;
     transition: background-color 0.2s ease;
+    color: var(--text-secondary);
 
     display: flex;
     align-items: center;
@@ -139,7 +140,7 @@
 }
 
 .continent-header:hover {
-    background-color: #d4e8f8;
+    background-color: var(--surface-quaternary);
 }
 
 .scrollable-shark-list {
@@ -172,8 +173,8 @@
 }
 
 .filter-group {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-tertiary);
     border-radius: 8px;
     padding: 0.3rem 0.5rem 0.7rem 0.5rem;
 }
@@ -183,7 +184,7 @@
     font-size: 0.95rem;
     padding: 0 0.5rem;
     margin: -0.5rem;
-    color: #063f8e;
+    color: var(--accent-navy);
 }
 
 .filter-label {
@@ -198,9 +199,11 @@
     margin-top: 0.3rem;
     padding: 0.4rem 0.5rem;
     border-radius: 4px;
-    border: 1px solid #bbb;
+    border: 1px solid var(--border-secondary);
     font-size: 0.85rem;
     box-sizing: border-box;
+    background-color: var(--surface-primary);
+    color: var(--text-secondary);
 }
 
 .range-inputs {
@@ -214,7 +217,7 @@
   
 
 .scrollable-sharks-list {
-    border-top: 3px solid #000;
+    border-top: 3px solid var(--border-primary);
     padding-top: 1rem;
     max-height: calc(100% - 3rem); /* can adjust to approx height of toggle */
     overflow-y: auto;
@@ -224,16 +227,17 @@
     font-style: italic;
     font-size: 1rem;
     padding: 1rem;
+    color: var(--text-tertiary);
 }
 
 .shark-selector-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #000;
+    color: var(--text-primary);
     height: 1.5rem;
     border-radius: 3px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-tertiary);
     padding: 8px 10px;
     user-select: none;
     overflow: hidden;

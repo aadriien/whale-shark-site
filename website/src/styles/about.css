@@ -51,9 +51,9 @@
 .section-layout img {
     max-width: 100%;
     height: auto;
-    border: 1px solid #000;
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-xl);
 }
 
 @media (min-width: 768px) {
@@ -100,7 +100,7 @@
     justify-content: center;
     align-items: flex-end; /* push text content to bottom */
     padding-bottom: 0.1rem;
-    border-bottom: 4px solid #42a9d1;
+    border-bottom: 4px solid var(--primary-blue);
 }
 
 .hero-content {
@@ -146,8 +146,9 @@
 /* Conservation status section */
 .conservation-status {
     padding: 3rem 1.5rem;
-    background-color: #ffeaea;
+    background-color: var(--conservation-bg);
     text-align: center;
+    color: var(--text-secondary);
 }
 
 
@@ -167,8 +168,9 @@
 
 .fact-card {
     padding: 1rem;
-    background: #e0f7ff;
+    background: var(--fact-card-bg);
     border-radius: 8px;
+    color: var(--text-secondary);
 }
 
 @media (min-width: 768px) {
@@ -200,6 +202,7 @@
     cursor: pointer;
     text-align: left;
     width: 100%;
+    color: var(--text-primary);
 }
 
 .faq-item p {
