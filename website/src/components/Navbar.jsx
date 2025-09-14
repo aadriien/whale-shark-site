@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 
+import LightDarkToggle from "./controls/LightDarkMode.jsx";
 
-function Navbar({ isLogbookOpen, setIsLogbookOpen }) {
+
+function Navbar({ isLogbookOpen, setIsLogbookOpen, theme, setTheme }) {
 
     // Get current route (page), so user knows where they are
     const location = useLocation(); 
@@ -15,6 +17,8 @@ function Navbar({ isLogbookOpen, setIsLogbookOpen }) {
 
     return (
         <nav>
+            <LightDarkToggle theme={theme} setTheme={setTheme} />
+
             <button
                 onClick={handleLogbookClick}
                 className={`logbook-button ${isLogbookOpen ? "active" : ""}`}

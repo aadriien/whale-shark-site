@@ -1,3 +1,4 @@
+@import "./styles/theme_toggle.css";
 @import "./styles/helper_logbook.css";
 @import "./styles/about.css";
 @import "./styles/research_creative.css";
@@ -57,7 +58,7 @@ nav {
     justify-content: center;
     align-items: center;
     background-color: #041533;
-    padding: 15px;
+    padding: 10px 5px;
     position: fixed;
     top: 0;
     width: 100%;
