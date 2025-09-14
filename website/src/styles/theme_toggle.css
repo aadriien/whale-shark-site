@@ -1,0 +1,152 @@
+/* 
+    NOTE: light / dark mode toggle adapted from Jamie Wilson!
+    —> https://codepen.io/jamiewilsonict/pen/LYKGjdb
+*/
+
+.theme-switcher-grid {
+    --light-background: #87ceeb;
+    --dark-background: #1c1c1c;
+    --sun: #ffdf00;
+    --moon: #f1f1f1;
+    --cloud: #fff;
+    --star: #fff;
+    
+    display: grid;
+    place-items: center;
+    position: relative;
+    width: 48px;
+    height: 30px;
+    margin-right: 5px;
+    border-radius: 40px;
+    border: 1px solid var(--moon);
+    background: var(--light-background);
+
+    cursor: pointer;
+    transition: background 0.5s ease;
+    overflow: hidden;
+
+    transform: rotate(90deg);
+    transform-origin: center;
+}
+
+/* NIGHT THEME BACKGROUND */
+.theme-switcher-grid.night-theme {
+    background: var(--dark-background);
+}
+
+/* Sun (yellow circle) */
+.theme-switcher-grid .sun {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--sun);
+    border-radius: 50%;
+    top: 4px;
+    left: 10px;
+    z-index: 2;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.theme-switcher-grid.night-theme .sun {
+    background: var(--moon);
+    transform: translateX(12px);
+    opacity: 0.6;
+}
+
+/* Moon overlay (white circle that "covers" sun) */
+.theme-switcher-grid .moon-overlay {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--dark-background); /* match night background */
+    border-radius: 50%;
+    top: 4px;
+    left: 6px;
+    z-index: 3;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.theme-switcher-grid.night-theme .moon-overlay {
+    transform: translateX(10px);
+    opacity: 1;
+}
+
+/* Cloud balls */
+.theme-switcher-grid .cloud-ball {
+    position: absolute;
+    bottom: 9px;
+    background: var(--cloud);
+    border-radius: 50%;
+    opacity: 1;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.cloud-ball-left {
+    left: 6px;
+    width: 10px;
+    height: 10px;
+}
+
+.cloud-ball-middle {
+    left: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.cloud-ball-right {
+    left: 28px;
+    width: 10px;
+    height: 10px;
+}
+
+.cloud-ball-top {
+    left: 36px;
+    bottom: 12px;
+    width: 6px;
+    height: 6px;
+}
+
+/* Hide clouds at night */
+.theme-switcher-grid.night-theme .cloud-ball {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Stars */
+.theme-switcher-grid .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--star);
+    border-radius: 50%;
+    top: 4px;
+    left: 18px;
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    z-index: 10;
+}
+
+.theme-switcher-grid .star:nth-child(8) {
+    top: 10px;
+    left: 6px;
+}
+
+.theme-switcher-grid .star:nth-child(9) {
+    top: 22px;
+    left: 12px;
+}
+
+.theme-switcher-grid .star:nth-child(10) {
+    top: 14px;
+    left: 24px;
+}
+
+/* Show stars at night */
+.theme-switcher-grid.night-theme .star {
+    opacity: 1;
+    transform: scale(1);
+}
+
