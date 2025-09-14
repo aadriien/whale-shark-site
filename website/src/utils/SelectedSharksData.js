@@ -89,7 +89,7 @@ export function createSummaryDataset(selectedSharks, allSharksData = []) {
     
     if (sharkObjects.length === 0) {
         return [{
-            'Summary': 'No sharks selected',
+            'lab': 'No sharks selected',
             'Total Selected': 0,
             'Total Occurrences': 0,
             'Countries': 'N/A',
@@ -129,7 +129,7 @@ export function createSummaryDataset(selectedSharks, allSharksData = []) {
     const countriesArray = Array.from(countries);
 
     return [{
-        'Summary': `${sharkObjects.length} Selected Sharks`,
+        'lab': `${sharkObjects.length} Selected Sharks`,
         'Total Selected': sharkObjects.length,
         'Total Occurrences': totalOccurrences,
         'Countries': countriesArray.slice(0, 3).join(', ') + (countriesArray.length > 3 ? '...' : ''),
