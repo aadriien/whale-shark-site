@@ -8,34 +8,35 @@
     margin-bottom: 2rem;
     box-sizing: border-box;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-md);
+    color: var(--text-secondary);
 }
 
 .section-calendar {
-    background: linear-gradient(to bottom right, #ffe8ec, #f9f0ff);
+    background: linear-gradient(to bottom right, var(--data-calendar-bg-start), var(--data-calendar-bg-end));
 }
 .section-continent {
-    background: linear-gradient(to bottom right, #e0fff7, #d0f0ff);
+    background: linear-gradient(to bottom right, var(--data-continent-bg-start), var(--data-continent-bg-end));
 }
 .section-country {
-    background: linear-gradient(to bottom right, #fff5e1, #fce8d8);
+    background: linear-gradient(to bottom right, var(--data-country-bg-start), var(--data-country-bg-end));
 }
 .section-publishing {
-    background: linear-gradient(to bottom right, #e2f3ff, #d9e8ff);
+    background: linear-gradient(to bottom right, var(--data-publishing-bg-start), var(--data-publishing-bg-end));
 }
 
 /* Slightly darker header bands for each section */
 .section-calendar .section-header {
-    background-color: #f7d8e1;
+    background-color: var(--data-calendar-header-bg);
 }
 .section-continent .section-header {
-    background-color: #ccefee;
+    background-color: var(--data-continent-header-bg);
 }
 .section-country .section-header {
-    background-color: #f5dbba;
+    background-color: var(--data-country-header-bg);
 }
 .section-publishing .section-header {
-    background-color: #cbe2ff;
+    background-color: var(--data-publishing-header-bg);
 }
 
 
@@ -61,6 +62,7 @@
     font-weight: bold;
     display: block;
     margin-bottom: 0.25rem;
+    color: var(--text-primary);
 }
 
 .data-metric-filter-select {
@@ -68,11 +70,12 @@
     max-width: 100%;
     font-size: 1.05rem;
     font-weight: 500;
-    background-color: white;
-    border: 1px solid #bbb;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--data-filter-border);
     border-radius: 8px;
     margin: 0rem 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-secondary);
 }
 
 @media (max-width: 600px) {
@@ -112,13 +115,13 @@
 
 /* Style for each card */
 .data-grid > * {
-    border: 1px solid #ccc;
+    border: 1px solid var(--data-card-border);
     border-radius: 8px;
     /* padding: 1rem;
     height: 100%;
     min-height: 400px; */
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: var(--bg-primary);
+    box-shadow: var(--shadow-sm);
 
     width: 100%;
     aspect-ratio: 1; /* Make the card square */
@@ -143,10 +146,10 @@
 /* Style for each data overview by metric */
 .data-overview-panel {
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
-    border: 1px solid #d0e3f0;
+    border: 1px solid var(--data-overview-border);
     border-radius: 12px;
-    background: linear-gradient(to bottom right, #b7f4e2, #d0c2fc);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(to bottom right, var(--data-overview-bg-start), var(--data-overview-bg-end));
+    box-shadow: var(--shadow-md);
     padding: 1rem;
     margin-top: 0.75rem;
     max-height: 100%;
@@ -157,9 +160,9 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 0.5rem;
-    border-left: 5px solid #1da1f2;
+    border-left: 5px solid var(--data-overview-row-border);
     padding: 0.3rem;
-    background-color: #f8fbff;
+    background-color: var(--data-overview-row-bg);
     border-radius: 6px;
 }
 
@@ -170,13 +173,13 @@
 .data-overview-row-label {
     font-size: 1rem;
     font-weight: 600;
-    color: #444;
+    color: var(--data-overview-label-text);
 }
 
 .data-overview-row-value {
     font-size: 1.1rem;
     font-weight: 500;
-    color: #1a73e8;
+    color: var(--data-overview-value-text);
     line-height: 1.2;
     padding: 6px;
 }

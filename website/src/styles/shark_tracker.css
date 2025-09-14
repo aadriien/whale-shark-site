@@ -66,7 +66,7 @@
     width: 100%;
     max-width: 100%;
     aspect-ratio: 1.3;
-    border: 1px solid var(--jet);
+    border: 1px solid var(--border-secondary);
     border-radius: 16px;
     overflow: hidden;
 }
@@ -148,8 +148,8 @@
 
 /* Basic card styling */
 .shark-card {
-    background-color: #f5fffd;
-    border: 2px solid #ccc;
+    background-color: var(--surface-secondary);
+    border: 2px solid var(--border-secondary);
     border-radius: 8px;
     padding: 10px;
     cursor: pointer;
@@ -172,64 +172,57 @@
 .shark-card:hover:not(.anyPlaying),
 .shark-card.expanded:not(.anyPlaying) {
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
 }
 
 .shark-card.anyPlaying:hover,
 .shark-card.expanded.anyPlaying {
     transform: scale(1.03);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
 }
 
 /* Individual card styling for shark whose story is actively playing */
 .shark-card.currentlyPlaying {
-    border: 2px solid black;
+    border: 2px solid var(--border-primary);
     transform: scale(1.03);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
 }
 
 
 .play-story-button {
     border-radius: 8px;
-    border: 1px solid black;
+    border: 1px solid var(--border-primary);
     padding: 6px 8px;
-    color: black;
+    color: var(--text-primary);
     font-size: 15px;
     font-weight: 500;
     font-family: inherit;
-    background-color: #1a1a1a;
+    background-color: var(--bg-secondary);
     width: 100%;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .play-story-button:hover:not(.anyPlaying) {
-    background-color: #b2ebf2;
-    border: 2px solid black;
-    color: black;
+    background-color: var(--primary-teal);
+    border: 2px solid var(--border-primary);
+    color: var(--text-primary);
 }
 
 .play-story-button:focus:not(.anyPlaying),
 .play-story-button:focus-visible:not(.anyPlaying) {
-    background-color: #b2ebf2;
-    border: 1px solid black;
-    outline: 4px auto -webkit-focus-ring-color;
+    background-color: var(--primary-teal);
+    border: 1px solid var(--border-primary);
+    outline: 4px auto var(--focus-ring);
 }
 
 /* Individual button styling for shark whose story is actively playing */
 .play-story-button.currentlyPlaying {
-    background-color: #b2ebf2;
-    border: 1.5px solid black;
-    color: #25417d;
+    background-color: var(--primary-teal);
+    border: 1.5px solid var(--border-primary);
+    color: var(--accent-dark-blue);
     font-weight: bold;
 }
-
-@media (prefers-color-scheme: light) {
-    .play-story-button {
-        background-color: #f9f9f9;
-    }
-}
-
 
 /* Tags to label regions for a given shark's card view */
 .shark-country-tags {
@@ -242,19 +235,19 @@
 }
 
 .country-tag {
-    background-color: #d3e1f5;
-    color: #0c5a50;
+    background-color: var(--surface-tertiary);
+    color: var(--accent-dark-blue);
     font-size: 10px;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 8px;
     white-space: nowrap;
-    box-shadow: 0 0 0 1px #0c5a5079;
+    box-shadow: 0 0 0 1px var(--border-secondary);
     transition: background-color 0.2s ease;
 }
 
 .country-tag:hover {
-    background-color: #b2ebf2;
+    background-color: var(--primary-teal);
 }
 
 
@@ -262,7 +255,7 @@
 .shark-card-image {
     width: 100%;
     height: 95px;
-    background-color: #f0f0f0;
+    background-color: var(--bg-secondary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -272,7 +265,7 @@
 
 .shark-card-image span {
     font-size: 16px;
-    color: #888;
+    color: var(--text-muted);
 }
 
 .shark-card-image img {
@@ -296,13 +289,13 @@
 
 
 .shark-card-details {
-    background: #f9fbfd; 
+    background: var(--surface-secondary); 
     padding: 0; 
     border-radius: 5px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-sm);
     margin-top: 16px;
     font-size: 13px; 
-    color: #333;
+    color: var(--text-secondary);
     display: flex;
     flex-direction: column;
     gap: 7px; 
@@ -312,7 +305,7 @@
 }
 
 .shark-card-details:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
 }
 
 /* Each category (div section) gets its own color band with left strip */
@@ -324,20 +317,20 @@
     font-weight: bold;
     margin: 0;
     padding: 8px 12px;
-    background-color: #dbd9f7;
-    border-left: 6px solid #7a7de0; 
+    background-color: var(--shark-id-bg);
+    border-left: 6px solid var(--shark-id-border); 
 }
 
 .shark-nicknames {
     padding: 8px 12px;
-    background-color: #e0f7fa;
-    border-left: 6px solid #2093a2; 
+    background-color: var(--shark-nicknames-bg);
+    border-left: 6px solid var(--shark-nicknames-border); 
 }
 
 .shark-traits {
     padding: 8px 12px;
-    background-color: #e3f4cf;
-    border-left: 6px solid #66bb6a; 
+    background-color: var(--shark-traits-bg);
+    border-left: 6px solid var(--shark-traits-border); 
 }
 
 .shark-records {

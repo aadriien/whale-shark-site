@@ -15,8 +15,8 @@
 .shark-generator-form {
     width: 55%;
     padding: 24px;
-    background-color: #f5fffd;
-    border: 2px solid #ccc;
+    background-color: var(--build-form-bg);
+    border: 2px solid var(--build-form-border);
     border-radius: 12px;
     font-family: 'Inter', 'Segoe UI', sans-serif;
 
@@ -36,12 +36,12 @@
     align-items: flex-start; 
     font-size: 18px;
     font-weight: 500;
-    color: #333;
-    background-color: #e1f9e7;
+    color: var(--text-secondary);
+    background-color: var(--build-label-bg);
 
     padding: 16px 20px;
     border-radius: 8px;
-    border-left: 5px solid #a5b4fc;
+    border-left: 5px solid var(--build-label-border);
     width: 100%;
     text-align: left;
     box-sizing: border-box;
@@ -56,7 +56,7 @@
 .label-subtext {
     font-size: 0.9rem;
     font-weight: 400;
-    color: #444;
+    color: var(--build-label-subtext);
     margin-top: 4px;
 }
   
@@ -65,10 +65,11 @@
     flex-shrink: 0;
     margin: 0;
     padding: 10px 14px;
-    border: 1px solid #d4d4d8;
+    border: 1px solid var(--build-input-border);
     border-radius: 6px;
     font-size: 1rem;
-    background-color: white;
+    background-color: var(--bg-primary);
+    color: var(--text-secondary);
     width: 50%; 
     box-sizing: border-box;
 }
@@ -94,16 +95,16 @@
 }
 
 .shark-generator-form button:hover {
-    background-color: #6366f1 !important;
-    border: 2px solid black;
+    background-color: var(--primary-purple) !important;
+    border: 2px solid var(--border-primary);
 }
 
 /* Red color for reset button, green for submit button */
 .shark-generator-form button[type="button"] {
-    background-color: #ff4d4d; 
+    background-color: var(--error); 
 }
 .shark-generator-form button[type="submit"] {
-    background-color: #4caf50; 
+    background-color: var(--success); 
 }
 
 #generated-image-container {
@@ -111,7 +112,7 @@
     height: auto;
     min-height: 80px;
     max-height: 600px; 
-    background-color: #f0f0f0; /* Default for empty image area */
+    background-color: var(--build-image-container-bg); /* Default for empty image area */
     border-radius: 32px;
     padding: 10px;
     display: flex;
@@ -133,7 +134,7 @@
 /* Style default text before image load (or error message, if applicable) */
 #generated-image-container p {
     text-align: center;
-    color: #888;
+    color: var(--build-image-text);
     font-size: 1.2rem;
     font-weight: 600;
     line-height: 2.6;

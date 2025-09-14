@@ -1,12 +1,12 @@
 /* View mode toggle button */
 .view-mode-toggle {
-    background-color: #7e58f0;
-    border: 2px solid #e8f0ff;
+    background-color: var(--primary-purple);
+    border: 2px solid var(--active-bg);
     border-radius: 8px;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     font-weight: 600;
-    color: #e8f0ff;
+    color: var(--surface-primary);
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 0.5rem;
@@ -15,7 +15,7 @@
 }
 
 .view-mode-toggle:hover {
-    background-color: #6b47d9;
+    background-color: var(--accent-purple);
 }
 
 
@@ -31,15 +31,15 @@
 }
 
 .saved-shark-card-wrapper.selected .shark-banner {
-    background-color: #ccece5;
+    background-color: var(--primary-green);
 }
 
 
 .story-controls-container {
     margin-bottom: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-tertiary);
     border-radius: 10px;
-    background-color: #f8f9ff;
+    background-color: var(--bg-tertiary);
     overflow: visible; 
     transition: all 0.3s ease;
 }
@@ -51,13 +51,13 @@
 
 .geo-labs-step-button {
     border-radius: 8px; /* all corners rounded by default */
-    border: 1px solid #6b47d9; 
+    border: 1px solid var(--accent-purple); 
     padding: 0.75rem 1rem;
-    color: #333;
+    color: var(--text-secondary);
     font-size: 1rem;
     font-weight: 600;
     font-family: inherit;
-    background-color: #e8f0ff;
+    background-color: var(--active-bg);
     cursor: pointer;
     width: 100%;
     text-align: left;
@@ -66,28 +66,28 @@
 }
 
 .geo-labs-step-button:hover {
-    background-color: #d4e8f8;
-    color: #0066cc;
+    background-color: var(--surface-quaternary);
+    color: var(--accent-blue);
     font-weight: 700;
 }
 
 .geo-labs-step-button.step-mode-active {
     border-radius: 8px 8px 0 0; /* only top corners rounded when open */
-    background-color: #7e58f0;
+    background-color: var(--primary-purple);
     color: white;
-    border-bottom: 1px solid #6b47d9; /* purple bottom border when open */
+    border-bottom: 1px solid var(--accent-purple); /* purple bottom border when open */
 }
 
 .geo-labs-step-button.step-mode-active:hover {
-    background-color: #6b47d9;
+    background-color: var(--accent-purple);
 }
 
 /* Timeline slider container */
 .story-step-container {
     padding: 1rem;
     border-radius: 0 0 8px 8px;
-    border: 1px solid #ddd;
-    background-color: #f8f9ff;
+    border: 1px solid var(--border-tertiary);
+    background-color: var(--bg-tertiary);
     border-top: none;
     min-height: auto; /* ensure full height */
     overflow: visible; /* prevent clipping */
@@ -96,14 +96,14 @@
 .story-slider-section h4 {
     margin: 0 0 1rem 0;
     font-size: 0.9rem;
-    color: #555;
+    color: var(--text-tertiary);
     font-weight: 600;
     text-align: center;
 }
 
 .step-date-header {
     font-style: italic;
-    color: #7e58f0;
+    color: var(--primary-purple);
     font-weight: normal;
 }
 
@@ -119,9 +119,9 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    border: 1px solid #7e58f0;
-    background-color: #fff;
-    color: #7e58f0;
+    border: 1px solid var(--primary-purple);
+    background-color: var(--surface-primary);
+    color: var(--primary-purple);
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
@@ -136,7 +136,7 @@
 }
 
 .step-button:hover:not(:disabled) {
-    background-color: #7e58f0;
+    background-color: var(--primary-purple);
     color: white;
 }
 
@@ -158,7 +158,7 @@
 
 .story-slider::-webkit-slider-track {
     height: 6px;
-    background: linear-gradient(to right, #4CAF50 0%, #2196F3 50%, #9C27B0 100%);
+    background: linear-gradient(to right, var(--success) 0%, var(--info) 50%, var(--primary-purple) 100%);
     border-radius: 3px;
 }
 
@@ -168,21 +168,21 @@
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background: #ffffff;
-    border: 2px solid #7e58f0;
+    background: var(--surface-primary);
+    border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
     transition: all 0.2s ease;
 }
 
 .story-slider::-webkit-slider-thumb:hover {
     transform: scale(1.1);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .story-slider::-moz-range-track {
     height: 6px;
-    background: linear-gradient(to right, #4CAF50 0%, #2196F3 50%, #9C27B0 100%);
+    background: linear-gradient(to right, var(--success) 0%, var(--info) 50%, var(--primary-purple) 100%);
     border-radius: 3px;
     border: none;
 }
@@ -191,21 +191,21 @@
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background: #ffffff;
-    border: 2px solid #7e58f0;
+    background: var(--surface-primary);
+    border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
 }
 
 
 .saved-shark-card-wrapper.selected-for-lab .shark-banner {
-    background-color: #ccece5;
+    background-color: var(--primary-green);
 }
 
 .multi-select-info {
     padding: 1rem;
-    background-color: #f8f9ff;
-    border: 1px solid #ddd;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-tertiary);
     border-radius: 8px;
     margin-bottom: 1rem;
 }
@@ -218,7 +218,7 @@
 }
 
 .multi-select-info h4 {
-    color: #7e58f0;
+    color: var(--primary-purple);
     font-size: 1rem;
     text-align: left;
     margin: 0;
@@ -229,7 +229,7 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    color: #555;
+    color: var(--text-tertiary);
     cursor: pointer;
 }
 
@@ -237,7 +237,7 @@
     width: 1rem;
     height: 1rem;
     cursor: pointer;
-    accent-color: #7e58f0;
+    accent-color: var(--primary-purple);
 }
 
 .selected-sharks-list {
@@ -288,8 +288,8 @@
     width: 100%;
     height: 280px;
     margin-top: 10px;
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: var(--surface-primary);
+    border: 1px solid var(--border-tertiary);
     border-radius: 12px;
     overflow: hidden;
 }
@@ -298,8 +298,8 @@
     width: 100%;
     height: 260px;
     margin-top: 10px;
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: var(--surface-primary);
+    border: 1px solid var(--border-tertiary);
     border-radius: 12px;
     overflow: hidden;
 }
@@ -309,9 +309,9 @@
 .timeline-controls-container {
     width: 100%;
     margin-bottom: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-tertiary);
     border-radius: 10px;
-    background-color: #f8f9ff;
+    background-color: var(--bg-tertiary);
     overflow: visible;
     transition: all 0.3s ease;
 }
@@ -323,13 +323,13 @@
 
 .geo-labs-timeline-button {
     border-radius: 8px;
-    border: 1px solid #6b47d9;
+    border: 1px solid var(--accent-purple);
     padding: 0.75rem 1rem;
-    color: #333;
+    color: var(--text-secondary);
     font-size: 1rem;
     font-weight: 600;
     font-family: inherit;
-    background-color: #e8f0ff;
+    background-color: var(--active-bg);
     cursor: pointer;
     width: 100%;
     text-align: left;
@@ -338,20 +338,20 @@
 }
 
 .geo-labs-timeline-button:hover {
-    background-color: #d4e8f8;
-    color: #0066cc;
+    background-color: var(--surface-quaternary);
+    color: var(--accent-blue);
     font-weight: 700;
 }
 
 .geo-labs-timeline-button.timeline-mode-active {
     border-radius: 8px 8px 0 0;
-    background-color: #7e58f0;
+    background-color: var(--primary-purple);
     color: white;
-    border-bottom: 1px solid #6b47d9;
+    border-bottom: 1px solid var(--accent-purple);
 }
 
 .geo-labs-timeline-button.timeline-mode-active:hover {
-    background-color: #6b47d9;
+    background-color: var(--accent-purple);
 }
 
 /* Timeline Selector */
@@ -359,8 +359,8 @@
     width: 100%;
     padding: 1rem;
     border-radius: 0 0 8px 8px;
-    border: 1px solid #ddd;
-    background-color: #f8f9ff;
+    border: 1px solid var(--border-tertiary);
+    background-color: var(--bg-tertiary);
     border-top: none;
     min-height: auto;
     overflow: hidden;
@@ -377,9 +377,9 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    border: 1px solid #7e58f0;
-    background-color: #fff;
-    color: #7e58f0;
+    border: 1px solid var(--primary-purple);
+    background-color: var(--surface-primary);
+    color: var(--primary-purple);
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
@@ -393,7 +393,7 @@
 }
 
 .timeline-nav-button:hover:not(:disabled) {
-    background-color: #7e58f0;
+    background-color: var(--primary-purple);
     color: white;
 }
 
@@ -407,7 +407,7 @@
     text-align: center;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #7e58f0;
+    color: var(--primary-purple);
 }
 
 .timeline-slider-section {
@@ -426,7 +426,7 @@
 
 .timeline-slider::-webkit-slider-track {
     height: 6px;
-    background: linear-gradient(to right, #4CAF50 0%, #2196F3 50%, #9C27B0 100%);
+    background: linear-gradient(to right, var(--success) 0%, var(--info) 50%, var(--primary-purple) 100%);
     border-radius: 3px;
 }
 
@@ -436,21 +436,21 @@
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background: #ffffff;
-    border: 2px solid #7e58f0;
+    background: var(--surface-primary);
+    border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
     transition: all 0.2s ease;
 }
 
 .timeline-slider::-webkit-slider-thumb:hover {
     transform: scale(1.1);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .timeline-slider::-moz-range-track {
     height: 6px;
-    background: linear-gradient(to right, #4CAF50 0%, #2196F3 50%, #9C27B0 100%);
+    background: linear-gradient(to right, var(--success) 0%, var(--info) 50%, var(--primary-purple) 100%);
     border-radius: 3px;
     border: none;
 }
@@ -459,14 +459,14 @@
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background: #ffffff;
-    border: 2px solid #7e58f0;
+    background: var(--surface-primary);
+    border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
 }
 
 .timeline-info {
-    color: #7e58f0;
+    color: var(--primary-purple);
     font-size: 0.85rem;
     text-align: center;
     font-style: italic;
@@ -477,14 +477,14 @@
     width: 100%;
     margin-top: 0.75rem;
     padding-top: 0.75rem;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--border-quaternary);
     overflow: hidden;
 }
 
 .sharks-list-title {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #555;
+    color: var(--text-tertiary);
     margin-bottom: 0.5rem;
     text-align: center;
     flex: none; 
