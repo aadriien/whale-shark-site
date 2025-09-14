@@ -22,24 +22,36 @@ const Animation = lazy(() => import("./pages/Animation.jsx"));
 
 function App() {
     const [isLogbookOpen, setIsLogbookOpen] = useState(false);
-    const [theme, setTheme] = useState("light");
+  
+    const [theme, setTheme] = useState(() => {
+        // Check localStorage first for light / dark mode, then system preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            return savedTheme;
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    });
 
-    // Keep track of browser light vs dark mode 
-    useEffect(() => {
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        setTheme(prefersDark ? "dark" : "light");
-    }, []);
+    // Save theme to localStorage whenever it changes
+    const handleThemeChange = (newTheme) => {
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+    };
 
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
     }, [theme]);
 
+    // Listen for system theme changes only if no saved preference
     useEffect(() => {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        const handler = (e) => setTheme(e.matches ? "dark" : "light");
-
-        mediaQuery.addEventListener("change", handler);
-        return () => mediaQuery.removeEventListener("change", handler);
+        const savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) {
+            const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+            const handler = (e) => setTheme(e.matches ? "dark" : "light");
+            
+            mediaQuery.addEventListener("change", handler);
+            return () => mediaQuery.removeEventListener("change", handler);
+        }
     }, []);
 
 
@@ -51,7 +63,7 @@ function App() {
                     isLogbookOpen={isLogbookOpen}
                     setIsLogbookOpen={setIsLogbookOpen}
                     theme={theme} 
-                    setTheme={setTheme}
+                    setTheme={handleThemeChange}
                 />
 
                 {/* Logbook overlay (always there but conditionally rendered) */}
