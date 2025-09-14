@@ -64,7 +64,7 @@ function LabSelectionPanel({
             <div className="overview-container">
                 <DataOverview 
                     dataset={selectedSharksDataset}
-                    filterField="Summary"
+                    filterField="geolabs" // special key word for DataOverview.jsx
                     selectedFilter={
                         selectedSharksForLab.size > 0 
                         ? `${selectedSharksForLab.size} Selected Sharks` 

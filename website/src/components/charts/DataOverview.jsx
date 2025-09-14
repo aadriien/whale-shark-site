@@ -60,7 +60,12 @@ const DataOverview = ({
                 selectedFilter ? (
                     <p style={{ textAlign: "center" }}>No data available for this {filterField}.</p>
                 ) : (
-                    <ChartPlaceholder type="overview" message={`Select a ${filterField} to see data overview`} />
+                    // Allow unique placeholder message for GeoLabs.jsx
+                    filterField === "geolabs" ? (
+                        <ChartPlaceholder type="overview" message={`Add sharks to lab for overview`} />
+                    ) : (
+                        <ChartPlaceholder type="overview" message={`Select a ${filterField} to see data overview`} />
+                    )
                 )
             )}
         </>
@@ -68,3 +73,4 @@ const DataOverview = ({
 };
 
 export default DataOverview;
+

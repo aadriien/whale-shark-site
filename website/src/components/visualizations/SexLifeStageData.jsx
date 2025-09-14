@@ -135,7 +135,7 @@ const SexLifeStageData = ({
                     sharks.length === 0 ? (
                         <ChartPlaceholder 
                             type="radialHeatmap" 
-                            message="Add sharks for lifeStage and sex" 
+                            message="Add sharks for life stage and sex" 
                         />
                     ) : (
                         <p style={{ textAlign: "center" }}>
@@ -150,7 +150,7 @@ const SexLifeStageData = ({
                     ) : (
                         <ChartPlaceholder 
                             type="radialHeatmap" 
-                            message="Select a year to see lifeStage and sex" 
+                            message="Select a year to see life stage and sex" 
                         />
                     )
                 )
