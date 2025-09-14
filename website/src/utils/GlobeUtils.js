@@ -251,7 +251,7 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
 };
 
 
-export async function highlightSharkMode(globe, controls, camera, pitchRef, yawRef, sharkID, usePoints = false) {
+export async function highlightSharkMode(globe, controls, camera, pitchRef, yawRef, sharkID, usePoints = false, keepControlsDisabled = false) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
     
@@ -266,17 +266,20 @@ export async function highlightSharkMode(globe, controls, camera, pitchRef, yawR
     // Show either points or ripples for this whale shark
     if (usePoints) {
         addPointsData(globe, sortedPointsData);
-    } else {
+    } 
+    else {
         addRingsData(globe, sortedPointsData);
     }
     
     const point = sortedPointsData[0];
     goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
 
-    // Restore orbit controls
-    setTimeout(() => {
-        controls.enabled = true;
-    }, 2500);
+    // Only restore orbit controls if not requested to keep them disabled
+    if (!keepControlsDisabled) {
+        setTimeout(() => {
+            controls.enabled = true;
+        }, 2500);
+    }
 };
 
 

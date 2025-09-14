@@ -58,7 +58,7 @@ const Globe = forwardRef((props, ref) => {
     };
 
 
-    const highlightShark = async (sharkID, usePoints = false) => {
+    const highlightShark = async (sharkID, usePoints = false, keepControlsDisabled = false) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
@@ -69,7 +69,7 @@ const Globe = forwardRef((props, ref) => {
         
         await highlightSharkMode(
             globeRef.current, controlsRef.current, cameraRef.current, 
-            pitchRef, yawRef, sharkID, usePoints
+            pitchRef, yawRef, sharkID, usePoints, keepControlsDisabled
         );
     };
     
@@ -121,6 +121,12 @@ const Globe = forwardRef((props, ref) => {
             controlsRef.current.enabled = true;
         }
     };
+    
+    const disableControls = () => {
+        if (controlsRef.current) {
+            controlsRef.current.enabled = false;
+        }
+    };
 
     
     // Expose globe instance, playStory, highlightShark, interruptStory methods to parent
@@ -132,6 +138,7 @@ const Globe = forwardRef((props, ref) => {
         interruptStory,
         showSinglePoint,
         enableControls,
+        disableControls,
     }));
 
 

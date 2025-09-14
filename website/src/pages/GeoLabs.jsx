@@ -168,8 +168,10 @@ function GeoLabs() {
             setIsStepMode(true);
             setCurrentStepIndex(0);
             
-            // Clear current points and prepare for step-through
-            if (globeRef.current) {
+            if (globeRef.current && selectedShark) {
+                // Disable controls, clear points, & prepare for step mode
+                globeRef.current.disableControls();
+                
                 const globeInstance = globeRef.current.getGlobe();
                 clearAllData(globeInstance);
             }
