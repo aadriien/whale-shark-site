@@ -6,8 +6,8 @@
     padding: 0 !important;
     margin-right: 15px;
     border-radius: 50%;
-    border: 1px solid #ccc;
-    background-color: #eee;
+    border: 1px solid var(--logbook-button-border);
+    background-color: var(--logbook-button-bg);
     font-size: 1.1rem;
     cursor: pointer;
     
@@ -24,7 +24,7 @@
 .logbook-button:hover,
 .logbook-button:focus,
 .logbook-button.active {
-  background-color: #ffbb00; 
+  background-color: var(--logbook-button-hover-bg); 
   transform: scale(1.05);
 }
 
@@ -48,7 +48,7 @@
     
     font-size: 1.1rem;
     line-height: 1;
-    color: #333;
+    color: var(--logbook-close-button-text);
     
     width: auto !important;
     height: auto !important;
@@ -58,7 +58,7 @@
 
 .logbook-close-button:hover,
 .logbook-close-button:focus {
-    color: #000;
+    color: var(--logbook-close-button-hover);
     outline: none;
     border-radius: 6px;
 }
@@ -83,11 +83,11 @@
     display: flex;
     flex-direction: column;
 
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: var(--logbook-container-bg);
+    border: 1px solid var(--logbook-container-border);
     border-radius: 8px;
     padding: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px var(--logbook-container-shadow);
     z-index: 9999;
 }
 
@@ -102,13 +102,13 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: 8px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--logbook-header-border);
 }
 
 .logbook-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #222;
+    color: var(--logbook-title);
     margin: 0; /* reset default margin on h2 */
 }
 
@@ -117,20 +117,20 @@
     margin-top: 12px;
     overflow-y: auto;
     font-size: 1rem;
-    color: #333;
+    color: var(--logbook-body-text);
 }
 
 .logbook-body h4 {
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 0px;
-    color: #222;
+    color: var(--logbook-section-title);
 }
 
 .logbook-body .logbook-page-name {
     font-weight: 600;
-    color: #005f8f;
-    background-color: #eef6fb;
+    color: var(--logbook-page-name);
+    background-color: var(--logbook-page-name-bg);
     padding: 2px 6px;
     border-radius: 4px;
     white-space: nowrap;
@@ -141,7 +141,7 @@
     justify-content: center;
     align-items: center;
     padding-top: 12px;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid var(--logbook-nav-border);
     margin-top: auto;
     font-size: 0.8rem;
     gap: 4px;
@@ -162,7 +162,7 @@
 }
 
 .logbook-nav a {
-    color: #005f8f;
+    color: var(--logbook-nav-link);
     text-decoration: none;
     cursor: pointer;
     transition: color 0.2s ease;
@@ -174,13 +174,13 @@
 }
 
 .logbook-nav a.active {
-    color: #1385ff; 
+    color: var(--logbook-nav-link-active); 
     text-decoration: underline;
     font-weight: bold;
 }
 
 .logbook-nav span {
-    color: #999;
+    color: var(--logbook-nav-separator);
     font-size: 0.8rem;
     padding: 0 2px;
     flex: 0 0 auto;
@@ -201,8 +201,8 @@
 }
 
 .overview-box {
-    background: linear-gradient(to bottom right, #fdfdfd, #f4faff);
-    border-left: 5px solid #4da6ff;
+    background: linear-gradient(to bottom right, var(--overview-box-bg-start), var(--overview-box-bg-end));
+    border-left: 5px solid var(--overview-box-border);
     padding: 14px 16px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
@@ -211,14 +211,14 @@
 }
 
 .overview-box:hover {
-    background: linear-gradient(to bottom right, #f8fbff, #eaf4ff);
+    background: linear-gradient(to bottom right, var(--overview-box-hover-start), var(--overview-box-hover-end));
 }
 
 .overview-box p {
     margin: 0;
     font-size: 1rem;
     line-height: 1.6;
-    color: #2a2a2a;
+    color: var(--overview-box-text);
 }
 
 
@@ -234,21 +234,21 @@
 }
 
 .faqItem {
-    background: #f5faff;
-    border: 1px solid #cce6ff;
+    background: var(--faq-item-bg);
+    border: 1px solid var(--faq-item-border);
     border-radius: 8px;
     padding: 16px 14px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 4px var(--faq-item-shadow);
     transition: background-color 0.3s ease;
 }
 
 /* Change background on hover only if not open */
 .faqItem:hover:not(.open) {
-    background-color: #d0e6ff;
+    background-color: var(--faq-item-hover-bg);
 }
 
 .faqItem.open {
-    background-color: #d0e6ff; 
+    background-color: var(--faq-item-open-bg); 
 }
 
 .faq-toggle {
@@ -258,7 +258,7 @@
     align-items: center;
     width: 100%;
     font-weight: 600;
-    color: #003f5f;
+    color: var(--faq-toggle-text);
     font-size: 1rem;
     cursor: pointer;
     border-radius: 8px;
@@ -293,7 +293,7 @@
 .faq-answer {
     margin: 0;
     font-size: 0.95rem;
-    color: #444;
+    color: var(--faq-answer-text);
     line-height: 1.4;
 }
 
@@ -318,7 +318,7 @@
 .visited-saved-header h3 {
     margin: 0;
     font-weight: 600;
-    color: #222;
+    color: var(--logbook-section-title);
     user-select: none;
     flex-shrink: 1;
     white-space: nowrap;
@@ -329,10 +329,10 @@
 .clear-button {
     all: unset;
     display: inline-block;
-    border: 1.5px solid #888;
+    border: 1.5px solid var(--clear-button-border);
     border-radius: 6px;
     font-size: 0.9rem;
-    color: #444;
+    color: var(--clear-button-text);
 
     padding: 4px 8px;
     line-height: 1;
@@ -349,8 +349,8 @@
 }
 
 .clear-button:hover {
-    background-color: #eee;
-    color: #000;
+    background-color: var(--clear-button-hover-bg);
+    color: var(--clear-button-hover-text);
 }
 
 .stamp-grid {
@@ -395,7 +395,7 @@
     position: relative;
     width: 100px;
     height: 100px;
-    background-color: white;
+    background-color: var(--stamp-blob-bg);
     background-size: 14px 14px;
 
     border: 2px dashed hsla(var(--hue), 40%, 70%, 0.7);
@@ -428,7 +428,7 @@
     margin: 10px auto;
     font-size: 0.85rem;
     font-weight: 500;
-    color: #222;
+    color: var(--stamp-text);
     text-align: center;
     max-width: 130px;
 }
@@ -476,9 +476,9 @@
 }
 
 .condensed-shark-card {
-    background: #f9fbfd; 
+    background: var(--condensed-card-bg); 
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px var(--condensed-card-shadow);
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -507,12 +507,12 @@
     background: 
         repeating-linear-gradient(
             45deg,
-            #dde6f1,
-            #dde6f1 5px,
-            #cbd6e7 5px,
-            #cbd6e7 10px
+            var(--condensed-media-stripe-light),
+            var(--condensed-media-stripe-light) 5px,
+            var(--condensed-media-stripe-dark) 5px,
+            var(--condensed-media-stripe-dark) 10px
         ),
-        linear-gradient(135deg, #e6efff, #cbd6e7);
+        linear-gradient(135deg, var(--condensed-media-bg-start), var(--condensed-media-bg-end));
 }
 
 .condensed-media img {
@@ -525,18 +525,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f0f4fa;
+    background: var(--condensed-id-bg);
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 1rem;
     font-weight: 600;
-    color: #25417d;
+    color: var(--condensed-id-text);
 }
 
 .shark-banner {
-    background: #f9fbfd; 
+    background: var(--condensed-card-bg); 
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px var(--condensed-card-shadow);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -563,12 +563,12 @@
     background: 
         repeating-linear-gradient(
             45deg,
-            #dde6f1,
-            #dde6f1 5px,
-            #cbd6e7 5px,
-            #cbd6e7 10px
+            var(--condensed-media-stripe-light),
+            var(--condensed-media-stripe-light) 5px,
+            var(--condensed-media-stripe-dark) 5px,
+            var(--condensed-media-stripe-dark) 10px
         ),
-        linear-gradient(135deg, #e6efff, #cbd6e7);
+        linear-gradient(135deg, var(--condensed-media-bg-start), var(--condensed-media-bg-end));
 }
 
 .tiny-banner-media img {
@@ -581,14 +581,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f0f4fa;
+    background: var(--condensed-id-bg);
     width: 100%;
     height: 50px;
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #25417d;
+    color: var(--condensed-id-text);
 }
 
 .favorite-button {
@@ -596,14 +596,14 @@
     border: none;
     cursor: pointer;
     font-size: 1.5rem;
-    color: #f39c12; /* golden star */
+    color: var(--favorite-button); /* golden star */
     text-align: center;
     width: 50px;
     padding: 4px 0 !important;
 }
 
 .favorite-button:hover {
-    background: #fbe5b0;
+    background: var(--favorite-button-hover-bg);
     border-radius: 50px;
 }
 
@@ -616,21 +616,21 @@
 }
 
 .condensed-traits {
-    background-color: #e6f2ea; 
-    border-left: 6px solid #4a9d6e; 
-    color: #2e553e;
+    background-color: var(--condensed-traits-bg); 
+    border-left: 6px solid var(--condensed-traits-border); 
+    color: var(--condensed-traits-text);
 }
 
 .condensed-records {
-    background-color: #e3eff7;
-    border-left: 6px solid #4a7f9d;
-    color: #2e4355;
+    background-color: var(--condensed-records-bg);
+    border-left: 6px solid var(--condensed-records-border);
+    color: var(--condensed-records-text);
 }
 
 .condensed-places {
-    background-color: #f0e9f7;
-    border-left: 6px solid #7a4a9d; 
-    color: #422e55;
+    background-color: var(--condensed-places-bg);
+    border-left: 6px solid var(--condensed-places-border); 
+    color: var(--condensed-places-text);
 }
 
 

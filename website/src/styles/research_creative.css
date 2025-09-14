@@ -2,7 +2,7 @@
 
 .research-creative-wrapper {
     font-family: 'Lato', sans-serif;
-    color: #e3f7ff;
+    color: var(--research-text);
     padding-top: 30px;
 }
 
@@ -14,7 +14,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    border-bottom: 4px solid #42a9d1;
+    border-bottom: 4px solid var(--research-hero-border);
     text-align: center;
 }
 
@@ -31,12 +31,12 @@
     );
     padding: 1.5rem 2rem;
     width: 100%;
-    border-bottom: 4px solid #acdcfc;
+    border-bottom: 4px solid var(--research-hero-bottom-border);
 }
 
 .research-creative-hero-content h1, 
 .research-creative-hero-content p {
-    color: #fffeab;
+    color: var(--research-hero-text);
     text-shadow:
         3px 3px 6px rgba(0, 0, 0, 0.9),
         0 0 10px rgba(0, 0, 0, 0.7);
@@ -59,7 +59,7 @@
     margin: 2rem auto 3rem auto;
     font-size: 1.6rem;
     line-height: 1.6;
-    color: #000;
+    color: var(--research-intro-text);
     padding: 0 1.5rem;
     text-align: center;
 }
@@ -78,24 +78,24 @@
     height: 430px; 
     background: linear-gradient(
         145deg,
-        rgba(0, 59, 95, 0.98),
-        rgba(0, 80, 128, 0.98)
+        var(--research-card-bg-start),
+        var(--research-card-bg-end)
     );
     border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 64, 128, 0.4);
+    box-shadow: 0 8px 24px var(--research-card-shadow);
     text-decoration: none;
-    color: #e0f7ff;
+    color: var(--research-card-text);
     display: block;
 }
 
 .research-creative-card:hover {
     transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 12px 28px rgba(0, 128, 192, 0.5);
+    box-shadow: 0 12px 28px var(--research-card-hover-shadow);
     background: linear-gradient(
         145deg,
-        rgba(0, 80, 128, 1),
-        rgba(0, 105, 160, 1)
+        var(--research-card-hover-bg-start),
+        var(--research-card-hover-bg-end)
     );
 }
 
@@ -103,7 +103,7 @@
     height: 60%; 
     width: 100%;
     object-fit: cover;
-    border-bottom: 2px solid #3fa8d4;
+    border-bottom: 2px solid var(--research-card-border);
     display: block;
 }
 
@@ -117,7 +117,7 @@
 .research-creative-card h3 {
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-size: 1.7rem;
-    color: #bba9ef;
+    color: var(--research-card-title);
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
     margin: 0 0 0.5rem 0;
 }
@@ -125,7 +125,7 @@
 .research-creative-card p {
     font-size: 1.2rem;
     line-height: 1.6;
-    color: #d6f8ff;
+    color: var(--research-card-content);
     margin: 0;
 }
 

@@ -4,12 +4,12 @@
 */
 
 .theme-switcher-grid {
-    --light-background: #87ceeb;
-    --dark-background: #1c1c1c;
-    --sun: #ffdf00;
-    --moon: #f1f1f1;
-    --cloud: #fff;
-    --star: #fff;
+    --light-background: var(--toggle-light-bg);
+    --dark-background: var(--toggle-dark-bg);
+    --sun: var(--toggle-sun);
+    --moon: var(--toggle-moon);
+    --cloud: var(--toggle-cloud);
+    --star: var(--toggle-star);
 
     display: grid;
     place-items: center;

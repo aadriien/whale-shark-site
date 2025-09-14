@@ -77,6 +77,16 @@
   --shark-nicknames-border: #2093a2;
   --shark-traits-bg: #e3f4cf;
   --shark-traits-border: #66bb6a;
+  --shark-records-bg: #fefcd5;
+  --shark-records-border: #f2d251;
+  --shark-regions-bg: #fff3e0;
+  --shark-regions-border: #ff7043;
+  --shark-section-title: #25417d;
+  --shark-section-text: #444;
+  --timeline-text: #333;
+  --timeline-circle: #eaa089;
+  --timeline-circle-border: #fff;
+  --timeline-line: #eaa089;
   
   /* Build A Shark Specific */
   --build-form-bg: #f5fffd;
@@ -116,6 +126,96 @@
     --globe-points: rgba(255, 255, 0, 0.8);
     --globe-rings: rgba(255, 255, 0, 0.9);
     --coordinate-text: rgba(0, 255, 255, 0.9);
+    
+    /* Animation Controls */
+    --animation-container-bg: rgba(0, 0, 0, 0.7);
+    --animation-text: #fff;
+    --animation-add-button-bg: #4ecdc4;
+    --animation-add-button-text: #000;
+    --animation-remove-button-text: #fff;
+    
+    /* Research Creative */
+    --research-text: #e3f7ff;
+    --research-hero-border: #42a9d1;
+    --research-hero-bottom-border: #acdcfc;
+    --research-hero-text: #fffeab;
+    --research-intro-text: #000;
+    --research-card-bg-start: rgba(0, 59, 95, 0.98);
+    --research-card-bg-end: rgba(0, 80, 128, 0.98);
+    --research-card-shadow: rgba(0, 64, 128, 0.4);
+    --research-card-text: #e0f7ff;
+    --research-card-hover-bg-start: rgba(0, 80, 128, 1);
+    --research-card-hover-bg-end: rgba(0, 105, 160, 1);
+    --research-card-hover-shadow: rgba(0, 128, 192, 0.5);
+    --research-card-border: #3fa8d4;
+    --research-card-title: #bba9ef;
+    --research-card-content: #d6f8ff;
+    
+    /* Helper Logbook */
+    --logbook-button-bg: #eee;
+    --logbook-button-border: #ccc;
+    --logbook-button-hover-bg: #ffbb00;
+    --logbook-close-button-text: #333;
+    --logbook-close-button-hover: #000;
+    --logbook-container-bg: #fff;
+    --logbook-container-border: #ccc;
+    --logbook-container-shadow: rgba(0, 0, 0, 0.2);
+    --logbook-header-border: #ccc;
+    --logbook-title: #222;
+    --logbook-body-text: #333;
+    --logbook-section-title: #222;
+    --logbook-page-name: #005f8f;
+    --logbook-page-name-bg: #eef6fb;
+    --logbook-nav-border: #ccc;
+    --logbook-nav-link: #005f8f;
+    --logbook-nav-link-active: #1385ff;
+    --logbook-nav-separator: #999;
+    --overview-box-bg-start: #fdfdfd;
+    --overview-box-bg-end: #f4faff;
+    --overview-box-border: #4da6ff;
+    --overview-box-hover-start: #f8fbff;
+    --overview-box-hover-end: #eaf4ff;
+    --overview-box-text: #2a2a2a;
+    --faq-item-bg: #f5faff;
+    --faq-item-border: #cce6ff;
+    --faq-item-shadow: rgba(0, 0, 0, 0.04);
+    --faq-item-hover-bg: #d0e6ff;
+    --faq-item-open-bg: #d0e6ff;
+    --faq-toggle-text: #003f5f;
+    --faq-answer-text: #444;
+    --clear-button-border: #888;
+    --clear-button-text: #444;
+    --clear-button-hover-bg: #eee;
+    --clear-button-hover-text: #000;
+    --stamp-text: #222;
+    --stamp-blob-bg: white;
+    --condensed-card-bg: #f9fbfd;
+    --condensed-card-shadow: rgba(0, 0, 0, 0.1);
+    --condensed-media-bg-start: #e6efff;
+    --condensed-media-bg-end: #cbd6e7;
+    --condensed-media-stripe-light: #dde6f1;
+    --condensed-media-stripe-dark: #cbd6e7;
+    --condensed-id-bg: #f0f4fa;
+    --condensed-id-text: #25417d;
+    --favorite-button: #f39c12;
+    --favorite-button-hover-bg: #fbe5b0;
+    --condensed-traits-bg: #e6f2ea;
+    --condensed-traits-border: #4a9d6e;
+    --condensed-traits-text: #2e553e;
+    --condensed-records-bg: #e3eff7;
+    --condensed-records-border: #4a7f9d;
+    --condensed-records-text: #2e4355;
+    --condensed-places-bg: #f0e9f7;
+    --condensed-places-border: #7a4a9d;
+    --condensed-places-text: #422e55;
+    
+    /* Theme Toggle Specific */
+    --toggle-light-bg: #87ceeb;
+    --toggle-dark-bg: #1c1c1c;
+    --toggle-sun: #ffdf00;
+    --toggle-moon: #f1f1f1;
+    --toggle-cloud: #fff;
+    --toggle-star: #fff;
 }
 
 
@@ -195,6 +295,16 @@
   --shark-nicknames-border: #4da6ff;
   --shark-traits-bg: #354538;
   --shark-traits-border: #66bb6a;
+  --shark-records-bg: #4a4a2a;
+  --shark-records-border: #d4a850;
+  --shark-regions-bg: #4a3a2a;
+  --shark-regions-border: #cc5533;
+  --shark-section-title: #5aa7f7;
+  --shark-section-text: #cccccc;
+  --timeline-text: #cccccc;
+  --timeline-circle: #cc8866;
+  --timeline-circle-border: #444444;
+  --timeline-line: #cc8866;
   
   /* Build A Shark Specific */
   --build-form-bg: #2a3a2a;
@@ -234,6 +344,96 @@
     --globe-points: rgba(255, 255, 50, 0.9);
     --globe-rings: rgba(255, 255, 50, 1.0);
     --coordinate-text: rgba(0, 255, 255, 1.0);
+    
+    /* Animation Controls */
+    --animation-container-bg: rgba(0, 0, 0, 0.8);
+    --animation-text: #ffffff;
+    --animation-add-button-bg: #3a9b94;
+    --animation-add-button-text: #ffffff;
+    --animation-remove-button-text: #ffffff;
+    
+    /* Research Creative */
+    --research-text: #b8e6ff;
+    --research-hero-border: #5aa7d1;
+    --research-hero-bottom-border: #7db8dc;
+    --research-hero-text: #fff5aa;
+    --research-intro-text: #ffffff;
+    --research-card-bg-start: rgba(30, 79, 115, 0.98);
+    --research-card-bg-end: rgba(30, 100, 148, 0.98);
+    --research-card-shadow: rgba(30, 84, 148, 0.6);
+    --research-card-text: #c0e7ff;
+    --research-card-hover-bg-start: rgba(30, 100, 148, 1);
+    --research-card-hover-bg-end: rgba(30, 125, 180, 1);
+    --research-card-hover-shadow: rgba(30, 148, 212, 0.7);
+    --research-card-border: #5fa8d4;
+    --research-card-title: #cbb9ef;
+    --research-card-content: #e6f8ff;
+    
+    /* Helper Logbook */
+    --logbook-button-bg: #4a4a4a;
+    --logbook-button-border: #666666;
+    --logbook-button-hover-bg: #cc9900;
+    --logbook-close-button-text: #cccccc;
+    --logbook-close-button-hover: #ffffff;
+    --logbook-container-bg: #2d2d2d;
+    --logbook-container-border: #555555;
+    --logbook-container-shadow: rgba(0, 0, 0, 0.4);
+    --logbook-header-border: #555555;
+    --logbook-title: #dddddd;
+    --logbook-body-text: #cccccc;
+    --logbook-section-title: #dddddd;
+    --logbook-page-name: #4da6ff;
+    --logbook-page-name-bg: #2a3a4a;
+    --logbook-nav-border: #555555;
+    --logbook-nav-link: #4da6ff;
+    --logbook-nav-link-active: #5aa7f7;
+    --logbook-nav-separator: #777777;
+    --overview-box-bg-start: #3a3a3a;
+    --overview-box-bg-end: #2a3a4a;
+    --overview-box-border: #5aa7f7;
+    --overview-box-hover-start: #3a3a4a;
+    --overview-box-hover-end: #3a4a5a;
+    --overview-box-text: #dddddd;
+    --faq-item-bg: #3a3a4a;
+    --faq-item-border: #4a5a6a;
+    --faq-item-shadow: rgba(0, 0, 0, 0.2);
+    --faq-item-hover-bg: #4a5a6a;
+    --faq-item-open-bg: #4a5a6a;
+    --faq-toggle-text: #b8d8ff;
+    --faq-answer-text: #cccccc;
+    --clear-button-border: #777777;
+    --clear-button-text: #cccccc;
+    --clear-button-hover-bg: #4a4a4a;
+    --clear-button-hover-text: #ffffff;
+    --stamp-text: #dddddd;
+    --stamp-blob-bg: #3a3a3a;
+    --condensed-card-bg: #2d3a3d;
+    --condensed-card-shadow: rgba(0, 0, 0, 0.3);
+    --condensed-media-bg-start: #2a3a4a;
+    --condensed-media-bg-end: #2a2a3a;
+    --condensed-media-stripe-light: #3a4a5a;
+    --condensed-media-stripe-dark: #2a3a4a;
+    --condensed-id-bg: #3a4a5a;
+    --condensed-id-text: #5aa7f7;
+    --favorite-button: #cc7a00;
+    --favorite-button-hover-bg: #4a3a2a;
+    --condensed-traits-bg: #2a4a3a;
+    --condensed-traits-border: #6a9d7e;
+    --condensed-traits-text: #aaddaa;
+    --condensed-records-bg: #2a3a4a;
+    --condensed-records-border: #6a9fbd;
+    --condensed-records-text: #aaddff;
+    --condensed-places-bg: #3a2a4a;
+    --condensed-places-border: #9a6abd;
+    --condensed-places-text: #ddaaff;
+    
+    /* Theme Toggle Specific (same colors work for both themes) */
+    --toggle-light-bg: #87ceeb;
+    --toggle-dark-bg: #1c1c1c;
+    --toggle-sun: #ffdf00;
+    --toggle-moon: #f1f1f1;
+    --toggle-cloud: #fff;
+    --toggle-star: #fff;
 }
 
 

@@ -335,14 +335,14 @@
 
 .shark-records {
     padding: 8px 12px;
-    background-color: #fefcd5;
-    border-left: 6px solid #f2d251; 
+    background-color: var(--shark-records-bg);
+    border-left: 6px solid var(--shark-records-border); 
 }
 
 .shark-regions {
     padding: 8px 12px;
-    background-color: #fff3e0;
-    border-left: 6px solid #ff7043; 
+    background-color: var(--shark-regions-bg);
+    border-left: 6px solid var(--shark-regions-border); 
 }
 
 
@@ -354,7 +354,7 @@
 .shark-regions h3 {
     font-size: 14px;
     font-weight: 600;
-    color: #25417d;
+    color: var(--shark-section-title);
     margin-bottom: 6px; 
 }
 
@@ -365,7 +365,7 @@
 .shark-observation p,
 .shark-regions p {
     font-size: 13px; 
-    color: #444;
+    color: var(--shark-section-text);
     margin: 0; 
 }
 
@@ -402,7 +402,7 @@
     position: relative;
     text-align: left;
     font-size: 13px;
-    color: #333;
+    color: var(--timeline-text);
     margin-bottom: 8px;
 }
 
@@ -414,9 +414,9 @@
     top: 4px;
     width: 10px;
     height: 10px;
-    background-color: #eaa089; 
+    background-color: var(--timeline-circle); 
     border-radius: 50%; 
-    border: 2px solid #fff; 
+    border: 2px solid var(--timeline-circle-border); 
 }
 
 /* Vertical line connecting items via circles */
@@ -427,7 +427,7 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background-color: #eaa089; 
+    background-color: var(--timeline-line); 
 }
 
 .timeline-item::before,
