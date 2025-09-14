@@ -87,7 +87,7 @@ function LabSelectionPanel({
                 {selectedSharksForLab.size > 0 && selectedSharksHeatmapData.length > 0 ? (
                     <Heatmap 
                         data={selectedSharksHeatmapData}
-                        title={`Lab Sharks Occurrence Timeline`}
+                        title={`Lab Sharks Record Timeline`}
                     />
                 ) : (
                     <ChartPlaceholder 

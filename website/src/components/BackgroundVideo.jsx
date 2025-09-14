@@ -29,7 +29,8 @@ function BackgroundVideo() {
                 if (!isPaused) {
                     videoRef.current.play().catch(() => {});
                 }
-            } else {
+            } 
+            else {
                 videoRef.current.pause();
             }
         }
