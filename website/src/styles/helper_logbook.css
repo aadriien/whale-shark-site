@@ -147,11 +147,14 @@
     gap: 4px;
     overflow-x: auto;
     white-space: nowrap;
-    scrollbar-width: none; /* for Firefox */
+    
+    /* Hide horizontal scrollbar */
+    scrollbar-width: none !important; 
+    -ms-overflow-style: none !important; 
 }
 
 .logbook-nav::-webkit-scrollbar {
-    display: none; /* for Chrome/Safari */
+    display: none !important; 
 }
 
 .logbook-nav h4 {
@@ -486,11 +489,14 @@
     width: 100%;
     height: 280px;
     overflow-y: auto;
-    scrollbar-width: none; /* for Firefox */
+    
+    /* Hide vertical scrollbar */
+    scrollbar-width: none !important; 
+    -ms-overflow-style: none !important; 
 }
 
 .condensed-shark-card::-webkit-scrollbar {
-    display: none; /* for Chrome/Safari */
+    display: none !important;
 }
 
 .condensed-media {

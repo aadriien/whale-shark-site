@@ -3,6 +3,11 @@
 
 /* Light Theme (Default) */
 :root {
+    /* Scrollbar Settings */
+    --scrollbar-thumb: rgba(0, 0, 0, 0.25);
+    --scrollbar-thumb-hover: rgba(0, 0, 0, 0.4);
+    --scrollbar-track: transparent;
+
     /* Primary Colors */
     --primary-blue: #479bf5;
     --primary-purple: #7e58f0;
@@ -221,6 +226,11 @@
 
 /* Dark Theme */
 [data-theme="dark"] {
+    /* Scrollbar Settings */
+    --scrollbar-thumb: rgba(255, 255, 255, 0.25);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+    --scrollbar-track: transparent;
+
     /* Primary Colors (adjusted for dark mode) */
     --primary-blue: #5aa7f7;
     --primary-purple: #9370f2;

@@ -60,21 +60,7 @@ body {
     box-sizing: border-box;
 }
 
-/* Aggressively prevent any scrollbar-related white space */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-#root::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    background: transparent;
-}
-
-html, body, #root {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-/* Final safety net - ensure no white space can appear */
+/* Ensure no white space can appear */
 html::before,
 body::before {
     content: '';
@@ -87,6 +73,34 @@ body::before {
     z-index: -9999;
     pointer-events: none;
 }
+
+
+/* Scrollbar for WebKit-based browsers */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+}
+
+/* Scrollbar for Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
   
 a {
     font-weight: 500;
@@ -111,11 +125,6 @@ nav {
     z-index: 10;
     overflow-x: auto; /* allow horizontal scroll on small screens */
     white-space: nowrap; /* prevent links from wrapping */
-    scrollbar-width: none; /* for Firefox */
-}
-
-nav::-webkit-scrollbar {
-    display: none; /* for Chrome/Safari */
 }
 
 /* Link styling */

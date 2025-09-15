@@ -87,6 +87,14 @@
     text-decoration: none;
     color: var(--research-card-text);
     display: block;
+
+    /* Hide vertical scrollbar */
+    scrollbar-width: none !important; 
+    -ms-overflow-style: none !important; 
+}
+
+.research-creative-card::-webkit-scrollbar {
+    display: none !important;
 }
 
 .research-creative-card:hover {

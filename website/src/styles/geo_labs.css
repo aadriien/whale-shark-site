@@ -263,13 +263,13 @@
 
     contain: layout size !important;
     
-    /* Hide scrollbar */
-    scrollbar-width: none; 
-    -ms-overflow-style: none; 
+    /* Hide horizontal scrollbar */
+    scrollbar-width: none !important; 
+    -ms-overflow-style: none !important; 
 }
 
 .selected-sharks-list::-webkit-scrollbar {
-    display: none; 
+    display: none !important; 
 }
 
 .overview-container {
