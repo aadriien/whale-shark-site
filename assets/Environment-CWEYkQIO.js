@@ -1,0 +1,1 @@
+import{j as e}from"./index-Cv8Wm8-d.js";function i(){return e.jsxs("div",{className:"page-content environment-wrapper",children:[e.jsx("h1",{children:"Copernicus Marine Data Viewer"}),e.jsx("div",{className:"copernicus-visual",children:e.jsx("iframe",{src:"https://data.marine.copernicus.eu/-/kob6a042j8",width:"100%",height:"100%"})})]})}export{i as default};
