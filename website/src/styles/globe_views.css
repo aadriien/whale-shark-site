@@ -107,7 +107,7 @@
 /* Shared active/focus */
 .show-all-button.active,
 .toggle-filter-button.active {
-    color: white;
+    color: var(--bg-primary);
     background-color: var(--primary-purple);
 }
 
@@ -117,7 +117,7 @@
     border: 1px solid var(--border-secondary);
     border-radius: 6px;
     background-color: var(--bg-quaternary);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-xs);
     overflow: hidden;
 }
 
@@ -252,29 +252,29 @@
 
 .country-code {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--text-quaternary);
 }
 
 .shark-selector-item:hover:not(.selected) {
     cursor: pointer;
-    background-color: #a8e8ea;
+    background-color: var(--primary-teal);
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .shark-selector-item.selected {
     font-weight: 600;
-    color: white;
-    background-color: #479bf5;
+    color: var(--bg-primary);
+    background-color: var(--primary-blue);
 }
 
 
 .shark-info-panel {
     height: 100%;
     padding: 10px;
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-xs);
     overflow-y: scroll;
 }
 
@@ -298,10 +298,10 @@
 .shark-panel-details {
     display: flex;
     flex-direction: column;
-    background: #f9fbfd; 
+    background-color: var(--surface-secondary); 
     border-radius: 5px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-    color: #333;
+    box-shadow: var(--shadow-sm);
+    color: var(--text-secondary);
     gap: 7px; 
     overflow-y: auto;
     transition: box-shadow 0.3s ease;
@@ -315,7 +315,7 @@
 
 .shark-panel-details .timeline-label {
     font-weight: 600;
-    color: #25417d;
+    color: var(--accent-dark-blue);
 }
 
 .timeline-item > div {
@@ -330,7 +330,7 @@
 .shark-images-container {
     display: flex;
     flex-direction: column;
-    border-top: 3px solid #000;
+    border-top: 3px solid var(--text-primary);
     gap: 0.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.7rem;
@@ -343,10 +343,10 @@
 }
 
 .shark-image-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-tertiary);
     border-radius: 6px;
     overflow: hidden;
-    background-color: #f9f9f9;
+    background-color: var(--bg-secondary);
     padding: 0.5rem;
     text-align: center;
 }
@@ -361,7 +361,7 @@
 
 .shark-image-meta {
     font-size: 0.8rem;
-    color: #555;
+    color: var(--text-tertiary);
     margin-top: 0.2rem;
     margin-bottom: 0.1rem;
 }
@@ -370,7 +370,7 @@
 .image-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background-color: var(--bg-overlay-soft);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -411,9 +411,9 @@
 /* White slip for credits background below image */
 .overlay-meta {
     display: block;
-    background: white;
+    background-color: var(--bg-primary);
     padding: 0.3rem 0.5rem;
-    color: #444;
+    color: var(--shark-section-text);
     font-size: 0.85rem;
     box-sizing: border-box;
     user-select: none;
@@ -445,7 +445,7 @@
 /* Carousel buttons to move between shark's images */
 .carousel-button {
     font-size: 3rem;
-    color: #fff;
+    color: var(--bg-primary);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -466,7 +466,7 @@
 }
 
 .carousel-button:hover {
-    background-color: #666 !important;
+    background-color: var(--text-quaternary) !important;
 }
   
 /* Disable carousel opacity & cursor if no other images */
@@ -480,7 +480,7 @@
     top: 0.5rem;
     right: 0.5rem;
     font-size: 2rem;
-    background: #fff;
+    background-color: var(--bg-primary);
     border: none;
     border-radius: 50%;
     width: 3rem;
@@ -498,7 +498,7 @@
 }
 
 .close-button:hover {
-    background-color: #666 !important;
+    background-color: var(--text-quaternary) !important;
 }
 
 

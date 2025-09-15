@@ -7,7 +7,7 @@
     --scrollbar-thumb: rgba(0, 0, 0, 0.25);
     --scrollbar-thumb-hover: rgba(0, 0, 0, 0.4);
     --scrollbar-track: transparent;
-
+    
     /* Primary Colors */
     --primary-blue: #479bf5;
     --primary-purple: #7e58f0;
@@ -19,6 +19,7 @@
     --bg-secondary: #f9f9f9;
     --bg-tertiary: #f8f9ff;
     --bg-quaternary: #f2f8fc;
+    --bg-overlay-soft: rgba(0, 0, 0, 0.75);
     --bg-overlay: rgba(0, 0, 0, 0.8);
     
     /* Surface Colors */
@@ -60,7 +61,8 @@
     --focus-ring: rgba(66, 153, 225, 0.5);
     
     /* Shadows */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 3px 8px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.15);
     --shadow-xl: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -68,63 +70,63 @@
     /* Navbar Specific */
     --navbar-bg: #041533;
     --navbar-text: #ffffff;
-    --navbar-text-hover: #fff41dcb;
+    --navbar-text-hover: #ffb41d;
     --navbar-text-active: #fff41d;
     
-  /* Page Specific Colors */
-  --conservation-bg: #ffeaea;
-  --fact-card-bg: #e0f7ff;
-  
-  /* Shark Card Sections */
-  --shark-id-bg: #dbd9f7;
-  --shark-id-border: #7a7de0;
-  --shark-nicknames-bg: #e0f7fa;
-  --shark-nicknames-border: #2093a2;
-  --shark-traits-bg: #e3f4cf;
-  --shark-traits-border: #66bb6a;
-  --shark-records-bg: #fefcd5;
-  --shark-records-border: #f2d251;
-  --shark-regions-bg: #fff3e0;
-  --shark-regions-border: #ff7043;
-  --shark-section-title: #25417d;
-  --shark-section-text: #444;
-  --timeline-text: #333;
-  --timeline-circle: #eaa089;
-  --timeline-circle-border: #fff;
-  --timeline-line: #eaa089;
-  
-  /* Build A Shark Specific */
-  --build-form-bg: #f5fffd;
-  --build-form-border: #ccc;
-  --build-label-bg: #e1f9e7;
-  --build-label-border: #a5b4fc;
-  --build-label-subtext: #444;
-  --build-input-border: #d4d4d8;
-  --build-image-container-bg: #f0f0f0;
-  --build-image-text: #888;
-  
-  /* Data Visuals Sections */
-  --data-calendar-bg-start: #ffe8ec;
-  --data-calendar-bg-end: #f9f0ff;
-  --data-calendar-header-bg: #f7d8e1;
-  --data-continent-bg-start: #e0fff7;
-  --data-continent-bg-end: #d0f0ff;
-  --data-continent-header-bg: #ccefee;
-  --data-country-bg-start: #fff5e1;
-  --data-country-bg-end: #fce8d8;
-  --data-country-header-bg: #f5dbba;
-  --data-publishing-bg-start: #e2f3ff;
-  --data-publishing-bg-end: #d9e8ff;
-  --data-publishing-header-bg: #cbe2ff;
-  --data-filter-border: #bbb;
-  --data-card-border: #ccc;
-  --data-overview-border: #d0e3f0;
-  --data-overview-bg-start: #b7f4e2;
-  --data-overview-bg-end: #d0c2fc;
-  --data-overview-row-bg: #f8fbff;
-  --data-overview-row-border: #1da1f2;
-  --data-overview-label-text: #444;
-  --data-overview-value-text: #1a73e8;
+    /* Page Specific Colors */
+    --conservation-bg: #ffeaea;
+    --fact-card-bg: #e0f7ff;
+    
+    /* Shark Card Sections */
+    --shark-id-bg: #dbd9f7;
+    --shark-id-border: #7a7de0;
+    --shark-nicknames-bg: #e0f7fa;
+    --shark-nicknames-border: #2093a2;
+    --shark-traits-bg: #e3f4cf;
+    --shark-traits-border: #66bb6a;
+    --shark-records-bg: #fefcd5;
+    --shark-records-border: #f2d251;
+    --shark-regions-bg: #fff3e0;
+    --shark-regions-border: #ff7043;
+    --shark-section-title: #25417d;
+    --shark-section-text: #444;
+    --timeline-text: #333;
+    --timeline-circle: #eaa089;
+    --timeline-circle-border: #fff;
+    --timeline-line: #eaa089;
+    
+    /* Build A Shark Specific */
+    --build-form-bg: #f5fffd;
+    --build-form-border: #ccc;
+    --build-label-bg: #e1f9e7;
+    --build-label-border: #a5b4fc;
+    --build-label-subtext: #444;
+    --build-input-border: #d4d4d8;
+    --build-image-container-bg: #f0f0f0;
+    --build-image-text: #888;
+    
+    /* Data Visuals Sections */
+    --data-calendar-bg-start: #ffe8ec;
+    --data-calendar-bg-end: #f9f0ff;
+    --data-calendar-header-bg: #f7d8e1;
+    --data-continent-bg-start: #e0fff7;
+    --data-continent-bg-end: #d0f0ff;
+    --data-continent-header-bg: #ccefee;
+    --data-country-bg-start: #fff5e1;
+    --data-country-bg-end: #fce8d8;
+    --data-country-header-bg: #f5dbba;
+    --data-publishing-bg-start: #e2f3ff;
+    --data-publishing-bg-end: #d9e8ff;
+    --data-publishing-header-bg: #cbe2ff;
+    --data-filter-border: #bbb;
+    --data-card-border: #ccc;
+    --data-overview-border: #d0e3f0;
+    --data-overview-bg-start: #b7f4e2;
+    --data-overview-bg-end: #d0c2fc;
+    --data-overview-row-bg: #f8fbff;
+    --data-overview-row-border: #1da1f2;
+    --data-overview-label-text: #444;
+    --data-overview-value-text: #1a73e8;
     
     /* Globe Map Specific */
     --globe-glow: #FFD700;
@@ -202,6 +204,7 @@
     --condensed-media-stripe-dark: #cbd6e7;
     --condensed-id-bg: #f0f4fa;
     --condensed-id-text: #25417d;
+    --no-media-text: #222;
     --favorite-button: #f39c12;
     --favorite-button-hover-bg: #fbe5b0;
     --condensed-traits-bg: #e6f2ea;
@@ -230,7 +233,7 @@
     --scrollbar-thumb: rgba(255, 255, 255, 0.25);
     --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
     --scrollbar-track: transparent;
-
+    
     /* Primary Colors (adjusted for dark mode) */
     --primary-blue: #5aa7f7;
     --primary-purple: #9370f2;
@@ -242,6 +245,7 @@
     --bg-secondary: #2d2d2d;
     --bg-tertiary: #1e1e2e;
     --bg-quaternary: #2a2a3a;
+    --bg-overlay-soft: rgba(0, 0, 0, 0.75);
     --bg-overlay: rgba(0, 0, 0, 0.9);
     
     /* Surface Colors */
@@ -283,7 +287,8 @@
     --focus-ring: rgba(138, 180, 248, 0.5);
     
     /* Shadows */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 3px 8px rgba(0, 0, 0, 0.35);
     --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 4px 12px rgba(0, 0, 0, 0.6);
@@ -292,62 +297,62 @@
     --navbar-bg: #1a1a2e;
     --navbar-text: #ffffff;
     --navbar-text-hover: #7dd3d6;
-    --navbar-text-active: #9370f2;
+    --navbar-text-active: #c192fe;
     
-  /* Page Specific Colors */
-  --conservation-bg: #3a2d2d;
-  --fact-card-bg: #2d3a3a;
-  
-  /* Shark Card Sections */
-  --shark-id-bg: #3a3a4a;
-  --shark-id-border: #8b6df4;
-  --shark-nicknames-bg: #2d4042;
-  --shark-nicknames-border: #4da6ff;
-  --shark-traits-bg: #354538;
-  --shark-traits-border: #66bb6a;
-  --shark-records-bg: #4a4a2a;
-  --shark-records-border: #d4a850;
-  --shark-regions-bg: #4a3a2a;
-  --shark-regions-border: #cc5533;
-  --shark-section-title: #5aa7f7;
-  --shark-section-text: #cccccc;
-  --timeline-text: #cccccc;
-  --timeline-circle: #cc8866;
-  --timeline-circle-border: #444444;
-  --timeline-line: #cc8866;
-  
-  /* Build A Shark Specific */
-  --build-form-bg: #2a3a2a;
-  --build-form-border: #555555;
-  --build-label-bg: #2d4032;
-  --build-label-border: #7a7de0;
-  --build-label-subtext: #cccccc;
-  --build-input-border: #666666;
-  --build-image-container-bg: #3a3a3a;
-  --build-image-text: #aaaaaa;
-  
-  /* Data Visuals Sections */
-  --data-calendar-bg-start: #4a3a3a;
-  --data-calendar-bg-end: #3a3a4a;
-  --data-calendar-header-bg: #4a4040;
-  --data-continent-bg-start: #2a4a3a;
-  --data-continent-bg-end: #2a3a4a;
-  --data-continent-header-bg: #3a4a4a;
-  --data-country-bg-start: #4a4a2a;
-  --data-country-bg-end: #4a3a2a;
-  --data-country-header-bg: #4a4035;
-  --data-publishing-bg-start: #2a3a4a;
-  --data-publishing-bg-end: #2a2a4a;
-  --data-publishing-header-bg: #3a3a5a;
-  --data-filter-border: #555555;
-  --data-card-border: #444444;
-  --data-overview-border: #4a5a6a;
-  --data-overview-bg-start: #3a5a4a;
-  --data-overview-bg-end: #4a3a5a;
-  --data-overview-row-bg: #2a3a4a;
-  --data-overview-row-border: #4da6ff;
-  --data-overview-label-text: #cccccc;
-  --data-overview-value-text: #5aa7f7;
+    /* Page Specific Colors */
+    --conservation-bg: #3a2d2d;
+    --fact-card-bg: #2d3a3a;
+    
+    /* Shark Card Sections */
+    --shark-id-bg: #3a3a4a;
+    --shark-id-border: #8b6df4;
+    --shark-nicknames-bg: #2d4042;
+    --shark-nicknames-border: #4da6ff;
+    --shark-traits-bg: #354538;
+    --shark-traits-border: #66bb6a;
+    --shark-records-bg: #4a4a2a;
+    --shark-records-border: #d4a850;
+    --shark-regions-bg: #4a3a2a;
+    --shark-regions-border: #cc5533;
+    --shark-section-title: #5aa7f7;
+    --shark-section-text: #cccccc;
+    --timeline-text: #cccccc;
+    --timeline-circle: #cc8866;
+    --timeline-circle-border: #444444;
+    --timeline-line: #cc8866;
+    
+    /* Build A Shark Specific */
+    --build-form-bg: #2a3a2a;
+    --build-form-border: #555555;
+    --build-label-bg: #2d4032;
+    --build-label-border: #7a7de0;
+    --build-label-subtext: #cccccc;
+    --build-input-border: #666666;
+    --build-image-container-bg: #3a3a3a;
+    --build-image-text: #aaaaaa;
+    
+    /* Data Visuals Sections */
+    --data-calendar-bg-start: #4a3a3a;
+    --data-calendar-bg-end: #3a3a4a;
+    --data-calendar-header-bg: #4a4040;
+    --data-continent-bg-start: #2a4a3a;
+    --data-continent-bg-end: #2a3a4a;
+    --data-continent-header-bg: #3a4a4a;
+    --data-country-bg-start: #4a4a2a;
+    --data-country-bg-end: #4a3a2a;
+    --data-country-header-bg: #4a4035;
+    --data-publishing-bg-start: #2a3a4a;
+    --data-publishing-bg-end: #2a2a4a;
+    --data-publishing-header-bg: #3a3a5a;
+    --data-filter-border: #555555;
+    --data-card-border: #444444;
+    --data-overview-border: #4a5a6a;
+    --data-overview-bg-start: #3a5a4a;
+    --data-overview-bg-end: #4a3a5a;
+    --data-overview-row-bg: #2a3a4a;
+    --data-overview-row-border: #4da6ff;
+    --data-overview-label-text: #cccccc;
+    --data-overview-value-text: #5aa7f7;
     
     /* Globe Map Specific (brighter for visibility) */
     --globe-glow: #FFE135;
@@ -382,7 +387,7 @@
     /* Helper Logbook */
     --logbook-button-bg: #4a4a4a;
     --logbook-button-border: #666666;
-    --logbook-button-hover-bg: #cc9900;
+    --logbook-button-hover-bg: #e7b213;
     --logbook-close-button-text: #cccccc;
     --logbook-close-button-hover: #ffffff;
     --logbook-container-bg: #2d2d2d;
@@ -425,8 +430,9 @@
     --condensed-media-stripe-dark: #2a3a4a;
     --condensed-id-bg: #3a4a5a;
     --condensed-id-text: #5aa7f7;
+    --no-media-text: #dddddd;
     --favorite-button: #cc7a00;
-    --favorite-button-hover-bg: #4a3a2a;
+    --favorite-button-hover-bg: #7d6c44;
     --condensed-traits-bg: #2a4a3a;
     --condensed-traits-border: #6a9d7e;
     --condensed-traits-text: #aaddaa;
@@ -456,3 +462,5 @@
 .theme-transitioning * {
     transition: none !important;
 }
+
+

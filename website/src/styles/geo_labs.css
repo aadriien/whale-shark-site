@@ -171,7 +171,7 @@
     background: var(--surface-primary);
     border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-xs);
     transition: all 0.2s ease;
 }
 

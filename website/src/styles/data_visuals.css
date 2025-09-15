@@ -74,7 +74,7 @@
     border: 1px solid var(--data-filter-border);
     border-radius: 8px;
     margin: 0rem 1rem;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-xs);
     color: var(--text-secondary);
 }
 
@@ -121,7 +121,7 @@
     height: 100%;
     min-height: 400px; */
     background-color: var(--bg-primary);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-xs);
 
     width: 100%;
     aspect-ratio: 1; /* Make the card square */
