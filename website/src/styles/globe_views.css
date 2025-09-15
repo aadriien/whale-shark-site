@@ -445,7 +445,7 @@
 /* Carousel buttons to move between shark's images */
 .carousel-button {
     font-size: 3rem;
-    color: var(--bg-primary);
+    color: var(--bg-secondary);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -480,7 +480,7 @@
     top: 0.5rem;
     right: 0.5rem;
     font-size: 2rem;
-    background-color: var(--bg-primary);
+    background-color: var(--bg-secondary);
     border: none;
     border-radius: 50%;
     width: 3rem;

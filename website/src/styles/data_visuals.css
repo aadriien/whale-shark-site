@@ -78,6 +78,13 @@
     color: var(--text-secondary);
 }
 
+#heatmap-decade-select {
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--data-filter-border);
+    border-radius: 8px;
+}
+
 @media (max-width: 600px) {
     .section-header {
         flex-direction: column;
@@ -120,7 +127,7 @@
     /* padding: 1rem;
     height: 100%;
     min-height: 400px; */
-    background-color: var(--bg-primary);
+    background-color: var(--bg-secondary);
     box-shadow: var(--shadow-xs);
 
     width: 100%;
@@ -141,6 +148,14 @@
     height: 100%;
     min-width: 300px;
     min-height: 300px;
+
+    /* Hide vertical scrollbar */
+    scrollbar-width: none !important; 
+    -ms-overflow-style: none !important; 
+}
+
+.card-data-wrapper::-webkit-scrollbar {
+    display: none !important;
 }
 
 /* Style for each data overview by metric */
@@ -254,5 +269,18 @@
     margin: 0;
     font-size: 0.9rem;
 }
+
+
+.chart-title {
+    font-size: 14px;
+    font-weight: bold;
+    fill: var(--text-secondary); 
+}
+
+.chart-legend {
+    font-size: 12px;
+    fill: var(--text-secondary);
+}
+
 
 

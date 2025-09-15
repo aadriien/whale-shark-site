@@ -242,7 +242,7 @@
     
     /* Background Colors */
     --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
+    --bg-secondary: #5f5e5e;
     --bg-tertiary: #1e1e2e;
     --bg-quaternary: #2a2a3a;
     --bg-overlay-soft: rgba(0, 0, 0, 0.75);
@@ -251,7 +251,7 @@
     /* Surface Colors */
     --surface-primary: #2d2d2d;
     --surface-secondary: #3a3a3a;
-    --surface-tertiary: #404040;
+    --surface-tertiary: #5e5e5e;
     --surface-quaternary: #4a4a4a;
     
     /* Text Colors */
@@ -265,8 +265,8 @@
     /* Accent Colors */
     --accent-blue: #4da6ff;
     --accent-purple: #8b6df4;
-    --accent-dark-blue: #5a7bc4;
-    --accent-navy: #4a6fa5;
+    --accent-dark-blue: #809fe0;
+    --accent-navy: rgb(147, 186, 241);
     
     /* Border Colors */
     --border-primary: #555555;
@@ -332,18 +332,18 @@
     --build-image-text: #aaaaaa;
     
     /* Data Visuals Sections */
-    --data-calendar-bg-start: #4a3a3a;
-    --data-calendar-bg-end: #3a3a4a;
-    --data-calendar-header-bg: #4a4040;
-    --data-continent-bg-start: #2a4a3a;
-    --data-continent-bg-end: #2a3a4a;
-    --data-continent-header-bg: #3a4a4a;
-    --data-country-bg-start: #4a4a2a;
-    --data-country-bg-end: #4a3a2a;
-    --data-country-header-bg: #4a4035;
-    --data-publishing-bg-start: #2a3a4a;
-    --data-publishing-bg-end: #2a2a4a;
-    --data-publishing-header-bg: #3a3a5a;
+    --data-calendar-bg-start: #856262;
+    --data-calendar-bg-end: #6b5977;
+    --data-calendar-header-bg: #714848;
+    --data-continent-bg-start: #39644f;
+    --data-continent-bg-end: #375f61;
+    --data-continent-header-bg: #315353;
+    --data-country-bg-start: #747442;
+    --data-country-bg-end: #695037;
+    --data-country-header-bg: #6f573e;
+    --data-publishing-bg-start: #364b60;
+    --data-publishing-bg-end: #414178;
+    --data-publishing-header-bg: #3b3b65;
     --data-filter-border: #555555;
     --data-card-border: #444444;
     --data-overview-border: #4a5a6a;

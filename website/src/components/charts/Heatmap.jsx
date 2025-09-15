@@ -137,8 +137,7 @@ const Heatmap = ({
             .attr("x", width / 2)
             .attr("y", 25)
             .attr("text-anchor", "middle")
-            .style("font-size", "14px")
-            .attr("font-weight", "bold")
+            .attr("class", "chart-title") // apply CSS class
             .text(title);
         
     }, [data, title, svgDimensions, yTickFormatter]);

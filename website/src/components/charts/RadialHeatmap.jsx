@@ -117,8 +117,7 @@ const RadialHeatmap = ({
             .attr("x", width / 2)
             .attr("y", 25)
             .attr("text-anchor", "middle")
-            .attr("font-size", "14px")
-            .attr("font-weight", "bold")
+            .attr("class", "chart-title") // apply CSS class
             .text(title);
 
         // If pieData provided, create pie chart in center
@@ -176,9 +175,9 @@ const RadialHeatmap = ({
                 .attr("fill", segmentColorScale(segments.indexOf(segment))); 
 
             legendGroup.append("text")
-                .attr("x", 20)
-                .attr("y", i * 18 + 12)
-                .attr("font-size", "12px")
+                .attr("x", 18)
+                .attr("y", i * 18 + 10)
+                .attr("class", "chart-legend") // apply CSS class
                 .text(() => {
                     const totalForSegment = d3.sum(data.filter(
                         d => d[segmentField] === segment

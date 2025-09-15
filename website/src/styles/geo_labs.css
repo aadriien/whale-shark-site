@@ -74,7 +74,7 @@
 .geo-labs-step-button.step-mode-active {
     border-radius: 8px 8px 0 0; /* only top corners rounded when open */
     background-color: var(--primary-purple);
-    color: white;
+    color: var(--surface-primary);
     border-bottom: 1px solid var(--accent-purple); /* purple bottom border when open */
 }
 
@@ -137,7 +137,7 @@
 
 .step-button:hover:not(:disabled) {
     background-color: var(--primary-purple);
-    color: white;
+    color: var(--surface-primary);
 }
 
 .step-button:disabled {
@@ -194,7 +194,7 @@
     background: var(--surface-primary);
     border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-xs);
 }
 
 
@@ -249,9 +249,9 @@
     height: 2rem;
 
     font-family: monospace;
-    background-color: white;
+    background-color: var(--bg-primary);
     padding: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-secondary);
     border-radius: 4px;
     font-size: 0.9rem;
     line-height: 0.95rem;
@@ -273,7 +273,8 @@
 }
 
 .overview-container {
-    border: 1px solid #ddd;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-tertiary);
     border-radius: 12px;
     overflow: hidden;
 }
@@ -288,7 +289,7 @@
     width: 100%;
     height: 280px;
     margin-top: 10px;
-    background-color: var(--surface-primary);
+    background-color: var(--bg-secondary);
     border: 1px solid var(--border-tertiary);
     border-radius: 12px;
     overflow: hidden;
@@ -298,7 +299,7 @@
     width: 100%;
     height: 260px;
     margin-top: 10px;
-    background-color: var(--surface-primary);
+    background-color: var(--bg-secondary);
     border: 1px solid var(--border-tertiary);
     border-radius: 12px;
     overflow: hidden;
@@ -346,7 +347,7 @@
 .geo-labs-timeline-button.timeline-mode-active {
     border-radius: 8px 8px 0 0;
     background-color: var(--primary-purple);
-    color: white;
+    color: var(--surface-primary);
     border-bottom: 1px solid var(--accent-purple);
 }
 
@@ -394,7 +395,7 @@
 
 .timeline-nav-button:hover:not(:disabled) {
     background-color: var(--primary-purple);
-    color: white;
+    color: var(--surface-primary);
 }
 
 .timeline-nav-button:disabled {
@@ -439,7 +440,7 @@
     background: var(--surface-primary);
     border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-xs);
     transition: all 0.2s ease;
 }
 
@@ -462,7 +463,7 @@
     background: var(--surface-primary);
     border: 2px solid var(--primary-purple);
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-xs);
 }
 
 .timeline-info {
