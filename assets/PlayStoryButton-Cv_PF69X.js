@@ -1,4 +1,4 @@
-import{j as t}from"./index-Cv8Wm8-d.js";const d=({shark:o,onPlayStory:r,isPlaying:e,playingSharkId:l,showPauseForGeoLabs:i=!1,onToggleStepMode:a,isStepMode:s=!1})=>o?i?t.jsx("div",{className:"play-story-section",children:t.jsx("button",{className:`geo-labs-step-button
+import{j as t}from"./index-DK2bq1kE.js";const d=({shark:o,onPlayStory:r,isPlaying:e,playingSharkId:l,showPauseForGeoLabs:i=!1,onToggleStepMode:a,isStepMode:s=!1})=>o?i?t.jsx("div",{className:"play-story-section",children:t.jsx("button",{className:`geo-labs-step-button
                         ${s?" step-mode-active":""}
                     `,onClick:n=>{n.stopPropagation(),a()},children:s?"Exit Story Mode":t.jsxs(t.Fragment,{children:["Step Through ",t.jsx("strong",{children:o.name||o.id}),"'s Story"]})})}):t.jsx("div",{className:"play-story-section",children:t.jsx("button",{className:`play-story-button
                     ${l===o.id&&e?" currentlyPlaying":""}
