@@ -215,6 +215,11 @@ I used [Pollinations.AI](https://pollinations.ai)'s API to access OpenAI text + 
 Thank you to Sean Bradley, whose open source [JEasings module](https://github.com/Sean-Bradley/JEasings), a JavaScript animation engine, allows me to control movements on the Three.js globe for "storytelling mode".
 
 
+### Styling & Controls
+
+Thank you to Jamie Wilson, whose open source [theme switcher](https://codepen.io/jamiewilsonict/pen/LYKGjdb) served as inspiration for my own adaptation of a light / dark mode toggle button!
+
+
 ### 3D Model Credits
 
 ["Whale Shark Fantasy"](https://skfb.ly/6ysSQ) by Alenzo is licensed under [Creative Commons Attribution](http://creativecommons.org/licenses/by/4.0/).
