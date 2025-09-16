@@ -73,7 +73,29 @@
     --navbar-text-hover: #ffb41d;
     --navbar-text-active: #fff41d;
     
-    /* Page Specific Colors */
+    /* Content Zone Selection */
+    --version-toggle: #c1ffec;
+    --version-bg: #a8e6cf33;
+    --version-shadow: 0 2px 6px rgba(0, 119, 190, 0.4);
+    --version-hover-shadow: 0 4px 12px rgba(0, 143, 223, 0.6);
+
+    /* Research Reef */
+    --reef-hover-text: #3a1e19;
+    --reef-hover-bg: #f5927a;
+    --reef-hover-border: #f07a56;
+    --reef-active-bg: #f7b7a3;
+    --reef-active-border: #f5a089;
+    --reef-shadow: 0 0 10px rgba(247, 183, 163, 0.9);
+
+    /* Creative Current */
+    --current-hover-text: #223613;
+    --current-hover-bg: #88bb5a;
+    --current-hover-border: #6fa23f;
+    --current-active-bg: #a8d5a3;
+    --current-active-border: #94c57a;
+    --current-shadow: 0 0 10px rgba(168, 213, 163, 0.9);
+    
+    /* About Page Colors */
     --conservation-bg: #ffeaea;
     --fact-card-bg: #e0f7ff;
     
@@ -299,7 +321,29 @@
     --navbar-text-hover: #7dd3d6;
     --navbar-text-active: #c192fe;
     
-    /* Page Specific Colors */
+    /* Content Zone Selection */
+    --version-toggle: #c1ffec;
+    --version-bg: #a8e6cf33;
+    --version-shadow: 0 2px 6px rgba(0, 119, 190, 0.4);
+    --version-hover-shadow: 0 4px 12px rgba(0, 143, 223, 0.6);
+
+    /* Research Reef */
+    --reef-hover-text: #3a1e19;
+    --reef-hover-bg: #f5927a;
+    --reef-hover-border: #f07a56;
+    --reef-active-bg: #f7b7a3;
+    --reef-active-border: #f5a089;
+    --reef-shadow: 0 0 10px rgba(247, 183, 163, 0.9);
+
+    /* Creative Current */
+    --current-hover-text: #223613;
+    --current-hover-bg: #88bb5a;
+    --current-hover-border: #6fa23f;
+    --current-active-bg: #a8d5a3;
+    --current-active-border: #94c57a;
+    --current-shadow: 0 0 10px rgba(168, 213, 163, 0.9);
+    
+    /* About Page Colors */
     --conservation-bg: #3a2d2d;
     --fact-card-bg: #2d3a3a;
     

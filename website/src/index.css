@@ -163,53 +163,53 @@ nav a.active {
     font-size: 1rem;
     font-weight: 600;
 
-    color: #c1ffec;
-    background-color: #a8e6cf33; /* subtle pastel highlight */
+    color: var(--version-toggle);
+    background-color: var(--version-bg); /* subtle pastel highlight */
     border-radius: 16px;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0, 119, 190, 0.4);
+    box-shadow: var(--version-shadow);
     
     cursor: pointer;
     user-select: none;
 }
 
 .version-toggle a:hover {
-    box-shadow: 0 4px 12px rgba(0, 143, 223, 0.6);
+    box-shadow: var(--version-hover-shadow);
 }
 
 .reef {
-    border: 2px solid #f5a089; 
+    border: 2px solid var(--reef-active-border); 
 }
 
 .reef:hover {
-    color: #3a1e19;
-    background-color: #f5927a; 
-    border-color: #f07a56;
+    color: var(--reef-hover-text);
+    background-color: var(--reef-hover-bg); 
+    border-color: var(--reef-hover-border);
 }
 
 .reef.active-version {
-    color: #3a1e19; 
-    background-color: #f7b7a3; 
-    border-color: #f5a089; 
-    box-shadow: 0 0 10px rgba(247, 183, 163, 0.9);
+    color: var(--reef-hover-text); 
+    background-color: var(--reef-active-bg); 
+    border-color: var(--reef-active-border); 
+    box-shadow: var(--reef-shadow);
 }
 
 .current {
-    border: 2px solid #94c57a; 
+    border: 2px solid var(--current-active-border); 
 }
 
 .current:hover {
-    color: #223613;
-    background-color: #88bb5a; 
-    border-color: #6fa23f;
+    color: var(--current-hover-text);
+    background-color: var(--current-hover-bg); 
+    border-color: var(--current-hover-border);
 }
 
 .current.active-version {
-    color: #223613; 
-    background-color: #a8d5a3;  
-    border-color: #94c57a; 
-    box-shadow: 0 0 10px rgba(168, 213, 163, 0.9);
+    color: var(--current-hover-text); 
+    background-color: var(--current-active-bg);  
+    border-color: var(--current-active-border); 
+    box-shadow: var(--current-shadow);
 }
 
 /* Smaller font and margin on small screens */
