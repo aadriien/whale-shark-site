@@ -6,32 +6,35 @@ function CreativeCurrent() {
         {
             path: "/creative/buildashark",
             title: "Build-A-Shark",
-            description: "Create your own virtual shark with custom features and colors.",
+            description: "Create your own virtual whale shark based on selected features",
             image: "./build-a-shark.png",
         },
         {
             path: "/creative/animation",
             title: "Animation",
-            description: "Watch beautiful ocean animations and learn how they're made.",
+            description: "Customize your own 3D path and watch a shark swim along it",
             image: "./animation.png",
         },
     ];
 
     return (
         <div className="page-content research-creative-wrapper">
-            {/* <section className="research-creative-hero"> */}
-                <div className="research-creative-hero-content">
-                    <h1>Welcome to the Creative Current</h1>
-                    <p>Build sharks, watch animations, and dive into creativity.</p>
-                </div>
-            {/* </section> */}
+            
+            <div className="research-creative-hero-content">
+                <h1>Welcome to the Creative Current</h1>
+                <p>Dive into imagination. Construct dynamic paths. Build whale sharks.</p>
+            </div>
 
             <div className="research-creative-intro">
                 <p>
-                    Creative Current is your hub for interactive ocean creativity. Customize your own shark, 
-                    explore stunning animations inspired by marine life, and discover playful ways to engage 
-                    with the sea's wonders. Whether you're a creator or just curious, this section invites you 
-                    to dive in and have fun.
+                    Creative Current is the playful and innovative sandbox of our whale shark experience. 
+                </p>
+                <p>    
+                    Here you can invent your own shark, toy with the software behind 3D animations, 
+                    and discover exciting ways to engage with the many wonders of our ocean. 
+
+                    Whether you're an eager creator or simply an enthusiastic technologist, this
+                    section will invite you to harness your experimental side and lean into the fun.
                 </p>
             </div>
 
