@@ -56,16 +56,22 @@
 
 .research-creative-intro {
     max-width: 85vw;
-    margin: 2rem auto 3rem auto;
-    font-size: 1.6rem;
+    margin: 1.5rem auto 3rem auto;
+    font-size: 1.5rem;
     line-height: 1.6;
     color: var(--research-intro-text);
-    padding: 0 1.5rem;
+    padding: 0.8rem 1.8rem 1.3rem 1.8rem;
     text-align: center;
+
+    background: linear-gradient(to bottom right, var(--overview-box-bg-start), var(--overview-box-bg-end));
+    border-left: 5px solid var(--overview-box-border);
+    border-right: 5px solid var(--overview-box-border);
 }
 
-.research-creative-intro p:not(:last-child) {
+.research-creative-intro .tagline {
     margin-bottom: 1.5rem;
+    font-size: 1.7rem;
+    color: var(--accent-dark-blue);
 }
 
 

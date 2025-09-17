@@ -26,7 +26,7 @@ function CreativeCurrent() {
             </div>
 
             <div className="research-creative-intro">
-                <p>
+                <p className="tagline">
                     Creative Current is the playful and innovative sandbox of our whale shark experience. 
                 </p>
                 <p>    

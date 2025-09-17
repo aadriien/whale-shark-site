@@ -46,7 +46,7 @@ function ResearchReef() {
             </div>
 
             <div className="research-creative-intro">
-                <p>
+                <p className="tagline">
                     Research Reef is the authentic science and data hub of our whale shark experience.
                 </p>
                 <p>
