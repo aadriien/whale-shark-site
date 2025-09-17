@@ -7,13 +7,15 @@ import {
 import FavoriteButton from "../controls/FavoriteButton.jsx";
 import SharkMediaGallery from "../cards/SharkMediaGallery.jsx";
 
+import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
+
 
 const SharkInfoPanel = ({ shark }) => {
     if (!shark) {
         return (
             <div className="shark-info-panel">
-                <h2>All Sharks Overview</h2>
-                <p>Select a shark to view detailed tracking information.</p>
+                <h2>Select a whale shark to view its records</h2>
+                <ChartPlaceholder type="globeViews" message="" />
             </div>
         );
     }

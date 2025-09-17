@@ -3,6 +3,8 @@ import barChartPlaceholder from "../../assets/images/chart-placeholders/bar-char
 import heatmapPlaceholder from "../../assets/images/chart-placeholders/heatmap.svg";
 import radialHeatmapPlaceholder from "../../assets/images/chart-placeholders/radial-heatmap.svg";
 
+import globeViewsPlaceholder from "../../assets/images/chart-placeholders/globe-views.svg";
+
 
 const ChartPlaceholder = ({ type, message }) => {
     const imageMap = {
@@ -10,6 +12,8 @@ const ChartPlaceholder = ({ type, message }) => {
         bar: barChartPlaceholder,
         heatmap: heatmapPlaceholder,
         radialHeatmap: radialHeatmapPlaceholder,
+
+        globeViews: globeViewsPlaceholder,
     };
 
     return (
@@ -21,9 +25,11 @@ const ChartPlaceholder = ({ type, message }) => {
                     className="chart-placeholder-image"
                 />
             </div>
-            <div className="chart-placeholder-message">
-                <p>{message}</p>
-            </div>
+            {message !== "" && (
+                <div className="chart-placeholder-message">
+                    <p>{message}</p>
+                </div>
+            )}
         </div>
     );
 };
