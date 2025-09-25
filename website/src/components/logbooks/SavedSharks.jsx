@@ -46,10 +46,15 @@ function SavedSharks () {
 
     // Allow user to reset saved whale sharks
     const clearSaved = () => {
-        const isConfirmed = confirm("STOP! WAIT!\n\nAre you sure you want to erase all of your saved whale sharks? This cannot be undone.");
-        const isConfirmedAgain = confirm("Seriously, last chance!");
+        const isConfirmed = confirm(`
+            STOP! WAIT!\n\n
+            Are you sure you want to erase all of your saved whale sharks? 
+            This cannot be undone.
+        `);
 
         if (isConfirmed) {
+            const isConfirmedAgain = confirm(`Seriously, last chance!`);
+            
             if (isConfirmedAgain) {
                 localStorage.removeItem(STORAGE_KEY);
                 setSaved(new Set());
