@@ -10,6 +10,7 @@ export const pageMap = {
     geolabs: { label: "Geo Labs", path: "/research/geolabs" },
     datavisuals: { label: "Data Visuals", path: "/research/datavisuals" },
     environment: { label: "Environment", path: "/research/environment" },
+    sharkvision: { label: "Shark Vision", path: "/research/sharkvision" },
 
     buildashark: { label: "Build-A-Shark", path: "/creative/buildashark" },
     animation: { label: "Animation", path: "/creative/animation" },
@@ -133,6 +134,19 @@ export const pageContent = {
             { 
                 q: "Which metrics could be interesting to explore?", 
                 a: "For whale sharks, chlorophyll-a and temperature offer a lot of insight!" 
+            }
+        ]
+    },
+    sharkvision: {
+        overview: "This is a technological overview of computer vision, a field of AI. Learn how it can help us study whale sharks!",
+        faqs: [
+            { 
+                q: "How can the computer vision model see the shark?", 
+                a: "One of the models has been fine-tuned to detect the rough shape of a whale shark. It learned this by studying real data. " 
+            },
+            { 
+                q: "How do we know if the model is right?", 
+                a: "This is difficult to determine, and there is so much that goes into it! A series of checks aim to validate the results, but we cannot be fully certain." 
             }
         ]
     },
