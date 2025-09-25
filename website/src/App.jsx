@@ -15,6 +15,7 @@ const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
 const GeoLabs = lazy(() => import("./pages/GeoLabs.jsx"));
 const DataVisuals = lazy(() => import("./pages/DataVisuals.jsx"));
 const Environment = lazy(() => import("./pages/Environment.jsx"));
+const SharkVision = lazy(() => import("./pages/SharkVision.jsx"));
 
 const BuildAShark = lazy(() => import("./pages/BuildAShark.jsx"));
 const Animation = lazy(() => import("./pages/Animation.jsx"));
@@ -86,6 +87,7 @@ function App() {
                     <Route path="/research/geolabs" element={<GeoLabs />} />
                     <Route path="/research/datavisuals" element={<DataVisuals />} />
                     <Route path="/research/environment" element={<Environment />} />
+                    <Route path="/research/sharkvision" element={<SharkVision />} />
 
                     {/* Creative Current */}
                     <Route path="/creative/buildashark" element={<BuildAShark />} />

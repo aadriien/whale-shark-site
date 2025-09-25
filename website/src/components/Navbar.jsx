@@ -53,6 +53,7 @@ function Navbar({ isLogbookOpen, setIsLogbookOpen, theme, setTheme }) {
                     <Link to="/research/geolabs" className={location.pathname === "/research/geolabs" ? "active" : ""}>Geo Labs</Link>
                     <Link to="/research/datavisuals" className={location.pathname === "/research/datavisuals" ? "active" : ""}>Data Visuals</Link>
                     <Link to="/research/environment" className={location.pathname === "/research/environment" ? "active" : ""}>Environment</Link>
+                    <Link to="/research/sharkvision" className={location.pathname === "/research/sharkvision" ? "active" : ""}>Shark Vision</Link>
                 </>
             )}
 

@@ -32,8 +32,14 @@ function ResearchReef() {
         {
             path: "/research/environment",
             title: "Environment",
-            description: "Discover the key marine conditions that impact whale sharks",
+            description: "Discover key marine conditions that can affect whale sharks",
             image: "./environment.png",
+        },
+        {
+            path: "/research/sharkvision",
+            title: "Shark Vision",
+            description: "Learn about computer vision and its impact on scientific research",
+            image: "./shark-vision.png",
         },
     ];
 
