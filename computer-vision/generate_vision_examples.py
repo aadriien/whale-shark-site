@@ -35,6 +35,7 @@ from src.clean.gbif import (
 
 # Output directory for generated vision examples
 VISION_IMAGES_FOLDER = "computer-vision/vision-images"
+ORIGINAL_FOLDER = f"{VISION_IMAGES_FOLDER}/original"
 BBOX_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox"
 SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/segmentation"
 
@@ -273,13 +274,17 @@ def process_image_for_vision_examples(row: pd.Series) -> bool:
         # Generate filename
         image_key = row["key"]
         base_filename = f"shark_{image_key}"
+
+        original_path = f"{ORIGINAL_FOLDER}/{base_filename}_original.jpg"
+        image.save(original_path, "JPEG", quality=95)
+        print(f"  Saved original image: {original_path}")
         
         # Generate & save BBOX version
         if bbox_results:
             bbox_image = draw_bounding_boxes(image, bbox_results)
             bbox_path = f"{BBOX_FOLDER}/{base_filename}_bbox.jpg"
             bbox_image.save(bbox_path, "JPEG", quality=95)
-            print(f"  Saved bbox image: {bbox_path}")
+            print(f"  Saved BBOX image: {bbox_path}")
         
         # Generate & save segmentation version
         if segmentation_results:
@@ -320,6 +325,6 @@ if __name__ == "__main__":
     # Suppress warnings for cleaner output
     warnings.filterwarnings("ignore")
     
-    generate_vision_examples(num_samples=30)
+    generate_vision_examples(num_samples=100)
 
 
