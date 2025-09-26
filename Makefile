@@ -8,7 +8,7 @@ VENV_DIR = .venv
 		convert_csv_json zip_data \
 		generate_shark_names_images generate_shark_names generate_shark_images \
 		extract_tar process_annotations train_model \
-		get_new_shark_embeddings match_shark_embeddings \
+		get_new_shark_embeddings match_shark_embeddings generate_vision_examples \
 		format clean \
 		setup_website run_website deploy_website clean_website
 
@@ -96,6 +96,10 @@ get_new_shark_embeddings:
 # Identify matches for unknown sharks based on source of truth
 match_shark_embeddings:
 	@$(POETRY) run python -m computer-vision.match_embeddings
+
+# Generate CV examples with YOLO bounding boxes & segmentation masks
+generate_vision_examples:
+	@$(POETRY) run python -m computer-vision.generate_vision_examples
 
 
 # Auto-format Python code

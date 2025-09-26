@@ -285,13 +285,13 @@ def view_npz_file() -> None:
 
 
 if __name__ == "__main__":
-    gbif_media_df = get_image_records()
-    # print(f"Size of media file: {gbif_media_df.shape[0]}")
+    # gbif_media_df = get_image_records()
+    # # print(f"Size of media file: {gbif_media_df.shape[0]}")
 
-    # test_df = gbif_media_df.head(10)
-    # process_all_images(test_df)
+    # # test_df = gbif_media_df.head(10)
+    # # process_all_images(test_df)
 
-    process_all_images(gbif_media_df)
+    # process_all_images(gbif_media_df)
 
     view_npz_file()
 
