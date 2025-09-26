@@ -35,6 +35,7 @@ computer-vision/vision-images/segmentation/*
 !computer-vision/vision-images/segmentation/.gitkeep
 
 yolov8n.pt
+yolov8n-seg.pt
 YOLOv8
 
 *.yaml

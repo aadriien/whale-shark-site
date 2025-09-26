@@ -16,6 +16,13 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from typing import Optional, Tuple, List
 
+# Use separate model (yolov8n-seg) for segmentation
+from ultralytics import YOLO
+
+
+from .handle_yolo_model import (
+    get_yolo_model, 
+)
 
 from src.utils.data_utils import (
     read_csv, folder_exists,
@@ -25,15 +32,26 @@ from src.clean.gbif import (
     GBIF_MEDIA_CSV,
 )
 
-from .handle_yolo_model import (
-    get_yolo_model, 
-)
-
 
 # Output directory for generated vision examples
 VISION_IMAGES_FOLDER = "computer-vision/vision-images"
 BBOX_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox"
 SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/segmentation"
+
+
+# Segmentation model cache
+_SEGMENTATION_MODEL = None
+
+
+def get_yolo_segmentation_model():
+    # Load & cache YOLO segmentation model (yolov8n-seg.pt) 
+    global _SEGMENTATION_MODEL
+    
+    if _SEGMENTATION_MODEL is None:
+        print("Loading YOLOv8 segmentation model (yolov8n-seg.pt)...")
+        _SEGMENTATION_MODEL = YOLO("yolov8n-seg.pt")
+    
+    return _SEGMENTATION_MODEL
 
 
 def setup_output_directories() -> None:
@@ -80,23 +98,23 @@ def get_sample_image_records(num_samples: int = 20) -> pd.DataFrame:
 
 
 def run_yolo_inference(image: Image.Image) -> Tuple[List, List]:
-    # Get bounding boxes & segmentation masks via YOLO model
-    model, _, _ = get_yolo_model()
-    
-    results = model(image, conf=0.25, iou=0.4)
-    
+    # Run YOLO inference on image to get bounding boxes & segmentation masks
+    # Uses original trained model for BBOXES, & separate segmentation model for masks
     bbox_results = []
     segmentation_results = []
     
-    for result in results:
-        # Bounding boxes
+    # Get BBOXes from ordinary fine-tuned model
+    bbox_model, _, _ = get_yolo_model()
+    bbox_results_raw = bbox_model(image, conf=0.25, iou=0.4)
+    
+    for result in bbox_results_raw:
         if result.boxes is not None:
             boxes = result.boxes
 
             for box in boxes:
                 cls_id = int(box.cls[0])
                 confidence = float(box.conf[0])
-                label = model.names[cls_id]
+                label = bbox_model.names[cls_id]
                 xyxy = box.xyxy[0].tolist() # [x1, y1, x2, y2]
                 
                 bbox_results.append({
@@ -104,25 +122,33 @@ def run_yolo_inference(image: Image.Image) -> Tuple[List, List]:
                     'confidence': confidence,
                     'bbox': xyxy
                 })
-        
-        # Segmentation masks
+    
+    # Get segmentation masks from segmentation model
+    seg_model = get_yolo_segmentation_model()
+    seg_results_raw = seg_model(image, conf=0.25, iou=0.4)
+    
+    for result in seg_results_raw:
         if hasattr(result, 'masks') and result.masks is not None:
             masks = result.masks
+            print(f"  Found {len(masks)} segmentation masks from seg model")
 
             for i, mask in enumerate(masks):
                 cls_id = int(result.boxes.cls[i])
                 confidence = float(result.boxes.conf[i])
-                label = model.names[cls_id]
+                label = seg_model.names[cls_id]
                 
-                # Get mask data
-                mask_data = mask.data[0].cpu().numpy() # Convert to numpy
+                # Get mask data, with correct indexing for each mask
+                mask_data = mask.data[i].cpu().numpy() 
                 
                 segmentation_results.append({
                     'class': label,
                     'confidence': confidence,
                     'mask': mask_data
                 })
+        else:
+            print("  No segmentation masks found from seg model")
     
+    print(f"  Total: {len(bbox_results)} bboxes from trained model, {len(segmentation_results)} masks from seg model")
     return bbox_results, segmentation_results
 
 
@@ -172,9 +198,6 @@ def draw_bounding_boxes(image: Image.Image, bbox_results: List) -> Image.Image:
 
 
 def draw_segmentation_masks(image: Image.Image, segmentation_results: List) -> Image.Image:
-    # Draw segmentation masks on image
-    img_array = np.array(image)
-    
     # Color palette for different classes (with alpha)
     colors = [
         (255, 0, 0, 128),    # Semi-transparent Red
@@ -187,33 +210,33 @@ def draw_segmentation_masks(image: Image.Image, segmentation_results: List) -> I
     
     # Create overlay image with alpha channel
     overlay = Image.new('RGBA', image.size, (0, 0, 0, 0))
-    overlay_draw = ImageDraw.Draw(overlay)
     
     for i, detection in enumerate(segmentation_results):
         mask = detection['mask']
         label = detection['class']
         confidence = detection['confidence']
         
+        print(f"    Processing mask for {label} (confidence: {confidence:.2f})")
+        print(f"    Mask shape: {mask.shape}, Image size: {image.size}")
+        
         # Resize mask to match image dimensions if needed
         # PIL size is (width, height), numpy is (height, width)
         if mask.shape != image.size[::-1]:  
-            mask = cv2.resize(mask.astype(np.uint8), image.size, interpolation=cv2.INTER_NEAREST)
+            print(f"    Resizing mask from {mask.shape} to {image.size[::-1]}")
+            mask = cv2.resize(mask.astype(np.float32), image.size, interpolation=cv2.INTER_NEAREST)
         
+        # Convert mask to boolean
         mask_bool = mask > 0.5        
         color = colors[i % len(colors)]
         
-        # Create mask image
-        mask_img = Image.new('RGBA', image.size, (0, 0, 0, 0))
-        mask_pixels = mask_img.load()
+        # Create mask image more efficiently
+        mask_array = np.zeros((*image.size[::-1], 4), dtype=np.uint8) # RGBA array
         
-        # Apply color to mask pixels
-        height, width = mask_bool.shape
-        for y in range(height):
-            for x in range(width):
-                if mask_bool[y, x]:
-                    mask_pixels[x, y] = color
+        # Apply color to mask pixels where mask is True
+        mask_array[mask_bool] = color
         
-        # Composite mask onto overlay
+        # Convert to PIL & composite
+        mask_img = Image.fromarray(mask_array, 'RGBA')
         overlay = Image.alpha_composite(overlay, mask_img)
     
     # Composite overlay onto original image
@@ -297,6 +320,6 @@ if __name__ == "__main__":
     # Suppress warnings for cleaner output
     warnings.filterwarnings("ignore")
     
-    generate_vision_examples(num_samples=10)
+    generate_vision_examples(num_samples=30)
 
 
