@@ -22,7 +22,6 @@ computer-vision/extracted-data/*
 computer-vision/embeddings-database/*
 computer-vision/new-embeddings/*
 
-computer-vision/vision-images/*
 computer-vision/vision-images/bbox/*
 computer-vision/vision-images/segmentation/*
 
@@ -32,7 +31,6 @@ computer-vision/vision-images/segmentation/*
 !computer-vision/embeddings-database/.gitkeep
 !computer-vision/new-embeddings/.gitkeep
 
-!computer-vision/vision-images/.gitkeep
 !computer-vision/vision-images/bbox/.gitkeep
 !computer-vision/vision-images/segmentation/.gitkeep
 
