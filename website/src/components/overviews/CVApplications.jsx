@@ -1,13 +1,13 @@
 const applications = [
     {
         title: "Individual Identification",
-        description: "Each whale shark has a unique spot pattern, like a fingerprint. Computer vision can automatically match and identify individuals across thousands of photographs.",
+        description: "Each whale shark has a unique spot pattern. Computer vision can match and identify individuals from pictures.",
         impact: "Track migration patterns and population dynamics",
         icon: "🆔"
     },
     {
         title: "Population Monitoring", 
-        description: "Automated counting and tracking of whale sharks in large datasets helps scientists monitor population health and trends over time.",
+        description: "Automated tracking of whale sharks in large datasets helps scientists monitor population health and trends over time.",
         impact: "Assess conservation status and effectiveness",
         icon: "📈"
     },
@@ -19,7 +19,7 @@ const applications = [
     },
     {
         title: "Size Estimation",
-        description: "Computer vision algorithms can accurately measure whale shark length and estimate age, crucial for understanding growth rates.",
+        description: "Computer vision algorithms can measure whale shark length and estimate age, crucial for understanding growth rates.",
         impact: "Study life cycles and reproductive maturity",
         icon: "📏"
     },
@@ -43,7 +43,7 @@ const CVApplications = () => {
             <h2>Research Applications</h2>
             <p>
                 Computer vision technology is transforming whale shark research across multiple domains, 
-                enabling new insights that were previously impossible or extremely time-consuming to obtain.
+                enabling new insights that were previously impossible or very time-consuming to obtain.
             </p>
 
             <div className="applications-grid">
