@@ -4,7 +4,7 @@ import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
 export function getCoordinates(sharkDict, limit = Infinity) {
   if (!sharkDict) return [];
 
-  // Grab the last N points per shark (if you grab everything, then globe laggy)
+  // Grab last N points per shark (if you grab everything, then globe laggy)
   const coords = sharkDict.coordinates.slice(-limit); 
 
   return coords.map(coord => {
@@ -39,7 +39,7 @@ export function getAllCoordinates() {
 
 export function getGroupCoordinates(allSharkIDs) {
     let groupResult = [];
-    const limitResults = 300;
+    const limitResults = 1000;
 
     // If no IDs provided, plot nothing
     if (!allSharkIDs) {
@@ -49,7 +49,7 @@ export function getGroupCoordinates(allSharkIDs) {
     coordinatesData.forEach(sharkDict => {
         if (allSharkIDs.includes(sharkDict.whaleSharkID)) {
             let currResult = getCoordinates(sharkDict, limitResults);
-            groupResult.push(...currResult); // Fixed: was using fullResult instead of groupResult
+            groupResult.push(...currResult); 
         }
     });
     return groupResult;
