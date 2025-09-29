@@ -4,9 +4,7 @@ import * as d3 from "d3";
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import RadialHeatmap from "../charts/RadialHeatmap.jsx";
 
-
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+import { MONTHS } from "../../utils/DataUtils.js";
 
 
 const capitalizeWords = (dataStr) => {
@@ -25,7 +23,7 @@ const reshapeRegionData = (rawData, metric) => {
     const reshaped = [];
 
     rawData.forEach(row => {
-        months.forEach(month => {
+        MONTHS.forEach(month => {
             // Get occurrences for that specific month (cumulative over all time)
             const totalOccurrences = row[month];
 
@@ -78,7 +76,7 @@ const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion, onRegionCha
     const getMonthOccurrences = (region) => {
         return reshapedData.filter(d => d.region === region)
             .reduce((accum, curr) => {
-                months.forEach(month => {
+                MONTHS.forEach(month => {
                     accum[month] = (accum[month] || 0) + (curr[month] || 0);
                 });
                 return accum;

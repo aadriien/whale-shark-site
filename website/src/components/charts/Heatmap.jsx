@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
+import { MONTHS } from "../../utils/DataUtils.js";
+
 
 const Heatmap = ({ 
     data, 
@@ -9,10 +11,7 @@ const Heatmap = ({
 }) => {
     const svgRef = useRef(null);
     const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
-    
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        
+            
     useEffect(() => {
         const handleResize = () => {
             if (svgRef.current) {
@@ -50,7 +49,7 @@ const Heatmap = ({
         const colorScale = d3.scaleSequential(d3.interpolateYlGnBu)
             .domain([0, maxValue]);
         
-        const x = d3.scaleBand().domain(months).range([0, innerWidth]).padding(0.05);
+        const x = d3.scaleBand().domain(MONTHS).range([0, innerWidth]).padding(0.05);
         const y = d3.scaleBand().domain(allYears).range([0, innerHeight]).padding(0.05);
         
         const g = svg.append("g")

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import SharkFilter from "./SharkFilter.jsx";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks.jsx";
+import { FULLMONTHS } from "../../utils/DataUtils.js";
 
 
 function SharkSelector({ 
@@ -27,10 +28,7 @@ function SharkSelector({
     const minYear = Math.min(...allYears);
     const maxYear = Math.max(...allYears);
 
-    const months = [
-        "January", "February", "March", "April", "May", "June", 
-        "July", "August", "September", "October", "November", "December"
-    ]
+    const months = FULLMONTHS;
 
     // Memoize default criteria to prevent unnecessary re-initializations
     const defaultCriteria = React.useMemo(() => ({

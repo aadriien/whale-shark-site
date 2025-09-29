@@ -10,7 +10,7 @@ const HeroIntro = () => {
             >
                 <div className="hero-content">
                     <h1>Meet the Whale Shark</h1>
-                    <p>The ocean's largest fish — and one of its most peaceful.</p>
+                    <p>The oceans' largest fish — and one of its most peaceful.</p>
                 </div>
             </section>
 

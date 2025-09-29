@@ -11,18 +11,17 @@ import SexLifeStageData from "./SexLifeStageData.jsx";
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import BarChart from "../charts/BarChart.jsx";
 
+import { MONTHS } from "../../utils/DataUtils.js";
+
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
-
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
 const reshapeYearData = (rawData) => {
     const byYear = {};
     rawData.forEach((row) => {
         const year = row["year"];
         
-        byYear[year] = months.map((month) => ({
+        byYear[year] = MONTHS.map((month) => ({
             label: month,
             value: +row[month] || 0,
         }));

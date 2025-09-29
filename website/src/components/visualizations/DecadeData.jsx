@@ -3,18 +3,17 @@ import React, { useState, useMemo } from "react";
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import Heatmap from "../charts/Heatmap.jsx";
 
+import { MONTHS } from "../../utils/DataUtils.js";
+
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
-
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
 const reshapeYearData = (rawData) => {
     const byYear = {};
     rawData.forEach((row) => {
         const year = row["year"];
         
-        byYear[year] = months.map((month) => ({
+        byYear[year] = MONTHS.map((month) => ({
             label: month,
             value: +row[month] || 0,
         }));
@@ -27,7 +26,7 @@ const flattenToHeatmapFormat = (rawData) => {
     rawData.forEach((row) => {
         const year = row["year"];
 
-        months.forEach((month) => {
+        MONTHS.forEach((month) => {
             heatmapData.push({
                 year: year,
                 month: month,

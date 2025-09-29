@@ -1,4 +1,8 @@
-import { parseSpecificRegion, getDate } from './DataUtils.js';
+import { 
+    parseSpecificRegion, getDate, 
+    MONTHS 
+} from './DataUtils.js';
+
 import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
 
 
@@ -145,9 +149,6 @@ export function createCalendarHeatmapData(selectedSharkIds, allSharksData = []) 
     if (!selectedSharkIds || selectedSharkIds.length === 0) {
         return [];
     }
-
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         
     // Map to count occurrences by year-month
     const yearMonthCounts = new Map();
@@ -165,7 +166,7 @@ export function createCalendarHeatmapData(selectedSharkIds, allSharksData = []) 
                     const date = new Date(coord.eventDate);
                     if (!isNaN(date.getTime())) {
                         const year = date.getFullYear();
-                        const month = months[date.getMonth()];
+                        const month = MONTHS[date.getMonth()];
                         const key = `${year}-${month}`;
                         
                         yearMonthCounts.set(key, (yearMonthCounts.get(key) || 0) + 1);

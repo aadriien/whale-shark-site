@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 
+import { MONTHS } from "../../utils/DataUtils.js";
+
 import coordinatesData from '../../assets/data/json/gbif_shark_tracking.json';
 
 
@@ -50,11 +52,6 @@ const TimelineSelector = ({
     };
     
     const [sliderIndex, setSliderIndex] = useState(getInitialIndex);
-    
-    const months = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
 
     // Get current month & year from slider index
     const getCurrentMonthYear = (index) => {
@@ -125,7 +122,7 @@ const TimelineSelector = ({
                 </button>
                 
                 <div className="timeline-date-display">
-                    {months[currentMonthYear.month - 1]} {currentMonthYear.year}
+                    {MONTHS[currentMonthYear.month - 1]} {currentMonthYear.year}
                 </div>
                 
                 <button 
@@ -150,7 +147,7 @@ const TimelineSelector = ({
             </div>
             
             <div className="timeline-info">
-                Showing map data from {months[currentMonthYear.month - 1]} {currentMonthYear.year}
+                Showing map data from {MONTHS[currentMonthYear.month - 1]} {currentMonthYear.year}
             </div>
             
             {/* Display plotted shark IDs */}

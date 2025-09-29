@@ -8,6 +8,17 @@ import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json"
 import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
 
 
+export const MONTHS = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+export const FULLMONTHS = [
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"
+];
+
+
 const sharksOfInterest = [
     "101373b", // total: 5 --> Male Adult --> Belize (2011), Guatemala (2011), Honduras (2011), Trinidad and Tobago (2011)
     "101376a", // total: 11 --> Male Adult --> Colombia (2011), Cuba (2010), Mexico (2010), Mexico (year Unknown), Nicaragua (2011), United States (2010)
@@ -160,12 +171,7 @@ export function parseImageField(imageField = "") {
 
 
 function extractMonths(obj) {
-    const months = [
-        "January", "February", "March", "April", "May", "June", 
-        "July", "August", "September", "October", "November", "December"
-    ]
     let sharkMonths = [];
-
     const sharkCoordData = coordinatesData.find(shark => shark.whaleSharkID === obj.id);
     
     if (sharkCoordData && sharkCoordData.coordinates) {
@@ -174,7 +180,7 @@ function extractMonths(obj) {
             if (coord.eventDate) {
                 const date = new Date(coord.eventDate);
                 if (!isNaN(date.getTime())) {
-                    const month = months[date.getMonth()];
+                    const month = FULLMONTHS[date.getMonth()];
                     sharkMonths.push(month);
                 }
             }
