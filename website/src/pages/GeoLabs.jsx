@@ -25,6 +25,7 @@ import { mediaSharks } from "../utils/DataUtils.js";
 function GeoLabs() {
     const [selectedShark, setSelectedShark] = useState(null);
     const [allSharksVisible, setAllSharksVisible] = useState(true);
+    const [filteredSharks, setFilteredSharks] = useState(mediaSharks);
     
     const [savedIds, setSavedIds] = useState(new Set());
     const [viewMode, setViewMode] = useState('multiple'); // 'individual' or 'multiple'
@@ -41,6 +42,8 @@ function GeoLabs() {
     const [isTimelineMode, setIsTimelineMode] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
+
+    const sharks = mediaSharks;
 
     // Update saved IDs when favorites change
     useEffect(() => {
@@ -61,12 +64,26 @@ function GeoLabs() {
         };
     }, []);
 
-    // Get coordinates for saved sharks only
+    // Get coordinates for saved sharks only (with any filters in place)
     const pointsData = useMemo(() => {
         const savedSharkIds = getSavedSharkIds();
-        console.log('Plotting saved sharks on globe:', savedSharkIds);
-        return getGroupCoordinates(savedSharkIds);
-    }, [savedIds]);
+        const filteredSharkIds = filteredSharks.map(shark => shark.id);
+
+        // Remove duplicates from both arrays
+        const uniqueSavedSharkIds = [...new Set(savedSharkIds)];
+        const uniqueFilteredSharkIds = [...new Set(filteredSharkIds)];
+
+        console.log('Unique sharks from saved IDs:', uniqueSavedSharkIds);
+        console.log('Unique sharks from filtered IDs:', uniqueFilteredSharkIds);
+
+        // Find intersection (common IDs) between both arrays
+        const intersectionSavedFiltered = uniqueSavedSharkIds.filter(
+            id => uniqueFilteredSharkIds.includes(id)
+        );
+
+        console.log('Plotting sharks on globe:', intersectionSavedFiltered);
+        return getGroupCoordinates(intersectionSavedFiltered);
+    }, [savedIds, filteredSharks]);
     
     // Get coordinates for selected lab sharks (multi-select mode)
     const selectedLabPointsData = useMemo(() => {
@@ -83,8 +100,6 @@ function GeoLabs() {
         return getGroupCoordinates(labSharkIds);
     }, [selectedSharksForLab, isTimelineMode, selectedMonth, selectedYear]);
     
-    
-    const sharks = mediaSharks;
     
     useEffect(() => {
         if (!globeRef.current) return;
@@ -360,7 +375,10 @@ function GeoLabs() {
                                 onSelect={viewMode === 'multiple' ? null : props.onSelect} 
                             />
                         )}
-                        disabled={isStepMode || isTimelineMode} // Disable selector while in step or timeline mode
+                        // Disable selector while in step or timeline mode
+                        disabled={isStepMode || isTimelineMode}
+                        
+                        onFilteredSharksChange={setFilteredSharks}
                     />
                 </div>
 
