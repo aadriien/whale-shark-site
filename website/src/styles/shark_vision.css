@@ -23,7 +23,7 @@
 
 /* Pipeline Component */
 .cv-pipeline {
-    background-color: var(--conservation-bg);
+    background: linear-gradient(-145deg, var(--bg-primary) 0%, var(--conservation-bg) 100%);
     border-radius: 16px;
     margin: 3rem 1.5rem;
     padding: 3rem 1.5rem;
@@ -127,7 +127,7 @@
 
 /* Interactive Demo */
 .interactive-demo {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--conservation-bg) 100%);
+    background-color: var(--conservation-bg);
     border-radius: 16px;
     margin: 2rem 1.5rem;
     padding: 3rem 2rem;
@@ -222,7 +222,7 @@
 
 /* View Controls */
 .view-controls {
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
 }
 
 .view-controls h3 {

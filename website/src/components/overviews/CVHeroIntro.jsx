@@ -10,7 +10,7 @@ const CVHeroIntro = () => {
             >
                 <div className="hero-content">
                     <h1>AI for Whale Sharks</h1>
-                    <p>Using computer vision to protect the ocean's gentle giants.</p>
+                    <p>Using computer vision to protect the oceans' gentle giants.</p>
                 </div>
             </section>
 
