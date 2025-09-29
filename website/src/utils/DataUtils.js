@@ -5,6 +5,8 @@ import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.jso
 import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
 import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json";
 
+import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
+
 
 const sharksOfInterest = [
     "101373b", // total: 5 --> Male Adult --> Belize (2011), Guatemala (2011), Honduras (2011), Trinidad and Tobago (2011)
@@ -94,7 +96,7 @@ export function extractContinents(continent) {
             return c;
         });
         
-    // Removed duplicate continents before returning
+    // Remove duplicate continents before returning
     return [...new Set(continents)];
 }
 
@@ -157,6 +159,33 @@ export function parseImageField(imageField = "") {
 }
 
 
+function extractMonths(obj) {
+    const months = [
+        "January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"
+    ]
+    let sharkMonths = [];
+
+    const sharkCoordData = coordinatesData.find(shark => shark.whaleSharkID === obj.id);
+    
+    if (sharkCoordData && sharkCoordData.coordinates) {
+        // Process each coordinate/occurrence for given shark
+        sharkCoordData.coordinates.forEach(coord => {
+            if (coord.eventDate) {
+                const date = new Date(coord.eventDate);
+                if (!isNaN(date.getTime())) {
+                    const month = months[date.getMonth()];
+                    sharkMonths.push(month);
+                }
+            }
+        });
+    }
+
+    // Remove duplicate months before returning
+    return [...new Set(sharkMonths)];
+}
+
+
 function formatKeyVals(obj, keyMap) {
     // Adjust column names for easier access in shark card
     const renamed = Object.fromEntries(
@@ -167,6 +196,9 @@ function formatKeyVals(obj, keyMap) {
     if (renamed.lifeStage) {
         renamed.lifeStage = cleanLifestage(renamed);
     }
+
+    // Add new field for all months where shark had records
+    renamed.months = extractMonths(renamed);
 
     return renamed;
 }

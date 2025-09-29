@@ -68,7 +68,7 @@ function LocationFilters({ criteria, onChange, countries, publishingCountries })
 
 
 // Time Filter
-function TimeFilter({ criteria, onChange, minYear, maxYear }) {
+function TimeFilter({ criteria, onChange, minYear, maxYear, months }) {
     return (
         <fieldset className="filter-group">
             <legend>Time</legend>
@@ -118,6 +118,24 @@ function TimeFilter({ criteria, onChange, minYear, maxYear }) {
                         className="filter-input"
                     />
                 </div>
+            </label>
+
+            <label className="filter-label">
+                Month:
+                <select
+                    value={criteria.month}
+                    onChange={(e) =>
+                        onChange({ ...criteria, month: e.target.value })
+                    }
+                    className="filter-select"
+                >
+                    <option value="">All</option>
+                    {months.map((month) => (
+                        <option key={month} value={month}>
+                            {month}
+                        </option>
+                    ))}
+                </select>
             </label>
         </fieldset>
     );
@@ -234,6 +252,7 @@ function SharkFilter({ criteria, onChange, options }) {
         publishingCountries = [],
         minYear = 2000,
         maxYear = 2024,
+        months = [],
         minRecords = 1,
         maxRecords = 100
     } = options;
@@ -254,6 +273,7 @@ function SharkFilter({ criteria, onChange, options }) {
                 onChange={onChange} 
                 minYear={minYear}
                 maxYear={maxYear}
+                months={months}
             />
             
             <MetadataFilters 

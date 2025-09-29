@@ -27,11 +27,17 @@ function SharkSelector({
     const minYear = Math.min(...allYears);
     const maxYear = Math.max(...allYears);
 
+    const months = [
+        "January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"
+    ]
+
     // Memoize default criteria to prevent unnecessary re-initializations
     const defaultCriteria = React.useMemo(() => ({
         showOnlyWithMedia: false,
         country: "",
         yearRange: [String(minYear), String(maxYear)],
+        month: "",
         hasOccurrenceNotes: false,
         minRecords: 1,
         sex: "",
@@ -73,6 +79,7 @@ function SharkSelector({
         publishingCountries,
         minYear,
         maxYear,
+        months,
         minRecords,
         maxRecords
     };

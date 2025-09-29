@@ -76,6 +76,15 @@ export function filterSharks(sharks, filters) {
             }
         }
 
+        if (filters.month) {
+            const match = shark.months.some(
+                c => c.includes(
+                    filters.month
+                )
+            );
+            if (!match) return false;
+        }
+
         // ---------- METADATA ----------
         if (filters.hasOccurrenceNotes) {
             const remarks = parseRemarks(shark.remarks);
