@@ -25,6 +25,7 @@ computer-vision/new-embeddings/*
 computer-vision/vision-images/original/*
 computer-vision/vision-images/bbox/*
 computer-vision/vision-images/segmentation/*
+computer-vision/vision-images/bbox-segmentation/*
 
 !computer-vision/training-data/.gitkeep
 !computer-vision/extracted-data/.gitkeep
@@ -35,6 +36,7 @@ computer-vision/vision-images/segmentation/*
 !computer-vision/vision-images/original/.gitkeep
 !computer-vision/vision-images/bbox/.gitkeep
 !computer-vision/vision-images/segmentation/.gitkeep
+!computer-vision/vision-images/bbox-segmentation/.gitkeep
 
 yolov8n.pt
 yolov8n-seg.pt

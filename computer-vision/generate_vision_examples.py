@@ -35,9 +35,12 @@ from src.clean.gbif import (
 
 # Output directory for generated vision examples
 VISION_IMAGES_FOLDER = "computer-vision/vision-images"
+
 ORIGINAL_FOLDER = f"{VISION_IMAGES_FOLDER}/original"
 BBOX_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox"
 SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/segmentation"
+
+BBOX_SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox-segmentation"
 
 
 # Segmentation model cache
@@ -292,6 +295,15 @@ def process_image_for_vision_examples(row: pd.Series) -> bool:
             seg_path = f"{SEGMENTATION_FOLDER}/{base_filename}_segmentation.jpg"
             seg_image.save(seg_path, "JPEG", quality=95)
             print(f"  Saved segmentation image: {seg_path}")
+
+        # Draw both BBOX & segmentation on same image
+        if bbox_results and segmentation_results:
+            bbox_image = draw_bounding_boxes(image, bbox_results)
+            seg_bbox_image = draw_segmentation_masks(bbox_image, segmentation_results)
+
+            seg_bbox_path = f"{BBOX_SEGMENTATION_FOLDER}/{base_filename}_bbox_segmentation.jpg"
+            seg_bbox_image.save(seg_bbox_path, "JPEG", quality=95)
+            print(f"  Saved BBOX + segmentation image: {seg_bbox_path}")
         
         return True
         
@@ -319,12 +331,13 @@ def generate_vision_examples(num_samples: int = 10) -> None:
     print(f"Results saved to:")
     print(f"  - Bounding boxes: {BBOX_FOLDER}")
     print(f"  - Segmentation masks: {SEGMENTATION_FOLDER}")
+    print(f"  - BBOX / Segmentation: {BBOX_SEGMENTATION_FOLDER}")
 
 
 if __name__ == "__main__":
     # Suppress warnings for cleaner output
     warnings.filterwarnings("ignore")
     
-    generate_vision_examples(num_samples=100)
+    generate_vision_examples(num_samples=300)
 
 
