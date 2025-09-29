@@ -5,12 +5,12 @@ const CVHeroIntro = () => {
             <section
                 className="hero"
                 style={{
-                    background: `url(./cv-whale-shark-hero.jpg) center/cover no-repeat`
+                    background: `url(./cv-whale-shark-hero.png) center/cover no-repeat`
                 }}
             >
                 <div className="hero-content">
-                    <h1>Computer Vision for Whale Sharks</h1>
-                    <p>Using AI to protect and study the ocean's gentle giants.</p>
+                    <h1>AI for Whale Sharks</h1>
+                    <p>Using computer vision to protect the ocean's gentle giants.</p>
                 </div>
             </section>
 
@@ -39,7 +39,7 @@ const CVHeroIntro = () => {
                 </div>
 
                 <div className="section-image">
-                    <img src="./cv-analysis-example.jpg" alt="Computer Vision Analysis of Whale Shark" />
+                    <img src="./cv-intro-example.jpg" alt="Bounding box for whale shark with computer vision" />
                 </div>
             </section>
 

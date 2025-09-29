@@ -45,14 +45,9 @@ const CVPipeline = () => {
             <div className="section-text">
                 <h2>How Computer Vision Works</h2>
                 <p>
-                    The computer vision pipeline for whale shark research involves several 
-                    interconnected steps that transform raw underwater imagery into valuable 
-                    scientific insights.
-                </p>
-                <p>
-                    Each stage builds upon the previous one, creating a comprehensive system 
-                    that can automatically process vast amounts of visual data with unprecedented 
-                    speed and accuracy.
+                    This AI-powered pipeline for shark research involves several 
+                    interconnected steps that build upon each other to transform raw  
+                    underwater imagery into valuable scientific insights.
                 </p>
                 
                 <div className="pipeline-steps">
@@ -83,9 +78,9 @@ const CVPipeline = () => {
             </div>
 
             <div className="section-image">
-                <img src="./cv-pipeline-diagram.jpg" alt="Computer Vision Pipeline Diagram" />
+                <img src="./cv-pipeline-example.jpg" alt="Example image in computer vision pipeline" />
             </div>
-            
+
         </section>
     );
 };
