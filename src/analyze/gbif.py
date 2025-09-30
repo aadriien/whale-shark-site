@@ -191,8 +191,8 @@ def make_unique_sharks_count(source_df: pd.DataFrame,
                             target_df: pd.DataFrame, 
                             groupby: list[str]) -> pd.DataFrame:
     # Get unique sharks 
-    source_df = validate_and_dropna(source_df, na_subset=["whaleSharkID"] + groupby)
-    unique_sharks = source_df.drop_duplicates(subset=["whaleSharkID"]).reset_index()
+    source_df = validate_and_dropna(source_df, na_subset=["key"] + groupby)
+    unique_sharks = source_df.drop_duplicates(subset=["key"]).reset_index()
 
     # Copy to make pandas happy
     target_df = target_df.copy()
@@ -276,7 +276,7 @@ def make_individual_metric_df(occurrences_df: pd.DataFrame,
             return format_str_or_func.format(*vals)
 
     # Assemble specific metric values over time per shark ID (e.g. lifeStage)
-    valid_metric = valid_metric.groupby("whaleSharkID").apply(
+    valid_metric = valid_metric.groupby("key").apply(
         # Use `dict.fromkeys` instead of `sorted(set` to preserve original order
         lambda x: ", ".join(dict.fromkeys(
             # Example: zip occurrenceRemarks with eventDate
@@ -287,7 +287,7 @@ def make_individual_metric_df(occurrences_df: pd.DataFrame,
         include_groups=False
     ).reset_index(name=column_name)
 
-    individual_sharks = individual_sharks.merge(valid_metric, on="whaleSharkID", how="left")
+    individual_sharks = individual_sharks.merge(valid_metric, on="key", how="left")
     individual_sharks.loc[:, column_name] = individual_sharks[column_name].fillna("Unknown")
 
     return individual_sharks
@@ -572,32 +572,33 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
-    occurrences_df = validate_and_dropna(occurrences_df, na_subset=["whaleSharkID"])
+    occurrences_df = validate_and_dropna(occurrences_df, na_subset=["key"])
 
     # Now focus on clean entries & map info (sex, lifeStage, etc) where available
-    individual_sharks = occurrences_df[["whaleSharkID", "organismID", "identificationID"]].drop_duplicates().reset_index(drop=True)
-    individual_sharks.set_index("whaleSharkID", inplace=True)
+    # Use 'key' as primary unique identifier, keeping whaleSharkID, organismID, identificationID for reference
+    individual_sharks = occurrences_df[["key", "whaleSharkID", "organismID", "identificationID"]].drop_duplicates(subset=["key"]).reset_index(drop=True)
+    individual_sharks.set_index("key", inplace=True)
 
     individual_sharks = add_totals_column(
         source_df=occurrences_df,
         target_df=individual_sharks,
-        groupby=["whaleSharkID"]
+        groupby=["key"]
     )
 
     # Oldest & newest occurrence eventDates
-    date_min_max = make_eventDate_df(occurrences_df, groupby=["whaleSharkID"])
-    individual_sharks = individual_sharks.merge(date_min_max, on=["whaleSharkID"], how="left")
+    date_min_max = make_eventDate_df(occurrences_df, groupby=["key"])
+    individual_sharks = individual_sharks.merge(date_min_max, on=["key"], how="left")
 
     # Observation type (human/divers vs machine/satellites)
-    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["whaleSharkID"])
-    individual_sharks = individual_sharks.merge(basisOfRecord_counts, on="whaleSharkID", how="left")
+    basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["key"])
+    individual_sharks = individual_sharks.merge(basisOfRecord_counts, on="key", how="left")
 
     sex_mappings = (
         occurrences_df[occurrences_df["sex"].isin(["Female", "Male"])] 
-        .drop_duplicates(subset="whaleSharkID", keep="first") 
-        [["whaleSharkID", "sex"]] 
+        .drop_duplicates(subset="key", keep="first") 
+        [["key", "sex"]] 
     )
-    individual_sharks = individual_sharks.merge(sex_mappings, on="whaleSharkID", how="left")
+    individual_sharks = individual_sharks.merge(sex_mappings, on="key", how="left")
     individual_sharks.loc[:, "sex"] = individual_sharks["sex"].fillna("Unknown")
 
     # Build & assemble all other relevant metrics (e.g. lifeStage, locations, etc)
@@ -684,6 +685,7 @@ def export_shark_tracking_json(shark_df: pd.DataFrame, json_file: str) -> None:
         # Skip if "Unknown" or parsing failed
         if coords:  
             output.append({
+                "key": row["key"],
                 "whaleSharkID": row["whaleSharkID"],
                 "coordinates": coords
             })
@@ -717,6 +719,7 @@ def export_shark_tracking_geojson(shark_df: pd.DataFrame,
                 "coordinates": coordinates
             },
             "properties": {
+                "key": row["key"],
                 "whaleSharkID": row["whaleSharkID"],
                 "eventDates": event_dates,
                 "regions": regions
