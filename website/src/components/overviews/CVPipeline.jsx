@@ -78,7 +78,13 @@ const CVPipeline = () => {
             </div>
 
             <div className="section-image">
-                <img src="./cv-pipeline-example.jpg" alt="Example image in computer vision pipeline" />
+                <div className="image-wrapper-large">
+                    <img src="./cv-pipeline-example.jpg" alt="Example image in computer vision pipeline" />
+
+                    <p className="shark-image-meta">
+                        <small>📸 Creator: richardtenbrinke | CC BY-NC [Attribution-NonCommercial]</small>
+                    </p>
+                </div>
             </div>
 
         </section>

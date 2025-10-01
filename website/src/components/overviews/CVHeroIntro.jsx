@@ -39,7 +39,13 @@ const CVHeroIntro = () => {
                 </div>
 
                 <div className="section-image">
-                    <img src="./cv-intro-example.jpg" alt="Bounding box for whale shark with computer vision" />
+                    <div className="image-wrapper-large">
+                        <img src="./cv-intro-example.jpg" alt="Bounding box for whale shark with computer vision" />
+
+                        <p className="shark-image-meta">
+                            <small>📸 Creator: Ryan E. Gray | CC BY-NC [Attribution-NonCommercial]</small>
+                        </p>
+                    </div>
                 </div>
             </section>
 

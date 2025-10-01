@@ -139,11 +139,17 @@ const InteractiveDemo = () => {
             {/* Main Display */}
             <div className="demo-display">
                 <div className="image-container">
-                    <img 
-                        src={getCurrentImageSrc()} 
-                        alt={`${selectedImage.name} - ${activeView}`}
-                        className="demo-image"
-                    />
+                    <div className="image-wrapper-large">
+                        <img 
+                            src={getCurrentImageSrc()} 
+                            alt={`${selectedImage.name} - ${activeView}`}
+                            className="demo-image"
+                        />
+
+                        <p className="shark-image-meta">
+                            <small>📸 Creator: {selectedImage.creator} | {selectedImage.license}</small>
+                        </p>
+                    </div>
                 </div>
                 
                 <div className="analysis-info">

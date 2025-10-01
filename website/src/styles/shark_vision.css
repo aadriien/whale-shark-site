@@ -20,6 +20,41 @@
     margin-top: 0;
 }
 
+.image-wrapper-large {
+    position: relative;
+    width: 100%;
+    height: auto; 
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.image-wrapper-large img {
+    width: 100%;
+    height: auto; 
+    object-fit: cover; 
+    display: block;
+    border-radius: 8px;
+}
+
+.image-wrapper-large .shark-image-meta {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 6px 10px;  
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.image-wrapper-large:hover .shark-image-meta {
+    opacity: 1;
+}
+
 
 /* Pipeline Component */
 .cv-pipeline {
@@ -216,6 +251,8 @@
     bottom: 0;
     left: 0;
     right: 0;
+    text-align: center;
+    font-size: 0.7rem;
     background: rgba(0,0,0,0.6);
     color: #fff;
     padding: 4px 8px;
