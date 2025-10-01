@@ -2,22 +2,48 @@ import { useState } from 'react';
 
 
 // Sample data for demo images
-function createWhaleSharkImage(id, name, description) {
+function createWhaleSharkImage(id, name, description, creator, license) {
     return {
         id,
         name,
         original: `./cv-demos/shark_${id}_original.jpg`,
         bbox: `./cv-demos/shark_${id}_bbox.jpg`,
         segmentation: `./cv-demos/shark_${id}_segmentation.jpg`,
-        description
+        description,
+        creator,
+        license
     };
 }
 
 const demoImages = [
-    createWhaleSharkImage(3070393848, "Whale Shark #1", "TBD.. description currently a WIP"),
-    createWhaleSharkImage(3338151009, "Whale Shark #2", "TBD.. description currently a WIP"),
-    createWhaleSharkImage(4177294484, "Whale Shark #3", "TBD.. description currently a WIP"),
-    createWhaleSharkImage(4900906641, "Whale Shark #4", "TBD.. description currently a WIP"),
+    createWhaleSharkImage(
+        3070393848, 
+        "Whale Shark #1", 
+        "TBD.. description currently a WIP",
+        "stefzanirato",
+        "CC BY-NC [Attribution-NonCommercial]"
+    ),
+    createWhaleSharkImage(
+        3338151009, 
+        "Whale Shark #2", 
+        "TBD.. description currently a WIP",
+        "Carlos Gajón Bermúdez",
+        "CC BY-NC [Attribution-NonCommercial]"
+    ),
+    createWhaleSharkImage(
+        4177294484, 
+        "Whale Shark #3", 
+        "TBD.. description currently a WIP",
+        "Nathan Cook",
+        "CC BY-NC [Attribution-NonCommercial]"
+    ),
+    createWhaleSharkImage(
+        4900906641, 
+        "Whale Shark #4", 
+        "TBD.. description currently a WIP",
+        "Slunky",
+        "CC BY [Attribution]"
+    ),
 ];
 
 
@@ -66,7 +92,14 @@ const InteractiveDemo = () => {
                             className={`thumbnail ${selectedImage.id === image.id ? 'active' : ''}`}
                             onClick={() => setSelectedImage(image)}
                         >
-                            <img src={image.original} alt={image.name} />
+                            <div className="image-wrapper">
+                                <img src={image.original} alt={image.name} />
+
+                                <p className="shark-image-meta">
+                                    <small>📸 Creator: {image.creator} | {image.license}</small>
+                                </p>
+                            </div>
+
                             <div className="thumbnail-info">
                                 <h4>{image.name}</h4>
                                 <p>{image.description}</p>

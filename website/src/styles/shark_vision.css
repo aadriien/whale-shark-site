@@ -195,12 +195,38 @@
     color: white;
 }
 
-.thumbnail img {
+.image-wrapper {
+    position: relative; /* positioning context for overlay */
     width: 100%;
-    height: 150px;
-    object-fit: cover;
+    height: 150px; 
     border-radius: 8px;
     margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.image-wrapper .shark-image-meta {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 4px 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+/* Show only when hovering over image wrapper (i.e. image area) */
+.image-wrapper:hover .shark-image-meta {
+    opacity: 1;
 }
 
 .thumbnail-info h4 {
