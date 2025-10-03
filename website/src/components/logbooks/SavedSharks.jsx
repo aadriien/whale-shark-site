@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocalStorage } from "../../hooks/useLocalStorage.js";
 
 import CondensedSharkCard from "../cards/CondensedSharkCard.jsx";
 import { mediaSharks } from "../../utils/DataUtils.js";
@@ -34,15 +35,10 @@ const CondensedGrid = ({ saved }) => {
 
 
 function SavedSharks () {
-    // Initialize from localStorage or empty set
-    const [saved, setSaved] = useState(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? new Set(JSON.parse(stored)) : new Set();
-        } catch {
-            return new Set();
-        }
-    });
+    const [saved, setSaved] = useLocalStorage(
+        STORAGE_KEY,
+        () => new Set()
+    );
 
     // Allow user to reset saved whale sharks
     const clearSaved = () => {
@@ -56,7 +52,6 @@ function SavedSharks () {
             const isConfirmedAgain = confirm(`Seriously, last chance!`);
             
             if (isConfirmedAgain) {
-                localStorage.removeItem(STORAGE_KEY);
                 setSaved(new Set());
             }
         }
