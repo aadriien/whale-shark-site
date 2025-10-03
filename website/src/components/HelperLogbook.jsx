@@ -19,15 +19,6 @@ function Logbook({ isLogbookOpen, setIsLogbookOpen }) {
 
     const pageLabelPath = pageMap[pageSlug];
 
-    const SECTION_COMPONENTS = {
-        overview: <PageOverview currentPage={pageSlug} />,
-        faq: <PageFAQ currentPage={pageSlug} />,
-        stamps: <VisitedStamps currentPage={pageSlug} />,
-        saved: <SavedSharks />
-    };
-
-
-
     return (
         <>
             {/* This part is invisible when closed */}
@@ -50,8 +41,10 @@ function Logbook({ isLogbookOpen, setIsLogbookOpen }) {
 
                         <div className="logbook-body">
                             <h4>📍 <span className="logbook-page-name">{pageLabelPath.label}</span> page</h4>
-                            {/* Logs, sections, etc go here */}
-                            {SECTION_COMPONENTS[activeSection]}
+                            <PageOverview currentPage={pageSlug} />,
+                            <PageFAQ currentPage={pageSlug} />,
+                            <VisitedStamps currentPage={pageSlug} />,
+                            <SavedSharks />
                         </div>
 
                         <div className="logbook-nav">
