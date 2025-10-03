@@ -53,7 +53,7 @@ const createSexLifeStageFromSharks = (sharks) => {
 
     sharks.forEach(shark => {
         const sex = shark.sex || 'Unknown';
-        if (sexCount.hasOwnProperty(sex)) {
+        if (sex in sexCount) {
             sexCount[sex]++;
         } 
         else {
@@ -77,7 +77,7 @@ const createSexLifeStageFromSharks = (sharks) => {
 
     // Create rings data for life stages
     const ringsData = Object.entries(lifeStageCount)
-        .filter(([stage, count]) => count > 0)
+        .filter(([, count]) => count > 0)
         .map(([stage, count]) => ({
             lifeStageCategory: 'Life Stage',
             lifeStageSegment: stage,
