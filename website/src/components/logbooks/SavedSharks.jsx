@@ -6,7 +6,7 @@ import { mediaSharks } from "../../utils/DataUtils.js";
 
 const STORAGE_KEY = "savedSharks";
 
-function RetrieveSharks(saved) {
+function retrieveSharks(saved) {
     if (!saved || saved.size === 0) return [];
     
     // Build lookup map for fast retrieval: { sharkID -> sharkObject }
@@ -20,7 +20,7 @@ function RetrieveSharks(saved) {
 
 
 const CondensedGrid = ({ saved }) => {
-    const sharks = RetrieveSharks(saved);
+    const sharks = retrieveSharks(saved);
     console.log(sharks)
 
     return (
