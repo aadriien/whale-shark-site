@@ -68,10 +68,12 @@ function App() {
                 />
 
                 {/* Logbook overlay (always there but conditionally rendered) */}
-                <Logbook 
-                    isLogbookOpen={isLogbookOpen}
-                    setIsLogbookOpen={setIsLogbookOpen}
-                />
+                { isLogbookOpen &&
+                    <Logbook 
+                        isLogbookOpen={isLogbookOpen}
+                        setIsLogbookOpen={setIsLogbookOpen}
+                    />
+                }
 
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />
