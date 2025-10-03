@@ -35,6 +35,7 @@ function Logbook({ setIsLogbookOpen }) {
                 </div>
 
                 <div className="logbook-body">
+                    { /* How did we get from h2 to h4 here? What happened to h3? */}
                     <h4>📍 <span className="logbook-page-name">{pageLabelPath.label}</span> page</h4>
                     <PageOverview currentPage={pageSlug} />,
                     <PageFAQ currentPage={pageSlug} />,
@@ -72,6 +73,7 @@ function LogbookNav({ children }) {
             {
                 items.map((item, index) => (
                     <>
+                        {/* h3 skipped? Are h* tags appropriate for navigation? */}
                         <h4 key={index}>
                             {item}
                         </h4>
