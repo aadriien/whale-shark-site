@@ -44,47 +44,52 @@ function Logbook({ setIsLogbookOpen }) {
                     <SavedSharks />
                 </div>
 
-                <div className="logbook-nav">
-                    <h4>
-                        <a 
-                            onClick={() => setActiveSection("overview")}
-                            className={activeSection === "overview" ? "active" : ""}
-                        >
-                            Page Overview
-                        </a>
-                    </h4>
-                    <span>|</span>
-                    <h4>
-                        <a 
-                            onClick={() => setActiveSection("faq")}
-                            className={activeSection === "faq" ? "active" : ""}
-                        >
-                            Page FAQs
-                        </a>
-                    </h4>
-                    <span>|</span>
-                    <h4>
-                        <a 
-                            onClick={() => setActiveSection("stamps")}
-                            className={activeSection === "stamps" ? "active" : ""}
-                        >
-                            Visited Stamps
-                        </a>
-                    </h4>
-                    <span>|</span>
-                    <h4>
-                        <a 
-                            onClick={() => setActiveSection("saved")}
-                            className={activeSection === "saved" ? "active" : ""}
-                        >
-                            Saved Sharks
-                        </a>
-                    </h4>
-                </div>
-
+                <LogbookNav>
+                    <a 
+                        onClick={() => setActiveSection("overview")}
+                        className={activeSection === "overview" ? "active" : ""}
+                    >
+                        Page Overview
+                    </a>
+                    <a 
+                        onClick={() => setActiveSection("faq")}
+                        className={activeSection === "faq" ? "active" : ""}
+                    >
+                        Page FAQs
+                    </a>
+                    <a 
+                        onClick={() => setActiveSection("stamps")}
+                        className={activeSection === "stamps" ? "active" : ""}
+                    >
+                        Visited Stamps
+                    </a>
+                    <a 
+                        onClick={() => setActiveSection("saved")}
+                        className={activeSection === "saved" ? "active" : ""}
+                    >
+                        Saved Sharks
+                    </a>
+                </LogbookNav>
             </div>
         </div>
     );
+}
+
+function LogbookNav({ children }) {
+    const items = React.Children.toArray(children);
+    return (
+        <div className="logbook-nav">
+        {
+            items.map((item, index) => (
+                <>
+                    <h4 key={index}>
+                        {item}
+                    </h4>
+                    {index < items.length - 1 && <span>|</span>}
+                </>
+            ))
+        }
+        </div>
 }
 
 export default Logbook;
