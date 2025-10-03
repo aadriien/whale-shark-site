@@ -17,18 +17,9 @@ function VisitedStamps({ currentPage }) {
     const blobStyles = useMemo(
         () =>
             Object.keys(pageMap).map(() => ({
-            hue: Math.floor(Math.random() * 360),
-            borderRadius: `
-                ${randomRange(30, 70)}% 
-                ${randomRange(30, 70)}% 
-                ${randomRange(30, 70)}% 
-                ${randomRange(30, 70)}% / 
-                ${randomRange(30, 70)}% 
-                ${randomRange(30, 70)}% 
-                ${randomRange(30, 70)}% 
-                ${randomRange(30, 70)}%
-            `,
-        })),
+                hue: Math.floor(Math.random() * 360),
+                borderRadius: blobBorderRadius(30, 70),
+            })),
         []
     );
 
@@ -101,6 +92,19 @@ function VisitedStamps({ currentPage }) {
         </div>
     );
 } 
+
+function blobBorderRadius(min, max) {
+    return `
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}% /
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+    `;
+}
 
 function randomRange(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
