@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import { pageMap } from "./LogbookContent.js"
@@ -7,15 +7,10 @@ import { pageMap } from "./LogbookContent.js"
 const STORAGE_KEY = "visitedPages";
 
 function VisitedStamps({ currentPage }) {
-    // Initialize from localStorage or empty set
-    const [visited, setVisited] = useState(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? new Set(JSON.parse(stored)) : new Set();
-        } catch {
-            return new Set();
-        }
-    });
+    const [visited, setVisited] = useLocalStorage(
+        STORAGE_KEY,
+        () => new Set()
+    );
     
     // Precompute random blob styles once
     const blobStyles = useMemo(
@@ -36,12 +31,10 @@ function VisitedStamps({ currentPage }) {
         []
     );
 
-    // Allow user to reset stamps
     const clearVisited = () => {
-        localStorage.removeItem(STORAGE_KEY);
         setVisited(new Set());
-    };
-    
+    }
+
     useEffect(() => {
         if (!currentPage) return;
 
@@ -49,13 +42,10 @@ function VisitedStamps({ currentPage }) {
             if (prev.has(currentPage)) return prev; // no change
             const updated = new Set(prev);
             updated.add(currentPage);
-            
-            // Save updated set to localStorage
-            localStorage.setItem(STORAGE_KEY, JSON.stringify([...updated]));
             return updated;
         });
     }, [currentPage]);
-    
+
     return (
         <div className="logbook-section visited-stamps">
             <div className="visited-saved-header">
@@ -110,6 +100,38 @@ function VisitedStamps({ currentPage }) {
         </div>
     );
 } 
+
+function useLocalStorage(key, defaultValue) {
+    const [value, setValue] = useState(() => {
+        try {
+            const saved = localStorage.getItem(key);
+            console.log(`Loading ${key} from localStorage: ${saved}`);
+            if (saved !== null) {
+                return JSON.parse(saved);
+            }
+            return defaultValue;
+        } catch (e) {
+            console.error(e);
+            return defaultValue;
+        }
+    });
+
+    useEffect(() => {
+        if (value === null) {
+            return;
+        }
+        const rawValue = JSON.stringify(value);
+        localStorage.setItem(key, rawValue);
+    }, [key, value]);
+
+    const deleteValue = useCallback((): void => {
+        console.log(`Deleting ${key} from localStorage`);
+        localStorage.removeItem(key);
+        setValue(defaultValue);
+    }, [key, defaultValue]);
+
+    return [value, setValue, deleteValue];
+}
 
 function randomRange(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
