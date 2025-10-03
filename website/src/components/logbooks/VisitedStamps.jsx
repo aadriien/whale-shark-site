@@ -23,14 +23,14 @@ function VisitedStamps({ currentPage }) {
             Object.keys(pageMap).map(() => ({
             hue: Math.floor(Math.random() * 360),
             borderRadius: `
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% / 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}%
+                ${randomRange(30, 70)}% 
+                ${randomRange(30, 70)}% 
+                ${randomRange(30, 70)}% 
+                ${randomRange(30, 70)}% / 
+                ${randomRange(30, 70)}% 
+                ${randomRange(30, 70)}% 
+                ${randomRange(30, 70)}% 
+                ${randomRange(30, 70)}%
             `,
         })),
         []
@@ -110,5 +110,9 @@ function VisitedStamps({ currentPage }) {
         </div>
     );
 } 
+
+function randomRange(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
 export default VisitedStamps;
