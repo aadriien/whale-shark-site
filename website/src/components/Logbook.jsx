@@ -8,16 +8,14 @@ import SavedSharks from "./logbooks/SavedSharks.jsx";
 
 import { pageMap } from "./logbooks/LogbookContent.js";
 
-
 function Logbook({ setIsLogbookOpen }) {
-    const [activeSection, setActiveSection] = useState("overview");
-
     // Figure out which page user is on & update logbook display
     const location = useLocation();
     const currentPath = location.pathname;
     const pageSlug = currentPath.split("/").filter(Boolean).pop(); 
 
     const pageLabelPath = pageMap[pageSlug];
+
 
     return (
         <div className="logbook-container">
@@ -45,51 +43,57 @@ function Logbook({ setIsLogbookOpen }) {
                 </div>
 
                 <LogbookNav>
-                    <a 
-                        onClick={() => setActiveSection("overview")}
-                        className={activeSection === "overview" ? "active" : ""}
-                    >
+                    <NavLink page="overview">
                         Page Overview
-                    </a>
-                    <a 
-                        onClick={() => setActiveSection("faq")}
-                        className={activeSection === "faq" ? "active" : ""}
-                    >
+                    </NavLink>
+                    <NavLink page="faq">
                         Page FAQs
-                    </a>
-                    <a 
-                        onClick={() => setActiveSection("stamps")}
-                        className={activeSection === "stamps" ? "active" : ""}
-                    >
+                    </NavLink>
+                    <NavLink page="stamps">
                         Visited Stamps
-                    </a>
-                    <a 
-                        onClick={() => setActiveSection("saved")}
-                        className={activeSection === "saved" ? "active" : ""}
-                    >
+                    </NavLink>
+                    <NavLink page="saved">
                         Saved Sharks
-                    </a>
+                    </NavLink>
                 </LogbookNav>
             </div>
         </div>
     );
 }
 
+const LogbookContext = React.createContext();
+
 function LogbookNav({ children }) {
+    const [activeSection, setActiveSection] = useState("overview");
     const items = React.Children.toArray(children);
     return (
-        <div className="logbook-nav">
-        {
-            items.map((item, index) => (
-                <>
-                    <h4 key={index}>
-                        {item}
-                    </h4>
-                    {index < items.length - 1 && <span>|</span>}
-                </>
-            ))
-        }
-        </div>
+        <LogbookContext.Provider value={{ activeSection, setActiveSection }}>
+            <div className="logbook-nav">
+            {
+                items.map((item, index) => (
+                    <>
+                        <h4 key={index}>
+                            {item}
+                        </h4>
+                        {index < items.length - 1 && <span>|</span>}
+                    </>
+                ))
+            }
+            </div>
+        </LogbookContext.Provider>
+    )
+}
+
+function NavLink({ page, children }) {
+    const { activeSection, setActiveSection } = useContext(LogbookContext);
+    return (
+        <a
+            onClick={() => setActiveSection(page)}
+            className={activeSection === page ? "active" : ""}
+        >
+            {children}
+        </a>
+    );
 }
 
 export default Logbook;
