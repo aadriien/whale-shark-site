@@ -7,9 +7,12 @@ import GBIFRegionOccurrences from "./RegionalData.jsx";
 import GBIFRegionAverages from "./RegionalAverages.jsx";
 
 import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";
+import { useState } from "react";
 
 
-const GBIFContinentOccurrences = ({ selectedRegion, onChange }) => {
+const GBIFContinentOccurrences = () => {
+    const [selectedRegion, setSelectedRegion] = useState("")
+
     const commonProps = {
         regionData: continentStatsGBIF,
         metric: "continent",
@@ -26,7 +29,7 @@ const GBIFContinentOccurrences = ({ selectedRegion, onChange }) => {
                     field="continent"
                     data={continentStatsGBIF}
                     selectedValue={selectedRegion}
-                    onChange={onChange}
+                    onChange={setSelectedRegion}
                     inline={true} /* toggles display of "select a continent" */
                 />
             </div>
