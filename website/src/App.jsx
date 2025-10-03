@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 
 import Navbar from "./components/Navbar.jsx";
-import Logbook from "./components/HelperLogbook.jsx";
+import Logbook from "./components/Logbook.jsx";
 
 const ResearchReef = lazy(() => import("./pages/ResearchReef.jsx"));
 const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent.jsx"));
@@ -68,10 +68,12 @@ function App() {
                 />
 
                 {/* Logbook overlay (always there but conditionally rendered) */}
-                <Logbook 
-                    isLogbookOpen={isLogbookOpen}
-                    setIsLogbookOpen={setIsLogbookOpen}
-                />
+                { isLogbookOpen &&
+                    <Logbook 
+                        isLogbookOpen={isLogbookOpen}
+                        setIsLogbookOpen={setIsLogbookOpen}
+                    />
+                }
 
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />

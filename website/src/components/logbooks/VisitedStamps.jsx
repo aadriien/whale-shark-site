@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
+import { useLocalStorage } from "../../hooks/useLocalStorage.js";
 import { Link } from "react-router-dom";
 
 import { pageMap } from "./LogbookContent.js"
@@ -7,41 +8,25 @@ import { pageMap } from "./LogbookContent.js"
 const STORAGE_KEY = "visitedPages";
 
 function VisitedStamps({ currentPage }) {
-    // Initialize from localStorage or empty set
-    const [visited, setVisited] = useState(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? new Set(JSON.parse(stored)) : new Set();
-        } catch {
-            return new Set();
-        }
-    });
+    const [visited, setVisited] = useLocalStorage(
+        STORAGE_KEY,
+        () => new Set()
+    );
     
     // Precompute random blob styles once
     const blobStyles = useMemo(
         () =>
             Object.keys(pageMap).map(() => ({
-            hue: Math.floor(Math.random() * 360),
-            borderRadius: `
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% / 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}%
-            `,
-        })),
+                hue: Math.floor(Math.random() * 360),
+                borderRadius: blobBorderRadius(30, 70),
+            })),
         []
     );
 
-    // Allow user to reset stamps
     const clearVisited = () => {
-        localStorage.removeItem(STORAGE_KEY);
         setVisited(new Set());
-    };
-    
+    }
+
     useEffect(() => {
         if (!currentPage) return;
 
@@ -49,13 +34,10 @@ function VisitedStamps({ currentPage }) {
             if (prev.has(currentPage)) return prev; // no change
             const updated = new Set(prev);
             updated.add(currentPage);
-            
-            // Save updated set to localStorage
-            localStorage.setItem(STORAGE_KEY, JSON.stringify([...updated]));
             return updated;
         });
     }, [currentPage]);
-    
+
     return (
         <div className="logbook-section visited-stamps">
             <div className="visited-saved-header">
@@ -111,4 +93,23 @@ function VisitedStamps({ currentPage }) {
     );
 } 
 
+function blobBorderRadius(min, max) {
+    return `
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}% /
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+    `;
+}
+
+function randomRange(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
 export default VisitedStamps;
+
+

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
 import SharkBanner from "../cards/SharkBanner.jsx";
 import { getFavorites } from "../../utils/FavoritesUtils.js";
@@ -58,7 +58,7 @@ function SavedSharksDisplay({
         }
     };
 
-    const handleLabToggle = React.useCallback((sharkId) => {
+    const handleLabToggle = useCallback((sharkId) => {
         if (onLabSelectionChange && selectedSharksForLab) {
             const newSelection = new Set(selectedSharksForLab);
             if (newSelection.has(sharkId)) {
