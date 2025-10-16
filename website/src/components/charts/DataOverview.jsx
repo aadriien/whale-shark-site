@@ -27,12 +27,12 @@ const DataOverview = ({
     ],
     selectedFilter = "", // expect selectedFilter from parent now
 }) => {
-    const data = Array.isArray(dataset) ? dataset : (datasets[dataset] || []);
-    
     const selectedData = useMemo(() => {
+        const data = Array.isArray(dataset) ? dataset : (datasets[dataset] || []);
+
         // Force both to type string when comparing for search
         return data.find(d => String(d[filterField]) === String(selectedFilter));
-    }, [data, filterField, selectedFilter]);
+    }, [dataset, filterField, selectedFilter]);
     
     return (
         <>
