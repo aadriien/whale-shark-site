@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import RadialHeatmap from "../charts/RadialHeatmap.jsx";
@@ -53,7 +53,7 @@ const createSexLifeStageFromSharks = (sharks) => {
 
     sharks.forEach(shark => {
         const sex = shark.sex || 'Unknown';
-        if (sexCount.hasOwnProperty(sex)) {
+        if (sex in sexCount) {
             sexCount[sex]++;
         } 
         else {

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import * as d3 from "d3";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
@@ -42,59 +42,61 @@ const reshapeRegionData = (rawData, metric) => {
 
     return reshaped;
 };
+
+
+// Get human vs machine observation percentages as pie chart data
+const getObservationTypeData = (selectedRegion, reshapedData) => {
+    const entries = reshapedData.filter(d => d.region === selectedRegion);
+
+    if (!entries.length) return [];
+
+    const totalHuman = d3.sum(entries, d => d["Human Observation"]);
+    const totalMachine = d3.sum(entries, d => d["Machine Observation"]);
+    const total = totalHuman + totalMachine;
+
+    return [
+        { label: "Human Observation", value: (totalHuman / total) * 100 },
+        { label: "Machine Observation", value: (totalMachine / total) * 100 }
+    ];
+};
+
+
+// Calculate total occurrences per month
+const getMonthOccurrences = (region, reshapedData) => {
+    return reshapedData.filter(d => d.region === region)
+        .reduce((accum, curr) => {
+            MONTHS.forEach(month => {
+                accum[month] = (accum[month] || 0) + (curr[month] || 0);
+            });
+            return accum;
+        }, {});
+};
                 
 
-const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion, onRegionChange }) => {
+const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion }) => {
     // Reshape data once on mount or when regionData / metric change
     const reshapedData = useMemo(() => reshapeRegionData(regionData, metric), [regionData, metric]);
 
     const filteredData = useMemo(() => {
         return reshapedData.filter(d => d.region === selectedRegion);
     }, [reshapedData, selectedRegion]);
-
-    // Get human vs machine observation percentages as pie chart data
-    const getObservationTypeData = (selectedRegion) => {
-        const entries = reshapedData.filter(d => d.region === selectedRegion);
-    
-        if (!entries.length) return [];
-    
-        const totalHuman = d3.sum(entries, d => d["Human Observation"]);
-        const totalMachine = d3.sum(entries, d => d["Machine Observation"]);
-        const total = totalHuman + totalMachine;
-    
-        return [
-            { label: "Human Observation", value: (totalHuman / total) * 100 },
-            { label: "Machine Observation", value: (totalMachine / total) * 100 }
-        ];
-    };
     
     const pieData = useMemo(() => {
-        return getObservationTypeData(selectedRegion);
+        return getObservationTypeData(selectedRegion, reshapedData);
     }, [selectedRegion, reshapedData]);
-
-    // Calculate total occurrences per month
-    const getMonthOccurrences = (region) => {
-        return reshapedData.filter(d => d.region === region)
-            .reduce((accum, curr) => {
-                MONTHS.forEach(month => {
-                    accum[month] = (accum[month] || 0) + (curr[month] || 0);
-                });
-                return accum;
-            }, {});
-    };
 
     // Get occurrences for selected region
     const monthOccurrences = useMemo(() => {
         if (selectedRegion) {
-            return getMonthOccurrences(selectedRegion);
+            return getMonthOccurrences(selectedRegion, reshapedData);
         }
         return {};
     }, [selectedRegion, reshapedData]);
 
     return (
-        <div className="region-occurrence-card" 
-            style={{ 
-                width: "100%", 
+        <div className="region-occurrence-card"
+            style={{
+                width: "100%",
                 height: "100%",
             }}
         >
@@ -108,8 +110,8 @@ const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion, onRegionCha
                         ringField="Avg Per Year (all)"
                         valueField="Total Occurrences"
                         title={`Total Monthly Records — ${selectedRegion}`}
-                        monthOccurrences={monthOccurrences}  
-                        pieData={pieData}  
+                        monthOccurrences={monthOccurrences}
+                        pieData={pieData}
                     />
                 </>
             ) : (
