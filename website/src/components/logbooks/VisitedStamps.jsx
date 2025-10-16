@@ -6,6 +6,26 @@ import { pageMap } from "./LogbookContent.js"
 
 const STORAGE_KEY = "visitedPages";
 
+
+function randomRange(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+
+function blobBorderRadius(min, max) {
+    return `
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}% /
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+        ${randomRange(min, max)}%
+    `;
+}
+
+
 function VisitedStamps({ currentPage }) {
     // Initialize from localStorage or empty set
     const [visited, setVisited] = useState(() => {
@@ -21,18 +41,9 @@ function VisitedStamps({ currentPage }) {
     const blobStyles = useMemo(
         () =>
             Object.keys(pageMap).map(() => ({
-            hue: Math.floor(Math.random() * 360),
-            borderRadius: `
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% / 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}% 
-                ${30 + Math.random() * 40}%
-            `,
-        })),
+                hue: Math.floor(Math.random() * 360),
+                borderRadius: blobBorderRadius(30, 70),
+            })),
         []
     );
 
