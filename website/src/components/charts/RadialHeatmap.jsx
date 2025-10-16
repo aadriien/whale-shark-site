@@ -57,7 +57,7 @@ const RadialHeatmap = ({
         const total = d3.sum(data, d => +d[valueField]);
         
         // Angular scale for segments (e.g. months) as percentage of total
-        const angleScale = d3.scaleLinear()
+        const _angleScale = d3.scaleLinear()
             .domain([0, total])
             .range([0, 2 * Math.PI]);
         
