@@ -67,11 +67,10 @@ function App() {
                     setTheme={handleThemeChange}
                 />
 
-                {/* Logbook overlay (always there but conditionally rendered) */}
-                <Logbook 
-                    isLogbookOpen={isLogbookOpen}
-                    setIsLogbookOpen={setIsLogbookOpen}
-                />
+                {/* Logbook overlay (conditionally rendered) */}
+                {isLogbookOpen && (
+                    <Logbook setIsLogbookOpen={setIsLogbookOpen} />
+                )}
 
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />
