@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getNames } from "country-list";
 
 import { fetchImageLLM } from "../utils/LLMUtils.jsx";

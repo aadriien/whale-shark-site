@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 import TimelineButton from "./TimelineButton.jsx";
 import TimelineSelector from "./TimelineSelector.jsx";

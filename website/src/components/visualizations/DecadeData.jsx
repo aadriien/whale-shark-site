@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
 import Heatmap from "../charts/Heatmap.jsx";

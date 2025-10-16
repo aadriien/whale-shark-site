@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { 
     extractContinents, 
@@ -21,7 +21,7 @@ const VALID_CONTINENTS = new Set([
 function ContinentDisplay({ sharks, onSelect, selectedSharkId }) {
     const [openContinents, setOpenContinents] = useState({});
 
-    const sharksByContinent = React.useMemo(() => {
+    const sharksByContinent = useMemo(() => {
         const byContinent = {};
                 
         sharks.forEach(shark => {

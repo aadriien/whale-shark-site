@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import FavoriteButton from "../controls/FavoriteButton.jsx";
 import PlayStoryButton from "../controls/PlayStoryButton.jsx";

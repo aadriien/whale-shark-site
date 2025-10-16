@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import SharkFilter from "./SharkFilter.jsx";
 
@@ -31,7 +31,7 @@ function SharkSelector({
     const months = FULLMONTHS;
 
     // Memoize default criteria to prevent unnecessary re-initializations
-    const defaultCriteria = React.useMemo(() => ({
+    const defaultCriteria = useMemo(() => ({
         showOnlyWithMedia: false,
         country: "",
         yearRange: [String(minYear), String(maxYear)],
@@ -56,7 +56,7 @@ function SharkSelector({
     };
 
     // Apply filters to get filtered sharks
-    const filteredSharks = React.useMemo(() => {
+    const filteredSharks = useMemo(() => {
         console.log("Computing filteredSharks with criteria:", criteria);
         const result = filterSharks(sharks, criteria);
         
@@ -65,7 +65,7 @@ function SharkSelector({
     }, [sharks, criteria]);
     
     // Notify parent of filtered sharks changes
-    React.useEffect(() => {
+    useEffect(() => {
         if (onFilteredSharksChange) {
             onFilteredSharksChange(filteredSharks);
         }

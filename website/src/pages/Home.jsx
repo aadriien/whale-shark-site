@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import ExtractPointsOnce from "../utils/ModelUtils.jsx";
 import GalacticOcean from "../components/animations/GalacticOcean.jsx";
