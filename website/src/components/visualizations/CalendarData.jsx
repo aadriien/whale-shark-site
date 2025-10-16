@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import DataMetricFilter from "./DataMetricFilter.jsx";
 
@@ -29,7 +29,9 @@ const reshapeYearData = (rawData) => {
     return byYear;
 };
     
-const GBIFCalendarOccurrences = ({ selectedYear, onChange }) => {
+const GBIFCalendarOccurrences = () => {
+    const [selectedYear, setSelectedYear] = useState(""); 
+
     const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);    
     const monthlyData = useMemo(() => reshaped[selectedYear] || [], [selectedYear, reshaped]);
         
@@ -43,7 +45,7 @@ const GBIFCalendarOccurrences = ({ selectedYear, onChange }) => {
                     field="year"
                     data={calendarStatsGBIF}
                     selectedValue={selectedYear}
-                    onChange={onChange}
+                    onChange={setSelectedYear}
                     inline={true} /* toggles display of "select a year" */
                 />
             </div>

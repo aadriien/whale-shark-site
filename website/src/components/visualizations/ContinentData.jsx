@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import DataMetricFilter from "./DataMetricFilter.jsx";
 
 import DataOverview from "../charts/DataOverview.jsx";
@@ -9,11 +11,13 @@ import GBIFRegionAverages from "./RegionalAverages.jsx";
 import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";
 
 
-const GBIFContinentOccurrences = ({ selectedRegion, onChange }) => {
+const GBIFContinentOccurrences = () => {
+    const [selectedContinent, setSelectedContinent] = useState("");
+
     const commonProps = {
         regionData: continentStatsGBIF,
         metric: "continent",
-        selectedRegion,
+        selectedRegion: selectedContinent,
     };
 
     return (
@@ -25,8 +29,8 @@ const GBIFContinentOccurrences = ({ selectedRegion, onChange }) => {
                     label="Continent"
                     field="continent"
                     data={continentStatsGBIF}
-                    selectedValue={selectedRegion}
-                    onChange={onChange}
+                    selectedValue={selectedContinent}
+                    onChange={setSelectedContinent}
                     inline={true} /* toggles display of "select a continent" */
                 />
             </div>
@@ -36,7 +40,7 @@ const GBIFContinentOccurrences = ({ selectedRegion, onChange }) => {
                     <DataOverview 
                         dataset="continent" 
                         filterField="continent"
-                        selectedFilter={selectedRegion}
+                        selectedFilter={selectedContinent}
                         displayFields={[
                             { label: "Total Occurrences", field: "Total Occurrences" },
                             { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },

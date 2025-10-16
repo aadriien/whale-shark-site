@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import DataMetricFilter from "./DataMetricFilter.jsx";
 
 import DataOverview from "../charts/DataOverview.jsx";
@@ -9,11 +11,13 @@ import GBIFRegionAverages from "./RegionalAverages.jsx";
 import publishingCountryStatsGBIF from "../../assets/data/json/gbif_publishingCountry_stats.json";
   
 
-const GBIFPublishingCountryOccurrences = ({ selectedRegion, onChange }) => {
+const GBIFPublishingCountryOccurrences = () => {
+    const [selectedPublishingCountry, setSelectedPublishingCountry] = useState("");
+
     const commonProps = {
         regionData: publishingCountryStatsGBIF,
         metric: "publishingCountry",
-        selectedRegion,
+        selectedRegion: selectedPublishingCountry,
     };
     return (
         <>
@@ -24,8 +28,8 @@ const GBIFPublishingCountryOccurrences = ({ selectedRegion, onChange }) => {
                     label="Publishing Country"
                     field="publishingCountry"
                     data={publishingCountryStatsGBIF}
-                    selectedValue={selectedRegion}
-                    onChange={onChange}
+                    selectedValue={selectedPublishingCountry}
+                    onChange={setSelectedPublishingCountry}
                     inline={true} /* toggles display of "select a publishing country" */
                 />
             </div>
@@ -35,7 +39,7 @@ const GBIFPublishingCountryOccurrences = ({ selectedRegion, onChange }) => {
                     <DataOverview 
                         dataset="publishingCountry" 
                         filterField="publishingCountry"
-                        selectedFilter={selectedRegion}
+                        selectedFilter={selectedPublishingCountry}
                         displayFields={[
                             { label: "Total Occurrences", field: "Total Occurrences" },
                             { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
