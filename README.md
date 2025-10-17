@@ -196,6 +196,8 @@ In the meantime, feel free to explore the codebase and/or reach out with any que
 
 A massive thank you to the wonderful community of builders, creators, and programmers at [the Recurse Center](https://www.recurse.com)! Much of this project has been developed during my time at RC, and I'm continually inspired by the energy and passion of those around me.
 
+In particular, thank you to [Anjana Vakil](https://github.com/vakila) and [Adam Kelly](https://github.com/cthulahoops) from RC for taking time to do code review on the data visuals and helper logbook features! 
+
 Thank you to Anastasia from the [Wild Me](https://www.wildme.org) support team for chatting with me about [Sharkbook](https://www.sharkbook.ai), and for sharing open source resources like Wildbook's [Image Analysis](https://github.com/WildMeOrg/wildbook-ia) software!
 
 Thank you to Leïla from the [Copernicus Marine](https://marine.copernicus.eu) support team for helping me troubleshoot the capabilities of the [MyOcean Pro Viewer](https://marine.copernicus.eu/access-data/ocean-visualisation-tools) in relation to 3rd party data imports!
