@@ -2,6 +2,7 @@ import CVHeroIntro from "../components/overviews/CVHeroIntro.jsx";
 import CVPipeline from "../components/overviews/CVPipeline.jsx";
 import InteractiveDemo from "../components/overviews/InteractiveDemo.jsx";
 import CVApplications from "../components/overviews/CVApplications.jsx";
+import SharkMatchViewer from "../components/SharkMatchViewer.jsx";
 
 
 function SharkVision() {
@@ -13,6 +14,7 @@ function SharkVision() {
             <CVPipeline />
             <InteractiveDemo />
             <CVApplications />
+            <SharkMatchViewer />
         
         </div>
     );
