@@ -10,6 +10,9 @@ import numpy as np
 import pandas as pd
 from typing import Tuple
 
+import json
+import unicodedata
+
 
 from src.utils.data_utils import (
     read_csv, export_to_csv,
@@ -31,6 +34,11 @@ from .get_new_image_embeddings import (
 
 GBIF_MEDIA_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches.csv"
 GBIF_INDIVIDUAL_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches.csv"
+
+# JSON files go to website assets folder for React import
+JSON_OUTPUT_FOLDER = "./website/src/assets/data/json"
+GBIF_MEDIA_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_media_matches.json"
+GBIF_INDIVIDUAL_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_shark_matches.json"
 
 
 # L2 DISTANCE SCALE (for normalized values, to judge match likelihood): 
@@ -103,6 +111,45 @@ def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:
     return results
 
 
+def normalize_string(s):
+    if not isinstance(s, str):
+        return s
+    
+    # Normalize unicode to decomposed form, then encode to ASCII 
+    normalized = unicodedata.normalize('NFKD', s)
+    return normalized.encode('ascii', 'ignore').decode('ascii')
+
+
+def export_to_json(filepath: str, df: pd.DataFrame) -> None:
+    # Replace NaN values before converting to DataFrame, then list of dicts
+    df_clean = df.fillna('')
+    data = df_clean.to_dict('records')
+    
+    # Normalize string values to handle accents & special characters
+    normalized_data = []
+
+    for record in data:
+        normalized_record = {}
+
+        for key, value in record.items():
+            # Normalize both keys & values
+            normalized_key = normalize_string(key)
+
+            if isinstance(value, str):
+                normalized_record[normalized_key] = normalize_string(value)
+            elif pd.isna(value):
+                normalized_record[normalized_key] = None
+            else:
+                normalized_record[normalized_key] = value
+                
+        normalized_data.append(normalized_record)
+    
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(normalized_data, f, indent=2, default=str, ensure_ascii=True)
+    
+    print(f"Exported {len(normalized_data)} records to {filepath}")
+
+
 def validate_matches(media_matches_df: pd.DataFrame) -> None:
     media_sharks_df = read_csv(GBIF_INDIVIDUAL_SHARKS_STATS_CSV)
 
@@ -165,6 +212,7 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
     )
 
     export_to_csv(GBIF_INDIVIDUAL_MATCHES_FILE, individual_sharks)
+    export_to_json(GBIF_INDIVIDUAL_MATCHES_JSON, individual_sharks)
 
 
 
@@ -206,6 +254,7 @@ if __name__ == "__main__":
 
 
     export_to_csv(GBIF_MEDIA_MATCHES_FILE, enriched_df)
+    export_to_json(GBIF_MEDIA_MATCHES_JSON, enriched_df)
 
     validate_matches(enriched_df)
 
