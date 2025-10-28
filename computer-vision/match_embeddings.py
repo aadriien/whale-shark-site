@@ -83,37 +83,53 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
         known_ids = known_data["whale_shark_names"]
         all_ids = np.concatenate([known_ids, query_ids])
         
-        # Search against all embeddings (first match will be self, so we need k=2)
-        distances_miewid, indices_miewid = perform_search(all_miewid, all_miewid, k=2)
-        distances_dino, indices_dino = perform_search(all_dino, all_dino, k=2)
+        # Search against all embeddings (get more matches to skip same shark ID)
+        # Need extra matches in case top results have same shark ID
+        distances_miewid, indices_miewid = perform_search(all_miewid, all_miewid, k=50)
+        distances_dino, indices_dino = perform_search(all_dino, all_dino, k=50)
         
         # Process only new data results (skip known data)
         known_count = len(known_data["miewid_embeddings"])
         
         for i in range(len(query_miewid)):
             global_idx = known_count + i
+            current_shark_id = query_ids[i]
             
-            # Use second-best match (first match is always self)
-            idx_miewid = indices_miewid[global_idx][1]
-            dist_miewid = distances_miewid[global_idx][1]
+            # Find first match with different shark ID (skip self image & same shark)
+            idx_miewid = None
+            dist_miewid = None
+            for k in range(len(indices_miewid[global_idx])):
+                candidate_idx = indices_miewid[global_idx][k]
+
+                if all_ids[candidate_idx] != current_shark_id:
+                    idx_miewid = candidate_idx
+                    dist_miewid = distances_miewid[global_idx][k]
+                    break
             
-            idx_dino = indices_dino[global_idx][1]
-            dist_dino = distances_dino[global_idx][1]
+            idx_dino = None
+            dist_dino = None
+            for k in range(len(indices_dino[global_idx])):
+                candidate_idx = indices_dino[global_idx][k]
+                
+                if all_ids[candidate_idx] != current_shark_id:
+                    idx_dino = candidate_idx
+                    dist_dino = distances_dino[global_idx][k]
+                    break
             
             result = {
                 "query_index": i,
 
                 # MIEWID match
-                "miewid_closest_whale_shark_id": all_ids[idx_miewid],
-                "miewid_matched_image_id": idx_miewid,
-                "miewid_matched_annotation_id": idx_miewid,
-                "miewid_distance": round(float(dist_miewid), 4),
+                "miewid_closest_whale_shark_id": all_ids[idx_miewid] if idx_miewid is not None else "N/A",
+                "miewid_matched_image_id": idx_miewid if idx_miewid is not None else -1,
+                "miewid_matched_annotation_id": idx_miewid if idx_miewid is not None else -1,
+                "miewid_distance": round(float(dist_miewid), 4) if dist_miewid is not None else 999.0,
 
                 # DINOv2 match
-                "dinov2_closest_whale_shark_id": all_ids[idx_dino],
-                "dinov2_matched_image_id": idx_dino,
-                "dinov2_matched_annotation_id": idx_dino,
-                "dinov2_distance": round(float(dist_dino), 4),
+                "dinov2_closest_whale_shark_id": all_ids[idx_dino] if idx_dino is not None else "N/A",
+                "dinov2_matched_image_id": idx_dino if idx_dino is not None else -1,
+                "dinov2_matched_annotation_id": idx_dino if idx_dino is not None else -1,
+                "dinov2_distance": round(float(dist_dino), 4) if dist_dino is not None else 999.0,
             }
             results.append(result)
     
