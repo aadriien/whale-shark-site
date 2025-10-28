@@ -67,46 +67,92 @@ def perform_search(known_embeddings: np.ndarray,
 
 
 
-def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:
-    known_miewid = known_data["miewid_embeddings"]
+def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False) -> list[dict]:
     query_miewid = new_data["miewid_embeddings"]
-    
-    known_dino = known_data["dinov2_embeddings"]
     query_dino = new_data["dinov2_embeddings"]
-
-    distances_miewid, indices_miewid = perform_search(known_miewid, query_miewid)
-    distances_dino, indices_dino = perform_search(known_dino, query_dino)
-
-    whale_shark_names = known_data["whale_shark_names"]
-    image_ids = known_data["image_ids"]
-    annotation_ids = known_data["annotation_ids"]
-
+    query_ids = new_data["identificationIDs"]
+    
     results = []
+    
+    if compare_all:
+        # Combine known & new embeddings into single dataset
+        all_miewid = np.vstack([known_data["miewid_embeddings"], query_miewid])
+        all_dino = np.vstack([known_data["dinov2_embeddings"], query_dino])
+        
+        # Combine metadata (use identificationID for new data, whale_shark_names for known)
+        known_ids = known_data["whale_shark_names"]
+        all_ids = np.concatenate([known_ids, query_ids])
+        
+        # Search against all embeddings (first match will be self, so we need k=2)
+        distances_miewid, indices_miewid = perform_search(all_miewid, all_miewid, k=2)
+        distances_dino, indices_dino = perform_search(all_dino, all_dino, k=2)
+        
+        # Process only new data results (skip known data)
+        known_count = len(known_data["miewid_embeddings"])
+        
+        for i in range(len(query_miewid)):
+            global_idx = known_count + i
+            
+            # Use second-best match (first match is always self)
+            idx_miewid = indices_miewid[global_idx][1]
+            dist_miewid = distances_miewid[global_idx][1]
+            
+            idx_dino = indices_dino[global_idx][1]
+            dist_dino = distances_dino[global_idx][1]
+            
+            result = {
+                "query_index": i,
 
-    # Map back to "source of truth" metadata
-    for i in range(len(query_miewid)):
-        idx_miewid = indices_miewid[i][0]
-        dist_miewid = distances_miewid[i][0]
+                # MIEWID match
+                "miewid_closest_whale_shark_id": all_ids[idx_miewid],
+                "miewid_matched_image_id": idx_miewid,
+                "miewid_matched_annotation_id": idx_miewid,
+                "miewid_distance": round(float(dist_miewid), 4),
 
-        idx_dino = indices_dino[i][0]
-        dist_dino = distances_dino[i][0]
+                # DINOv2 match
+                "dinov2_closest_whale_shark_id": all_ids[idx_dino],
+                "dinov2_matched_image_id": idx_dino,
+                "dinov2_matched_annotation_id": idx_dino,
+                "dinov2_distance": round(float(dist_dino), 4),
+            }
+            results.append(result)
+    
+    else:
+        # Compare new data only against known source of truth
+        known_miewid = known_data["miewid_embeddings"]
+        known_dino = known_data["dinov2_embeddings"]
 
-        result = {
-            "query_index": i,
+        distances_miewid, indices_miewid = perform_search(known_miewid, query_miewid)
+        distances_dino, indices_dino = perform_search(known_dino, query_dino)
 
-            # MIEWID match
-            "miewid_closest_whale_shark_id": whale_shark_names[idx_miewid],
-            "miewid_matched_image_id": image_ids[idx_miewid],
-            "miewid_matched_annotation_id": annotation_ids[idx_miewid],
-            "miewid_distance": round(float(dist_miewid), 4),
+        whale_shark_names = known_data["whale_shark_names"]
+        image_ids = known_data["image_ids"]
+        annotation_ids = known_data["annotation_ids"]
 
-            # DINOv2 match
-            "dinov2_closest_whale_shark_id": whale_shark_names[idx_dino],
-            "dinov2_matched_image_id": image_ids[idx_dino],
-            "dinov2_matched_annotation_id": annotation_ids[idx_dino],
-            "dinov2_distance": round(float(dist_dino), 4),
-        }
-        results.append(result)
+        # Map back to "source of truth" metadata
+        for i in range(len(query_miewid)):
+            idx_miewid = indices_miewid[i][0]
+            dist_miewid = distances_miewid[i][0]
+
+            idx_dino = indices_dino[i][0]
+            dist_dino = distances_dino[i][0]
+
+            result = {
+                "query_index": i,
+
+                # MIEWID match
+                "miewid_closest_whale_shark_id": whale_shark_names[idx_miewid],
+                "miewid_matched_image_id": image_ids[idx_miewid],
+                "miewid_matched_annotation_id": annotation_ids[idx_miewid],
+                "miewid_distance": round(float(dist_miewid), 4),
+
+                # DINOv2 match
+                "dinov2_closest_whale_shark_id": whale_shark_names[idx_dino],
+                "dinov2_matched_image_id": image_ids[idx_dino],
+                "dinov2_matched_annotation_id": annotation_ids[idx_dino],
+                "dinov2_distance": round(float(dist_dino), 4),
+            }
+            results.append(result)
 
     return results
 
@@ -233,8 +279,8 @@ if __name__ == "__main__":
     #   - image_url_identifiers 
     new_data = np.load(GBIF_OUTPUT_NPZ_FILE)
 
-
-    results = identify_sharks(known_data=known_data, new_data=new_data)
+    # Compare all embeddings against each other (set to True to find matches within GBIF dataset)
+    results = identify_sharks(known_data=known_data, new_data=new_data, compare_all=True)
     results_df = pd.DataFrame(results)
 
     gbif_media_df = get_image_records()
