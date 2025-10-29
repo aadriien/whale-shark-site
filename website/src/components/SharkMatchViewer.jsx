@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import '../styles/SharkMatchViewer.css';
 import mediaMatchesData from '../assets/data/json/GBIF_media_matches.json';
 import sharkMatchesData from '../assets/data/json/GBIF_shark_matches.json';
+import MatchSharkSelector from './panels/MatchSharkSelector.jsx';
 
 function SharkMatchViewer() {
     const [mediaMatches, setMediaMatches] = useState([]);
     const [sharkMatches, setSharkMatches] = useState([]);
+    const [filteredSharkMatches, setFilteredSharkMatches] = useState([]);
     const [selectedSharkId, setSelectedSharkId] = useState(null);
     const [sharkImages, setSharkImages] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -22,6 +24,39 @@ function SharkMatchViewer() {
         }
     }, [selectedSharkId, mediaMatches]);
 
+    // Transform shark matches data to be compatible with filters
+    const transformedSharks = useMemo(() => {
+        return sharkMatchesData.map(shark => {
+            // Parse MIEWID distance from formatted string
+            const miewidMatch = shark['MIEWID: closest_whale_shark_id (matched_image_id, distance)'];
+            const miewidDistanceMatch = miewidMatch?.match(/\((\d+),\s*([\d.]+)\)/);
+            const miewidDistance = miewidDistanceMatch ? parseFloat(miewidDistanceMatch[2]) : null;
+
+            // Extract country and year
+            const countryYear = shark['country (year)'] || '';
+            const countryMatch = countryYear.match(/^([^(]+)/);
+            const yearMatch = countryYear.match(/\((\d{4})\)/);
+            const country = countryMatch ? countryMatch[1].trim() : '';
+            const year = yearMatch ? yearMatch[1] : '';
+
+            // Extract month from stateProvince field
+            const stateProvince = shark['stateProvince - verbatimLocality (month year)'] || '';
+            const monthMatch = stateProvince.match(/\((\w+)\s+\d{4}\)/);
+            const month = monthMatch ? monthMatch[1] : '';
+
+            return {
+                ...shark,
+                miewid_distance: miewidDistance,
+                countries: country,
+                oldest: shark['Oldest Occurrence'] ? shark['Oldest Occurrence'].split('-')[0] : year,
+                newest: shark['Newest Occurrence'] ? shark['Newest Occurrence'].split('-')[0] : year,
+                months: month ? [month] : [],
+                occurrences: 1, // Default value since we don't have this data
+                image: 'Yes', // These sharks have images from GBIF
+            };
+        });
+    }, []);
+
     const loadData = () => {
         try {
             setLoading(true);
@@ -29,8 +64,9 @@ function SharkMatchViewer() {
             console.log('Loading media matches:', mediaMatchesData.length, 'records');
             setMediaMatches(mediaMatchesData);
             
-            console.log('Loading shark matches:', sharkMatchesData.length, 'records');
-            setSharkMatches(sharkMatchesData);
+            console.log('Loading shark matches:', transformedSharks.length, 'records');
+            setSharkMatches(transformedSharks);
+            setFilteredSharkMatches(transformedSharks);
 
             setLoading(false);
         } catch (err) {
@@ -94,21 +130,12 @@ function SharkMatchViewer() {
             <div className="viewer-container">
                 {/* Shark Selection Panel */}
                 <div className="shark-selector-panel">
-                    <h3>Select a Shark</h3>
-                    <div className="shark-list">
-                        {sharkMatches.slice(0, 50).map((shark, idx) => (
-                            <div
-                                key={shark.identificationID || `shark-${idx}`}
-                                className={`shark-item ${selectedSharkId === shark.identificationID ? 'selected' : ''}`}
-                                onClick={() => handleSharkSelect(shark.identificationID)}
-                            >
-                                <div className="shark-id">ID: {shark.whaleSharkID || 'N/A'}</div>
-                                <div className="shark-meta">
-                                    {shark['country (year)'] || 'Unknown'} | {shark['Oldest Occurrence'] || 'N/A'}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <MatchSharkSelector
+                        sharks={sharkMatches}
+                        onSharkSelect={handleSharkSelect}
+                        selectedSharkId={selectedSharkId}
+                        onFilteredSharksChange={setFilteredSharkMatches}
+                    />
                 </div>
 
                 {/* Main Viewer */}
