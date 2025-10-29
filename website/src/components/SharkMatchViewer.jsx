@@ -96,20 +96,6 @@ function SharkMatchViewer() {
         setSelectedImage(image);
     };
 
-    const handleNextImage = () => {
-        if (sharkImages.length === 0) return;
-        const currentIndex = sharkImages.indexOf(selectedImage);
-        const nextIndex = (currentIndex + 1) % sharkImages.length;
-        setSelectedImage(sharkImages[nextIndex]);
-    };
-
-    const handlePrevImage = () => {
-        if (sharkImages.length === 0) return;
-        const currentIndex = sharkImages.indexOf(selectedImage);
-        const prevIndex = (currentIndex - 1 + sharkImages.length) % sharkImages.length;
-        setSelectedImage(sharkImages[prevIndex]);
-    };
-
     if (loading) {
         return <div className="shark-match-viewer loading">Loading data...</div>;
     }
@@ -132,6 +118,7 @@ function SharkMatchViewer() {
                 <div className="shark-selector-panel">
                     <MatchSharkSelector
                         sharks={sharkMatches}
+                        mediaMatches={mediaMatches}
                         onSharkSelect={handleSharkSelect}
                         selectedSharkId={selectedSharkId}
                         onFilteredSharksChange={setFilteredSharkMatches}

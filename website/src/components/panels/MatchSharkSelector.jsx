@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 
-import MatchLocationTimeFilter from "./MatchLocationTimeFilter.jsx";
 import MatchFilter from "./MatchFilter.jsx";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks.jsx";
@@ -8,7 +7,8 @@ import { FULLMONTHS } from "../../utils/DataUtils.js";
 
 
 function MatchSharkSelector({ 
-    sharks, 
+    sharks,
+    mediaMatches,
     onSharkSelect,
     selectedSharkId,
     onFilteredSharksChange 
@@ -29,12 +29,18 @@ function MatchSharkSelector({
 
     const months = FULLMONTHS;
 
-    // Memoize default criteria
-    const defaultSharkCriteria = useMemo(() => ({
-        showOnlyWithMedia: false,
+    // Memoize default criteria (combined shark and match filters)
+    const defaultCriteria = useMemo(() => ({
+        // Location & Time
         country: "",
         yearRange: [String(minYear), String(maxYear)],
         month: "",
+        // Match Quality
+        miewidDistanceRange: [0, 5.0],
+        showOnlyConfidentMatches: false,
+        hasMatchedImages: false,
+        // Keep these for filterSharks compatibility
+        showOnlyWithMedia: false,
         hasOccurrenceNotes: false,
         minRecords: 1,
         sex: "",
@@ -42,44 +48,51 @@ function MatchSharkSelector({
         publishingCountry: "", 
         observationType: "", 
     }), [minYear, maxYear]);
-
-    const defaultMatchCriteria = useMemo(() => ({
-        miewidDistanceRange: [0, 5.0],
-        showOnlyConfidentMatches: false,
-    }), []);
     
-    const [sharkCriteria, setSharkCriteria] = useState(defaultSharkCriteria);
-    const [matchCriteria, setMatchCriteria] = useState(defaultMatchCriteria);
+    const [criteria, setCriteria] = useState(defaultCriteria);
     const [showFilters, setShowFilters] = useState(true);
 
     const handleReset = () => {
-        setSharkCriteria(defaultSharkCriteria);
-        setMatchCriteria(defaultMatchCriteria);
+        setCriteria(defaultCriteria);
     };
 
-    // Apply shark filters
-    const filteredBySharkCriteria = useMemo(() => {
-        return filterSharks(sharks, sharkCriteria);
-    }, [sharks, sharkCriteria]);
-
-    // Apply match quality filters
+    // Apply all filters (shark + match quality)
     const filteredSharks = useMemo(() => {
+        // First apply standard shark filters
+        const filteredBySharkCriteria = filterSharks(sharks, criteria);
+
+        // Then apply match-specific filters
         return filteredBySharkCriteria.filter(shark => {
             // Filter by MIEWID distance range
             const distance = parseFloat(shark.miewid_distance);
             if (isNaN(distance)) return false;
 
-            const [minDist, maxDist] = matchCriteria.miewidDistanceRange;
+            const [minDist, maxDist] = criteria.miewidDistanceRange;
             if (distance < minDist || distance > maxDist) return false;
 
             // Filter by confident matches checkbox
-            if (matchCriteria.showOnlyConfidentMatches && distance >= 1.0) {
+            if (criteria.showOnlyConfidentMatches && distance >= 1.0) {
                 return false;
+            }
+
+            // Filter by hasMatchedImages - check if matched shark has images in mediaMatches
+            if (criteria.hasMatchedImages && mediaMatches) {
+                // Extract the matched shark ID (could be in miewid_closest_whale_shark_id or parsed from string)
+                const matchedSharkId = shark.miewid_closest_whale_shark_id || 
+                    shark['MIEWID: closest_whale_shark_id (matched_image_id, distance)']?.match(/MIEWID:\s*([^(]+)/)?.[1]?.trim();
+                
+                if (matchedSharkId) {
+                    const hasImages = mediaMatches.some(img => 
+                        img.identificationID === matchedSharkId
+                    );
+                    // If filter is on and no images found, exclude this shark
+                    if (!hasImages) return false;
+                }
             }
 
             return true;
         });
-    }, [filteredBySharkCriteria, matchCriteria]);
+    }, [sharks, criteria]);
     
     // Notify parent of filtered sharks changes
     useEffect(() => {
@@ -111,38 +124,22 @@ function MatchSharkSelector({
                 </button>
             </div>
 
-            <div className="filter-toggle-container">
-                <button 
-                    onClick={() => setShowFilters((prev) => !prev)}
-                    className={`match-toggle-filter-button ${showFilters ? "active" : ""}`}
-                >
-                    {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
-                </button>
+            <button 
+                onClick={() => setShowFilters((prev) => !prev)}
+                className={`match-toggle-filter-button ${showFilters ? "active" : ""}`}
+            >
+                {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
+            </button>
 
-                {showFilters && (
-                    <div className="match-filters-container">
-                        <div className="match-filter-columns">
-                            <div className="match-filter-column">
-                                <h4>Location & Time</h4>
-                                <MatchLocationTimeFilter 
-                                    criteria={sharkCriteria} 
-                                    onChange={setSharkCriteria} 
-                                    options={filterOptions}
-                                />
-                            </div>
-
-                            <div className="match-filter-column">
-                                <h4>Match Quality</h4>
-                                <MatchFilter 
-                                    criteria={matchCriteria} 
-                                    onChange={setMatchCriteria} 
-                                    options={{}}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
+            {showFilters && (
+                <div className="match-filters-section">
+                    <MatchFilter 
+                        criteria={criteria} 
+                        onChange={setCriteria} 
+                        options={filterOptions}
+                    />
+                </div>
+            )}
 
             <div className="shark-list-container">
                 <div className="shark-list-header">
