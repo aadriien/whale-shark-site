@@ -114,7 +114,7 @@ function MatchSharkSelector({
 
     return (
         <div className="match-shark-selector">
-            <div className="selector-header">
+            <div className="match-selector-header">
                 <h3>Shark Selection</h3>
                 <button 
                     onClick={handleReset}
@@ -141,19 +141,19 @@ function MatchSharkSelector({
                 </div>
             )}
 
-            <div className="shark-list-container">
-                <div className="shark-list-header">
+            <div className="match-list-container">
+                <div className="match-list-header">
                     <span>Showing {filteredSharks.length} of {sharks.length} sharks</span>
                 </div>
-                <div className="shark-list">
+                <div className="match-shark-list">
                     {filteredSharks.map((shark) => (
                         <div
                             key={shark.identificationID}
-                            className={`shark-item ${selectedSharkId === shark.identificationID ? 'selected' : ''}`}
+                            className={`match-shark-item ${selectedSharkId === shark.identificationID ? 'selected' : ''}`}
                             onClick={() => onSharkSelect(shark.identificationID)}
                         >
-                            <div className="shark-id">ID: {shark.whaleSharkID || 'N/A'}</div>
-                            <div className="shark-meta">
+                            <div className="match-shark-id">ID: {shark.whaleSharkID || 'N/A'}</div>
+                            <div className="match-shark-meta">
                                 {shark['country (year)'] || 'Unknown'} | {shark['Oldest Occurrence'] || 'N/A'}
                             </div>
                             {shark.miewid_distance && (

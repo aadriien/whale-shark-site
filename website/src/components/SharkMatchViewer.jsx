@@ -109,13 +109,13 @@ function SharkMatchViewer() {
     return (
         <div className="shark-match-viewer">
             <h2>Shark Image Match Viewer</h2>
-            <p className="viewer-description">
+            <p className="match-viewer-description">
                 Explore whale shark identifications and their matched images using MIEWID embeddings
             </p>
 
-            <div className="viewer-container">
+            <div className="match-viewer-container">
                 {/* Shark Selection Panel */}
-                <div className="shark-selector-panel">
+                <div className="match-selector-panel">
                     <MatchSharkSelector
                         sharks={sharkMatches}
                         mediaMatches={mediaMatches}
@@ -129,9 +129,9 @@ function SharkMatchViewer() {
                 {selectedSharkId && (
                     <div className="match-viewer-main">
                         {/* Shark Info Header */}
-                        <div className="shark-info-header">
+                        <div className="match-info-header">
                             <h3>Shark: {sharkInfo?.whaleSharkID}</h3>
-                            <div className="shark-details">
+                            <div className="match-info-details">
                                 <span><strong>Location:</strong> {sharkInfo?.['country (year)']}</span>
                                 <span><strong>Date Range:</strong> {sharkInfo?.['Oldest Occurrence']} to {sharkInfo?.['Newest Occurrence']}</span>
                                 <span><strong>Images:</strong> {sharkImages.length}</span>
@@ -143,25 +143,25 @@ function SharkMatchViewer() {
                             <div className="match-details">
                                 <h4>Match Information</h4>
                                 <div className="match-container">
-                                    <div className="query-image">
+                                    <div className="match-query-image">
                                         <h5>Query Image</h5>
                                         <img 
                                             src={selectedImage.identifier} 
                                             alt="Query"
                                             onError={(e) => e.target.src = '/placeholder-shark.png'}
                                         />
-                                        <div className="image-info">
+                                        <div className="match-image-info">
                                             <p><strong>Query Shark ID:</strong> {selectedImage.identificationID}</p>
                                             <p><strong>Query Image ID:</strong> {selectedImage.query_index}</p>
                                             <p><strong>Occurrence ID:</strong> {selectedImage.occurrenceID}</p>
                                         </div>
-                                        <div className="query-images-grid">
+                                        <div className="match-query-images-grid">
                                             <h6>All Query Images ({sharkImages.length}):</h6>
-                                            <div className="query-images-thumbnails">
+                                            <div className="match-query-images-thumbnails">
                                                 {sharkImages.map((img, idx) => (
                                                     <div 
                                                         key={`query-${idx}`} 
-                                                        className={`query-image-item ${selectedImage === img ? 'active' : ''}`}
+                                                        className={`match-query-image-item ${selectedImage === img ? 'active' : ''}`}
                                                         onClick={() => handleImageSelect(img)}
                                                     >
                                                         <img 
@@ -169,7 +169,7 @@ function SharkMatchViewer() {
                                                             alt={`Query ${idx + 1}`}
                                                             onError={(e) => e.target.src = '/placeholder-shark.png'}
                                                         />
-                                                        <div className="query-image-label">
+                                                        <div className="match-query-image-label">
                                                             {idx + 1}
                                                         </div>
                                                     </div>
@@ -180,16 +180,16 @@ function SharkMatchViewer() {
 
                                     <div className="match-arrow">→</div>
 
-                                    <div className="matched-images">
+                                    <div className="match-matched-images">
                                         <h5>MIEWID Matched Shark: {selectedImage.miewid_closest_whale_shark_id}</h5>
-                                        <div className="match-info">
-                                            <p className="distance">
+                                        <div className="match-match-info">
+                                            <p className="match-distance">
                                                 <strong>Distance:</strong> 
-                                                <span className={`distance-value ${parseFloat(selectedImage.miewid_distance) < 1.0 ? 'good' : 'moderate'}`}>
+                                                <span className={`match-distance-value ${parseFloat(selectedImage.miewid_distance) < 1.0 ? 'good' : 'moderate'}`}>
                                                     {selectedImage.miewid_distance}
                                                 </span>
                                             </p>
-                                            <div className="distance-legend">
+                                            <div className="match-distance-legend">
                                                 <small>
                                                     Distance Scale: 0.0 = Perfect match | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ = Different
                                                 </small>
@@ -201,22 +201,22 @@ function SharkMatchViewer() {
                                             );
                                             
                                             return matchedImages.length > 0 ? (
-                                                <div className="matched-images-grid">
+                                                <div className="match-matched-images-grid">
                                                     {matchedImages.map((img, idx) => (
-                                                        <div key={`matched-${idx}`} className="matched-image-item">
+                                                        <div key={`matched-${idx}`} className="match-matched-image-item">
                                                             <img 
                                                                 src={img.identifier} 
                                                                 alt={`Matched shark ${idx + 1}`}
                                                                 onError={(e) => e.target.src = '/placeholder-shark.png'}
                                                             />
-                                                            <div className="matched-image-label">
+                                                            <div className="match-matched-image-label">
                                                                 Image {idx + 1}
                                                             </div>
                                                         </div>
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <p className="no-matches">No images found for matched shark ID in dataset</p>
+                                                <p className="match-no-matches">No images found for matched shark ID in dataset</p>
                                             );
                                         })()}
                                     </div>
@@ -227,7 +227,7 @@ function SharkMatchViewer() {
                 )}
 
                 {!selectedSharkId && (
-                    <div className="no-selection">
+                    <div className="match-no-selection">
                         <p>Select a shark from the list to view its images and matches</p>
                     </div>
                 )}

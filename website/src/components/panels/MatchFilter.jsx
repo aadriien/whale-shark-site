@@ -138,7 +138,7 @@ function MatchQualityFilter({ criteria, onChange }) {
                         className="filter-input"
                     />
                 </div>
-                <div className="filter-hint">
+                <div className="match-filter-hint">
                     <small>0.0 = Perfect | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ = Different</small>
                 </div>
             </label>
