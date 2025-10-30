@@ -97,6 +97,13 @@ get_new_shark_embeddings:
 match_shark_embeddings:
 	@$(POETRY) run python -m computer-vision.match_embeddings
 
+
+
+validate_shark_embeddings:
+	@$(POETRY) run python -m computer-vision.validate_embeddings
+
+
+
 # Generate CV examples with YOLO bounding boxes & segmentation masks
 generate_vision_examples:
 	@$(POETRY) run python -m computer-vision.generate_vision_examples
