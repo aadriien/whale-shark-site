@@ -144,6 +144,23 @@ function MatchQualityFilter({ criteria, onChange }) {
             </label>
 
             <label className="filter-label">
+                Plausibility:
+                <select
+                    value={criteria.plausibility || ""}
+                    onChange={(e) =>
+                        onChange({ ...criteria, plausibility: e.target.value })
+                    }
+                    className="filter-select"
+                >
+                    <option value="">All</option>
+                    <option value="PLAUSIBLE">Plausible</option>
+                    <option value="UNCERTAIN">Uncertain</option>
+                    <option value="IMPOSSIBLE">Impossible</option>
+                    <option value="UNKNOWN">Unknown</option>
+                </select>
+            </label>
+
+            <label className="filter-label">
                 <input
                     type="checkbox"
                     checked={criteria.showOnlyConfidentMatches}

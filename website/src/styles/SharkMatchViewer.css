@@ -149,6 +149,36 @@
     color: #856404;
 }
 
+.match-plausibility {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    margin-top: 0.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.match-plausibility.plausibility-plausible {
+    background: #d4edda;
+    color: #155724;
+}
+
+.match-plausibility.plausibility-uncertain {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.match-plausibility.plausibility-impossible {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.match-plausibility.plausibility-unknown {
+    background: #e2e3e5;
+    color: #6c757d;
+}
+
 .match-filter-hint {
     margin-top: 0.5rem;
     color: #7f8c8d;

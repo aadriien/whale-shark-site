@@ -39,6 +39,7 @@ function MatchSharkSelector({
         miewidDistanceRange: [0, 5.0],
         showOnlyConfidentMatches: false,
         hasMatchedImages: false,
+        plausibility: "",
         // Keep these for filterSharks compatibility
         showOnlyWithMedia: false,
         hasOccurrenceNotes: false,
@@ -75,15 +76,20 @@ function MatchSharkSelector({
                 return false;
             }
 
+            // Filter by plausibility
+            if (criteria.plausibility && shark.plausibility !== criteria.plausibility) {
+                return false;
+            }
+
             // Filter by hasMatchedImages - check if matched shark has images in mediaMatches
             if (criteria.hasMatchedImages && mediaMatches) {
-                // Extract the matched shark ID (could be in miewid_closest_whale_shark_id or parsed from string)
-                const matchedSharkId = shark.miewid_closest_whale_shark_id || 
-                    shark['MIEWID: closest_whale_shark_id (matched_image_id, distance)']?.match(/MIEWID:\s*([^(]+)/)?.[1]?.trim();
+                // Extract the matched shark ID from the MIEWID column
+                const miewidMatch = shark['MIEWID: closest_whale_shark_id (matched_image_id, distance)'];
+                const matchedSharkId = miewidMatch?.match(/MIEWID:\s*([^(]+)/)?.[1]?.trim();
                 
                 if (matchedSharkId) {
                     const hasImages = mediaMatches.some(img => 
-                        img.identificationID === matchedSharkId
+                        String(img.identificationID) === String(matchedSharkId)
                     );
                     // If filter is on and no images found, exclude this shark
                     if (!hasImages) return false;
@@ -159,6 +165,11 @@ function MatchSharkSelector({
                             {shark.miewid_distance && (
                                 <div className={`match-distance ${parseFloat(shark.miewid_distance) < 1.0 ? 'good' : 'moderate'}`}>
                                     Distance: {shark.miewid_distance}
+                                </div>
+                            )}
+                            {shark.plausibility && (
+                                <div className={`match-plausibility plausibility-${shark.plausibility.toLowerCase()}`}>
+                                    {shark.plausibility}
                                 </div>
                             )}
                         </div>
