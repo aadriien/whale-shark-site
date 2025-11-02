@@ -279,27 +279,56 @@ function SharkMatchViewer() {
                                         </div>
                                         {(() => {
                                             const matchedImages = mediaMatches.filter(
-                                                img => img.identificationID === selectedImage.miewid_closest_whale_shark_id
+                                                img => String(img.identificationID) === String(selectedImage.miewid_closest_whale_shark_id)
                                             );
                                             
-                                            return matchedImages.length > 0 ? (
-                                                <div className="match-matched-images-grid">
-                                                    {matchedImages.map((img, idx) => (
-                                                        <div key={`matched-${idx}`} className="match-matched-image-item">
-                                                            <img 
-                                                                src={img.identifier} 
-                                                                alt={`Matched shark ${idx + 1}`}
-                                                                onError={(e) => e.target.src = '/placeholder-shark.png'}
-                                                            />
-                                                            <div className="match-matched-image-label">
-                                                                Image {idx + 1}
+                                            if (matchedImages.length > 0) {
+                                                const [firstMatchedImage, ...otherMatchedImages] = matchedImages;
+                                                return (
+                                                    <>
+                                                        {/* Main matched image */}
+                                                        <img 
+                                                            src={firstMatchedImage.identifier} 
+                                                            alt="Matched shark main"
+                                                            onError={(e) => e.target.src = '/placeholder-shark.png'}
+                                                            style={{
+                                                                width: '100%',
+                                                                maxWidth: '400px',
+                                                                height: 'auto',
+                                                                borderRadius: '6px',
+                                                                border: '2px solid #e0e0e0',
+                                                                marginTop: '1rem'
+                                                            }}
+                                                        />
+                                                        
+                                                        {/* Matched shark thumbnails grid */}
+                                                        {otherMatchedImages.length > 0 && (
+                                                            <div className="match-query-images-grid">
+                                                                <h6>All Matched Images ({matchedImages.length}):</h6>
+                                                                <div className="match-query-images-thumbnails">
+                                                                    {matchedImages.map((img, idx) => (
+                                                                        <div 
+                                                                            key={`matched-${idx}`} 
+                                                                            className={`match-query-image-item ${idx === 0 ? 'active' : ''}`}
+                                                                        >
+                                                                            <img 
+                                                                                src={img.identifier} 
+                                                                                alt={`Matched ${idx + 1}`}
+                                                                                onError={(e) => e.target.src = '/placeholder-shark.png'}
+                                                                            />
+                                                                            <div className="match-query-image-label">
+                                                                                {idx + 1}
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <p className="match-no-matches">No images found for matched shark ID in dataset</p>
-                                            );
+                                                        )}
+                                                    </>
+                                                );
+                                            } else {
+                                                return <p className="match-no-matches">No images found for matched shark ID in dataset</p>;
+                                            }
                                         })()}
                                     </div>
                                 </div>
