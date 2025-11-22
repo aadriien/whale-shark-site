@@ -6,7 +6,7 @@ import PageFAQ from "./logbooks/PageFAQ.jsx";
 import VisitedStamps from "./logbooks/VisitedStamps.jsx";
 import SavedSharks from "./logbooks/SavedSharks.jsx";
 
-import { pageMap } from "./logbooks/LogbookContent.js";
+import { pageMap } from "./logbooks/LogbookContent.ts";
 
 
 function Logbook({ setIsLogbookOpen }) {

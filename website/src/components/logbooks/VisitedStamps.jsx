@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
-import { pageMap } from "./LogbookContent.js"
+import { pageMap } from "./LogbookContent.ts"
 
 
 const STORAGE_KEY = "visitedPages";

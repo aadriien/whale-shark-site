@@ -1,4 +1,4 @@
-import { pageContent } from "./LogbookContent.js";
+import { pageContent } from "./LogbookContent.ts";
 
 
 function PageOverview ({ currentPage }) {
