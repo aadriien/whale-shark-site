@@ -1,7 +1,15 @@
 import { pageContent } from "./LogbookContent.ts";
 
+import { PageContent } from "../../types/constants.ts";
 
-function PageOverview ({ currentPage }) {
+
+type PageOverviewProps = {
+    // Ensure only valid keys are allowed
+    currentPage: keyof PageContent; 
+};
+
+
+function PageOverview ({ currentPage }: PageOverviewProps) {
     const pageOverviewFAQs = pageContent[currentPage];
 
     return (
@@ -14,3 +22,4 @@ function PageOverview ({ currentPage }) {
 } 
 
 export default PageOverview;
+
