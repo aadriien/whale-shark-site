@@ -1,20 +1,22 @@
 import { useState } from "react";
 
 import { pageContent } from "./LogbookContent.ts";
+import { FAQ, PageContentProps } from "../../types/logbooks.ts";
 
 
-function PageFAQ({ currentPage }) {
+function PageFAQ({ currentPage }: PageContentProps) {
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
+    
     const pageOverviewFAQs = pageContent[currentPage];
-    const [openIndex, setOpenIndex] = useState(null);
 
-    const toggleFAQ = (idx) => {
+    const toggleFAQ = (idx: number) => {
         setOpenIndex(openIndex === idx ? null : idx);
     };
 
     return (
         <div className="logbook-section page-faq">
             <div className="faqBox">
-                {pageOverviewFAQs.faqs.map(({ q, a }, idx) => (
+                {pageOverviewFAQs.faqs.map(({ q, a }: FAQ, idx: number) => (
                     <div key={idx} className={`faqItem ${openIndex === idx ? "open" : ""}`}>
                         <button
                             className="faq-toggle"
@@ -34,3 +36,4 @@ function PageFAQ({ currentPage }) {
 }
 
 export default PageFAQ;
+
