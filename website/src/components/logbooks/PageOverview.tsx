@@ -1,15 +1,9 @@
 import { pageContent } from "./LogbookContent.ts";
 
-import { PageContent } from "../../types/constants.ts";
+import { PageContentProps } from "../../types/logbooks.ts";
 
 
-type PageOverviewProps = {
-    // Ensure only valid keys are allowed
-    currentPage: keyof PageContent; 
-};
-
-
-function PageOverview ({ currentPage }: PageOverviewProps) {
+function PageOverview ({ currentPage }: PageContentProps) {
     const pageOverviewFAQs = pageContent[currentPage];
 
     return (

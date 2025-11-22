@@ -1,4 +1,4 @@
-// Helper logbook constants
+/* Helper logbook types */
 
 export type Page = { 
     label: string; 
@@ -20,5 +20,11 @@ export type PageContent = {
         faqs: FAQ[];
     };
 };
+
+export type PageContentProps = {
+    // Ensure only valid keys are allowed
+    currentPage: keyof PageContent; 
+};
+
 
 
