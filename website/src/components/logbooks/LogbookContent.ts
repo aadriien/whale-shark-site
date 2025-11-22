@@ -1,4 +1,7 @@
-export const pageMap = {
+import { PageMap, PageContent } from "../../types/constants.ts";
+
+
+export const pageMap: PageMap = {
     home: { label: "Home", path: "/" },
     about: { label: "About", path: "/about" },
 
@@ -17,7 +20,7 @@ export const pageMap = {
 };
 
 
-export const pageContent = {
+export const pageContent: PageContent = {
     home: {
         overview: "This is your entry point into the whale shark site. Interact with the particle blobs and start exploring!",
         faqs: [
