@@ -5,21 +5,18 @@ export type Page = {
     path: string 
 };
 
-export type PageMap = { 
-    [key: string]: Page 
-};
+// Note that `Record<string, Page>` is equivalent to `[key: string]: Page`
+export type PageMap = Record<string, Page>;
 
 export type FAQ = { 
     q: string; 
     a: string 
 };
 
-export type PageContent = {
-    [key: string]: {
-        overview: string;
-        faqs: FAQ[];
-    };
-};
+export type PageContent = Record<string, {
+    overview: string;
+    faqs: FAQ[];
+}>;
 
 export type PageContentProps = {
     // Ensure only valid keys are allowed (+ enforce type string)
