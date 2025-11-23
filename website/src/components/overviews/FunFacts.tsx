@@ -1,4 +1,10 @@
-const facts = [
+type Fact = {
+    title: string; 
+    detail: string; 
+};
+
+
+const facts: Fact[] = [
     { 
         title: "Largest Fish", 
         detail: "Can grow over 40 feet long!" 
@@ -13,13 +19,14 @@ const facts = [
     },
 ];
 
+
 const FunFacts = () => {
     return (
         <section className="fun-facts">
             <h2>Why They're Great</h2>
 
             <div className="facts-list">
-                {facts.map((fact, i) => (
+                {facts.map((fact: Fact, i: number) => (
                     <div key={i} className="fact-card">
                         <h3>{fact.title}</h3>
                         <p>{fact.detail}</p>
@@ -31,4 +38,5 @@ const FunFacts = () => {
 };
 
 export default FunFacts;
+
         
