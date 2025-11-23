@@ -3,16 +3,24 @@ import { Link } from "react-router-dom";
 
 import { pageMap } from "./LogbookContent.ts"
 
+import { PageContentProps } from "../../types/logbooks.ts";
+
+
+type BlobStyle = {
+    hue: number;
+    borderRadius: string;
+};
+
 
 const STORAGE_KEY = "visitedPages";
 
 
-function randomRange(min, max) {
+function randomRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
 
-function blobBorderRadius(min, max) {
+function blobBorderRadius(min: number, max: number) {
     return `
         ${randomRange(min, max)}%
         ${randomRange(min, max)}%
@@ -26,9 +34,9 @@ function blobBorderRadius(min, max) {
 }
 
 
-function VisitedStamps({ currentPage }) {
+function VisitedStamps({ currentPage }: PageContentProps) {
     // Initialize from localStorage or empty set
-    const [visited, setVisited] = useState(() => {
+    const [visited, setVisited] = useState<Set<string>>(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
             return stored ? new Set(JSON.parse(stored)) : new Set();
@@ -38,7 +46,7 @@ function VisitedStamps({ currentPage }) {
     });
     
     // Precompute random blob styles once
-    const blobStyles = useMemo(
+    const blobStyles = useMemo<BlobStyle[]>(
         () =>
             Object.keys(pageMap).map(() => ({
                 hue: Math.floor(Math.random() * 360),
@@ -85,7 +93,10 @@ function VisitedStamps({ currentPage }) {
                         <>
                             <div
                                 className="stamp-blob"
-                                style={{ "--hue": hue, borderRadius }}
+                                style={{
+                                    "--hue": String(hue),
+                                    borderRadius,
+                                } as React.CSSProperties}
                             />
                             <span className="stamp-label">{label}</span>
                             {isStamped && (
@@ -123,3 +134,4 @@ function VisitedStamps({ currentPage }) {
 } 
 
 export default VisitedStamps;
+

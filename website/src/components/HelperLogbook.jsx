@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import PageOverview from "./logbooks/PageOverview.tsx";
 import PageFAQ from "./logbooks/PageFAQ.tsx";
-import VisitedStamps from "./logbooks/VisitedStamps.jsx";
+import VisitedStamps from "./logbooks/VisitedStamps.tsx";
 import SavedSharks from "./logbooks/SavedSharks.jsx";
 
 import { pageMap } from "./logbooks/LogbookContent.ts";

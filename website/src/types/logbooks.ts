@@ -22,8 +22,8 @@ export type PageContent = {
 };
 
 export type PageContentProps = {
-    // Ensure only valid keys are allowed
-    currentPage: keyof PageContent; 
+    // Ensure only valid keys are allowed (+ enforce type string)
+    currentPage: Extract<keyof PageContent, string>; 
 };
 
 
