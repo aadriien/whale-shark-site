@@ -1,7 +1,14 @@
-import { useState } from 'react'; 
+import { useState } from "react"; 
 
 
-const pipelineSteps = [
+type PipelineStep = {
+    title: string; 
+    description: string; 
+    icon: string;
+};
+
+
+const pipelineSteps: PipelineStep[] = [
     {
         title: "Image Acquisition",
         description: "Underwater cameras and drones capture high-resolution images and videos of whale sharks in their natural habitat.",
@@ -31,9 +38,9 @@ const pipelineSteps = [
 
 
 const CVPipeline = () => {
-    const [expandedSteps, setExpandedSteps] = useState({});
+    const [expandedSteps, setExpandedSteps] = useState<Record<number, boolean>>({});
 
-    const toggleStep = (index) => {
+    const toggleStep = (index: number) => {
         setExpandedSteps(prev => ({
             ...prev,
             [index]: !prev[index]
@@ -51,7 +58,7 @@ const CVPipeline = () => {
                 </p>
                 
                 <div className="pipeline-steps">
-                    {pipelineSteps.map((step, i) => (
+                    {pipelineSteps.map((step: PipelineStep, i: number) => (
                         <div key={i} className="pipeline-step">
 
                             <div 

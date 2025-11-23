@@ -1,4 +1,12 @@
-const applications = [
+type Application = {
+    title: string; 
+    description: string; 
+    impact: string; 
+    icon: string; 
+};
+
+
+const applications: Application[] = [
     {
         title: "Individual Identification",
         description: "Each whale shark has a unique spot pattern. Computer vision can match and identify individuals from pictures.",
@@ -37,6 +45,7 @@ const applications = [
     }
 ];
 
+
 const CVApplications = () => {
     return (
         <section className="cv-applications">
@@ -47,7 +56,7 @@ const CVApplications = () => {
             </p>
 
             <div className="applications-grid">
-                {applications.map((app, i) => (
+                {applications.map((app: Application, i: number) => (
                     <div key={i} className="application-card">
                         <div className="app-header">
                             <span className="app-icon">{app.icon}</span>

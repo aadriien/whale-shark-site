@@ -1,7 +1,7 @@
-import CVHeroIntro from "../components/overviews/CVHeroIntro.jsx";
-import CVPipeline from "../components/overviews/CVPipeline.jsx";
+import CVHeroIntro from "../components/overviews/CVHeroIntro.tsx";
+import CVPipeline from "../components/overviews/CVPipeline.tsx";
 import InteractiveDemo from "../components/overviews/InteractiveDemo.jsx";
-import CVApplications from "../components/overviews/CVApplications.jsx";
+import CVApplications from "../components/overviews/CVApplications.tsx";
 import SharkMatchViewer from "../components/SharkMatchViewer.jsx";
 
 
