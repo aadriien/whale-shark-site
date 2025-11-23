@@ -8,7 +8,7 @@ import DataGrid from "../DataGrid.jsx";
 import DecadeData from "./DecadeData.jsx";
 import SexLifeStageData from "./SexLifeStageData.jsx";
 
-import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
+import ChartPlaceholder from "../charts/ChartPlaceholder.tsx";
 import BarChart from "../charts/BarChart.jsx";
 
 import { MONTHS } from "../../utils/DataUtils.js";

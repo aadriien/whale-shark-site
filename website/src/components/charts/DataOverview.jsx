@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
+import ChartPlaceholder from "../charts/ChartPlaceholder.tsx";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";

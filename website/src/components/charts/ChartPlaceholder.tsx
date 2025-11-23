@@ -6,8 +6,11 @@ import radialHeatmapPlaceholder from "../../assets/images/chart-placeholders/rad
 import globeViewsPlaceholder from "../../assets/images/chart-placeholders/globe-views.svg";
 
 
-const ChartPlaceholder = ({ type, message }) => {
-    const imageMap = {
+import { ChartPlaceholderProps, ImageMap } from "../../types/charts.ts";
+
+
+const ChartPlaceholder = ({ type, message }: ChartPlaceholderProps) => {
+    const imageMap: ImageMap = {
         overview: overviewPlaceholder,
         bar: barChartPlaceholder,
         heatmap: heatmapPlaceholder,
@@ -35,3 +38,4 @@ const ChartPlaceholder = ({ type, message }) => {
 };
 
 export default ChartPlaceholder;
+

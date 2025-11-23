@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 
-import ChartPlaceholder from "../charts/ChartPlaceholder.jsx";
+import ChartPlaceholder from "../charts/ChartPlaceholder.tsx";
 import Heatmap from "../charts/Heatmap.jsx";
 
 import { MONTHS } from "../../utils/DataUtils.js";
