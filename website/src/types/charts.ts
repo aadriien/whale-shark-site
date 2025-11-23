@@ -5,8 +5,6 @@ export type ChartPlaceholderProps = {
     message: string 
 };
 
-export type ImageMap = { 
-    [key: string]: string
-};
+export type ImageMap = Record<string, string>;
 
 
