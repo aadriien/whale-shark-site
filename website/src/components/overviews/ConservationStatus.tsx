@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 
 
-const speciesName = "rhincodon typus";
-
-const urlBase = `https://api.gbif.org/v1/species`;
-
-const speciesMatchEndpoint = `match`;
-const IUCNredListEndpoint = `iucnRedListCategory`;
+type StatusIUCN = {
+    category: string;
+    code: string;
+}
 
 
-const statusColors = {
+const speciesName: string = "rhincodon typus";
+
+const urlBase: string = `https://api.gbif.org/v1/species`;
+
+const speciesMatchEndpoint: string = `match`;
+const IUCNredListEndpoint: string = `iucnRedListCategory`;
+
+
+const statusColors: Record<string, string> = {
     // Full names (uppercase)
     "LEAST CONCERN": "green",
     "NEAR THREATENED": "yellowgreen",
@@ -32,7 +38,7 @@ const statusColors = {
 };
 
 
-async function getSpeciesKey(name = speciesName) {
+async function getSpeciesKey(name: string = speciesName) {
     const queryParams = new URLSearchParams({ name }); 
     const url = `${urlBase}/${speciesMatchEndpoint}?${queryParams.toString()}`;
     // console.log("Querying GBIF to retrieve species key: ", url);
@@ -58,7 +64,7 @@ async function getSpeciesKey(name = speciesName) {
 
 async function getRedListIUCN() {
     // Fall back on known status when GBIF has CORS issues
-    const defaultStatus = {
+    const defaultStatus: StatusIUCN = {
         category: "ENDANGERED",
         code: "EN",
     };
@@ -92,8 +98,8 @@ async function getRedListIUCN() {
 
 
 const ConservationStatus = () => {
-    const [redListStatus, setRedListStatus] = useState("(loading)");
-    const [statusColor, setStatusColor] = useState("lightgray");
+    const [redListStatus, setRedListStatus] = useState<string>("(loading)");
+    const [statusColor, setStatusColor] = useState<string>("lightgray");
     
     useEffect(() => {
         getRedListIUCN().then(({ category, code }) => {

@@ -8,7 +8,7 @@ const ResearchReef = lazy(() => import("./pages/ResearchReef.jsx"));
 const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent.jsx"));
 
 const Home = lazy(() => import("./pages/Home.jsx"));
-const About = lazy(() => import("./pages/About.jsx"));
+const About = lazy(() => import("./pages/About.tsx"));
 
 const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
 const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
