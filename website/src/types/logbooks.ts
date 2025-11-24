@@ -2,7 +2,7 @@
 
 export type Page = { 
     label: string; 
-    path: string 
+    path: string; 
 };
 
 // Note that `Record<string, Page>` is equivalent to `[key: string]: Page`
@@ -10,7 +10,7 @@ export type PageMap = Record<string, Page>;
 
 export type FAQ = { 
     q: string; 
-    a: string 
+    a: string; 
 };
 
 export type PageContent = Record<string, {

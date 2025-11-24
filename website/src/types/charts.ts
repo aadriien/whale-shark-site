@@ -2,7 +2,7 @@
 
 export type ChartPlaceholderProps = { 
     type: string; 
-    message: string 
+    message: string; 
 };
 
 export type ImageMap = Record<string, string>;
