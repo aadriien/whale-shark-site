@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react";
+
+
+type SharkImageCV = {
+    id: number; 
+    name: string; 
+    description: string; 
+    creator: string; 
+    license: string; 
+};
 
 
 // Sample data for demo images
-function createWhaleSharkImage(id, name, description, creator, license) {
+function createWhaleSharkImage({id, name, description, creator, license}: SharkImageCV) {
     return {
         id,
         name,
@@ -16,46 +25,46 @@ function createWhaleSharkImage(id, name, description, creator, license) {
 }
 
 const demoImages = [
-    createWhaleSharkImage(
-        3070393848, 
-        "Whale Shark #1", 
-        "TBD.. description currently a WIP",
-        "stefzanirato",
-        "CC BY-NC [Attribution-NonCommercial]"
-    ),
-    createWhaleSharkImage(
-        3338151009, 
-        "Whale Shark #2", 
-        "TBD.. description currently a WIP",
-        "Carlos Gajón Bermúdez",
-        "CC BY-NC [Attribution-NonCommercial]"
-    ),
-    createWhaleSharkImage(
-        4177294484, 
-        "Whale Shark #3", 
-        "TBD.. description currently a WIP",
-        "Nathan Cook",
-        "CC BY-NC [Attribution-NonCommercial]"
-    ),
-    createWhaleSharkImage(
-        4900906641, 
-        "Whale Shark #4", 
-        "TBD.. description currently a WIP",
-        "Slunky",
-        "CC BY [Attribution]"
-    ),
+    createWhaleSharkImage({
+        id: 3070393848, 
+        name: "Whale Shark #1", 
+        description: "TBD.. description currently a WIP",
+        creator: "stefzanirato",
+        license: "CC BY-NC [Attribution-NonCommercial]"
+    }),
+    createWhaleSharkImage({
+        id: 3338151009, 
+        name: "Whale Shark #2", 
+        description: "TBD.. description currently a WIP",
+        creator: "Carlos Gajón Bermúdez",
+        license: "CC BY-NC [Attribution-NonCommercial]"
+    }),
+    createWhaleSharkImage({
+        id: 4177294484, 
+        name: "Whale Shark #3", 
+        description: "TBD.. description currently a WIP",
+        creator: "Nathan Cook",
+        license: "CC BY-NC [Attribution-NonCommercial]"
+    }),
+    createWhaleSharkImage({
+        id: 4900906641, 
+        name: "Whale Shark #4", 
+        description: "TBD.. description currently a WIP",
+        creator: "Slunky",
+        license: "CC BY [Attribution]"
+    }),
 ];
 
 
 const InteractiveDemo = () => {
     const [selectedImage, setSelectedImage] = useState(demoImages[0]);
-    const [activeView, setActiveView] = useState('Original');
+    const [activeView, setActiveView] = useState<string>("Original");
 
     const getCurrentImageSrc = () => {
         switch (activeView) {
-            case 'BBOX':
+            case "BBOX":
                 return selectedImage.bbox;
-            case 'Segmentation':
+            case "Segmentation":
                 return selectedImage.segmentation;
             default:
                 return selectedImage.original;
@@ -64,9 +73,9 @@ const InteractiveDemo = () => {
 
     const getViewDescription = () => {
         switch (activeView) {
-            case 'BBOX':
+            case "BBOX":
                 return "Bounding box detection highlights where the AI has identified whale sharks in the image, along with its confidence.";
-            case 'Segmentation':
+            case "Segmentation":
                 return "Segmentation masks show the precise pixel-level outline of each detected whale shark.";
             default:
                 return "Original underwater photograph captured by researchers or underwater cameras.";
@@ -89,7 +98,7 @@ const InteractiveDemo = () => {
                     {demoImages.map((image) => (
                         <div 
                             key={image.id}
-                            className={`thumbnail ${selectedImage.id === image.id ? 'active' : ''}`}
+                            className={`thumbnail ${selectedImage.id === image.id ? "active" : ""}`}
                             onClick={() => setSelectedImage(image)}
                         >
                             <div className="image-wrapper">
@@ -116,20 +125,20 @@ const InteractiveDemo = () => {
                 
                 <div className="control-buttons">
                     <button 
-                        className={activeView === 'Original' ? 'active' : ''}
+                        className={activeView === "Original" ? "active" : ""}
                         onClick={() => setActiveView('Original')}
                     >
                         Original Image
                     </button>
                     <button 
-                        className={activeView === 'BBOX' ? 'active' : ''}
-                        onClick={() => setActiveView('BBOX')}
+                        className={activeView === "BBOX" ? "active" : ""}
+                        onClick={() => setActiveView("BBOX")}
                     >
                         Bounding Box
                     </button>
                     <button 
-                        className={activeView === 'Segmentation' ? 'active' : ''}
-                        onClick={() => setActiveView('Segmentation')}
+                        className={activeView === "Segmentation" ? "active" : ""}
+                        onClick={() => setActiveView("Segmentation")}
                     >
                         Segmentation
                     </button>
