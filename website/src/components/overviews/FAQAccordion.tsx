@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { FAQ } from "../../types/logbooks.ts";
+import { FAQ } from "../../types/logbooks";
 
 
 const faqs = [

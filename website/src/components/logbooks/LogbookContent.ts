@@ -1,4 +1,4 @@
-import { PageMap, PageContent } from "../../types/logbooks.ts";
+import { PageMap, PageContent } from "../../types/logbooks";
 
 
 export const pageMap: PageMap = {

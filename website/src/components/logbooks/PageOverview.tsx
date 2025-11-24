@@ -1,6 +1,6 @@
-import { pageContent } from "./LogbookContent.ts";
+import { pageContent } from "./LogbookContent";
 
-import { PageContentProps } from "../../types/logbooks.ts";
+import { PageContentProps } from "../../types/logbooks";
 
 
 function PageOverview ({ currentPage }: PageContentProps) {

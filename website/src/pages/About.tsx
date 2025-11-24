@@ -1,8 +1,8 @@
-import HeroIntro from "../components/overviews/HeroIntro.tsx";
-import HabitatMap from "../components/overviews/HabitatMap.tsx";
-import FunFacts from "../components/overviews/FunFacts.tsx";
-import ConservationStatus from "../components/overviews/ConservationStatus.tsx";
-import FAQAccordion from "../components/overviews/FAQAccordion.tsx";
+import HeroIntro from "../components/overviews/HeroIntro";
+import HabitatMap from "../components/overviews/HabitatMap";
+import FunFacts from "../components/overviews/FunFacts";
+import ConservationStatus from "../components/overviews/ConservationStatus";
+import FAQAccordion from "../components/overviews/FAQAccordion";
 
 
 function About() {

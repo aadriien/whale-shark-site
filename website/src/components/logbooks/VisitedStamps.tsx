@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
-import { pageMap } from "./LogbookContent.ts"
+import { pageMap } from "./LogbookContent"
 
-import { PageContentProps } from "../../types/logbooks.ts";
+import { PageContentProps } from "../../types/logbooks";
 
 
 type BlobStyle = {

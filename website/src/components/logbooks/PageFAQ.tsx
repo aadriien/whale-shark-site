@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { pageContent } from "./LogbookContent.ts";
-import { FAQ, PageContentProps } from "../../types/logbooks.ts";
+import { pageContent } from "./LogbookContent";
+import { FAQ, PageContentProps } from "../../types/logbooks";
 
 
 function PageFAQ({ currentPage }: PageContentProps) {
