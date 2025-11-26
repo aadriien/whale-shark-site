@@ -1,5 +1,5 @@
 import { parseImageField } from "../../utils/DataUtils.js";
-import FavoriteButton from "../controls/FavoriteButton.jsx";
+import FavoriteButton from "../controls/FavoriteButton";
 
 
 const SharkBanner = ({ shark }) => {

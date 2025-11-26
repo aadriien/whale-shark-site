@@ -24,4 +24,10 @@ export type PageContentProps = {
 };
 
 
+export type FavoriteButtonProps = { 
+    sharkId: string; 
+    className?: string; 
+};
+
+
 

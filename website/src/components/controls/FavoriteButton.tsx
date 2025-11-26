@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 
 import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils.js";
 
+import { FavoriteButtonProps } from "../../types/logbooks";
 
-const FavoriteButton = ({ sharkId, className = "favorite-button" }) => {
+
+const FavoriteButton = ({ sharkId, className = "favorite-button" }: FavoriteButtonProps) => {
     // Purely for forcing re-render on shark favoriting / saving
-    const [_, forceRender] = useState({});
+    const [_, forceRender] = useState<Record<string, never>>({});
 
     // Listen for favorites changes to ensure re-render
     useEffect(() => {
@@ -13,12 +15,12 @@ const FavoriteButton = ({ sharkId, className = "favorite-button" }) => {
             forceRender({});
         };
 
-        window.addEventListener('favoritesChanged', handleFavoritesChange);
-        window.addEventListener('storage', handleFavoritesChange);
+        window.addEventListener("favoritesChanged", handleFavoritesChange);
+        window.addEventListener("storage", handleFavoritesChange);
 
         return () => {
-            window.removeEventListener('favoritesChanged', handleFavoritesChange);
-            window.removeEventListener('storage', handleFavoritesChange);
+            window.removeEventListener("favoritesChanged", handleFavoritesChange);
+            window.removeEventListener("storage", handleFavoritesChange);
         };
     }, []);
 

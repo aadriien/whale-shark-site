@@ -4,7 +4,7 @@ import {
     parseRemarks, 
 } from "../../utils/DataUtils.js";
 
-import FavoriteButton from "../controls/FavoriteButton.jsx";
+import FavoriteButton from "../controls/FavoriteButton";
 import SharkMediaGallery from "../cards/SharkMediaGallery.jsx";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder.tsx";
