@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import ChartPlaceholder from "../charts/ChartPlaceholder.tsx";
+import ChartPlaceholder from "../charts/ChartPlaceholder";
 import RadialHeatmap from "../charts/RadialHeatmap.jsx";
 import { cleanLifestage } from "../../utils/DataUtils.js";
 

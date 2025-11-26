@@ -7,7 +7,7 @@ import {
 import FavoriteButton from "../controls/FavoriteButton";
 import SharkMediaGallery from "../cards/SharkMediaGallery.jsx";
 
-import ChartPlaceholder from "../charts/ChartPlaceholder.tsx";
+import ChartPlaceholder from "../charts/ChartPlaceholder";
 
 
 const SharkInfoPanel = ({ shark }) => {

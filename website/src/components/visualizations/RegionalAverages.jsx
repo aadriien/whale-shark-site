@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import ChartPlaceholder from "../charts/ChartPlaceholder.tsx";
+import ChartPlaceholder from "../charts/ChartPlaceholder";
 import BarChart from "../charts/BarChart.jsx";
 
 

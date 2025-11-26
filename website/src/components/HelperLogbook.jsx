@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import PageOverview from "./logbooks/PageOverview.tsx";
-import PageFAQ from "./logbooks/PageFAQ.tsx";
-import VisitedStamps from "./logbooks/VisitedStamps.tsx";
+import PageOverview from "./logbooks/PageOverview";
+import PageFAQ from "./logbooks/PageFAQ";
+import VisitedStamps from "./logbooks/VisitedStamps";
 import SavedSharks from "./logbooks/SavedSharks.jsx";
 
 import { pageMap } from "./logbooks/LogbookContent.ts";
