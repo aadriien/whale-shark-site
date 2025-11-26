@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
 import { getNames } from "country-list";
 
-import { fetchImageLLM } from "../utils/LLMUtils.jsx";
+import { fetchImageLLM } from "../utils/LLMUtils";
+
+
+type FormData = {
+    name: string;
+    age: string;
+    country: string;
+    researcherPOV: string;
+};
 
 
 // Populate list of all countries from "country-list" npm package
-const countries = getNames();
+const countries: string[] = getNames();
  
 const SharkGenerator = () => {
     // State to hold image content (or placeholder text)
-    const [imageContent, setImageContent] = useState(null); 
+    const [imageContent, setImageContent] = useState<React.ReactElement | null>(null); 
 
     const defaultText = (
         <p id="default-text">
@@ -19,14 +27,14 @@ const SharkGenerator = () => {
         </p>
     );
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         name: "",
         age: "",
         country: "",
         researcherPOV: ""
     });
 
-    const [formSubmitted, setFormSubmitted] = useState(false);
+    const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
     useEffect(() => {
         // Disable reload warning when component is mounted (refreshing page)
@@ -38,12 +46,12 @@ const SharkGenerator = () => {
         };
     }, []);
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         // Ensure form submission doesn't wipe inputs on page reload
         e.preventDefault();
         setFormSubmitted(true);
@@ -68,7 +76,7 @@ const SharkGenerator = () => {
 
         // Harness random each time (0 - 99999) to make images unique
         const seed = Math.floor(Math.random() * 1000000);
-        fetchImageLLM(imagePrompt, { seed: seed }, setImageContent);
+        fetchImageLLM({imagePrompt, params: { seed: seed }, setImageContent});
     };
 
     // Clear form data & reset status after submission
@@ -181,3 +189,4 @@ const SharkGenerator = () => {
 };
 
 export default SharkGenerator;
+
