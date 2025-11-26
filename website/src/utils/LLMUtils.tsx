@@ -1,6 +1,9 @@
-const apiImageParams = {
-    "width": 960,
-    "height": 720,
+import { FetchImageLLMProps } from "../types/utils";
+
+
+const apiImageParams: Record<string, string> = {
+    "width": "960",
+    "height": "720",
     "private": "true",
     "nologo": "true",
     "safe": "true"
@@ -9,16 +12,16 @@ const apiImageParams = {
 const urlBase = `https://image.pollinations.ai/prompt`;
 
 
-export async function fetchImageLLM(prompt, params = {}, updateImageContent) {
+export async function fetchImageLLM({imagePrompt, params = {}, setImageContent}: FetchImageLLMProps) {
     // Assemble query params & corresponding URL
     const queryParams = new URLSearchParams({ ...apiImageParams, ...params });
-    const encodedPrompt = encodeURIComponent(prompt);
+    const encodedPrompt = encodeURIComponent(imagePrompt);
 
     const url = `${urlBase}/${encodedPrompt}?${queryParams.toString()}`;
     console.log("Fetching image from:", url);
 
     // Show spinner while image loading
-    updateImageContent(<div className="spinner"></div>);
+    setImageContent(<div className="spinner"></div>);
     
     try {
         const response = await fetch(url);
@@ -34,12 +37,12 @@ export async function fetchImageLLM(prompt, params = {}, updateImageContent) {
         const imageBlob = await response.blob();
         const imageUrl = URL.createObjectURL(imageBlob);
 
-        updateImageContent(<img src={imageUrl} alt={prompt} loading="lazy" />);
+        setImageContent(<img src={imageUrl} alt={imagePrompt} loading="lazy" />);
 
     // Update image container on error
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error fetching image:", error);
-        updateImageContent(<p>Error loading image.. try submitting again!</p>);
+        setImageContent(<p>Error loading image.. try submitting again!</p>);
     }
 }
     

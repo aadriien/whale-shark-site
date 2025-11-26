@@ -1,4 +1,4 @@
-import SharkGenerator from "../components/SharkGenerator.jsx";
+import SharkGenerator from "../components/SharkGenerator";
 
 
 function BuildAShark() {
