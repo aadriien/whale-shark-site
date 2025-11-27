@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 
+import { PageMetadata } from "../types/pages"
+
 
 function ResearchReef() {
-    const pages = [
+    const pages: PageMetadata[] = [
         {
             path: "/research/globeviews",
             title: "Globe Views",
@@ -64,7 +66,7 @@ function ResearchReef() {
             </div>
 
             <div className="research-creative-grid">
-                {pages.map(({ path, title, description, image }) => (
+                {pages.map(({ path, title, description, image }: PageMetadata) => (
                     <Link key={path} to={path} className="research-creative-card">
                         <img src={image} alt={title} className="research-creative-image" />
                         <div className="research-creative-card-content">
@@ -79,3 +81,4 @@ function ResearchReef() {
 }
 
 export default ResearchReef;
+

@@ -4,8 +4,8 @@ import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 import Navbar from "./components/Navbar";
 import Logbook from "./components/HelperLogbook.jsx";
 
-const ResearchReef = lazy(() => import("./pages/ResearchReef.jsx"));
-const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent.jsx"));
+const ResearchReef = lazy(() => import("./pages/ResearchReef"));
+const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent"));
 
 const Home = lazy(() => import("./pages/Home.jsx"));
 const About = lazy(() => import("./pages/About"));

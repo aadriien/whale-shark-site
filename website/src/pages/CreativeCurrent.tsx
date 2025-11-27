@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 
+import { PageMetadata } from "../types/pages"
+
 
 function CreativeCurrent() {
-    const pages = [
+    const pages: PageMetadata[] = [
         {
             path: "/creative/buildashark",
             title: "Build-A-Shark",
@@ -39,7 +41,7 @@ function CreativeCurrent() {
             </div>
 
             <div className="research-creative-grid">
-                {pages.map(({ path, title, description, image }) => (
+                {pages.map(({ path, title, description, image }: PageMetadata) => (
                     <Link key={path} to={path} className="research-creative-card">
                         <img src={image} alt={title} className="research-creative-image" />
                         <div className="research-creative-card-content">
@@ -54,3 +56,4 @@ function CreativeCurrent() {
 }
 
 export default CreativeCurrent;
+

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { LightDarkToggleProps } from "../../types/utils";
+import { LightDarkToggleProps } from "../../types/pages";
 
 
 function LightDarkToggle({ theme, setTheme }: LightDarkToggleProps) {
