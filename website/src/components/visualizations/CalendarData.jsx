@@ -9,7 +9,7 @@ import DecadeData from "./DecadeData.jsx";
 import SexLifeStageData from "./SexLifeStageData.jsx";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
-import BarChart from "../charts/BarChart.jsx";
+import BarChart from "../charts/BarChart";
 
 import { MONTHS } from "../../utils/DataUtils.js";
 

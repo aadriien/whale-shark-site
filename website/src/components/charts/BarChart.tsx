@@ -1,13 +1,12 @@
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
+import { SvgDimensions, BarChartProps } from "../../types/charts"
 
-const BarChart = ({ 
-    data, 
-    title = "Bar Chart" 
-}) => {
-    const svgRef = useRef(null);
-    const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
+
+const BarChart = ({ data, title = "Bar Chart" }: BarChartProps) => {
+    const svgRef = useRef<SVGSVGElement | null>(null);
+    const [svgDimensions, setSvgDimensions] = useState<SvgDimensions>({ width: 0, height: 0 });
 
     // Handle resizing of SVG container
     useEffect(() => {

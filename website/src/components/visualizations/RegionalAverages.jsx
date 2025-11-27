@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
-import BarChart from "../charts/BarChart.jsx";
+import BarChart from "../charts/BarChart";
 
 
 const AVG_COLUMNS = [
