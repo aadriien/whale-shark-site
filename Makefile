@@ -133,7 +133,7 @@ setup_website:
 	npm install && \
 	npm install three three-globe d3 p5 react-router-dom && \
 	npm install @react-three/fiber @react-three/drei && \
-	npm install yuka @types/yuka && \
+	npm install --save-dev @types/three @types/d3 @types/p5 @types/react-router-dom && \
 	npm install country-list && \
 	npm install gh-pages --save-dev && \
 	echo "Checking npm version..." && \
