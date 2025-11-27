@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import ExtractPointsOnce from "../utils/ModelUtils.jsx";
+import ExtractPointsOnce from "../utils/ModelUtils";
 import GalacticOcean from "../components/animations/GalacticOcean.jsx";
 
 

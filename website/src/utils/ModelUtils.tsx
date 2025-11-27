@@ -1,8 +1,22 @@
 import { useEffect } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
+
+
+type Point3D = {
+    x: number;
+    y: number;
+    z: number;
+}
+
+type Point2D = {
+    x: number;
+    y: number;
+}
 
 
 const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
+
 
 function ExtractPointsOnce() {
     useEffect(() => {
@@ -11,10 +25,10 @@ function ExtractPointsOnce() {
         loader.load(
             SHARK_MODEL_fantasy,
             (gltf) => {
-                const vertices3D = [];
+                const vertices3D: Point3D[] = [];
 
                 // Find & omit any unwanted pieces of .glb model from points extraction
-                function isExcluded(node) {
+                function isExcluded(node: THREE.Object3D | null) {
                     while (node) {
                         if (node.name === "ocean" || node.name === "particles") {
                             return true;
@@ -24,8 +38,12 @@ function ExtractPointsOnce() {
                     return false;
                 }
 
+                function isMesh(object: THREE.Object3D): object is THREE.Mesh {
+                    return (object as THREE.Mesh).isMesh === true;
+                }
+
                 gltf.scene.traverse((child) => {
-                    if (child.isMesh && !isExcluded(child)) {
+                    if (isMesh(child) && !isExcluded(child)) {
                         const posAttr = child.geometry.attributes.position;
                         for (let i = 0; i < posAttr.count; i++) {
                             vertices3D.push({
@@ -39,7 +57,7 @@ function ExtractPointsOnce() {
 
                 // ==== 2D NORMALIZATION ====
 
-                const points2D = vertices3D.map(({ x, y }) => ({ x, y }));
+                const points2D: Point2D[] = vertices3D.map(({ x, y }) => ({ x, y }));
 
                 const minX2D = Math.min(...points2D.map((p) => p.x));
                 const maxX2D = Math.max(...points2D.map((p) => p.x));
@@ -49,7 +67,7 @@ function ExtractPointsOnce() {
                 const rangeX2D = maxX2D - minX2D || 1;
                 const rangeY2D = maxY2D - minY2D || 1;
 
-                const normalizedPoints2D = points2D.map((p) => ({
+                const normalizedPoints2D: Point2D[] = points2D.map((p) => ({
                     x: (p.x - minX2D) / rangeX2D,
                     y: (p.y - minY2D) / rangeY2D,
                 }));
@@ -70,7 +88,7 @@ function ExtractPointsOnce() {
 
                 const maxRange = Math.max(rangeX, rangeY, rangeZ);
 
-                const normalizedPoints3D = vertices3D.map((p) => ({
+                const normalizedPoints3D: Point3D[] = vertices3D.map((p) => ({
                     x: (p.x - minX) / maxRange,
                     y: (p.y - minY) / maxRange,
                     z: (p.z - minZ) / maxRange,
@@ -95,3 +113,4 @@ function ExtractPointsOnce() {
 }
 
 export default ExtractPointsOnce;
+
