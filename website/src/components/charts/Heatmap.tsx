@@ -3,14 +3,12 @@ import * as d3 from "d3";
 
 import { MONTHS } from "../../utils/DataUtils.js";
 
+import { SvgDimensions, HeatmapProps } from "../../types/charts"
 
-const Heatmap = ({ 
-    data, 
-    title = "Heatmap", 
-    yTickFormatter 
-}) => {
-    const svgRef = useRef(null);
-    const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
+
+const Heatmap = ({ data, title = "Heatmap", yTickFormatter }: HeatmapProps) => {
+    const svgRef = useRef<SVGSVGElement | null>(null);
+    const [svgDimensions, setSvgDimensions] = useState<SvgDimensions>({ width: 0, height: 0 });
             
     useEffect(() => {
         const handleResize = () => {
@@ -42,7 +40,8 @@ const Heatmap = ({
         // Sort years ascending then reverse to get descending (recent at top)
         const allYears = Array.from(new Set(data.map(d => d.year)))
             .sort((a, b) => a - b)
-            .reverse();
+            .reverse()
+            .map(String);
         
         const maxValue = Math.ceil(d3.max(data, d => d.value) || 1);
 
@@ -60,8 +59,8 @@ const Heatmap = ({
             .data(data)
             .enter()
             .append("rect")
-            .attr("x", d => x(d.month))
-            .attr("y", d => y(d.year))
+            .attr("x", d => x(d.month)!)
+            .attr("y", d => y(String(d.year))!)
             .attr("width", x.bandwidth())
             .attr("height", y.bandwidth())
             .attr("fill", d => colorScale(d.value))
@@ -71,7 +70,7 @@ const Heatmap = ({
         // Y axis (years)
         const yAxis = d3.axisLeft(y);
         if (typeof yTickFormatter === "function") {
-            yAxis.tickFormat(yTickFormatter);
+            yAxis.tickFormat(d => yTickFormatter(Number(d)));
         }
         g.append("g").call(yAxis);
         

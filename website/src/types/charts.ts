@@ -24,4 +24,16 @@ export type BarChartProps = {
     title?: string;
 }
 
+export type HeatmapDataPoint = {
+    year: number;
+    month: string;
+    value: number;
+}
+
+export type HeatmapProps = {
+    data: HeatmapDataPoint[];
+    title?: string;
+    yTickFormatter: (value: number) => string;
+}
+
 
