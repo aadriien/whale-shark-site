@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 
-import SharkAnimation from "../components/animations/SharkAnimation.jsx";
-
 
 function ResearchReef() {
     const pages = [
