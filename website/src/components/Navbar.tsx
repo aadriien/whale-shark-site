@@ -2,8 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 
 import LightDarkToggle from "./controls/LightDarkMode";
 
+import { NavbarProps } from "../types/utils";
 
-function Navbar({ isLogbookOpen, setIsLogbookOpen, theme, setTheme }) {
+
+function Navbar({ isLogbookOpen, setIsLogbookOpen, theme, setTheme }: NavbarProps) {
 
     // Get current route (page), so user knows where they are
     const location = useLocation(); 

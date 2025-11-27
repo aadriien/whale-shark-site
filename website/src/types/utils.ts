@@ -15,3 +15,11 @@ export type LightDarkToggleProps = {
 }
 
 
+export type NavbarProps = {
+    isLogbookOpen: boolean;
+    setIsLogbookOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    theme: LightDarkTheme;
+    setTheme: React.Dispatch<React.SetStateAction<LightDarkTheme>>;
+}
+
+
