@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 
-import LightDarkToggle from "./controls/LightDarkMode.jsx";
+import LightDarkToggle from "./controls/LightDarkMode";
 
 
 function Navbar({ isLogbookOpen, setIsLogbookOpen, theme, setTheme }) {

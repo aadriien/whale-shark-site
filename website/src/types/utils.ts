@@ -7,3 +7,11 @@ export type FetchImageLLMProps = {
 };
 
 
+export type LightDarkTheme = "light" | "dark";
+
+export type LightDarkToggleProps = {
+    theme: LightDarkTheme;
+    setTheme: React.Dispatch<React.SetStateAction<LightDarkTheme>>;
+}
+
+

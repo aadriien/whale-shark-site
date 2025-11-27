@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 
+import { LightDarkToggleProps } from "../../types/utils";
 
-function LightDarkToggle({ theme, setTheme }) {
-    const [isNight, setIsNight] = useState(theme === "dark");
+
+function LightDarkToggle({ theme, setTheme }: LightDarkToggleProps) {
+    const [isNight, setIsNight] = useState<boolean>(theme === "dark");
     
     // Keep in sync when parent theme changes
     useEffect(() => {
