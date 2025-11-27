@@ -24,6 +24,7 @@ export type BarChartProps = {
     title?: string;
 }
 
+
 export type HeatmapDataPoint = {
     year: number;
     month: string;
@@ -34,6 +35,24 @@ export type HeatmapProps = {
     data: HeatmapDataPoint[];
     title?: string;
     yTickFormatter: (value: number) => string;
+}
+
+
+export type RadialHeatmapDataPoint = Record<string, string | number>;
+
+export type PieDataPoint = {
+    label: string;
+    value: number;
+};
+
+export type RadialHeatmapProps = {
+    data: RadialHeatmapDataPoint[];
+    segmentField: string;
+    ringField: string;
+    valueField: string;
+    title?: string;
+    className?: string;
+    pieData?: PieDataPoint[];
 }
 
 

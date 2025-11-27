@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as d3 from "d3";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
-import RadialHeatmap from "../charts/RadialHeatmap.jsx";
+import RadialHeatmap from "../charts/RadialHeatmap";
 
 import { MONTHS } from "../../utils/DataUtils.js";
 

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
+import { SvgDimensions, PieDataPoint, RadialHeatmapProps } from "../../types/charts"
+
 
 const RadialHeatmap = ({ 
     data,             
@@ -10,9 +12,9 @@ const RadialHeatmap = ({
     title = "Radial Heatmap",
     className = "radial-heatmap",
     pieData = []      // Pie chart in center (e.g. "human/machine observation")
-}) => {
-    const svgRef = useRef(null);
-    const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
+}: RadialHeatmapProps) => {
+    const svgRef = useRef<SVGSVGElement | null>(null);
+    const [svgDimensions, setSvgDimensions] = useState<SvgDimensions>({ width: 0, height: 0 });
 
     // Handle resizing of SVG container
     const handleResize = () => {
@@ -62,7 +64,7 @@ const RadialHeatmap = ({
             .range([0, 2 * Math.PI]);
         
         // Radius scale for rings (e.g. years)
-        const radiusScale = d3.scaleBand()
+        const radiusScale = d3.scaleBand<string | number>()
             .domain(rings)
             .range([innerRadius, outerRadius]);
         
@@ -77,7 +79,7 @@ const RadialHeatmap = ({
             const innerRad = radiusScale(ring);
             const outerRad = innerRad + radiusScale.bandwidth();
 
-            const ringTotal = d3.sum(ringData, d => d[valueField]);
+            const ringTotal = d3.sum(ringData, d => Number(d[valueField]));
             let currentAngle = 0;
 
             ringData.forEach((d) => {
@@ -121,15 +123,17 @@ const RadialHeatmap = ({
             .text(title);
 
         // If pieData provided, create pie chart in center
-        if (pieData.length > 0) {
+        if (pieData && pieData.length > 0) {
             const pieRadius = Math.min(width, height) * 0.2; 
             const pieGroup = svg.append("g")
                 .attr("transform", `translate(${outerRadius}, ${height / 2})`);
                 // .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
             // Define pie chart layout
-            const pie = d3.pie().value(d => d.value);
-            const arc = d3.arc().innerRadius(0).outerRadius(pieRadius);
+            const pie = d3.pie<PieDataPoint>().value(d => d.value);
+            const arc = d3.arc<d3.PieArcDatum<PieDataPoint>>()
+                .innerRadius(0)
+                .outerRadius(pieRadius);
             const color = d3.scaleOrdinal(d3.schemePastel2);
 
             // Create slices
@@ -139,7 +143,7 @@ const RadialHeatmap = ({
                 .enter()
                 .append("path")
                 .attr("d", arc)
-                .attr("fill", (d, i) => color(i))
+                .attr("fill", (d, i) => color(String(i)))
                 .attr("stroke", "#fff")
                 .attr("stroke-width", 1)
                 .append("title")
@@ -181,7 +185,7 @@ const RadialHeatmap = ({
                 .text(() => {
                     const totalForSegment = d3.sum(data.filter(
                         d => d[segmentField] === segment
-                    ), d => d[valueField]);
+                    ), d => Number(d[valueField]));
                     return `${segment} — ${totalForSegment}`;
                 });
         });
