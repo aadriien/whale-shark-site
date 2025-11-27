@@ -3,8 +3,6 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF, useAnimations, TransformControls } from "@react-three/drei";
 import * as THREE from "three";
 
-import type { OrbitControls as OrbitControlsType } from "three/examples/jsm/controls/OrbitControls";
-
 
 type SharkModelProps = {
     isAnimating: boolean;
@@ -254,7 +252,7 @@ export default function SharkAnimation() {
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     const [tetherPosition, setTetherPosition] = useState<number>(0); 
 
-    const orbitControlsRef = useRef<OrbitControlsType | null>(null);
+    const orbitControlsRef = useRef<any>(null);
     
     // Handle control point dragging
     const handlePointDrag = (index: number, newPosition: THREE.Vector3) => {
