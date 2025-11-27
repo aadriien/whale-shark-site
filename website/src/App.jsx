@@ -14,7 +14,7 @@ const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
 const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
 const GeoLabs = lazy(() => import("./pages/GeoLabs.jsx"));
 const DataVisuals = lazy(() => import("./pages/DataVisuals.jsx"));
-const Environment = lazy(() => import("./pages/Environment.jsx"));
+const Environment = lazy(() => import("./pages/Environment"));
 const SharkVision = lazy(() => import("./pages/SharkVision.jsx"));
 
 const BuildAShark = lazy(() => import("./pages/BuildAShark"));
