@@ -10,7 +10,7 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "baseUrl": "src",
-        "types": ["vite/client"]
+        "types": ["vite/client", "@react-three/fiber"]
     },
     "include": ["src"]
 }
