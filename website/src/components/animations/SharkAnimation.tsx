@@ -4,6 +4,32 @@ import { OrbitControls, useGLTF, useAnimations, TransformControls } from "@react
 import * as THREE from "three";
 
 
+type SharkModelProps = {
+    isAnimating: boolean;
+    controlPoints: THREE.Vector3[];
+    tetherPosition: number;
+}
+
+type ControlPointProps = {
+    position: THREE.Vector3;
+    onDrag: (index: number, newPosition: THREE.Vector3) => void;
+    isSelected: boolean;
+    onSelect: (index: number) => void;
+    index: number;
+}
+
+type TetherPointProps = {
+    controlPoints: THREE.Vector3[];
+    tetherPosition: number;
+    curveClosed: boolean;
+}
+
+type CurveVisualizationProps = {
+    controlPoints: THREE.Vector3[];
+    curveClosed: boolean;
+}
+
+
 // SHARK_MODEL_fantasy: 
 // - has 3 children pieces: 
 //      - "particles", "ocean", "WhaleSharkRig"
@@ -18,13 +44,13 @@ const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
 
 
 // Shark model with animation support
-function SharkModel({ isAnimating, controlPoints, tetherPosition }) {
+function SharkModel({ isAnimating, controlPoints, tetherPosition }: SharkModelProps) {
     const { scene, animations } = useGLTF(SHARK_MODEL_fantasy);
     const { actions } = useAnimations(animations, scene);
-    const sharkRef = useRef();
+    const sharkRef = useRef<THREE.Object3D>(null);
     
     // IF DESIRED: can remove other things from root object (Sketchfab_model -> Root)
-    const root = scene.children[0].children[0]; 
+    const root = scene?.children?.[0]?.children?.[0]; 
     
     // E.g. remove "ocean" (sand floor) from SHARK_MODEL_fantasy
     const ocean = root.children.find(child => child.name === "ocean");
@@ -41,7 +67,7 @@ function SharkModel({ isAnimating, controlPoints, tetherPosition }) {
     useEffect(() => {
         if (isAnimating && actions?.Swimming) {
             actions.Swimming.play();
-            actions.Swimming.setLoop(THREE.LoopRepeat);
+            actions.Swimming.setLoop(THREE.LoopRepeat, Infinity);
         } 
         else if (actions?.Swimming) {
             actions.Swimming.stop();
@@ -61,7 +87,7 @@ function SharkModel({ isAnimating, controlPoints, tetherPosition }) {
         const curve = new THREE.CatmullRomCurve3(controlPoints);
         curve.closed = true;
         
-        let t, nextT;
+        let t: number, nextT: number;
         
         if (isAnimating) {
             // Animation mode: move along curve over time
@@ -106,8 +132,8 @@ function SharkModel({ isAnimating, controlPoints, tetherPosition }) {
 
 
 // Control point component with draggable sphere
-function ControlPoint({ position, onDrag, isSelected, onSelect, index }) {
-    const meshRef = useRef();
+function ControlPoint({ position, onDrag, isSelected, onSelect, index }: ControlPointProps) {
+    const meshRef = useRef<THREE.Mesh>(null);
     
     return (
         <group>
@@ -115,7 +141,10 @@ function ControlPoint({ position, onDrag, isSelected, onSelect, index }) {
             <mesh
                 ref={meshRef}
                 position={position}
-                onClick={onSelect}
+                onClick={(event) => {
+                    event.stopPropagation(); // prevent bubbling to canvas
+                    onSelect(index);
+                }}
             >
                 <sphereGeometry args={[0.3, 16, 16]} />
                 <meshBasicMaterial 
@@ -126,9 +155,9 @@ function ControlPoint({ position, onDrag, isSelected, onSelect, index }) {
             </mesh>
             
             {/* Transform controls for dragging when selected */}
-            {isSelected && (
+            {isSelected && meshRef.current && (
                 <TransformControls
-                    object={meshRef}
+                    object={meshRef.current}
                     mode="translate"
                     onObjectChange={(e) => {
                         if (meshRef.current) {
@@ -143,8 +172,8 @@ function ControlPoint({ position, onDrag, isSelected, onSelect, index }) {
 
 
 // Tether point for shark to remain on curve while editing
-function TetherPoint({ controlPoints, tetherPosition, curveClosed }) {
-    const meshRef = useRef();
+function TetherPoint({ controlPoints, tetherPosition, curveClosed }: TetherPointProps) {
+    const meshRef = useRef<THREE.Mesh>(null);
     
     useFrame(() => {
         if (!meshRef.current || controlPoints.length < 3) return;
@@ -172,8 +201,8 @@ function TetherPoint({ controlPoints, tetherPosition, curveClosed }) {
 }
 
 // Curve visualization component
-function CurveVisualization({ controlPoints, curveClosed }) {
-    const lineRef = useRef();
+function CurveVisualization({ controlPoints, curveClosed }: CurveVisualizationProps) {
+    const lineRef = useRef<any>(null);
     
     useEffect(() => {
         if (controlPoints.length < 3) return;
@@ -210,23 +239,23 @@ function CurveVisualization({ controlPoints, curveClosed }) {
 
 export default function SharkAnimation() {
     // State for managing control points & selection
-    const [controlPoints, setControlPoints] = useState([
+    const [controlPoints, setControlPoints] = useState<THREE.Vector3[]>([
         new THREE.Vector3(-10, 0, -5),
         new THREE.Vector3(-5, 3, 0),
         new THREE.Vector3(0, -2, 5),
         new THREE.Vector3(5, 1, 0),
         new THREE.Vector3(10, 0, -3)
     ]);
-    const [selectedPointIndex, setSelectedPointIndex] = useState(null);
+    const [selectedPointIndex, setSelectedPointIndex] = useState<number | null>(null);
 
-    const [curveClosed, setCurveClosed] = useState(false);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [tetherPosition, setTetherPosition] = useState(0); 
+    const [curveClosed, setCurveClosed] = useState<boolean>(false);
+    const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const [tetherPosition, setTetherPosition] = useState<number>(0); 
 
-    const orbitControlsRef = useRef();
+    const orbitControlsRef = useRef<any>(null);
     
     // Handle control point dragging
-    const handlePointDrag = (index, newPosition) => {
+    const handlePointDrag = (index: number, newPosition: THREE.Vector3) => {
         setControlPoints(prev => {
             const updated = [...prev];
             updated[index] = newPosition;
@@ -235,7 +264,7 @@ export default function SharkAnimation() {
     };
     
     // Handle control point selection
-    const handlePointSelect = (index) => {
+    const handlePointSelect = (index: number) => {
         setSelectedPointIndex(index);
     };
     
@@ -322,7 +351,7 @@ export default function SharkAnimation() {
             
             <Canvas 
                 style={{ width: "100%", height: "100%" }} 
-                onPointerMissed={(event) => {
+                onPointerMissed={() => {
                     // Fires when user clicked but no object hit (done editing point)
                     setSelectedPointIndex(null);
                 }}
@@ -363,7 +392,6 @@ export default function SharkAnimation() {
                     <SharkModel 
                         isAnimating={isAnimating}
                         controlPoints={controlPoints}
-                        curveClosed={curveClosed}
                         tetherPosition={tetherPosition}
                     />
                 </Suspense>
