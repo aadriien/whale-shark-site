@@ -18,7 +18,7 @@ const Environment = lazy(() => import("./pages/Environment"));
 const SharkVision = lazy(() => import("./pages/SharkVision.jsx"));
 
 const BuildAShark = lazy(() => import("./pages/BuildAShark"));
-const Animation = lazy(() => import("./pages/Animation.jsx"));
+const Animation = lazy(() => import("./pages/Animation"));
 
 
 function App() {
