@@ -7,24 +7,30 @@ import { MONTHS } from "../../utils/DataUtils.js";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
+import { HeatmapDataPoint, GBIFDataset, YearMonthsMapping } from "../../types/charts"
+
     
-const reshapeYearData = (rawData) => {
-    const byYear = {};
+const reshapeYearData = (rawData: GBIFDataset) => {
+    const byYear: YearMonthsMapping = {};
+
     rawData.forEach((row) => {
-        const year = row["year"];
+        const year = row["year"] as number;
         
         byYear[year] = MONTHS.map((month) => ({
             label: month,
             value: +row[month] || 0,
         }));
     });
+
     return byYear;
 };
+
     
-const flattenToHeatmapFormat = (rawData) => {
-    const heatmapData = [];
+const flattenToHeatmapFormat = (rawData: GBIFDataset) => {
+    const heatmapData: HeatmapDataPoint[] = [];
+
     rawData.forEach((row) => {
-        const year = row["year"];
+        const year = row["year"] as number;
 
         MONTHS.forEach((month) => {
             heatmapData.push({
@@ -34,16 +40,18 @@ const flattenToHeatmapFormat = (rawData) => {
             });
         });
     });
+
     return heatmapData;
 };
+
     
-const getDecadeTickFormatter = (yearsArray) => {
+const getDecadeTickFormatter = (yearsArray: number[]) => {
     const shown = new Set();
     const validDecades = new Set(
         yearsArray.map((y) => Math.floor(y / 10) * 10)
     );
 
-    return (year) => {
+    return (year: number) => {
         const decade = Math.floor(+year / 10) * 10;
         if (validDecades.has(decade) && !shown.has(decade)) {
             shown.add(decade);
@@ -52,25 +60,27 @@ const getDecadeTickFormatter = (yearsArray) => {
         return "";
     };
 };
+
     
 const GBIFDecadeOccurrences = () => {
-    const [selectedDecade, setSelectedDecade] = useState("");
+    const [selectedDecade, setSelectedDecade] = useState<string>("");
 
     const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);
-    const years = useMemo(() => Object.keys(reshaped).sort((a, b) => b - a), [reshaped]);
+    const years = useMemo(() => Object.keys(reshaped).sort((a, b) => Number(b) - Number(a)), [reshaped]);
     
     const heatmapData = useMemo(() => flattenToHeatmapFormat(calendarStatsGBIF), []);
     
     const decadeGroups = useMemo(() => {
-        const byDecade = {};
+        const byDecade: Record<string, string[]> = {};
 
         // Organize heatmap display by decade (group years)
-        years.forEach((year) => {
+        years.forEach((yearStr) => {
+            const year = Number(yearStr);
             const decade = Math.floor(year / 10) * 10;
             const key = `${decade}s`;
 
             if (!byDecade[key]) byDecade[key] = [];
-            byDecade[key].push(year);
+            byDecade[key].push(yearStr);
         });
         return byDecade;
     }, [years]);
@@ -130,3 +140,4 @@ const GBIFDecadeOccurrences = () => {
 };
 
 export default GBIFDecadeOccurrences;
+

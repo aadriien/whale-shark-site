@@ -5,7 +5,7 @@ import DataMetricFilter from "./DataMetricFilter.jsx";
 import DataOverview from "../charts/DataOverview";
 import DataGrid from "../DataGrid.jsx";
 
-import DecadeData from "./DecadeData.jsx";
+import DecadeData from "./DecadeData";
 import SexLifeStageData from "./SexLifeStageData.jsx";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";

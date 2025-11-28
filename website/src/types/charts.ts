@@ -79,3 +79,11 @@ export type DataOverviewProps = {
 };
 
 
+export type MonthsMapping = {
+    label: string;
+    value: number;
+};
+
+export type YearMonthsMapping = Record<number, MonthsMapping[]>;
+
+
