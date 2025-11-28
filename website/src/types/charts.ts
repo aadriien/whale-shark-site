@@ -17,25 +17,25 @@ export type SvgDimensions = {
 export type BarChartDataPoint = {
     label: string;
     value: number;
-}
+};
 
 export type BarChartProps = {
     data: BarChartDataPoint[];
     title?: string;
-}
+};
 
 
 export type HeatmapDataPoint = {
     year: number;
     month: string;
     value: number;
-}
+};
 
 export type HeatmapProps = {
     data: HeatmapDataPoint[];
     title?: string;
     yTickFormatter: (value: number) => string;
-}
+};
 
 
 export type RadialHeatmapDataPoint = Record<string, string | number>;
@@ -53,7 +53,7 @@ export type RadialHeatmapProps = {
     title?: string;
     className?: string;
     pieData?: PieDataPoint[];
-}
+};
 
 
 export type GBIFDataEntry = Record<string, string | number>;
@@ -66,7 +66,7 @@ export type DisplayField = {
     label: string;
     field: string;
     formatter?: (value: any) => React.ReactNode;
-}
+};
 
 export type DataOverviewProps = {
     // Ensure only valid keys (i.e. "calendar", "continent", "country", "publishingCountry")
@@ -76,6 +76,6 @@ export type DataOverviewProps = {
     filterField?: string;
     displayFields?: DisplayField[];
     selectedFilter?: string;
-}
+};
 
 

@@ -5,7 +5,7 @@ export type LightDarkTheme = "light" | "dark";
 export type LightDarkToggleProps = {
     theme: LightDarkTheme;
     setTheme: React.Dispatch<React.SetStateAction<LightDarkTheme>>;
-}
+};
 
 
 export type NavbarProps = {
@@ -13,7 +13,7 @@ export type NavbarProps = {
     setIsLogbookOpen: React.Dispatch<React.SetStateAction<boolean>>;
     theme: LightDarkTheme;
     setTheme: React.Dispatch<React.SetStateAction<LightDarkTheme>>;
-}
+};
 
 
 export type PageMetadata = {
@@ -21,6 +21,6 @@ export type PageMetadata = {
     title: string;
     description: string;
     image: string;
-}
+};
 
 
