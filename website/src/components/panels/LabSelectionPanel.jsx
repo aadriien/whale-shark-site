@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import ChartPlaceholder from '../charts/ChartPlaceholder';
 
-import DataOverview from '../charts/DataOverview.jsx';
+import DataOverview from '../charts/DataOverview';
 import Heatmap from '../charts/Heatmap';
 import SexLifeStageData from '../visualizations/SexLifeStageData.jsx';
 
@@ -64,7 +64,7 @@ function LabSelectionPanel({
             <div className="overview-container">
                 <DataOverview 
                     dataset={selectedSharksDataset}
-                    filterField="lab" // special key word for DataOverview.jsx
+                    filterField="lab" // special key word for DataOverview
                     selectedFilter={
                         selectedSharksForLab.size > 0 
                         ? `${selectedSharksForLab.size} Selected Sharks` 

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 import DataMetricFilter from "./DataMetricFilter.jsx";
 
-import DataOverview from "../charts/DataOverview.jsx";
+import DataOverview from "../charts/DataOverview";
 import DataGrid from "../DataGrid.jsx";
 
 import DecadeData from "./DecadeData.jsx";

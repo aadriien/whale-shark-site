@@ -56,3 +56,26 @@ export type RadialHeatmapProps = {
 }
 
 
+export type GBIFDataEntry = Record<string, string | number>;
+
+export type GBIFDataset = GBIFDataEntry[];
+
+export type DatasetMapping = Record<string, GBIFDataset>; 
+
+export type DisplayField = {
+    label: string;
+    field: string;
+    formatter?: (value: any) => React.ReactNode;
+}
+
+export type DataOverviewProps = {
+    // Ensure only valid keys (i.e. "calendar", "continent", "country", "publishingCountry")
+    // Caveat: special case for Geo Labs (directly pass newly-created summary dataset)
+    dataset?: Extract<keyof DatasetMapping, string> | GBIFDataset;
+
+    filterField?: string;
+    displayFields?: DisplayField[];
+    selectedFilter?: string;
+}
+
+

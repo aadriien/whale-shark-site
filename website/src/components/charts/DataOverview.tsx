@@ -1,14 +1,16 @@
 import { useMemo } from "react";
 
-import ChartPlaceholder from "../charts/ChartPlaceholder";
+import ChartPlaceholder from "./ChartPlaceholder";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";
 import countryStatsGBIF from "../../assets/data/json/gbif_country_stats.json";
 import publishingCountryStatsGBIF from "../../assets/data/json/gbif_publishingCountry_stats.json";
 
+import { DatasetMapping, DisplayField, DataOverviewProps } from "../../types/charts"
 
-const datasets = {
+
+const datasets: DatasetMapping = {
     "calendar": calendarStatsGBIF,
     "continent": continentStatsGBIF,
     "country": countryStatsGBIF,
@@ -26,7 +28,7 @@ const DataOverview = ({
         { label: "Top 3 Publishing Countries", field: "Top 3 Publishing Countries" }
     ],
     selectedFilter = "", // expect selectedFilter from parent now
-}) => {
+}: DataOverviewProps) => {
     const selectedData = useMemo(() => {
         const data = Array.isArray(dataset) ? dataset : (datasets[dataset] || []);
 
@@ -40,7 +42,7 @@ const DataOverview = ({
 
             {selectedData ? (
                 <div className="data-overview-panel">
-                    {displayFields.map(({ label, field, formatter }, i) => {
+                    {displayFields.map(({ label, field, formatter }: DisplayField, i: number) => {
                         const value = selectedData[field];
                         return (
                             <div key={i} className={`data-overview-row${
