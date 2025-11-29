@@ -3,7 +3,7 @@ import { useState } from "react";
 import DataMetricFilter from "./DataMetricFilter";
 
 import DataOverview from "../charts/DataOverview";
-import DataGrid from "../DataGrid.jsx";
+import DataGrid from "../DataGrid";
 
 import GBIFRegionOccurrences from "./RegionalData.jsx";
 import GBIFRegionAverages from "./RegionalAverages.jsx";

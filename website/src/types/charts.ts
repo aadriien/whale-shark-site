@@ -89,7 +89,7 @@ export type DataMetricFilterProps = {
     onChange: (value: DataMetricFilterProps["selectedValue"]) => void;
 
     inline: boolean;
-}
+};
 
 
 export type MonthsMapping = {

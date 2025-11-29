@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import DataMetricFilter from "./DataMetricFilter";
 
 import DataOverview from "../charts/DataOverview";
-import DataGrid from "../DataGrid.jsx";
+import DataGrid from "../DataGrid";
 
 import DecadeData from "./DecadeData";
 import SexLifeStageData from "./SexLifeStageData.jsx";
