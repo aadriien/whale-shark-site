@@ -79,6 +79,19 @@ export type DataOverviewProps = {
 };
 
 
+export type DataMetricFilterProps = {
+    label: string;
+    field: string;
+    data: GBIFDataset;
+    selectedValue: string | number;
+
+    // Ensure type matches that of selectedValue
+    onChange: (value: DataMetricFilterProps["selectedValue"]) => void;
+
+    inline: boolean;
+}
+
+
 export type MonthsMapping = {
     label: string;
     value: number;

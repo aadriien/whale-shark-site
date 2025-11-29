@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import DataMetricFilter from "./DataMetricFilter.jsx";
+import DataMetricFilter from "./DataMetricFilter";
 
 import DataOverview from "../charts/DataOverview";
 import DataGrid from "../DataGrid.jsx";

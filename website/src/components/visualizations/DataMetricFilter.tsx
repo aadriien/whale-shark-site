@@ -1,7 +1,15 @@
 import { useMemo } from "react";
 
+import { DataMetricFilterProps } from "../../types/charts"
 
-const DataMetricFilter = ({ label, field, data, selectedValue, onChange, inline }) => {
+
+const DataMetricFilter = ({ 
+    label, field, 
+    data, 
+    selectedValue, 
+    onChange, 
+    inline 
+}: DataMetricFilterProps) => {
     const options = useMemo(() => {
         const uniqueValues = Array.from(new Set(data.map(d => d[field])));
 
@@ -40,3 +48,4 @@ const DataMetricFilter = ({ label, field, data, selectedValue, onChange, inline 
 };
 
 export default DataMetricFilter;
+
