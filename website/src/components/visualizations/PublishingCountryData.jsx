@@ -5,7 +5,7 @@ import DataMetricFilter from "./DataMetricFilter";
 import DataOverview from "../charts/DataOverview";
 import DataGrid from "../DataGrid";
 
-import GBIFRegionOccurrences from "./RegionalData.jsx";
+import GBIFRegionOccurrences from "./RegionalData";
 import GBIFRegionAverages from "./RegionalAverages.jsx";
 
 import publishingCountryStatsGBIF from "../../assets/data/json/gbif_publishingCountry_stats.json";

@@ -100,3 +100,10 @@ export type MonthsMapping = {
 export type YearMonthsMapping = Record<number, MonthsMapping[]>;
 
 
+export type GBIFRegionOccurrencesProps = {
+    regionData: GBIFDataset; 
+    metric: string; 
+    selectedRegion: string;
+};
+
+

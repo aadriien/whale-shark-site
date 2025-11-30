@@ -6,8 +6,10 @@ import RadialHeatmap from "../charts/RadialHeatmap";
 
 import { MONTHS } from "../../utils/DataUtils.js";
 
+import { GBIFDataset, GBIFRegionOccurrencesProps } from "../../types/charts"
 
-const capitalizeWords = (dataStr) => {
+
+const capitalizeWords = (dataStr: string) => {
     const lowercase = dataStr.toLowerCase().replace(/_/g, " ").split(" ");
     const capitalizedWords = lowercase.map((word) => {
         if (word === "and") {
@@ -19,8 +21,8 @@ const capitalizeWords = (dataStr) => {
 };
 
 
-const reshapeRegionData = (rawData, metric) => {
-    const reshaped = [];
+const reshapeRegionData = (rawData: GBIFDataset, metric: string) => {
+    const reshaped: GBIFDataset = [];
 
     rawData.forEach(row => {
         MONTHS.forEach(month => {
@@ -29,7 +31,7 @@ const reshapeRegionData = (rawData, metric) => {
 
             if (totalOccurrences != null && !Number.isNaN(+totalOccurrences)) {
                 reshaped.push({
-                    region: capitalizeWords(row[metric]),
+                    region: capitalizeWords(String(row[metric])),
                     month,
                     "Total Occurrences": +totalOccurrences,
                     "Avg Per Year (all)": +row["Avg Per Year (all)"],
@@ -45,13 +47,13 @@ const reshapeRegionData = (rawData, metric) => {
 
 
 // Get human vs machine observation percentages as pie chart data
-const getObservationTypeData = (selectedRegion, reshapedData) => {
+const getObservationTypeData = (selectedRegion: string, reshapedData: GBIFDataset) => {
     const entries = reshapedData.filter(d => d.region === selectedRegion);
 
     if (!entries.length) return [];
 
-    const totalHuman = d3.sum(entries, d => d["Human Observation"]);
-    const totalMachine = d3.sum(entries, d => d["Machine Observation"]);
+    const totalHuman = d3.sum(entries, d => Number(d["Human Observation"]));
+    const totalMachine = d3.sum(entries, d => Number(d["Machine Observation"]));
     const total = totalHuman + totalMachine;
 
     return [
@@ -62,20 +64,26 @@ const getObservationTypeData = (selectedRegion, reshapedData) => {
 
 
 // Calculate total occurrences per month
-const getMonthOccurrences = (region, reshapedData) => {
+const getMonthOccurrences = (region: string, reshapedData: GBIFDataset) => {
     return reshapedData.filter(d => d.region === region)
         .reduce((accum, curr) => {
             MONTHS.forEach(month => {
-                accum[month] = (accum[month] || 0) + (curr[month] || 0);
+                accum[month] = (Number(accum[month]) || 0) + (Number(curr[month]) || 0);
             });
             return accum;
         }, {});
 };
                 
 
-const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion }) => {
+const GBIFRegionOccurrences = ({ 
+    regionData, 
+    metric, 
+    selectedRegion 
+}: GBIFRegionOccurrencesProps) => {
     // Reshape data once on mount or when regionData / metric change
-    const reshapedData = useMemo(() => reshapeRegionData(regionData, metric), [regionData, metric]);
+    const reshapedData = useMemo(() => {
+        return reshapeRegionData(regionData, metric);
+    }, [regionData, metric]);
 
     const filteredData = useMemo(() => {
         return reshapedData.filter(d => d.region === selectedRegion);
@@ -110,7 +118,7 @@ const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion }) => {
                         ringField="Avg Per Year (all)"
                         valueField="Total Occurrences"
                         title={`Total Monthly Records — ${selectedRegion}`}
-                        monthOccurrences={monthOccurrences}
+                        // monthOccurrences={monthOccurrences}
                         pieData={pieData}
                     />
                 </>
@@ -118,7 +126,10 @@ const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion }) => {
                 selectedRegion ? (
                     <p style={{ textAlign: "center" }}>No data available for this {metric}.</p>
                 ) : (
-                    <ChartPlaceholder type="radialHeatmap" message={`Select a ${metric} to see monthly records`} />
+                    <ChartPlaceholder 
+                        type="radialHeatmap" 
+                        message={`Select a ${metric} to see monthly records`} 
+                    />
                 )
             )}
         </div>
@@ -126,3 +137,4 @@ const GBIFRegionOccurrences = ({ regionData, metric, selectedRegion }) => {
 };
 
 export default GBIFRegionOccurrences;
+
