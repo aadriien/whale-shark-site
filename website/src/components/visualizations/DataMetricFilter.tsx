@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { DataMetricFilterProps } from "../../types/charts"
+import { DataMetricFilterProps } from "../../types/charts";
 
 
 const DataMetricFilter = ({ 

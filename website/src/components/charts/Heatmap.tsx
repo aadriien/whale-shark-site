@@ -3,7 +3,7 @@ import * as d3 from "d3";
 
 import { MONTHS } from "../../utils/DataUtils.js";
 
-import { SvgDimensions, HeatmapProps } from "../../types/charts"
+import { SvgDimensions, HeatmapProps } from "../../types/charts";
 
 
 const Heatmap = ({ data, title = "Heatmap", yTickFormatter }: HeatmapProps) => {

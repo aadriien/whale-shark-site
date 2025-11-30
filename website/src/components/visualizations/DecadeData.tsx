@@ -7,7 +7,7 @@ import { MONTHS } from "../../utils/DataUtils.js";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
-import { HeatmapDataPoint, GBIFDataset, YearMonthsMapping } from "../../types/charts"
+import { HeatmapDataPoint, GBIFDataset, YearMonthsMapping } from "../../types/charts";
 
     
 const reshapeYearData = (rawData: GBIFDataset) => {

@@ -7,7 +7,7 @@ import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json
 import countryStatsGBIF from "../../assets/data/json/gbif_country_stats.json";
 import publishingCountryStatsGBIF from "../../assets/data/json/gbif_publishingCountry_stats.json";
 
-import { DatasetMapping, DisplayField, DataOverviewProps } from "../../types/charts"
+import { DatasetMapping, DisplayField, DataOverviewProps } from "../../types/charts";
 
 
 const datasets: DatasetMapping = {

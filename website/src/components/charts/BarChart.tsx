@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import { SvgDimensions, BarChartProps } from "../../types/charts"
+import { SvgDimensions, BarChartProps } from "../../types/charts";
 
 
 const BarChart = ({ data, title = "Bar Chart" }: BarChartProps) => {

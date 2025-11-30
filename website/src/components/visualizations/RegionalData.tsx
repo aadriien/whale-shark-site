@@ -6,7 +6,7 @@ import RadialHeatmap from "../charts/RadialHeatmap";
 
 import { MONTHS } from "../../utils/DataUtils.js";
 
-import { GBIFDataset, GBIFRegionOccurrencesProps } from "../../types/charts"
+import { GBIFDataset, GBIFRegionOccurrencesProps } from "../../types/charts";
 
 
 const capitalizeWords = (dataStr: string) => {

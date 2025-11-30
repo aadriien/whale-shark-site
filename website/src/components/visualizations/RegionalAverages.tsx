@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 import BarChart from "../charts/BarChart";
 
-import { GBIFRegionOccurrencesProps } from "../../types/charts"
+import { GBIFRegionOccurrencesProps } from "../../types/charts";
 
 
 const AVG_COLUMNS: string[] = [
