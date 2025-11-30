@@ -83,7 +83,7 @@ export type DataMetricFilterProps = {
     label: string;
     field: string;
     data: GBIFDataset;
-    selectedValue: string | number;
+    selectedValue: string;
 
     // Ensure type matches that of selectedValue
     onChange: (value: DataMetricFilterProps["selectedValue"]) => void;
