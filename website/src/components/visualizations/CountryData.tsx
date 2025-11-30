@@ -10,11 +10,13 @@ import GBIFRegionAverages from "./RegionalAverages";
 
 import countryStatsGBIF from "../../assets/data/json/gbif_country_stats.json";
 
+import { GBIFRegionOccurrencesProps } from "../../types/charts";
+
 
 const GBIFCountryOccurrences = () => {
-    const [selectedCountry, setSelectedCountry] = useState("");
+    const [selectedCountry, setSelectedCountry] = useState<string>("");
 
-    const commonProps = {
+    const commonProps: GBIFRegionOccurrencesProps = {
         regionData: countryStatsGBIF,
         metric: "country",
         selectedRegion: selectedCountry,

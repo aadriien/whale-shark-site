@@ -9,12 +9,14 @@ import GBIFRegionOccurrences from "./RegionalData";
 import GBIFRegionAverages from "./RegionalAverages";
 
 import publishingCountryStatsGBIF from "../../assets/data/json/gbif_publishingCountry_stats.json";
+
+import { GBIFRegionOccurrencesProps } from "../../types/charts";
   
 
 const GBIFPublishingCountryOccurrences = () => {
-    const [selectedPublishingCountry, setSelectedPublishingCountry] = useState("");
+    const [selectedPublishingCountry, setSelectedPublishingCountry] = useState<string>("");
 
-    const commonProps = {
+    const commonProps: GBIFRegionOccurrencesProps = {
         regionData: publishingCountryStatsGBIF,
         metric: "publishingCountry",
         selectedRegion: selectedPublishingCountry,

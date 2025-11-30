@@ -1,7 +1,7 @@
 import CalendarData from "../components/visualizations/CalendarData.jsx";
 import ContinentData from "../components/visualizations/ContinentData";
-import CountryData from "../components/visualizations/CountryData.jsx";
-import PublishingCountryData from "../components/visualizations/PublishingCountryData.jsx";
+import CountryData from "../components/visualizations/CountryData";
+import PublishingCountryData from "../components/visualizations/PublishingCountryData";
 
 
 function DataVisuals() {
