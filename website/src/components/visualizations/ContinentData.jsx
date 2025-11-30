@@ -6,7 +6,7 @@ import DataOverview from "../charts/DataOverview";
 import DataGrid from "../DataGrid";
 
 import GBIFRegionOccurrences from "./RegionalData";
-import GBIFRegionAverages from "./RegionalAverages.jsx";
+import GBIFRegionAverages from "./RegionalAverages";
 
 import continentStatsGBIF from "../../assets/data/json/gbif_continent_stats.json";
 
