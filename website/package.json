@@ -13,13 +13,13 @@
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.4.0",
+    "@react-three/fiber": "^9.4.2",
     "country-list": "^2.4.1",
     "d3": "^7.9.0",
     "p5": "^1.11.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.9.6",
+    "react-router-dom": "^7.10.1",
     "three": "^0.175.0",
     "three-globe": "^2.45.0"
   },
