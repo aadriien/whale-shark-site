@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 
-import { MONTHS } from "../../utils/DataUtils.js";
+import { MONTHS } from "../../utils/DataUtils";
 
 import coordinatesData from '../../assets/data/json/gbif_shark_tracking.json';
 

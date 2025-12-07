@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import Globe from "../components/Globe.jsx";
 import SharkGrid from "../components/cards/SharkGrid.jsx";
 
-import { storySharks } from "../utils/DataUtils.js";
+import { storySharks } from "../utils/DataUtils";
 
 
 function SharkTracker() {

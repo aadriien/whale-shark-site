@@ -2,7 +2,7 @@ import {
     cleanLifestage, 
     parseSpecificRegion, 
     parseRemarks, 
-} from "./DataUtils.js";
+} from "./DataUtils";
 
 
 // Helper to extract all regional options for filter (e.g. country, publishingCountry)

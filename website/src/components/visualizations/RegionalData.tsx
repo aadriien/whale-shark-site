@@ -4,7 +4,7 @@ import * as d3 from "d3";
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 import RadialHeatmap from "../charts/RadialHeatmap";
 
-import { MONTHS } from "../../utils/DataUtils.js";
+import { MONTHS } from "../../utils/DataUtils";
 
 import { GBIFDataset, GBIFRegionOccurrencesProps } from "../../types/charts";
 

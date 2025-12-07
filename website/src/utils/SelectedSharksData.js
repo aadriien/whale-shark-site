@@ -1,7 +1,7 @@
 import { 
     parseSpecificRegion, getDate, 
     MONTHS 
-} from './DataUtils.js';
+} from './DataUtils';
 
 import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
 

@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 
-import { MONTHS } from "../../utils/DataUtils.js";
+import { MONTHS } from "../../utils/DataUtils";
 
 import { SvgDimensions, HeatmapProps } from "../../types/charts";
 

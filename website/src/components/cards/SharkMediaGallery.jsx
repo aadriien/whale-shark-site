@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { parseImageField } from "../../utils/DataUtils.js";
+import { parseImageField } from "../../utils/DataUtils";
 
 
 const SharkMediaGallery = ({ shark }) => {

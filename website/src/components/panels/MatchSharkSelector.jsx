@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import MatchFilter from "./MatchFilter.jsx";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks.jsx";
-import { FULLMONTHS } from "../../utils/DataUtils.js";
+import { FULLMONTHS } from "../../utils/DataUtils";
 
 
 function MatchSharkSelector({ 

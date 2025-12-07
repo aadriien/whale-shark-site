@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { parseImageField } from "../../utils/DataUtils.js";
+import { parseImageField } from "../../utils/DataUtils";
 import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils.js";
 
 

@@ -19,7 +19,7 @@ import {
     getSharkCoordinates, 
     getGroupCoordinatesByTimeline 
 } from "../utils/CoordinateUtils.js";
-import { mediaSharks } from "../utils/DataUtils.js";
+import { mediaSharks } from "../utils/DataUtils";
 
 
 function GeoLabs() {

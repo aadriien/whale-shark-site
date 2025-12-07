@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import CondensedSharkCard from "../cards/CondensedSharkCard.jsx";
-import { mediaSharks } from "../../utils/DataUtils.js";
+import { mediaSharks } from "../../utils/DataUtils";
 
 
 const STORAGE_KEY = "savedSharks";

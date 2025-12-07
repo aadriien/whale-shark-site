@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 import RadialHeatmap from "../charts/RadialHeatmap";
-import { cleanLifestage } from "../../utils/DataUtils.js";
+import { cleanLifestage } from "../../utils/DataUtils";
 
 
 // Define Sex & Life Stage keys for calendar stats

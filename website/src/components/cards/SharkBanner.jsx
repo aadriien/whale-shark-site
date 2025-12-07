@@ -1,4 +1,4 @@
-import { parseImageField } from "../../utils/DataUtils.js";
+import { parseImageField } from "../../utils/DataUtils";
 import FavoriteButton from "../controls/FavoriteButton";
 
 

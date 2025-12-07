@@ -2,7 +2,7 @@ import {
     getDate, 
     parseSpecificRegion, 
     parseRemarks, 
-} from "../../utils/DataUtils.js";
+} from "../../utils/DataUtils";
 
 import FavoriteButton from "../controls/FavoriteButton";
 import SharkMediaGallery from "../cards/SharkMediaGallery.jsx";
