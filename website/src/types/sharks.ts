@@ -66,14 +66,14 @@ export type WhaleSharkDatasetRegular = WhaleSharkEntryRegular[];
 export type CoordinatePoint = {
     lat: number;
     long: number;
-    region: string;
-    eventDate: string; // date string
-    parsedDate: string; // date string
+    region?: string;
+    eventDate?: string; // date string
+    parsedDate?: string; // date string
 };
 
 export type WhaleSharkCoordinates = {
     whaleSharkID: string;
-    coordinates: CoordinatePoint[];
+    coordinates?: CoordinatePoint[];
 };
 
 export type WhaleSharkCoordinateDataset = WhaleSharkCoordinates[];
@@ -99,6 +99,8 @@ export type WhaleSharkEntryNormalized = {
     countries?: string;
     publishing?: string;
     regions?: string;
+
+    months?: string[];
 
     remarks?: string;
     image?: string;

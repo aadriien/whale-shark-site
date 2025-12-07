@@ -5,21 +5,28 @@ import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.jso
 import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
 import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json";
 
-import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
+import coordinatesData from "../assets/data/json/gbif_shark_tracking.json";
+
+import { 
+    WhaleSharkEntryLLM, WhaleSharkDatasetLLM, 
+    WhaleSharkEntryRegular, WhaleSharkDatasetRegular, 
+    WhaleSharkCoordinates, WhaleSharkCoordinateDataset, 
+    WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized 
+} from "../types/sharks";
 
 
-export const MONTHS = [
+export const MONTHS: string[] = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
-export const FULLMONTHS = [
+export const FULLMONTHS: string[] = [
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"
 ];
 
 
-const sharksOfInterest = [
+const sharksOfInterest: string[] = [
     "101373b", // total: 5 --> Male Adult --> Belize (2011), Guatemala (2011), Honduras (2011), Trinidad and Tobago (2011)
     "101376a", // total: 11 --> Male Adult --> Colombia (2011), Cuba (2010), Mexico (2010), Mexico (year Unknown), Nicaragua (2011), United States (2010)
     "57829", // total: 12 --> Male Adult --> Australia (2019), Australia (year Unknown), Indonesia (2018)
@@ -32,7 +39,7 @@ const sharksOfInterest = [
     "George", // total: 106 --> Unknown Unknown --> Colombia (2015), Ecuador (2015), Ecuador (2016)
 ]
 
-const selectedSharkIDs = [
+const selectedSharkIDs: string[] = [
     "101376a",
     "101373a",
     "Ranger",
@@ -41,7 +48,7 @@ const selectedSharkIDs = [
     "57821",
 ]
 
-const keyMap = {
+const keyMap: Record<string, string> = {
     "whaleSharkID": "id",
     "LLM-Gen Image (API)": "cartoonImageURL",
     "LLM-Gen Name (openai API)": "name",
@@ -56,7 +63,7 @@ const keyMap = {
     "stateProvince - verbatimLocality (month year)": "regions",
 };
 
-const keyMapHasMedia = {
+const keyMapHasMedia: Record<string, string> = {
     "whaleSharkID": "id",
     "Total Occurrences": "occurrences",
     "Oldest Occurrence": "oldest",
@@ -73,15 +80,25 @@ const keyMapHasMedia = {
 };
 
 
-const storySharksRaw = selectedStorySharks.filter(
-    shark => selectedSharkIDs.includes(shark.whaleSharkID)
-);
+// Generic mapper for both LLM & regular datasets
+function mapSharks(
+    rawData: WhaleSharkDatasetLLM | WhaleSharkDatasetRegular,
+    keyMap: Record<string, string>,
+    filterIDs?: string[]
+): WhaleSharkDatasetNormalized {
+    return rawData
+        .filter(shark => !filterIDs || filterIDs.includes(shark.whaleSharkID))
+        .map(shark => formatKeyVals(shark, keyMap));
+}
 
-export const storySharks = storySharksRaw.map(obj => formatKeyVals(obj, keyMap));
-export const mediaSharks = allSharkData.map(obj => formatKeyVals(obj, keyMapHasMedia));
+// Filtered & mapped LLM dataset
+export const storySharks = mapSharks(selectedStorySharks, keyMap, selectedSharkIDs);
+
+// Mapped regular dataset (no filtering needed)
+export const mediaSharks = mapSharks(allSharkData, keyMapHasMedia);
 
 
-export function cleanLifestage(obj) {
+export function cleanLifestage(obj: WhaleSharkEntryNormalized) {
     const rawLifeStage = obj.lifeStage;
   
     const cleanedLifeStage =
@@ -95,7 +112,7 @@ export function cleanLifestage(obj) {
 }
 
 
-export function extractContinents(continent) {
+export function extractContinents(continent: string) {
     if (!continent) return [];
     
     const continents = continent
@@ -112,7 +129,7 @@ export function extractContinents(continent) {
 }
 
 
-export function getCountryCode(countryName) {
+export function getCountryCode(countryName: string) {
     const trimmed = countryName.trim();
     const code = getCode(trimmed);
 
@@ -120,25 +137,25 @@ export function getCountryCode(countryName) {
 };  
 
 
-export function getDate(region = "") {
+export function getDate(region: string = "") {
     // Match text inside parentheses
     const match = region.match(/\(([^)]+)\)/); 
     return match ? match[1] : "Unknown";
 }
 
 
-export function parseSpecificRegion(regionEntry = "") {
+export function parseSpecificRegion(regionEntry: string = "") {
     // Everything before the date
     const match = regionEntry.match(/^(.+?)\s*\([^)]*\)$/); 
     return match ? match[1].trim() : regionEntry;
 }
 
 
-export function parseRemarks(str = "") {
+export function parseRemarks(str: string = "") {
     if (!str || str === "Unknown") return "None";
 
     // Match everything up to & including date in parentheses
-    const matches = str.match(/[^,]*?\(\d{4}-\d{2}-\d{2}\)/g) || [];
+    const matches: string[] = str.match(/[^,]*?\(\d{4}-\d{2}-\d{2}\)/g) || [];
 
     // Filter out telemetry aggregation remarks
     const filtered = matches.filter(
@@ -149,9 +166,9 @@ export function parseRemarks(str = "") {
 }
 
 
-export function parseImageField(imageField = "") {
+export function parseImageField(imageField: string = "") {
     // Split on comma that separates entries, not commas inside parentheses
-    const entries = imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/g) || [];
+    const entries: string[] = imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/g) || [];
 
     return entries.map((entry) => {
         const [urlPart, metaPart] = entry.split(/\s*\(/);
@@ -170,9 +187,11 @@ export function parseImageField(imageField = "") {
 }
 
 
-function extractMonths(obj) {
-    let sharkMonths = [];
-    const sharkCoordData = coordinatesData.find(shark => shark.whaleSharkID === obj.id);
+function extractMonths(obj: WhaleSharkEntryNormalized) {
+    let sharkMonths: string[] = [];
+    const sharkCoordData: WhaleSharkCoordinates = coordinatesData.find(
+        shark => shark.whaleSharkID === obj.id
+    );
     
     if (sharkCoordData && sharkCoordData.coordinates) {
         // Process each coordinate/occurrence for given shark
@@ -192,11 +211,14 @@ function extractMonths(obj) {
 }
 
 
-function formatKeyVals(obj, keyMap) {
+function formatKeyVals(
+    obj: WhaleSharkEntryLLM | WhaleSharkEntryRegular, 
+    keyMap: Record<string, string>
+) {
     // Adjust column names for easier access in shark card
     const renamed = Object.fromEntries(
         Object.entries(obj).map(([key, value]) => [keyMap[key] || key, value])
-    );
+    ) as unknown as WhaleSharkEntryNormalized; // ugly bandaid solution for Object.fromEntries
 
     // Extract just 1 lifeStage where available
     if (renamed.lifeStage) {
