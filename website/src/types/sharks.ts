@@ -1,9 +1,9 @@
 /* Shark data types */
 
+// Applicable for data in `gbif_story_shark_images.json` 
 export type WhaleSharkEntryLLM = {
     whaleSharkID: string;
     
-    // GenAI stuff relevant for gbif_story_shark_images.json 
     "LLM-Gen Image (API)": string;
     "LLM-Gen Name (gemma:2b local)": string;
     "LLM-Gen Name (openai API)": string;
@@ -20,7 +20,7 @@ export type WhaleSharkEntryLLM = {
     "lifeStage (year)": string;
     "country (year)": string;
     "stateProvince - verbatimLocality (month year)": string;
-
+    
     "occurrenceRemarks (eventDate)": string;
     "lat:decimalLatitude long:decimalLongitude (eventDate)": string;
     
@@ -30,6 +30,7 @@ export type WhaleSharkEntryLLM = {
 export type WhaleSharkDatasetLLM = WhaleSharkEntryLLM[];
 
 
+// Applicable for data in `gbif_individual_sharks_stats.json` 
 export type WhaleSharkEntryRegular = {
     whaleSharkID: string;
     
@@ -61,6 +62,7 @@ export type WhaleSharkEntryRegular = {
 export type WhaleSharkDatasetRegular = WhaleSharkEntryRegular[];
 
 
+// Applicable for data in `gbif_shark_tracking.json` 
 export type CoordinatePoint = {
     lat: number;
     long: number;
@@ -75,5 +77,37 @@ export type WhaleSharkCoordinates = {
 };
 
 export type WhaleSharkCoordinateDataset = WhaleSharkCoordinates[];
+
+
+// Applicable after string mapping for field names 
+// Works for both datasets (LLM + regular), hence optional fields
+export type WhaleSharkEntryNormalized = {
+    id: string;
+
+    occurrences: number;
+
+    oldest: string;
+    newest: string;
+
+    human: number;
+    machine: number;
+
+    sex?: string;
+    lifeStage?: string;
+
+    continent?: string;
+    countries?: string;
+    publishing?: string;
+    regions?: string;
+
+    remarks?: string;
+    image?: string;
+
+    cartoonImageURL?: string;
+    name?: string;
+    gemmaName?: string;
+};
+
+export type WhaleSharkDatasetNormalized = WhaleSharkEntryNormalized[];
 
 
