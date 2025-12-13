@@ -7,6 +7,8 @@ import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json"
 
 import coordinatesData from "../assets/data/json/gbif_shark_tracking.json";
 
+import { GBIFDataset, YearMonthsMapping } from "../types/charts";
+
 import { 
     WhaleSharkEntryLLM, WhaleSharkDatasetLLM, 
     WhaleSharkEntryRegular, WhaleSharkDatasetRegular, 
@@ -37,7 +39,7 @@ const sharksOfInterest: string[] = [
     "112470", // total: 31 --> Male Subadult --> Mexico (2013), Mexico (year Unknown), United States (2013), United States (year Unknown)
     "57821", // total: 35 --> Female Subadult --> Australia (year Unknown), Christmas Island (2018), Cocos (Keeling) Islands (2018)
     "George", // total: 106 --> Unknown Unknown --> Colombia (2015), Ecuador (2015), Ecuador (2016)
-]
+];
 
 const selectedSharkIDs: string[] = [
     "101376a",
@@ -46,7 +48,7 @@ const selectedSharkIDs: string[] = [
     "101371a",
     "57828",
     "57821",
-]
+];
 
 const keyMap: Record<string, string> = {
     "whaleSharkID": "id",
@@ -89,7 +91,7 @@ function mapSharks(
     return rawData
         .filter(shark => !filterIDs || filterIDs.includes(shark.whaleSharkID))
         .map(shark => formatKeyVals(shark, keyMap));
-}
+};
 
 // Filtered & mapped LLM dataset
 export const storySharks = mapSharks(selectedStorySharks, keyMap, selectedSharkIDs);
@@ -109,7 +111,7 @@ export function cleanLifestage(obj: WhaleSharkEntryNormalized) {
             ?.replace(/\s*\(\d{4}\)/, "") || "Unknown";
   
     return cleanedLifeStage;
-}
+};
 
 
 export function extractContinents(continent: string) {
@@ -126,7 +128,7 @@ export function extractContinents(continent: string) {
         
     // Remove duplicate continents before returning
     return [...new Set(continents)];
-}
+};
 
 
 export function getCountryCode(countryName: string) {
@@ -141,14 +143,14 @@ export function getDate(region: string = "") {
     // Match text inside parentheses
     const match = region.match(/\(([^)]+)\)/); 
     return match ? match[1] : "Unknown";
-}
+};
 
 
 export function parseSpecificRegion(regionEntry: string = "") {
     // Everything before the date
     const match = regionEntry.match(/^(.+?)\s*\([^)]*\)$/); 
     return match ? match[1].trim() : regionEntry;
-}
+};
 
 
 export function parseRemarks(str: string = "") {
@@ -163,7 +165,7 @@ export function parseRemarks(str: string = "") {
     );
 
     return filtered.length > 0 ? filtered.join(", ") : "None";
-}
+};
 
 
 export function parseImageField(imageField: string = "") {
@@ -184,7 +186,7 @@ export function parseImageField(imageField: string = "") {
             creator: creatorMatch ? creatorMatch[1].trim() : "Unknown"
         };
     });
-}
+};
 
 
 function extractMonths(obj: WhaleSharkEntryNormalized) {
@@ -208,7 +210,23 @@ function extractMonths(obj: WhaleSharkEntryNormalized) {
 
     // Remove duplicate months before returning
     return [...new Set(sharkMonths)];
-}
+};
+
+
+export const reshapeYearData = (rawData: GBIFDataset) => {
+    const byYear: YearMonthsMapping = {};
+
+    rawData.forEach((row) => {
+        const year = row["year"] as number;
+        
+        byYear[year] = MONTHS.map((month) => ({
+            label: month,
+            value: +row[month] || 0,
+        }));
+    });
+
+    return byYear;
+};
 
 
 function formatKeyVals(
@@ -229,7 +247,7 @@ function formatKeyVals(
     renamed.months = extractMonths(renamed);
 
     return renamed;
-}
+};
 
 
 
