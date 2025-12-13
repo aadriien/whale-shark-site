@@ -1,4 +1,4 @@
-import CalendarData from "../components/visualizations/CalendarData.jsx";
+import CalendarData from "../components/visualizations/CalendarData";
 import ContinentData from "../components/visualizations/ContinentData";
 import CountryData from "../components/visualizations/CountryData";
 import PublishingCountryData from "../components/visualizations/PublishingCountryData";

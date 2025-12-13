@@ -11,29 +11,18 @@ import SexLifeStageData from "./SexLifeStageData";
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 import BarChart from "../charts/BarChart";
 
-import { MONTHS } from "../../utils/DataUtils";
+import { reshapeYearData } from "../../utils/DataUtils";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
-    
-const reshapeYearData = (rawData) => {
-    const byYear = {};
-    rawData.forEach((row) => {
-        const year = row["year"];
-        
-        byYear[year] = MONTHS.map((month) => ({
-            label: month,
-            value: +row[month] || 0,
-        }));
-    });
-    return byYear;
-};
+import { MonthsMapping } from "../../types/charts";
+
     
 const GBIFCalendarOccurrences = () => {
-    const [selectedYear, setSelectedYear] = useState(""); 
+    const [selectedYear, setSelectedYear] = useState<string>(""); 
 
     const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);    
-    const monthlyData = useMemo(() => reshaped[selectedYear] || [], [selectedYear, reshaped]);
+    const monthlyData: MonthsMapping[] = useMemo(() => reshaped[selectedYear] || [], [selectedYear, reshaped]);
         
     return (
         <>
@@ -92,3 +81,4 @@ const GBIFCalendarOccurrences = () => {
 };
 
 export default GBIFCalendarOccurrences;
+

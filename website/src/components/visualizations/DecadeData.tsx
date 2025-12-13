@@ -3,27 +3,14 @@ import { useState, useMemo } from "react";
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 import Heatmap from "../charts/Heatmap";
 
-import { MONTHS } from "../../utils/DataUtils";
+import { 
+    MONTHS, 
+    reshapeYearData 
+} from "../../utils/DataUtils";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
-import { HeatmapDataPoint, GBIFDataset, YearMonthsMapping } from "../../types/charts";
-
-    
-const reshapeYearData = (rawData: GBIFDataset) => {
-    const byYear: YearMonthsMapping = {};
-
-    rawData.forEach((row) => {
-        const year = row["year"] as number;
-        
-        byYear[year] = MONTHS.map((month) => ({
-            label: month,
-            value: +row[month] || 0,
-        }));
-    });
-
-    return byYear;
-};
+import { HeatmapDataPoint, GBIFDataset } from "../../types/charts";
 
     
 const flattenToHeatmapFormat = (rawData: GBIFDataset) => {
