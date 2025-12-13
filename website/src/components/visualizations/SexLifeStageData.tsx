@@ -4,10 +4,13 @@ import ChartPlaceholder from "../charts/ChartPlaceholder";
 import RadialHeatmap from "../charts/RadialHeatmap";
 import { cleanLifestage } from "../../utils/DataUtils";
 
+import { GBIFDataset, SexLifeStageDataProps } from "../../types/charts";
+import { WhaleSharkDatasetNormalized } from "../../types/sharks";
+
 
 // Define Sex & Life Stage keys for calendar stats
-const sexOptions = ["Sex: Female", "Sex: Male", "Sex: Unknown"];
-const lifeStageOptions = {
+const sexOptions: string[] = ["Sex: Female", "Sex: Male", "Sex: Unknown"];
+const lifeStageOptions: Record<string, string> = {
     "Life Stage: Adult": "Adl",
     "Life Stage: Immature": "Imm",
     "Life Stage: Juvenile": "Juv",
@@ -18,7 +21,7 @@ const lifeStageOptions = {
 
 
 // Process calendar stats data (year-based)
-const reshapeSexLifeStageData = (rawData, selectedYear) => {
+const reshapeSexLifeStageData = (rawData: GBIFDataset, selectedYear: string) => {
     const row = rawData.find(d => String(d.year) === String(selectedYear));
     if (!row) return { ringsData: [], pieData: [] };
     
@@ -43,16 +46,16 @@ const reshapeSexLifeStageData = (rawData, selectedYear) => {
 
 
 // Process shark arrays (flexible mode)
-const createSexLifeStageFromSharks = (sharks) => {
+const createSexLifeStageFromSharks = (sharks: WhaleSharkDatasetNormalized) => {
     if (!sharks || sharks.length === 0) {
         return { ringsData: [], pieData: [] };
     }
 
-    const lifeStageCount = {};
+    const lifeStageCount: Record<string, number> = {};
     const sexCount = { Male: 0, Female: 0, Unknown: 0 };
 
     sharks.forEach(shark => {
-        const sex = shark.sex || 'Unknown';
+        const sex = shark.sex || "Unknown";
         if (sex in sexCount) {
             sexCount[sex]++;
         } 
@@ -65,7 +68,7 @@ const createSexLifeStageFromSharks = (sharks) => {
         
         // Map to abbreviated string form 
         const lifeStageKey = `Life Stage: ${lifeStage}`;
-        const abbreviatedStage = lifeStageOptions[lifeStageKey] || 'Unk';
+        const abbreviatedStage = lifeStageOptions[lifeStageKey] || "Unk";
         
         if (lifeStageCount[abbreviatedStage]) {
             lifeStageCount[abbreviatedStage]++;
@@ -79,14 +82,14 @@ const createSexLifeStageFromSharks = (sharks) => {
     const ringsData = Object.entries(lifeStageCount)
         .filter(([stage, count]) => count > 0)
         .map(([stage, count]) => ({
-            lifeStageCategory: 'Life Stage',
+            lifeStageCategory: "Life Stage",
             lifeStageSegment: stage,
             lifeStageCount: count
         }));
 
     // Create pie data for sex distribution (as percentages)
     const totalSex = Object.values(sexCount).reduce((acc, count) => acc + count, 0);
-    const pieData = totalSex === 0 ? [] : ['Male', 'Female', 'Unknown']
+    const pieData = totalSex === 0 ? [] : ["Male", "Female", "Unknown"]
         .filter(sex => sexCount[sex] > 0)
         .map(sex => ({
             label: sex,
@@ -102,7 +105,7 @@ const SexLifeStageData = ({
     dataset, 
     sharks,
     title
-}) => {
+}: SexLifeStageDataProps) => {
     const { ringsData, pieData } = useMemo(() => {
         // If sharks array provided, use flexible mode (GeoLabs)
         if (sharks) {

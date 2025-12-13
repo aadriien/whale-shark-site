@@ -1,3 +1,5 @@
+import { WhaleSharkDatasetNormalized } from "./sharks";
+
 /* Chart types */
 
 export type ChartPlaceholderProps = { 
@@ -104,6 +106,14 @@ export type GBIFRegionOccurrencesProps = {
     regionData: GBIFDataset; 
     metric: string; 
     selectedRegion: string;
+};
+
+
+export type SexLifeStageDataProps = {
+    selectedYear?: string;
+    dataset?: GBIFDataset;
+    sharks?: WhaleSharkDatasetNormalized;
+    title?: string;
 };
 
 

@@ -4,7 +4,7 @@ import ChartPlaceholder from '../charts/ChartPlaceholder';
 
 import DataOverview from '../charts/DataOverview';
 import Heatmap from '../charts/Heatmap';
-import SexLifeStageData from '../visualizations/SexLifeStageData.jsx';
+import SexLifeStageData from '../visualizations/SexLifeStageData';
 
 import { createSummaryDataset, createCalendarHeatmapData } from '../../utils/SelectedSharksData.js';
 

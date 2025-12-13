@@ -6,7 +6,7 @@ import DataOverview from "../charts/DataOverview";
 import DataGrid from "../DataGrid";
 
 import DecadeData from "./DecadeData";
-import SexLifeStageData from "./SexLifeStageData.jsx";
+import SexLifeStageData from "./SexLifeStageData";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 import BarChart from "../charts/BarChart";
