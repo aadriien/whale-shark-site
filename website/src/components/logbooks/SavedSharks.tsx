@@ -3,10 +3,12 @@ import { useState } from "react";
 import CondensedSharkCard from "../cards/CondensedSharkCard.jsx";
 import { mediaSharks } from "../../utils/DataUtils";
 
+import { SavedSharkIDs } from "../../types/sharks"
+
 
 const STORAGE_KEY = "savedSharks";
 
-function retrieveSharks(saved) {
+function retrieveSharks(saved: SavedSharkIDs) {
     if (!saved || saved.size === 0) return [];
     
     // Build lookup map for fast retrieval: { sharkID -> sharkObject }
@@ -19,7 +21,7 @@ function retrieveSharks(saved) {
 }
 
 
-const CondensedGrid = ({ saved }) => {
+const CondensedGrid = ({ saved }: {saved: SavedSharkIDs}) => {
     const sharks = retrieveSharks(saved);
     console.log(sharks)
 
@@ -35,7 +37,7 @@ const CondensedGrid = ({ saved }) => {
 
 function SavedSharks () {
     // Initialize from localStorage or empty set
-    const [saved, setSaved] = useState(() => {
+    const [saved, setSaved] = useState<SavedSharkIDs>(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
             return stored ? new Set(JSON.parse(stored)) : new Set();
@@ -83,3 +85,4 @@ function SavedSharks () {
 } 
 
 export default SavedSharks;
+

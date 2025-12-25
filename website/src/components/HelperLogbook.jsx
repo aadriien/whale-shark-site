@@ -4,9 +4,9 @@ import { useLocation } from "react-router-dom";
 import PageOverview from "./logbooks/PageOverview";
 import PageFAQ from "./logbooks/PageFAQ";
 import VisitedStamps from "./logbooks/VisitedStamps";
-import SavedSharks from "./logbooks/SavedSharks.jsx";
+import SavedSharks from "./logbooks/SavedSharks";
 
-import { pageMap } from "./logbooks/LogbookContent.ts";
+import { pageMap } from "./logbooks/LogbookContent";
 
 
 function Logbook({ setIsLogbookOpen }) {

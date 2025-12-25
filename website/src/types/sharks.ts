@@ -113,3 +113,6 @@ export type WhaleSharkEntryNormalized = {
 export type WhaleSharkDatasetNormalized = WhaleSharkEntryNormalized[];
 
 
+export type SavedSharkIDs = Set<string>;
+
+
