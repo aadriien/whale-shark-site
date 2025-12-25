@@ -8,7 +8,7 @@ import SavedSharks from "./logbooks/SavedSharks";
 
 import { pageMap } from "./logbooks/LogbookContent";
 
-import { LogbookProps } from "../types/logbooks"
+import { LogbookProps } from "../types/logbooks";
 
 
 function Logbook({ setIsLogbookOpen }: LogbookProps) {

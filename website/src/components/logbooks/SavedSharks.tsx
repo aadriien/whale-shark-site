@@ -3,7 +3,7 @@ import { useState } from "react";
 import CondensedSharkCard from "../cards/CondensedSharkCard.jsx";
 import { mediaSharks } from "../../utils/DataUtils";
 
-import { SavedSharkIDs, CondensedGridProps } from "../../types/sharks"
+import { SavedSharkIDs, CondensedGridProps } from "../../types/sharks";
 
 
 const STORAGE_KEY = "savedSharks";

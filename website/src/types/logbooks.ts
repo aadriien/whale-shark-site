@@ -1,7 +1,5 @@
 /* Helper logbook types */
 
-import { SetStateAction } from "react";
-
 export type Page = { 
     label: string; 
     path: string; 
