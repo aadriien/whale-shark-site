@@ -3,7 +3,7 @@ import { useState } from "react";
 import CondensedSharkCard from "../cards/CondensedSharkCard.jsx";
 import { mediaSharks } from "../../utils/DataUtils";
 
-import { SavedSharkIDs } from "../../types/sharks"
+import { SavedSharkIDs, CondensedGridProps } from "../../types/sharks"
 
 
 const STORAGE_KEY = "savedSharks";
@@ -21,7 +21,7 @@ function retrieveSharks(saved: SavedSharkIDs) {
 }
 
 
-const CondensedGrid = ({ saved }: {saved: SavedSharkIDs}) => {
+const CondensedGrid = ({ saved }: CondensedGridProps) => {
     const sharks = retrieveSharks(saved);
     console.log(sharks)
 

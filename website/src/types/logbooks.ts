@@ -1,5 +1,7 @@
 /* Helper logbook types */
 
+import { SetStateAction } from "react";
+
 export type Page = { 
     label: string; 
     path: string; 
@@ -27,6 +29,11 @@ export type PageContentProps = {
 export type FavoriteButtonProps = { 
     sharkId: string; 
     className?: string; 
+};
+
+
+export type LogbookProps = {
+    setIsLogbookOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 

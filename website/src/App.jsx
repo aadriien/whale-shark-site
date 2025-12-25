@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 
 import Navbar from "./components/Navbar";
-import Logbook from "./components/HelperLogbook.jsx";
+import Logbook from "./components/HelperLogbook";
 
 const ResearchReef = lazy(() => import("./pages/ResearchReef"));
 const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent"));

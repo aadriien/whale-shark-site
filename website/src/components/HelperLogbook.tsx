@@ -8,9 +8,11 @@ import SavedSharks from "./logbooks/SavedSharks";
 
 import { pageMap } from "./logbooks/LogbookContent";
 
+import { LogbookProps } from "../types/logbooks"
 
-function Logbook({ setIsLogbookOpen }) {
-    const [activeSection, setActiveSection] = useState("overview");
+
+function Logbook({ setIsLogbookOpen }: LogbookProps) {
+    const [activeSection, setActiveSection] = useState<string>("overview");
 
     // Figure out which page user is on & update logbook display
     const location = useLocation();
@@ -97,3 +99,4 @@ function Logbook({ setIsLogbookOpen }) {
 }
 
 export default Logbook;
+

@@ -115,4 +115,7 @@ export type WhaleSharkDatasetNormalized = WhaleSharkEntryNormalized[];
 
 export type SavedSharkIDs = Set<string>;
 
+export type CondensedGridProps = {
+    saved: SavedSharkIDs;
+};
 
