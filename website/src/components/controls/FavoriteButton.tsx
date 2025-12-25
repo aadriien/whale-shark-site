@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils.js";
+import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils";
 
 import { FavoriteButtonProps } from "../../types/logbooks";
 

@@ -4,7 +4,7 @@ import TimelineButton from "./TimelineButton.jsx";
 import TimelineSelector from "./TimelineSelector.jsx";
 
 import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils.js";
-import { getSavedSharkIds } from "../../utils/FavoritesUtils.js";
+import { getSavedSharkIds } from "../../utils/FavoritesUtils";
 import { addPointsData, clearAllData } from "../../utils/GlobeUtils.js";
 
 

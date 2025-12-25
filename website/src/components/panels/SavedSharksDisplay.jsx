@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 
 import SharkBanner from "../cards/SharkBanner.jsx";
-import { getFavorites } from "../../utils/FavoritesUtils.js";
+import { getFavorites } from "../../utils/FavoritesUtils";
 
 
 function SavedSharksDisplay({ 

@@ -11,7 +11,7 @@ import SavedDisplay from "../components/panels/SavedSharksDisplay.jsx";
 import LabSelectionPanel from "../components/panels/LabSelectionPanel.jsx";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
-import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils.js";
+import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils";
 import { useGlobeClick } from "../utils/GlobeClick.jsx";
 
 import { 

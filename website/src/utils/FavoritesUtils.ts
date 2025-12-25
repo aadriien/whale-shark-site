@@ -1,7 +1,9 @@
+import { SavedSharkIDs } from "../types/sharks";
+
+
 const STORAGE_KEY = "savedSharks";
 
-
-export function getFavorites() {
+export function getFavorites(): SavedSharkIDs {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         return stored ? new Set(JSON.parse(stored)) : new Set();
@@ -11,7 +13,7 @@ export function getFavorites() {
 }
 
 
-export function toggleFavorite(sharkId) {
+export function toggleFavorite(sharkId: string) {
     const favorites = getFavorites();
     
     // If whale shark already favorited / saved / starred then undo
@@ -31,29 +33,8 @@ export function toggleFavorite(sharkId) {
 }
 
 
-export function isFavorite(sharkId) {
+export function isFavorite(sharkId: string) {
     return getFavorites().has(sharkId);
-}
-
-
-export function clearFavorites() {
-    localStorage.removeItem(STORAGE_KEY);
-}
-
-
-export function getSavedSharks(sharks) {
-    const savedIds = getFavorites();
-    
-    if (savedIds.size === 0) return [];
-    
-    // Build lookup map for performance
-    const sharkMap = new Map(sharks.map(shark => [shark.id, shark]));
-    
-    // Get saved sharks that exist in provided array
-    return [...savedIds]
-        .map(id => sharkMap.get(id))
-        .filter(Boolean) 
-        .sort((a, b) => a.id.localeCompare(b.id)); 
 }
 
 
