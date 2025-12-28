@@ -119,3 +119,9 @@ export type CondensedGridProps = {
     saved: SavedSharkIDs;
 };
 
+
+export type SharkBannerProps = {
+    shark: WhaleSharkEntryNormalized;
+};
+
+
