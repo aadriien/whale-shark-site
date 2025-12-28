@@ -8,7 +8,7 @@ import SexLifeStageData from "../visualizations/SexLifeStageData";
 
 import { createSummaryDataset, createCalendarHeatmapData } from "../../utils/SelectedSharksData";
 
-import { LabSelectionPanelProps } from "../../types/pages";
+import { LabSelectionPanelProps } from "../../types/panels";
 
 
 function LabSelectionPanel({ 
