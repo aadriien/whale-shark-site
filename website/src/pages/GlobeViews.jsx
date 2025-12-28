@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Globe from "../components/Globe.jsx";
 import SharkInfoPanel from "../components/panels/SharkInfoPanel.jsx";
 import SharkSelector from "../components/panels/SharkSelector.jsx";
-import ContinentDisplay from "../components/panels/ContinentSharksDisplay.jsx";
+import ContinentDisplay from "../components/panels/ContinentSharksDisplay";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getGroupCoordinates } from "../utils/CoordinateUtils.js";

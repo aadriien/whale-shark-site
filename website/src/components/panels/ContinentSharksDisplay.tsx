@@ -6,8 +6,12 @@ import {
     parseSpecificRegion 
 } from "../../utils/DataUtils";
 
+import { WhaleSharkDatasetNormalized } from "types/sharks";
 
-const VALID_CONTINENTS = new Set([
+import { ContinentDisplayProps } from "../../types/panels";
+
+
+const VALID_CONTINENTS = [
     "Africa",
     "Antarctica",
     "Asia",
@@ -15,20 +19,22 @@ const VALID_CONTINENTS = new Set([
     "North America",
     "Oceania",
     "South America",
-]);
+] as const;
+
+type Continent = typeof VALID_CONTINENTS[number];
 
 
-function ContinentDisplay({ sharks, onSelect, selectedSharkId }) {
-    const [openContinents, setOpenContinents] = useState({});
+function ContinentDisplay({ sharks, onSelect, selectedSharkId }: ContinentDisplayProps) {
+    const [openContinents, setOpenContinents] = useState<Partial<Record<Continent, boolean>>>({});
 
     const sharksByContinent = useMemo(() => {
-        const byContinent = {};
+        const byContinent: Partial<Record<Continent, WhaleSharkDatasetNormalized>> = {};
                 
         sharks.forEach(shark => {
             const continents = extractContinents(shark.continent);
             
             continents.forEach(continent => {
-                if (VALID_CONTINENTS.has(continent)) {
+                if (VALID_CONTINENTS.includes(continent as Continent)) {
                     if (!byContinent[continent]) {
                         byContinent[continent] = [];
                     }
@@ -39,12 +45,12 @@ function ContinentDisplay({ sharks, onSelect, selectedSharkId }) {
         
         console.log("Sharks by continent:", Object.keys(byContinent).map(c => 
             `${c}: ${byContinent[c].length}`
-        ).join(', '));
+        ).join(", "));
         
         return byContinent;
     }, [sharks]);
 
-    const toggleContinent = (continent) => {
+    const toggleContinent = (continent: string) => {
         setOpenContinents(prev => ({
             ...prev,
             [continent]: !prev[continent],
@@ -61,7 +67,7 @@ function ContinentDisplay({ sharks, onSelect, selectedSharkId }) {
             Object.entries(sharksByContinent)
                 .sort(([a], [b]) => a.localeCompare(b))
                 .map(([continent, continentSharks]) => {
-                    const isOpen = openContinents[continent];
+                    const isOpen: boolean = openContinents[continent];
                     
                     return (  
                         <div key={continent} className="continent-dropdown">

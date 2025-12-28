@@ -11,3 +11,10 @@ export type LabSelectionPanelProps = {
 };
 
 
+export type ContinentDisplayProps = {
+    sharks: WhaleSharkDatasetNormalized;
+    onSelect: (id: string) => void;
+    selectedSharkId: string;
+};
+
+
