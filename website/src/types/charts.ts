@@ -1,5 +1,6 @@
 import { WhaleSharkDatasetNormalized } from "./sharks";
 
+
 /* Chart types */
 
 export type ChartPlaceholderProps = { 
@@ -36,7 +37,7 @@ export type HeatmapDataPoint = {
 export type HeatmapProps = {
     data: HeatmapDataPoint[];
     title?: string;
-    yTickFormatter: (value: number) => string;
+    yTickFormatter?: (value: number) => string;
 };
 
 

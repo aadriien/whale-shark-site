@@ -1,3 +1,6 @@
+import { WhaleSharkDatasetNormalized } from "./sharks";
+
+
 /* Page-adjacent types */
 
 export type LightDarkTheme = "light" | "dark";
@@ -22,5 +25,13 @@ export type PageMetadata = {
     description: string;
     image: string;
 };
+
+
+export type LabSelectionPanelProps = {
+    selectedSharksForLab: Set<string>; 
+    savedIds: Set<string>;
+    sharks: WhaleSharkDatasetNormalized;
+    onSelectAllToggle: React.ChangeEventHandler<HTMLInputElement>;
+}
 
 

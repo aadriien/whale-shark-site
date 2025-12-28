@@ -8,7 +8,7 @@ import TimelineControls from "../components/controls/TimelineControls.jsx";
 import SharkInfoPanel from "../components/panels/SharkInfoPanel.jsx";
 import SharkSelector from "../components/panels/SharkSelector.jsx";
 import SavedDisplay from "../components/panels/SavedSharksDisplay.jsx";
-import LabSelectionPanel from "../components/panels/LabSelectionPanel.jsx";
+import LabSelectionPanel from "../components/panels/LabSelectionPanel";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils";

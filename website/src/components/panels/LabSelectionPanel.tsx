@@ -1,12 +1,14 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import ChartPlaceholder from '../charts/ChartPlaceholder';
+import ChartPlaceholder from "../charts/ChartPlaceholder";
 
-import DataOverview from '../charts/DataOverview';
-import Heatmap from '../charts/Heatmap';
-import SexLifeStageData from '../visualizations/SexLifeStageData';
+import DataOverview from "../charts/DataOverview";
+import Heatmap from "../charts/Heatmap";
+import SexLifeStageData from "../visualizations/SexLifeStageData";
 
-import { createSummaryDataset, createCalendarHeatmapData } from '../../utils/SelectedSharksData';
+import { createSummaryDataset, createCalendarHeatmapData } from "../../utils/SelectedSharksData";
+
+import { LabSelectionPanelProps } from "../../types/pages";
 
 
 function LabSelectionPanel({ 
@@ -14,26 +16,22 @@ function LabSelectionPanel({
     savedIds, 
     sharks,
     onSelectAllToggle 
-}) {
-    const selectedSharksDataset = useMemo(() => {
+}: LabSelectionPanelProps) {
+
+    const selectedSharks = useMemo(() => {
         if (selectedSharksForLab.size === 0) return [];
-
-        const selectedIds = Array.from(selectedSharksForLab);
-        const selectedSharks = sharks.filter(shark => selectedIds.includes(shark.id));
-
-        return createSummaryDataset(selectedSharks);
+        return sharks.filter(shark => selectedSharksForLab.has(shark.id));
     }, [selectedSharksForLab, sharks]);
-    
+
+    const selectedSharksDataset = useMemo(() => {
+        if (selectedSharks.length === 0) return [];
+        return createSummaryDataset(selectedSharks);
+    }, [selectedSharks]);
+
     const selectedSharksHeatmapData = useMemo(() => {
         if (selectedSharksForLab.size === 0) return [];
         return createCalendarHeatmapData(selectedSharksForLab);
     }, [selectedSharksForLab]);
-    
-    const selectedSharks = useMemo(() => {
-        if (selectedSharksForLab.size === 0) return [];
-        const selectedIds = Array.from(selectedSharksForLab);
-        return sharks.filter(shark => selectedIds.includes(shark.id));
-    }, [selectedSharksForLab, sharks]);
 
     return (
         <>
@@ -44,7 +42,10 @@ function LabSelectionPanel({
                     <label className="select-all-container">
                         <input 
                             type="checkbox" 
-                            checked={selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))}
+                            checked={
+                                selectedSharksForLab.size > 0 && 
+                                Array.from(savedIds).every(id => selectedSharksForLab.has(id))
+                            }
                             onChange={onSelectAllToggle}
                             className="select-all-checkbox"
                         />
@@ -54,8 +55,8 @@ function LabSelectionPanel({
 
                 <div className="selected-sharks-list">
                     {selectedSharksForLab.size > 0 
-                        ? Array.from(selectedSharksForLab).join(', ') 
-                        : 'None in lab'
+                        ? Array.from(selectedSharksForLab).join(", ") 
+                        : "None in lab"
                     }
                 </div>
 
