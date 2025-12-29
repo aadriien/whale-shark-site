@@ -120,7 +120,7 @@ export type CondensedGridProps = {
 };
 
 
-export type SharkBannerProps = {
+export type IndividualSharkProps = {
     shark: WhaleSharkEntryNormalized;
 };
 

@@ -1,10 +1,10 @@
 import { parseImageField } from "../../utils/DataUtils";
 import FavoriteButton from "../controls/FavoriteButton";
 
-import { SharkBannerProps } from "../../types/sharks";
+import { IndividualSharkProps } from "../../types/sharks";
 
 
-const SharkBanner = ({ shark }: SharkBannerProps) => {
+const SharkBanner = ({ shark }: IndividualSharkProps) => {
     const images = shark.image !== "Unknown" ? parseImageField(shark.image) : [];
 
     return (
