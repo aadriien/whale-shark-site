@@ -5,7 +5,7 @@ import {
 } from "../../utils/DataUtils";
 
 import FavoriteButton from "../controls/FavoriteButton";
-import SharkMediaGallery from "../cards/SharkMediaGallery.jsx";
+import SharkMediaGallery from "../cards/SharkMediaGallery";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 

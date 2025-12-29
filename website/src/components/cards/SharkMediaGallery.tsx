@@ -2,21 +2,23 @@ import { useState, useEffect } from "react";
 
 import { parseImageField } from "../../utils/DataUtils";
 
+import { IndividualSharkProps } from "../../types/sharks";
 
-const SharkMediaGallery = ({ shark }) => {
-    const [expandedImageIndex, setExpandedImageIndex] = useState(null);
+
+const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
+    const [expandedImageIndex, setExpandedImageIndex] = useState<number>(null);
 
     const images = shark && shark.image !== "Unknown" ? parseImageField(shark.image) : [];
 
     // Open lightbox with image index, not just image object
-    const openImage = (index) => setExpandedImageIndex(index);
+    const openImage = (index: number) => setExpandedImageIndex(index);
     const closeImage = () => setExpandedImageIndex(null);
 
     // Keyboard navigation for image carousel 
     useEffect(() => {
         if (expandedImageIndex === null) return;
 
-        const handleKeyDown = (e) => {
+        const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "ArrowLeft") {
                 setExpandedImageIndex((idx) => Math.max(idx - 1, 0));
             } 
