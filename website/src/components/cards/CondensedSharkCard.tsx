@@ -1,22 +1,28 @@
-import { useState } from "react";
+import { useReducer } from "react";
 
 import { parseImageField } from "../../utils/DataUtils";
 import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils";
 
+import { IndividualSharkProps } from "../../types/sharks";
 
-function formatYearMonth(dateString) {
-    if (!dateString) return "";
+
+function formatYearMonth(dateString: string) {
     const date = new Date(dateString);
-    if (isNaN(date)) return "";
-    
-    const options = { year: "numeric", month: "short" };
-    return date.toLocaleDateString(undefined, options); // e.g. "Jan 2025"
+    if (Number.isNaN(date.getTime())) return "";
+
+    const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "short",
+    };
+
+    return date.toLocaleDateString(undefined, options);
 }
 
 
-const CondensedSharkCard = ({ shark }) => {
+
+const CondensedSharkCard = ({ shark }: IndividualSharkProps) => {
     // Purely for forcing re-render on shark favoriting / saving
-    const [_, forceRender] = useState({}); 
+    const [, forceRender] = useReducer((x: number) => x + 1, 0);
 
     const images = shark.image !== "Unknown" ? parseImageField(shark.image) : [];
 
@@ -24,7 +30,7 @@ const CondensedSharkCard = ({ shark }) => {
     const stageKnown = shark.lifeStage && shark.lifeStage !== "Unknown";
 
     // Build traits description line 
-    let traitsDescription;
+    let traitsDescription: string = "";
     if (sexKnown && stageKnown) {
         traitsDescription = ` ${shark.sex.toLowerCase()} ${shark.lifeStage.toLowerCase()}`;
     } 
@@ -38,7 +44,7 @@ const CondensedSharkCard = ({ shark }) => {
         traitsDescription = ` (sex & life stage unknown)`;
     }
 
-    let dateRange = "";
+    let dateRange: string = "";
     const oldestFormatted = formatYearMonth(shark.oldest);
     const newestFormatted = formatYearMonth(shark.newest);
 
@@ -69,12 +75,12 @@ const CondensedSharkCard = ({ shark }) => {
         }
     }
 
-    let recordsDescription = `${shark.occurrences} `;
+    let recordsDescription: string = `${shark.occurrences} `;
     recordsDescription += shark.occurrences === 1 ? "record " : "records ";
     recordsDescription += dateRange;
 
     // Extract unique countries
-    const uniqueCountries = Array.from(
+    const uniqueCountries: string[] = Array.from(
         new Set(
             shark.countries
                 .split(",")
@@ -104,7 +110,7 @@ const CondensedSharkCard = ({ shark }) => {
                     onClick={(e) => {
                         e.stopPropagation();
                         toggleFavorite(shark.id);
-                        forceRender({});
+                        forceRender();
                     }}
                 >
                     {isFavorite(shark.id) ? "★" : "☆"}

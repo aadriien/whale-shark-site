@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import CondensedSharkCard from "../cards/CondensedSharkCard.jsx";
+import CondensedSharkCard from "../cards/CondensedSharkCard";
 import { mediaSharks } from "../../utils/DataUtils";
 
 import { SavedSharkIDs, CondensedGridProps } from "../../types/sharks";
