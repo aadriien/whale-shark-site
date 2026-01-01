@@ -3,15 +3,18 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import SharkBanner from "../cards/SharkBanner";
 import { getFavorites } from "../../utils/FavoritesUtils";
 
+import { WhaleSharkEntryNormalized } from "../../types/sharks";
+import { SavedSharksDisplayProps } from "../../types/panels";
+
 
 function SavedSharksDisplay({ 
     sharks, 
     onSelect, selectedSharkId, 
     viewMode, 
     selectedSharksForLab, onLabSelectionChange 
-}) {
-    const [savedIds, setSavedIds] = useState(new Set());
-    const [isInitialized, setIsInitialized] = useState(false);
+}: SavedSharksDisplayProps) {
+    const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+    const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
     // Load saved shark IDs from localStorage
     useEffect(() => {
@@ -23,12 +26,12 @@ function SavedSharksDisplay({
         updateSavedIds();
         
         // Listen for storage changes (favorites modified in other tab or same tab)
-        window.addEventListener('storage', updateSavedIds);
-        window.addEventListener('favoritesChanged', updateSavedIds);
+        window.addEventListener("storage", updateSavedIds);
+        window.addEventListener("favoritesChanged", updateSavedIds);
         
         return () => {
-            window.removeEventListener('storage', updateSavedIds);
-            window.removeEventListener('favoritesChanged', updateSavedIds);
+            window.removeEventListener("storage", updateSavedIds);
+            window.removeEventListener("favoritesChanged", updateSavedIds);
         };
     }, []);
 
@@ -45,8 +48,8 @@ function SavedSharksDisplay({
             .sort((a, b) => a.id.localeCompare(b.id)); 
     }, [sharks, savedIds]);
 
-    const handleCardClick = (shark) => {
-        if (viewMode === 'multiple') {
+    const handleCardClick = (shark: WhaleSharkEntryNormalized) => {
+        if (viewMode === "multiple") {
             // In multi-select mode, toggle selection for lab
             handleLabToggle(shark.id);
         } 
@@ -58,7 +61,7 @@ function SavedSharksDisplay({
         }
     };
 
-    const handleLabToggle = useCallback((sharkId) => {
+    const handleLabToggle = useCallback((sharkId: string) => {
         if (onLabSelectionChange && selectedSharksForLab) {
             const newSelection = new Set(selectedSharksForLab);
             if (newSelection.has(sharkId)) {
@@ -86,9 +89,9 @@ function SavedSharksDisplay({
                                 <div 
                                     key={shark.id}
                                     className={`saved-shark-card-wrapper ${
-                                        viewMode === 'individual' && shark.id === selectedSharkId ? "selected" : ""
+                                        viewMode === "individual" && shark.id === selectedSharkId ? "selected" : ""
                                     } ${
-                                        viewMode === 'multiple' && isSelectedForLab ? "selected-for-lab" : ""
+                                        viewMode === "multiple" && isSelectedForLab ? "selected-for-lab" : ""
                                     }`}
                                     onClick={() => handleCardClick(shark)}
                                 >

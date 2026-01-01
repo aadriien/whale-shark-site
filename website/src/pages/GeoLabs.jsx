@@ -7,7 +7,7 @@ import TimelineControls from "../components/controls/TimelineControls.jsx";
 
 import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector.jsx";
-import SavedDisplay from "../components/panels/SavedSharksDisplay.jsx";
+import SavedDisplay from "../components/panels/SavedSharksDisplay";
 import LabSelectionPanel from "../components/panels/LabSelectionPanel";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
@@ -28,7 +28,7 @@ function GeoLabs() {
     const [filteredSharks, setFilteredSharks] = useState(mediaSharks);
     
     const [savedIds, setSavedIds] = useState(new Set());
-    const [viewMode, setViewMode] = useState('multiple'); // 'individual' or 'multiple'
+    const [viewMode, setViewMode] = useState("multiple"); // "individual" or "multiple"
     
     const [selectedSharksForLab, setSelectedSharksForLab] = useState(new Set()); // for multi-select mode
 
@@ -55,12 +55,12 @@ function GeoLabs() {
         updateSavedIds();
         
         // Listen for changes
-        window.addEventListener('storage', updateSavedIds);
-        window.addEventListener('favoritesChanged', updateSavedIds);
+        window.addEventListener("storage", updateSavedIds);
+        window.addEventListener("favoritesChanged", updateSavedIds);
         
         return () => {
-            window.removeEventListener('storage', updateSavedIds);
-            window.removeEventListener('favoritesChanged', updateSavedIds);
+            window.removeEventListener("storage", updateSavedIds);
+            window.removeEventListener("favoritesChanged", updateSavedIds);
         };
     }, []);
 
@@ -73,15 +73,15 @@ function GeoLabs() {
         const uniqueSavedSharkIds = [...new Set(savedSharkIds)];
         const uniqueFilteredSharkIds = [...new Set(filteredSharkIds)];
 
-        console.log('Unique sharks from saved IDs:', uniqueSavedSharkIds);
-        console.log('Unique sharks from filtered IDs:', uniqueFilteredSharkIds);
+        console.log("Unique sharks from saved IDs:", uniqueSavedSharkIds);
+        console.log("Unique sharks from filtered IDs:", uniqueFilteredSharkIds);
 
         // Find intersection (common IDs) between both arrays
         const intersectionSavedFiltered = uniqueSavedSharkIds.filter(
             id => uniqueFilteredSharkIds.includes(id)
         );
 
-        console.log('Plotting sharks on globe:', intersectionSavedFiltered);
+        console.log("Plotting sharks on globe:", intersectionSavedFiltered);
         return getGroupCoordinates(intersectionSavedFiltered);
     }, [savedIds, filteredSharks]);
     
@@ -90,7 +90,7 @@ function GeoLabs() {
         if (selectedSharksForLab.size === 0) return [];
         const labSharkIds = Array.from(selectedSharksForLab);
 
-        console.log('Plotting selected lab sharks on globe:', labSharkIds);
+        console.log("Plotting selected lab sharks on globe:", labSharkIds);
         
         // Use timeline filtering if timeline mode active
         if (isTimelineMode && selectedMonth && selectedYear) {
@@ -119,7 +119,7 @@ function GeoLabs() {
             return;
         }
         
-        if (viewMode === 'individual') {
+        if (viewMode === "individual") {
             if (selectedShark) {
                 // Individual mode with shark selected - show only that shark's points
                 globeRef.current.highlightShark(selectedShark.id, true);
@@ -245,7 +245,7 @@ function GeoLabs() {
         }
         
         // Switch mode
-        setViewMode(prev => prev === 'individual' ? 'multiple' : 'individual');
+        setViewMode(prev => prev === "individual" ? "multiple" : "individual");
     };
     
     const handleToggleTimelineMode = () => {
@@ -275,9 +275,9 @@ function GeoLabs() {
                         className={`view-mode-toggle ${viewMode}`}
                         onClick={handleToggleViewMode}
                     >
-                        {viewMode === 'individual' 
-                            ? 'Switch to Multi Shark View' 
-                            : 'Switch to Single Shark View'
+                        {viewMode === "individual" 
+                            ? "Switch to Multi Shark View" 
+                            : "Switch to Single Shark View"
                         }
                     </button>
                     
@@ -302,7 +302,7 @@ function GeoLabs() {
                     )}
                     
                     {/* Timeline Mode Controls shown in multiple view */}
-                    {viewMode === 'multiple' && (
+                    {viewMode === "multiple" && (
                         <TimelineControls 
                             globeRef={globeRef}
                             selectedSharksForLab={selectedSharksForLab}
@@ -311,7 +311,7 @@ function GeoLabs() {
                         />
                     )}
                     
-                    {viewMode === 'multiple' ? (
+                    {viewMode === "multiple" ? (
                         <div className="shark-info-panel">
                             <LabSelectionPanel 
                                 selectedSharksForLab={selectedSharksForLab}
@@ -330,7 +330,7 @@ function GeoLabs() {
                     <Globe 
                         ref={globeRef} 
                         onSharkClick={handleSelectShark} 
-                        allowClicks={viewMode === 'individual' && !selectedShark}
+                        allowClicks={viewMode === "individual" && !selectedShark}
                     />
                     {/* Coordinate display to match SharkTracker positioning */}
                     {isStepMode && currentPoint && (
@@ -372,7 +372,7 @@ function GeoLabs() {
                                 onLabSelectionChange={setSelectedSharksForLab}
 
                                 // Disable onSelect in multiple mode
-                                onSelect={viewMode === 'multiple' ? null : props.onSelect} 
+                                onSelect={viewMode === "multiple" ? null : props.onSelect} 
                             />
                         )}
                         // Disable selector while in step or timeline mode

@@ -18,3 +18,13 @@ export type ContinentDisplayProps = {
 };
 
 
+export type SavedSharksDisplayProps = {
+    sharks: WhaleSharkDatasetNormalized; 
+    onSelect?: (id: string) => void; 
+    selectedSharkId: string; 
+    viewMode: string; 
+    selectedSharksForLab: Set<string>; 
+    onLabSelectionChange: (value: Set<string>) => void;
+};
+
+
