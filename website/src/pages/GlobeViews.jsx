@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 
 import Globe from "../components/Globe.jsx";
-import SharkInfoPanel from "../components/panels/SharkInfoPanel.jsx";
+import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector.jsx";
 import ContinentDisplay from "../components/panels/ContinentSharksDisplay";
 

@@ -9,8 +9,10 @@ import SharkMediaGallery from "../cards/SharkMediaGallery";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 
+import { IndividualSharkProps } from "../../types/sharks";
 
-const SharkInfoPanel = ({ shark }) => {
+
+const SharkInfoPanel = ({ shark }: IndividualSharkProps) => {
     if (!shark) {
         return (
             <div className="shark-info-panel">

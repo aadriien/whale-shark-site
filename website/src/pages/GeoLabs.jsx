@@ -5,7 +5,7 @@ import PlayStoryButton from "../components/controls/PlayStoryButton.jsx";
 import StoryStepSlider from "../components/controls/StoryStepSlider.jsx";
 import TimelineControls from "../components/controls/TimelineControls.jsx";
 
-import SharkInfoPanel from "../components/panels/SharkInfoPanel.jsx";
+import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector.jsx";
 import SavedDisplay from "../components/panels/SavedSharksDisplay.jsx";
 import LabSelectionPanel from "../components/panels/LabSelectionPanel";
