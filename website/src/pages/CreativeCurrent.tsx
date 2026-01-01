@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { PageMetadata } from "../types/pages"
+import { PageMetadata } from "../types/pages";
 
 
 function CreativeCurrent() {

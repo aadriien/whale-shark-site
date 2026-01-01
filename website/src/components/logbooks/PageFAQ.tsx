@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { pageContent } from "./LogbookContent";
+
 import { FAQ, PageContentProps } from "../../types/logbooks";
 
 

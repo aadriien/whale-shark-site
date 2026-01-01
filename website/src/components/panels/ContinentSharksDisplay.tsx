@@ -7,7 +7,6 @@ import {
 } from "../../utils/DataUtils";
 
 import { WhaleSharkDatasetNormalized } from "../../types/sharks";
-
 import { ContinentDisplayProps } from "../../types/panels";
 
 
