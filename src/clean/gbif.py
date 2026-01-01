@@ -106,7 +106,19 @@ def export_gbif_occurrences() -> pd.DataFrame:
         raise ValueError("Error: No occurrences to export")
 
     occurrences_df = pd.DataFrame(all_occurrences)
+    
+    # Convert any unhashable types (lists, dicts) to strings for duplicate detection
+    for col in occurrences_df.columns:
+        if occurrences_df[col].apply(lambda x: isinstance(x, (list, dict))).any():
+            occurrences_df[col] = occurrences_df[col].astype(str)
+    
     occurrences_df = refactor_field_values(occurrences_df)
+
+    print(
+        "Number of duplicate rows to drop (all columns):",
+        occurrences_df.duplicated().sum()
+    )
+    occurrences_df.drop_duplicates(inplace=True)
 
     # Media goes in its own separate CSV (since variable per occurrence)
     if "media" in occurrences_df.columns:
@@ -237,14 +249,14 @@ def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
     # Split entries with multiple IDs (multiple sharks) into separate rows
-    df["organismID"] = df["organismID"].str.split(';')
+    df["organismID"] = df["organismID"].fillna("").astype(str).str.split(';')
     df = df.explode("organismID")
 
     # Remove any spaces or weird formatting chars, e.g. "{"
     df["organismID"] = df["organismID"].str.replace(r"[{} ]", "", regex=True)
 
     # Repeat with identificationID field (just to be safe)
-    df["identificationID"] = df["identificationID"].str.split(';')
+    df["identificationID"] = df["identificationID"].fillna("").astype(str).str.split(';')
     df = df.explode("identificationID")
     df["identificationID"] = df["identificationID"].str.replace(r"[{} ]", "", regex=True)
 
