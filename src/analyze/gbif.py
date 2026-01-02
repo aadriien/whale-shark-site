@@ -285,7 +285,7 @@ def make_individual_metric_df(occurrences_df: pd.DataFrame,
             zip(*(x[col] for col in all_metric_vals))
         )), 
         include_groups=False
-    ).reset_index(name=column_name)
+    ).reset_index().rename(columns={0: column_name})
 
     individual_sharks = individual_sharks.merge(valid_metric, on="whaleSharkID", how="left")
     individual_sharks.loc[:, column_name] = individual_sharks[column_name].fillna("Unknown")
@@ -572,7 +572,7 @@ def export_publishingCountry_stats(occurrences_df: pd.DataFrame) -> None:
 
 
 def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
-    occurrences_df = validate_and_dropna(occurrences_df, na_subset=["whaleSharkID"])
+    occurrences_df = validate_and_dropna(occurrences_df, na_subset=["whaleSharkID", "eventDate"])
 
     # Now focus on clean entries & map info (sex, lifeStage, etc) where available
     individual_sharks = occurrences_df[["whaleSharkID", "organismID", "identificationID"]].drop_duplicates().reset_index(drop=True)
@@ -587,6 +587,8 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     # Oldest & newest occurrence eventDates
     date_min_max = make_eventDate_df(occurrences_df, groupby=["whaleSharkID"])
     individual_sharks = individual_sharks.merge(date_min_max, on=["whaleSharkID"], how="left")
+    print(individual_sharks.columns)
+    print(individual_sharks.head(15))
 
     # Observation type (human/divers vs machine/satellites)
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["whaleSharkID"])
