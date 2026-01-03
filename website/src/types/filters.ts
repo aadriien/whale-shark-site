@@ -28,3 +28,42 @@ export type SharkMatchCriteria = SharkBaseCriteria & {
 export type SharkCriteria = SharkBaseCriteria | SharkMatchCriteria;
 
 
+export type SharkFilterOptions = {
+    countries: string[];
+    publishingCountries?: string[];
+
+    minYear: number;
+    maxYear: number;
+    months: string[];
+
+    minRecords?: number;
+    maxRecords?: number;
+};
+
+
+export type BaseFilterProps = {
+    criteria: SharkCriteria;
+    onChange: React.Dispatch<React.SetStateAction<SharkCriteria>>;
+};
+
+export type LocationFilterProps = BaseFilterProps & {
+    countries: string[];
+    publishingCountries: string[];
+};
+
+export type TimeFilterProps = BaseFilterProps & {
+    minYear: number;
+    maxYear: number;
+    months: string[];
+};
+
+export type MetadataFilterProps = BaseFilterProps & {
+    minRecords: number;
+    maxRecords: number;
+};
+
+export type SharkFilterProps = BaseFilterProps & {
+    options: SharkFilterOptions;
+};
+
+

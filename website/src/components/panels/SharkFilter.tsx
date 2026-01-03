@@ -1,5 +1,14 @@
+import { 
+    BaseFilterProps, 
+    LocationFilterProps, 
+    TimeFilterProps, 
+    MetadataFilterProps,
+    SharkFilterProps 
+} from "../../types/filters";
+
+
 // Media Filter
-function MediaFilter({ criteria, onChange }) {
+function MediaFilter({ criteria, onChange }: BaseFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Media</legend>
@@ -22,7 +31,10 @@ function MediaFilter({ criteria, onChange }) {
 
 
 // Location Filters
-function LocationFilters({ criteria, onChange, countries, publishingCountries }) {
+function LocationFilters({ 
+    criteria, onChange, 
+    countries, publishingCountries 
+}: LocationFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Location</legend>
@@ -68,7 +80,10 @@ function LocationFilters({ criteria, onChange, countries, publishingCountries })
 
 
 // Time Filter
-function TimeFilter({ criteria, onChange, minYear, maxYear, months }) {
+function TimeFilter({ 
+    criteria, onChange, 
+    minYear, maxYear, months 
+}: TimeFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Time</legend>
@@ -143,7 +158,10 @@ function TimeFilter({ criteria, onChange, minYear, maxYear, months }) {
 
 
 // Metadata Filters
-function MetadataFilters({ criteria, onChange, minRecords, maxRecords }) {
+function MetadataFilters({ 
+    criteria, onChange, 
+    minRecords, maxRecords 
+}: MetadataFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Metadata</legend>
@@ -168,11 +186,11 @@ function MetadataFilters({ criteria, onChange, minRecords, maxRecords }) {
                     value={criteria.minRecords}
                     onChange={(e) => {
                         const val = e.target.value;
-                        onChange({ ...criteria, minRecords: val });
+                        onChange({ ...criteria, minRecords: Number(val) });
                     }}
                     // Validate min records bounds on click away
                     onBlur={() => {
-                        const num = parseInt(criteria.minRecords, 10);
+                        const num = criteria.minRecords;
                         if (isNaN(num)) {
                             onChange({ ...criteria, minRecords: minRecords });
                             return;
@@ -192,7 +210,7 @@ function MetadataFilters({ criteria, onChange, minRecords, maxRecords }) {
 
 
 // Biological Filters
-function BiologicalFilters({ criteria, onChange }) {
+function BiologicalFilters({ criteria, onChange }: BaseFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Biological</legend>
@@ -246,7 +264,7 @@ function BiologicalFilters({ criteria, onChange }) {
 
 
 // Main SharkFilter component (purely controlled)
-function SharkFilter({ criteria, onChange, options }) {
+function SharkFilter({ criteria, onChange, options }: SharkFilterProps) {
     const {
         countries = [],
         publishingCountries = [],
