@@ -5,6 +5,9 @@ import SharkFilter from "./SharkFilter";
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
 import { FULLMONTHS } from "../../utils/DataUtils";
 
+import { SharkFilterOptions, SharkBaseCriteria } from "../../types/filters";
+import { SharkSelectorProps } from "../../types/panels";
+
 
 function SharkSelector({ 
     sharks, 
@@ -13,7 +16,7 @@ function SharkSelector({
     DisplayComponent, 
     disabled = false,
     onFilteredSharksChange 
-}) {
+}: SharkSelectorProps) {
     // Compute filter options from data
     const countries = extractUniqueSortedRegions(sharks, "countries");
     const publishingCountries = extractUniqueSortedRegions(sharks, "publishing");
@@ -31,21 +34,21 @@ function SharkSelector({
     const months = FULLMONTHS;
 
     // Memoize default criteria to prevent unnecessary re-initializations
-    const defaultCriteria = useMemo(() => ({
-        showOnlyWithMedia: false,
+    const defaultCriteria: SharkBaseCriteria = useMemo(() => ({
         country: "",
+        publishingCountry: "", 
         yearRange: [String(minYear), String(maxYear)],
         month: "",
-        hasOccurrenceNotes: false,
-        minRecords: 1,
         sex: "",
-        lifeStage: "",  
-        publishingCountry: "", 
+        lifeStage: "", 
+        minRecords: 1,
         observationType: "", 
+        showOnlyWithMedia: false,
+        hasOccurrenceNotes: false,
     }), [minYear, maxYear]);
     
-    const [criteria, setCriteria] = useState(defaultCriteria);
-    const [showFilters, setShowFilters] = useState(true);
+    const [criteria, setCriteria] = useState<SharkBaseCriteria>(defaultCriteria);
+    const [showFilters, setShowFilters] = useState<boolean>(true);
 
     const handleReset = () => {
         // Reset filters (but keep toggle state) & close all continent tabs
@@ -72,7 +75,7 @@ function SharkSelector({
     }, [filteredSharks, onFilteredSharksChange]);
 
     // Prepare filter options for SharkFilter component
-    const filterOptions = {
+    const filterOptions: SharkFilterOptions = {
         countries,
         publishingCountries,
         minYear,
@@ -113,7 +116,6 @@ function SharkSelector({
                             criteria={criteria} 
                             onChange={setCriteria} 
                             options={filterOptions}
-                            disabled={disabled}
                         />
                     )}
                 </div>
@@ -122,7 +124,6 @@ function SharkSelector({
                     sharks={filteredSharks}
                     onSelect={onSelect}
                     selectedSharkId={selectedSharkId}
-                    disabled={disabled}
                 />
             </div>
         </div>

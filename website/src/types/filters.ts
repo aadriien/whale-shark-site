@@ -1,4 +1,4 @@
-/* Filter data types */
+/* Filter types */
 
 export type SharkBaseCriteria = {
     country: string;

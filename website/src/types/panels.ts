@@ -28,3 +28,14 @@ export type SavedSharksDisplayProps = {
 };
 
 
+export type SharkSelectorProps = {
+    sharks: WhaleSharkDatasetNormalized; 
+    onSelect: () => void;
+    onReset: () => void; 
+    selectedSharkId: string; 
+    DisplayComponent: React.ComponentType<ContinentDisplayProps | SavedSharksDisplayProps>; 
+    disabled?: boolean;
+    onFilteredSharksChange: React.Dispatch<React.SetStateAction<WhaleSharkDatasetNormalized>>; 
+};
+
+
