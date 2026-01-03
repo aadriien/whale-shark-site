@@ -19,7 +19,7 @@ function MediaFilter({ criteria, onChange }: BaseFilterProps) {
                     onChange={() =>
                         onChange({
                             ...criteria,
-                            showOnlyWithMedia: !criteria.showOnlyWithMedia,
+                            showOnlyWithMedia: !criteria.showOnlyWithMedia
                         })
                     }
                 />
@@ -96,7 +96,10 @@ function TimeFilter({
                         value={criteria.yearRange[0]}
                         onChange={(e) => {
                             const val = e.target.value;
-                            onChange({ ...criteria, yearRange: [val, criteria.yearRange[1]] });
+                            onChange({ 
+                                ...criteria, 
+                                yearRange: [val, criteria.yearRange[1]] 
+                            });
                         }}
                         // Validate int min bounds on click away
                         onBlur={() => {
@@ -107,7 +110,10 @@ function TimeFilter({
                                     minYear,
                                     Math.min(num, parseInt(criteria.yearRange[1]))
                                 );
-                            onChange({ ...criteria, yearRange: [String(safe), criteria.yearRange[1]] });
+                            onChange({ 
+                                ...criteria, 
+                                yearRange: [String(safe), criteria.yearRange[1]] 
+                            });
                         }}
                         className="filter-input"
                     />
@@ -117,7 +123,10 @@ function TimeFilter({
                         value={criteria.yearRange[1]}
                         onChange={(e) => {
                             const val = e.target.value;
-                            onChange({ ...criteria, yearRange: [criteria.yearRange[0], val] });
+                            onChange({ 
+                                ...criteria, 
+                                yearRange: [criteria.yearRange[0], val] 
+                            });
                         }}
                         // Validate int max bounds on click away
                         onBlur={() => {
@@ -128,7 +137,10 @@ function TimeFilter({
                                     maxYear,
                                     Math.max(num, parseInt(criteria.yearRange[0]))
                                 );
-                            onChange({ ...criteria, yearRange: [criteria.yearRange[0], String(safe)] });
+                            onChange({ 
+                                ...criteria, 
+                                yearRange: [criteria.yearRange[0], String(safe)] 
+                            });
                         }}
                         className="filter-input"
                     />
@@ -171,7 +183,10 @@ function MetadataFilters({
                     type="checkbox"
                     checked={criteria.hasOccurrenceNotes}
                     onChange={() =>
-                        onChange({ ...criteria, hasOccurrenceNotes: !criteria.hasOccurrenceNotes })
+                        onChange({ 
+                            ...criteria, 
+                            hasOccurrenceNotes: !criteria.hasOccurrenceNotes 
+                        })
                     }
                 />
                 Sharks with occurrence notes
