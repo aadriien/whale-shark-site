@@ -4,7 +4,8 @@ import {
     parseRemarks, 
 } from "./DataUtils";
 
-import { WhaleSharkDatasetNormalized, SharkCriteria } from "../types/sharks";
+import { WhaleSharkDatasetNormalized } from "../types/sharks";
+import { SharkCriteria } from "../types/filters";
 
 
 // Helper to extract all regional options for filter (e.g. country, publishingCountry)

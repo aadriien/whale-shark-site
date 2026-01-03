@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 
-import SharkFilter from "./SharkFilter.jsx";
+import SharkFilter from "./SharkFilter";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
 import { FULLMONTHS } from "../../utils/DataUtils";
