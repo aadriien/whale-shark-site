@@ -4,24 +4,36 @@ import {
     parseRemarks, 
 } from "./DataUtils";
 
+import { WhaleSharkDatasetNormalized, SharkCriteria } from "../types/sharks";
+
 
 // Helper to extract all regional options for filter (e.g. country, publishingCountry)
-export function extractUniqueSortedRegions(items, key) {
+export function extractUniqueSortedRegions(
+    sharks: WhaleSharkDatasetNormalized, 
+    fieldSelector: string
+) {
     return Array.from(
         new Set(
-            items.flatMap(item =>
-                item[key]
-                    ?.split(",")
-                    .map(c => parseSpecificRegion(c).trim())
-                    .filter(Boolean) || []
-            )
+            sharks.flatMap(shark => {
+                const value = shark[fieldSelector] as string | undefined;
+
+                return (
+                    value
+                        ?.split(",")
+                        .map(c => parseSpecificRegion(c).trim())
+                        .filter(Boolean)
+                    ) ?? [];
+            })
         )
     ).sort((a, b) => a.localeCompare(b));
 }
 
 
 // Pure function that applies all filters to sharks array
-export function filterSharks(sharks, filters) {
+export function filterSharks(
+    sharks: WhaleSharkDatasetNormalized, 
+    filters: SharkCriteria
+) {
     return sharks.filter((shark) => {
         // ---------- MEDIA PRESENCE ----------
         if (filters.showOnlyWithMedia) {

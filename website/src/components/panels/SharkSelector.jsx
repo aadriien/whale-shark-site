@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 
 import SharkFilter from "./SharkFilter.jsx";
 
-import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks.jsx";
+import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
 import { FULLMONTHS } from "../../utils/DataUtils";
 
 
