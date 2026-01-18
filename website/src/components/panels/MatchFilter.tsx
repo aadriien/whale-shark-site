@@ -1,5 +1,13 @@
+import { 
+    BaseFilterProps, 
+    LocationFilterProps, 
+    TimeFilterProps, 
+    SharkFilterProps 
+} from "../../types/filters";
+
+
 // Location Filters
-function LocationFilters({ criteria, onChange, countries }) {
+function LocationFilters({ criteria, onChange, countries }: LocationFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Location</legend>
@@ -27,7 +35,10 @@ function LocationFilters({ criteria, onChange, countries }) {
 
 
 // Time Filter
-function TimeFilter({ criteria, onChange, minYear, maxYear, months }) {
+function TimeFilter({ 
+    criteria, onChange, 
+    minYear, maxYear, months 
+}: TimeFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Time</legend>
@@ -100,7 +111,7 @@ function TimeFilter({ criteria, onChange, minYear, maxYear, months }) {
 
 
 // Match Quality Filter
-function MatchQualityFilter({ criteria, onChange }) {
+function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Match Quality</legend>
@@ -193,7 +204,7 @@ function MatchQualityFilter({ criteria, onChange }) {
 
 
 // Main MatchFilter component - combines all filters
-function MatchFilter({ criteria, onChange, options }) {
+function MatchFilter({ criteria, onChange, options }: SharkFilterProps) {
     const {
         countries = [],
         minYear = 2000,

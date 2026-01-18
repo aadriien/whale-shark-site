@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 
-import MatchFilter from "./MatchFilter.jsx";
+import MatchFilter from "./MatchFilter";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
 import { FULLMONTHS } from "../../utils/DataUtils";

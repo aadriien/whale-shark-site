@@ -17,15 +17,16 @@ export type SharkBaseCriteria = {
     hasOccurrenceNotes: boolean;
 };
 
-export type SharkMatchCriteria = SharkBaseCriteria & {
-    hasMatchedImages: boolean;
-    miewidDistanceRange: [number, number];
-
-    showOnlyConfidentMatches: boolean;
-    plausibility: string;
+export type SharkMatchFields = {
+  hasMatchedImages: boolean;
+  miewidDistanceRange: [number, number];
+  showOnlyConfidentMatches: boolean;
+  plausibility: string;
 };
 
-export type SharkCriteria = SharkBaseCriteria | SharkMatchCriteria;
+export type SharkMatchCriteria = SharkBaseCriteria & SharkMatchFields;
+
+export type SharkCriteria = SharkBaseCriteria & Partial<SharkMatchFields>;
 
 
 export type SharkFilterOptions = {
@@ -48,7 +49,7 @@ export type BaseFilterProps = {
 
 export type LocationFilterProps = BaseFilterProps & {
     countries: string[];
-    publishingCountries: string[];
+    publishingCountries?: string[];
 };
 
 export type TimeFilterProps = BaseFilterProps & {
