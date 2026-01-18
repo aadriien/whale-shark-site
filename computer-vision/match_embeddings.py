@@ -183,10 +183,8 @@ def normalize_string(s):
 
 
 def export_to_json(filepath: str, df: pd.DataFrame) -> None:
-    # Replace NaN values before converting to DataFrame, then list of dicts
-    df_clean = df.fillna('')
-    data = df_clean.to_dict('records')
-    
+    data = df.to_dict('records')
+
     # Normalize string values to handle accents & special characters
     normalized_data = []
 
@@ -197,18 +195,19 @@ def export_to_json(filepath: str, df: pd.DataFrame) -> None:
             # Normalize both keys & values
             normalized_key = normalize_string(key)
 
-            if isinstance(value, str):
-                normalized_record[normalized_key] = normalize_string(value)
-            elif pd.isna(value):
+            if pd.isna(value):
+                # Use None so JSON becomes null
                 normalized_record[normalized_key] = None
+            elif isinstance(value, str):
+                normalized_record[normalized_key] = normalize_string(value)
             else:
                 normalized_record[normalized_key] = value
-                
+
         normalized_data.append(normalized_record)
-    
+
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(normalized_data, f, indent=2, default=str, ensure_ascii=True)
-    
+
     print(f"Exported {len(normalized_data)} records to {filepath}")
 
 
