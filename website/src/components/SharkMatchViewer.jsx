@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import '../styles/SharkMatchViewer.css';
 import mediaMatchesData from '../assets/data/json/GBIF_media_matches.json';
-import mediaMatchesValidatedData from '../assets/data/json/GBIF_media_matches_validated.json';
-import sharkMatchesData from '../assets/data/json/GBIF_shark_matches_validated.json';
 import sharkImageOccurrencesData from '../assets/data/json/GBIF_shark_image_occurrences_validated.json';
-import MatchSharkSelector from './panels/MatchSharkSelector.jsx';
+import MatchSharkSelector from './panels/MatchSharkSelector';
 
 function SharkMatchViewer() {
-    const [mediaMatches, setMediaMatches] = useState([]);
     const [sharkMatches, setSharkMatches] = useState([]);
     const [filteredSharkMatches, setFilteredSharkMatches] = useState([]);
     const [selectedSharkId, setSelectedSharkId] = useState(null);
@@ -21,80 +18,88 @@ function SharkMatchViewer() {
     }, []);
 
     useEffect(() => {
-        if (selectedSharkId && mediaMatches.length > 0) {
+        if (selectedSharkId) {
             filterImagesByShark(selectedSharkId);
         }
-    }, [selectedSharkId, mediaMatches]);
+    }, [selectedSharkId]);
 
-    // Create lookup for plausibility from exploded occurrences (has per-image match plausibility)
-    const mediaPlausibilityLookup = useMemo(() => {
+    // Create lookup from key to identifier (image URL) from media matches
+    const keyToIdentifierLookup = useMemo(() => {
         const lookup = {};
-        sharkImageOccurrencesData.forEach(occurrence => {
-            const key = String(occurrence.key); // Convert to string for consistent lookup
-            if (key) {
-                lookup[key] = {
-                    plausibility: occurrence.plausibility,
-                    distance_km: occurrence.distance_km,
-                    days_between: occurrence.days_between,
-                    implied_speed_km_per_day: occurrence.implied_speed_km_per_day,
-                    matched_shark_id: occurrence.matched_shark_id
-                };
-            }
+        mediaMatchesData.forEach(media => {
+            lookup[media.key] = media.identifier;
         });
         return lookup;
     }, []);
 
-    // Create a lookup for plausibility data from the exploded occurrences file
-    const plausibilityLookup = useMemo(() => {
-        const lookup = {};
+    // Group image occurrences by shark ID
+    const imagesByShark = useMemo(() => {
+        const grouped = {};
         sharkImageOccurrencesData.forEach(occurrence => {
             const sharkId = occurrence.identificationID;
-            const imageId = occurrence.key;
-            
-            if (!lookup[sharkId]) {
-                lookup[sharkId] = {};
+            if (!grouped[sharkId]) {
+                grouped[sharkId] = [];
             }
+            // Enrich with identifier from media matches
+            grouped[sharkId].push({
+                ...occurrence,
+                identifier: keyToIdentifierLookup[occurrence.key] || null
+            });
+        });
+        return grouped;
+    }, [keyToIdentifierLookup]);
+
+    // Transform shark data from image occurrences - aggregate by shark ID
+    const transformedSharks = useMemo(() => {
+        const sharkMap = {};
+        
+        // Group all occurrences by shark ID and aggregate data
+        sharkImageOccurrencesData.forEach(occurrence => {
+            const sharkId = occurrence.identificationID;
             
-            // Store plausibility info per image for this shark
-            if (imageId) {
-                lookup[sharkId][imageId] = {
-                    plausibility: occurrence.plausibility,
-                    matched_shark_id: occurrence.matched_shark_id,
-                    distance_km: occurrence.distance_km,
-                    days_between: occurrence.days_between,
-                    implied_speed_km_per_day: occurrence.implied_speed_km_per_day
+            if (!sharkMap[sharkId]) {
+                // Extract country and year from the occurrence
+                const countryYear = occurrence['country (year)'] || '';
+                const countryMatch = countryYear.match(/^([^(]+)/);
+                const yearMatch = countryYear.match(/\((\d{4})\)/);
+                const country = countryMatch ? countryMatch[1].trim() : '';
+                const year = yearMatch ? yearMatch[1] : '';
+
+                // Extract month from stateProvince field
+                const stateProvince = occurrence['stateProvince - verbatimLocality (month year)'] || '';
+                const monthMatch = stateProvince.match(/\((\w+)\s+\d{4}\)/);
+                const month = monthMatch ? monthMatch[1] : '';
+                
+                // Parse MIEWID distance from match_distance field
+                const miewidDistance = occurrence.match_distance;
+                
+                sharkMap[sharkId] = {
+                    identificationID: sharkId,
+                    whaleSharkID: occurrence.whaleSharkID,
+                    'country (year)': occurrence['country (year)'],
+                    'stateProvince - verbatimLocality (month year)': occurrence['stateProvince - verbatimLocality (month year)'],
+                    'Oldest Occurrence': occurrence['Oldest Occurrence'],
+                    'Newest Occurrence': occurrence['Newest Occurrence'],
+                    miewid_distance: miewidDistance,
+                    countries: country,
+                    oldest: occurrence['Oldest Occurrence'] ? occurrence['Oldest Occurrence'].split('-')[0] : year,
+                    newest: occurrence['Newest Occurrence'] ? occurrence['Newest Occurrence'].split('-')[0] : year,
+                    months: month ? [month] : [],
+                    occurrences: 1,
+                    image: 'Yes',
+                    plausibilities: []
                 };
             }
+            
+            // Collect plausibilities for aggregation
+            if (occurrence.plausibility) {
+                sharkMap[sharkId].plausibilities.push(occurrence.plausibility);
+            }
         });
-        return lookup;
-    }, []);
-
-    // Transform shark matches data to be compatible with filters
-    const transformedSharks = useMemo(() => {
-        return sharkMatchesData.map(shark => {
-            // Parse MIEWID distance from formatted string
-            const miewidMatch = shark['MIEWID: closest_whale_shark_id (matched_image_id, distance)'];
-            const miewidDistanceMatch = miewidMatch?.match(/\((\d+),\s*([\d.]+)\)/);
-            const miewidDistance = miewidDistanceMatch ? parseFloat(miewidDistanceMatch[2]) : null;
-
-            // Extract country and year
-            const countryYear = shark['country (year)'] || '';
-            const countryMatch = countryYear.match(/^([^(]+)/);
-            const yearMatch = countryYear.match(/\((\d{4})\)/);
-            const country = countryMatch ? countryMatch[1].trim() : '';
-            const year = yearMatch ? yearMatch[1] : '';
-
-            // Extract month from stateProvince field
-            const stateProvince = shark['stateProvince - verbatimLocality (month year)'] || '';
-            const monthMatch = stateProvince.match(/\((\w+)\s+\d{4}\)/);
-            const month = monthMatch ? monthMatch[1] : '';
-            
-            // Get plausibility data for this shark's images
-            const sharkId = shark.identificationID;
-            const sharkPlausibilityData = plausibilityLookup[sharkId] || {};
-            
-            // Aggregate plausibility - use the best (most plausible) match for filtering
-            const plausibilities = Object.values(sharkPlausibilityData).map(d => d.plausibility);
+        
+        // Convert to array and aggregate plausibility
+        return Object.values(sharkMap).map(shark => {
+            const plausibilities = shark.plausibilities;
             const hasPlausible = plausibilities.includes('PLAUSIBLE');
             const hasUncertain = plausibilities.includes('UNCERTAIN');
             const hasImpossible = plausibilities.includes('IMPOSSIBLE');
@@ -103,42 +108,23 @@ function SharkMatchViewer() {
             if (hasPlausible) aggregatedPlausibility = 'PLAUSIBLE';
             else if (hasUncertain) aggregatedPlausibility = 'UNCERTAIN';
             else if (hasImpossible) aggregatedPlausibility = 'IMPOSSIBLE';
-
+            
+            // Remove the temporary plausibilities array
+            const { plausibilities: _, ...sharkWithoutTemp } = shark;
+            
             return {
-                ...shark,
-                miewid_distance: miewidDistance,
-                countries: country,
-                oldest: shark['Oldest Occurrence'] ? shark['Oldest Occurrence'].split('-')[0] : year,
-                newest: shark['Newest Occurrence'] ? shark['Newest Occurrence'].split('-')[0] : year,
-                months: month ? [month] : [],
-                occurrences: 1,
-                image: 'Yes',
-                plausibility: aggregatedPlausibility,
-                plausibilityData: sharkPlausibilityData // Store for per-image lookup
+                ...sharkWithoutTemp,
+                plausibility: aggregatedPlausibility
             };
         });
-    }, [plausibilityLookup]);
+    }, []);
 
     const loadData = () => {
         try {
             setLoading(true);
             
-            // Enrich media matches with plausibility data
-            const enrichedMediaMatches = mediaMatchesData.map(media => {
-                const plausibilityData = mediaPlausibilityLookup[String(media.key)] || {};
-                return {
-                    ...media,
-                    plausibility: plausibilityData.plausibility || 'UNKNOWN',
-                    distance_km: plausibilityData.distance_km,
-                    days_between: plausibilityData.days_between,
-                    implied_speed_km_per_day: plausibilityData.implied_speed_km_per_day
-                };
-            });
-            
-            console.log('Loading media matches:', enrichedMediaMatches.length, 'records');
-            setMediaMatches(enrichedMediaMatches);
-            
-            console.log('Loading shark matches:', transformedSharks.length, 'records');
+            console.log('Loading shark data:', transformedSharks.length, 'unique sharks');
+            console.log('Loading image occurrences:', sharkImageOccurrencesData.length, 'total records');
             setSharkMatches(transformedSharks);
             setFilteredSharkMatches(transformedSharks);
 
@@ -151,11 +137,10 @@ function SharkMatchViewer() {
     };
 
     const filterImagesByShark = (identificationID) => {
-        const filtered = mediaMatches.filter(
-            record => String(record.identificationID) === String(identificationID)
-        );
-        setSharkImages(filtered);
-        setSelectedImage(filtered.length > 0 ? filtered[0] : null);
+        // Get all image occurrences for this shark
+        const images = imagesByShark[identificationID] || [];
+        setSharkImages(images);
+        setSelectedImage(images.length > 0 ? images[0] : null);
     };
 
     const getSharkInfo = (identificationID) => {
@@ -192,7 +177,7 @@ function SharkMatchViewer() {
                 <div className="match-selector-panel">
                     <MatchSharkSelector
                         sharks={sharkMatches}
-                        mediaMatches={mediaMatches}
+                        mediaMatches={sharkImageOccurrencesData}
                         onSharkSelect={handleSharkSelect}
                         selectedSharkId={selectedSharkId}
                         onFilteredSharksChange={setFilteredSharkMatches}
@@ -226,7 +211,7 @@ function SharkMatchViewer() {
                                         />
                                         <div className="match-image-info">
                                             <p><strong>Query Shark ID:</strong> {selectedImage.identificationID}</p>
-                                            <p><strong>Query Image ID:</strong> {selectedImage.query_index}</p>
+                                            <p><strong>Image Key:</strong> {selectedImage.key}</p>
                                             <p><strong>Occurrence ID:</strong> {selectedImage.occurrenceID}</p>
                                         </div>
                                         <div className="match-query-images-grid">
@@ -255,12 +240,12 @@ function SharkMatchViewer() {
                                     <div className="match-arrow">→</div>
 
                                     <div className="match-matched-images">
-                                        <h5>MIEWID Matched Shark: {selectedImage.miewid_closest_whale_shark_id}</h5>
+                                        <h5>MIEWID Matched Shark: {selectedImage.matched_shark_id}</h5>
                                         <div className="match-match-info">
                                             <p className="match-distance">
                                                 <strong>Distance:</strong> 
-                                                <span className={`match-distance-value ${parseFloat(selectedImage.miewid_distance) < 1.0 ? 'good' : 'moderate'}`}>
-                                                    {selectedImage.miewid_distance}
+                                                <span className={`match-distance-value ${parseFloat(selectedImage.match_distance) < 1.0 ? 'good' : 'moderate'}`}>
+                                                    {selectedImage.match_distance}
                                                 </span>
                                             </p>
                                             {selectedImage.plausibility && (
@@ -278,9 +263,8 @@ function SharkMatchViewer() {
                                             </div>
                                         </div>
                                         {(() => {
-                                            const matchedImages = mediaMatches.filter(
-                                                img => String(img.identificationID) === String(selectedImage.miewid_closest_whale_shark_id)
-                                            );
+                                            // Get all images for the matched shark ID
+                                            const matchedImages = imagesByShark[selectedImage.matched_shark_id] || [];
                                             
                                             if (matchedImages.length > 0) {
                                                 const [firstMatchedImage, ...otherMatchedImages] = matchedImages;
