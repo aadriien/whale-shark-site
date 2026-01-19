@@ -15,7 +15,8 @@ import {
     WhaleSharkEntryRegular, WhaleSharkDatasetRegular, 
     WhaleSharkEntryVision, WhaleSharkDatasetVision,
     WhaleSharkCoordinates, WhaleSharkCoordinateDataset, 
-    WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized
+    WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized,
+    ImagesWithMetadata
 } from "../types/sharks";
 
 
@@ -196,7 +197,7 @@ export function parseImageField(imageField: string = "") {
             license: licenseMatch ? licenseMatch[1].trim() : "Unknown",
             creator: creatorMatch ? creatorMatch[1].trim() : "Unknown"
         };
-    });
+    }) as ImagesWithMetadata;
 };
 
 
