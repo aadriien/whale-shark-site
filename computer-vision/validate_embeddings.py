@@ -216,8 +216,8 @@ def validate_media_matches(media_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
     media_matches_df['implied_speed_km_per_day'] = speeds
     media_matches_df['plausibility'] = plausibilities
     
-    # Remove duplicates based on occurrenceID
-    media_matches_df = media_matches_df.drop_duplicates(subset=['occurrenceID'], keep='first')
+    # Remove duplicates based on image_id (each unique image should have its own row)
+    media_matches_df = media_matches_df.drop_duplicates(subset=['image_id'], keep='first')
     
     print(f"Validation complete:")
     print(f"  PLAUSIBLE: {(media_matches_df['plausibility'] == 'PLAUSIBLE').sum()}")
@@ -228,7 +228,7 @@ def validate_media_matches(media_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
     return media_matches_df
 
 
-def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame) -> pd.DataFrame:
+def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame, media_matches_df: pd.DataFrame) -> pd.DataFrame:
     """
     Explode shark matches into individual image occurrences with validation.
     Each row in the output represents one image occurrence for a shark ID.
@@ -239,6 +239,9 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
     
     # Create lookup for GBIF data
     gbif_lookup = gbif_df.groupby('identificationID').first()[['decimalLatitude', 'decimalLongitude', 'eventDate', 'occurrenceID', 'key']].to_dict('index')
+    
+    # Create lookup from key to image_id
+    key_to_image_id = dict(zip(media_matches_df['key'], media_matches_df['image_id']))
     
     # Parse the MIEWID column to extract all matches
     # Format: "MIEWID: {shark_id} ({image_id}, {distance}), MIEWID: ..."
@@ -270,11 +273,13 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
         
         if not matched_ids:
             # No matches - create a single row with UNKNOWN
+            query_key = shark_data.get('key')
             exploded_rows.append({
                 'whaleSharkID': row.get('whaleSharkID', shark_id),
                 'identificationID': shark_id,
                 'occurrenceID': shark_data.get('occurrenceID'),
-                'key': shark_data.get('key'),
+                'key': query_key,
+                'image_id': key_to_image_id.get(query_key, -1),
                 'decimalLatitude': lat1,
                 'decimalLongitude': lon1,
                 'eventDate': time1,
@@ -340,11 +345,13 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
                 print(f"Error processing match for {shark_id} -> {matched_shark_id}: {e}")
                 plausibility = "ERROR"
             
+            query_key = shark_data.get('key')
             exploded_rows.append({
                 'whaleSharkID': row.get('whaleSharkID', shark_id),
                 'identificationID': shark_id,
                 'occurrenceID': shark_data.get('occurrenceID'),
-                'key': shark_data.get('key'),
+                'key': query_key,
+                'image_id': key_to_image_id.get(query_key, -1),
                 'decimalLatitude': lat1,
                 'decimalLongitude': lon1,
                 'eventDate': time1,
@@ -353,7 +360,7 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
                 'country (year)': row.get('country (year)'),
                 'stateProvince - verbatimLocality (month year)': row.get('stateProvince - verbatimLocality (month year)'),
                 'matched_shark_id': matched_shark_id,
-                'matched_image_id': matched_image_id,
+                'matched_image_id': int(matched_image_id),
                 'match_distance': match_distance,
                 'matched_decimalLatitude': lat2,
                 'matched_decimalLongitude': lon2,
@@ -546,14 +553,19 @@ if __name__ == "__main__":
     # Validate shark ID matches (legacy format)
     validated_shark_df = validate_shark_matches(shark_matches_df, gbif_df)
     
+    # Drop unnecessary columns before exporting
+    columns_to_drop = ['matched_decimalLatitude', 'matched_decimalLongitude', 'matched_eventDate', 
+                       'distance_km', 'days_between', 'implied_speed_km_per_day', 'plausibility']
+    shark_df_for_export = validated_shark_df.drop(columns=columns_to_drop, errors='ignore')
+    
     # Export shark ID matches
     print(f"Exporting validated shark ID matches to CSV and JSON...")
-    export_to_csv(VALIDATED_SHARK_MATCHES_FILE, validated_shark_df)
-    export_to_json(VALIDATED_SHARK_MATCHES_JSON, validated_shark_df)
+    export_to_csv(VALIDATED_SHARK_MATCHES_FILE, shark_df_for_export)
+    export_to_json(VALIDATED_SHARK_MATCHES_JSON, shark_df_for_export)
     
     # Create exploded per-image occurrence file
     print("\nCreating per-image occurrence file...")
-    exploded_df = explode_shark_matches_to_occurrences(shark_matches_df, gbif_df)
+    exploded_df = explode_shark_matches_to_occurrences(shark_matches_df, gbif_df, validated_media_df)
     
     # Export exploded data
     exploded_csv = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_image_occurrences_validated.csv"

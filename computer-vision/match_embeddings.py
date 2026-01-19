@@ -117,7 +117,7 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
                     break
             
             result = {
-                "query_index": i,
+                "image_id": i, # renamed from query_index for clarity
 
                 # MIEWID match
                 "miewid_closest_whale_shark_id": all_ids[idx_miewid] if idx_miewid is not None else "N/A",
@@ -154,7 +154,7 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
             dist_dino = distances_dino[i][0]
 
             result = {
-                "query_index": i,
+                "image_id": i, # renamed from query_index for clarity
 
                 # MIEWID match
                 "miewid_closest_whale_shark_id": whale_shark_names[idx_miewid],
@@ -308,10 +308,10 @@ if __name__ == "__main__":
 
 
     # Add index used for matching explicitly & merge
-    results_df["query_index"] = results_df["query_index"].astype(int)
-    gbif_media_df = gbif_media_df.reset_index().rename(columns={"index": "query_index"})
+    results_df["image_id"] = results_df["image_id"].astype(int)
+    gbif_media_df = gbif_media_df.reset_index().rename(columns={"index": "image_id"})
 
-    enriched_df = pd.merge(gbif_media_df, results_df, on="query_index", how="inner")
+    enriched_df = pd.merge(gbif_media_df, results_df, on="image_id", how="inner")
 
 
     export_to_csv(GBIF_MEDIA_MATCHES_FILE, enriched_df)
