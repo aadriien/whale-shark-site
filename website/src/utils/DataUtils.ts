@@ -267,7 +267,7 @@ function formatVisionKeyVals(
     keyMap: Record<string, string>
 ) {
     // Adjust column names for easier access
-    const renamed = Object.fromEntries(
+    const renamed: WhaleSharkEntryNormalized = Object.fromEntries(
         Object.entries(obj).map(([key, value]) => [keyMap[key] || key, value])
     ) as any;
 
@@ -304,7 +304,7 @@ function formatVisionKeyVals(
     renamed.days_between = obj.days_between;
     renamed.implied_speed_km_per_day = obj.implied_speed_km_per_day;
 
-    return renamed as WhaleSharkEntryNormalized;
+    return renamed;
 }
 
 
@@ -321,7 +321,9 @@ function mapVisionSharks(
     rawData: WhaleSharkDatasetVision,
     keyMap: Record<string, string>
 ): WhaleSharkDatasetNormalized {
-    const sharkMap: Record<string, any> = {};
+    // Temporary type for aggregation that includes plausibilities array
+    type SharkWithPlausibilities = WhaleSharkEntryNormalized & { plausibilities: string[] };
+    const sharkMap: Record<string, SharkWithPlausibilities> = {};
     
     rawData.forEach(occurrence => {
         const sharkId = occurrence.whaleSharkID;
@@ -339,6 +341,7 @@ function mapVisionSharks(
         }
     });
     
+    // Remove temp plausibilities array & add aggregated plausibility
     return Object.values(sharkMap).map(shark => {
         const { plausibilities, ...sharkData } = shark;
         return {
@@ -348,6 +351,12 @@ function mapVisionSharks(
     });
 };
 
+// Aggregated vision sharks (one per whale shark ID, for filtering/selection)
 export const visionSharks = mapVisionSharks(visionSharkData, keyMapVision);
+
+// Raw vision occurrences (one per image occurrence, for display)
+export const visionOccurrences = visionSharkData.map(
+    occurrence => formatVisionKeyVals(occurrence, keyMapVision)
+);
 
 
