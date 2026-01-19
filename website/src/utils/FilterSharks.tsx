@@ -135,3 +135,52 @@ export function filterSharks(
     });
 }
 
+
+// Filter function for computer vision shark matching 
+export function filterVisionSharks(
+    sharks: WhaleSharkDatasetNormalized, 
+    filters: SharkCriteria
+) {
+    // First apply standard shark filters, then CV filters
+    const filteredBySharkCriteria = filterSharks(sharks, filters);
+
+    return filteredBySharkCriteria.filter((shark) => {
+        // ---------- MATCH QUALITY ----------
+        if (filters.miewidDistanceRange) {
+            const distance = shark.miewid_match_distance;
+            if (!distance || isNaN(distance)) return false;
+
+            const [minDist, maxDist] = filters.miewidDistanceRange;
+            if (distance < minDist || distance > maxDist) return false;
+        }
+
+        if (filters.showOnlyConfidentMatches) {
+            const distance = shark.miewid_match_distance;
+            if (!distance || isNaN(distance) || distance >= 1.0) {
+                return false;
+            }
+        }
+
+        if (filters.plausibility) {
+            if (shark.plausibility !== filters.plausibility) {
+                return false;
+            }
+        }
+
+        // ---------- MATCHED IMAGES ----------
+        if (filters.hasMatchedImages) {
+            const matchedSharkId = shark.matched_shark_id;
+            
+            if (matchedSharkId) {
+                const hasImages = sharks.some(
+                    matchedSharkImg => matchedSharkImg.id === matchedSharkId
+                );
+                if (!hasImages) return false;
+            }
+        }
+
+        // PASSES ALL FILTERS
+        return true;
+    });
+}
+
