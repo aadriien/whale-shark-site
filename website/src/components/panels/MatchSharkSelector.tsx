@@ -12,8 +12,7 @@ import { SharkCriteria } from "../../types/filters";
 function MatchSharkSelector({ 
     sharks,
     onSharkSelect,
-    selectedSharkId,
-    onFilteredSharksChange 
+    selectedSharkId
 }: MatchSharkSelectorProps) {
     // Compute filter options from shark data
     const countries = extractUniqueSortedRegions(sharks, "countries");
@@ -61,13 +60,6 @@ function MatchSharkSelector({
     const filteredSharks = useMemo(() => {
         return filterVisionSharks(sharks, criteria);
     }, [sharks, criteria]);
-    
-    // Notify parent of filtered sharks changes
-    useEffect(() => {
-        if (onFilteredSharksChange) {
-            onFilteredSharksChange(filteredSharks);
-        }
-    }, [filteredSharks, onFilteredSharksChange]);
 
     // Prepare filter options
     const filterOptions = {

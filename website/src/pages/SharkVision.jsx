@@ -2,7 +2,7 @@ import CVHeroIntro from "../components/overviews/CVHeroIntro";
 import CVPipeline from "../components/overviews/CVPipeline";
 import InteractiveDemo from "../components/overviews/InteractiveDemo";
 import CVApplications from "../components/overviews/CVApplications";
-import SharkMatchViewer from "../components/SharkMatchViewer.jsx";
+import SharkMatchViewer from "../components/SharkMatchViewer";
 
 
 function SharkVision() {

@@ -47,7 +47,6 @@ export type MatchSharkSelectorProps = {
     sharks: WhaleSharkDatasetNormalized; 
     onSharkSelect: (id: string) => void;
     selectedSharkId: string; 
-    onFilteredSharksChange: React.Dispatch<React.SetStateAction<WhaleSharkDatasetNormalized>>; 
 };
 
 
