@@ -125,3 +125,69 @@ export type IndividualSharkProps = {
 };
 
 
+// Applicable for data in `GBIF_shark_image_occurrences_validated.json` 
+export type WhaleSharkEntryVision = {
+    whaleSharkID: string;
+        
+    identificationID: string;
+    occurrenceID: string;
+
+    key: number;
+
+    decimalLatitude: number;
+    decimalLongitude: number;
+
+    eventDate: string; // date string
+    
+    "Oldest Occurrence": string; // date string
+    "Newest Occurrence": string; // date string
+
+    "country (year)": string;
+    "stateProvince - verbatimLocality (month year)": string;
+
+    matched_shark_id: string;
+    matched_image_id: string;
+
+    match_distance: number;
+
+    matched_decimalLatitude?: number;
+    matched_decimalLongitude?: number;
+
+    matched_eventDate?: string; // date string
+
+    distance_km?: number;
+    days_between?: number;
+    implied_speed_km_per_day?: number;
+
+    plausibility: string;
+};
+
+export type WhaleSharkDatasetVision = WhaleSharkEntryVision[];
+
+
+// Applicable for data in `GBIF_media_matches.json` 
+export type WhaleSharkMediaEntry = {
+    query_index: number;
+    key: number;
+
+    occurrenceID: string;
+    identificationID: string;
+
+    format: string;
+    references: string;
+    identifier: string;
+
+    miewid_closest_whale_shark_id: string;
+    miewid_matched_image_id: number;
+    miewid_matched_annotation_id: number;
+    miewid_distance: number;
+
+    dinov2_closest_whale_shark_id: string;
+    dinov2_matched_image_id: number;
+    dinov2_matched_annotation_id: number;
+    dinov2_distance: number;
+};
+
+export type WhaleSharkDatasetMedia = WhaleSharkMediaEntry[];
+
+
