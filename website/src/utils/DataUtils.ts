@@ -4,6 +4,7 @@ import storySharkOptions from "../assets/data/json/gbif_story_sharks_named.json"
 import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.json";
 import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
 import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json";
+import visionSharkData from "../assets/data/json/GBIF_shark_image_occurrences_validated.json";
 
 import coordinatesData from "../assets/data/json/gbif_shark_tracking.json";
 
@@ -12,8 +13,9 @@ import { GBIFDataset, YearMonthsMapping } from "../types/charts";
 import { 
     WhaleSharkEntryLLM, WhaleSharkDatasetLLM, 
     WhaleSharkEntryRegular, WhaleSharkDatasetRegular, 
+    WhaleSharkEntryVision, WhaleSharkDatasetVision,
     WhaleSharkCoordinates, WhaleSharkCoordinateDataset, 
-    WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized 
+    WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized
 } from "../types/sharks";
 
 
@@ -79,6 +81,16 @@ const keyMapHasMedia: Record<string, string> = {
     "stateProvince - verbatimLocality (month year)": "regions",
     "occurrenceRemarks (eventDate)": "remarks",
     "imageURL (license, creator)": "image",
+};
+
+const keyMapVision: Record<string, string> = {
+    "whaleSharkID": "id",
+    "key": "mediaKey",
+    "Oldest Occurrence": "oldest",
+    "Newest Occurrence": "newest",
+    "country (year)": "countries",
+    "stateProvince - verbatimLocality (month year)": "regions",
+    "match_distance": "miewid_match_distance",
 };
 
 
@@ -250,5 +262,92 @@ function formatKeyVals(
 };
 
 
+function formatVisionKeyVals(
+    obj: WhaleSharkEntryVision,
+    keyMap: Record<string, string>
+) {
+    // Adjust column names for easier access
+    const renamed = Object.fromEntries(
+        Object.entries(obj).map(([key, value]) => [keyMap[key] || key, value])
+    ) as any;
+
+    // Parse country from "country (year)" field
+    if (renamed.countries) {
+        renamed.countries = parseSpecificRegion(renamed.countries);
+    }
+
+    // Extract month from eventDate
+    if (obj.eventDate) {
+        const date = new Date(obj.eventDate);
+        if (!isNaN(date.getTime())) {
+            renamed.months = [FULLMONTHS[date.getMonth()]];
+        } 
+        else {
+            renamed.months = [];
+        }
+    } 
+    else {
+        renamed.months = [];
+    }
+
+    // Set default values for filterable fields
+    renamed.occurrences = 1;
+
+    renamed.human = 1;
+    renamed.machine = 0;
+
+    // Keep vision-specific fields
+    renamed.occurrenceID = obj.occurrenceID;
+    renamed.matched_shark_id = obj.matched_shark_id;
+    renamed.matched_image_id = obj.matched_image_id;
+    renamed.distance_km = obj.distance_km;
+    renamed.days_between = obj.days_between;
+    renamed.implied_speed_km_per_day = obj.implied_speed_km_per_day;
+
+    return renamed as WhaleSharkEntryNormalized;
+}
+
+
+function aggregatePlausibility(plausibilities: string[]): string {
+    if (plausibilities.includes("PLAUSIBLE")) return "PLAUSIBLE";
+    if (plausibilities.includes("UNCERTAIN")) return "UNCERTAIN";
+    if (plausibilities.includes("IMPOSSIBLE")) return "IMPOSSIBLE";
+    return "UNKNOWN";
+};
+
+
+// Mapper for vision dataset 
+function mapVisionSharks(
+    rawData: WhaleSharkDatasetVision,
+    keyMap: Record<string, string>
+): WhaleSharkDatasetNormalized {
+    const sharkMap: Record<string, any> = {};
+    
+    rawData.forEach(occurrence => {
+        const sharkId = occurrence.whaleSharkID;
+        
+        if (!sharkMap[sharkId]) {
+            sharkMap[sharkId] = {
+                ...formatVisionKeyVals(occurrence, keyMap),
+                plausibilities: []
+            };
+        }
+        
+        // Collect plausibilities for aggregation
+        if (occurrence.plausibility) {
+            sharkMap[sharkId].plausibilities.push(occurrence.plausibility);
+        }
+    });
+    
+    return Object.values(sharkMap).map(shark => {
+        const { plausibilities, ...sharkData } = shark;
+        return {
+            ...sharkData,
+            plausibility: aggregatePlausibility(plausibilities)
+        };
+    });
+};
+
+export const visionSharks = mapVisionSharks(visionSharkData, keyMapVision);
 
 

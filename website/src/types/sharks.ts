@@ -62,69 +62,6 @@ export type WhaleSharkEntryRegular = {
 export type WhaleSharkDatasetRegular = WhaleSharkEntryRegular[];
 
 
-// Applicable for data in `gbif_shark_tracking.json` 
-export type CoordinatePoint = {
-    lat: number;
-    long: number;
-    region?: string;
-    eventDate?: string; // date string
-    parsedDate?: string; // date string
-};
-
-export type WhaleSharkCoordinates = {
-    whaleSharkID: string;
-    coordinates?: CoordinatePoint[];
-};
-
-export type WhaleSharkCoordinateDataset = WhaleSharkCoordinates[];
-
-
-// Applicable after string mapping for field names 
-// Works for both datasets (LLM + regular), hence optional fields
-export type WhaleSharkEntryNormalized = {
-    id: string;
-
-    occurrences: number;
-
-    oldest: string;
-    newest: string;
-
-    human: number;
-    machine: number;
-
-    sex?: string;
-    lifeStage?: string;
-
-    continent?: string;
-    countries?: string;
-    publishing?: string;
-    regions?: string;
-
-    months?: string[];
-
-    remarks?: string;
-    image?: string;
-
-    cartoonImageURL?: string;
-    name?: string;
-    gemmaName?: string;
-};
-
-export type WhaleSharkDatasetNormalized = WhaleSharkEntryNormalized[];
-
-
-export type SavedSharkIDs = Set<string>;
-
-export type CondensedGridProps = {
-    saved: SavedSharkIDs;
-};
-
-
-export type IndividualSharkProps = {
-    shark: WhaleSharkEntryNormalized;
-};
-
-
 // Applicable for data in `GBIF_shark_image_occurrences_validated.json` 
 export type WhaleSharkEntryVision = {
     whaleSharkID: string;
@@ -189,5 +126,84 @@ export type WhaleSharkMediaEntry = {
 };
 
 export type WhaleSharkDatasetMedia = WhaleSharkMediaEntry[];
+
+
+// Applicable for data in `gbif_shark_tracking.json` 
+export type CoordinatePoint = {
+    lat: number;
+    long: number;
+    region?: string;
+    eventDate?: string; // date string
+    parsedDate?: string; // date string
+};
+
+export type WhaleSharkCoordinates = {
+    whaleSharkID: string;
+    coordinates?: CoordinatePoint[];
+};
+
+export type WhaleSharkCoordinateDataset = WhaleSharkCoordinates[];
+
+
+// Applicable after string mapping for field names 
+// Works for both datasets (LLM + regular), hence optional fields
+export type WhaleSharkEntryNormalized = {
+    id: string;
+
+    occurrences: number;
+
+    oldest: string;
+    newest: string;
+
+    human: number;
+    machine: number;
+
+    sex?: string;
+    lifeStage?: string;
+
+    continent?: string;
+    countries?: string;
+    publishing?: string;
+    regions?: string;
+
+    months?: string[];
+
+    remarks?: string;
+    image?: string;
+
+    // LLM fields
+    cartoonImageURL?: string;
+    name?: string;
+    gemmaName?: string;
+
+    // CV fields    
+    occurrenceID?: string;
+    mediaKey?: number;
+
+    matched_shark_id?: string;
+    matched_image_id?: string;
+
+    miewid_match_distance?: number;
+
+    distance_km?: number;
+    days_between?: number;
+    implied_speed_km_per_day?: number;
+
+    plausibility?: string;
+};
+
+export type WhaleSharkDatasetNormalized = WhaleSharkEntryNormalized[];
+
+
+export type SavedSharkIDs = Set<string>;
+
+export type CondensedGridProps = {
+    saved: SavedSharkIDs;
+};
+
+
+export type IndividualSharkProps = {
+    shark: WhaleSharkEntryNormalized;
+};
 
 
