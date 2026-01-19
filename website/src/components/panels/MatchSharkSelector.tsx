@@ -2,23 +2,21 @@ import { useState, useEffect, useMemo } from "react";
 
 import MatchFilter from "./MatchFilter";
 
-import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
+import { filterVisionSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
 import { FULLMONTHS } from "../../utils/DataUtils";
+
+import { MatchSharkSelectorProps } from "../../types/panels";
+import { SharkCriteria } from "../../types/filters";
 
 
 function MatchSharkSelector({ 
     sharks,
-    mediaMatches,
     onSharkSelect,
     selectedSharkId,
     onFilteredSharksChange 
-}) {
+}: MatchSharkSelectorProps) {
     // Compute filter options from shark data
     const countries = extractUniqueSortedRegions(sharks, "countries");
-    const publishingCountries = extractUniqueSortedRegions(sharks, "publishing");
-
-    const minRecords = Math.min(...sharks.map(s => s.occurrences || 1));
-    const maxRecords = Math.max(...sharks.map(s => s.occurrences || 1));
 
     const allYears = sharks.flatMap(
         s => [parseInt(s.oldest), parseInt(s.newest)]
@@ -30,17 +28,19 @@ function MatchSharkSelector({
     const months = FULLMONTHS;
 
     // Memoize default criteria (combined shark and match filters)
-    const defaultCriteria = useMemo(() => ({
-        // Location & Time
+    const defaultCriteria: SharkCriteria = useMemo(() => ({
+        // Location & time
         country: "",
         yearRange: [String(minYear), String(maxYear)],
         month: "",
-        // Match Quality
+
+        // Match quality
         miewidDistanceRange: [0, 5.0],
         showOnlyConfidentMatches: false,
         hasMatchedImages: false,
         plausibility: "",
-        // Keep these for filterSharks compatibility
+
+        // Keep for filterSharks compatibility
         showOnlyWithMedia: false,
         hasOccurrenceNotes: false,
         minRecords: 1,
@@ -50,8 +50,8 @@ function MatchSharkSelector({
         observationType: "", 
     }), [minYear, maxYear]);
     
-    const [criteria, setCriteria] = useState(defaultCriteria);
-    const [showFilters, setShowFilters] = useState(true);
+    const [criteria, setCriteria] = useState<SharkCriteria>(defaultCriteria);
+    const [showFilters, setShowFilters] = useState<boolean>(true);
 
     const handleReset = () => {
         setCriteria(defaultCriteria);
@@ -59,45 +59,7 @@ function MatchSharkSelector({
 
     // Apply all filters (shark + match quality)
     const filteredSharks = useMemo(() => {
-        // First apply standard shark filters
-        const filteredBySharkCriteria = filterSharks(sharks, criteria);
-
-        // Then apply match-specific filters
-        return filteredBySharkCriteria.filter(shark => {
-            // Filter by MIEWID distance range
-            const distance = parseFloat(shark.miewid_distance);
-            if (isNaN(distance)) return false;
-
-            const [minDist, maxDist] = criteria.miewidDistanceRange;
-            if (distance < minDist || distance > maxDist) return false;
-
-            // Filter by confident matches checkbox
-            if (criteria.showOnlyConfidentMatches && distance >= 1.0) {
-                return false;
-            }
-
-            // Filter by plausibility
-            if (criteria.plausibility && shark.plausibility !== criteria.plausibility) {
-                return false;
-            }
-
-            // Filter by hasMatchedImages - check if matched shark has images in mediaMatches
-            if (criteria.hasMatchedImages && mediaMatches) {
-                // Extract the matched shark ID from the MIEWID column
-                const miewidMatch = shark['MIEWID: closest_whale_shark_id (matched_image_id, distance)'];
-                const matchedSharkId = miewidMatch?.match(/MIEWID:\s*([^(]+)/)?.[1]?.trim();
-                
-                if (matchedSharkId) {
-                    const hasImages = mediaMatches.some(img => 
-                        String(img.identificationID) === String(matchedSharkId)
-                    );
-                    // If filter is on and no images found, exclude this shark
-                    if (!hasImages) return false;
-                }
-            }
-
-            return true;
-        });
+        return filterVisionSharks(sharks, criteria);
     }, [sharks, criteria]);
     
     // Notify parent of filtered sharks changes
@@ -110,12 +72,9 @@ function MatchSharkSelector({
     // Prepare filter options
     const filterOptions = {
         countries,
-        publishingCountries,
         minYear,
         maxYear,
         months,
-        minRecords,
-        maxRecords
     };
 
     return (
@@ -154,17 +113,17 @@ function MatchSharkSelector({
                 <div className="match-shark-list">
                     {filteredSharks.map((shark) => (
                         <div
-                            key={shark.identificationID}
-                            className={`match-shark-item ${selectedSharkId === shark.identificationID ? 'selected' : ''}`}
-                            onClick={() => onSharkSelect(shark.identificationID)}
+                            key={shark.id}
+                            className={`match-shark-item ${selectedSharkId === shark.id ? "selected" : ""}`}
+                            onClick={() => onSharkSelect(shark.id)}
                         >
-                            <div className="match-shark-id">ID: {shark.whaleSharkID || 'N/A'}</div>
+                            <div className="match-shark-id">ID: {shark.id || "N/A"}</div>
                             <div className="match-shark-meta">
-                                {shark['country (year)'] || 'Unknown'} | {shark['Oldest Occurrence'] || 'N/A'}
+                                {shark.countries || "Unknown"} | {shark.oldest || "N/A"}
                             </div>
-                            {shark.miewid_distance && (
-                                <div className={`match-distance ${parseFloat(shark.miewid_distance) < 1.0 ? 'good' : 'moderate'}`}>
-                                    Distance: {shark.miewid_distance}
+                            {shark.miewid_match_distance && (
+                                <div className={`match-distance ${shark.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
+                                    Distance: {shark.miewid_match_distance}
                                 </div>
                             )}
                             {shark.plausibility && (
@@ -181,3 +140,4 @@ function MatchSharkSelector({
 }
 
 export default MatchSharkSelector;
+

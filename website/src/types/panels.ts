@@ -1,4 +1,8 @@
-import { WhaleSharkDatasetNormalized } from "./sharks";
+import { 
+    WhaleSharkDatasetNormalized, 
+    WhaleSharkDatasetVision,
+    WhaleSharkDatasetMedia
+} from "./sharks";
 
 
 /* Panel types */
@@ -35,6 +39,14 @@ export type SharkSelectorProps = {
     selectedSharkId: string; 
     DisplayComponent: React.ComponentType<ContinentDisplayProps | SavedSharksDisplayProps>; 
     disabled?: boolean;
+    onFilteredSharksChange: React.Dispatch<React.SetStateAction<WhaleSharkDatasetNormalized>>; 
+};
+
+
+export type MatchSharkSelectorProps = {
+    sharks: WhaleSharkDatasetNormalized; 
+    onSharkSelect: (id: string) => void;
+    selectedSharkId: string; 
     onFilteredSharksChange: React.Dispatch<React.SetStateAction<WhaleSharkDatasetNormalized>>; 
 };
 

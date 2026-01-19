@@ -18,10 +18,10 @@ export type SharkBaseCriteria = {
 };
 
 export type SharkMatchFields = {
-  hasMatchedImages: boolean;
-  miewidDistanceRange: [number, number];
-  showOnlyConfidentMatches: boolean;
-  plausibility: string;
+    hasMatchedImages: boolean;
+    miewidDistanceRange: [number, number];
+    showOnlyConfidentMatches: boolean;
+    plausibility: string;
 };
 
 export type SharkMatchCriteria = SharkBaseCriteria & SharkMatchFields;
