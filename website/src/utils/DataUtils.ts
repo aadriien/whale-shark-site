@@ -85,7 +85,6 @@ const keyMapHasMedia: Record<string, string> = {
 
 const keyMapVision: Record<string, string> = {
     "whaleSharkID": "id",
-    "key": "mediaKey",
     "Oldest Occurrence": "oldest",
     "Newest Occurrence": "newest",
     "country (year)": "countries",
@@ -292,17 +291,18 @@ function formatVisionKeyVals(
 
     // Set default values for filterable fields
     renamed.occurrences = 1;
-
     renamed.human = 1;
     renamed.machine = 0;
 
     // Keep vision-specific fields
+    renamed.image_id = obj.image_id;
     renamed.occurrenceID = obj.occurrenceID;
     renamed.matched_shark_id = obj.matched_shark_id;
     renamed.matched_image_id = obj.matched_image_id;
     renamed.distance_km = obj.distance_km;
     renamed.days_between = obj.days_between;
     renamed.implied_speed_km_per_day = obj.implied_speed_km_per_day;
+    renamed.plausibility = obj.plausibility;
 
     return renamed;
 }

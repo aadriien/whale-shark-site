@@ -70,6 +70,7 @@ export type WhaleSharkEntryVision = {
     occurrenceID: string;
 
     key: number;
+    image_id: number;
 
     decimalLatitude: number;
     decimalLongitude: number;
@@ -83,7 +84,7 @@ export type WhaleSharkEntryVision = {
     "stateProvince - verbatimLocality (month year)": string;
 
     matched_shark_id: string;
-    matched_image_id: string;
+    matched_image_id: number;
 
     match_distance: number;
 
@@ -104,7 +105,7 @@ export type WhaleSharkDatasetVision = WhaleSharkEntryVision[];
 
 // Applicable for data in `GBIF_media_matches.json` 
 export type WhaleSharkMediaEntry = {
-    query_index: number;
+    image_id: number;
     key: number;
 
     occurrenceID: string;
@@ -178,10 +179,10 @@ export type WhaleSharkEntryNormalized = {
 
     // CV fields    
     occurrenceID?: string;
-    mediaKey?: number;
+    image_id?: number;
 
     matched_shark_id?: string;
-    matched_image_id?: string;
+    matched_image_id?: number;
 
     miewid_match_distance?: number;
 
