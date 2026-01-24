@@ -15,7 +15,7 @@ const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
 const GeoLabs = lazy(() => import("./pages/GeoLabs.jsx"));
 const DataVisuals = lazy(() => import("./pages/DataVisuals"));
 const Environment = lazy(() => import("./pages/Environment"));
-const SharkVision = lazy(() => import("./pages/SharkVision.jsx"));
+const SharkVision = lazy(() => import("./pages/SharkVision"));
 
 const BuildAShark = lazy(() => import("./pages/BuildAShark"));
 const Animation = lazy(() => import("./pages/Animation"));
