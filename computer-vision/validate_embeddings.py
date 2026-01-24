@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Tuple, Optional
 
 from src.utils.data_utils import read_csv, export_to_csv
-from src.clean.gbif import GBIF_CLEAN_CSV, GBIF_MEDIA_CSV
+from src.gbif.clean import GBIF_CLEAN_CSV, GBIF_MEDIA_CSV
 from .match_embeddings import (
     NEW_EMBEDDINGS_FOLDER, JSON_OUTPUT_FOLDER,
     export_to_json

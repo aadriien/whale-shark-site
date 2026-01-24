@@ -28,7 +28,7 @@ from src.utils.data_utils import (
     read_csv, folder_exists,
 )
 
-from src.clean.gbif import (
+from src.gbif.clean import (
     GBIF_MEDIA_CSV,
 )
 

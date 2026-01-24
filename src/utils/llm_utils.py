@@ -12,7 +12,7 @@ from src.utils.data_utils import (
     folder_exists, read_csv, export_to_csv, export_to_json, move_column_after,
 )
 
-from src.analyze.gbif import (
+from src.gbif.analyze import (
     GBIF_STORY_SHARKS_CSV,
 )
 
