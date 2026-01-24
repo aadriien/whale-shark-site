@@ -268,8 +268,8 @@ def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df["identificationID"] = df["identificationID"].str.replace(r"[{} ]", "", regex=True)
 
     # Replace empty strings with NaN so combine_first works
-    df["organismID"].replace("", pd.NA, inplace=True)
-    df["identificationID"].replace("", pd.NA, inplace=True)
+    df.replace({"organismID": {"": pd.NA}}, inplace=True)
+    df.replace({"identificationID": {"": pd.NA}}, inplace=True)
 
     # Consolidate organismID / identificationID into 1 column (whaleSharkID)
     df["whaleSharkID"] = df["organismID"].combine_first(df["identificationID"])

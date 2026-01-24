@@ -587,8 +587,6 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame) -> None:
     # Oldest & newest occurrence eventDates
     date_min_max = make_eventDate_df(occurrences_df, groupby=["whaleSharkID"])
     individual_sharks = individual_sharks.merge(date_min_max, on=["whaleSharkID"], how="left")
-    print(individual_sharks.columns)
-    print(individual_sharks.head(15))
 
     # Observation type (human/divers vs machine/satellites)
     basisOfRecord_counts = make_basisOfRecord_df(occurrences_df, index=["whaleSharkID"])
