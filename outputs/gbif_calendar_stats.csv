@@ -1,12 +1,13 @@
 year,Total Occurrences,Unique Sharks (with ID),Top 3 Publishing Countries,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,HUMAN_OBSERVATION,MACHINE_OBSERVATION,Sex: Female,Sex: Male,Sex: Unknown,Life Stage: Adult,Life Stage: Immature,Life Stage: Juvenile,Life Stage: Mature,Life Stage: Subadult,Life Stage: Unknown
-2025,164,151,United States > Australia > Mexico,9,10,8,14,9,14,17,20,21,16,18,8,158,6,2,9,153,22,0,2,0,0,140
+2026,4,4,United States > Australia,4,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,4,0,0,0,0,0,4
+2025,171,159,United States > Australia > Mexico,9,10,8,14,9,14,17,20,23,18,12,17,166,5,2,8,161,21,0,2,0,0,148
 2024,196,189,United States > Mexico > Australia,15,16,17,14,10,24,26,28,8,13,7,18,195,0,5,1,190,7,0,10,0,0,179
 2023,169,161,United States > Mexico > Australia,7,6,16,18,8,16,24,27,20,11,12,4,168,1,1,2,166,14,0,14,0,0,141
-2022,107,91,United States > Mexico > Australia,4,8,8,11,3,7,9,9,12,11,16,9,107,0,3,0,104,6,0,5,0,0,96
+2022,109,93,United States > Mexico > Australia,4,8,8,12,3,8,9,9,12,11,16,9,109,0,3,0,106,6,0,5,0,0,98
 2021,79,56,United States > Australia > Mexico,5,4,6,14,6,4,8,8,2,8,4,10,73,0,4,2,73,9,0,8,0,0,62
 2020,78,68,United States > Mexico > Australia,11,13,14,0,1,3,8,7,5,11,4,1,76,0,4,1,73,5,0,4,0,0,69
 2019,141,113,United States > Mexico > Colombia,11,7,10,15,9,11,16,24,15,9,7,7,136,5,9,4,128,15,0,10,0,0,116
-2018,212,92,United States > Netherlands > Australia,11,17,7,33,8,20,27,29,19,22,9,10,142,69,48,36,128,25,0,10,8,44,125
+2018,214,94,United States > Netherlands > Australia,11,17,7,33,8,22,27,29,19,22,9,10,144,69,48,36,130,25,0,10,8,44,127
 2017,495,109,Australia > Ecuador > United States,143,14,53,18,21,13,89,32,53,21,28,10,154,337,65,159,271,10,6,8,12,8,451
 2016,1465,130,Ecuador > Australia > United States,175,90,35,14,16,43,18,24,298,287,338,127,131,1332,67,60,1338,16,2,10,8,2,1427
 2015,1305,89,Ecuador > United States > Australia,26,4,6,8,3,24,264,224,257,225,99,165,112,1188,10,63,1232,7,2,22,6,0,1268
