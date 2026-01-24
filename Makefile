@@ -3,8 +3,8 @@
 POETRY = poetry
 VENV_DIR = .venv
 
-.PHONY: setup refresh_all_data \
-		fetch_data clean_data analyze_data \
+.PHONY: setup refresh_all_gbif \
+		fetch_gbif clean_gbif analyze_gbif \
 		convert_csv_json zip_data \
 		generate_shark_names_images generate_shark_names generate_shark_images \
 		extract_tar process_annotations train_model \
@@ -12,7 +12,7 @@ VENV_DIR = .venv
 		format clean \
 		setup_website run_website deploy_website clean_website
 
-all: setup refresh_all_data zip_data
+all: setup refresh_all_gbif zip_data
 
 # Install Poetry dependencies & set up venv
 setup:
@@ -26,20 +26,20 @@ setup:
 
 
 # Run full ETL pipeline for latest data
-refresh_all_data: clean_data analyze_data convert_csv_json
+refresh_all_gbif: clean_gbif analyze_gbif convert_csv_json
 
 
 # Fetch data from API (NOTE: returned data don't really "go" anywhere)
-fetch_data:
-	@$(POETRY) run python -m src.fetch.gbif
+fetch_gbif:
+	@$(POETRY) run python -m src.gbif.fetch
 
 # Clean, format, & organize raw data from queries
-clean_data:
-	@$(POETRY) run python -m src.clean.gbif
+clean_gbif:
+	@$(POETRY) run python -m src.gbif.clean
 
 # Analyze cleaned data
-analyze_data:
-	@$(POETRY) run python -m src.analyze.gbif
+analyze_gbif:
+	@$(POETRY) run python -m src.gbif.analyze
 
 
 convert_csv_json:
@@ -156,7 +156,7 @@ clean_website:
 
 
 fetch_copernicus:
-	@$(POETRY) run python -m src.clean.copernicus
+	@$(POETRY) run python -m src.copernicus.clean
 
 test_LME:
 	@$(POETRY) run python -m src.utils.geomap_utils
