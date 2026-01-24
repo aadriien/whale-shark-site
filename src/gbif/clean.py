@@ -16,7 +16,7 @@ from src.utils.data_utils import (
     export_to_csv, extract_relevant_fields, move_column_after, standardize_column_vals,
 )
 
-from src.fetch.gbif import (
+from src.gbif.fetch import (
     get_all_occurrences_raw,
 )
 

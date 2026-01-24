@@ -14,7 +14,7 @@ from src.utils.data_utils import (
     folder_exists, export_to_csv, 
 )
 
-from src.fetch.copernicus import (
+from src.copernicus.fetch import (
     get_chlorophyll_data,
 )
 

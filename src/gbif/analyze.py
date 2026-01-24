@@ -23,7 +23,7 @@ from src.utils.geomap_utils import (
     get_LME_from_coords,
 )
 
-from src.clean.gbif import (
+from src.gbif.clean import (
     GBIF_CLEAN_CSV, GBIF_MEDIA_CSV,
 )
 
