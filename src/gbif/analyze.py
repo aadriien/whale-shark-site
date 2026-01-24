@@ -23,30 +23,22 @@ from src.utils.geomap_utils import (
     get_LME_from_coords,
 )
 
-from src.gbif.clean import (
-    GBIF_CLEAN_CSV, GBIF_MEDIA_CSV,
+from src.gbif.constants import (
+    GBIF_CLEAN_CSV,
+    GBIF_MEDIA_CSV,
+    GBIF_CALENDAR_STATS_CSV,
+    GBIF_COUNTRY_STATS_CSV,
+    GBIF_CONTINENT_STATS_CSV,
+    GBIF_PUBLISHING_COUNTRY_STATS_CSV,
+    GBIF_INDIVIDUAL_SHARKS_STATS_CSV,
+    GBIF_SHARK_TRACKING_JSON,
+    GBIF_STORY_SHARKS_CSV,
+    GBIF_STORY_SHARK_TRACKING_JSON,
+    GBIF_SHARK_TRACKING_MULTI_GEOJSON,
+    GBIF_SHARK_TRACKING_LINE_GEOJSON,
+    GBIF_MEDIA_SHARKS_CSV,
+    GBIF_MEDIA_SHARK_TRACKING_JSON,
 )
-
-
-GBIF_CALENDAR_STATS_CSV = "outputs/gbif_calendar_stats.csv"
-GBIF_COUNTRY_STATS_CSV = "outputs/gbif_country_stats.csv"
-GBIF_CONTINENT_STATS_CSV = "outputs/gbif_continent_stats.csv"
-GBIF_PUBLISHING_COUNTRY_STATS_CSV = "outputs/gbif_publishingCountry_stats.csv"
-
-GBIF_INDIVIDUAL_SHARKS_STATS_CSV = "outputs/gbif_individual_sharks_stats.csv"
-
-# Feeds as JSON into Three.js globe display on website
-GBIF_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_shark_tracking.json"
-
-GBIF_STORY_SHARKS_CSV = "outputs/gbif_story_sharks.csv"
-GBIF_STORY_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_story_shark_tracking.json"
-
-# Maintains special GeoJSON format for integration into Copernicus Marine as data layer 
-GBIF_SHARK_TRACKING_MULTI_GEOJSON = "website/src/assets/data/json/gbif_shark_tracking_multipoint_geojson.json"
-GBIF_SHARK_TRACKING_LINE_GEOJSON = "website/src/assets/data/json/gbif_shark_tracking_linestring_geojson.json"
-
-GBIF_MEDIA_SHARKS_CSV = "outputs/gbif_media_sharks.csv"
-GBIF_MEDIA_SHARK_TRACKING_JSON = "website/src/assets/data/json/gbif_media_shark_tracking.json"
 
 
 #####

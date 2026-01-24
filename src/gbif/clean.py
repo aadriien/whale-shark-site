@@ -20,9 +20,10 @@ from src.gbif.fetch import (
     get_all_occurrences_raw,
 )
 
-
-GBIF_CLEAN_CSV = "data/gbif_clean.csv"
-GBIF_MEDIA_CSV = "data/gbif_media.csv"
+from src.gbif.constants import (
+    GBIF_CLEAN_CSV,
+    GBIF_MEDIA_CSV,
+)
 
 OCCURRENCE_RESULT_FIELDS = [
     "key", 

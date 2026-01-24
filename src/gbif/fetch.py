@@ -20,8 +20,9 @@ from src.utils.data_utils import (
     export_to_csv, 
 )
 
-
-GBIF_RAW_CSV = "data/gbif_raw.csv"
+from src.gbif.constants import (
+    GBIF_RAW_CSV,
+)
 
 BASE_URL = "https://api.gbif.org/v1"
 

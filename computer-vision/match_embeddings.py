@@ -18,7 +18,7 @@ from src.utils.data_utils import (
     read_csv, export_to_csv,
 )
 
-from src.gbif.analyze import (
+from src.gbif.constants import (
     GBIF_INDIVIDUAL_SHARKS_STATS_CSV,
 )
 
