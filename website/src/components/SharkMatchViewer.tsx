@@ -61,7 +61,7 @@ function SharkMatchViewer() {
         <div className="shark-match-viewer">
             <h2>Shark Image Match Viewer</h2>
             <p className="match-viewer-description">
-                Explore whale shark identifications and their matched images using MIEWID embeddings
+                Explore whale shark identifications and their matched images using MiewID embeddings
             </p>
 
             <div className="match-viewer-container">
@@ -119,8 +119,8 @@ function SharkMatchViewer() {
                                                 <span className="match-shark-id-value">{sharkInfo?.id}</span>
                                             </div>
                                             <div className="match-shark-details-row">
-                                                <span className="match-shark-meta">Location: {sharkInfo?.countries}</span>
-                                                <span className="match-shark-meta">Dates: {sharkInfo?.oldest} to {sharkInfo?.newest}</span>
+                                                <span className="match-shark-meta">{sharkInfo?.countries}</span>
+                                                <span className="match-shark-meta">({sharkInfo?.oldest} to {sharkInfo?.newest})</span>
                                             </div>
                                         </div>
                                         <img 
@@ -174,8 +174,8 @@ function SharkMatchViewer() {
                                                             <span className="match-shark-id-value">{occurrence?.matched_shark_id}</span>
                                                         </div>
                                                         <div className="match-shark-details-row">
-                                                            <span className="match-shark-meta">Location: {matchedShark?.countries}</span>
-                                                            <span className="match-shark-meta">Dates: {matchedShark?.oldest} to {matchedShark?.newest}</span>
+                                                            <span className="match-shark-meta">{matchedShark?.countries}</span>
+                                                            <span className="match-shark-meta">({matchedShark?.oldest} to {matchedShark?.newest})</span>
                                                         </div>
                                                     </div>
                                                     <img 

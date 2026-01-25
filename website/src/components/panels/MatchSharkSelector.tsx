@@ -71,8 +71,13 @@ function MatchSharkSelector({
 
     return (
         <div className="match-shark-selector">
-            <div className="match-selector-header">
-                <h3>Shark Selection</h3>
+            <div className="match-selector-buttons">
+                <button 
+                    onClick={() => setShowFilters((prev) => !prev)}
+                    className={`match-toggle-filter-button ${showFilters ? "active" : ""}`}
+                >
+                    {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
+                </button>
                 <button 
                     onClick={handleReset}
                     className="match-reset-filters-button"
@@ -81,12 +86,9 @@ function MatchSharkSelector({
                 </button>
             </div>
 
-            <button 
-                onClick={() => setShowFilters((prev) => !prev)}
-                className={`match-toggle-filter-button ${showFilters ? "active" : ""}`}
-            >
-                {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
-            </button>
+            <div className="match-list-header">
+                <span>Showing {filteredSharks.length} of {sharks.length} sharks</span>
+            </div>
 
             {showFilters && (
                 <div className="match-filters-section">
@@ -99,9 +101,6 @@ function MatchSharkSelector({
             )}
 
             <div className="match-list-container">
-                <div className="match-list-header">
-                    <span>Showing {filteredSharks.length} of {sharks.length} sharks</span>
-                </div>
                 <div className="match-shark-list">
                     {filteredSharks.map((shark) => (
                         <div

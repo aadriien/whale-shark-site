@@ -50,28 +50,22 @@
     gap: 0.75rem;
 }
 
-.match-selector-header {
+.match-selector-buttons {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.match-selector-header h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: var(--accent-dark-blue);
+    gap: 0.5rem;
+    margin-bottom: 0;
 }
 
 .match-reset-filters-button {
     background: var(--error);
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: all 0.3s ease;
+    flex: 1;
 }
 
 .match-reset-filters-button:hover {
@@ -82,15 +76,15 @@
 }
 
 .match-toggle-filter-button {
-    width: 100%;
     background: var(--primary-blue);
     color: white;
     border: none;
-    padding: 0.75rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.85rem;
     transition: all 0.3s ease;
+    flex: 1;
 }
 
 .match-toggle-filter-button:hover {
@@ -108,7 +102,7 @@
 .match-filters-section {
     flex: 1;
     overflow-y: auto;
-    margin-top: 0.75rem;
+    margin-top: 0;
     padding-right: 0.5rem;
 }
 
@@ -129,10 +123,11 @@
     padding: 0.5rem 0.75rem;
     background: var(--bg-secondary);
     border-radius: 6px;
-    margin-bottom: 0.5rem;
+    margin: 0;
     font-size: 0.9rem;
     color: var(--text-secondary);
     font-weight: 600;
+    border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .match-shark-list {
@@ -141,6 +136,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    padding-right: 0.5rem;
+    border-top: 3px solid var(--border-primary);
+    padding-top: 0.75rem;
 }
 
 
@@ -161,7 +159,7 @@
 .match-shark-item {
     padding: 0.75rem;
     background: var(--bg-primary);
-    border: 1px solid var(--border-primary);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -186,7 +184,7 @@
 }
 
 .match-shark-meta {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
 }
 
@@ -232,14 +230,17 @@
 
 .match-stats-group {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     align-items: center;
+    justify-content: center;
     white-space: nowrap;
+    min-width: 0;
+    flex: 1;
 }
 
 .match-stats-left {
     display: flex;
-    gap: 1.5rem;
+    gap: 0.5rem;
     align-items: center;
 }
 
@@ -256,12 +257,13 @@
     white-space: nowrap;
     font-size: 0.95rem;
     opacity: 1;
-    flex: 1;
+    flex: 0 1 auto;
     justify-content: flex-end;
     background: rgba(255, 255, 255, 0.15);
     padding: 0.5rem 1rem;
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.5);
+    min-width: 0;
 }
 
 .match-distance-legend-inline small {
@@ -311,11 +313,11 @@
     background: var(--primary-blue);
     border-radius: 6px;
     padding: 0.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .match-shark-id-row {
@@ -327,7 +329,7 @@
 .match-shark-label {
     font-weight: 600;
     color: white;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
 }
 
 .match-shark-id-value {
@@ -355,7 +357,7 @@
 
 .match-info-section p {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--text-secondary);
 }
 
@@ -483,7 +485,7 @@
 
 /* Match Details */
 .match-details {
-    background: var(--bg-primary);
+    background: var(--fact-card-bg);
     border: 1px solid var(--border-primary);
     border-radius: 0 0 8px 8px;
     padding: 1.5rem;
@@ -517,7 +519,6 @@
 
 .match-main-image {
     width: 100%;
-    max-width: 400px;
     height: auto;
     border-radius: 6px;
     border: 1px solid var(--border-primary);
@@ -526,7 +527,7 @@
 .match-images-grid {
     margin-top: 0.75rem;
     padding-top: 0.75rem;
-    border-top: 1px solid var(--border-primary);
+    border-top: 1.5px solid var(--border-primary);
 }
 
 .match-images-grid h6 {
