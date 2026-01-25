@@ -79,11 +79,74 @@ function SharkMatchViewer() {
                     <div className="match-viewer-main">
                         {/* Shark Info Header */}
                         <div className="match-info-header">
-                            <h3>Shark: {sharkInfo?.id}</h3>
-                            <div className="match-info-details">
-                                <span><strong>Location:</strong> {sharkInfo?.countries}</span>
-                                <span><strong>Date Range:</strong> {sharkInfo?.oldest} to {sharkInfo?.newest}</span>
-                                <span><strong>Images:</strong> {occurrenceImgs.length}</span>
+                            {/* Match Stats Top Bar */}
+                            <div className="match-info-topbar">
+                                {(() => {
+                                    const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
+                                    const occurrence = sharkOccurrences[selectedImageIndex];
+                                    return (
+                                        <div className="match-stats-group">
+                                            <div className="match-stats-left">
+                                                <span className="match-stat-pair">
+                                                    <span className={`match-distance-value ${occurrence?.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
+                                                        {occurrence?.miewid_match_distance || 'N/A'}
+                                                    </span>
+                                                </span>
+                                                {occurrence?.plausibility && (
+                                                    <span className="match-stat-pair">
+                                                        <span className={`match-plausibility plausibility-${occurrence.plausibility.toLowerCase()}`}>
+                                                            {occurrence.plausibility}
+                                                        </span>
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="match-distance-legend-inline">
+                                                <small>
+                                                    Distance Scale: 0.0 = Perfect match | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ = Different
+                                                </small>
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
+                            </div>
+
+                            <div className="match-info-top">
+                                {/* Query Shark Info */}
+                                <div className="match-info-section">
+                                    <div className="match-info-header-line">
+                                        <h3>Query Shark ID:</h3>
+                                        <p><strong>{sharkInfo?.id}</strong></p>
+                                    </div>
+                                    <div className="match-info-details">
+                                        <div><span><strong>Location:&nbsp;</strong>{sharkInfo?.countries}</span></div>
+                                        <div><span><strong>Date Range:&nbsp;</strong>{sharkInfo?.oldest} to {sharkInfo?.newest}</span></div>
+                                    </div>
+                                </div>
+
+                                <div style={{ borderLeft: '2px solid var(--border-primary)', borderRight: '2px solid var(--border-primary)' }}></div>
+
+                                {/* Matched Shark Info */}
+                                <div className="match-info-section">
+                                    <div className="match-info-header-line">
+                                        <h3>Matched Shark ID:</h3>
+                                        <p><strong>{(() => {
+                                            const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
+                                            const occurrence = sharkOccurrences[selectedImageIndex];
+                                            return occurrence?.matched_shark_id || 'N/A';
+                                        })()}</strong></p>
+                                    </div>
+                                    {(() => {
+                                        const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
+                                        const occurrence = sharkOccurrences[selectedImageIndex];
+                                        const matchedShark = visionSharks.find(s => s.id === occurrence?.matched_shark_id);
+                                        return matchedShark ? (
+                                            <div className="match-info-details">
+                                                <div><span><strong>Location:&nbsp;</strong>{matchedShark.countries}</span></div>
+                                                <div><span><strong>Date Range:&nbsp;</strong>{matchedShark.oldest} to {matchedShark.newest}</span></div>
+                                            </div>
+                                        ) : null;
+                                    })()}
+                                </div>
                             </div>
                         </div>
 
@@ -131,35 +194,6 @@ function SharkMatchViewer() {
                                             const occurrence = sharkOccurrences[selectedImageIndex];
                                             return occurrence?.matched_shark_id || 'N/A';
                                         })()}</h5>
-                                        <div className="match-match-info">
-                                            {(() => {
-                                                const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
-                                                const occurrence = sharkOccurrences[selectedImageIndex];
-                                                return (
-                                                    <>
-                                                        <p className="match-distance">
-                                                            <strong>Distance:</strong> 
-                                                            <span className={`match-distance-value ${occurrence?.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
-                                                                {occurrence?.miewid_match_distance || 'N/A'}
-                                                            </span>
-                                                        </p>
-                                                        {occurrence?.plausibility && (
-                                                            <p className="match-plausibility-display">
-                                                                <strong>Plausibility:</strong> 
-                                                                <span className={`match-plausibility plausibility-${occurrence.plausibility.toLowerCase()}`}>
-                                                                    {occurrence.plausibility}
-                                                                </span>
-                                                            </p>
-                                                        )}
-                                                    </>
-                                                );
-                                            })()}
-                                            <div className="match-distance-legend">
-                                                <small>
-                                                    Distance Scale: 0.0 = Perfect match | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ = Different
-                                                </small>
-                                            </div>
-                                        </div>
                                         {(() => {
                                             const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
                                             const occurrence = sharkOccurrences[selectedImageIndex];
@@ -180,14 +214,7 @@ function SharkMatchViewer() {
                                                     <img 
                                                         src={selectedMatchedImage?.url || matchedImages[0].url} 
                                                         alt="Matched shark main"
-                                                        style={{
-                                                            width: "100%",
-                                                            maxWidth: "400px",
-                                                            height: "auto",
-                                                            borderRadius: "6px",
-                                                            border: "2px solid #e0e0e0",
-                                                            marginTop: "1rem"
-                                                        }}
+                                                        className="match-matched-image-main"
                                                     />
                                                     
                                                     {/* Matched shark thumbnails grid */}
