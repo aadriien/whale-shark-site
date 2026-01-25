@@ -77,44 +77,44 @@ function SharkMatchViewer() {
                 {/* Main Viewer */}
                 {selectedSharkId && (
                     <div className="match-viewer-main">
-                        {/* Match Stats Top Bar */}
-                        <div className="match-info-topbar">
-                            {(() => {
-                                const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
-                                const occurrence = sharkOccurrences[selectedImageIndex];
-                                return (
-                                    <div className="match-stats-group">
-                                        <div className="match-stats-left">
-                                            <span className="match-stat-pair">
-                                                <span className={`match-distance-value ${occurrence?.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
-                                                    {occurrence?.miewid_match_distance || 'N/A'}
-                                                </span>
-                                            </span>
-                                            {occurrence?.plausibility && (
-                                                <span className="match-stat-pair">
-                                                    <span className={`match-plausibility plausibility-${occurrence.plausibility.toLowerCase()}`}>
-                                                        {occurrence.plausibility}
-                                                    </span>
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="match-distance-legend-inline">
-                                            <small>
-                                                Distance Scale: 0.0 = Perfect match | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ = Different
-                                            </small>
-                                        </div>
-                                    </div>
-                                );
-                            })()}
-                        </div>
-
                         {/* Combined Match Details */}
                         {occurrenceImgs.length > 0 && (
-                            <div className="match-details">
-                                <div className="match-container">
+                            <>
+                                {/* Match Stats Banner */}
+                                <div className="match-info-banner">
+                                    {(() => {
+                                        const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
+                                        const occurrence = sharkOccurrences[selectedImageIndex];
+                                        return (
+                                            <div className="match-stats-group">
+                                                <div className="match-stats-left">
+                                                    <span className="match-stat-pair">
+                                                        <span className={`match-distance-value ${occurrence?.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
+                                                            {occurrence?.miewid_match_distance || 'N/A'}
+                                                        </span>
+                                                    </span>
+                                                    {occurrence?.plausibility && (
+                                                        <span className="match-stat-pair">
+                                                            <span className={`match-plausibility plausibility-${occurrence.plausibility.toLowerCase()}`}>
+                                                                {occurrence.plausibility}
+                                                            </span>
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="match-distance-legend-inline">
+                                                    <small>
+                                                        Distance Scale: 0.0 = Perfect match | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ = Different
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+
+                                <div className="match-details">
+                                    <div className="match-container">
                                     {/* Query Shark Box */}
-                                    <div className="match-query-image">
-                                        {/* Query Shark Info Box */}
+                                    <div className="match-shark-box">
                                         <div className="match-shark-info-box">
                                             <div className="match-shark-id-row">
                                                 <span className="match-shark-label">QUERY SHARK ID:</span>
@@ -125,28 +125,23 @@ function SharkMatchViewer() {
                                                 <span className="match-shark-meta">Dates: {sharkInfo?.oldest} to {sharkInfo?.newest}</span>
                                             </div>
                                         </div>
-                                        
                                         <img 
                                             src={occurrenceImgs[selectedImageIndex]?.url} 
                                             alt="Query"
+                                            className="match-main-image"
                                         />
-                                        <div className="match-query-images-grid">
+                                        <div className="match-images-grid">
                                             <h6>All Images for Query Shark ({occurrenceImgs.length}):</h6>
                                             {occurrenceImgs.length > 1 ? (
-                                                <div className="match-query-images-thumbnails">
+                                                <div className="match-thumbnails">
                                                     {occurrenceImgs.map((img, idx) => (
                                                         <div 
                                                             key={`query-${idx}`} 
-                                                            className={`match-query-image-item ${selectedImageIndex === idx ? "active" : ""}`}
+                                                            className={`match-thumbnail-item ${selectedImageIndex === idx ? "active" : ""}`}
                                                             onClick={() => setSelectedImageIndex(idx)}
                                                         >
-                                                            <img 
-                                                                src={img.url} 
-                                                                alt={`Query ${idx + 1}`}
-                                                            />
-                                                            <div className="match-query-image-label">
-                                                                {idx + 1}
-                                                            </div>
+                                                            <img src={img.url} alt={`Query ${idx + 1}`} />
+                                                            <div className="match-thumbnail-label">{idx + 1}</div>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -157,7 +152,7 @@ function SharkMatchViewer() {
                                     </div>
 
                                     {/* Matched Shark Box */}
-                                    <div className="match-matched-images">
+                                    <div className="match-shark-box">
                                         {(() => {
                                             const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
                                             const occurrence = sharkOccurrences[selectedImageIndex];
@@ -175,7 +170,6 @@ function SharkMatchViewer() {
                                             
                                             return (
                                                 <>
-                                                    {/* Matched Shark Info Box */}
                                                     <div className="match-shark-info-box">
                                                         <div className="match-shark-id-row">
                                                             <span className="match-shark-label">MATCHED SHARK ID:</span>
@@ -186,32 +180,23 @@ function SharkMatchViewer() {
                                                             <span className="match-shark-meta">Dates: {matchedShark?.oldest} to {matchedShark?.newest}</span>
                                                         </div>
                                                     </div>
-                                                    
-                                                    {/* Main matched image */}
                                                     <img 
                                                         src={selectedMatchedImage?.url || matchedImages[0].url} 
                                                         alt="Matched shark main"
-                                                        className="match-matched-image-main"
+                                                        className="match-main-image"
                                                     />
-                                                    
-                                                    {/* Matched shark thumbnails grid */}
-                                                    <div className="match-query-images-grid">
+                                                    <div className="match-images-grid">
                                                         <h6>All Images for Matched Shark ({matchedImages.length}):</h6>
                                                         {matchedImages.length > 1 ? (
-                                                            <div className="match-query-images-thumbnails">
+                                                            <div className="match-thumbnails">
                                                                 {matchedImages.map((img, idx) => (
                                                                     <div 
                                                                         key={`matched-${idx}`} 
-                                                                        className={`match-query-image-item ${selectedMatchedImage?.url === img.url ? "active" : idx === 0 ? "active" : ""}`}
+                                                                        className={`match-thumbnail-item ${selectedMatchedImage?.url === img.url ? "active" : ""}`}
                                                                         onClick={() => setSelectedMatchedImage(img)}
                                                                     >
-                                                                        <img 
-                                                                            src={img.url} 
-                                                                            alt={`Matched ${idx + 1}`}
-                                                                        />
-                                                                        <div className="match-query-image-label">
-                                                                            {idx + 1}
-                                                                        </div>
+                                                                        <img src={img.url} alt={`Matched ${idx + 1}`} />
+                                                                        <div className="match-thumbnail-label">{idx + 1}</div>
                                                                     </div>
                                                                 ))}
                                                             </div>
@@ -223,8 +208,9 @@ function SharkMatchViewer() {
                                             );
                                         })()}
                                     </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </>
                         )}
                     </div>
                 )}
