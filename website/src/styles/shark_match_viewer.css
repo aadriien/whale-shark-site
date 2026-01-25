@@ -58,7 +58,7 @@
 
 .match-reset-filters-button {
     background: var(--error);
-    color: white;
+    color: var(--text-primary);
     border: none;
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
@@ -77,7 +77,7 @@
 
 .match-toggle-filter-button {
     background: var(--primary-blue);
-    color: white;
+    color: var(--text-primary);
     border: none;
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
@@ -127,7 +127,7 @@
     font-size: 0.9rem;
     color: var(--text-secondary);
     font-weight: 600;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-quaternary);
 }
 
 .match-shark-list {
@@ -137,7 +137,7 @@
     flex-direction: column;
     gap: 0.75rem;
     padding-right: 0.5rem;
-    border-top: 3px solid var(--border-primary);
+    border-top: 1px solid var(--border-primary);
     padding-top: 0.75rem;
 }
 
@@ -159,7 +159,7 @@
 .match-shark-item {
     padding: 0.75rem;
     background: var(--bg-primary);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-quaternary);
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -197,9 +197,9 @@
     font-size: 0.7rem;
     font-weight: 600;
     margin-right: 0.25rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: black;
-    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-secondary);
+    color: var(--text-primary);
+    background: var(--bg-secondary);
 }
 
 /* Main Viewer */
@@ -215,7 +215,7 @@
 
 .match-info-banner {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
-    color: white;
+    color: var(--text-primary);
     padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
@@ -259,29 +259,29 @@
     opacity: 1;
     flex: 0 1 auto;
     justify-content: flex-end;
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--bg-tertiary);
     padding: 0.5rem 1rem;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--border-secondary);
     min-width: 0;
 }
 
 .match-distance-legend-inline small {
-    color: black;
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 0.95rem;
 }
 
 .match-distance-value,
 .match-plausibility {
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--bg-tertiary);
     padding: 0.5rem 1rem;
     border-radius: 6px;
     font-weight: 700;
     font-size: 1rem;
     display: inline-block;
-    color: black;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--text-primary);
+    border: 1px solid var(--border-secondary);
     white-space: nowrap;
     min-width: 100px;
     text-align: center;
@@ -290,23 +290,23 @@
 /* Good tier - green for both distance and plausible */
 .match-distance-value.good,
 .match-plausibility.plausibility-plausible {
-    background: color-mix(in srgb, var(--success) 40%, white);
+    background: color-mix(in srgb, var(--success) 40%, var(--bg-primary));
 }
 
 /* Moderate tier - orange for both distance and uncertain */
 .match-distance-value.moderate,
 .match-plausibility.plausibility-uncertain {
-    background: color-mix(in srgb, var(--warning) 40%, white);
+    background: color-mix(in srgb, var(--warning) 40%, var(--bg-primary));
 }
 
 /* Bad tier - red for impossible */
 .match-plausibility.plausibility-impossible {
-    background: color-mix(in srgb, var(--error) 40%, white);
+    background: color-mix(in srgb, var(--error) 40%, var(--bg-primary));
 }
 
 /* Unknown tier - muted */
 .match-plausibility.plausibility-unknown {
-    background: color-mix(in srgb, var(--text-light) 40%, rgba(200, 200, 200, 0.3));
+    background: color-mix(in srgb, var(--text-light) 40%, var(--bg-tertiary));
 }
 
 .match-shark-info-box {
@@ -328,13 +328,13 @@
 
 .match-shark-label {
     font-weight: 600;
-    color: white;
+    color: var(--text-primary);
     font-size: 1.1rem;
 }
 
 .match-shark-id-value {
     font-weight: 700;
-    color: white;
+    color: var(--text-primary);
     font-size: 1.3rem;
 }
 
@@ -445,7 +445,7 @@
 .match-thumbnail {
     position: relative;
     cursor: pointer;
-    border: 3px solid var(--border-primary);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -477,7 +477,7 @@
     left: 0;
     right: 0;
     background: color-mix(in srgb, var(--text-primary) 70%, transparent);
-    color: white;
+    color: var(--text-primary);
     padding: 0.5rem;
     text-align: center;
     font-size: 0.85rem;
@@ -527,7 +527,7 @@
 .match-images-grid {
     margin-top: 0.75rem;
     padding-top: 0.75rem;
-    border-top: 1.5px solid var(--border-primary);
+    border-top: 1px solid var(--border-primary);
 }
 
 .match-images-grid h6 {
@@ -577,7 +577,7 @@
     left: 0;
     right: 0;
     background: color-mix(in srgb, var(--text-primary) 70%, transparent);
-    color: white;
+    color: var(--text-primary);
     padding: 0.25rem;
     text-align: center;
     font-size: 0.85rem;
@@ -665,3 +665,5 @@
         gap: 0.75rem;
     }
 }
+
+
