@@ -75,12 +75,10 @@ function SharkMatchViewer() {
                 </div>
 
                 {/* Main Viewer */}
-                {selectedSharkId && (
-                    <div className="match-viewer-main">
-                        {/* Combined Match Details */}
-                        {occurrenceImgs.length > 0 && (
-                            <>
-                                {/* Match Stats Banner */}
+                <div className="match-viewer-main">
+                    {selectedSharkId && occurrenceImgs.length > 0 ? (
+                        <>
+                            {/* Match Stats Banner */}
                                 <div className="match-info-banner">
                                     {(() => {
                                         const sharkOccurrences = visionOccurrences.filter(occ => occ.id === selectedSharkId);
@@ -208,18 +206,15 @@ function SharkMatchViewer() {
                                             );
                                         })()}
                                     </div>
-                                    </div>
                                 </div>
-                            </>
-                        )}
-                    </div>
-                )}
-
-                {!selectedSharkId && (
-                    <div className="match-no-selection">
-                        <p>Select a shark from the list to view its images and matches</p>
-                    </div>
-                )}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="match-no-selection">
+                            <p>Select a shark from the list to view its images and matches</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -113,16 +113,18 @@ function MatchSharkSelector({
                             <div className="match-shark-meta">
                                 {shark.countries || "Unknown"} | {shark.oldest || "N/A"}
                             </div>
-                            {shark.miewid_match_distance && (
-                                <div className={`match-distance ${shark.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
-                                    Distance: {shark.miewid_match_distance}
-                                </div>
-                            )}
-                            {shark.plausibility && (
-                                <div className={`match-plausibility plausibility-${shark.plausibility.toLowerCase()}`}>
-                                    {shark.plausibility}
-                                </div>
-                            )}
+                            <div>
+                                {shark.miewid_match_distance && (
+                                    <span className={`match-distance-value ${shark.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
+                                        {shark.miewid_match_distance}
+                                    </span>
+                                )}
+                                {shark.plausibility && (
+                                    <span className={`match-plausibility plausibility-${shark.plausibility.toLowerCase()}`}>
+                                        {shark.plausibility}
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>

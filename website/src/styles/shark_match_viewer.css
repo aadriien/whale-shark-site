@@ -23,10 +23,10 @@
 
 .match-viewer-container {
     display: grid;
-    grid-template-columns: 330px 1fr;
+    grid-template-columns: 330px minmax(0, 1fr);
     gap: 1.5rem;
     height: 800px;
-    width: 100%;
+    width: 90vw;
 }
 
 /* Shark Selection Panel */
@@ -190,6 +190,20 @@
     color: var(--text-secondary);
 }
 
+/* Sidebar tags - smaller versions */
+.match-shark-item .match-distance-value,
+.match-shark-item .match-plausibility {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-right: 0.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: black;
+    background: rgba(0, 0, 0, 0.2);
+}
+
 /* Main Viewer */
 .match-viewer-main {
     display: flex;
@@ -290,7 +304,7 @@
 
 /* Unknown tier - muted */
 .match-plausibility.plausibility-unknown {
-    background: rgba(255, 255, 255, 0.2);
+    background: color-mix(in srgb, var(--text-light) 40%, rgba(200, 200, 200, 0.3));
 }
 
 .match-shark-info-box {
