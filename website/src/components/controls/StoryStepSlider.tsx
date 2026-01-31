@@ -2,9 +2,17 @@ import { useState, useEffect } from "react";
 
 import { getSharkCoordinates } from "../../utils/CoordinateUtils";
 
+import { PlottedCoordinatePoint } from "../../types/coordinates";
+import { StoryStepSliderProps } from "../../types/controls";
 
-const StoryStepSlider = ({ shark, onStepChange, currentStepIndex, isVisible }) => {
-    const [storyData, setStoryData] = useState([]);
+
+const StoryStepSlider = ({ 
+    shark, 
+    onStepChange, 
+    currentStepIndex, 
+    isVisible 
+}: StoryStepSliderProps) => {
+    const [storyData, setStoryData] = useState<PlottedCoordinatePoint[]>([]);
     
     useEffect(() => {
         if (shark) {
@@ -20,7 +28,7 @@ const StoryStepSlider = ({ shark, onStepChange, currentStepIndex, isVisible }) =
 
     if (!isVisible || !shark || storyData.length === 0) return null;
 
-    const handleSliderChange = (e) => {
+    const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const stepIndex = parseInt(e.target.value);
         const point = storyData[stepIndex];
         onStepChange(stepIndex, point);

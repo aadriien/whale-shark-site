@@ -1,4 +1,5 @@
 import { WhaleSharkEntryNormalized } from "./sharks";
+import { PlottedCoordinatePoint } from "./coordinates";
 
 
 /* Controls types */
@@ -17,6 +18,14 @@ export type PlayStoryButtonProps = {
 export type TimelineButtonProps = {
     onToggleTimelineMode: () => void;
     isTimelineMode: boolean;
+};
+
+
+export type StoryStepSliderProps = {
+    shark: WhaleSharkEntryNormalized;
+    onStepChange: (stepIndex: number, point: PlottedCoordinatePoint) => void;
+    currentStepIndex: number;
+    isVisible: boolean;
 };
 
 
