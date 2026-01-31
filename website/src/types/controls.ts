@@ -14,3 +14,9 @@ export type PlayStoryButtonProps = {
 };
 
 
+export type TimelineButtonProps = {
+    onToggleTimelineMode: () => void;
+    isTimelineMode: boolean;
+};
+
+

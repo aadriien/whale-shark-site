@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-import TimelineButton from "./TimelineButton.jsx";
+import TimelineButton from "./TimelineButton";
 import TimelineSelector from "./TimelineSelector.jsx";
 
 import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils.js";

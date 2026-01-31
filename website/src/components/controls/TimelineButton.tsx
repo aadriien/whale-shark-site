@@ -1,7 +1,10 @@
+import { TimelineButtonProps } from "types/controls";
+
+
 const TimelineButton = ({ 
     onToggleTimelineMode, 
     isTimelineMode = false 
-}) => {
+}: TimelineButtonProps) => {
     return (
         <div className="timeline-mode-section">
             <button
