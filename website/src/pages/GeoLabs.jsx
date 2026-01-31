@@ -18,7 +18,7 @@ import {
     getGroupCoordinates, 
     getSharkCoordinates, 
     getGroupCoordinatesByTimeline 
-} from "../utils/CoordinateUtils.js";
+} from "../utils/CoordinateUtils";
 import { mediaSharks } from "../utils/DataUtils";
 
 

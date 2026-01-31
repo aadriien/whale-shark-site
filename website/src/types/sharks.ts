@@ -129,23 +129,6 @@ export type WhaleSharkMediaEntry = {
 export type WhaleSharkDatasetMedia = WhaleSharkMediaEntry[];
 
 
-// Applicable for data in `gbif_shark_tracking.json` 
-export type CoordinatePoint = {
-    lat: number;
-    long: number;
-    region?: string;
-    eventDate?: string; // date string
-    parsedDate?: string; // date string
-};
-
-export type WhaleSharkCoordinates = {
-    whaleSharkID: string;
-    coordinates?: CoordinatePoint[];
-};
-
-export type WhaleSharkCoordinateDataset = WhaleSharkCoordinates[];
-
-
 // Applicable after string mapping for field names 
 // Works for both datasets (LLM + regular), hence optional fields
 export type WhaleSharkEntryNormalized = {

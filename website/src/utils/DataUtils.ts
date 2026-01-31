@@ -14,10 +14,10 @@ import {
     WhaleSharkEntryLLM, WhaleSharkDatasetLLM, 
     WhaleSharkEntryRegular, WhaleSharkDatasetRegular, 
     WhaleSharkEntryVision, WhaleSharkDatasetVision,
-    WhaleSharkCoordinates, WhaleSharkCoordinateDataset, 
     WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized,
     ImagesWithMetadata
 } from "../types/sharks";
+import { WhaleSharkCoordinates } from "../types/coordinates";
 
 
 export const MONTHS: string[] = [

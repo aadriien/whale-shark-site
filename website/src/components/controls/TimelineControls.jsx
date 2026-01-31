@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 import TimelineButton from "./TimelineButton";
 import TimelineSelector from "./TimelineSelector.jsx";
 
-import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils.js";
+import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils";
 import { getSavedSharkIds } from "../../utils/FavoritesUtils";
 import { addPointsData, clearAllData } from "../../utils/GlobeUtils.js";
 

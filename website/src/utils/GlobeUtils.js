@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import JEASINGS, { JEasing, Cubic } from './JEasings/JEasings.ts';
 
-import { getSharkCoordinates } from './CoordinateUtils.js';
+import { getSharkCoordinates } from './CoordinateUtils';
 
 import earthImg from '../assets/images/three-globe-imgs/earth-blue-marble.jpg';
 import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';

@@ -1,7 +1,12 @@
-import coordinatesData from '../assets/data/json/gbif_shark_tracking.json';
+import coordinatesData from "../assets/data/json/gbif_shark_tracking.json";
+
+import { WhaleSharkCoordinates, PlottedCoordinatePoint } from "types/coordinates";
 
 
-export function getCoordinates(sharkDict, limit = Infinity) {
+export function getCoordinates(
+    sharkDict: WhaleSharkCoordinates, 
+    limit: number = Infinity
+) {
   if (!sharkDict) return [];
 
   // Grab last N points per shark (if you grab everything, then globe laggy)
@@ -20,13 +25,13 @@ export function getCoordinates(sharkDict, limit = Infinity) {
         ringMaxSize: 3,
         ringPropagationSpeed: 0.7,
         ringRepeatPeriod: 2000 + baseDelay,
-    };
+    } as PlottedCoordinatePoint;
   });
 };
 
 
 export function getAllCoordinates() {
-    let fullResult = [];
+    let fullResult: PlottedCoordinatePoint[] = [];
     const limitResults = 25;
 
     coordinatesData.forEach(sharkDict => {
@@ -37,8 +42,8 @@ export function getAllCoordinates() {
 };
 
 
-export function getGroupCoordinates(allSharkIDs) {
-    let groupResult = [];
+export function getGroupCoordinates(allSharkIDs: string[]) {
+    let groupResult: PlottedCoordinatePoint[] = [];
     const limitResults = 1000;
 
     // If no IDs provided, plot nothing
@@ -56,7 +61,7 @@ export function getGroupCoordinates(allSharkIDs) {
 };
 
 
-export function getSharkCoordinates(sharkID) {
+export function getSharkCoordinates(sharkID: string) {
     if (!sharkID) return [];
 
     const sharkDict = coordinatesData.find(
@@ -67,7 +72,11 @@ export function getSharkCoordinates(sharkID) {
 
 
 // Filter coordinates by month & year
-export function filterCoordinatesByDate(coordinates, month, year) {
+export function filterCoordinatesByDate(
+    coordinates: PlottedCoordinatePoint[], 
+    month: number, 
+    year: number
+) {
     if (!coordinates || coordinates.length === 0) return [];
     
     return coordinates.filter(coord => {
@@ -85,7 +94,11 @@ export function filterCoordinatesByDate(coordinates, month, year) {
 
 
 // Get group coordinates filtered by timeline
-export function getGroupCoordinatesByTimeline(allSharkIDs, month, year) {
+export function getGroupCoordinatesByTimeline(
+    allSharkIDs: string[], 
+    month: number, 
+    year: number
+) {
     if (!allSharkIDs) return [];
     
     let groupResult = [];
