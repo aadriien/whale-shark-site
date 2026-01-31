@@ -1,8 +1,4 @@
-import { 
-    WhaleSharkDatasetNormalized, 
-    WhaleSharkDatasetVision,
-    WhaleSharkDatasetMedia
-} from "./sharks";
+import { WhaleSharkDatasetNormalized } from "./sharks";
 
 
 /* Panel types */

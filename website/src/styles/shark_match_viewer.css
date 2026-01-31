@@ -137,7 +137,7 @@
     flex-direction: column;
     gap: 0.75rem;
     padding-right: 0.5rem;
-    border-top: 1px solid var(--border-primary);
+    border-top: 2.5px solid var(--border-primary);
     padding-top: 0.75rem;
 }
 
@@ -259,7 +259,7 @@
     opacity: 1;
     flex: 0 1 auto;
     justify-content: flex-end;
-    background: var(--bg-tertiary);
+    background: var(--surface-tertiary);
     padding: 0.5rem 1rem;
     border-radius: 6px;
     border: 1px solid var(--border-secondary);
