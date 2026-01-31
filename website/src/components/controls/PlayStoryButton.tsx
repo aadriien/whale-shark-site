@@ -1,9 +1,12 @@
+import { PlayStoryButtonProps } from "types/controls";
+
+
 const PlayStoryButton = ({ 
     shark, 
     onPlayStory, isPlaying, playingSharkId, 
     showPauseForGeoLabs = false, 
     onToggleStepMode, isStepMode = false 
-}) => {
+}: PlayStoryButtonProps) => {
     if (!shark) return null;
 
     // GeoLabs version with step-through functionality
