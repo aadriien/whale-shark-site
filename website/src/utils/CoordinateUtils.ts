@@ -101,7 +101,7 @@ export function getGroupCoordinatesByTimeline(
 ) {
     if (!allSharkIDs) return [];
     
-    let groupResult = [];
+    let groupResult: PlottedCoordinatePoint[] = [];
     const limitResults = 300;
 
     coordinatesData.forEach(sharkDict => {

@@ -20,6 +20,15 @@ export type TimelineButtonProps = {
     isTimelineMode: boolean;
 };
 
+export type TimelineSelectorProps = {
+    onTimelineChange: (month: number, year: number) => void;
+    currentMonth: number;
+    currentYear: number;
+    isVisible: boolean;
+    availableSharks: string[];
+    plottedCoordinates: PlottedCoordinatePoint[]
+};
+
 
 export type StoryStepSliderProps = {
     shark: WhaleSharkEntryNormalized;

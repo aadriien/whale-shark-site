@@ -2,7 +2,9 @@ import { useState, useEffect, useMemo } from "react";
 
 import { MONTHS } from "../../utils/DataUtils";
 
-import coordinatesData from '../../assets/data/json/gbif_shark_tracking.json';
+import coordinatesData from "../../assets/data/json/gbif_shark_tracking.json";
+
+import { TimelineSelectorProps } from "../../types/controls";
 
 
 const TimelineSelector = ({ 
@@ -11,10 +13,10 @@ const TimelineSelector = ({
     isVisible, 
     availableSharks = [],
     plottedCoordinates = []
-}) => {
+}: TimelineSelectorProps) => {
     // Get all available month-year combinations from sharks in lab
     const getAvailableMonthYears = () => {
-        const monthYears = new Set();
+        const monthYears = new Set<string>();
         
         coordinatesData.forEach(sharkDict => {
             // Only include sharks in available list
@@ -26,7 +28,7 @@ const TimelineSelector = ({
                         const month = date.getMonth() + 1;
 
                         if (!isNaN(year) && !isNaN(month)) {
-                            monthYears.add(`${year}-${month.toString().padStart(2, '0')}`);
+                            monthYears.add(`${year}-${month.toString().padStart(2, "0")}`);
                         }
                     }
                 });
@@ -44,21 +46,24 @@ const TimelineSelector = ({
         const currentKey = `${
             currentYear || 
             new Date().getFullYear()}-${(currentMonth || 
-            new Date().getMonth() + 1).toString().padStart(2, '0')
+            new Date().getMonth() + 1).toString().padStart(2, "0")
         }`;
         
         const index = availableMonthYears.indexOf(currentKey);
         return index >= 0 ? index : 0;
     };
     
-    const [sliderIndex, setSliderIndex] = useState(getInitialIndex);
+    const [sliderIndex, setSliderIndex] = useState<number>(getInitialIndex);
 
     // Get current month & year from slider index
-    const getCurrentMonthYear = (index) => {
-        if (availableMonthYears.length === 0) return { month: 1, year: new Date().getFullYear() };
+    const getCurrentMonthYear = (index: number) => {
+        if (availableMonthYears.length === 0) return { 
+            month: 1, 
+            year: new Date().getFullYear() 
+        };
         
         const monthYearStr = availableMonthYears[index] || availableMonthYears[0];
-        const [year, month] = monthYearStr.split('-').map(Number);
+        const [year, month] = monthYearStr.split("-").map(Number);
         return { month, year };
     };
     
@@ -68,11 +73,11 @@ const TimelineSelector = ({
     const plottedSharkIds = useMemo(() => {
         if (!plottedCoordinates || plottedCoordinates.length === 0) return [];
         
-        const sharkIds = new Set();
+        const sharkIds = new Set<string>();
         plottedCoordinates.forEach(coord => {
             if (coord.id) {
                 // Extract shark ID from coordinate ID (format: "sharkID-lat-lng")
-                const sharkId = coord.id.split('-')[0];
+                const sharkId = coord.id.split("-")[0];
                 sharkIds.add(sharkId);
             }
         });
@@ -89,7 +94,7 @@ const TimelineSelector = ({
 
     if (!isVisible || availableMonthYears.length === 0) return null;
 
-    const handleSliderChange = (e) => {
+    const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newIndex = parseInt(e.target.value);
         setSliderIndex(newIndex);
     };
@@ -154,10 +159,10 @@ const TimelineSelector = ({
             {plottedSharkIds.length > 0 && (
                 <div className="timeline-sharks-display">
                     <div className="sharks-list-title">
-                        Plotting {plottedSharkIds.length} whale shark{plottedSharkIds.length !== 1 ? 's' : ''}:
+                        Plotting {plottedSharkIds.length} whale shark{plottedSharkIds.length !== 1 ? "s" : ""}:
                     </div>
                     <div className="selected-sharks-list">
-                        {Array.from(plottedSharkIds).join(', ')}
+                        {Array.from(plottedSharkIds).join(", ")}
                     </div>
                 </div>
             )}

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 
 import TimelineButton from "./TimelineButton";
-import TimelineSelector from "./TimelineSelector.jsx";
+import TimelineSelector from "./TimelineSelector";
 
 import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils";
 import { getSavedSharkIds } from "../../utils/FavoritesUtils";
