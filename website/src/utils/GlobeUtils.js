@@ -1,13 +1,13 @@
-import * as THREE from 'three';
-import ThreeGlobe from 'three-globe';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from "three";
+import ThreeGlobe from "three-globe";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import JEASINGS, { JEasing, Cubic } from './JEasings/JEasings.ts';
+import JEASINGS, { JEasing, Cubic } from "./JEasings/JEasings.ts";
 
-import { getSharkCoordinates } from './CoordinateUtils';
+import { getSharkCoordinates } from "./CoordinateUtils";
 
-import earthImg from '../assets/images/three-globe-imgs/earth-blue-marble.jpg';
-import bumpImg from '../assets/images/three-globe-imgs/earth-topology.png';
+import earthImg from "../assets/images/three-globe-imgs/earth-blue-marble.jpg";
+import bumpImg from "../assets/images/three-globe-imgs/earth-topology.png";
 
 
 export function createGlobe() {
@@ -101,14 +101,14 @@ export function colorInterpolator(t) {
 export function addRingsData(globe, pointsData) {
     if (!globe) return;
 
-    // Setting up the points (rings) based on 'pointsData'
+    // Setting up the points (rings) based on "pointsData"
     globe.ringsData(pointsData)
         .ringColor(() => colorInterpolator)
-        .ringMaxRadius('ringMaxSize')
-        .ringPropagationSpeed('ringPropagationSpeed') 
+        .ringMaxRadius("ringMaxSize")
+        .ringPropagationSpeed("ringPropagationSpeed") 
 
         // Repeat period variable (randomized delay in data)
-        .ringRepeatPeriod('ringRepeatPeriod'); 
+        .ringRepeatPeriod("ringRepeatPeriod"); 
 };
 
 
@@ -117,7 +117,7 @@ export function addRingsDataStatic(globe, pointsData) {
 
     globe.ringsData(pointsData)
         // Ring color static since no movement
-        .ringColor(() => 'rgba(230, 255, 50, 0.9)')
+        .ringColor(() => "rgba(230, 255, 50, 0.9)")
 
         // Smaller radius & zero movement
         .ringMaxRadius(0.5)
@@ -138,7 +138,7 @@ export function addPointsData(globe, pointsData) {
     if (!globe) return;
     
     globe.pointsData(pointsData)
-        .pointColor(() => 'rgba(255, 255, 0, 0.8)')
+        .pointColor(() => "rgba(255, 255, 0, 0.8)")
         .pointRadius(0.3)
         .pointResolution(6)
         .pointAltitude(0.02);
@@ -261,7 +261,7 @@ export async function highlightSharkMode(globe, controls, camera, pitchRef, yawR
         .easing(Cubic.InOut)
         .start();
 
-    console.log(`Highlighting shark ID: ${sharkID} with ${usePoints ? 'points' : 'ripples'}`);
+    console.log(`Highlighting shark ID: ${sharkID} with ${usePoints ? "points" : "ripples"}`);
 
     // Show either points or ripples for this whale shark
     if (usePoints) {
