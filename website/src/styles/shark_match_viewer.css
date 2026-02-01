@@ -576,7 +576,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: color-mix(in srgb, var(--text-primary) 70%, transparent);
+    background: color-mix(in srgb, var(--bg-primary) 70%, transparent);
     color: var(--text-primary);
     padding: 0.25rem;
     text-align: center;
@@ -586,14 +586,14 @@
 
 
 .match-no-matches {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-style: italic;
     padding: 1rem;
     text-align: center;
 }
 
 .match-no-other-images {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-style: italic;
     padding: 0.75rem;
     text-align: center;
