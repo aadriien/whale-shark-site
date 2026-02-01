@@ -174,6 +174,8 @@ def make_media_conditions(occurrences_df: pd.DataFrame,
     license_types = {
         "http://creativecommons.org/licenses/by/4.0/": "CC BY [Attribution]",
         "http://creativecommons.org/licenses/by-nc/4.0/": "CC BY-NC [Attribution-NonCommercial]",
+        "http://creativecommons.org/licenses/by-nc-nd/4.0/": "CC BY-NC [Attribution-NoDerivatives]",
+        "http://creativecommons.org/licenses/by-nc-sa/4.0/": "CC BY-NC [Attribution-ShareAlike]",
         "http://creativecommons.org/publicdomain/zero/1.0/": "CC0 [Public Domain]"
     }
 
