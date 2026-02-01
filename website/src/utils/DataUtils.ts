@@ -182,7 +182,7 @@ export function parseRemarks(str: string = "") {
 
 export function parseImageField(imageField: string = "") {
     // Split on comma that separates entries, not commas inside parentheses
-    const entries: string[] = imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/g) || [];
+    const entries: string[] = imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/gi) || [];
 
     return entries.map((entry) => {
         const [urlPart, metaPart] = entry.split(/\s*\(/);
