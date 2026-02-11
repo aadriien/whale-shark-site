@@ -248,13 +248,16 @@
     display: flex;
     align-items: center;
     white-space: nowrap;
+    overflow: scroll;
     font-size: 1rem;
 }
 
 .match-distance-legend-inline {
     display: flex;
     align-items: center;
+    text-align: center;
     white-space: nowrap;
+    overflow: scroll;
     font-size: 0.95rem;
     opacity: 1;
     flex: 0 1 auto;
@@ -282,7 +285,7 @@
     display: inline-block;
     color: var(--text-primary);
     border: 1px solid var(--border-secondary);
-    white-space: nowrap;
+    /* white-space: nowrap; */
     min-width: 100px;
     text-align: center;
 }
@@ -635,6 +638,7 @@
 @media (max-width: 1200px) {
     .match-viewer-container {
         grid-template-columns: 1fr;
+        height: 100%;
     }
 
     .match-selector-panel {
@@ -652,12 +656,42 @@
 }
 
 @media (max-width: 768px) {
-    .match-viewer-container {
-        height: 100%;
-    }
-    
     .shark-match-viewer {
         padding: 1rem;
+    }
+
+    .match-info-banner {
+        height: auto;
+        min-height: 48px;
+        padding: 0.5rem 0.75rem;
+        align-items: center;
+    }
+
+    .match-stats-group {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .match-stats-left {
+        flex: 0 0 100%;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .match-stat-pair {
+        flex: 1 1 0;
+        justify-content: center;
+        text-align: center;
+        min-width: 0;
+    }
+
+    .match-distance-legend-inline {
+        flex: 0 0 100%;
+        order: 2; /* ensure it comes after stats */
+        justify-content: center;
     }
 
     .match-thumbnail-grid {
