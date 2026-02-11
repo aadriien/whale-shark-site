@@ -325,6 +325,7 @@
 
 .match-shark-id-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     align-items: baseline;
 }
@@ -692,6 +693,14 @@
         flex: 0 0 100%;
         order: 2; /* ensure it comes after stats */
         justify-content: center;
+    }
+
+    .match-shark-id-row {
+        gap: 0rem;
+    }
+
+    .match-shark-details-row {
+        gap: 0.1rem;
     }
 
     .match-thumbnail-grid {
