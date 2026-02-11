@@ -652,6 +652,10 @@
 }
 
 @media (max-width: 768px) {
+    .match-viewer-container {
+        height: 100%;
+    }
+    
     .shark-match-viewer {
         padding: 1rem;
     }
