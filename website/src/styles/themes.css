@@ -15,6 +15,7 @@
     --primary-green: #ccece5;
     
     /* Background Colors */
+    --bg-all-pages: rgba(212, 243, 252, 0.4);
     --bg-primary: #ffffff;
     --bg-secondary: #f9f9f9;
     --bg-tertiary: #f8f9ff;
@@ -263,6 +264,7 @@
     --primary-green: #a8d4c8;
     
     /* Background Colors */
+    --bg-all-pages: rgba(22, 41, 45, 0.4);
     --bg-primary: #1a1a1a;
     --bg-secondary: #5f5e5e;
     --bg-tertiary: #1e1e2e;

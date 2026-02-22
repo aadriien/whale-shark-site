@@ -23,7 +23,7 @@ function Home() {
                 </style>
 
                 <div 
-                    className="page-content" 
+                    className="page-content home" 
                     style={{ 
                         position: "relative", 
                         textAlign: "center",
