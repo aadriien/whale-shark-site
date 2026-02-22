@@ -123,11 +123,16 @@ function SharkMatchViewer() {
                                                 <span className="match-shark-meta">({sharkInfo?.oldest} to {sharkInfo?.newest})</span>
                                             </div>
                                         </div>
-                                        <img 
-                                            src={occurrenceImgs[selectedImageIndex]?.url} 
-                                            alt="Query"
-                                            className="match-main-image"
-                                        />
+                                        <div className="image-wrapper-large">
+                                            <img 
+                                                src={occurrenceImgs[selectedImageIndex]?.url} 
+                                                alt="Query"
+                                                className="match-main-image"
+                                            />
+                                            <p className="shark-image-meta">
+                                                <small>📸 Creator: {occurrenceImgs[selectedImageIndex]?.creator} | {occurrenceImgs[selectedImageIndex]?.license}</small>
+                                            </p>
+                                        </div>
                                         <div className="match-images-grid">
                                             <h6>All Images for Query Shark ({occurrenceImgs.length}):</h6>
                                             {occurrenceImgs.length > 1 ? (
@@ -178,11 +183,16 @@ function SharkMatchViewer() {
                                                             <span className="match-shark-meta">({matchedShark?.oldest} to {matchedShark?.newest})</span>
                                                         </div>
                                                     </div>
-                                                    <img 
-                                                        src={selectedMatchedImage?.url || matchedImages[0].url} 
-                                                        alt="Matched shark main"
-                                                        className="match-main-image"
-                                                    />
+                                                    <div className="image-wrapper-large">
+                                                        <img 
+                                                            src={selectedMatchedImage?.url || matchedImages[0].url} 
+                                                            alt="Matched shark main"
+                                                            className="match-main-image"
+                                                        />
+                                                        <p className="shark-image-meta">
+                                                            <small>📸 Creator: {selectedMatchedImage?.creator || matchedImages[0].creator} | {selectedMatchedImage?.license || matchedImages[0].license}</small>
+                                                        </p>
+                                                    </div>
                                                     <div className="match-images-grid">
                                                         <h6>All Images for Matched Shark ({matchedImages.length}):</h6>
                                                         {matchedImages.length > 1 ? (
