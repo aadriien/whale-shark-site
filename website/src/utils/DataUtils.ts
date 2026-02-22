@@ -53,6 +53,17 @@ const selectedSharkIDs: string[] = [
     "57821",
 ];
 
+const genImagesSubdir: string = "shark-tracker-genAI-images";
+
+export const selectedSharkGenImages: Record<string, string> = {
+    "101376a": `${genImagesSubdir}/sir-chomps-a-lot.png`,
+    "101373a": `${genImagesSubdir}/captain-caribbean.png`,
+    "Ranger": `${genImagesSubdir}/sirena-splash.png`,
+    "101371a": `${genImagesSubdir}/ashen-quest.png`,
+    "57828": `${genImagesSubdir}/captain-glitterfin.png`,
+    "57821": `${genImagesSubdir}/neonika-sparkfluke.png`,
+};
+
 const keyMap: Record<string, string> = {
     "whaleSharkID": "id",
     "LLM-Gen Image (API)": "cartoonImageURL",

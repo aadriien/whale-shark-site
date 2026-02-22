@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { selectedSharkGenImages } from "../../utils/DataUtils";
+
 import FavoriteButton from "../controls/FavoriteButton";
 import PlayStoryButton from "../controls/PlayStoryButton";
 
@@ -36,11 +38,19 @@ const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
             </div>
 
             <div className="shark-card-image">
-                {shark.cartoonImageURL ? (
-                    <img src={shark.cartoonImageURL} alt={`LLM-generated cartoon image of whale shark named ${shark.name}`} />
+                {shark.id in selectedSharkGenImages ? (
+                    <img 
+                        src={selectedSharkGenImages[shark.id]} 
+                        alt={`LLM-generated cartoon image of whale shark named ${shark.name}`} 
+                    />
                 ) : (
                     <span>Shark Image</span> /* Placeholder text */
                 )}
+                {/* {shark.cartoonImageURL ? (
+                    <img src={shark.cartoonImageURL} alt={`LLM-generated cartoon image of whale shark named ${shark.name}`} />
+                ) : (
+                    <span>Shark Image</span>
+                )} */}
             </div>
 
             <div className="shark-card-content">
