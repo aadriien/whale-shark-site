@@ -8,7 +8,7 @@ const apiImageParams: Record<string, string> = {
     "width": "960",
     "height": "720",
     "safe": "true"
-    
+
     // Params no longer supported :(
     // "private": "true",
     // "nologo": "true",
@@ -51,7 +51,17 @@ export async function fetchImageLLM({imagePrompt, params = {}, setImageContent}:
     // Update image container on error
     } catch (error: unknown) {
         console.error("Error fetching image:", error);
-        setImageContent(<p>Error loading image.. try submitting again!</p>);
+        setImageContent(
+            <div style={{ textAlign: "center" }}>
+                <img 
+                    src="build-shark-error.png" 
+                    alt="Build-A-Shark error fallback with messy whale shark" 
+                    loading="lazy" 
+                    style={{ marginBottom: "0.7rem" }} 
+                />
+                <p>Oops, it looks like something went wrong... try submitting again!</p>
+            </div>
+        );
     }
 }
     
