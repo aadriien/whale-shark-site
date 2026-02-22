@@ -1,15 +1,20 @@
 import { FetchImageLLMProps } from "../types/utils";
 
 
+const API = import.meta.env.VITE_POLLINATIONS;
+
 const apiImageParams: Record<string, string> = {
+    "model": "flux",
     "width": "960",
     "height": "720",
-    "private": "true",
-    "nologo": "true",
     "safe": "true"
+    
+    // Params no longer supported :(
+    // "private": "true",
+    // "nologo": "true",
 };
 
-const urlBase = `https://image.pollinations.ai/prompt`;
+const urlBase = `https://gen.pollinations.ai/image`;
 
 
 export async function fetchImageLLM({imagePrompt, params = {}, setImageContent}: FetchImageLLMProps) {
@@ -24,7 +29,11 @@ export async function fetchImageLLM({imagePrompt, params = {}, setImageContent}:
     setImageContent(<div className="spinner"></div>);
     
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            headers: {
+                Authorization: `Bearer ${API}`
+            }
+        });
 
         if (!response.ok) {
             const errorText = await response.text(); 
