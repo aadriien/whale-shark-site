@@ -14,6 +14,35 @@ type FormData = {
 
 // Populate list of all countries from "country-list" npm package
 const countries: string[] = getNames();
+
+const MAX_INPUT_LENGTH = {
+    name: 50,
+    age: 3,
+    country: 80,
+    researcherPOV: 150
+};
+
+const sanitizeInput = (input: string): string => {
+    // Remove any HTML tags
+    const temp = document.createElement("div");
+    temp.textContent = input;
+    return temp.textContent || "";
+};
+
+const isValidForm = (data: FormData) => {
+    // Only validate non-empty fields
+    if (data.age.trim()) {
+        const ageNum = Number(data.age);
+        if (isNaN(ageNum) || ageNum <= 0 || ageNum > 200) return false;
+    }
+    if (data.country.trim() && !countries.includes(data.country.trim())) return false;
+
+    const textRegex = /^[\p{L}0-9 .,!?'\-()]*$/u;
+    if (data.name.trim() && !textRegex.test(data.name.trim())) return false;
+    if (data.researcherPOV.trim() && !textRegex.test(data.researcherPOV.trim())) return false;
+
+    return true;
+};
  
 const SharkGenerator = () => {
     // State to hold image content (or placeholder text)
@@ -48,13 +77,23 @@ const SharkGenerator = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        const sanitizedValue = sanitizeInput(value);
+        const maxLength = MAX_INPUT_LENGTH[name as keyof FormData] || 100;
+        const truncatedValue = sanitizedValue.slice(0, maxLength);
+
+        setFormData((prev) => ({ ...prev, [name]: truncatedValue }));
     };
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         // Ensure form submission doesn't wipe inputs on page reload
         e.preventDefault();
         setFormSubmitted(true);
+
+        if (!isValidForm(formData)) {
+            alert("Please enter valid information.");
+            return;
+        }
 
         // Highlight key traits from user inputs to infuse personality
         const nbsp = "\u00A0";
