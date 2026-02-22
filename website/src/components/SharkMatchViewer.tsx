@@ -56,6 +56,7 @@ function SharkMatchViewer() {
     };
 
     const sharkInfo = selectedSharkId ? getSharkInfo(selectedSharkId) : null;
+    const queryImage = occurrenceImgs[selectedImageIndex];
 
     return (
         <div className="shark-match-viewer">
@@ -125,12 +126,12 @@ function SharkMatchViewer() {
                                         </div>
                                         <div className="image-wrapper-large">
                                             <img 
-                                                src={occurrenceImgs[selectedImageIndex]?.url} 
+                                                src={queryImage?.url} 
                                                 alt="Query"
                                                 className="match-main-image"
                                             />
                                             <p className="shark-image-meta">
-                                                <small>📸 Creator: {occurrenceImgs[selectedImageIndex]?.creator} | {occurrenceImgs[selectedImageIndex]?.license}</small>
+                                                <small>📸 Creator: {queryImage?.creator} | {queryImage?.license}</small>
                                             </p>
                                         </div>
                                         <div className="match-images-grid">
@@ -170,6 +171,7 @@ function SharkMatchViewer() {
                                             if (matchedImages.length === 0) {
                                                 return <p className="match-no-matches">No images found for matched shark ID</p>;
                                             }
+                                            const matchImage = selectedMatchedImage ?? matchedImages?.[0];
                                             
                                             return (
                                                 <>
@@ -185,12 +187,12 @@ function SharkMatchViewer() {
                                                     </div>
                                                     <div className="image-wrapper-large">
                                                         <img 
-                                                            src={selectedMatchedImage?.url || matchedImages[0].url} 
+                                                            src={matchImage?.url} 
                                                             alt="Matched shark main"
                                                             className="match-main-image"
                                                         />
                                                         <p className="shark-image-meta">
-                                                            <small>📸 Creator: {selectedMatchedImage?.creator || matchedImages[0].creator} | {selectedMatchedImage?.license || matchedImages[0].license}</small>
+                                                            <small>📸 Creator: {matchImage?.creator } | {matchImage?.license}</small>
                                                         </p>
                                                     </div>
                                                     <div className="match-images-grid">
