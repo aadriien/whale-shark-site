@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import Globe from "../components/Globe.jsx";
 import SharkInfoPanel from "../components/panels/SharkInfoPanel";
@@ -12,7 +13,15 @@ import { mediaSharks } from "../utils/DataUtils";
 
 
 function GlobeViews() {
-    const [selectedShark, setSelectedShark] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    // Initialize selected shark from URL
+    const [selectedShark, setSelectedShark] = useState(() => {
+        const sharkId = searchParams.get("selectedSharkId");
+        if (sharkId) {
+            return mediaSharks.find(s => s.id === sharkId) || null;
+        }
+        return null;
+    });
     const [allSharksVisible, setAllSharksVisible] = useState(true);
     const [filteredSharks, setFilteredSharks] = useState(mediaSharks); // track filtered sharks
     const globeRef = useRef();
@@ -55,6 +64,20 @@ function GlobeViews() {
             addPointsData(globeInstance, filteredPointsData);
         }
     }, [filteredPointsData]);
+
+    // Update query param in URL if shark selected
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams);
+
+        if (selectedShark) {
+            params.set("selectedSharkId", selectedShark.id);
+        } 
+        else {
+            params.delete("selectedSharkId");
+        }
+
+        setSearchParams(params);
+    }, [selectedShark]);
     
     // Direct call to useGlobeClick (with filtered sharks)
     const handleSelectShark = useGlobeClick({
