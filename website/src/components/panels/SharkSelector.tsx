@@ -48,6 +48,7 @@ function SharkSelector({
         showOnlyWithMedia: false,
         hasOccurrenceNotes: false,
     }), [minYear, maxYear]);
+    
     const [searchParams, setSearchParams] = useSearchParams();
     const [criteria, setCriteria] = useState<SharkBaseCriteria>(() =>
         parseCriteria(searchParams, defaultCriteria)

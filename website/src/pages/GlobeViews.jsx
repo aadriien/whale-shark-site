@@ -68,14 +68,12 @@ function GlobeViews() {
     // Update query param in URL if shark selected
     useEffect(() => {
         const params = new URLSearchParams(searchParams);
-
         if (selectedShark) {
             params.set("selectedSharkId", selectedShark.id);
         } 
         else {
             params.delete("selectedSharkId");
         }
-
         setSearchParams(params);
     }, [selectedShark]);
     

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { 
     mediaSharks, 
@@ -12,7 +13,13 @@ import { ImageMetadata, ImagesWithMetadata } from "types/sharks";
 
 
 function SharkMatchViewer() {
-    const [selectedSharkId, setSelectedSharkId] = useState<string>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    // Initialize selected shark from URL
+    const [selectedSharkId, setSelectedSharkId] = useState<string>(() => {
+        const sharkId = searchParams.get("selectedSharkId");
+        if (sharkId) return sharkId;
+        return null;
+    });
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
     const [occurrenceImgs, setOccurrenceImgs] = useState<ImagesWithMetadata>([]);
     const [selectedMatchedImage, setSelectedMatchedImage] = useState<ImageMetadata>(null);
@@ -46,6 +53,18 @@ function SharkMatchViewer() {
             }
         }
     }, [selectedSharkId, selectedImageIndex]);
+
+    // Update query param in URL if shark selected
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams);
+        if (selectedSharkId) {
+            params.set("selectedSharkId", selectedSharkId);
+        } 
+        else {
+            params.delete("selectedSharkId");
+        }
+        setSearchParams(params);
+    }, [selectedSharkId]);
 
     const getSharkInfo = (id: string) => {
         return visionSharks.find(shark => shark.id === id);

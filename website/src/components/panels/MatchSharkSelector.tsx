@@ -1,8 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import MatchFilter from "./MatchFilter";
 
 import { filterVisionSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
+import { parseCriteria, criteriaToParams } from "../../utils/UrlParamUtils";
 import { FULLMONTHS } from "../../utils/DataUtils";
 
 import { MatchSharkSelectorProps } from "../../types/panels";
@@ -48,8 +50,11 @@ function MatchSharkSelector({
         publishingCountry: "", 
         observationType: "", 
     }), [minYear, maxYear]);
-    
-    const [criteria, setCriteria] = useState<SharkCriteria>(defaultCriteria);
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [criteria, setCriteria] = useState<SharkCriteria>(() =>
+        parseCriteria(searchParams, defaultCriteria)
+    );
     const [showFilters, setShowFilters] = useState<boolean>(true);
 
     const handleReset = () => {
@@ -60,6 +65,12 @@ function MatchSharkSelector({
     const filteredSharks = useMemo(() => {
         return filterVisionSharks(sharks, criteria);
     }, [sharks, criteria]);
+
+    // Ensure filters are reflected as query params in URL
+    useEffect(() => {
+        const params = criteriaToParams(criteria, defaultCriteria);
+        setSearchParams(params);
+    }, [criteria]);
 
     // Prepare filter options
     const filterOptions = {
