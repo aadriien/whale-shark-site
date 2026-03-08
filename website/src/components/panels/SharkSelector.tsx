@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import SharkFilter from "./SharkFilter";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
+import { parseCriteria, criteriaToParams } from "../../utils/UrlParamUtils";
 import { FULLMONTHS } from "../../utils/DataUtils";
 
 import { SharkFilterOptions, SharkBaseCriteria } from "../../types/filters";
@@ -46,8 +48,10 @@ function SharkSelector({
         showOnlyWithMedia: false,
         hasOccurrenceNotes: false,
     }), [minYear, maxYear]);
-    
-    const [criteria, setCriteria] = useState<SharkBaseCriteria>(defaultCriteria);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [criteria, setCriteria] = useState<SharkBaseCriteria>(() =>
+        parseCriteria(searchParams, defaultCriteria)
+    );
     const [showFilters, setShowFilters] = useState<boolean>(true);
 
     const handleReset = () => {
@@ -73,6 +77,12 @@ function SharkSelector({
             onFilteredSharksChange(filteredSharks);
         }
     }, [filteredSharks, onFilteredSharksChange]);
+
+    // Ensure filters are reflected as query params in URL
+    useEffect(() => {
+        const params = criteriaToParams(criteria, defaultCriteria);
+        setSearchParams(params);
+    }, [criteria]);
 
     // Prepare filter options for SharkFilter component
     const filterOptions: SharkFilterOptions = {
