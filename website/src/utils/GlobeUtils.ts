@@ -17,12 +17,6 @@ export function createGlobe() {
         .globeImageUrl(earthImg)
         .bumpImageUrl(bumpImg);
   
-    // const material = new THREE.MeshStandardMaterial({
-    //     roughness: 0.8,
-    //     metalness: 0.1,
-    // });
-  
-    // globe.globeMaterial(material);
     globe.scale.set(1, 1, 1);
     globe.visible = true;
 
