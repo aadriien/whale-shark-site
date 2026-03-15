@@ -2,9 +2,11 @@ import * as THREE from "three";
 import ThreeGlobe from "three-globe";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import JEASINGS, { JEasing, Cubic } from "./JEasings/JEasings.ts";
+import JEASINGS, { JEasing, Cubic } from "./JEasings/JEasings";
 
 import { getSharkCoordinates } from "./CoordinateUtils";
+
+import { PlottedCoordinatePoint } from "../types/coordinates";
 
 import earthImg from "../assets/images/three-globe-imgs/earth-blue-marble.jpg";
 import bumpImg from "../assets/images/three-globe-imgs/earth-topology.png";
@@ -15,15 +17,12 @@ export function createGlobe() {
         .globeImageUrl(earthImg)
         .bumpImageUrl(bumpImg);
   
-    const material = new THREE.MeshStandardMaterial({
-        color: 0x0055ff,
-        roughness: 0.7,
-        metalness: 0.3,
-        emissive: 0xFFD700,
-        emissiveIntensity: 3,
-    });
+    // const material = new THREE.MeshStandardMaterial({
+    //     roughness: 0.8,
+    //     metalness: 0.1,
+    // });
   
-    globe.material = material;
+    // globe.globeMaterial(material);
     globe.scale.set(1, 1, 1);
     globe.visible = true;
 
@@ -41,7 +40,7 @@ export function createLights() {
 };
 
 
-export function createCamera(globeContainer) {
+export function createCamera(globeContainer: HTMLDivElement) {
     const camera = new THREE.PerspectiveCamera(
         75,
         globeContainer.clientWidth / globeContainer.clientHeight,
@@ -54,7 +53,10 @@ export function createCamera(globeContainer) {
 };
 
 
-export function createControls(camera, renderer) {
+export function createControls(
+    camera: THREE.PerspectiveCamera, 
+    renderer: THREE.WebGLRenderer
+) {
     const controls = new OrbitControls(camera, renderer.domElement);
 
     controls.enableDamping = true;
@@ -71,7 +73,10 @@ export function createControls(camera, renderer) {
 };
   
 
-export function setupCameraAngles(scene, camera) {
+export function setupCameraAngles(
+    scene: THREE.Scene<THREE.Object3DEventMap>, 
+    camera: THREE.PerspectiveCamera
+) {
     // Euler angles for managing globe storytelling
     const pivot = new THREE.Object3D(); // point around which globe rotates
     const yaw = new THREE.Object3D(); // y-axis (vertical), turn left/right
@@ -88,7 +93,7 @@ export function setupCameraAngles(scene, camera) {
   
 
 // Color Interpolator for ring effects
-export function colorInterpolator(t) {
+export function colorInterpolator(t: number) {
     // Yellow (255, 255, 0) -> Neon Cyan (0, 255, 255) transition
     const r = Math.round(255 - t * 255);  // Transition from yellow to red
     const g = Math.round(255);             // Keep green constant (255)
@@ -98,7 +103,10 @@ export function colorInterpolator(t) {
 
 
 
-export function addRingsData(globe, pointsData) {
+export function addRingsData(
+    globe: ThreeGlobe, 
+    pointsData: PlottedCoordinatePoint[]
+) {
     if (!globe) return;
 
     // Setting up the points (rings) based on "pointsData"
@@ -112,7 +120,10 @@ export function addRingsData(globe, pointsData) {
 };
 
 
-export function addRingsDataStatic(globe, pointsData) {
+export function addRingsDataStatic(
+    globe: ThreeGlobe, 
+    pointsData: PlottedCoordinatePoint[]
+) {
     if (!globe) return;
 
     globe.ringsData(pointsData)
@@ -126,7 +137,7 @@ export function addRingsDataStatic(globe, pointsData) {
 };
 
 
-export function clearRingsData(globe) {
+export function clearRingsData(globe: ThreeGlobe) {
     if (!globe) return;
 
     // Clear all rings by passing empty data
@@ -134,7 +145,10 @@ export function clearRingsData(globe) {
 }
 
 
-export function addPointsData(globe, pointsData) {
+export function addPointsData(
+    globe: ThreeGlobe, 
+    pointsData: PlottedCoordinatePoint[]
+) {
     if (!globe) return;
     
     globe.pointsData(pointsData)
@@ -145,20 +159,24 @@ export function addPointsData(globe, pointsData) {
 }
 
 
-export function clearPointsData(globe) {
+export function clearPointsData(globe: ThreeGlobe) {
     if (!globe) return;
     globe.pointsData([]);
 }
 
 
-export function clearAllData(globe) {
+export function clearAllData(globe: ThreeGlobe) {
     if (!globe) return;
     globe.ringsData([]);
     globe.pointsData([]);
 }
   
 
-export async function resetGlobe(camera, pitchRef, yawRef) {
+export async function resetGlobe(
+    camera: THREE.PerspectiveCamera, 
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>
+) {
     // Start with camera zooming out.. far!
     new JEasing(camera.position)
         .to({ x: 0, y: 0, z: 300 }, 1000) 
@@ -187,7 +205,11 @@ export async function resetGlobe(camera, pitchRef, yawRef) {
 
 
 // Ease camera view to coords point for globe storytelling
-export function goToCoordinates(lat, long, pitchRef, yawRef) {
+export function goToCoordinates(
+    lat: number, lng: number, 
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>
+) {
     new JEasing(pitchRef.current.rotation)
         // Convert latitude to radians, & animate over 1000 ms (1 sec)
         .to(
@@ -200,7 +222,7 @@ export function goToCoordinates(lat, long, pitchRef, yawRef) {
     new JEasing(yawRef.current.rotation)
         // Convert longitude to radians, & animate over 1000 ms (1 sec)
         .to(
-            { y: (long / 180) * Math.PI },
+            { y: (lng / 180) * Math.PI },
             1000
         )
         .easing(Cubic.InOut)
@@ -208,7 +230,15 @@ export function goToCoordinates(lat, long, pitchRef, yawRef) {
 };
 
 
-export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, sharkID, onPointChange) {
+export async function playStoryMode(
+    globe: ThreeGlobe, 
+    controls: OrbitControls, 
+    camera: THREE.PerspectiveCamera, 
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    sharkID: string, 
+    onPointChange?: (point: PlottedCoordinatePoint) => void
+) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
     
@@ -251,7 +281,16 @@ export async function playStoryMode(globe, controls, camera, pitchRef, yawRef, s
 };
 
 
-export async function highlightSharkMode(globe, controls, camera, pitchRef, yawRef, sharkID, usePoints = false, keepControlsDisabled = false) {
+export async function highlightSharkMode(
+    globe: ThreeGlobe, 
+    controls: OrbitControls, 
+    camera: THREE.PerspectiveCamera, 
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    sharkID: string, 
+    usePoints: boolean = false, 
+    keepControlsDisabled: boolean = false
+) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
     

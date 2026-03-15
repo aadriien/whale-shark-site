@@ -10,7 +10,7 @@ import SharkSelector from "../components/panels/SharkSelector";
 import SavedDisplay from "../components/panels/SavedSharksDisplay";
 import LabSelectionPanel from "../components/panels/LabSelectionPanel";
 
-import { addPointsData, clearAllData } from "../utils/GlobeUtils.js";
+import { addPointsData, clearAllData } from "../utils/GlobeUtils";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils";
 import { useGlobeClick } from "../utils/GlobeClick.jsx";
 

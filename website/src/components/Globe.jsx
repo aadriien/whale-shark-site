@@ -7,7 +7,7 @@ import JEASINGS from "../utils/JEasings/JEasings.ts";
 import { 
     createGlobe, createLights, createCamera, createControls,
     setupCameraAngles, resetGlobe, playStoryMode, highlightSharkMode, goToCoordinates
-} from "../utils/GlobeUtils.js";
+} from "../utils/GlobeUtils";
 
 
 const Globe = forwardRef((props, ref) => {

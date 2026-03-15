@@ -5,7 +5,7 @@ import TimelineSelector from "./TimelineSelector";
 
 import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils";
 import { getSavedSharkIds } from "../../utils/FavoritesUtils";
-import { addPointsData, clearAllData } from "../../utils/GlobeUtils.js";
+import { addPointsData, clearAllData } from "../../utils/GlobeUtils";
 
 
 const TimelineControls = ({ 
