@@ -7,17 +7,19 @@ import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils";
 import { getSavedSharkIds } from "../../utils/FavoritesUtils";
 import { addPointsData, clearAllData } from "../../utils/GlobeUtils";
 
+import { TimelineControlsProps } from "../../types/controls";
+import { PlottedCoordinatePoint } from "../../types/coordinates";
+
 
 const TimelineControls = ({ 
     globeRef, 
     selectedSharksForLab, 
     onToggleTimelineMode, 
     isTimelineMode,
-    onTimelineStateChange 
-}) => {
-    const [selectedMonth, setSelectedMonth] = useState(null);
-    const [selectedYear, setSelectedYear] = useState(null);
-    const [plottedCoordinates, setPlottedCoordinates] = useState([]);
+}: TimelineControlsProps) => {
+    const [selectedMonth, setSelectedMonth] = useState<number>(null);
+    const [selectedYear, setSelectedYear] = useState<number>(null);
+    const [plottedCoordinates, setPlottedCoordinates] = useState<PlottedCoordinatePoint[]>([]);
 
     const handleToggleTimelineMode = () => {
         if (isTimelineMode) {
@@ -27,10 +29,9 @@ const TimelineControls = ({
             setPlottedCoordinates([]);
         }
         onToggleTimelineMode();
-        onTimelineStateChange?.(false);
     };
 
-    const handleTimelineChange = useCallback((month, year) => {
+    const handleTimelineChange = useCallback((month: number, year: number) => {
         setSelectedMonth(month);
         setSelectedYear(year);
         console.log(`Timeline changed to: ${month}/${year}`);
@@ -38,18 +39,24 @@ const TimelineControls = ({
         // Show filtered timeline data on globe
         if (globeRef.current && month && year) {
             const globeInstance = globeRef.current.getGlobe();
-            clearAllData(globeInstance);
+            if (globeInstance) {
+                clearAllData(globeInstance);
+            }
             
             const savedSharkIds = getSavedSharkIds();
-            let dataToShow;
+            let dataToShow: PlottedCoordinatePoint[];
             
             if (selectedSharksForLab.size > 0) {
                 // Selected lab sharks with timeline filtering
-                dataToShow = getGroupCoordinatesByTimeline(Array.from(selectedSharksForLab), month, year);
+                dataToShow = getGroupCoordinatesByTimeline(
+                    Array.from(selectedSharksForLab), month, year
+                );
             } 
             else {
                 // All saved sharks with timeline filtering
-                dataToShow = getGroupCoordinatesByTimeline(savedSharkIds, month, year);
+                dataToShow = getGroupCoordinatesByTimeline(
+                    savedSharkIds, month, year
+                );
             }
             
             // Store plotted coordinates for display in TimelineSelector

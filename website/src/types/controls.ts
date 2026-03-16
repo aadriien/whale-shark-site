@@ -1,5 +1,6 @@
 import { WhaleSharkEntryNormalized } from "./sharks";
 import { PlottedCoordinatePoint } from "./coordinates";
+import { GlobeHandle } from "./globes";
 
 
 /* Controls types */
@@ -27,6 +28,14 @@ export type TimelineSelectorProps = {
     isVisible: boolean;
     availableSharks: string[];
     plottedCoordinates: PlottedCoordinatePoint[]
+};
+
+
+export type TimelineControlsProps = {
+    globeRef: React.RefObject<GlobeHandle>;
+    selectedSharksForLab: Set<string>;
+    onToggleTimelineMode: () => void; 
+    isTimelineMode: boolean;
 };
 
 
