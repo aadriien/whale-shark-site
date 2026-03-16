@@ -1,7 +1,14 @@
 import SharkCard from "./SharkCard";
 
+import { SharkGridProps } from "../../types/cards";
 
-const SharkGrid = ({ sharks, onPlayStory, isPlaying, playingSharkId }) => {
+
+const SharkGrid = ({ 
+    sharks, 
+    onPlayStory, 
+    isPlaying, 
+    playingSharkId 
+}: SharkGridProps) => {
     return (
         <div className="shark-grid">
             {sharks.map((shark) => (
@@ -16,3 +23,4 @@ const SharkGrid = ({ sharks, onPlayStory, isPlaying, playingSharkId }) => {
 };
 
 export default SharkGrid;
+
