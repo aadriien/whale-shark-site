@@ -10,9 +10,9 @@ export type PlayStoryButtonProps = {
     onPlayStory: (id: string) => void;
     isPlaying: boolean; 
     playingSharkId: string; 
-    showPauseForGeoLabs: boolean; 
-    onToggleStepMode: () => void;
-    isStepMode: boolean;
+    showPauseForGeoLabs?: boolean; 
+    onToggleStepMode?: () => void;
+    isStepMode?: boolean;
 };
 
 
