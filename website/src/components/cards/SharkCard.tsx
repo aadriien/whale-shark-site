@@ -5,9 +5,16 @@ import { selectedSharkGenImages } from "../../utils/DataUtils";
 import FavoriteButton from "../controls/FavoriteButton";
 import PlayStoryButton from "../controls/PlayStoryButton";
 
+import { SharkCardProps } from "../../types/cards";
 
-const SharkCard = ({ shark, onPlayStory, isPlaying, playingSharkId }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+
+const SharkCard = ({ 
+    shark, 
+    onPlayStory, 
+    isPlaying, 
+    playingSharkId 
+}: SharkCardProps) => {
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
