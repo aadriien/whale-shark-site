@@ -5,13 +5,16 @@ import SharkGrid from "../components/cards/SharkGrid";
 
 import { storySharks } from "../utils/DataUtils";
 
+import { PlottedCoordinatePoint } from "../types/coordinates";
+import { GlobeHandle } from "../types/globes";
+
 
 function SharkTracker() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [playingSharkId, setPlayingSharkId] = useState(null);
-    const [currentPoint, setCurrentPoint] = useState(null);
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
+    const [playingSharkId, setPlayingSharkId] = useState<string>(null);
+    const [currentPoint, setCurrentPoint] = useState<PlottedCoordinatePoint>(null);
 
-    const globeRef = useRef();
+    const globeHandleRef = useRef<GlobeHandle>(null);
 
     const sharks = storySharks;
 
@@ -19,13 +22,13 @@ function SharkTracker() {
     const leftSharks = sharks.slice(0, mid);
     const rightSharks = sharks.slice(mid);
 
-    const handlePlayStory = (sharkId) => {
+    const handlePlayStory = (sharkId: string) => {
         setIsPlaying(true);
         setPlayingSharkId(sharkId);
 
         // Reset isPlaying state when story finished
         // (buttons disabled while story playing)
-        globeRef.current?.playStory(sharkId, (point) => {
+        globeHandleRef.current?.playStory(sharkId, (point) => {
             setCurrentPoint(point);
         }).finally(() => {
             // Clear after story ends
@@ -42,12 +45,17 @@ function SharkTracker() {
             <div className="globe-cards-container">
                 {/* Left Shark Cards */}
                 <div className="side-column">
-                    <SharkGrid sharks={leftSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} playingSharkId={playingSharkId} />
+                    <SharkGrid 
+                        sharks={leftSharks} 
+                        onPlayStory={handlePlayStory} 
+                        isPlaying={isPlaying} 
+                        playingSharkId={playingSharkId} 
+                    />
                 </div>
 
                 {/* Globe */}
                 <div className="globe-container" style={{ position: "relative" }}>
-                    <Globe ref={globeRef} />
+                    <Globe ref={globeHandleRef} />
                     <div 
                         style={{
                             position: "absolute",
@@ -82,7 +90,12 @@ function SharkTracker() {
 
                 {/* Right Shark Cards */}
                 <div className="side-column">
-                    <SharkGrid sharks={rightSharks} onPlayStory={handlePlayStory} isPlaying={isPlaying} playingSharkId={playingSharkId} />
+                    <SharkGrid 
+                        sharks={rightSharks} 
+                        onPlayStory={handlePlayStory} 
+                        isPlaying={isPlaying} 
+                        playingSharkId={playingSharkId} 
+                    />
                 </div>
             </div>
         </div>

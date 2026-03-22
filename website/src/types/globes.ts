@@ -54,8 +54,8 @@ export type SharkClickParams = {
 };
 
 export type GlobeProps = {
-    onSharkClick: (sharkClickParams: SharkClickParams) => void;
-    allowClicks: boolean;
+    onSharkClick?: (sharkClickParams: SharkClickParams) => void;
+    allowClicks?: boolean;
 };
 
 
