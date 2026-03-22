@@ -1,16 +1,20 @@
 import { useRef, useEffect } from "react";
 
+import { UseGlobeClickParams, SharkClickParams } from "../types/globes";
+import { WhaleSharkDatasetNormalized } from "../types/sharks";
+import { PlottedCoordinatePoint } from "../types/coordinates";
+
 
 export function useGlobeClick({ 
     sharks, 
     pointsData, 
     allSharksVisible, 
     onSharkSelect 
-}) {
+}: UseGlobeClickParams) {
     // Use refs to always have current values 
-    const sharksRef = useRef(sharks);
-    const pointsDataRef = useRef(pointsData);
-    const allSharksVisibleRef = useRef(allSharksVisible);
+    const sharksRef = useRef<WhaleSharkDatasetNormalized>(sharks);
+    const pointsDataRef = useRef<PlottedCoordinatePoint[]>(pointsData);
+    const allSharksVisibleRef = useRef<boolean>(allSharksVisible);
     const onSharkSelectRef = useRef(onSharkSelect);
     
     // Update refs whenever props change
@@ -21,7 +25,7 @@ export function useGlobeClick({
         onSharkSelectRef.current = onSharkSelect;
     });
     
-    const handleSelectShark = (arg) => {
+    const handleSelectShark = (arg: SharkClickParams | string) => {
         // Check if arg is object (from globe click) or string (from dropdown)
         if (typeof arg === "object" && arg.lat !== undefined && arg.lng !== undefined) {
             if (!allSharksVisibleRef.current) {
@@ -44,8 +48,7 @@ export function useGlobeClick({
                 const cleanID = found.id.split("-")[0];
                 console.log("Matched shark:", found.id, " with ID: ", cleanID);
 
-                // Using "==" instead of "===" in case different types for ID
-                const foundShark = sharksRef.current.find(shark => shark.id == cleanID) || null;
+                const foundShark = sharksRef.current.find(shark => shark.id === cleanID);
 
                 console.log("Sending shark object:", foundShark);
                 onSharkSelectRef.current(foundShark);
@@ -57,7 +60,7 @@ export function useGlobeClick({
         } 
         else {
             // Coming from dropdown (arg = sharkId or null)
-            const foundShark = sharksRef.current.find(shark => shark.id == arg) || null;
+            const foundShark = sharksRef.current.find(shark => shark.id === arg);
             onSharkSelectRef.current(foundShark);
         }
     };

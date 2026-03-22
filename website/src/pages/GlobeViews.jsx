@@ -8,7 +8,7 @@ import ContinentDisplay from "../components/panels/ContinentSharksDisplay";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils";
 import { getGroupCoordinates } from "../utils/CoordinateUtils";
-import { useGlobeClick } from "../utils/GlobeClick.jsx";
+import { useGlobeClick } from "../utils/GlobeClick";
 import { mediaSharks } from "../utils/DataUtils";
 
 

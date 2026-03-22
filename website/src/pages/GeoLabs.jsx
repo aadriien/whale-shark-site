@@ -12,7 +12,7 @@ import LabSelectionPanel from "../components/panels/LabSelectionPanel";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils";
-import { useGlobeClick } from "../utils/GlobeClick.jsx";
+import { useGlobeClick } from "../utils/GlobeClick";
 
 import { 
     getGroupCoordinates, 
