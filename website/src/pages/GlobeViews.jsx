@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import Globe from "../components/Globe.jsx";
+import Globe from "../components/Globe";
 import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector";
 import ContinentDisplay from "../components/panels/ContinentSharksDisplay";

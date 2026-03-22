@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 
-import Globe from "../components/Globe.jsx";
+import Globe from "../components/Globe";
 import PlayStoryButton from "../components/controls/PlayStoryButton";
 import StoryStepSlider from "../components/controls/StoryStepSlider";
 import TimelineControls from "../components/controls/TimelineControls";

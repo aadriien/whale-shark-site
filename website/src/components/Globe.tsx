@@ -2,32 +2,42 @@ import { useEffect, useRef } from "react";
 import { forwardRef, useImperativeHandle } from "react";
 
 import * as THREE from "three";
-import JEASINGS from "../utils/JEasings/JEasings.ts";
+import ThreeGlobe from "three-globe";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
+import JEASINGS from "../utils/JEasings/JEasings";
 
 import { 
     createGlobe, createLights, createCamera, createControls,
     setupCameraAngles, resetGlobe, playStoryMode, highlightSharkMode, goToCoordinates
 } from "../utils/GlobeUtils";
 
+import { GlobeHandle, GlobeProps } from "../types/globes";
 
-const Globe = forwardRef((props, ref) => {
-    const mountRef = useRef(null);
+
+// Weird TypeScript ForwardRef rules when ordering for type inference
+// Always props first (GlobeProps), then ref second (GlobeHandle)
+const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
+    const mountRef = useRef<HTMLDivElement | null>(null);
     
     // Hoist these so playStory can access them
-    const globeRef = useRef(null);
-    const cameraRef = useRef(null);
-    const controlsRef = useRef(null);
+    const globeRef = useRef<ThreeGlobe>(null);
+    const cameraRef = useRef<THREE.PerspectiveCamera>(null);
+    const controlsRef = useRef<OrbitControls>(null);
     
-    const pivotRef = useRef(null);
-    const yawRef = useRef(null);
-    const pitchRef = useRef(null);
+    const pivotRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
+    const yawRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
+    const pitchRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
 
-    const raycaster = useRef(new THREE.Raycaster());
-    const mouse = useRef(new THREE.Vector2());
+    const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
+    const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
 
-    const allowClicksRef = useRef(props.allowClicks);
+    const allowClicksRef = useRef<boolean>(props.allowClicks);
 
-    const playStory = async (sharkID, onPointChange) => {
+    const playStory: GlobeHandle["playStory"] = async (
+        sharkID, 
+        onPointChange
+    ) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
@@ -44,7 +54,10 @@ const Globe = forwardRef((props, ref) => {
     
 
     // GeoLabs version: don't reset globe if shark already selected
-    const playStoryFromSelection = async (sharkID, onPointChange) => {
+    const playStoryFromSelection: GlobeHandle["playStoryFromSelection"] = async (
+        sharkID, 
+        onPointChange
+    ) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
@@ -58,7 +71,11 @@ const Globe = forwardRef((props, ref) => {
     };
 
 
-    const highlightShark = async (sharkID, usePoints = false, keepControlsDisabled = false) => {
+    const highlightShark: GlobeHandle["highlightShark"] = async (
+        sharkID, 
+        usePoints = false, 
+        keepControlsDisabled = false
+    ) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
         
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
@@ -74,7 +91,7 @@ const Globe = forwardRef((props, ref) => {
     };
     
 
-    const interruptStory = () => {
+    const interruptStory: GlobeHandle["interruptStory"] = () => {
         // Clear all ongoing JEASINGS animations
         JEASINGS.removeAll();
         
@@ -90,7 +107,10 @@ const Globe = forwardRef((props, ref) => {
         }
     };
     
-    const showSinglePoint = (point, disableControls = true) => {
+    const showSinglePoint: GlobeHandle["showSinglePoint"] = (
+        point, 
+        disableControls = true
+    ) => {
         if (!globeRef.current || !point) return;
         
         // Disable orbit controls for step mode
@@ -116,13 +136,13 @@ const Globe = forwardRef((props, ref) => {
     };
     
     
-    const enableControls = () => {
+    const enableControls: GlobeHandle["enableControls"] = () => {
         if (controlsRef.current) {
             controlsRef.current.enabled = true;
         }
     };
     
-    const disableControls = () => {
+    const disableControls: GlobeHandle["disableControls"] = () => {
         if (controlsRef.current) {
             controlsRef.current.enabled = false;
         }
@@ -210,7 +230,7 @@ const Globe = forwardRef((props, ref) => {
         controlsRef.current = controls;
 
 
-        const handleClick = (event) => {
+        const handleClick = (event: MouseEvent) => {
             if (!mountRef.current || !globeRef.current) return;
 
             // Prevent override of selected shark in globe clicking 
