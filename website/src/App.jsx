@@ -10,7 +10,7 @@ const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent"));
 const Home = lazy(() => import("./pages/Home.jsx"));
 const About = lazy(() => import("./pages/About"));
 
-const GlobeViews = lazy(() => import("./pages/GlobeViews.jsx"));
+const GlobeViews = lazy(() => import("./pages/GlobeViews"));
 const SharkTracker = lazy(() => import("./pages/SharkTracker.jsx"));
 const GeoLabs = lazy(() => import("./pages/GeoLabs.jsx"));
 const DataVisuals = lazy(() => import("./pages/DataVisuals"));

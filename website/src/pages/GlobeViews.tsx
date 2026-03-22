@@ -11,20 +11,24 @@ import { getGroupCoordinates } from "../utils/CoordinateUtils";
 import { useGlobeClick } from "../utils/GlobeClick";
 import { mediaSharks } from "../utils/DataUtils";
 
+import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "../types/sharks";
+import { GlobeHandle } from "../types/globes";
+
 
 function GlobeViews() {
     const [searchParams, setSearchParams] = useSearchParams();
     // Initialize selected shark from URL
-    const [selectedShark, setSelectedShark] = useState(() => {
+    const [selectedShark, setSelectedShark] = useState<WhaleSharkEntryNormalized | null>(() => {
         const sharkId = searchParams.get("selectedSharkId");
         if (sharkId) {
             return mediaSharks.find(s => s.id === sharkId) || null;
         }
         return null;
     });
-    const [allSharksVisible, setAllSharksVisible] = useState(true);
-    const [filteredSharks, setFilteredSharks] = useState(mediaSharks); // track filtered sharks
-    const globeRef = useRef();
+    const [allSharksVisible, setAllSharksVisible] = useState<boolean>(true);
+    const [filteredSharks, setFilteredSharks] = useState<WhaleSharkDatasetNormalized>(mediaSharks); // track filtered sharks
+    
+    const globeHandleRef = useRef<GlobeHandle>(null);
     
     // Get coordinates for filtered sharks only
     const filteredPointsData = useMemo(() => {
@@ -38,8 +42,8 @@ function GlobeViews() {
     useEffect(() => {
         // Show filtered sharks if nothing selected
         if (!selectedShark) {
-            if (globeRef.current) {
-                const globeInstance = globeRef.current.getGlobe();
+            if (globeHandleRef.current) {
+                const globeInstance = globeHandleRef.current.getGlobe();
                 clearAllData(globeInstance);
                 addPointsData(globeInstance, filteredPointsData);
             }
@@ -47,10 +51,10 @@ function GlobeViews() {
         } 
         else {
             // When shark selected, clear points & show rings for individual
-            if (globeRef.current) {
-                const globeInstance = globeRef.current.getGlobe();
+            if (globeHandleRef.current) {
+                const globeInstance = globeHandleRef.current.getGlobe();
                 clearAllData(globeInstance); // Clear both points & rings
-                globeRef.current.highlightShark(selectedShark.id);
+                globeHandleRef.current.highlightShark(selectedShark.id);
             }
             setAllSharksVisible(false);
         }
@@ -58,8 +62,8 @@ function GlobeViews() {
     
     // Initial setup to show sharks on mount
     useEffect(() => {
-        if (globeRef.current) {
-            const globeInstance = globeRef.current.getGlobe();
+        if (globeHandleRef.current) {
+            const globeInstance = globeHandleRef.current.getGlobe();
             clearAllData(globeInstance);
             addPointsData(globeInstance, filteredPointsData);
         }
@@ -81,7 +85,7 @@ function GlobeViews() {
     const handleSelectShark = useGlobeClick({
         sharks: filteredSharks,
         pointsData: filteredPointsData, 
-        allSharksVisible: !selectedShark,
+        allSharksVisible: allSharksVisible,
         onSharkSelect: setSelectedShark
     });
       
@@ -105,7 +109,7 @@ function GlobeViews() {
                 {/* Globe component */}
                 <div className="globe-container">
                     <Globe 
-                        ref={globeRef} 
+                        ref={globeHandleRef} 
                         onSharkClick={handleSelectShark} 
                         allowClicks={!selectedShark}
                     />
