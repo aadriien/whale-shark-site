@@ -141,8 +141,9 @@ function createCircleTexture() {
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
+
     const ctx = canvas.getContext('2d');
-    
+    if (!ctx) return;
     ctx.clearRect(0, 0, size, size);
 
     // Create radial gradient with multiple stops for smooth falloff

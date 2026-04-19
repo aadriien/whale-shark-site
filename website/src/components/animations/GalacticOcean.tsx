@@ -256,6 +256,8 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         // Optional: Update blob group's screen position if source object provided
         if (sourceObject && cameraRef.current) {
             const blobGroup = sourceObject.parent;
+            if (!blobGroup) return;
+
             const vector = new THREE.Vector3();
             vector.setFromMatrixPosition(blobGroup.matrixWorld);
             vector.project(cameraRef.current);
@@ -334,10 +336,12 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
 
         // Create research reef & creative current objects
         const reef = createReef();
+        if (!reef) return;
         reef.scale.set(1.8, 1.8, 1.8);
         scene.add(reef);
 
         const current = createCurrent();
+        if (!current) return;
         current.scale.set(1.8, 1.8, 1.8);
         scene.add(current);
 
@@ -377,7 +381,8 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
             },
         };
 
-        ["reef", "current"].forEach((keyName) => {
+        const blobKeys: HoverBlobName[] = ["reef", "current"];
+        blobKeys.forEach((keyName) => {
             const parentObject = keyName === "reef" ? reef : current;
             parentObject.traverse((child) => {
                 if (child instanceof THREE.Points) {
@@ -454,8 +459,10 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
             if (!geometry.boundingSphere) {
                 geometry.computeBoundingSphere();
             }
+            const sphere = geometry.boundingSphere;
+            if (!sphere) return;
 
-            sharkSphere.copy(geometry.boundingSphere);
+            sharkSphere.copy(sphere);
             sharkSphere.applyMatrix4(shark.matrixWorld);
 
             let collidedName: HoverBlobName | null = null;
@@ -507,6 +514,7 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
 
             updateShark(elapsed);
 
+            if (!reef || !current) return;
             animateReef(reef);
             animateCurrent(current);
 

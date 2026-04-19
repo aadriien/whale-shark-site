@@ -21,13 +21,13 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
     const mountRef = useRef<HTMLDivElement | null>(null);
     
     // Hoist these so playStory can access them
-    const globeRef = useRef<ThreeGlobe>(null);
-    const cameraRef = useRef<THREE.PerspectiveCamera>(null);
-    const controlsRef = useRef<OrbitControls>(null);
+    const globeRef = useRef<ThreeGlobe | null>(null);
+    const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+    const controlsRef = useRef<OrbitControls | null>(null);
     
-    const pivotRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
-    const yawRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
-    const pitchRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
+    const pivotRef = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null);
+    const yawRef = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null);
+    const pitchRef = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null);
 
     const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
     const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
@@ -151,7 +151,7 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
     
     // Expose globe instance, playStory, highlightShark, interruptStory methods to parent
     useImperativeHandle(ref, () => ({
-        getGlobe: () => globeRef.current,
+        getGlobe: () => globeRef.current!,
         playStory,
         playStoryFromSelection,
         highlightShark,
@@ -243,7 +243,7 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
             mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-            raycaster.current.setFromCamera(mouse.current, cameraRef.current);
+            raycaster.current.setFromCamera(mouse.current, cameraRef.current!);
             const intersects = raycaster.current.intersectObject(globeRef.current);
 
             if (intersects.length > 0) {
@@ -269,7 +269,7 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
         };
 
         window.addEventListener("resize", resizeCanvas);
-        mountRef.current.addEventListener("click", handleClick);
+        mountRef.current!.addEventListener("click", handleClick);
 
         const animate = () => {
             controls.update();

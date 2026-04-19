@@ -2,6 +2,13 @@ import * as THREE from "three";
 
 /* Animation types */
 
+type Axes = "x" | "y" | "z";
+
+type Mode = "simple" | "segmented" | "smooth";
+
+export type HoverBlobName = "reef" | "current";
+
+
 export type BlobParticleGroupParams = {
     baseColors: THREE.Color[]; 
     particleCount: number;
@@ -13,11 +20,11 @@ export type BlobParticleGroupParams = {
 
 
 type Oscillation = {
-    axis1: string;
+    axis1: Axes;
     amplitude1: number;
     frequency1: number;
 
-    axis2: string;
+    axis2: Axes;
     amplitude2: number;
     frequency2: number;
 };
@@ -49,10 +56,6 @@ export type SegmentDataItem = {
 export type SegmentData = SegmentDataItem[];
 
 
-type Axes = "x" | "y" | "z";
-
-type Mode = "simple" | "segmented" | "smooth";
-
 export type WaveProps = {
     basePositions: Float32Array<ArrayBuffer>;
     time: number;
@@ -76,15 +79,13 @@ export type GalacticOceanProps = {
 };
 
 
-export type HoverBlobName = "reef" | "current";
-
 type BlobConfigs = {
     opacity: number;
     size: number;
 };
 
 type ParticleBlob = {
-    blob: THREE.Points;
+    blob: THREE.Points | null;
     original: BlobConfigs;
 };
 
@@ -93,8 +94,8 @@ export type ParticleBlobs = Record<HoverBlobName, ParticleBlob>;
 
 export type SetActiveBlobProps = {
     particleBlobs: ParticleBlobs;
-    activeName?: HoverBlobName;
-    sourceObject?: THREE.Object3D;
+    activeName?: HoverBlobName | null;
+    sourceObject?: THREE.Object3D | null;
 };
 
 

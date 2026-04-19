@@ -64,7 +64,9 @@ function createBlobParticles({
     const canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
+
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
     const gradient = ctx.createRadialGradient(
         size / 2, 
@@ -107,7 +109,9 @@ function animateBlobParticles({
     oscillation, 
     bounds 
 }: AnimateBlobGroupParams) {
-    const axisIndex = { x: 0, y: 1, z: 2 };
+    if (!moveVector || ! oscillation || !bounds) return;
+
+    const axisIndex = { "x": 0, "y": 1, "z": 2 };
     const rangeX = bounds.maxX - bounds.minX;
 
     blobGroup.traverse(child => {
@@ -173,6 +177,7 @@ function createBlobGroup({
     const blobGroup = createBlobParticles({
         baseColors, particleCount, spaceScale, pointSize
     });
+    if (!blobGroup) return;
 
     // Add a clickable invisible mesh
     const clickable = new THREE.Mesh(
@@ -199,8 +204,8 @@ function animateBlobGroup({
     blobGroup,
     moveVector = new THREE.Vector3(0, 0, 0),
     oscillation = {
-        axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
-        axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
+        axis1: "z", amplitude1: 0.025, frequency1: 0.12,
+        axis2: "y", amplitude2: 0.006, frequency2: 0.06,
     },
     bounds = { 
         minX: -60, maxX: 60, 
@@ -211,12 +216,11 @@ function animateBlobGroup({
     animateBlobParticles({ blobGroup, moveVector, oscillation, bounds });
 
     // Find points object inside blobGroup
-    let points: THREE.Points | null = null;
-    blobGroup.traverse(child => {
-        if (child instanceof THREE.Points && child.userData.positions) {
-            points = child;
-        }
-    });
+    const points = blobGroup.children.find(
+        (child): child is THREE.Points =>
+            child instanceof THREE.Points &&
+            !!child.userData.positions
+    );
     if (!points) return;
 
     // Calculate average center of particles
@@ -263,8 +267,8 @@ export function animateReef(reefGroup: THREE.Points) {
         blobGroup: reefGroup, 
         moveVector: new THREE.Vector3(0.035, 0, 0),
         oscillation: {
-            axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
-            axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
+            axis1: "z", amplitude1: 0.025, frequency1: 0.12,
+            axis2: "y", amplitude2: 0.006, frequency2: 0.06,
         },
         bounds: { 
             minX: -60, maxX: 60, 
@@ -298,8 +302,8 @@ export function animateCurrent(currentGroup: THREE.Points) {
         blobGroup: currentGroup, 
         moveVector: new THREE.Vector3(-0.035, 0, 0), 
         oscillation: {
-            axis1: 'z', amplitude1: 0.025, frequency1: 0.12,
-            axis2: 'y', amplitude2: 0.006, frequency2: 0.06,
+            axis1: "z", amplitude1: 0.025, frequency1: 0.12,
+            axis2: "y", amplitude2: 0.006, frequency2: 0.06,
         }, 
         bounds: { 
             minX: -60, maxX: 60, 

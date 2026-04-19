@@ -30,7 +30,7 @@ type ViewMode = "individual" | "multiple";
 
 
 function GeoLabs() {
-    const [selectedShark, setSelectedShark] = useState<WhaleSharkEntryNormalized>(null);
+    const [selectedShark, setSelectedShark] = useState<WhaleSharkEntryNormalized | null>(null);
     const [allSharksVisible, setAllSharksVisible] = useState<boolean>(true);
     const [filteredSharks, setFilteredSharks] = useState<WhaleSharkDatasetNormalized>(mediaSharks);
     
@@ -42,13 +42,13 @@ function GeoLabs() {
     // Step-through story functionality
     const [isStepMode, setIsStepMode] = useState<boolean>(false);
     const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-    const [currentPoint, setCurrentPoint] = useState<PlottedCoordinatePoint>(null);
+    const [currentPoint, setCurrentPoint] = useState<PlottedCoordinatePoint | null>(null);
     const globeHandleRef = useRef<GlobeHandle>(null);
     
     // Timeline mode functionality
     const [isTimelineMode, setIsTimelineMode] = useState<boolean>(false);
-    const [selectedMonth, setSelectedMonth] = useState<number>(null);
-    const [selectedYear, setSelectedYear] = useState<number>(null);
+    const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+    const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
     const sharks = mediaSharks;
 

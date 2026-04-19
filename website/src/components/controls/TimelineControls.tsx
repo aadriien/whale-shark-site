@@ -17,8 +17,8 @@ const TimelineControls = ({
     onToggleTimelineMode, 
     isTimelineMode,
 }: TimelineControlsProps) => {
-    const [selectedMonth, setSelectedMonth] = useState<number>(null);
-    const [selectedYear, setSelectedYear] = useState<number>(null);
+    const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+    const [selectedYear, setSelectedYear] = useState<number | null>(null);
     const [plottedCoordinates, setPlottedCoordinates] = useState<PlottedCoordinatePoint[]>([]);
 
     const handleToggleTimelineMode = () => {
@@ -84,8 +84,8 @@ const TimelineControls = ({
             
             <TimelineSelector 
                 onTimelineChange={handleTimelineChange}
-                currentMonth={selectedMonth}
-                currentYear={selectedYear}
+                currentMonth={selectedMonth!}
+                currentYear={selectedYear!}
                 isVisible={isTimelineMode}
                 availableSharks={getAvailableSharks()}
                 plottedCoordinates={plottedCoordinates}
