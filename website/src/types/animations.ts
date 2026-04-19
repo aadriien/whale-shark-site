@@ -71,3 +71,30 @@ export type ApplyRippleProps = WaveProps & {
 };
 
 
+export type GalacticOceanProps = {
+    isMobile: boolean;
+};
+
+
+export type HoverBlobName = "reef" | "current";
+
+type BlobConfigs = {
+    opacity: number;
+    size: number;
+};
+
+type ParticleBlob = {
+    blob: THREE.Points;
+    original: BlobConfigs;
+};
+
+export type ParticleBlobs = Record<HoverBlobName, ParticleBlob>;
+
+
+export type SetActiveBlobProps = {
+    particleBlobs: ParticleBlobs;
+    activeName?: HoverBlobName;
+    sourceObject?: THREE.Object3D;
+};
+
+

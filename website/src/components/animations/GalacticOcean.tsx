@@ -2,10 +2,10 @@ import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
 
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 import { 
     createReef, animateReef, 
@@ -13,8 +13,10 @@ import {
 } from "./ReefCurrentAnimated";
 import { GlowSharkAnimated } from "./GlowSharkAnimated";
 
+import { GalacticOceanProps, HoverBlobName, ParticleBlobs, SetActiveBlobProps } from "../../types/animations";
 
-function createNebula(scene) {
+
+function createNebula(scene: THREE.Scene) {
     // Stars particle system
     const starCount = 2500;
     const starGeometry = new THREE.BufferGeometry();
@@ -114,7 +116,7 @@ function createNebula(scene) {
 }
 
 
-function createOcean(scene) {
+function createOcean(scene: THREE.Scene) {
     // Ocean plane in scene
     const oceanGeometry = new THREE.PlaneGeometry(2430, 800, 80, 40);
 
@@ -208,39 +210,44 @@ function createOcean(scene) {
 }
 
 
-function GalacticOcean({ isMobile }) {
-    const [hoveredText, setHoveredText] = useState(null); // "reef" | "current" | null
-    const [hoveredBlob, setHoveredBlob] = useState(null); // "reef" | "current" | null
+function GalacticOcean({ isMobile }: GalacticOceanProps) {
+    const [hoveredText, setHoveredText] = useState<HoverBlobName | null>(null); // "reef" | "current" | null
+    const [hoveredBlob, setHoveredBlob] = useState<HoverBlobName | null>(null); // "reef" | "current" | null
     const [hoveredScreenPos, setHoveredScreenPos] = useState({ x: 0, y: 0 });
 
-    const currentHovered = useRef(null);
-    const currentColliding = useRef(null);
+    const currentHovered = useRef<HoverBlobName | null>(null);
+    const currentColliding = useRef<HoverBlobName | null>(null);
 
-    const mountRef = useRef();
-    const cameraRef = useRef();
+    const mountRef = useRef<HTMLDivElement | null>(null);
+    const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
     // Store for clickable Research Reef & Creative Current particle blobs
     const navigate = useNavigate();
-    const raycaster = useRef(new THREE.Raycaster());
-    const mouse = useRef(new THREE.Vector2());
-    const clickableMeshes = useRef([]);
+    const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
+    const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
+    const clickableMeshes = useRef<THREE.Mesh[]>([]);
 
     const isReefActive = hoveredBlob === "reef" || hoveredText === "reef";
     const isCurrentActive = hoveredBlob === "current" || hoveredText === "current";
 
 
     // Reusable helper to activate particle blob glow on mouse hover or shark collision
-    function setActiveBlob(particleBlobs, activeName, sourceObject = null) {
+    function setActiveBlob({
+        particleBlobs, 
+        activeName = null, 
+        sourceObject = null
+    }: SetActiveBlobProps) {
         // Reset all particles first
         Object.entries(particleBlobs).forEach(([name, { blob, original }]) => {
             if (!blob) return;
 
             const isActive = name === activeName;
+            const material = blob.material as THREE.PointsMaterial;
 
             // Glow only for hovered blob (reef vs current)
-            blob.material.opacity = isActive ? 1.2 : original.opacity;
-            blob.material.size = isActive ? original.size * 1.6 : original.size;
-            blob.material.needsUpdate = true;
+            material.opacity = isActive ? 1.2 : original.opacity;
+            material.size = isActive ? original.size * 1.6 : original.size;
+            material.needsUpdate = true;
         });
 
         // Update blob name for external state
@@ -342,22 +349,38 @@ function GalacticOcean({ isMobile }) {
 
         // Add their invisible meshes to clickable list
         reef.traverse((child) => {
-            if (child.isMesh && child.name === "reef") clickableMeshes.current.push(child);
+            if (child instanceof THREE.Mesh && child.name === "reef") {
+                clickableMeshes.current.push(child)
+            };
         });
         current.traverse((child) => {
-            if (child.isMesh && child.name === "current") clickableMeshes.current.push(child);
+            if (child instanceof THREE.Mesh && child.name === "current") {
+                clickableMeshes.current.push(child)
+            };
         });
 
         // Store particle blobs + their original material states
-        const particleBlobs = {
-            reef: { blob: null, original: {} },
-            current: { blob: null, original: {} },
+        const particleBlobs: ParticleBlobs = {
+            reef: { 
+                blob: null, 
+                original: { 
+                    opacity: 1, 
+                    size: 1 
+                } 
+            },
+            current: { 
+                blob: null, 
+                original: { 
+                    opacity: 1, 
+                    size: 1 
+                } 
+            },
         };
 
         ["reef", "current"].forEach((keyName) => {
             const parentObject = keyName === "reef" ? reef : current;
             parentObject.traverse((child) => {
-                if (child.isPoints) {
+                if (child instanceof THREE.Points) {
                     child.material.transparent = true;
                     particleBlobs[keyName].blob = child;
                     particleBlobs[keyName].original.opacity = child.material.opacity;
@@ -367,21 +390,21 @@ function GalacticOcean({ isMobile }) {
         });
 
         // Reusable helper function for mouse click & hover detection
-        function getIntersectedClickable(event) {
+        function getIntersectedClickable(event: MouseEvent) {
             if (!mountRef.current) return null;
 
             const rect = mountRef.current.getBoundingClientRect();
-            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-            raycaster.current.setFromCamera(mouse, camera);
+            raycaster.current.setFromCamera(mouse.current, camera);
             const intersects = raycaster.current.intersectObjects(clickableMeshes.current, true);
 
             return intersects.length > 0 ? intersects[0] : null;
         }
 
 
-        const handleClick = (event) => {
+        const handleClick = (event: MouseEvent) => {
             const intersect = getIntersectedClickable(event);
             if (intersect) {
                 const name = intersect.object.name;
@@ -397,21 +420,25 @@ function GalacticOcean({ isMobile }) {
         mountRef.current.addEventListener("click", handleClick);
 
 
-        const handleHover = (event) => {
+        const handleHover = (event: MouseEvent) => {
             const intersect = getIntersectedClickable(event);
 
             if (intersect) {
                 // Only enable changes if hovered object different
-                const hoveredName = intersect.object.name;
+                const hoveredName = intersect.object.name as HoverBlobName;
 
                 if (hoveredName !== currentHovered.current) {
-                    setActiveBlob(particleBlobs, hoveredName, intersect.object);
+                    setActiveBlob({ 
+                        particleBlobs: particleBlobs, 
+                        activeName: hoveredName, 
+                        sourceObject: intersect.object 
+                    });
                     currentHovered.current = hoveredName;
                 }
             } 
             else {
                 if (currentHovered.current !== null) {
-                    setActiveBlob(particleBlobs, null);
+                    setActiveBlob({ particleBlobs });
                     currentHovered.current = null;
                 }
             }
@@ -431,7 +458,7 @@ function GalacticOcean({ isMobile }) {
             sharkSphere.copy(geometry.boundingSphere);
             sharkSphere.applyMatrix4(shark.matrixWorld);
 
-            let collidedName = null;
+            let collidedName: HoverBlobName | null = null;
 
             // Check for interceptions / collisions with reef or current blobs
             for (const mesh of clickableMeshes.current) {
@@ -441,13 +468,16 @@ function GalacticOcean({ isMobile }) {
                 blobSphere.applyMatrix4(mesh.matrixWorld);
 
                 if (sharkSphere.intersectsSphere(blobSphere)) {
-                    collidedName = mesh.name; // "reef" or "current"
+                    collidedName = mesh.name as HoverBlobName; // "reef" or "current"
                     break;
                 }
             }
 
             if (collidedName !== currentColliding.current) {
-                setActiveBlob(particleBlobs, collidedName); // no need for screen project
+                setActiveBlob({ 
+                    particleBlobs: particleBlobs, 
+                    activeName: collidedName 
+                }); // no need for screen project
                 currentColliding.current = collidedName;
             }
         }
