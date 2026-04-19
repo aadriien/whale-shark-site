@@ -28,28 +28,23 @@ function App() {
   
     const [theme, setTheme] = useState<LightDarkTheme>(() => {
         // Check localStorage first for light / dark mode, then system preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            return savedTheme as LightDarkTheme;
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+            return savedTheme;
         }
         return window.matchMedia(
             "(prefers-color-scheme: dark)"
         ).matches ? "dark" : "light";
     });
 
-    // Save theme to localStorage whenever it changes
-    const handleThemeChange = (newTheme: LightDarkTheme) => {
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-    };
-
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
     }, [theme]);
 
     // Listen for system theme changes only if no saved preference
     useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
+        const savedTheme = localStorage.getItem("theme");
         if (!savedTheme) {
             const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
             const handler = (e: MediaQueryListEvent) => setTheme(
@@ -70,7 +65,7 @@ function App() {
                     isLogbookOpen={isLogbookOpen}
                     setIsLogbookOpen={setIsLogbookOpen}
                     theme={theme} 
-                    setTheme={handleThemeChange}
+                    setTheme={setTheme}
                 />
 
                 {/* Logbook overlay (conditionally rendered) */}
