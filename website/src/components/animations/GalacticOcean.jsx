@@ -10,7 +10,7 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 import { 
     createReef, animateReef, 
     createCurrent, animateCurrent 
-} from "./ReefCurrentAnimated.jsx";
+} from "./ReefCurrentAnimated";
 import { GlowSharkAnimated } from "./GlowSharkAnimated.jsx";
 
 
