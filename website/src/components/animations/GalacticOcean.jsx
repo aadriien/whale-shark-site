@@ -11,7 +11,7 @@ import {
     createReef, animateReef, 
     createCurrent, animateCurrent 
 } from "./ReefCurrentAnimated";
-import { GlowSharkAnimated } from "./GlowSharkAnimated.jsx";
+import { GlowSharkAnimated } from "./GlowSharkAnimated";
 
 
 function createNebula(scene) {

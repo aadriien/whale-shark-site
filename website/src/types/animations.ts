@@ -41,3 +41,33 @@ export type AnimateBlobGroupParams = {
 };
 
 
+export type SegmentDataItem = {
+    segmentIndex: number;
+    segmentPos: number;
+};
+
+export type SegmentData = SegmentDataItem[];
+
+
+type Axes = "x" | "y" | "z";
+
+type Mode = "simple" | "segmented" | "smooth";
+
+export type WaveProps = {
+    basePositions: Float32Array<ArrayBuffer>;
+    time: number;
+    wavelength: number;
+    speed: number;
+};
+
+export type ApplyRippleProps = WaveProps & {
+    positions: Float32Array<ArrayBuffer>;
+    axis: Axes;
+    amplitude: number;
+    numSegments: number;
+    taperPower: number;
+    taperStart: number;
+    mode: Mode;
+};
+
+

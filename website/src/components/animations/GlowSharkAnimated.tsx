@@ -2,8 +2,12 @@ import * as THREE from "three";
 
 import SharkModelPoints3D from "../../assets/data/json/shark_model_extracted_points_3d.json";
 
+import { SegmentData, WaveProps, ApplyRippleProps } from "../../types/animations";
 
-function computeWave(basePositions, time, wavelength, speed) {
+function computeWave({
+    basePositions, 
+    time, wavelength, speed
+}: WaveProps) {
     const waveValues = new Float32Array(basePositions.length / 3);
 
     for (let i = 0; i < basePositions.length / 3; i++) {
@@ -15,7 +19,10 @@ function computeWave(basePositions, time, wavelength, speed) {
 }
 
 
-function computeSegments(basePositions, numSegments) {
+function computeSegments(
+    basePositions: Float32Array<ArrayBuffer>, 
+    numSegments: number
+) {
     let minY = Infinity, maxY = -Infinity;
 
     for (let i = 0; i < basePositions.length / 3; i++) {
@@ -27,7 +34,7 @@ function computeSegments(basePositions, numSegments) {
     const segmentSize = (maxY - minY) / numSegments;
     
     // Assign each point to segment index & fractional position in segment
-    const segmentData = new Array(basePositions.length / 3);
+    const segmentData: SegmentData = new Array(basePositions.length / 3);
     for (let i = 0; i < basePositions.length / 3; i++) {
         const y = basePositions[i * 3 + 1];
 
@@ -53,18 +60,24 @@ function applyRipple({
     taperPower = 2,
     taperStart = 0.5, // start taper at halfway point
     mode = "smooth", // "simple", "segmented", "smooth"
-}) {
+}: ApplyRippleProps) {
     const axisIndex = { x: 0, y: 1, z: 2 }[axis];
     if (axisIndex === undefined) return;
     
     const pointCount = basePositions.length / 3;
     
     // Compute wave values & body segments based on Y axis
-    const waveValues = computeWave(basePositions, time, wavelength, speed);
-    const { minY, maxY, segmentSize, segmentData } = computeSegments(basePositions, numSegments);
+    const waveValues = computeWave({ 
+        basePositions, 
+        time, wavelength, speed 
+    });
+    const { minY, maxY, segmentSize, segmentData } = computeSegments(
+        basePositions, 
+        numSegments
+    );
     
     // Precompute segment ripple offsets with taper flipped (tail = higher Y)
-    const segmentOffsets = new Array(numSegments).fill(0);
+    const segmentOffsets: number[] = new Array(numSegments).fill(0);
     if (mode !== "simple") {
         for (let i = 0; i < numSegments; i++) {
             const segmentY = minY + i * segmentSize + segmentSize / 2;
@@ -253,13 +266,15 @@ export function GlowSharkAnimated() {
         geometry,
         basePositions,
         curve,
-        update: (time) => {
+        update: (time: number) => {
             // Hue shift + pulse
             const colors = geometry.attributes.color.array;
             for (let i = 0; i < rawPoints.length; i++) {
                 const hue = (time * 0.1 + i / rawPoints.length) % 1;
                 const pulse = 0.5 + 0.5 * Math.sin(time + i * 0.01);
+
                 color.setHSL(hue, 1.0, 0.5 + 0.2 * pulse);
+                
                 colors[i * 3] = color.r;
                 colors[i * 3 + 1] = color.g;
                 colors[i * 3 + 2] = color.b;
