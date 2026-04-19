@@ -1,5 +1,5 @@
 import { WhaleSharkDatasetNormalized } from "./sharks";
-import { SharkClickParams } from "./globes";
+import { SharkClickProps } from "./globes";
 
 
 /* Panel types */
@@ -31,7 +31,7 @@ export type SavedSharksDisplayProps = {
 
 export type SharkSelectorProps = {
     sharks: WhaleSharkDatasetNormalized; 
-    onSelect: (arg: SharkClickParams | string) => void;
+    onSelect: (arg: SharkClickProps | string) => void;
     onReset: () => void; 
     selectedSharkId: string | null; 
     DisplayComponent: React.ComponentType<ContinentDisplayProps | SavedSharksDisplayProps>; 

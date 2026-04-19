@@ -9,7 +9,7 @@ type Mode = "simple" | "segmented" | "smooth";
 export type HoverBlobName = "reef" | "current";
 
 
-export type BlobParticleGroupParams = {
+export type BlobParticleGroupProps = {
     baseColors: THREE.Color[]; 
     particleCount: number;
     spaceScale: number;
@@ -40,7 +40,7 @@ type Bounds = {
     maxZ: number;
 };
 
-export type AnimateBlobGroupParams = {
+export type AnimateBlobGroupProps = {
     blobGroup: THREE.Points;
     moveVector?: THREE.Vector3;
     oscillation?: Oscillation;

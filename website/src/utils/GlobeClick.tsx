@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 
-import { UseGlobeClickParams, SharkClickParams } from "../types/globes";
+import { UseGlobeClickProps, SharkClickProps } from "../types/globes";
 import { WhaleSharkDatasetNormalized } from "../types/sharks";
 import { PlottedCoordinatePoint } from "../types/coordinates";
 
@@ -10,7 +10,7 @@ export function useGlobeClick({
     pointsData, 
     allSharksVisible, 
     onSharkSelect 
-}: UseGlobeClickParams) {
+}: UseGlobeClickProps) {
     // Use refs to always have current values 
     const sharksRef = useRef<WhaleSharkDatasetNormalized>(sharks);
     const pointsDataRef = useRef<PlottedCoordinatePoint[]>(pointsData);
@@ -25,7 +25,7 @@ export function useGlobeClick({
         onSharkSelectRef.current = onSharkSelect;
     });
     
-    const handleSelectShark = (arg: SharkClickParams | string) => {
+    const handleSelectShark = (arg: SharkClickProps | string) => {
         // Check if arg is object (from globe click) or string (from dropdown)
         if (typeof arg === "object" && arg.lat !== undefined && arg.lng !== undefined) {
             if (!allSharksVisibleRef.current) {

@@ -40,7 +40,7 @@ export type GlobeHandle = {
 };
 
 
-export type UseGlobeClickParams = {
+export type UseGlobeClickProps = {
     sharks: WhaleSharkDatasetNormalized;
     pointsData: PlottedCoordinatePoint[];
     allSharksVisible: boolean;
@@ -48,13 +48,13 @@ export type UseGlobeClickParams = {
 };
 
 
-export type SharkClickParams = { 
+export type SharkClickProps = { 
     lat: number, 
     lng: number
 };
 
 export type GlobeProps = {
-    onSharkClick?: (sharkClickParams: SharkClickParams) => void;
+    onSharkClick?: (sharkClickProps: SharkClickProps) => void;
     allowClicks?: boolean;
 };
 

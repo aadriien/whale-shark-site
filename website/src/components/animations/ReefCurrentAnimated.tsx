@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { BlobParticleGroupParams, AnimateBlobGroupParams } from "../../types/animations";
+import { BlobParticleGroupProps, AnimateBlobGroupProps } from "../../types/animations";
 
 
 function createBlobParticles({
@@ -8,7 +8,7 @@ function createBlobParticles({
     particleCount = 500, 
     spaceScale = 2, 
     pointSize = 12
-}: BlobParticleGroupParams) {
+}: BlobParticleGroupProps) {
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colorsArray = new Float32Array(particleCount * 3);
@@ -108,7 +108,7 @@ function animateBlobParticles({
     moveVector, 
     oscillation, 
     bounds 
-}: AnimateBlobGroupParams) {
+}: AnimateBlobGroupProps) {
     if (!moveVector || ! oscillation || !bounds) return;
 
     const axisIndex = { "x": 0, "y": 1, "z": 2 };
@@ -173,7 +173,7 @@ function createBlobGroup({
     pointSize = 13,
     clickableRadius = 50,
     name = "blob"
-}: BlobParticleGroupParams) {
+}: BlobParticleGroupProps) {
     const blobGroup = createBlobParticles({
         baseColors, particleCount, spaceScale, pointSize
     });
@@ -212,7 +212,7 @@ function animateBlobGroup({
         minY: 0, maxY: 70, 
         minZ: -60, maxZ: 60 
     }
-}: AnimateBlobGroupParams) {
+}: AnimateBlobGroupProps) {
     animateBlobParticles({ blobGroup, moveVector, oscillation, bounds });
 
     // Find points object inside blobGroup
