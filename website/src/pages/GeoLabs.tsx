@@ -21,27 +21,34 @@ import {
 } from "../utils/CoordinateUtils";
 import { mediaSharks } from "../utils/DataUtils";
 
+import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "../types/sharks";
+import { PlottedCoordinatePoint } from "../types/coordinates";
+import { GlobeHandle } from "../types/globes";
+
+
+type ViewMode = "individual" | "multiple";
+
 
 function GeoLabs() {
-    const [selectedShark, setSelectedShark] = useState(null);
-    const [allSharksVisible, setAllSharksVisible] = useState(true);
-    const [filteredSharks, setFilteredSharks] = useState(mediaSharks);
+    const [selectedShark, setSelectedShark] = useState<WhaleSharkEntryNormalized>(null);
+    const [allSharksVisible, setAllSharksVisible] = useState<boolean>(true);
+    const [filteredSharks, setFilteredSharks] = useState<WhaleSharkDatasetNormalized>(mediaSharks);
     
-    const [savedIds, setSavedIds] = useState(new Set());
-    const [viewMode, setViewMode] = useState("multiple"); // "individual" or "multiple"
+    const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+    const [viewMode, setViewMode] = useState<ViewMode>("multiple"); // "individual" or "multiple"
     
-    const [selectedSharksForLab, setSelectedSharksForLab] = useState(new Set()); // for multi-select mode
+    const [selectedSharksForLab, setSelectedSharksForLab] = useState<Set<string>>(new Set()); // for multi-select mode
 
     // Step-through story functionality
-    const [isStepMode, setIsStepMode] = useState(false);
-    const [currentStepIndex, setCurrentStepIndex] = useState(0);
-    const [currentPoint, setCurrentPoint] = useState(null);
-    const globeRef = useRef();
+    const [isStepMode, setIsStepMode] = useState<boolean>(false);
+    const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+    const [currentPoint, setCurrentPoint] = useState<PlottedCoordinatePoint>(null);
+    const globeHandleRef = useRef<GlobeHandle>(null);
     
     // Timeline mode functionality
-    const [isTimelineMode, setIsTimelineMode] = useState(false);
-    const [selectedMonth, setSelectedMonth] = useState(null);
-    const [selectedYear, setSelectedYear] = useState(null);
+    const [isTimelineMode, setIsTimelineMode] = useState<boolean>(false);
+    const [selectedMonth, setSelectedMonth] = useState<number>(null);
+    const [selectedYear, setSelectedYear] = useState<number>(null);
 
     const sharks = mediaSharks;
 
@@ -102,9 +109,9 @@ function GeoLabs() {
     
     
     useEffect(() => {
-        if (!globeRef.current) return;
+        if (!globeHandleRef.current) return;
         
-        const globeInstance = globeRef.current.getGlobe();
+        const globeInstance = globeHandleRef.current.getGlobe();
         clearAllData(globeInstance);
         
         // Nothing plotted during step mode 
@@ -122,7 +129,7 @@ function GeoLabs() {
         if (viewMode === "individual") {
             if (selectedShark) {
                 // Individual mode with shark selected - show only that shark's points
-                globeRef.current.highlightShark(selectedShark.id, true);
+                globeHandleRef.current.highlightShark(selectedShark.id, true);
                 setAllSharksVisible(false);
             } 
             else {
@@ -165,11 +172,11 @@ function GeoLabs() {
             setCurrentStepIndex(0);
             setCurrentPoint(null);
             
-            if (globeRef.current) {
-                const globeInstance = globeRef.current.getGlobe();
+            if (globeHandleRef.current) {
+                const globeInstance = globeHandleRef.current.getGlobe();
                 clearAllData(globeInstance);
                 
-                globeRef.current.enableControls();
+                globeHandleRef.current.enableControls();
                 
                 // Show static points for selected shark without reorienting
                 if (selectedShark) {
@@ -183,22 +190,22 @@ function GeoLabs() {
             setIsStepMode(true);
             setCurrentStepIndex(0);
             
-            if (globeRef.current && selectedShark) {
+            if (globeHandleRef.current && selectedShark) {
                 // Disable controls, clear points, & prepare for step mode
-                globeRef.current.disableControls();
+                globeHandleRef.current.disableControls();
                 
-                const globeInstance = globeRef.current.getGlobe();
+                const globeInstance = globeHandleRef.current.getGlobe();
                 clearAllData(globeInstance);
             }
         }
     };
     
-    const handleStepChange = useCallback((stepIndex, point) => {
+    const handleStepChange = useCallback((stepIndex: number, point: PlottedCoordinatePoint) => {
         setCurrentStepIndex(stepIndex);
         setCurrentPoint(point);
         
-        if (globeRef.current && point) {
-            globeRef.current.showSinglePoint(point);
+        if (globeHandleRef.current && point) {
+            globeHandleRef.current.showSinglePoint(point);
         }
     }, []); // No dependencies since using refs & state setters
     
@@ -225,8 +232,8 @@ function GeoLabs() {
             setCurrentStepIndex(0);
             setCurrentPoint(null);
             
-            if (globeRef.current) {
-                globeRef.current.enableControls();
+            if (globeHandleRef.current) {
+                globeHandleRef.current.enableControls();
             }
         }
         
@@ -238,8 +245,8 @@ function GeoLabs() {
         }
         
         // Clear globe & reset to default state
-        if (globeRef.current) {
-            const globeInstance = globeRef.current.getGlobe();
+        if (globeHandleRef.current) {
+            const globeInstance = globeHandleRef.current.getGlobe();
             clearAllData(globeInstance);
             // Points will be replotted by main useEffect
         }
@@ -304,7 +311,7 @@ function GeoLabs() {
                     {/* Timeline Mode Controls shown in multiple view */}
                     {viewMode === "multiple" && (
                         <TimelineControls 
-                            globeRef={globeRef}
+                            globeRef={globeHandleRef}
                             selectedSharksForLab={selectedSharksForLab}
                             onToggleTimelineMode={handleToggleTimelineMode}
                             isTimelineMode={isTimelineMode}
@@ -328,7 +335,7 @@ function GeoLabs() {
                 {/* Globe component */}
                 <div className="globe-container">
                     <Globe 
-                        ref={globeRef} 
+                        ref={globeHandleRef} 
                         onSharkClick={handleSelectShark} 
                         allowClicks={viewMode === "individual" && !selectedShark}
                     />
