@@ -1,15 +1,16 @@
 {
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "ES2020",
         "module": "ESNext",
         "jsx": "react-jsx",
         "allowJs": true,
-        "checkJs": false,
-        "strict": false,
+        "checkJs": true,
+        "strict": true,
         "esModuleInterop": true,
         "moduleResolution": "bundler",
         "resolveJsonModule": true,
         "isolatedModules": true,
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
         "baseUrl": "src",
         "types": ["vite/client", "@react-three/fiber"]
     },
