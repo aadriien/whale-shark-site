@@ -51,7 +51,7 @@ export function useGlobeClick({
                 const foundShark = sharksRef.current.find(shark => shark.id === cleanID);
 
                 console.log("Sending shark object:", foundShark);
-                onSharkSelectRef.current(foundShark);
+                onSharkSelectRef.current(foundShark!);
             }
             else {
                 console.log("No nearby shark found.");
@@ -61,7 +61,7 @@ export function useGlobeClick({
         else {
             // Coming from dropdown (arg = sharkId or null)
             const foundShark = sharksRef.current.find(shark => shark.id === arg);
-            onSharkSelectRef.current(foundShark);
+            onSharkSelectRef.current(foundShark!);
         }
     };
 
