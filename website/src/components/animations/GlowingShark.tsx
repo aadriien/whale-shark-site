@@ -6,7 +6,7 @@ import SharkModelPoints3D from "../../assets/data/json/shark_model_extracted_poi
 
 
 function GlowingShark() {
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // Recreate whale shark by plotting points extracted from 3D model 
     // 3660 total from full .glb, or 2275 for just "WhaleSharkRigging" (no "ocean" or "particles")
@@ -54,7 +54,7 @@ function GlowingShark() {
         let canvasWidth = 0;
         let canvasHeight = 0;
 
-        const sketch = (p) => {
+        const sketch = (p: p5) => {
             p.setup = () => {
                 canvasWidth = containerRef.current.offsetWidth;
                 canvasHeight = containerRef.current.offsetHeight;
@@ -100,7 +100,12 @@ function GlowingShark() {
                 }
             };
 
-            const drawGlowingDot3D = (p, x, y, z, pulseAmount, hue) => {
+            const drawGlowingDot3D = (
+                p: p5, 
+                x: number, y: number, z: number, 
+                pulseAmount: number, 
+                hue: number
+            ) => {
                 p.push();
                 p.translate(x, y, z);
                 p.noStroke();
@@ -119,17 +124,17 @@ function GlowingShark() {
                 p.pop();
             };
 
-            const drawDebugOriginDot = (p) => {
+            const drawDebugOriginDot = (p: p5) => {
                 p.push();
                 p.blendMode(p.BLEND);
                 p.noStroke();
-                p.fill(0, 100, 100); // Bright red dot
+                p.fill(0, 100, 100); // bright red dot
                 p.translate(0, 0, 0);
                 p.sphere(5);
                 p.pop();
             };
 
-            const drawBoundingBox = (p) => {
+            const drawBoundingBox = (p: p5) => {
                 const boxWidth = (maxX - minX) * scaleFactor;
                 const boxHeight = (maxY - minY) * scaleFactor;
                 const boxDepth = (maxZ - minZ) * scaleFactor;
@@ -142,7 +147,7 @@ function GlowingShark() {
                 p.pop();
             };
 
-            const drawDebugAxes = (p) => {
+            const drawDebugAxes = (p: p5) => {
                 const len = 200;
                 p.push();
                 p.blendMode(p.BLEND);
@@ -192,3 +197,4 @@ function GlowingShark() {
 }
 
 export default GlowingShark;
+
