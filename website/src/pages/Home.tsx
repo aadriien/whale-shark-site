@@ -6,7 +6,7 @@ import GalacticOcean from "../components/animations/GalacticOcean";
 
 function Home() {
     // Be mindful of home screen display on mobile (adjust slightly)
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 768);

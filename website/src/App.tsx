@@ -4,10 +4,12 @@ import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
 import Navbar from "./components/Navbar";
 import Logbook from "./components/HelperLogbook";
 
+import { LightDarkTheme } from "types/pages";
+
 const ResearchReef = lazy(() => import("./pages/ResearchReef"));
 const CreativeCurrent = lazy(() => import("./pages/CreativeCurrent"));
 
-const Home = lazy(() => import("./pages/Home.jsx"));
+const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
 
 const GlobeViews = lazy(() => import("./pages/GlobeViews"));
@@ -22,19 +24,21 @@ const Animation = lazy(() => import("./pages/Animation"));
 
 
 function App() {
-    const [isLogbookOpen, setIsLogbookOpen] = useState(false);
+    const [isLogbookOpen, setIsLogbookOpen] = useState<boolean>(false);
   
-    const [theme, setTheme] = useState(() => {
+    const [theme, setTheme] = useState<LightDarkTheme>(() => {
         // Check localStorage first for light / dark mode, then system preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
-            return savedTheme;
+            return savedTheme as LightDarkTheme;
         }
-        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        return window.matchMedia(
+            "(prefers-color-scheme: dark)"
+        ).matches ? "dark" : "light";
     });
 
     // Save theme to localStorage whenever it changes
-    const handleThemeChange = (newTheme) => {
+    const handleThemeChange = (newTheme: LightDarkTheme) => {
         setTheme(newTheme);
         localStorage.setItem('theme', newTheme);
     };
@@ -48,7 +52,9 @@ function App() {
         const savedTheme = localStorage.getItem('theme');
         if (!savedTheme) {
             const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-            const handler = (e) => setTheme(e.matches ? "dark" : "light");
+            const handler = (e: MediaQueryListEvent) => setTheme(
+                e.matches ? "dark" : "light"
+            );
             
             mediaQuery.addEventListener("change", handler);
             return () => mediaQuery.removeEventListener("change", handler);
