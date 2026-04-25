@@ -47,7 +47,7 @@ function formatMonthKey(key: MonthKey): string {
 function generateMonths(): MonthKey[] {
   const months: MonthKey[] = [];
   const now = new Date();
-  let year = 2015;
+  let year = 2000;
   let month = 1;
   while (
     year < now.getFullYear() ||
