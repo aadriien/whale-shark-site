@@ -220,10 +220,16 @@ export default function OceanViewer() {
       const found = SHARK_MAP.get(shark.whaleSharkID);
       if (found) {
         const container = document.createElement("div");
+        container.style.width = "230px";
         const root = createRoot(container);
         root.render(<CondensedSharkCard shark={found} />);
-        const popup = L.popup({ maxWidth: 280, className: "shark-card-popup" })
-          .setContent(container);
+        const popup = L.popup({
+          maxWidth: 230,
+          minWidth: 230,
+          className: "shark-card-popup",
+          autoPan: true,
+          autoPanPadding: [10, 60],
+        }).setContent(container);
         popup.on("remove", () => root.unmount());
         marker.bindPopup(popup);
       } else {
@@ -240,6 +246,12 @@ export default function OceanViewer() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "90%", }}>
+      <style>{`
+        .shark-card-popup .leaflet-popup-content-wrapper { padding: 0; border-radius: 8px; overflow: hidden; }
+        .shark-card-popup .leaflet-popup-content { margin: 0 !important; width: auto !important; }
+        .shark-card-popup .condensed-shark-card { border-radius: 8px; }
+        .shark-card-popup .condensed-shark-card p { margin: 0 !important; }
+      `}</style>
       <div
         ref={mapElRef}
         style={{ width: "100%", height: 500, borderRadius: 8, overflow: "hidden" }}
