@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
 import * as d3 from "d3";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+import CondensedSharkCard from "../cards/CondensedSharkCard";
+import { mediaSharks } from "../../utils/DataUtils";
 
 interface ChlPoint {
   latitude: number;
@@ -57,6 +61,8 @@ function generateMonths(): MonthKey[] {
 }
 
 const ALL_MONTHS = generateMonths();
+
+const SHARK_MAP = new Map(mediaSharks.map((s) => [s.id, s]));
 
 async function loadSharkData(): Promise<Map<MonthKey, SharkObs[]>> {
   const index = new Map<MonthKey, SharkObs[]>();
@@ -202,18 +208,31 @@ export default function OceanViewer() {
 
     sharkLayerRef.current.clearLayers();
     for (const shark of sharkData.get(month) ?? []) {
-      L.circleMarker([shark.lat, shark.lon], {
+      const marker = L.circleMarker([shark.lat, shark.lon], {
         renderer,
         radius: 5,
         color: "#cc4400",
         fillColor: "#ff7700",
         fillOpacity: 0.9,
         weight: 1.5,
-      })
-        .bindPopup(
+      });
+
+      const found = SHARK_MAP.get(shark.whaleSharkID);
+      if (found) {
+        const container = document.createElement("div");
+        const root = createRoot(container);
+        root.render(<CondensedSharkCard shark={found} />);
+        const popup = L.popup({ maxWidth: 280, className: "shark-card-popup" })
+          .setContent(container);
+        popup.on("remove", () => root.unmount());
+        marker.bindPopup(popup);
+      } else {
+        marker.bindPopup(
           `<b>Whale Shark</b><br>ID: ${shark.whaleSharkID}<br>Date: ${shark.date}`
-        )
-        .addTo(sharkLayerRef.current!);
+        );
+      }
+
+      marker.addTo(sharkLayerRef.current!);
     }
   }, [sliderIdx, yearChlData, sharkData]);
 
