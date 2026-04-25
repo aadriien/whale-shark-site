@@ -19,7 +19,7 @@ LON_RANGE   = (-180, 180) # global
 STRIDE      = 25          # 25 × 0.04° ≈ 1° resolution, reduces ~40M → ~29K cells/month
 
 
-def export_global_chlorophyll(start_year: int = 2015, end_year: int = 2024) -> None:
+def export_global_chlorophyll(start_year: int = 2015, end_year: int = 2026) -> None:
     print(f"Exporting global chlorophyll {start_year}-{end_year} to {WEB_CHL_DIR}/\n")
 
     for year in range(start_year, end_year + 1):
@@ -61,4 +61,4 @@ def export_global_chlorophyll(start_year: int = 2015, end_year: int = 2024) -> N
 
 
 if __name__ == "__main__":
-    export_global_chlorophyll(start_year=2015, end_year=2024)
+    export_global_chlorophyll(start_year=2015, end_year=2026)
