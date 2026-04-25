@@ -158,6 +158,9 @@ clean_website:
 fetch_copernicus:
 	@$(POETRY) run python -m src.copernicus.clean
 
+fetch_global_copernicus:
+	@$(POETRY) run python -m src.copernicus.export_global_chlorophyll
+
 test_LME:
 	@$(POETRY) run python -m src.utils.geomap_utils
 
