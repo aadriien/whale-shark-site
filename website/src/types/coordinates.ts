@@ -21,11 +21,17 @@ export type PlottedCoordinatePoint = {
     id: string;
     lat: number;
     lng: number;
-    date: string; // date string 
+    date: string; // date string
     size: number;
     ringMaxSize: number;
     ringPropagationSpeed: number;
     ringRepeatPeriod: number;
 };
 
+// Applicable for Copernicus chlorophyll CSV data (global_{YYYY}_chlorophyll.csv)
+export type ChlorophyllGridPoint = {
+    lat: number;
+    lng: number;
+    meanCHL: number;
+};
 
