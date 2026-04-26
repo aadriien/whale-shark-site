@@ -28,6 +28,15 @@ export type PlottedCoordinatePoint = {
     ringRepeatPeriod: number;
 };
 
+
+// Base type for grid-based Copernicus marine data 
+// (lat/lng always present, extra fields vary by dataset)
+export type OceanGridPoint = {
+    lat: number;
+    lng: number;
+    [field: string]: number;
+};
+
 // Applicable for Copernicus chlorophyll CSV data (global_{YYYY}_chlorophyll.csv)
 export type ChlorophyllGridPoint = {
     lat: number;

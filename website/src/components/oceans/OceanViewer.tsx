@@ -1,73 +1,66 @@
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 
-import * as d3 from "d3";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 
 import CondensedSharkCard from "../cards/CondensedSharkCard";
+import OceanViewerMap from "./OceanViewerMap";
 import OceanViewerTimeline from "./OceanViewerTimeline";
 
-import { 
-    ALL_MONTHS, 
-    CHL_SCALE, 
-    SHARK_MAP, SHARK_OBS, 
-    POINT_TO_SHARK_ID 
+import {
+    ALL_MONTHS,
+    OCEAN_DATASETS,
+    SHARK_MAP, SHARK_OBS,
+    POINT_TO_SHARK_ID,
+    processOceanDataset,
 } from "../../utils/OceanViewerUtils";
 
-import { ChlorophyllGridPoint } from "../../types/coordinates";
+import { OceanGridPoint } from "../../types/coordinates";
+import { OceanMapHandle } from "../../types/oceans";
+import { PlottedCoordinatePoint } from "../../types/coordinates";
+
+
+function bindSharkPopup(marker: L.CircleMarker, pt: PlottedCoordinatePoint) {
+    const sharkID = POINT_TO_SHARK_ID.get(pt.id);
+    const found = sharkID ? SHARK_MAP.get(sharkID) : undefined;
+
+    if (found) {
+        const container = document.createElement("div");
+        container.className = "shark-card-popup-container";
+
+        const root = createRoot(container);
+        root.render(<CondensedSharkCard shark={found} />);
+
+        const popup = L.popup({
+            maxWidth: 230,
+            minWidth: 230,
+            className: "shark-card-popup",
+            autoPan: true,
+            autoPanPadding: [10, 60],
+        }).setContent(container);
+
+        popup.on("remove", () => root.unmount());
+        marker.bindPopup(popup);
+    } 
+    else {
+        marker.bindPopup(
+            `<b>Whale Shark</b><br>ID: ${sharkID ?? pt.id}<br>Date: ${pt.date}`
+        );
+    }
+}
 
 
 export default function OceanViewer() {
-    const mapElRef = useRef<HTMLDivElement>(null);
-    const mapRef = useRef<L.Map | null>(null);
-    const chlLayerRef = useRef<L.LayerGroup | null>(null);
-    const sharkLayerRef = useRef<L.LayerGroup | null>(null);
-    const rendererRef = useRef<L.Canvas | null>(null);
+    const mapHandleRef = useRef<OceanMapHandle>(null);
     const abortRef = useRef<AbortController | null>(null);
 
+    const [datasetToProcess, setDatasetToProcess] = useState<keyof typeof OCEAN_DATASETS>("chlorophyll");
     const [sliderIndex, setSliderIndex] = useState(ALL_MONTHS.length - 1);
-    const [yearChlData, setYearChlData] = useState<Record<string, ChlorophyllGridPoint[]>>({});
+    const [yearChlData, setYearChlData] = useState<Record<string, OceanGridPoint[]>>({});
     const [loadedYear, setLoadedYear] = useState<number | null>(null);
     const [isLoadingCHL, setIsLoadingCHL] = useState(false);
 
-    // Initialize Leaflet map once
-    useEffect(() => {
-        if (!mapElRef.current || mapRef.current) return;
-
-        const renderer = L.canvas({ padding: 0.5 });
-        rendererRef.current = renderer;
-
-        // maxBounds clamps panning to the data coverage area (lat ±40°)
-        const dataBounds = L.latLngBounds([-40, -180], [40, 180]);
-
-        const map = L.map(mapElRef.current, {
-            center: [0, 0],
-            zoom: 2,
-            minZoom: 2.3,
-            maxZoom: 10,
-            attributionControl: false,
-            maxBounds: dataBounds,
-            maxBoundsViscosity: 1.0,
-        });
-
-        // Dark base, no labels
-        L.tileLayer(
-            "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png",
-            { maxZoom: 10 }
-        ).addTo(map);
-
-        mapRef.current = map;
-        chlLayerRef.current = L.layerGroup().addTo(map);
-        sharkLayerRef.current = L.layerGroup().addTo(map);
-
-        // Defer size measurement so tiles fill without seams after layout
-        setTimeout(() => map.invalidateSize(), 0);
-
-        return () => { map.remove(); mapRef.current = null; };
-    }, []);
-
-    // Lazy-load per-year chlorophyll CSV when selected year changes
+    // Lazy-load per-year dataset CSV when selected year or dataset changes
     useEffect(() => {
         const year = +ALL_MONTHS[sliderIndex].slice(0, 4);
         if (year === loadedYear) return;
@@ -79,23 +72,9 @@ export default function OceanViewer() {
         setIsLoadingCHL(true);
         setYearChlData({});
 
-        fetch(`/data/chlorophyll/global_${year}_chlorophyll.csv`, {
-            signal: controller.signal,
-        })
-            .then((r) => (r.ok ? r.text() : Promise.reject(new Error(`HTTP ${r.status}`))))
-            .then((text) => {
-                const index: Record<string, ChlorophyllGridPoint[]> = {};
-                for (const row of d3.csvParse(text)) {
-                    if (!row.mean_CHL || row.mean_CHL === "") continue;
-                    const month = row.time.slice(0, 7);
-                    if (!index[month]) index[month] = [];
-                    index[month].push({
-                        lat: +row.latitude,
-                        lng: +row.longitude,
-                        meanCHL: +row.mean_CHL,
-                    });
-                }
-                setYearChlData(index);
+        processOceanDataset(datasetToProcess, year, controller.signal)
+            .then((data) => {
+                setYearChlData(data);
                 setLoadedYear(year);
                 setIsLoadingCHL(false);
             })
@@ -110,29 +89,30 @@ export default function OceanViewer() {
 
     // Re-render map layers when month or chlorophyll data changes
     useEffect(() => {
-        if (!chlLayerRef.current || !sharkLayerRef.current) return;
+        const { chlLayer, sharkLayer, renderer } = mapHandleRef.current ?? {};
+        if (!chlLayer || !sharkLayer) return;
 
         const month = ALL_MONTHS[sliderIndex];
-        const renderer = rendererRef.current ?? undefined;
+        const leafletRenderer = renderer ?? undefined;
 
-        chlLayerRef.current.clearLayers();
+        chlLayer.clearLayers();
         for (const pt of yearChlData[month] ?? []) {
             L.rectangle(
                 [[pt.lat, pt.lng], [pt.lat + 1, pt.lng + 1]],
                 {
-                    renderer,
+                    renderer: leafletRenderer,
                     color: "transparent",
-                    fillColor: CHL_SCALE(Math.max(0.05, pt.meanCHL)),
+                    fillColor: OCEAN_DATASETS[datasetToProcess].colorScale(Math.max(0.05, pt.meanCHL || 0.05)),
                     fillOpacity: 0.75,
                     weight: 0,
                 }
-            ).addTo(chlLayerRef.current!);
+            ).addTo(chlLayer);
         }
 
-        sharkLayerRef.current.clearLayers();
+        sharkLayer.clearLayers();
         for (const pt of SHARK_OBS[month] ?? []) {
             const marker = L.circleMarker([pt.lat, pt.lng], {
-                renderer,
+                renderer: leafletRenderer,
                 radius: 5,
                 color: "#cc4400",
                 fillColor: "#ff7700",
@@ -140,36 +120,14 @@ export default function OceanViewer() {
                 weight: 1.5,
             });
 
-            const sharkID = POINT_TO_SHARK_ID.get(pt.id);
-            const found = sharkID ? SHARK_MAP.get(sharkID) : undefined;
-
-            if (found) {
-                const container = document.createElement("div");
-                container.className = "shark-card-popup-container";
-                const root = createRoot(container);
-                root.render(<CondensedSharkCard shark={found} />);
-                const popup = L.popup({
-                    maxWidth: 230,
-                    minWidth: 230,
-                    className: "shark-card-popup",
-                    autoPan: true,
-                    autoPanPadding: [10, 60],
-                }).setContent(container);
-                popup.on("remove", () => root.unmount());
-                marker.bindPopup(popup);
-            } else {
-                marker.bindPopup(
-                    `<b>Whale Shark</b><br>ID: ${sharkID ?? pt.id}<br>Date: ${pt.date}`
-                );
-            }
-
-            marker.addTo(sharkLayerRef.current!);
+            bindSharkPopup(marker, pt);
+            marker.addTo(sharkLayer);
         }
     }, [sliderIndex, yearChlData]);
 
     return (
         <div className="ocean-viewer">
-            <div ref={mapElRef} className="ocean-viewer-map" />
+            <OceanViewerMap ref={mapHandleRef} />
 
             <OceanViewerTimeline
                 sliderIndex={sliderIndex}
