@@ -194,7 +194,7 @@ export default function OceanViewer() {
             const found = sharkID ? SHARK_MAP.get(sharkID) : undefined;
             if (found) {
                 const container = document.createElement("div");
-                container.style.width = "230px";
+                container.className = "shark-card-popup-container";
                 const root = createRoot(container);
                 root.render(<CondensedSharkCard shark={found} />);
                 const popup = L.popup({
@@ -218,26 +218,21 @@ export default function OceanViewer() {
 
     const currentMonth = ALL_MONTHS[sliderIdx];
 
-    return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "90%" }}>
-            <style>{`
-                .shark-card-popup .leaflet-popup-content-wrapper { padding: 0; border-radius: 8px; overflow: hidden; }
-                .shark-card-popup .leaflet-popup-content { margin: 0 !important; width: auto !important; }
-                .shark-card-popup .condensed-shark-card { border-radius: 8px; }
-                .shark-card-popup .condensed-shark-card p { margin: 0 !important; }
-            `}</style>
-            <div
-                ref={mapElRef}
-                style={{ width: "100%", height: 500, borderRadius: 8, overflow: "hidden" }}
-            />
+    const gradientStyle = {
+        background: `linear-gradient(to right, ${[0.05, 0.2, 0.7, 3, 12, 30].map((v) => CHL_SCALE(v)).join(", ")})`,
+    };
 
-            <div style={{ padding: "0 4px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                    <span style={{ fontWeight: 600, fontSize: 16 }}>
+    return (
+        <div className="ocean-viewer">
+            <div ref={mapElRef} className="ocean-viewer-map" />
+
+            <div className="ocean-viewer-controls">
+                <div className="ocean-viewer-month-header">
+                    <span className="ocean-viewer-month-label">
                         {formatMonthKey(currentMonth)}
                     </span>
                     {chlLoading && (
-                        <span style={{ fontSize: 12, color: "#888" }}>loading chlorophyll…</span>
+                        <span className="ocean-viewer-loading">loading chlorophyll…</span>
                     )}
                 </div>
 
@@ -247,39 +242,28 @@ export default function OceanViewer() {
                     max={ALL_MONTHS.length - 1}
                     value={sliderIdx}
                     onChange={(e) => setSliderIdx(+e.target.value)}
-                    style={{ width: "100%", cursor: "pointer" }}
+                    className="ocean-viewer-slider"
                 />
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#888", marginTop: 2 }}>
+                <div className="ocean-viewer-slider-bounds">
                     <span>{ALL_MONTHS[0]}</span>
                     <span>{ALL_MONTHS[ALL_MONTHS.length - 1]}</span>
                 </div>
 
-                <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 6 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 12, color: "#888", minWidth: 180 }}>
-                            Chlorophyll (mg/m³)
-                        </span>
-                        <div
-                            style={{
-                                width: 140,
-                                height: 12,
-                                borderRadius: 2,
-                                background: `linear-gradient(to right, ${[0.05, 0.2, 0.7, 3, 12, 30]
-                                    .map((v) => CHL_SCALE(v))
-                                    .join(", ")})`,
-                            }}
-                        />
-                        <div style={{ display: "flex", justifyContent: "space-between", width: 60, fontSize: 11, color: "#888" }}>
+                <div className="ocean-viewer-legend">
+                    <div className="ocean-viewer-legend-row">
+                        <span className="ocean-viewer-legend-label">Chlorophyll (mg/m³)</span>
+                        <div className="ocean-viewer-chl-gradient" style={gradientStyle} />
+                        <div className="ocean-viewer-legend-range">
                             <span>low</span>
                             <span>high</span>
                         </div>
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div className="ocean-viewer-legend-row">
                         <svg width={12} height={12} viewBox="0 0 12 12">
                             <circle cx={6} cy={6} r={5} fill="#ff7700" stroke="#cc4400" strokeWidth={1.5} />
                         </svg>
-                        <span style={{ fontSize: 12, color: "#888" }}>Whale shark observation</span>
+                        <span className="ocean-viewer-legend-text">Whale shark observation</span>
                     </div>
                 </div>
             </div>

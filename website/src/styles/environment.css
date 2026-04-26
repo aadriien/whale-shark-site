@@ -9,3 +9,114 @@
 }
 
 
+/* OceanViewer Map Display */
+
+.ocean-viewer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 90%;
+}
+
+.ocean-viewer-map {
+    width: 100%;
+    height: 500px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ocean-viewer-controls {
+    padding: 0 4px;
+}
+
+.ocean-viewer-month-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.ocean-viewer-month-label {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.ocean-viewer-loading {
+    font-size: 12px;
+    color: #888;
+}
+
+.ocean-viewer-slider {
+    width: 100%;
+    cursor: pointer;
+}
+
+.ocean-viewer-slider-bounds {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+}
+
+.ocean-viewer-legend {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ocean-viewer-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ocean-viewer-legend-label {
+    font-size: 12px;
+    color: #888;
+    min-width: 180px;
+}
+
+.ocean-viewer-legend-text {
+    font-size: 12px;
+    color: #888;
+}
+
+.ocean-viewer-chl-gradient {
+    width: 140px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.ocean-viewer-legend-range {
+    display: flex;
+    justify-content: space-between;
+    width: 60px;
+    font-size: 11px;
+    color: #888;
+}
+
+.shark-card-popup-container {
+    width: 230px;
+}
+
+.shark-card-popup .leaflet-popup-content-wrapper {
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.shark-card-popup .leaflet-popup-content {
+    margin: 0 !important;
+    width: auto !important;
+}
+
+.shark-card-popup .condensed-shark-card {
+    border-radius: 8px;
+}
+
+.shark-card-popup .condensed-shark-card p {
+    margin: 0 !important;
+}
+
