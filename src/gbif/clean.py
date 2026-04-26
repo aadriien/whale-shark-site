@@ -60,6 +60,7 @@ OCCURRENCE_RESULT_FIELDS = [
     # recently-added fields:
     "locality",
     "verbatimEventDate",
+    "eventID",
 ]
 
 
@@ -252,6 +253,34 @@ def format_sex_lifeStage(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     return occurrences_df
 
 
+def fill_whaleshark_id_from_fallbacks(df: pd.DataFrame) -> pd.DataFrame:
+    # Called after whaleSharkID is built from organismID / identificationID.
+    # Only fills rows where whaleSharkID is still null (standard fields take priority).
+
+    null_id = df["whaleSharkID"].isna()
+
+    # Rule 1: occurrenceRemarks = "Shark ID: {X}"
+    # Strict match: free-text fields risk false positives with looser patterns (e.g. bare "ID:").
+    # Confirmed across multiple independent publishers, cross-validated against eventID prefix.
+    if "occurrenceRemarks" in df.columns:
+        extracted = df["occurrenceRemarks"].str.extract(r"^Shark ID:\s*(.+)$", expand=False).str.strip()
+        fill = null_id & extracted.notna()
+        df.loc[fill, "whaleSharkID"] = extracted[fill]
+        null_id = df["whaleSharkID"].isna()
+
+    # Rule 2: eventID prefix "{sharkID}-track-{N}"
+    # The "-track-" keyword is semantically specific to individual animal deployments,
+    # distinct from date/location-based eventID groupings other publishers use.
+    # Applied independently of Rule 1, i.e. a publisher may use this eventID convention
+    # without also populating occurrenceRemarks.
+    if "eventID" in df.columns:
+        extracted = df["eventID"].str.extract(r"^(.+?)-track-", expand=False).str.strip()
+        fill = null_id & extracted.notna()
+        df.loc[fill, "whaleSharkID"] = extracted[fill]
+
+    return df
+
+
 def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     # Work with copy to satisfy pandas DataFrame slice concerns
     df = occurrences_df.copy()
@@ -274,6 +303,12 @@ def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
     # Consolidate organismID / identificationID into 1 column (whaleSharkID)
     df["whaleSharkID"] = df["organismID"].combine_first(df["identificationID"])
+
+    # If whaleSharkID is still null, fall back to remarks / eventID
+    # Note that this will almost certainly be telemetry data from satellite tracking,
+    # with minimal info beyond timestamps & coords (i.e. limited metadata) 
+    df = fill_whaleshark_id_from_fallbacks(df)
+
     df = move_column_after(df, col_to_move="whaleSharkID", after_col="identificationID")
 
     df = df.reset_index(drop=True)
