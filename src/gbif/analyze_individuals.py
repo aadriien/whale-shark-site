@@ -150,8 +150,11 @@ def assemble_individual_metrics(occurrences_df: pd.DataFrame,
     )
 
     # Build "occurrenceRemarks (eventDate)" metric
+    # Deduplicate by remark text per shark first. Identical remarks across many detections
+    # (e.g. telemetry pings all sharing same remark) would otherwise repeat in the output.
+    unique_remarks_df = occurrences_df.drop_duplicates(subset=["whaleSharkID", "occurrenceRemarks"])
     individual_sharks = make_individual_metric_df(
-        occurrences_df=occurrences_df, individual_sharks=individual_sharks,
+        occurrences_df=unique_remarks_df, individual_sharks=individual_sharks,
         metric_subset=["occurrenceRemarks"], metric_timing=["eventDate"],
         format_str_or_func="{0} ({1})", # == f"{occurrenceRemarks} ({eventDate})"
         column_name="occurrenceRemarks (eventDate)"

@@ -264,6 +264,14 @@ def fill_whaleshark_id_from_fallbacks(df: pd.DataFrame) -> pd.DataFrame:
     # Confirmed across multiple independent publishers, cross-validated against eventID prefix.
     if "occurrenceRemarks" in df.columns:
         extracted = df["occurrenceRemarks"].str.extract(r"^Shark ID:\s*(.+)$", expand=False).str.strip()
+
+        # Abbreviate trailing org/school names to initials: "A-907 Exmouth District HS" → "A-907 EDHS"
+        extracted = extracted.str.replace(
+            r"^([A-Z]-\d+)\s+(.+)$",
+            lambda m: f"{m.group(1)} {''.join(w[0].upper() for w in m.group(2).split())}",
+            regex=True
+        )
+        
         fill = null_id & extracted.notna()
         df.loc[fill, "whaleSharkID"] = extracted[fill]
         null_id = df["whaleSharkID"].isna()
