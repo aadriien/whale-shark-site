@@ -1,4 +1,4 @@
-import OceanViewer from "../components/animations/OceanViewer";
+import OceanViewer from "../components/oceans/OceanViewer";
 
 function Environment() {
     return (

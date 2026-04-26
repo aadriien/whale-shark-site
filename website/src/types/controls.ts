@@ -47,3 +47,11 @@ export type StoryStepSliderProps = {
 };
 
 
+export type OceanViewerTimelineProps = {
+    sliderIndex: number;
+    onSliderChange: (index: number) => void;
+    currentMonth: string;
+    isLoadingCHL: boolean;
+};
+
+
