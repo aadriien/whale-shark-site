@@ -1,12 +1,20 @@
-import { CHL_GRADIENT } from "../../utils/OceanViewerUtils";
+import { OCEAN_DATASETS } from "../../utils/OceanViewerUtils";
 
 
-const OceanViewerLegend = () => {
+const OceanViewerLegend = ( { datasetKey }: {datasetKey: string}) => {
+    const config = OCEAN_DATASETS[datasetKey as keyof typeof OCEAN_DATASETS];
+
+    const gradientStyle = {
+        background: `linear-gradient(to right, ${
+            config.gradientStops.map((v) => config.colorScale(v)).join(", ")
+        })`,
+    };
+
     return (
         <div className="ocean-viewer-legend">
             <div className="ocean-viewer-legend-row">
-                <span className="ocean-viewer-legend-label">Chlorophyll (mg/m³)</span>
-                <div className="ocean-viewer-chl-gradient" style={CHL_GRADIENT} />
+                <span className="ocean-viewer-legend-label">{config.label}</span>
+                <div className="ocean-viewer-data-gradient" style={gradientStyle} />
                 <div className="ocean-viewer-legend-range">
                     <span>low</span>
                     <span>high</span>

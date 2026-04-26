@@ -4,7 +4,7 @@ import L from "leaflet";
 /* Oceans types */
 
 export type OceanMapHandle = {
-    chlLayer: L.LayerGroup | null;
+    dataLayer: L.LayerGroup | null;
     sharkLayer: L.LayerGroup | null;
     renderer: L.Canvas | null;
 };
@@ -17,4 +17,6 @@ export type OceanDatasetConfig = {
     dataFields: Record<string, string>;
     colorScale: (value: number) => string;
     gradientStops: number[];
+    label: string;
 };
+

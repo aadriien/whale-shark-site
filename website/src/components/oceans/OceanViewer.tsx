@@ -56,9 +56,9 @@ export default function OceanViewer() {
 
     const [datasetToProcess, setDatasetToProcess] = useState<keyof typeof OCEAN_DATASETS>("chlorophyll");
     const [sliderIndex, setSliderIndex] = useState(ALL_MONTHS.length - 1);
-    const [yearChlData, setYearChlData] = useState<Record<string, OceanGridPoint[]>>({});
+    const [yearDataset, setYearChlData] = useState<Record<string, OceanGridPoint[]>>({});
     const [loadedYear, setLoadedYear] = useState<number | null>(null);
-    const [isLoadingCHL, setIsLoadingCHL] = useState(false);
+    const [isLoadingDataset, setIsLoadingDataset] = useState(false);
 
     // Lazy-load per-year dataset CSV when selected year or dataset changes
     useEffect(() => {
@@ -69,34 +69,34 @@ export default function OceanViewer() {
         const controller = new AbortController();
         abortRef.current = controller;
 
-        setIsLoadingCHL(true);
+        setIsLoadingDataset(true);
         setYearChlData({});
 
         processOceanDataset(datasetToProcess, year, controller.signal)
             .then((data) => {
                 setYearChlData(data);
                 setLoadedYear(year);
-                setIsLoadingCHL(false);
+                setIsLoadingDataset(false);
             })
             .catch((err) => {
                 if (err.name !== "AbortError") {
                     setYearChlData({}); // 404 / error — show nothing, don't retry
                     setLoadedYear(year);
-                    setIsLoadingCHL(false);
+                    setIsLoadingDataset(false);
                 }
             });
     }, [sliderIndex, loadedYear]);
 
     // Re-render map layers when month or chlorophyll data changes
     useEffect(() => {
-        const { chlLayer, sharkLayer, renderer } = mapHandleRef.current ?? {};
-        if (!chlLayer || !sharkLayer) return;
+        const { dataLayer, sharkLayer, renderer } = mapHandleRef.current ?? {};
+        if (!dataLayer || !sharkLayer) return;
 
         const month = ALL_MONTHS[sliderIndex];
         const leafletRenderer = renderer ?? undefined;
 
-        chlLayer.clearLayers();
-        for (const pt of yearChlData[month] ?? []) {
+        dataLayer.clearLayers();
+        for (const pt of yearDataset[month] ?? []) {
             L.rectangle(
                 [[pt.lat, pt.lng], [pt.lat + 1, pt.lng + 1]],
                 {
@@ -106,7 +106,7 @@ export default function OceanViewer() {
                     fillOpacity: 0.75,
                     weight: 0,
                 }
-            ).addTo(chlLayer);
+            ).addTo(dataLayer);
         }
 
         sharkLayer.clearLayers();
@@ -123,7 +123,7 @@ export default function OceanViewer() {
             bindSharkPopup(marker, pt);
             marker.addTo(sharkLayer);
         }
-    }, [sliderIndex, yearChlData]);
+    }, [sliderIndex, yearDataset]);
 
     return (
         <div className="ocean-viewer">
@@ -133,7 +133,8 @@ export default function OceanViewer() {
                 sliderIndex={sliderIndex}
                 onSliderChange={setSliderIndex}
                 currentMonth={ALL_MONTHS[sliderIndex]}
-                isLoadingCHL={isLoadingCHL}
+                isLoadingDataset={isLoadingDataset}
+                datasetKey={datasetToProcess}
             />
         </div>
     );

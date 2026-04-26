@@ -27,16 +27,9 @@ export const OCEAN_DATASETS = {
         dataFields: { meanCHL: "mean_CHL" },
         colorScale: CHL_SCALE,
         gradientStops: [0.05, 0.2, 0.7, 3, 12, 30],
+        label: "Chlorophyll (mg/m³)",
     },
 } satisfies Record<string, OceanDatasetConfig>;
-
-export const CHL_GRADIENT = {
-    background: `linear-gradient(to right, ${
-        OCEAN_DATASETS.chlorophyll.gradientStops
-            .map((v) => OCEAN_DATASETS.chlorophyll.colorScale(v))
-            .join(", ")
-    })`,
-};
 
 
 // Month viewer display

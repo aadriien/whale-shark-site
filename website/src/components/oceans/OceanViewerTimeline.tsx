@@ -9,7 +9,8 @@ const OceanViewerTimeline = ({
     sliderIndex,
     onSliderChange,
     currentMonth,
-    isLoadingCHL,
+    isLoadingDataset,
+    datasetKey,
 }: OceanViewerTimelineProps) => {
     return (
         <div className="ocean-viewer-controls">
@@ -17,9 +18,9 @@ const OceanViewerTimeline = ({
                 <span className="ocean-viewer-month-label">
                     {formatMonthKey(currentMonth)}
                 </span>
-                {isLoadingCHL && (
+                {isLoadingDataset && (
                     <span className="ocean-viewer-loading">
-                        loading chlorophyll…
+                        loading data…
                     </span>
                 )}
             </div>
@@ -37,7 +38,7 @@ const OceanViewerTimeline = ({
                 <span>{ALL_MONTHS[ALL_MONTHS.length - 1]}</span>
             </div>
 
-            <OceanViewerLegend />
+            <OceanViewerLegend datasetKey={datasetKey} />
         </div>
     );
 };

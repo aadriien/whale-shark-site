@@ -51,7 +51,8 @@ export type OceanViewerTimelineProps = {
     sliderIndex: number;
     onSliderChange: (index: number) => void;
     currentMonth: string;
-    isLoadingCHL: boolean;
+    isLoadingDataset: boolean;
+    datasetKey: string;
 };
 
 

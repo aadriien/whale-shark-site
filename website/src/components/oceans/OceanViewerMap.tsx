@@ -12,12 +12,12 @@ import { OceanMapHandle } from "../../types/oceans";
 const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
     const mapElRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
-    const chlLayerRef = useRef<L.LayerGroup | null>(null);
+    const dataLayerRef = useRef<L.LayerGroup | null>(null);
     const sharkLayerRef = useRef<L.LayerGroup | null>(null);
     const rendererRef = useRef<L.Canvas | null>(null);
 
     useImperativeHandle(ref, () => ({
-        get chlLayer() { return chlLayerRef.current; },
+        get dataLayer() { return dataLayerRef.current; },
         get sharkLayer() { return sharkLayerRef.current; },
         get renderer() { return rendererRef.current; },
     }));
@@ -48,7 +48,7 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
         ).addTo(map);
 
         mapRef.current = map;
-        chlLayerRef.current = L.layerGroup().addTo(map);
+        dataLayerRef.current = L.layerGroup().addTo(map);
         sharkLayerRef.current = L.layerGroup().addTo(map);
 
         // Defer size measurement so tiles fill without seams after layout
@@ -61,3 +61,4 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
 });
 
 export default OceanViewerMap;
+
