@@ -3,6 +3,38 @@ import coordinatesData from "../assets/data/json/gbif_shark_tracking.json";
 import { WhaleSharkCoordinates, PlottedCoordinatePoint } from "types/coordinates";
 
 
+// Target total rendered points to keep Three.js globe performant regardless of group size
+const POINT_BUDGET = 3000;
+const MAX_POINTS_PER_SHARK = 500;
+
+// Per-shark cap used when total available points exceed the budget
+function scalePointsPerShark(sharkCount: number): number {
+    if (sharkCount <= 0) return MAX_POINTS_PER_SHARK;
+    // Math.max(1, ...) guards against slice(-0), which returns the full array
+    return Math.max(
+        1, 
+        Math.min(
+            MAX_POINTS_PER_SHARK, 
+            Math.floor(10 * POINT_BUDGET / sharkCount)
+        )
+    );
+}
+
+// Count-only passes to check budget without instantiating point objects
+function countAllCoordinates(): number {
+    return coordinatesData.reduce(
+        (sum, s) => sum + s.coordinates.length, 
+        0
+    );
+}
+
+function countGroupCoordinates(allSharkIDs: string[]): number {
+    return coordinatesData
+        .filter(s => allSharkIDs.includes(s.whaleSharkID))
+        .reduce((sum, s) => sum + s.coordinates.length, 0);
+}
+
+
 export function getCoordinates(
     sharkDict: WhaleSharkCoordinates, 
     limit: number = Infinity
@@ -31,30 +63,32 @@ export function getCoordinates(
 
 
 export function getAllCoordinates() {
-    let fullResult: PlottedCoordinatePoint[] = [];
-    const limitResults = 25;
+    const totalAvailable = countAllCoordinates();
+    const limitResults = totalAvailable <= POINT_BUDGET
+        ? Infinity
+        : scalePointsPerShark(coordinatesData.length);
 
+    let fullResult: PlottedCoordinatePoint[] = [];
     coordinatesData.forEach(sharkDict => {
-        let currResult = getCoordinates(sharkDict, limitResults);
-        fullResult.push(...currResult);
-    })
+        fullResult.push(...getCoordinates(sharkDict, limitResults));
+    });
     return fullResult;
 };
 
 
 export function getGroupCoordinates(allSharkIDs: string[]) {
-    let groupResult: PlottedCoordinatePoint[] = [];
-    const limitResults = 1000;
-
     // If no IDs provided, plot nothing
-    if (!allSharkIDs) {
-        return [];
-    }
+    if (!allSharkIDs) return [];
 
+    const totalAvailable = countGroupCoordinates(allSharkIDs);
+    const limitResults = totalAvailable <= POINT_BUDGET
+        ? Infinity
+        : scalePointsPerShark(allSharkIDs.length);
+
+    let groupResult: PlottedCoordinatePoint[] = [];
     coordinatesData.forEach(sharkDict => {
         if (allSharkIDs.includes(sharkDict.whaleSharkID)) {
-            let currResult = getCoordinates(sharkDict, limitResults);
-            groupResult.push(...currResult); 
+            groupResult.push(...getCoordinates(sharkDict, limitResults));
         }
     });
     return groupResult;
@@ -101,8 +135,12 @@ export function getGroupCoordinatesByTimeline(
 ) {
     if (!allSharkIDs) return [];
     
+    const totalAvailable = countGroupCoordinates(allSharkIDs);
+    const limitResults = totalAvailable <= POINT_BUDGET
+        ? Infinity
+        : scalePointsPerShark(allSharkIDs.length);
+
     let groupResult: PlottedCoordinatePoint[] = [];
-    const limitResults = 300;
 
     coordinatesData.forEach(sharkDict => {
         if (allSharkIDs.includes(sharkDict.whaleSharkID)) {
@@ -112,7 +150,7 @@ export function getGroupCoordinatesByTimeline(
             if (month && year) {
                 currResult = filterCoordinatesByDate(currResult, month, year);
             }
-            
+
             groupResult.push(...currResult);
         }
     });
