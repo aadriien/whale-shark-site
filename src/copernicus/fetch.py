@@ -11,9 +11,6 @@ from dotenv import load_dotenv
 import copernicusmarine
 import xarray as xr
 
-from src.copernicus.fetch_chlorophyll import get_chlorophyll_data
-from src.copernicus.fetch_temperature import get_sea_surface_temperature_data
-
 
 load_dotenv()
 
@@ -31,6 +28,5 @@ def get_copernicus_data(dataset_id: str, **kwargs) -> xr.Dataset:
 
 
 if __name__ == "__main__":
-    chlorophyll_ds = get_chlorophyll_data()
-    temperature_ds = get_sea_surface_temperature_data()
+    pass
     

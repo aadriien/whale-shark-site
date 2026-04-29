@@ -38,7 +38,7 @@ def get_sea_surface_temperature_data(variables: list[str] = ["analysed_sst"],
     #   L4 (daily, satellite-derived observations) (1981-ongoing)
     # Variables of interest:
     #   - Sea surface temperature (analysed_sst)  [Kelvin]
-    # Documentation: https://data.marine.copernicus.eu/product/SST_GLO_SST_L4_REP_OBSERVATIONS_010_011/description
+    # Documentation: https://documentation.marine.copernicus.eu/PUM/CMEMS-SST-PUM-010-011.pdf
     dataset_id = "METOFFICE-GLO-SST-L4-REP-OBS-SST"
 
     fetch_params = {
