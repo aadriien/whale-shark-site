@@ -8,7 +8,7 @@
 import os
 import pandas as pd
 
-from src.copernicus.fetch import get_chlorophyll_data
+from src.copernicus.fetch_chlorophyll import get_chlorophyll_data
 from src.copernicus.clean import convert_xarray_to_df
 from src.utils.data_utils import export_to_csv
 
