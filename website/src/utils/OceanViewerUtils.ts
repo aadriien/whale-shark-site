@@ -7,7 +7,7 @@ import { PlottedCoordinatePoint, OceanGridPoint } from "../types/coordinates";
 import { OceanDatasetConfig } from "../types/oceans";
 
 
-// Chlorophyll scale
+// Chlorophyll scale (logarithmic, mg/m³)
 const CHL_INTERPOLATOR = d3.interpolateRgbBasis([
     "#002a1a",
     "#005533",
@@ -15,8 +15,20 @@ const CHL_INTERPOLATOR = d3.interpolateRgbBasis([
     "#44ff22",
     "#ccff00",
 ]);
-
 export const CHL_SCALE = d3.scaleSequentialLog().domain([0.05, 30]).interpolator(CHL_INTERPOLATOR);
+
+// Sea surface temperature scale (linear, °C)
+const SST_INTERPOLATOR = d3.interpolateRgbBasis([
+    "#0a1f6e",
+    "#0077b6",
+    "#00b4d8",
+    "#90e0ef",
+    "#ffffcc",
+    "#fdae61",
+    "#f46d43",
+    "#d73027",
+]);
+export const SST_SCALE = d3.scaleSequential().domain([0, 35]).interpolator(SST_INTERPOLATOR);
 
 export const OCEAN_DATASETS = {
     chlorophyll: {
@@ -28,6 +40,16 @@ export const OCEAN_DATASETS = {
         colorScale: CHL_SCALE,
         gradientStops: [0.05, 0.2, 0.7, 3, 12, 30],
         label: "Chlorophyll (mg/m³)",
+    },
+    temperature: {
+        csvPath: (year: number) => `/data/temperature/global_${year}_temperature.csv`,
+        timeField: "time",
+        latField: "latitude",
+        lngField: "longitude",
+        dataFields: { meanSST: "mean_analysed_sst" },
+        colorScale: SST_SCALE,
+        gradientStops: [0, 5, 15, 22, 28, 35],
+        label: "Sea Surface Temperature (°C)",
     },
 } satisfies Record<string, OceanDatasetConfig>;
 
@@ -75,7 +97,7 @@ function buildSharkIndex(): Record<string, PlottedCoordinatePoint[]> {
             const month = pt.date.slice(0, 7);
             if (!index[month]) index[month] = [];
             index[month].push(pt);
-            
+
             POINT_TO_SHARK_ID.set(pt.id, sharkID);
         }
     }
