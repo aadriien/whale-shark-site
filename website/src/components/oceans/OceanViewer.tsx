@@ -95,6 +95,10 @@ export default function OceanViewer() {
         const month = ALL_MONTHS[sliderIndex];
         const leafletRenderer = renderer ?? undefined;
 
+        const datasetConfig = OCEAN_DATASETS[datasetToProcess];
+        const primaryDataField = Object.keys(datasetConfig.dataFields)[0];
+        const scaleDomainMin = datasetConfig.colorScale.domain()[0];
+
         dataLayer.clearLayers();
         for (const pt of yearDataset[month] ?? []) {
             L.rectangle(
@@ -102,7 +106,7 @@ export default function OceanViewer() {
                 {
                     renderer: leafletRenderer,
                     color: "transparent",
-                    fillColor: OCEAN_DATASETS[datasetToProcess].colorScale(Math.max(0.05, pt.meanCHL || 0.05)),
+                    fillColor: datasetConfig.colorScale(Math.max(scaleDomainMin, (pt[primaryDataField] as number) || scaleDomainMin)),
                     fillOpacity: 0.75,
                     weight: 0,
                 }
