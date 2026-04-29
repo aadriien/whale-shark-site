@@ -9,6 +9,7 @@ import os
 import pandas as pd
 
 from src.copernicus.fetch_chlorophyll import get_chlorophyll_data
+from src.copernicus.fetch_temperature import get_sea_surface_temperature_data
 from src.copernicus.clean import convert_xarray_to_df
 from src.utils.data_utils import export_to_csv
 
@@ -24,6 +25,12 @@ METRIC_CONFIGS = {
         "variables": ["CHL"],
         "subdir":    "chlorophyll",
         "rename":    {"CHL": "mean_CHL"},
+    },
+    "temperature": {
+        "fetch_fn": get_sea_surface_temperature_data,
+        "variables": ["analysed_sst"],
+        "subdir":    "temperature",
+        "rename":    {"analysed_sst": "mean_analysed_sst"},
     },
 }
 

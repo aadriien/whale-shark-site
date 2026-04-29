@@ -59,7 +59,10 @@ def get_sea_surface_temperature_data(variables: list[str] = ["analysed_sst"],
         })
 
     daily_ds = get_copernicus_data(dataset_id, **fetch_params)
-    return aggregate_daily_to_monthly(daily_ds)
+    monthly_ds = aggregate_daily_to_monthly(daily_ds)
+
+    # Ensure returned dataset reflects Celsius instead of Kelvin
+    return convert_kelvin_to_celsius(monthly_ds, variables)
 
 
 if __name__ == "__main__":
