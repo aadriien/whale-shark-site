@@ -15,9 +15,11 @@ from src.utils.data_utils import export_to_csv
 
 
 WEB_DATA_DIR = "website/public/data"
+
 LAT_RANGE    = (-40, 40)   # covers full whale shark habitat range
 LON_RANGE    = (-180, 180) # global
-STRIDE       = 25          # 25 × 0.04° ≈ 1° resolution, reduces ~40M → ~29K cells/month
+
+TARGET_RESOLUTION_DEG = 1.0  # target output resolution for all metrics
 
 METRIC_CONFIGS = {
     "chlorophyll": {
@@ -62,11 +64,31 @@ def export_global_data(metrics: list[str] = list(METRIC_CONFIGS.keys()),
                     lon_range=LON_RANGE,
                 )
 
-                # Subsample to ~1° resolution before pulling into memory.
-                # isel with stride avoids downloading the full ~4km global grid.
+                # Compute stride from native grid spacing so it adapts automatically
+                # if dataset resolution ever changes (avoids hardcoding per metric)
+                
+                # This ensures 2D map renders as expected without weird cell gaps,
+                # since we're getting the float difference between 2 coordinates
+                lat_stride = max(
+                    1, 
+                    round(
+                        TARGET_RESOLUTION_DEG / abs(
+                            float(ds.coords["latitude"].values[1] - ds.coords["latitude"].values[0])
+                            )
+                        )
+                    )
+                lon_stride = max(
+                    1, 
+                    round(
+                        TARGET_RESOLUTION_DEG / abs(
+                            float(ds.coords["longitude"].values[1] - ds.coords["longitude"].values[0])
+                        )
+                    )
+                )
+
                 ds_sub = ds.isel(
-                    latitude=slice(None, None, STRIDE),
-                    longitude=slice(None, None, STRIDE),
+                    latitude=slice(None, None, lat_stride),
+                    longitude=slice(None, None, lon_stride),
                 )
 
                 df = convert_xarray_to_df(ds_sub, variable_names=variables)
