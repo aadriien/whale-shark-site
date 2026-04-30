@@ -18,11 +18,125 @@
     width: 90%;
 }
 
+.ocean-viewer-map-container {
+    position: relative;
+    width: 100%;
+}
+
 .ocean-viewer-map {
     width: 100%;
     height: 550px;
     border-radius: 8px;
     overflow: hidden;
+}
+
+.ocean-viewer-metrics {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.ocean-viewer-metrics-toggle {
+    width: 24px;
+    height: 96px;
+    background: var(--bg-overlay-soft);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.ocean-viewer-metrics-toggle:hover {
+    background: var(--bg-overlay);
+}
+
+.ocean-viewer-metrics-arrow {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+    line-height: 1;
+}
+
+.ocean-viewer-metrics-toggle:hover .ocean-viewer-metrics-arrow {
+    color: #fff;
+}
+
+.ocean-viewer-metrics-indicator {
+    width: 6px;
+    height: 32px;
+    border-radius: 3px;
+}
+
+.ocean-viewer-metrics-panel {
+    max-width: 0;
+    overflow: hidden;
+    transition: max-width 0.22s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--bg-overlay-soft);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    order: -1;
+    white-space: nowrap;
+}
+
+.ocean-viewer-metrics.expanded .ocean-viewer-metrics-panel {
+    max-width: 220px;
+    padding: 12px;
+}
+
+.ocean-viewer-metrics-heading {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+}
+
+.ocean-viewer-metric-option {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.ocean-viewer-metric-option:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.ocean-viewer-metric-option.active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.ocean-viewer-metric-gradient {
+    width: 100%;
+    height: 8px;
+    border-radius: 3px;
+}
+
+.ocean-viewer-metric-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
 }
 
 .ocean-viewer-controls {

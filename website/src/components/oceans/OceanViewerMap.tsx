@@ -56,7 +56,7 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
         // At zoom z the world is 256 * 2^z px wide, so the minimum zoom
         // that fills the container without blank edges is log2(width / 256).
         // Padding is subtracted so minZoom stays consistent with border gap.
-        const MAP_PADDING = 96;
+        const MAP_PADDING = 72;
         const fitToContainer = () => {
             if (!mapElRef.current) return;
             const minZoom = Math.log2((mapElRef.current.clientWidth - MAP_PADDING * 2) / 256);

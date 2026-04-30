@@ -20,3 +20,8 @@ export type OceanDatasetConfig = {
     label: string;
 };
 
+export type OceanViewerMetricsToggleProps = {
+    datasetKey: string;
+    onDatasetChange: (key: string) => void;
+};
+

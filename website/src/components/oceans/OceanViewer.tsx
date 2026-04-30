@@ -5,6 +5,7 @@ import L from "leaflet";
 
 import CondensedSharkCard from "../cards/CondensedSharkCard";
 import OceanViewerMap from "./OceanViewerMap";
+import OceanViewerMetricsToggle from "./OceanViewerMetricsToggle";
 import OceanViewerTimeline from "./OceanViewerTimeline";
 
 import {
@@ -56,9 +57,15 @@ export default function OceanViewer() {
 
     const [datasetToProcess, setDatasetToProcess] = useState<keyof typeof OCEAN_DATASETS>("chlorophyll");
     const [sliderIndex, setSliderIndex] = useState(ALL_MONTHS.length - 1);
-    const [yearDataset, setYearChlData] = useState<Record<string, OceanGridPoint[]>>({});
+    const [yearDataset, setYearGridData] = useState<Record<string, OceanGridPoint[]>>({});
     const [loadedYear, setLoadedYear] = useState<number | null>(null);
     const [isLoadingDataset, setIsLoadingDataset] = useState(false);
+
+    // Reset cache when metric changes so load effect re-fetches new dataset
+    useEffect(() => {
+        setLoadedYear(null);
+        setYearGridData({});
+    }, [datasetToProcess]);
 
     // Lazy-load per-year dataset CSV when selected year or dataset changes
     useEffect(() => {
@@ -70,17 +77,17 @@ export default function OceanViewer() {
         abortRef.current = controller;
 
         setIsLoadingDataset(true);
-        setYearChlData({});
+        setYearGridData({});
 
         processOceanDataset(datasetToProcess, year, controller.signal)
             .then((data) => {
-                setYearChlData(data);
+                setYearGridData(data);
                 setLoadedYear(year);
                 setIsLoadingDataset(false);
             })
             .catch((err) => {
                 if (err.name !== "AbortError") {
-                    setYearChlData({}); // 404 / error — show nothing, don't retry
+                    setYearGridData({}); // 404 / error — show nothing, don't retry
                     setLoadedYear(year);
                     setIsLoadingDataset(false);
                 }
@@ -131,7 +138,13 @@ export default function OceanViewer() {
 
     return (
         <div className="ocean-viewer">
-            <OceanViewerMap ref={mapHandleRef} />
+            <div className="ocean-viewer-map-container">
+                <OceanViewerMap ref={mapHandleRef} />
+                <OceanViewerMetricsToggle
+                    datasetKey={datasetToProcess}
+                    onDatasetChange={(key) => setDatasetToProcess(key as keyof typeof OCEAN_DATASETS)}
+                />
+            </div>
 
             <OceanViewerTimeline
                 sliderIndex={sliderIndex}
