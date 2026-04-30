@@ -157,7 +157,7 @@
 
 .ocean-viewer-loading {
     font-size: 12px;
-    color: #888;
+    color: var(--text-muted);
 }
 
 .ocean-viewer-slider {
@@ -169,7 +169,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 11px;
-    color: #888;
+    color: var(--text-muted);
     margin-top: 2px;
 }
 
@@ -188,13 +188,13 @@
 
 .ocean-viewer-legend-label {
     font-size: 12px;
-    color: #888;
+    color: var(--text-muted);
     min-width: 180px;
 }
 
 .ocean-viewer-legend-text {
     font-size: 12px;
-    color: #888;
+    color: var(--text-muted);
 }
 
 .ocean-viewer-data-gradient {
@@ -208,7 +208,7 @@
     justify-content: space-between;
     width: 60px;
     font-size: 11px;
-    color: #888;
+    color: var(--text-muted);
 }
 
 .shark-card-popup-container {
