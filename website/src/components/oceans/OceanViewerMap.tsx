@@ -28,14 +28,15 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
         const renderer = L.canvas({ padding: 0.5 });
         rendererRef.current = renderer;
 
-        // maxBounds clamps panning to the data coverage area (lat ±40°)
-        const dataBounds = L.latLngBounds([-40, -180], [40, 180]);
+        // maxBounds clamps panning to the data coverage area (lat ±60°)
+        const dataBounds = L.latLngBounds([-60, -180], [60, 180]);
 
         const map = L.map(mapElRef.current, {
             center: [0, 0],
             zoom: 2,
-            minZoom: 2.3,
-            maxZoom: 10,
+            minZoom: 2,
+            maxZoom: 5,
+            zoomSnap: 0.5,
             attributionControl: false,
             maxBounds: dataBounds,
             maxBoundsViscosity: 1.0,
@@ -51,10 +52,27 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
         dataLayerRef.current = L.layerGroup().addTo(map);
         sharkLayerRef.current = L.layerGroup().addTo(map);
 
-        // Defer size measurement so tiles fill without seams after layout
-        setTimeout(() => map.invalidateSize(), 0);
+        // Recompute minZoom and re-fit whenever the container resizes.
+        // At zoom z the world is 256 * 2^z px wide, so the minimum zoom
+        // that fills the container without blank edges is log2(width / 256).
+        // Padding is subtracted so minZoom stays consistent with border gap.
+        const MAP_PADDING = 96;
+        const fitToContainer = () => {
+            if (!mapElRef.current) return;
+            const minZoom = Math.log2((mapElRef.current.clientWidth - MAP_PADDING * 2) / 256);
+            map.setMinZoom(minZoom);
+            map.fitBounds(dataBounds, { padding: [MAP_PADDING, MAP_PADDING] });
+        };
 
-        return () => { map.remove(); mapRef.current = null; };
+        const observer = new ResizeObserver(fitToContainer);
+        observer.observe(mapElRef.current);
+
+        setTimeout(() => {
+            map.invalidateSize();
+            fitToContainer();
+        }, 0);
+
+        return () => { observer.disconnect(); map.remove(); mapRef.current = null; };
     }, []);
 
     return <div ref={mapElRef} className="ocean-viewer-map" />;

@@ -16,7 +16,7 @@ from src.utils.data_utils import export_to_csv
 
 WEB_DATA_DIR = "website/public/data"
 
-LAT_RANGE    = (-40, 40)   # covers full whale shark habitat range
+LAT_RANGE    = (-60, 60)   # covers full whale shark habitat range
 LON_RANGE    = (-180, 180) # global
 
 TARGET_RESOLUTION_DEG = 1.0  # target output resolution for all metrics
