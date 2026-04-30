@@ -40,6 +40,7 @@ export const OCEAN_DATASETS = {
         colorScale: CHL_SCALE,
         gradientStops: [0.05, 0.2, 0.7, 3, 12, 30],
         label: "Chlorophyll (mg/m³)",
+        sharkColor: "#ff7700",
     },
     temperature: {
         csvPath: (year: number) => `/data/temperature/global_${year}_temperature.csv`,
@@ -50,6 +51,7 @@ export const OCEAN_DATASETS = {
         colorScale: SST_SCALE,
         gradientStops: [0, 5, 15, 22, 28, 35],
         label: "Sea Surface Temperature (°C)",
+        sharkColor: "#39ff14",
     },
 } satisfies Record<string, OceanDatasetConfig>;
 

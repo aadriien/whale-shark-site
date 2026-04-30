@@ -18,6 +18,7 @@ export type OceanDatasetConfig = {
     colorScale: (value: number) => string;
     gradientStops: number[];
     label: string;
+    sharkColor: string;
 };
 
 export type OceanViewerMetricsToggleProps = {

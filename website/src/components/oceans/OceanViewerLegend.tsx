@@ -23,7 +23,7 @@ const OceanViewerLegend = ( { datasetKey }: {datasetKey: string}) => {
 
             <div className="ocean-viewer-legend-row">
                 <svg width={12} height={12} viewBox="0 0 12 12">
-                    <circle cx={6} cy={6} r={5} fill="#ff7700" stroke="#cc4400" strokeWidth={1.5} />
+                    <circle cx={6} cy={6} r={5} fill={config.sharkColor} stroke="#000" strokeWidth={1.5} />
                 </svg>
                 <span className="ocean-viewer-legend-text">Whale shark observation</span>
             </div>

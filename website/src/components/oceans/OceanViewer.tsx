@@ -125,8 +125,8 @@ export default function OceanViewer() {
             const marker = L.circleMarker([pt.lat, pt.lng], {
                 renderer: leafletRenderer,
                 radius: 5,
-                color: "#cc4400",
-                fillColor: "#ff7700",
+                color: "#000",
+                fillColor: datasetConfig.sharkColor,
                 fillOpacity: 0.9,
                 weight: 1.5,
             });
