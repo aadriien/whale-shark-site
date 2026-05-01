@@ -22,9 +22,7 @@ const OceanViewerLegend = ( { datasetKey }: {datasetKey: string}) => {
             </div>
 
             <div className="ocean-viewer-legend-row">
-                <svg width={12} height={12} viewBox="0 0 12 12">
-                    <circle cx={6} cy={6} r={5} fill={config.sharkColor} stroke="#000" strokeWidth={1.5} />
-                </svg>
+                <div className="shark-marker-icon" style={{ backgroundColor: config.sharkColor }} />
                 <span className="ocean-viewer-legend-text">Whale shark observation</span>
             </div>
         </div>

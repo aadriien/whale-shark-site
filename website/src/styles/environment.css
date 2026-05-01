@@ -211,6 +211,18 @@
     color: var(--text-muted);
 }
 
+.shark-marker-icon {
+    width: 28px;
+    height: 13px;
+    -webkit-mask-image: url('/whale-shark-marker.svg');
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url('/whale-shark-marker.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    filter: drop-shadow(0 0 1.5px rgba(0,0,0,0.8));
+}
+
 .shark-card-popup-container {
     width: 230px;
 }

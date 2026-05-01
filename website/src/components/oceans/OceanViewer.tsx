@@ -21,7 +21,7 @@ import { OceanMapHandle } from "../../types/oceans";
 import { PlottedCoordinatePoint } from "../../types/coordinates";
 
 
-function bindSharkPopup(marker: L.CircleMarker, pt: PlottedCoordinatePoint) {
+function bindSharkPopup(marker: L.Marker, pt: PlottedCoordinatePoint) {
     const sharkID = POINT_TO_SHARK_ID.get(pt.id);
     const found = sharkID ? SHARK_MAP.get(sharkID) : undefined;
 
@@ -122,14 +122,13 @@ export default function OceanViewer() {
 
         sharkLayer.clearLayers();
         for (const pt of SHARK_OBS[month] ?? []) {
-            const marker = L.circleMarker([pt.lat, pt.lng], {
-                renderer: leafletRenderer,
-                radius: 5,
-                color: "#000",
-                fillColor: datasetConfig.sharkColor,
-                fillOpacity: 0.9,
-                weight: 1.5,
+            const icon = L.divIcon({
+                className: "",
+                html: `<div class="shark-marker-icon" style="background-color:${datasetConfig.sharkColor}"></div>`,
+                iconSize: [28, 13],
+                iconAnchor: [14, 7],
             });
+            const marker = L.marker([pt.lat, pt.lng], { icon });
 
             bindSharkPopup(marker, pt);
             marker.addTo(sharkLayer);
