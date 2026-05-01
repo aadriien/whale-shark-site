@@ -1,4 +1,4 @@
-import { OCEAN_DATASETS } from "../../utils/OceanViewerUtils";
+import { OCEAN_DATASETS, sharkMarkerHtml } from "../../utils/OceanViewerUtils";
 
 
 const OceanViewerLegend = ( { datasetKey }: {datasetKey: string}) => {
@@ -22,7 +22,7 @@ const OceanViewerLegend = ( { datasetKey }: {datasetKey: string}) => {
             </div>
 
             <div className="ocean-viewer-legend-row">
-                <div className="shark-marker-icon" style={{ backgroundColor: config.sharkColor }} />
+                <div dangerouslySetInnerHTML={{ __html: sharkMarkerHtml(config.sharkColor) }} />
                 <span className="ocean-viewer-legend-text">Whale shark observation</span>
             </div>
         </div>

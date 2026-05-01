@@ -14,6 +14,8 @@ import {
     SHARK_MAP, SHARK_OBS,
     POINT_TO_SHARK_ID,
     processOceanDataset,
+    sharkMarkerHtml,
+    SHARK_MARKER_SIZE,
 } from "../../utils/OceanViewerUtils";
 
 import { OceanGridPoint } from "../../types/coordinates";
@@ -124,9 +126,9 @@ export default function OceanViewer() {
         for (const pt of SHARK_OBS[month] ?? []) {
             const icon = L.divIcon({
                 className: "",
-                html: `<div class="shark-marker-icon" style="background-color:${datasetConfig.sharkColor}"></div>`,
-                iconSize: [28, 13],
-                iconAnchor: [14, 7],
+                html: sharkMarkerHtml(datasetConfig.sharkColor),
+                iconSize: SHARK_MARKER_SIZE,
+                iconAnchor: [SHARK_MARKER_SIZE[0] / 2, SHARK_MARKER_SIZE[1] / 2],
             });
             const marker = L.marker([pt.lat, pt.lng], { icon });
 

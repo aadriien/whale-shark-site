@@ -7,6 +7,16 @@ import { PlottedCoordinatePoint, OceanGridPoint } from "../types/coordinates";
 import { OceanDatasetConfig } from "../types/oceans";
 
 
+const SHARK_MARKER_PATH = "M 4,28 C 4,20 8,12 18,10 C 24,9 30,10 44,10 C 48,5 52,2 55,2 C 58,2 62,7 62,13 C 64,13 74,15 82,20 C 88,14 96,7 94,10 C 92,16 89,23 86,28 C 88,33 96,40 94,40 C 92,38 82,32 60,36 C 48,38 34,40 18,38 C 8,36 4,34 4,28 Z M 10,26 a 1.5,1.5 0 1 0 3,0 a 1.5,1.5 0 1 0 -3,0";
+
+export const SHARK_MARKER_SIZE: [number, number] = [40, 18];
+
+export function sharkMarkerHtml(color: string): string {
+    const [w, h] = SHARK_MARKER_SIZE;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 46" width="${w}" height="${h}"><path fill="${color}" stroke="black" stroke-width="4" fill-rule="evenodd" d="${SHARK_MARKER_PATH}"/></svg>`;
+}
+
+
 // Chlorophyll scale (logarithmic, mg/m³)
 const CHL_INTERPOLATOR = d3.interpolateRgbBasis([
     "#002a1a",
@@ -64,10 +74,7 @@ function generateMonths(): string[] {
     let year = 2000;
     let month = 1;
 
-    while (
-        year < now.getFullYear() ||
-        (year === now.getFullYear() && month <= now.getMonth() + 1)
-    ) {
+    while (year < now.getFullYear()) {
         months.push(`${year}-${String(month).padStart(2, "0")}`);
         month++;
         if (month > 12) { month = 1; year++; }
