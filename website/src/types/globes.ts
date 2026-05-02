@@ -44,7 +44,7 @@ export type UseGlobeClickProps = {
     sharks: WhaleSharkDatasetNormalized;
     pointsData: PlottedCoordinatePoint[];
     allSharksVisible: boolean;
-    onSharkSelect: (shark: WhaleSharkEntryNormalized) => void;
+    onSharkSelect: (shark: WhaleSharkEntryNormalized | null) => void;
 };
 
 

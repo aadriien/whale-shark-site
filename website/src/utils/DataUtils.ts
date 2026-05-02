@@ -214,7 +214,7 @@ export function parseImageField(imageField: string = "") {
 
 function extractMonths(obj: WhaleSharkEntryNormalized) {
     let sharkMonths: string[] = [];
-    const sharkCoordData: WhaleSharkCoordinates = coordinatesData.find(
+    const sharkCoordData: WhaleSharkCoordinates | undefined = coordinatesData.find(
         shark => shark.whaleSharkID === obj.id
     );
     
@@ -309,11 +309,11 @@ function formatVisionKeyVals(
     // Keep vision-specific fields
     renamed.image_id = obj.image_id;
     renamed.occurrenceID = obj.occurrenceID;
-    renamed.matched_shark_id = obj.matched_shark_id;
-    renamed.matched_image_id = obj.matched_image_id;
-    renamed.distance_km = obj.distance_km;
-    renamed.days_between = obj.days_between;
-    renamed.implied_speed_km_per_day = obj.implied_speed_km_per_day;
+    renamed.matched_shark_id = obj.matched_shark_id ?? undefined;
+    renamed.matched_image_id = obj.matched_image_id ?? undefined;
+    renamed.distance_km = obj.distance_km ?? undefined;
+    renamed.days_between = obj.days_between ?? undefined;
+    renamed.implied_speed_km_per_day = obj.implied_speed_km_per_day ?? undefined;
     renamed.plausibility = obj.plausibility;
 
     return renamed;

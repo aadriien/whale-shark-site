@@ -72,8 +72,8 @@ export type WhaleSharkEntryVision = {
     key: number;
     image_id: number;
 
-    decimalLatitude: number;
-    decimalLongitude: number;
+    decimalLatitude: number | null;
+    decimalLongitude: number | null;
 
     eventDate: string; // date string
     
@@ -83,19 +83,19 @@ export type WhaleSharkEntryVision = {
     "country (year)": string;
     "stateProvince - verbatimLocality (month year)": string;
 
-    matched_shark_id: string;
-    matched_image_id: number;
+    matched_shark_id: string | null;
+    matched_image_id: number | null;
 
-    match_distance: number;
+    match_distance: number | null;
 
-    matched_decimalLatitude?: number;
-    matched_decimalLongitude?: number;
+    matched_decimalLatitude?: number | null;
+    matched_decimalLongitude?: number | null;
 
-    matched_eventDate?: string; // date string
+    matched_eventDate?: string | null; // date string
 
-    distance_km?: number;
-    days_between?: number;
-    implied_speed_km_per_day?: number;
+    distance_km?: number | null;
+    days_between?: number | null;
+    implied_speed_km_per_day?: number | null;
 
     plausibility: string;
 };
@@ -188,6 +188,10 @@ export type CondensedGridProps = {
 
 export type IndividualSharkProps = {
     shark: WhaleSharkEntryNormalized;
+};
+
+export type IndividualSharkOrNullProps = {
+    shark: WhaleSharkEntryNormalized | null;
 };
 
 

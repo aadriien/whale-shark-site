@@ -22,7 +22,7 @@ const GBIFCalendarOccurrences = () => {
     const [selectedYear, setSelectedYear] = useState<string>(""); 
 
     const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);    
-    const monthlyData: MonthsMapping[] = useMemo(() => reshaped[selectedYear] || [], [selectedYear, reshaped]);
+    const monthlyData: MonthsMapping[] = useMemo(() => reshaped[Number(selectedYear)] || [], [selectedYear, reshaped]);
         
     return (
         <>

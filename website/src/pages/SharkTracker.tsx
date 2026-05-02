@@ -11,8 +11,8 @@ import { GlobeHandle } from "../types/globes";
 
 function SharkTracker() {
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const [playingSharkId, setPlayingSharkId] = useState<string>(null);
-    const [currentPoint, setCurrentPoint] = useState<PlottedCoordinatePoint>(null);
+    const [playingSharkId, setPlayingSharkId] = useState<string | null>(null);
+    const [currentPoint, setCurrentPoint] = useState<PlottedCoordinatePoint | null>(null);
 
     const globeHandleRef = useRef<GlobeHandle>(null);
 
@@ -49,7 +49,7 @@ function SharkTracker() {
                         sharks={leftSharks} 
                         onPlayStory={handlePlayStory} 
                         isPlaying={isPlaying} 
-                        playingSharkId={playingSharkId} 
+                        playingSharkId={playingSharkId ?? ""}
                     />
                 </div>
 
@@ -94,7 +94,7 @@ function SharkTracker() {
                         sharks={rightSharks} 
                         onPlayStory={handlePlayStory} 
                         isPlaying={isPlaying} 
-                        playingSharkId={playingSharkId} 
+                        playingSharkId={playingSharkId ?? ""}
                     />
                 </div>
             </div>

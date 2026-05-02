@@ -36,13 +36,13 @@ function countGroupCoordinates(allSharkIDs: string[]): number {
 
 
 export function getCoordinates(
-    sharkDict: WhaleSharkCoordinates, 
+    sharkDict: WhaleSharkCoordinates | undefined,
     limit: number = Infinity
 ) {
   if (!sharkDict) return [];
 
   // Grab last N points per shark (if you grab everything, then globe laggy)
-  const coords = sharkDict.coordinates.slice(-limit); 
+  const coords = (sharkDict.coordinates ?? []).slice(-limit);
 
   return coords.map(coord => {
     // Randomize delay in ring propagation

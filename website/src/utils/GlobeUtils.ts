@@ -167,23 +167,23 @@ export function clearAllData(globe: ThreeGlobe) {
   
 
 export async function resetGlobe(
-    camera: THREE.PerspectiveCamera, 
-    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
-    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>
+    camera: THREE.PerspectiveCamera,
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
     // Start with camera zooming out.. far!
     new JEasing(camera.position)
-        .to({ x: 0, y: 0, z: 300 }, 1000) 
+        .to({ x: 0, y: 0, z: 300 }, 1000)
         .easing(Cubic.InOut)
         .start();
 
     // Then reset pitch & yaw rotations
-    new JEasing(pitchRef.current.rotation)
-        .to({ x: 0, y: 0, z: 0 }, 1025) 
+    new JEasing(pitchRef.current!.rotation)
+        .to({ x: 0, y: 0, z: 0 }, 1025)
         .easing(Cubic.InOut)
         .start();
 
-    new JEasing(yawRef.current.rotation)
+    new JEasing(yawRef.current!.rotation)
         .to({ x: 0, y: 0, z: 0 }, 1050)
         .easing(Cubic.InOut)
         .start();
@@ -200,11 +200,11 @@ export async function resetGlobe(
 
 // Ease camera view to coords point for globe storytelling
 export function goToCoordinates(
-    lat: number, lng: number, 
-    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
-    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>
+    lat: number, lng: number,
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
-    new JEasing(pitchRef.current.rotation)
+    new JEasing(pitchRef.current!.rotation)
         // Convert latitude to radians, & animate over 1000 ms (1 sec)
         .to(
             { x: (lat / 180) * Math.PI * -1 },
@@ -213,7 +213,7 @@ export function goToCoordinates(
         .easing(Cubic.InOut)
         .start()
 
-    new JEasing(yawRef.current.rotation)
+    new JEasing(yawRef.current!.rotation)
         // Convert longitude to radians, & animate over 1000 ms (1 sec)
         .to(
             { y: (lng / 180) * Math.PI },
@@ -225,11 +225,11 @@ export function goToCoordinates(
 
 
 export async function playStoryMode(
-    globe: ThreeGlobe, 
-    controls: OrbitControls, 
-    camera: THREE.PerspectiveCamera, 
-    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
-    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    globe: ThreeGlobe,
+    controls: OrbitControls,
+    camera: THREE.PerspectiveCamera,
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>, 
     sharkID: string, 
     onPointChange?: (point: PlottedCoordinatePoint) => void
 ) {
@@ -276,11 +276,11 @@ export async function playStoryMode(
 
 
 export async function highlightSharkMode(
-    globe: ThreeGlobe, 
-    controls: OrbitControls, 
-    camera: THREE.PerspectiveCamera, 
-    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
-    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap>>, 
+    globe: ThreeGlobe,
+    controls: OrbitControls,
+    camera: THREE.PerspectiveCamera,
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>, 
     sharkID: string, 
     usePoints: boolean = false, 
     keepControlsDisabled: boolean = false

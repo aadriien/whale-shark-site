@@ -56,8 +56,8 @@ function GlowingShark() {
 
         const sketch = (p: p5) => {
             p.setup = () => {
-                canvasWidth = containerRef.current.offsetWidth;
-                canvasHeight = containerRef.current.offsetHeight;
+                canvasWidth = containerRef.current!.offsetWidth;
+                canvasHeight = containerRef.current!.offsetHeight;
 
                 p.createCanvas(canvasWidth, canvasHeight, p.WEBGL); 
                 p.colorMode(p.HSB, 360, 100, 100, 100); // HSB easier color control
@@ -171,7 +171,7 @@ function GlowingShark() {
             p.windowResized = updateCanvasSize;
         };
 
-        const p5Instance = new p5(sketch, containerRef.current);
+        const p5Instance = new p5(sketch, containerRef.current ?? undefined);
 
         const resizeObserver = new ResizeObserver(() => {
             if (p5Instance && p5Instance.resizeCanvas && containerRef.current) {

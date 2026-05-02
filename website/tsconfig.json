@@ -12,7 +12,8 @@
         "isolatedModules": true,
         "lib": ["ES2020", "DOM", "DOM.Iterable"],
         "baseUrl": "src",
-        "types": ["vite/client", "@react-three/fiber"]
+        "types": ["vite/client", "@react-three/fiber"],
+        "ignoreDeprecations": "6.0"
     },
     "include": ["src"]
 }

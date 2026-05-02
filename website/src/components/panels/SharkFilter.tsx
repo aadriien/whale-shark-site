@@ -67,7 +67,7 @@ function LocationFilters({
                     className="filter-select"
                 >
                     <option value="">All</option>
-                    {publishingCountries.map((publishing) => (
+                    {(publishingCountries ?? []).map((publishing) => (
                         <option key={publishing} value={publishing}>
                             {publishing}
                         </option>

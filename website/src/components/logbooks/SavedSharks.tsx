@@ -17,7 +17,7 @@ function retrieveSharks(saved: SavedSharkIDs) {
     // Convert set of saved IDs into shark objects, filtering out any missing
     return [...saved]
         .map(id => sharkMap.get(id) || null)
-        .filter(Boolean);
+        .filter((s): s is NonNullable<typeof s> => Boolean(s));
 }
 
 

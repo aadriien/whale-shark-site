@@ -379,7 +379,7 @@ function GeoLabs() {
                                 onLabSelectionChange={setSelectedSharksForLab}
 
                                 // Disable onSelect in multiple mode
-                                onSelect={viewMode === "multiple" ? null : props.onSelect} 
+                                onSelect={viewMode === "multiple" ? undefined : props.onSelect}
                             />
                         )}
                         // Disable selector while in step or timeline mode

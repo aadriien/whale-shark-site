@@ -131,10 +131,10 @@ function SharkSelector({
                     )}
                 </div>
 
-                <DisplayComponent 
+                <DisplayComponent
                     sharks={filteredSharks}
                     onSelect={onSelect}
-                    selectedSharkId={selectedSharkId}
+                    selectedSharkId={selectedSharkId ?? ""}
                 />
             </div>
         </div>

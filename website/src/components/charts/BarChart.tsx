@@ -68,7 +68,7 @@ const BarChart = ({ data, title = "Bar Chart" }: BarChartProps) => {
             .enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("x", d => x(d.label))
+            .attr("x", d => x(d.label) ?? 0)
             .attr("y", d => y(d.value))
             .attr("width", x.bandwidth())
             .attr("height", d => innerHeight - y(d.value))

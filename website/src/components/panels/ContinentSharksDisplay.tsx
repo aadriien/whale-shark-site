@@ -30,20 +30,20 @@ function ContinentDisplay({ sharks, onSelect, selectedSharkId }: ContinentDispla
         const byContinent: Partial<Record<Continent, WhaleSharkDatasetNormalized>> = {};
                 
         sharks.forEach(shark => {
-            const continents = extractContinents(shark.continent);
-            
+            const continents = extractContinents(shark.continent ?? "");
+
             continents.forEach(continent => {
                 if (VALID_CONTINENTS.includes(continent as Continent)) {
-                    if (!byContinent[continent]) {
-                        byContinent[continent] = [];
+                    if (!byContinent[continent as Continent]) {
+                        byContinent[continent as Continent] = [];
                     }
-                    byContinent[continent].push(shark);
+                    byContinent[continent as Continent]!.push(shark);
                 }
             });
         });
         
-        console.log("Sharks by continent:", Object.keys(byContinent).map(c => 
-            `${c}: ${byContinent[c].length}`
+        console.log("Sharks by continent:", Object.keys(byContinent).map(c =>
+            `${c}: ${byContinent[c as Continent]?.length ?? 0}`
         ).join(", "));
         
         return byContinent;
@@ -52,7 +52,7 @@ function ContinentDisplay({ sharks, onSelect, selectedSharkId }: ContinentDispla
     const toggleContinent = (continent: string) => {
         setOpenContinents(prev => ({
             ...prev,
-            [continent]: !prev[continent],
+            [continent]: !prev[continent as Continent],
         }));
     };
 
@@ -66,7 +66,7 @@ function ContinentDisplay({ sharks, onSelect, selectedSharkId }: ContinentDispla
             Object.entries(sharksByContinent)
                 .sort(([a], [b]) => a.localeCompare(b))
                 .map(([continent, continentSharks]) => {
-                    const isOpen: boolean = openContinents[continent];
+                    const isOpen: boolean = !!openContinents[continent as Continent];
                     
                     return (  
                         <div key={continent} className="continent-dropdown">
@@ -85,7 +85,7 @@ function ContinentDisplay({ sharks, onSelect, selectedSharkId }: ContinentDispla
                                             onClick={() => onSelect(shark.id)}
                                         >
                                             {(() => {
-                                                const countryName = parseSpecificRegion(shark.countries.trim());
+                                                const countryName = parseSpecificRegion((shark.countries ?? "").trim());
                                                 const code = getCountryCode(countryName);
 
                                                 return (

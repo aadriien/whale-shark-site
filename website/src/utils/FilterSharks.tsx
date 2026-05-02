@@ -16,7 +16,7 @@ export function extractUniqueSortedRegions(
     return Array.from(
         new Set(
             sharks.flatMap(shark => {
-                const value = shark[fieldSelector] as string | undefined;
+                const value = (shark as Record<string, unknown>)[fieldSelector] as string | undefined;
 
                 return (
                     value
@@ -90,7 +90,7 @@ export function filterSharks(
         }
 
         if (filters.month) {
-            const match = shark.months.some(
+            const match = shark.months?.some(
                 c => c.includes(
                     filters.month
                 )

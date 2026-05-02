@@ -76,7 +76,7 @@ const RadialHeatmap = ({
         // Draw each ring segment independently by portion of total
         rings.forEach((ring) => {
             const ringData = data.filter(d => d[ringField] === ring);
-            const innerRad = radiusScale(ring);
+            const innerRad = radiusScale(ring) ?? 0;
             const outerRad = innerRad + radiusScale.bandwidth();
 
             const ringTotal = d3.sum(ringData, d => Number(d[valueField]));
@@ -104,7 +104,7 @@ const RadialHeatmap = ({
 
                 const group = chartGroup.append("g");
                 group.append("path")
-                    .attr("d", arc)
+                    .attr("d", arc as any)
                     .attr("fill", segmentColorScale(segments.indexOf(segment)))
                     .attr("stroke", "#fff")
                     .attr("stroke-width", 0.5);

@@ -123,12 +123,12 @@ function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
                         type="number"
                         step="0.1"
                         min="0"
-                        value={criteria.miewidDistanceRange[0]}
+                        value={criteria.miewidDistanceRange?.[0] ?? 0}
                         onChange={(e) => {
                             const val = parseFloat(e.target.value);
-                            onChange({ 
-                                ...criteria, 
-                                miewidDistanceRange: [val, criteria.miewidDistanceRange[1]] 
+                            onChange({
+                                ...criteria,
+                                miewidDistanceRange: [val, criteria.miewidDistanceRange?.[1] ?? 0]
                             });
                         }}
                         className="filter-input"
@@ -138,12 +138,12 @@ function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
                         type="number"
                         step="0.1"
                         min="0"
-                        value={criteria.miewidDistanceRange[1]}
+                        value={criteria.miewidDistanceRange?.[1] ?? 0}
                         onChange={(e) => {
                             const val = parseFloat(e.target.value);
-                            onChange({ 
-                                ...criteria, 
-                                miewidDistanceRange: [criteria.miewidDistanceRange[0], val] 
+                            onChange({
+                                ...criteria,
+                                miewidDistanceRange: [criteria.miewidDistanceRange?.[0] ?? 0, val]
                             });
                         }}
                         className="filter-input"

@@ -25,9 +25,9 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
     const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
     const controlsRef = useRef<OrbitControls | null>(null);
     
-    const pivotRef = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null);
-    const yawRef = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null);
-    const pitchRef = useRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null);
+    const pivotRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
+    const yawRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
+    const pitchRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
 
     const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
     const mouse = useRef<THREE.Vector2>(new THREE.Vector2());

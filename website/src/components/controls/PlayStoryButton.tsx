@@ -19,7 +19,7 @@ const PlayStoryButton = ({
                     `}
                     onClick={(e) => {
                         e.stopPropagation();
-                        onToggleStepMode();
+                        onToggleStepMode?.();
                     }}
                 >
                     {isStepMode ? (
@@ -44,7 +44,7 @@ const PlayStoryButton = ({
                 `}
                 onClick={(e) => {
                     e.stopPropagation();
-                    onPlayStory(shark.id);
+                    onPlayStory?.(shark.id);
                 }}
                 disabled={isPlaying}
             >

@@ -17,7 +17,7 @@ function Logbook({ setIsLogbookOpen }: LogbookProps) {
     // Figure out which page user is on & update logbook display
     const location = useLocation();
     const currentPath = location.pathname;
-    const pageSlug = currentPath.split("/").filter(Boolean).pop(); 
+    const pageSlug = currentPath.split("/").filter(Boolean).pop() ?? "home";
 
     const pageLabelPath = pageMap[pageSlug];
 
@@ -51,7 +51,7 @@ function Logbook({ setIsLogbookOpen }: LogbookProps) {
                     <div className="logbook-body">
                         <h4>📍 <span className="logbook-page-name">{pageLabelPath.label}</span> page</h4>
                         {/* Logs, sections, etc go here */}
-                        {SECTION_COMPONENTS[activeSection]}
+                        {SECTION_COMPONENTS[activeSection as keyof typeof SECTION_COMPONENTS]}
                     </div>
 
                     <div className="logbook-nav">

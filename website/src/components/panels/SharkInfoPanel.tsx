@@ -9,10 +9,10 @@ import SharkMediaGallery from "../cards/SharkMediaGallery";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 
-import { IndividualSharkProps } from "../../types/sharks";
+import { IndividualSharkOrNullProps } from "../../types/sharks";
 
 
-const SharkInfoPanel = ({ shark }: IndividualSharkProps) => {
+const SharkInfoPanel = ({ shark }: IndividualSharkOrNullProps) => {
     if (!shark) {
         return (
             <div className="shark-info-panel">
@@ -22,7 +22,7 @@ const SharkInfoPanel = ({ shark }: IndividualSharkProps) => {
         );
     }
 
-    const countries = shark.countries.split(",").map(s => s.trim());
+    const countries = (shark.countries ?? "").split(",").map(s => s.trim());
     const regions = shark.regions ? shark.regions.split(",").map(s => s.trim()) : [];
     const publishing = shark.publishing ? shark.publishing.split(",").map(s => s.trim()) : [];
     

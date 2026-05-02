@@ -33,9 +33,9 @@ const SharkCard = ({
                 {Array.from(
                     new Set(
                         // Extract only unique countries as tags (no year)
-                        shark.countries
+                        (shark.countries ?? "")
                             .split(',')
-                            .map((entry) => entry.trim().split(' (')[0]) 
+                            .map((entry) => entry.trim().split(' (')[0])
                     )
                 ).map((country) => (
                     <span key={country} className="country-tag">
@@ -111,7 +111,7 @@ const SharkCard = ({
                 <div className="shark-regions">
                     <h3 className="shark-details">Places Visited</h3>
                     <ul className="timeline-list">
-                        {shark.countries.split(",").map((country, index) => (
+                        {(shark.countries ?? "").split(",").map((country, index) => (
                             <li key={index} className="timeline-item">{country}</li>
                         ))}
                     </ul>

@@ -32,14 +32,14 @@ const CondensedSharkCard = ({ shark }: IndividualSharkProps) => {
     // Build traits description line 
     let traitsDescription: string = "";
     if (sexKnown && stageKnown) {
-        traitsDescription = ` ${shark.sex.toLowerCase()} ${shark.lifeStage.toLowerCase()}`;
-    } 
+        traitsDescription = ` ${shark.sex!.toLowerCase()} ${shark.lifeStage!.toLowerCase()}`;
+    }
     else if (sexKnown) {
-        traitsDescription = ` ${shark.sex.toLowerCase()} (life stage unknown)`;
-    } 
+        traitsDescription = ` ${shark.sex!.toLowerCase()} (life stage unknown)`;
+    }
     else if (stageKnown) {
-        traitsDescription = ` ${shark.lifeStage.toLowerCase()} (sex unknown)`;
-    } 
+        traitsDescription = ` ${shark.lifeStage!.toLowerCase()} (sex unknown)`;
+    }
     else {
         traitsDescription = ` (sex & life stage unknown)`;
     }
@@ -82,7 +82,7 @@ const CondensedSharkCard = ({ shark }: IndividualSharkProps) => {
     // Extract unique countries
     const uniqueCountries: string[] = Array.from(
         new Set(
-            shark.countries
+            (shark.countries ?? "")
                 .split(",")
                 .map((entry) => entry.trim().split(" (")[0])
         )

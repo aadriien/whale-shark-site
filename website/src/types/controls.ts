@@ -32,7 +32,7 @@ export type TimelineSelectorProps = {
 
 
 export type TimelineControlsProps = {
-    globeRef: React.RefObject<GlobeHandle>;
+    globeRef: React.RefObject<GlobeHandle | null>;
     selectedSharksForLab: Set<string>;
     onToggleTimelineMode: () => void; 
     isTimelineMode: boolean;

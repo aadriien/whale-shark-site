@@ -6,26 +6,28 @@ export function parseCriteria(
     searchParams: URLSearchParams, 
     defaults: SharkBaseCriteria
 ) {
-    const result = { ...defaults };
-    
+    const result: SharkBaseCriteria = { ...defaults };
+    const mutableResult = result as Record<string, unknown>;
+    const defaultsLookup = defaults as Record<string, unknown>;
+
     for (const key in defaults) {
         const value = searchParams.get(key);
         if (!value) continue;
-        
-        if (Array.isArray(defaults[key])) {
-            result[key] = value.split(",");
-        } 
-        else if (typeof defaults[key] === "boolean") {
-            result[key] = value === "true";
-        } 
-        else if (typeof defaults[key] === "number") {
-            result[key] = Number(value);
-        } 
+
+        if (Array.isArray(defaultsLookup[key])) {
+            mutableResult[key] = value.split(",");
+        }
+        else if (typeof defaultsLookup[key] === "boolean") {
+            mutableResult[key] = value === "true";
+        }
+        else if (typeof defaultsLookup[key] === "number") {
+            mutableResult[key] = Number(value);
+        }
         else {
-            result[key] = value;
+            mutableResult[key] = value;
         }
     }
-    
+
     return result;
 }
 
@@ -36,16 +38,18 @@ export function criteriaToParams(
     defaults: SharkBaseCriteria
 ) {
     const params = new URLSearchParams();
-    
+    const criteriaLookup = criteria as Record<string, unknown>;
+    const defaultsLookup = defaults as Record<string, unknown>;
+
     for (const key in defaults) {
-        const value = criteria[key];
-        const def = defaults[key];
-        
+        const value = criteriaLookup[key];
+        const def = defaultsLookup[key];
+
         if (Array.isArray(value)) {
-            if (value.join(",") !== def.join(",")) {
+            if (value.join(",") !== (def as unknown[]).join(",")) {
                 params.set(key, value.join(","));
             }
-        } 
+        }
         else if (value !== def) {
             params.set(key, String(value));
         }

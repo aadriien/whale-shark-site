@@ -34,7 +34,7 @@ export type SharkSelectorProps = {
     onSelect: (arg: SharkClickProps | string) => void;
     onReset: () => void; 
     selectedSharkId: string | null; 
-    DisplayComponent: React.ComponentType<ContinentDisplayProps | SavedSharksDisplayProps>; 
+    DisplayComponent: React.ComponentType<any>;
     disabled?: boolean;
     onFilteredSharksChange: React.Dispatch<React.SetStateAction<WhaleSharkDatasetNormalized>>; 
 };

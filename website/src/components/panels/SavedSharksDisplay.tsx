@@ -44,8 +44,8 @@ function SavedSharksDisplay({
         // Get saved sharks that exist in the provided sharks array
         return [...savedIds]
             .map(id => sharkMap.get(id))
-            .filter(Boolean) 
-            .sort((a, b) => a.id.localeCompare(b.id)); 
+            .filter((s): s is NonNullable<typeof s> => Boolean(s))
+            .sort((a, b) => a.id.localeCompare(b.id));
     }, [sharks, savedIds]);
 
     const handleCardClick = (shark: WhaleSharkEntryNormalized) => {

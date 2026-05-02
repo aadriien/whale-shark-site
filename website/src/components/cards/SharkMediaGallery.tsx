@@ -6,7 +6,7 @@ import { IndividualSharkProps } from "../../types/sharks";
 
 
 const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
-    const [expandedImageIndex, setExpandedImageIndex] = useState<number>(null);
+    const [expandedImageIndex, setExpandedImageIndex] = useState<number | null>(null);
 
     const images = shark && shark.image !== "Unknown" ? parseImageField(shark.image) : [];
 
@@ -20,10 +20,10 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "ArrowLeft") {
-                setExpandedImageIndex((idx) => Math.max(idx - 1, 0));
-            } 
+                setExpandedImageIndex((idx) => Math.max(idx! - 1, 0));
+            }
             else if (e.key === "ArrowRight") {
-                setExpandedImageIndex((idx) => Math.min(idx + 1, images.length - 1));
+                setExpandedImageIndex((idx) => Math.min(idx! + 1, images.length - 1));
             } 
             else if (e.key === "Escape") {
                 closeImage();
@@ -64,7 +64,7 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
                     <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
                         <button
                             className="carousel-button left"
-                            onClick={() => setExpandedImageIndex(prev => Math.max(prev - 1, 0))}
+                            onClick={() => setExpandedImageIndex(prev => Math.max(prev! - 1, 0))}
                             disabled={expandedImageIndex === 0}
                         >
                             &lt; {/* Left arrow for image carousel */}
@@ -82,7 +82,7 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
 
                         <button
                             className="carousel-button right"
-                            onClick={() => setExpandedImageIndex(prev => Math.min(prev + 1, images.length - 1))}
+                            onClick={() => setExpandedImageIndex(prev => Math.min(prev! + 1, images.length - 1))}
                             disabled={expandedImageIndex === images.length - 1}
                         >
                             &gt; {/* Right arrow for image carousel */}

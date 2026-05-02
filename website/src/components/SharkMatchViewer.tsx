@@ -15,14 +15,14 @@ import { ImageMetadata, ImagesWithMetadata } from "types/sharks";
 function SharkMatchViewer() {
     const [searchParams, setSearchParams] = useSearchParams();
     // Initialize selected shark from URL
-    const [selectedSharkId, setSelectedSharkId] = useState<string>(() => {
+    const [selectedSharkId, setSelectedSharkId] = useState<string | null>(() => {
         const sharkId = searchParams.get("selectedSharkId");
         if (sharkId) return sharkId;
         return null;
     });
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
     const [occurrenceImgs, setOccurrenceImgs] = useState<ImagesWithMetadata>([]);
-    const [selectedMatchedImage, setSelectedMatchedImage] = useState<ImageMetadata>(null);
+    const [selectedMatchedImage, setSelectedMatchedImage] = useState<ImageMetadata | null>(null);
 
     // Get images for a shark from mediaSharks
     const getSharkImages = (sharkId: string) => {
@@ -90,7 +90,7 @@ function SharkMatchViewer() {
                     <MatchSharkSelector
                         sharks={visionSharks}
                         onSharkSelect={handleSharkSelect}
-                        selectedSharkId={selectedSharkId}
+                        selectedSharkId={selectedSharkId ?? ""}
                     />
                 </div>
 
@@ -107,7 +107,7 @@ function SharkMatchViewer() {
                                             <div className="match-stats-group">
                                                 <div className="match-stats-left">
                                                     <span className="match-stat-pair">
-                                                        <span className={`match-distance-value ${occurrence?.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
+                                                        <span className={`match-distance-value ${occurrence?.miewid_match_distance != null && occurrence.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
                                                             {occurrence?.miewid_match_distance || 'N/A'}
                                                         </span>
                                                     </span>

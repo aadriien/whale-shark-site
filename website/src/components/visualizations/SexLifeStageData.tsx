@@ -57,7 +57,7 @@ const createSexLifeStageFromSharks = (sharks: WhaleSharkDatasetNormalized) => {
     sharks.forEach(shark => {
         const sex = shark.sex || "Unknown";
         if (sex in sexCount) {
-            sexCount[sex]++;
+            sexCount[sex as keyof typeof sexCount]++;
         } 
         else {
             sexCount.Unknown++;
@@ -90,10 +90,10 @@ const createSexLifeStageFromSharks = (sharks: WhaleSharkDatasetNormalized) => {
     // Create pie data for sex distribution (as percentages)
     const totalSex = Object.values(sexCount).reduce((acc, count) => acc + count, 0);
     const pieData = totalSex === 0 ? [] : ["Male", "Female", "Unknown"]
-        .filter(sex => sexCount[sex] > 0)
+        .filter(sex => sexCount[sex as keyof typeof sexCount] > 0)
         .map(sex => ({
             label: sex,
-            value: ((sexCount[sex] / totalSex) * 100)
+            value: ((sexCount[sex as keyof typeof sexCount] / totalSex) * 100)
         }));
 
     return { ringsData, pieData };
@@ -112,7 +112,7 @@ const SexLifeStageData = ({
             return createSexLifeStageFromSharks(sharks);
         }
         // Otherwise use dataset with selectedYear (DataVisuals)
-        return reshapeSexLifeStageData(dataset, selectedYear);
+        return reshapeSexLifeStageData(dataset ?? [], selectedYear ?? "");
     }, [sharks, dataset, selectedYear]);
     
     // Determine appropriate title
