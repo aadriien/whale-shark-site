@@ -15,6 +15,7 @@ from src.utils.data_utils import (
     move_column_after, add_totals_column,
 )
 from src.utils.geomap_utils import get_LME_from_coords
+from src.gbif.analyze_methodology import assemble_methodology_metrics
 from src.gbif.constants import (
     GBIF_MEDIA_CSV,
     GBIF_INDIVIDUAL_SHARKS_STATS_CSV,
@@ -361,6 +362,9 @@ def export_individual_shark_stats(occurrences_df: pd.DataFrame,
 
     # Get any available media (+ licensing rights)
     individual_sharks = make_media_conditions(occurrences_df, individual_sharks)
+
+    # Enrich with methodology classification, ID pattern, & coordinate precision
+    individual_sharks = assemble_methodology_metrics(occurrences_df, individual_sharks)
 
     export_to_csv(GBIF_INDIVIDUAL_SHARKS_STATS_CSV, individual_sharks)
 

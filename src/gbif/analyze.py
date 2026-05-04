@@ -30,6 +30,7 @@ from src.gbif.analyze_individuals import (
     make_unique_sharks_count,
     export_individual_shark_stats,
 )
+from src.gbif.analyze_methodology import annotate_occurrences
 
 
 def export_all_analyses(dataframe: pd.DataFrame) -> None:
@@ -39,6 +40,10 @@ def export_all_analyses(dataframe: pd.DataFrame) -> None:
     """
     # Use copy to generate specific CSVs (don't modify original DataFrame)
     occurrences_df = dataframe.copy()
+
+    # Annotate each occurrence with methodology & ID pattern so these
+    # columns are available to all downstream analysis functions
+    occurrences_df = annotate_occurrences(occurrences_df)
 
     # Generate demographic data needed by calendar stats
     occurrences_with_year = validate_and_dropna(occurrences_df.copy(), ["year", "month"])

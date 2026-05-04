@@ -61,6 +61,7 @@ OCCURRENCE_RESULT_FIELDS = [
     "locality",
     "verbatimEventDate",
     "eventID",
+    "catalogNumber",
 ]
 
 
