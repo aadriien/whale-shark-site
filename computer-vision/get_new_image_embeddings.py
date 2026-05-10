@@ -72,7 +72,7 @@ def get_dinov2_model():
 # Step 1: Open gbif_media.csv & read all entries (grab images)
 
 def get_image_records() -> pd.DataFrame:
-    media_df = read_csv(GBIF_MEDIA_CSV)
+    media_df = read_csv(GBIF_MEDIA_CSV, dtype={"key": str, "whaleSharkID": str, "identificationID": str})
 
     # Keep only relevant columns
     RELEVANT_COLUMNS = [

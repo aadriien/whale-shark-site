@@ -53,10 +53,15 @@ def implied_speed_km_per_day(
     d = haversine_distance(lat1, lon1, lat2, lon2)
     
     # Time difference in days
-    if isinstance(time1, str):
-        time1 = datetime.fromisoformat(time1.split('T')[0])  # Handle datetime or just date
-    if isinstance(time2, str):
-        time2 = datetime.fromisoformat(time2.split('T')[0])
+    try:
+        # Handle datetime or just date
+        if isinstance(time1, str):
+            time1 = datetime.fromisoformat(time1.split('T')[0])
+        if isinstance(time2, str):
+            time2 = datetime.fromisoformat(time2.split('T')[0])
+    except ValueError:
+        # Partial dates (e.g. year-only) lack specificity to calculate plausibility
+        return float('nan')
     
     delta_days = abs((time2 - time1).total_seconds()) / (3600 * 24)
     
@@ -453,33 +458,36 @@ def validate_shark_matches(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
             lon2 = matched_data['decimalLongitude']
             time2 = matched_data['eventDate']
             
-            matched_lats.append(lat2)
-            matched_lons.append(lon2)
-            matched_dates.append(time2)
-            
             if pd.notna(lat1) and pd.notna(lon1) and pd.notna(time1) and \
                pd.notna(lat2) and pd.notna(lon2) and pd.notna(time2):
-                
+
                 distance = haversine_distance(lat1, lon1, lat2, lon2)
                 speed = implied_speed_km_per_day(lat1, lon1, time1, lat2, lon2, time2)
                 plausibility = categorize_plausibility(speed, distance)
-                
-                # Calculate days between
-                if isinstance(time1, str):
-                    t1 = datetime.fromisoformat(time1.split('T')[0])
-                else:
-                    t1 = time1
-                if isinstance(time2, str):
-                    t2 = datetime.fromisoformat(time2.split('T')[0])
-                else:
-                    t2 = time2
-                days_diff = abs((t2 - t1).days)
-                
+
+                # Calculate days between (skip if speed is NaN — date lacked specificity)
+                if not np.isnan(speed):
+                    if isinstance(time1, str):
+                        t1 = datetime.fromisoformat(time1.split('T')[0])
+                    else:
+                        t1 = time1
+                    if isinstance(time2, str):
+                        t2 = datetime.fromisoformat(time2.split('T')[0])
+                    else:
+                        t2 = time2
+                    days_diff = abs((t2 - t1).days)
+
+                matched_lats.append(lat2)
+                matched_lons.append(lon2)
+                matched_dates.append(time2)
                 distances.append(round(distance, 2))
                 speeds.append(round(speed, 2) if not np.isinf(speed) else 999999.0)
                 days_between.append(days_diff)
                 plausibilities.append(plausibility)
             else:
+                matched_lats.append(lat2)
+                matched_lons.append(lon2)
+                matched_dates.append(time2)
                 distances.append(np.nan)
                 speeds.append(np.nan)
                 days_between.append(np.nan)
