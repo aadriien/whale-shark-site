@@ -16,8 +16,10 @@ from src.utils.data_utils import (
     folder_exists,
 )
 
-from .process_annotations import (
-    FULL_PATH_TO_DATASET_FOLDER, ANNOTATIONS_PATH,
+from .CONSTANTS import (
+    FULL_PATH_TO_DATASET_FOLDER,
+    YAML_FILE,
+    PROJECT_RUNS_TRAINS_PATH,
 )
 
 from .coco_to_yolo import (
@@ -25,12 +27,6 @@ from .coco_to_yolo import (
 )
 
 
-YAML_FILE = f"{FULL_PATH_TO_DATASET_FOLDER}/data.yaml"
-
-OUTPUT_LABELS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/labels/train2020"
-
-TRAINING_RESULTS_FOLDER = f"{FULL_PATH_TO_DATASET_FOLDER}/training-results"
-PROJECT_RUNS_TRAINS_PATH = f"{TRAINING_RESULTS_FOLDER}/runs/train"
 
 
 # Internal cache for ad hoc reference

@@ -20,8 +20,9 @@ from src.utils.data_utils import (
     folder_exists, prettify_json,
 )
 
-from .extract_tar_data import (
-    EXTRACTED_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
+from .CONSTANTS import (
+    ANNOTATIONS_PATH, IMAGES_PATH, 
+    OUTPUT_NPZ_FILE
 )
 
 
@@ -83,14 +84,6 @@ from .extract_tar_data import (
 ###############################################################################
 
 
-SPECIFIC_DATASET_FOLDER = "whaleshark.coco"
-FULL_PATH_TO_DATASET_FOLDER = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{SPECIFIC_DATASET_FOLDER}"
-
-ANNOTATIONS_PATH = f"{FULL_PATH_TO_DATASET_FOLDER}/annotations/instances_train2020.json"
-IMAGES_PATH = f"{FULL_PATH_TO_DATASET_FOLDER}/images/train2020"
-
-EMBEDDINGS_DATABASE_FOLDER = "computer-vision/embeddings-database"
-OUTPUT_NPZ_FILE = f"{EMBEDDINGS_DATABASE_FOLDER}/whaleshark_ningaloo_embeddings.npz"
 
 
 def print_annotations() -> None:

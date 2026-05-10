@@ -12,13 +12,10 @@ from src.utils.data_utils import (
 )
 
 
-# Training datasets (+ folder path)
-TRAINING_DATA_FOLDER = "computer-vision/training-data"
-LILA_NINGALOO_ARZOUMANIAN_COCO_TAR = "whaleshark.coco.tar"
-
-# Target / destination paths for extracted data
-EXTRACTED_DATA_FOLDER = "computer-vision/extracted-data"
-LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED = "whaleshark.coco_extracted"
+from .CONSTANTS import (
+    TRAINING_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_TAR,
+    EXTRACTED_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
+)
 
 
 def extract_from_tarfile(tar_file: str, extracted_folder_destination: str) -> None:

@@ -33,14 +33,10 @@ from src.gbif.clean import (
 )
 
 
-# Output directory for generated vision examples
-VISION_IMAGES_FOLDER = "computer-vision/vision-images"
-
-ORIGINAL_FOLDER = f"{VISION_IMAGES_FOLDER}/original"
-BBOX_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox"
-SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/segmentation"
-
-BBOX_SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox-segmentation"
+from .CONSTANTS import (
+    ORIGINAL_FOLDER, BBOX_FOLDER, SEGMENTATION_FOLDER, 
+    BBOX_SEGMENTATION_FOLDER,
+)
 
 
 # Segmentation model cache
