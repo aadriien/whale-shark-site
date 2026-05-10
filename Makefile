@@ -2,6 +2,8 @@
 
 POETRY = poetry
 VENV_DIR = .venv
+PYTHON_VERSION = python3.10
+ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 
 .PHONY: setup refresh_all_gbif \
 		fetch_gbif clean_gbif analyze_gbif \
@@ -15,13 +17,14 @@ VENV_DIR = .venv
 
 all: setup refresh_all_gbif zip_data
 
+
 # Install Poetry dependencies & set up venv
 setup:
-	@which poetry > /dev/null || (echo "Poetry not found. Installing..."; curl -sSL https://install.python-poetry.org | python3 -)
+	@which poetry > /dev/null || (echo "Poetry not found. Installing..."; curl -sSL https://install.python-poetry.org | $(PYTHON_VERSION) -)
 	@$(POETRY) config virtualenvs.in-project true  # Ensure virtualenv is inside project folder
 	@if [ ! -d "$(VENV_DIR)" ]; then \
 		echo "Virtual environment not found. Creating..."; \
-		$(POETRY) env use python3.10; \
+		$(POETRY) env use $(PYTHON_VERSION); \
 		$(POETRY) install --no-root --quiet; \
 	fi
 
@@ -32,19 +35,19 @@ refresh_all_gbif: clean_gbif analyze_gbif convert_csv_json run_vision_pipeline
 
 # Fetch data from API (NOTE: returned data don't really "go" anywhere)
 fetch_gbif:
-	@$(POETRY) run python -m src.gbif.fetch
+	@$(ACTIVATE_VENV) $(POETRY) run python -m src.gbif.fetch
 
 # Clean, format, & organize raw data from queries
 clean_gbif:
-	@$(POETRY) run python -m src.gbif.clean
+	@$(ACTIVATE_VENV) $(POETRY) run python -m src.gbif.clean
 
 # Analyze cleaned data
 analyze_gbif:
-	@$(POETRY) run python -m src.gbif.analyze
+	@$(ACTIVATE_VENV) $(POETRY) run python -m src.gbif.analyze
 
 
 convert_csv_json:
-	@$(POETRY) run python -c "from src.utils.data_utils import convert_all_csvs_to_json; convert_all_csvs_to_json()"
+	@$(ACTIVATE_VENV) $(POETRY) run python -c "from src.utils.data_utils import convert_all_csvs_to_json; convert_all_csvs_to_json()"
 
 
 # Zip data folder to reduce load (if exists, & if needs to be updated)
@@ -70,52 +73,51 @@ generate_shark_names_images: generate_shark_names generate_shark_images
 
 generate_shark_names:
 	@which ollama > /dev/null || (echo "ollama not found. Installing..."; $(POETRY) add ollama)
-	@$(POETRY) run python -c "from src.utils.llm_utils import handle_names; handle_names()"
+	@$(ACTIVATE_VENV) $(POETRY) run python -c "from src.utils.llm_utils import handle_names; handle_names()"
 
 generate_shark_images:
 	@which ollama > /dev/null || (echo "ollama not found. Installing..."; $(POETRY) add ollama)
-	@$(POETRY) run python -c "from src.utils.llm_utils import handle_images; handle_images()"
+	@$(ACTIVATE_VENV) $(POETRY) run python -c "from src.utils.llm_utils import handle_images; handle_images()"
 
 
 
 # Open up tarfile to get .coco dataset (for Hugging Face computer vision model)
 extract_tar:
-	@$(POETRY) run python -m computer-vision.extract_tar_data
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.extract_tar_data
 
 # Build source of truth whale shark library (embeddings x IDs)
 process_annotations:
-	@$(POETRY) run python -m computer-vision.process_annotations
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.process_annotations
 
 # Train YOLOv8 CV model for improved shark object detection
 train_model:
-	@$(POETRY) run python -m computer-vision.handle_yolo_model
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.handle_yolo_model
 
 # Generate embeddings (+ BBOXes) for new images of unknown sharks
 get_new_shark_embeddings:
-	@$(POETRY) run python -m computer-vision.get_new_image_embeddings
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.get_new_image_embeddings
 
 # Identify matches for unknown sharks based on source of truth
 match_shark_embeddings:
-	@$(POETRY) run python -m computer-vision.match_embeddings
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.match_embeddings
 
 # Leverage proof by contradiction to check match results
 validate_shark_embeddings:
-	@$(POETRY) run python -m computer-vision.validate_embeddings
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.validate_embeddings
 
 # Run full CV matching pipeline sequentially (embeddings → matches → validation)
 run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings
 
 
-
 # Generate CV examples with YOLO bounding boxes & segmentation masks
 generate_vision_examples:
-	@$(POETRY) run python -m computer-vision.generate_vision_examples
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.generate_vision_examples
 
 
 # Auto-format Python code
 format:
 	@which black > /dev/null || (echo "black not found. Installing..."; $(POETRY) add black)
-	$(POETRY) run black src/
+	@$(ACTIVATE_VENV) $(POETRY) run black src/
 
 clean:
 	@echo "Removing virtual environment..."
@@ -159,13 +161,12 @@ clean_website:
 
 
 fetch_copernicus:
-	@$(POETRY) run python -m src.copernicus.clean
+	@$(ACTIVATE_VENV) $(POETRY) run python -m src.copernicus.clean
 
 fetch_global_copernicus:
-	@$(POETRY) run python -m src.copernicus.export_global_data
+	@$(ACTIVATE_VENV) $(POETRY) run python -m src.copernicus.export_global_data
 
 test_LME:
-	@$(POETRY) run python -m src.utils.geomap_utils
-
+	@$(ACTIVATE_VENV) $(POETRY) run python -m src.utils.geomap_utils
 
 
