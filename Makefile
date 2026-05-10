@@ -12,6 +12,7 @@ ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 		extract_tar process_annotations train_model \
 		get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings \
 		run_vision_pipeline generate_vision_examples \
+		build_shark_graph render_shark_graph \
 		format clean \
 		setup_website run_website deploy_website clean_website
 
@@ -112,6 +113,16 @@ run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_sh
 # Generate CV examples with YOLO bounding boxes & segmentation masks
 generate_vision_examples:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.generate_vision_examples
+
+
+# Build match graph: UMAP projection + networkx graph construction
+build_shark_graph:
+	@$(ACTIVATE_VENV) $(POETRY) run python computer-vision/matches-graph/build_graph.py
+
+# Render match graph: Plotly interactive visualization
+render_shark_graph:
+	@$(ACTIVATE_VENV) $(POETRY) run python computer-vision/matches-graph/render_graph.py
+
 
 
 # Auto-format Python code
