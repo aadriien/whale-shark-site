@@ -22,23 +22,15 @@ from src.gbif.constants import (
     GBIF_INDIVIDUAL_SHARKS_STATS_CSV,
 )
 
-from .process_annotations import (
-    OUTPUT_NPZ_FILE,
+from .CONSTANTS import (
+    OUTPUT_NPZ_FILE, GBIF_OUTPUT_NPZ_FILE,
+    GBIF_MEDIA_MATCHES_FILE, GBIF_INDIVIDUAL_MATCHES_FILE,
+    GBIF_MEDIA_MATCHES_JSON, GBIF_INDIVIDUAL_MATCHES_JSON,
 )
 
 from .get_new_image_embeddings import (
-    NEW_EMBEDDINGS_FOLDER, GBIF_OUTPUT_NPZ_FILE,
     get_image_records,
 )
-
-
-GBIF_MEDIA_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches.csv"
-GBIF_INDIVIDUAL_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches.csv"
-
-# JSON files go to website assets folder for React import
-JSON_OUTPUT_FOLDER = "./website/src/assets/data/json"
-GBIF_MEDIA_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_media_matches.json"
-GBIF_INDIVIDUAL_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_shark_matches.json"
 
 
 # L2 DISTANCE SCALE (for normalized values, to judge match likelihood): 
@@ -79,7 +71,7 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
         all_miewid = np.vstack([known_data["miewid_embeddings"], query_miewid])
         all_dino = np.vstack([known_data["dinov2_embeddings"], query_dino])
         
-        # Combine metadata (use identificationID for new data, whale_shark_names for known)
+        # Combine metadata (use whaleSharkID for new data, whale_shark_names for known)
         known_ids = known_data["whale_shark_names"]
         all_ids = np.concatenate([known_ids, query_ids])
         
@@ -225,11 +217,11 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
         # "imageURL (license, creator)"
     ]
     media_sharks_df = media_sharks_df[RELEVANT_COLUMNS]
-    individual_sharks = media_sharks_df.dropna(subset=RELEVANT_COLUMNS).copy()
+    individual_sharks = media_sharks_df.dropna(subset=["whaleSharkID"]).copy()
     individual_sharks.reset_index(drop=True, inplace=True)
 
-    individual_sharks["identificationID"] = individual_sharks["identificationID"].astype(str)
-    media_matches_df["identificationID"] = media_matches_df["identificationID"].astype(str)
+    individual_sharks["whaleSharkID"] = individual_sharks["whaleSharkID"].astype(str)
+    media_matches_df["whaleSharkID"] = media_matches_df["whaleSharkID"].astype(str)
 
     # --- FORMAT & GROUP FOR MIEWID ---
     miewid_fmt = "MIEWID: {0} ({1}, {2})"
@@ -240,7 +232,7 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
     ]
     miewid_colname = "MIEWID: closest_whale_shark_id (matched_image_id, distance)"
 
-    miewid_df = media_matches_df.groupby("identificationID").apply(
+    miewid_df = media_matches_df.groupby("whaleSharkID").apply(
         lambda x: ", ".join(sorted(set(
             miewid_fmt.format(*vals)
             for vals in zip(*(x[col] for col in miewid_cols))
@@ -257,7 +249,7 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
     ]
     dino_colname = "DINOV2: closest_whale_shark_id (matched_image_id, distance)"
 
-    dino_df = media_matches_df.groupby("identificationID").apply(
+    dino_df = media_matches_df.groupby("whaleSharkID").apply(
         lambda x: ", ".join(sorted(set(
             dino_fmt.format(*vals)
             for vals in zip(*(x[col] for col in dino_cols))
@@ -268,8 +260,8 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
     # --- Merge all formatted columns ---
     individual_sharks = (
         individual_sharks
-        .merge(miewid_df, on="identificationID", how="left")
-        .merge(dino_df, on="identificationID", how="left")
+        .merge(miewid_df, on="whaleSharkID", how="left")
+        .merge(dino_df, on="whaleSharkID", how="left")
     )
 
     export_to_csv(GBIF_INDIVIDUAL_MATCHES_FILE, individual_sharks)
@@ -289,6 +281,7 @@ if __name__ == "__main__":
     #   - embeddings
     #   - bboxes 
     #   - image_id_keys 
+    #   - whaleSharkIDs
     #   - occurrenceIDs 
     #   - identificationIDs 
     #   - image_url_identifiers 

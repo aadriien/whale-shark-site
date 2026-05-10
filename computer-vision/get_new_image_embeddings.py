@@ -30,9 +30,7 @@ from .handle_yolo_model import (
     get_yolo_model, 
 )
 
-
-NEW_EMBEDDINGS_FOLDER = "computer-vision/new-embeddings"
-GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
+from .CONSTANTS import GBIF_OUTPUT_NPZ_FILE
 
 
 # ---------- MiewID embeddings model ----------
@@ -79,8 +77,8 @@ def get_image_records() -> pd.DataFrame:
     # Keep only relevant columns
     RELEVANT_COLUMNS = [
         "key", # maps to key in regular GBIF occurrence dataset
-        "occurrenceID",
         "whaleSharkID",
+        "occurrenceID",
         "identificationID",
         "format",
         "references",
@@ -88,7 +86,13 @@ def get_image_records() -> pd.DataFrame:
     ]
     media_df = media_df[RELEVANT_COLUMNS]
 
-    media_df_clean = media_df.dropna(subset=RELEVANT_COLUMNS)
+    # Enforce essential fields for embedding
+    REQUIRED_FOR_EMBEDDING = [
+        "key", 
+        "whaleSharkID", 
+        "identifier"
+    ]
+    media_df_clean = media_df.dropna(subset=REQUIRED_FOR_EMBEDDING)
     media_df_clean.reset_index(drop=True, inplace=True)
 
     return media_df_clean
@@ -205,8 +209,9 @@ def process_single_image(row) -> dict:
             "dinov2_embedding": dinov2_embedding,
             "bbox": bbox,
             "image_id (GBIF key)": row["key"],
-            "occurrenceID (GBIF)": row["occurrenceID"],
             "whaleSharkID (GBIF)": row["whaleSharkID"],
+            "occurrenceID (GBIF)": row["occurrenceID"],
+            "identificationID (GBIF)": row["identificationID"],
             "image_url (GBIF identifier)": row["identifier"],
         }
 
@@ -230,8 +235,9 @@ def process_all_images(media_df: pd.DataFrame) -> None:
     dinov2_embeddings = np.array([r["dinov2_embedding"] for r in results])
     bboxes = np.array([r["bbox"] for r in results])
     image_id_keys = np.array([r["image_id (GBIF key)"] for r in results])
-    occurrenceIDs = np.array([r["occurrenceID (GBIF)"] for r in results])
     whaleSharkIDs = np.array([r["whaleSharkID (GBIF)"] for r in results])
+    occurrenceIDs = np.array([r["occurrenceID (GBIF)"] for r in results])
+    identificationIDs = np.array([r["identificationID (GBIF)"] for r in results])
     image_url_identifiers = np.array([r["image_url (GBIF identifier)"] for r in results])
 
     # Confirm folder to hold embeddings exists, then save to .npz file
@@ -242,8 +248,9 @@ def process_all_images(media_df: pd.DataFrame) -> None:
         dinov2_embeddings=dinov2_embeddings,
         bboxes=bboxes,
         image_id_keys=image_id_keys,
-        occurrenceIDs=occurrenceIDs,
         whaleSharkIDs=whaleSharkIDs,
+        occurrenceIDs=occurrenceIDs,
+        identificationIDs=identificationIDs,
         image_url_identifiers=image_url_identifiers
     )
 
@@ -262,8 +269,9 @@ def view_npz_file() -> None:
     dinov2_embeddings = data["dinov2_embeddings"]
     bboxes = data["bboxes"]
     image_id_keys = data["image_id_keys"]
-    occurrenceIDs = data["occurrenceIDs"]
     whaleSharkIDs = data["whaleSharkIDs"]
+    occurrenceIDs = data["occurrenceIDs"]
+    identificationIDs = data["identificationIDs"]
     image_url_identifiers = data["image_url_identifiers"]
 
     # Check shape of embeddings (how many)
@@ -278,8 +286,9 @@ def view_npz_file() -> None:
         print(f"  DINOv2 Embedding: {dinov2_embeddings[i]}")
         print(f"  BBOX: {bboxes[i]}")
         print(f"  Image ID (GBIF key): {image_id_keys[i]}")
-        print(f"  Occurrence ID (GBIF): {occurrenceIDs[i]}")
         print(f"  Whale Shark ID (GBIF): {whaleSharkIDs[i]}")
+        print(f"  Occurrence ID (GBIF): {occurrenceIDs[i]}")
+        print(f"  Identification ID (GBIF): {identificationIDs[i]}")
         print(f"  Image URL (GBIF identifier): {image_url_identifiers[i]}")
         print("-" * 50)  # Separator for readability
 

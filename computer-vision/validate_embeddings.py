@@ -8,22 +8,18 @@ import pandas as pd
 import numpy as np
 from math import radians, sin, cos, asin, sqrt
 from datetime import datetime
-from typing import Tuple, Optional
+from typing import Tuple
 
 from src.utils.data_utils import read_csv, export_to_csv
 from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_MEDIA_CSV
-from .match_embeddings import (
-    NEW_EMBEDDINGS_FOLDER, JSON_OUTPUT_FOLDER,
-    export_to_json
+
+from .CONSTANTS import (
+    NEW_EMBEDDINGS_FOLDER,
+    VALIDATED_MEDIA_MATCHES_FILE, VALIDATED_SHARK_MATCHES_FILE,
+    VALIDATED_MEDIA_MATCHES_JSON, VALIDATED_SHARK_MATCHES_JSON,
 )
 
-
-# Output files
-VALIDATED_MEDIA_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches_validated.csv"
-VALIDATED_SHARK_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches_validated.csv"
-
-VALIDATED_MEDIA_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_media_matches_validated.json"
-VALIDATED_SHARK_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_shark_matches_validated.json"
+from .match_embeddings import export_to_json
 
 
 def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -125,7 +121,7 @@ def validate_media_matches(media_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
         media_matches_df = media_matches_df.drop(columns=dinov2_cols)
     
     # Create lookup for GBIF occurrence data by key
-    gbif_lookup = gbif_df.groupby('key').first()[['decimalLatitude', 'decimalLongitude', 'eventDate', 'identificationID', 'occurrenceID']].to_dict('index')
+    gbif_lookup = gbif_df.groupby('key').first()[['decimalLatitude', 'decimalLongitude', 'eventDate', 'whaleSharkID', 'identificationID', 'occurrenceID']].to_dict('index')
     
     # Create indexed media dataframe (miewid_matched_image_id is an index into this)
     media_df_indexed = media_df.reset_index(drop=True)
@@ -238,7 +234,7 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
     print(f"Exploding {len(shark_matches_df)} shark IDs into per-image occurrences...")
     
     # Create lookup for GBIF data
-    gbif_lookup = gbif_df.groupby('identificationID').first()[['decimalLatitude', 'decimalLongitude', 'eventDate', 'occurrenceID', 'key']].to_dict('index')
+    gbif_lookup = gbif_df.groupby('whaleSharkID').first()[['decimalLatitude', 'decimalLongitude', 'eventDate', 'identificationID', 'occurrenceID', 'key']].to_dict('index')
     
     # Create lookup from key to image_id
     key_to_image_id = dict(zip(media_matches_df['key'], media_matches_df['image_id']))
@@ -256,7 +252,7 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
     exploded_rows = []
     
     for _, row in shark_matches_df.iterrows():
-        shark_id = row['identificationID']
+        shark_id = row['whaleSharkID']
         miewid_col = row['MIEWID: closest_whale_shark_id (matched_image_id, distance)']
         
         # Get shark's own data
@@ -395,8 +391,8 @@ def validate_shark_matches(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
         shark_matches_df = shark_matches_df.drop(columns=dinov2_cols)
     
     # Create lookup for GBIF data
-    # Handle duplicate identificationIDs by keeping first occurrence per ID
-    gbif_lookup = gbif_df.groupby('identificationID').first()[['decimalLatitude', 'decimalLongitude', 'eventDate']].to_dict('index')
+    # Handle duplicate whaleSharkIDs by keeping first occurrence per ID
+    gbif_lookup = gbif_df.groupby('whaleSharkID').first()[['decimalLatitude', 'decimalLongitude', 'eventDate']].to_dict('index')
     
     # Extract matched shark ID from the formatted string
     # Format: "MIEWID: {shark_id} ({image_id}, {distance})"
@@ -422,7 +418,7 @@ def validate_shark_matches(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
     
     for _, row in shark_matches_df.iterrows():
         try:
-            shark_id = row['identificationID']
+            shark_id = row['whaleSharkID']
             matched_id = row['matched_shark_id']
             
             # Get query shark data
@@ -508,8 +504,8 @@ def validate_shark_matches(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
     shark_matches_df['implied_speed_km_per_day'] = speeds
     shark_matches_df['plausibility'] = plausibilities
     
-    # Remove duplicates based on identificationID
-    shark_matches_df = shark_matches_df.drop_duplicates(subset=['identificationID'], keep='first')
+    # Remove duplicates based on whaleSharkID
+    shark_matches_df = shark_matches_df.drop_duplicates(subset=['whaleSharkID'], keep='first')
     
     # Clean up temporary columns
     shark_matches_df = shark_matches_df.drop(columns=['matched_shark_id'], errors='ignore')
