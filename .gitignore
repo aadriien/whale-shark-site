@@ -7,6 +7,8 @@ __pycache__/
 .DS_Store
 **/.DS_Store
 
+.vscode
+
 data/*
 !data/data.zip
 
