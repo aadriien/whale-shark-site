@@ -79,10 +79,11 @@ def get_image_records() -> pd.DataFrame:
     # Keep only relevant columns
     RELEVANT_COLUMNS = [
         "key", # maps to key in regular GBIF occurrence dataset
-        "occurrenceID", 
-        "identificationID", 
-        "format", 
-        "references", 
+        "occurrenceID",
+        "whaleSharkID",
+        "identificationID",
+        "format",
+        "references",
         "identifier" # image URL (often in AWS S3 bucket)
     ]
     media_df = media_df[RELEVANT_COLUMNS]
@@ -205,7 +206,7 @@ def process_single_image(row) -> dict:
             "bbox": bbox,
             "image_id (GBIF key)": row["key"],
             "occurrenceID (GBIF)": row["occurrenceID"],
-            "identificationID (GBIF)": row["identificationID"],
+            "whaleSharkID (GBIF)": row["whaleSharkID"],
             "image_url (GBIF identifier)": row["identifier"],
         }
 
@@ -230,7 +231,7 @@ def process_all_images(media_df: pd.DataFrame) -> None:
     bboxes = np.array([r["bbox"] for r in results])
     image_id_keys = np.array([r["image_id (GBIF key)"] for r in results])
     occurrenceIDs = np.array([r["occurrenceID (GBIF)"] for r in results])
-    identificationIDs = np.array([r["identificationID (GBIF)"] for r in results])
+    whaleSharkIDs = np.array([r["whaleSharkID (GBIF)"] for r in results])
     image_url_identifiers = np.array([r["image_url (GBIF identifier)"] for r in results])
 
     # Confirm folder to hold embeddings exists, then save to .npz file
@@ -242,7 +243,7 @@ def process_all_images(media_df: pd.DataFrame) -> None:
         bboxes=bboxes,
         image_id_keys=image_id_keys,
         occurrenceIDs=occurrenceIDs,
-        identificationIDs=identificationIDs,
+        whaleSharkIDs=whaleSharkIDs,
         image_url_identifiers=image_url_identifiers
     )
 
@@ -262,7 +263,7 @@ def view_npz_file() -> None:
     bboxes = data["bboxes"]
     image_id_keys = data["image_id_keys"]
     occurrenceIDs = data["occurrenceIDs"]
-    identificationIDs = data["identificationIDs"]
+    whaleSharkIDs = data["whaleSharkIDs"]
     image_url_identifiers = data["image_url_identifiers"]
 
     # Check shape of embeddings (how many)
@@ -278,20 +279,20 @@ def view_npz_file() -> None:
         print(f"  BBOX: {bboxes[i]}")
         print(f"  Image ID (GBIF key): {image_id_keys[i]}")
         print(f"  Occurrence ID (GBIF): {occurrenceIDs[i]}")
-        print(f"  Identification ID (GBIF): {identificationIDs[i]}")
+        print(f"  Whale Shark ID (GBIF): {whaleSharkIDs[i]}")
         print(f"  Image URL (GBIF identifier): {image_url_identifiers[i]}")
         print("-" * 50)  # Separator for readability
 
 
 
 if __name__ == "__main__":
-    # gbif_media_df = get_image_records()
-    # # print(f"Size of media file: {gbif_media_df.shape[0]}")
+    gbif_media_df = get_image_records()
+    print(f"Size of media file: {gbif_media_df.shape[0]}")
 
     # # test_df = gbif_media_df.head(10)
     # # process_all_images(test_df)
 
-    # process_all_images(gbif_media_df)
+    process_all_images(gbif_media_df)
 
     view_npz_file()
 
