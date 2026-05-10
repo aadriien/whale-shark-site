@@ -62,7 +62,7 @@ def perform_search(known_embeddings: np.ndarray,
 def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False) -> list[dict]:
     query_miewid = new_data["miewid_embeddings"]
     query_dino = new_data["dinov2_embeddings"]
-    query_ids = new_data["whaleSharkIDs"]
+    query_ids = new_data["whaleSharkIDs"].astype(str)
     
     results = []
     

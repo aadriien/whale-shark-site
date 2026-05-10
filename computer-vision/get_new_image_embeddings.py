@@ -234,11 +234,11 @@ def process_all_images(media_df: pd.DataFrame) -> None:
     miewid_embeddings = np.array([r["miewid_embedding"] for r in results])
     dinov2_embeddings = np.array([r["dinov2_embedding"] for r in results])
     bboxes = np.array([r["bbox"] for r in results])
-    image_id_keys = np.array([r["image_id (GBIF key)"] for r in results])
-    whaleSharkIDs = np.array([r["whaleSharkID (GBIF)"] for r in results])
-    occurrenceIDs = np.array([r["occurrenceID (GBIF)"] for r in results])
-    identificationIDs = np.array([r["identificationID (GBIF)"] for r in results])
-    image_url_identifiers = np.array([r["image_url (GBIF identifier)"] for r in results])
+    image_id_keys = np.array([str(r["image_id (GBIF key)"]) for r in results])
+    whaleSharkIDs = np.array([str(r["whaleSharkID (GBIF)"]) for r in results])
+    occurrenceIDs = np.array([str(r["occurrenceID (GBIF)"]) for r in results])
+    identificationIDs = np.array([str(r["identificationID (GBIF)"]) for r in results])
+    image_url_identifiers = np.array([str(r["image_url (GBIF identifier)"]) for r in results])
 
     # Confirm folder to hold embeddings exists, then save to .npz file
     _ = folder_exists(GBIF_OUTPUT_NPZ_FILE, True)
