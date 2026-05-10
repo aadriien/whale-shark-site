@@ -518,12 +518,15 @@
     padding: 1.25rem;
     box-shadow: var(--shadow-md);
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .match-main-image {
     width: 100%;
+    max-height: 350px;
     height: auto;
+    object-fit: cover;
+    flex-shrink: 0;
     border-radius: 6px;
     border: 1px solid var(--border-primary);
 }
@@ -532,6 +535,9 @@
     margin-top: 0.75rem;
     padding-top: 0.75rem;
     border-top: 1px solid var(--border-primary);
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .match-images-grid h6 {
