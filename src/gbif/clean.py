@@ -64,33 +64,18 @@ OCCURRENCE_RESULT_FIELDS = [
     "catalogNumber",
 ]
 
+MEDIA_RELEVANT_FIELDS = [
+    "key", 
+    "occurrenceID", 
+    "identificationID", 
+    "whaleSharkID", 
+    "media"
+]
+
 
 #####
 ## Handle API results
 #####
-
-def extract_media_data(occurrences: list) -> list:
-    media_data = []
-
-    for occurrence in occurrences:
-        occurrence_key = occurrence.get("key", "Unknown")  
-        occurrence_id = occurrence.get("occurrenceID", "Unknown") 
-        identification_id = occurrence.get("identificationID", "Unknown") 
-        
-        # Check if media exists for this occurrence
-        if "media" in occurrence:
-            for media_item in occurrence["media"]:
-                # Flatten media dict & create 1 row for each entry 
-                media_row = {
-                    "key": occurrence_key,
-                    "occurrenceID": occurrence_id,
-                    "identificationID": identification_id,
-                    **media_item  # Include all media fields as separate columns
-                }
-                media_data.append(media_row)
-
-    return media_data
-
 
 def get_all_extracted_occurrences() -> list:
     extracted_occurrences = []
@@ -113,26 +98,36 @@ def export_gbif_occurrences() -> pd.DataFrame:
         raise ValueError("Error: No occurrences to export")
 
     occurrences_df = pd.DataFrame(all_occurrences)
-    
-    # Convert any unhashable types (lists, dicts) to strings for duplicate detection
+
+    # Convert any unhashable types (lists, dicts) to strings for duplicate detection,
+    # but preserve media column so it can be exploded after cleaning
     for col in occurrences_df.columns:
-        if occurrences_df[col].apply(lambda x: isinstance(x, (list, dict))).any():
+        if col != "media" and occurrences_df[col].apply(lambda x: isinstance(x, (list, dict))).any():
             occurrences_df[col] = occurrences_df[col].astype(str)
-    
+
     occurrences_df = refactor_field_values(occurrences_df)
 
+    non_media_cols = [c for c in occurrences_df.columns if c != "media"]
     print(
         "Number of duplicate rows to drop (all columns):",
-        occurrences_df.duplicated().sum()
+        occurrences_df.duplicated(subset=non_media_cols).sum()
     )
-    occurrences_df.drop_duplicates(inplace=True)
+    occurrences_df.drop_duplicates(subset=non_media_cols, inplace=True)
 
-    # Media goes in its own separate CSV (since variable per occurrence)
+    # Derive media CSV from cleaned occurrences (whaleSharkID already fully populated)
     if "media" in occurrences_df.columns:
-        occurrences_df = occurrences_df.drop(columns=["media"])
+        media_source = (
+            occurrences_df[[c for c in MEDIA_RELEVANT_FIELDS if c in occurrences_df.columns]]
+            .drop_duplicates(subset=["key"])
+        )
 
-        all_media_data = extract_media_data(all_occurrences)
-        media_df = pd.DataFrame(all_media_data)
+        media_rows = media_source.explode("media").dropna(subset=["media"])
+        media_df = pd.concat([
+            media_rows.drop("media", axis=1),
+            media_rows["media"].apply(pd.Series)
+        ], axis=1).reset_index(drop=True)
+
+        occurrences_df = occurrences_df.drop(columns=["media"])
 
         if not media_df.empty:
             export_to_csv(GBIF_MEDIA_CSV, media_df)
