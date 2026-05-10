@@ -157,7 +157,7 @@ def validate_media_matches(media_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
                 time1 = query_data['eventDate']
                 
                 # Get matched image's key from media_df using the index
-                if pd.notna(matched_image_key) and matched_image_key < len(media_df_indexed):
+                if pd.notna(matched_image_key) and 0 <= matched_image_key < len(media_df_indexed):
                     matched_image_row = media_df_indexed.iloc[int(matched_image_key)]
                     matched_key = matched_image_row['key']
                     
@@ -272,7 +272,7 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
             query_key = shark_data.get('key')
             exploded_rows.append({
                 'whaleSharkID': row.get('whaleSharkID', shark_id),
-                'identificationID': shark_id,
+                'identificationID': row.get('identificationID'),
                 'occurrenceID': shark_data.get('occurrenceID'),
                 'key': query_key,
                 'image_id': key_to_image_id.get(query_key, -1),
@@ -344,7 +344,7 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
             query_key = shark_data.get('key')
             exploded_rows.append({
                 'whaleSharkID': row.get('whaleSharkID', shark_id),
-                'identificationID': shark_id,
+                'identificationID': row.get('identificationID'),
                 'occurrenceID': shark_data.get('occurrenceID'),
                 'key': query_key,
                 'image_id': key_to_image_id.get(query_key, -1),
@@ -400,7 +400,7 @@ def validate_shark_matches(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
     def extract_matched_id(formatted_str):
         if pd.isna(formatted_str):
             return None
-        match = re.search(r'MIEWID:\\s*([^\\(]+)', formatted_str)
+        match = re.search(r'MIEWID:\s*([^\(]+)', formatted_str)
         if match:
             return match.group(1).strip()
         return None

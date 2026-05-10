@@ -113,14 +113,14 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
 
                 # MIEWID match
                 "miewid_closest_whale_shark_id": all_ids[idx_miewid] if idx_miewid is not None else "N/A",
-                "miewid_matched_image_id": idx_miewid if idx_miewid is not None else -1,
-                "miewid_matched_annotation_id": idx_miewid if idx_miewid is not None else -1,
+                "miewid_matched_image_id": (idx_miewid - known_count) if (idx_miewid is not None and idx_miewid >= known_count) else -1,
+                "miewid_matched_annotation_id": (idx_miewid - known_count) if (idx_miewid is not None and idx_miewid >= known_count) else -1,
                 "miewid_distance": round(float(dist_miewid), 4) if dist_miewid is not None else 999.0,
 
                 # DINOv2 match
                 "dinov2_closest_whale_shark_id": all_ids[idx_dino] if idx_dino is not None else "N/A",
-                "dinov2_matched_image_id": idx_dino if idx_dino is not None else -1,
-                "dinov2_matched_annotation_id": idx_dino if idx_dino is not None else -1,
+                "dinov2_matched_image_id": (idx_dino - known_count) if (idx_dino is not None and idx_dino >= known_count) else -1,
+                "dinov2_matched_annotation_id": (idx_dino - known_count) if (idx_dino is not None and idx_dino >= known_count) else -1,
                 "dinov2_distance": round(float(dist_dino), 4) if dist_dino is not None else 999.0,
             }
             results.append(result)
