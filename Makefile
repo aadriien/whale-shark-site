@@ -8,7 +8,8 @@ VENV_DIR = .venv
 		convert_csv_json zip_data \
 		generate_shark_names_images generate_shark_names generate_shark_images \
 		extract_tar process_annotations train_model \
-		get_new_shark_embeddings match_shark_embeddings generate_vision_examples \
+		get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings \
+		run_vision_pipeline generate_vision_examples \
 		format clean \
 		setup_website run_website deploy_website clean_website
 
@@ -26,7 +27,7 @@ setup:
 
 
 # Run full ETL pipeline for latest data
-refresh_all_gbif: clean_gbif analyze_gbif convert_csv_json
+refresh_all_gbif: clean_gbif analyze_gbif convert_csv_json run_vision_pipeline
 
 
 # Fetch data from API (NOTE: returned data don't really "go" anywhere)
@@ -97,10 +98,12 @@ get_new_shark_embeddings:
 match_shark_embeddings:
 	@$(POETRY) run python -m computer-vision.match_embeddings
 
-
-
+# Leverage proof by contradiction to check match results
 validate_shark_embeddings:
 	@$(POETRY) run python -m computer-vision.validate_embeddings
+
+# Run full CV matching pipeline sequentially (embeddings → matches → validation)
+run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings
 
 
 
