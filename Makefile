@@ -12,7 +12,7 @@ ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 		extract_tar process_annotations train_model \
 		get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings \
 		run_vision_pipeline generate_vision_examples \
-		build_shark_graph render_shark_graph \
+		build_shark_graph \
 		format clean \
 		setup_website run_website deploy_website clean_website
 
@@ -117,11 +117,7 @@ generate_vision_examples:
 
 # Build match graph: UMAP projection + networkx graph construction
 build_shark_graph:
-	@$(ACTIVATE_VENV) $(POETRY) run python computer-vision/matches-graph/build_graph.py
-
-# Render match graph: Plotly interactive visualization
-render_shark_graph:
-	@$(ACTIVATE_VENV) $(POETRY) run python computer-vision/matches-graph/render_graph.py
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.build_graph
 
 
 
@@ -150,6 +146,7 @@ setup_website:
 	npm install three three-globe d3 p5 react-router-dom && \
 	npm install @react-three/fiber @react-three/drei && \
 	npm install --save-dev @types/three @types/d3 @types/p5 @types/react-router-dom && \
+	npm install cytoscape react-cytoscapejs @types/cytoscape && \
 	npm install country-list && \
 	npm install gh-pages --save-dev && \
 	echo "Checking npm version..." && \

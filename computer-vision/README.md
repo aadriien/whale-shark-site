@@ -30,6 +30,35 @@ Datasets from `training-data` and `extracted-data` are **NOT included** in the r
     - Holmberg J, Norman B, Arzoumanian Z. [Estimating population size, structure, and residency time for whale sharks Rhincodon typus through collaborative photo-identification](https://www.int-res.com/abstracts/esr/v7/n1/p39-53/). Endangered Species Research. 2009 Apr 8;7(1):39-53.
 
 
+## Matches Graph
+
+Graph representation of whale shark image match connections, built from MiewID embedding similarity. Each node is a single image; nodes cluster by individual shark identity. Edges connect each GBIF query image to its nearest-neighbor match, weighted by `miewid_distance`.
+
+Serves as a visual reinforcer of the matching pipeline: making transitive identity chains visible (A matches B, B matches C → A and C may be the same individual), and surfacing cross-database links between GBIF observations and Ningaloo source-of-truth images.
+
+### Graph Structure
+
+**Nodes** — two populations, one node per image:
+- **GBIF** — clustered by `whaleSharkID`
+- **Ningaloo** — clustered by Wildbook UUID (`whale_shark_names`)
+
+Node positions are 2D UMAP coordinates projected from the full MiewID embedding vectors across both populations combined. Proximity in the layout reflects actual embedding similarity.
+
+**Edges** — directed, GBIF image → closest non-self match from the combined FAISS index:
+- **GBIF → Ningaloo** — cross-database identity claim; the only link between the two datasets
+- **GBIF → GBIF** — within-GBIF population match
+
+Edge weight = `miewid_distance` (L2 on normalized vectors; lower = stronger match). Edges are flagged as **mutual** (A→B and B→A both exist) or **one-sided**.
+
+### Running
+
+```sh
+make build_shark_graph
+```
+
+Output written to `website/src/assets/data/json/graph_data.json`.
+
+
 ## Acknowledgements
 
 ### Computer Vision Models

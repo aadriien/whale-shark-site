@@ -1,24 +1,20 @@
 ###############################################################################
 ##  `build_graph.py`                                                         ##
 ##                                                                           ##
-##  Purpose: UMAP projection + networkx graph construction and export        ##
+##  Purpose: UMAP projection + networkx graph construction & export          ##
 ###############################################################################
 
 
-import os
-import sys
 import json
 import numpy as np
 import pandas as pd
 import networkx as nx
 import umap
 
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from CONSTANTS import (
-    OUTPUT_NPZ_FILE, GBIF_OUTPUT_NPZ_FILE, GBIF_MEDIA_MATCHES_FILE,
-    GRAPH_OUTPUT_DIR, UMAP_COORDS_FILE, GRAPH_DATA_FILE,
+from .CONSTANTS import (
+    OUTPUT_NPZ_FILE, 
+    GBIF_OUTPUT_NPZ_FILE, GBIF_MEDIA_MATCHES_FILE,
+    GRAPH_DATA_FILE,
 )
 
 
@@ -72,18 +68,25 @@ def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np
             y=float(coords[NINGALOO_COUNT + i][1]),
         )
 
+    # compare_all=True stores GBIF-local index for GBIF→GBIF matches, -1 for Ningaloo matches.
+    # Look up Ningaloo nodes by shark name so -1 rows can still produce edges.
+    ningaloo_name_to_idx = {str(name): i for i, name in enumerate(ningaloo_names)}
+
     for _, row in matches_df.iterrows():
         source = f"gbif_{int(row['image_id'])}"
         matched_idx = int(row["miewid_matched_image_id"])
         distance = float(row["miewid_distance"])
 
-        if matched_idx < NINGALOO_COUNT:
-            target = f"ningaloo_{matched_idx}"
-            edge_type = "gbif_to_ningaloo"
-        else:
-            # Subtract NINGALOO_COUNT to convert combined-index → GBIF-local index
-            target = f"gbif_{matched_idx - NINGALOO_COUNT}"
+        if matched_idx >= 0:
+            target = f"gbif_{matched_idx}"
             edge_type = "gbif_to_gbif"
+        else:
+            closest_id = str(row["miewid_closest_whale_shark_id"])
+            ningaloo_idx = ningaloo_name_to_idx.get(closest_id)
+            if ningaloo_idx is None:
+                continue
+            target = f"ningaloo_{ningaloo_idx}"
+            edge_type = "gbif_to_ningaloo"
 
         if G.has_node(source) and G.has_node(target):
             G.add_edge(source, target, distance=distance, edge_type=edge_type, mutual=False)
@@ -97,12 +100,7 @@ def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np
     return G
 
 
-def export_outputs(coords: np.ndarray, G: nx.DiGraph) -> None:
-    os.makedirs(GRAPH_OUTPUT_DIR, exist_ok=True)
-
-    np.savez(UMAP_COORDS_FILE, coords=coords)
-    print(f"Saved UMAP coords: {UMAP_COORDS_FILE}")
-
+def export_graph(G: nx.DiGraph) -> None:
     graph_data = {
         "nodes": [{"id": nid, **attrs} for nid, attrs in G.nodes(data=True)],
         "edges": [{"source": u, "target": v, **attrs} for u, v, attrs in G.edges(data=True)],
@@ -123,6 +121,5 @@ if __name__ == "__main__":
 
     G = build_graph(ningaloo, gbif, matches_df, coords)
 
-    export_outputs(coords, G)
+    export_graph(G)
 
-    

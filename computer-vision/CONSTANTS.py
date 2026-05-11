@@ -51,8 +51,6 @@ BBOX_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox"
 SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/segmentation"
 BBOX_SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox-segmentation"
 
-# Match graph outputs
-GRAPH_OUTPUT_DIR = "computer-vision/matches-graph/output"
-UMAP_COORDS_FILE = f"{GRAPH_OUTPUT_DIR}/umap_coords.npz"
-GRAPH_DATA_FILE = f"{GRAPH_OUTPUT_DIR}/graph_data.json"
+# Match graph output (website asset)
+GRAPH_DATA_FILE = f"{JSON_OUTPUT_FOLDER}/graph_data.json"
 
