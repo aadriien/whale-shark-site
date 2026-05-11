@@ -101,16 +101,26 @@ def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np
 
 
 def export_graph(G: nx.DiGraph) -> None:
+    connected = {n for edge in G.edges() for n in edge}
+
+    nodes = []
+    for nid, attrs in G.nodes(data=True):
+        if attrs.get("population") == "ningaloo" and nid not in connected:
+            continue
+        nodes.append({"id": nid, **attrs})
+
     graph_data = {
-        "nodes": [{"id": nid, **attrs} for nid, attrs in G.nodes(data=True)],
+        "nodes": nodes,
         "edges": [{"source": u, "target": v, **attrs} for u, v, attrs in G.edges(data=True)],
     }
 
     with open(GRAPH_DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(graph_data, f, indent=2)
 
+    exported_nodes = len(nodes)
+    skipped = G.number_of_nodes() - exported_nodes
     print(f"Saved graph data: {GRAPH_DATA_FILE}")
-    print(f"  {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
+    print(f"  {exported_nodes} nodes ({skipped} isolated ningaloo nodes skipped), {G.number_of_edges()} edges")
 
 
 

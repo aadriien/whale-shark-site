@@ -2,8 +2,6 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { ElementDefinition, StylesheetStyle, Core } from "cytoscape";
 
-import graphData from "../assets/data/json/graph_data.json";
-
 
 type NodeFilter = "all" | "gbif" | "ningaloo";
 type EdgeFilter = "all" | "cross" | "same" | "mutual";
@@ -23,6 +21,8 @@ type GraphEdge = {
     edge_type: string;
     mutual: boolean;
 };
+
+type GraphData = { nodes: GraphNode[]; edges: GraphEdge[] };
 
 
 const POSITION_SCALE = 5000;
@@ -167,11 +167,18 @@ function applyFilters(cy: Core, nodeFilter: NodeFilter, edgeFilter: EdgeFilter) 
 function SharkMatchGraph() {
     const [nodeFilter, setNodeFilter] = useState<NodeFilter>("all");
     const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
+    const [graphData, setGraphData] = useState<GraphData | null>(null);
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const nodes = graphData.nodes as GraphNode[];
-    const edges = graphData.edges as GraphEdge[];
+    useEffect(() => {
+        import("../assets/data/json/graph_data.json").then((mod) => {
+            setGraphData(mod.default as GraphData);
+        });
+    }, []);
+
+    const nodes = graphData?.nodes ?? [];
+    const edges = graphData?.edges ?? [];
 
     const posMap = useMemo(() => normalizePositions(nodes), [nodes]);
     const elements = useMemo(
@@ -241,7 +248,9 @@ function SharkMatchGraph() {
             </div>
 
             <div ref={containerRef} className="cytoscape-canvas">
-                <CytoscapeComponent
+                {!graphData ? (
+                    <div className="graph-loading">Loading graph…</div>
+                ) : <CytoscapeComponent
                     elements={elements}
                     stylesheet={STYLESHEET}
                     layout={{ name: "preset" }}
@@ -263,10 +272,11 @@ function SharkMatchGraph() {
                             applyFilters(cy, nodeFilter, edgeFilter);
                         });
                     }}
-                />
+                />}
             </div>
         </div>
     );
 }
 
 export default SharkMatchGraph;
+
