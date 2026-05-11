@@ -10,6 +10,7 @@
 @import "./styles/environment.css";
 @import "./styles/shark_vision.css";
 @import "./styles/shark_match_viewer.css";
+@import "./styles/shark_match_graph.css";
 @import "./styles/build_a_shark.css";
 @import "./styles/animation.css";
 
