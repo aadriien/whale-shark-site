@@ -89,3 +89,112 @@
     text-align: left !important;
 }
 
+/* Canvas + panel side by side */
+.shark-match-graph-section .graph-canvas-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.shark-match-graph-section .graph-canvas-row .cytoscape-canvas {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+}
+
+/* Node detail panel */
+.graph-node-panel {
+    width: 280px;
+    height: 600px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    background: var(--bg-secondary, #f8f8f8);
+    padding: 12px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.graph-panel-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    opacity: 0.5;
+    line-height: 1;
+    padding: 2px 6px;
+}
+
+.graph-panel-close:hover {
+    opacity: 1;
+}
+
+.graph-panel-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.graph-panel-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.55;
+}
+
+.graph-panel-distance {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    opacity: 1;
+}
+
+.graph-panel-divider {
+    height: 1px;
+    background: var(--border-color, #ddd);
+}
+
+.graph-panel-missing {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+.graph-panel-ningaloo {
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 6px;
+    padding: 16px 12px;
+    text-align: center;
+}
+
+.graph-panel-ningaloo-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.55;
+    margin-bottom: 6px;
+}
+
+.graph-panel-ningaloo-id {
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+.graph-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    opacity: 0.5;
+    font-size: 0.9rem;
+}
+

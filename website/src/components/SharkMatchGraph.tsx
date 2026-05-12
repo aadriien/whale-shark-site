@@ -1,6 +1,9 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
-import type { ElementDefinition, StylesheetStyle, Core } from "cytoscape";
+import type { ElementDefinition, StylesheetStyle, Core, EventObject, EdgeSingular } from "cytoscape";
+
+import GraphNodePanel from "./GraphNodePanel";
+import type { SelectedMatch } from "./GraphNodePanel";
 
 
 type NodeFilter = "all" | "gbif" | "ningaloo";
@@ -129,6 +132,7 @@ function buildElements(
             target: e.target,
             edge_type: e.edge_type,
             mutual: e.mutual,
+            distance: e.distance,
             opacity: 1 - ((e.distance - dMin) / dRange) * (1 - EDGE_OPACITY_MIN),
         },
     }));
@@ -168,8 +172,11 @@ function SharkMatchGraph() {
     const [nodeFilter, setNodeFilter] = useState<NodeFilter>("all");
     const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
     const [graphData, setGraphData] = useState<GraphData | null>(null);
+    const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
+
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const lastCyInstance = useRef<Core | null>(null);
 
     useEffect(() => {
         import("../assets/data/json/graph_data.json").then((mod) => {
@@ -247,32 +254,74 @@ function SharkMatchGraph() {
                 </div>
             </div>
 
-            <div ref={containerRef} className="cytoscape-canvas">
-                {!graphData ? (
-                    <div className="graph-loading">Loading graph…</div>
-                ) : <CytoscapeComponent
-                    elements={elements}
-                    stylesheet={STYLESHEET}
-                    layout={{ name: "preset" }}
-                    style={{ width: "100%", height: "100%", position: "absolute", top: "0", left: "0" }}
-                    userZoomingEnabled={true}
-                    userPanningEnabled={true}
-                    autoungrabify={true}
-                    boxSelectionEnabled={false}
-                    textureOnViewport={true}
-                    hideEdgesOnViewport={true}
-                    pixelRatio={1}
-                    minZoom={0.03}
-                    maxZoom={3}
-                    cy={(cy) => {
-                        cyRef.current = cy;
-                        cy.one("render", () => {
-                            cy.resize();
-                            cy.fit();
-                            applyFilters(cy, nodeFilter, edgeFilter);
-                        });
-                    }}
-                />}
+            <div className="graph-canvas-row">
+                <div ref={containerRef} className="cytoscape-canvas">
+                    {!graphData ? (
+                        <div className="graph-loading">Loading graph…</div>
+                    ) : <CytoscapeComponent
+                        elements={elements}
+                        stylesheet={STYLESHEET}
+                        layout={{ name: "preset" }}
+                        style={{ width: "100%", height: "100%", position: "absolute", top: "0", left: "0" }}
+                        userZoomingEnabled={true}
+                        userPanningEnabled={true}
+                        autoungrabify={true}
+                        boxSelectionEnabled={false}
+                        textureOnViewport={true}
+                        hideEdgesOnViewport={true}
+                        pixelRatio={1}
+                        minZoom={0.03}
+                        maxZoom={3}
+                        cy={(cy) => {
+                            cyRef.current = cy;
+                            if (lastCyInstance.current !== cy) {
+                                lastCyInstance.current = cy;
+                                cy.on("tap", (evt: EventObject) => {
+                                    const target = evt.target as any;
+                                    if (target === cy) {
+                                        setSelectedMatch(null);
+                                        return;
+                                    }
+                                    if (typeof target.isNode !== "function" || !target.isNode()) return;
+                                    if (target.data("population") !== "gbif") return;
+
+                                    const nodeId = target.id() as string;
+                                    const clickedSharkId = target.data("shark_id") as string;
+
+                                    let bestEdge: EdgeSingular | null = null;
+                                    let bestDist = Infinity;
+                                    cy.edges(`[source = "${nodeId}"]`).forEach((edge: EdgeSingular) => {
+                                        const d = edge.data("distance") as number;
+                                        if (d < bestDist) {
+                                            bestDist = d;
+                                            bestEdge = edge;
+                                        }
+                                    });
+
+                                    if (!bestEdge) return;
+                                    const targetNode = cy.getElementById((bestEdge as EdgeSingular).data("target") as string);
+                                    setSelectedMatch({
+                                        clickedSharkId,
+                                        matchSharkId: targetNode.data("shark_id") as string,
+                                        matchPopulation: targetNode.data("population") as "gbif" | "ningaloo",
+                                        matchDistance: bestDist,
+                                    });
+                                });
+                            }
+                            cy.one("render", () => {
+                                cy.resize();
+                                cy.fit();
+                                applyFilters(cy, nodeFilter, edgeFilter);
+                            });
+                        }}
+                    />}
+                </div>
+            {selectedMatch && (
+                <GraphNodePanel
+                    match={selectedMatch}
+                    onClose={() => setSelectedMatch(null)}
+                />
+            )}
             </div>
         </div>
     );
