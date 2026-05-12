@@ -1,3 +1,5 @@
+import sharkSelectionPlaceholder from "../assets/images/chart-placeholders/globe-views.svg";
+
 import CondensedSharkCard from "./cards/CondensedSharkCard";
 import { mediaSharks } from "../utils/DataUtils";
 
@@ -10,12 +12,24 @@ export type SelectedMatch = {
 };
 
 type GraphNodePanelProps = {
-    match: SelectedMatch;
+    match: SelectedMatch | null;
     onClose: () => void;
 };
 
 
 function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {
+    if (!match) {
+        return (
+            <div className="graph-node-panel graph-node-panel--empty">
+                <img
+                    src={sharkSelectionPlaceholder}
+                    alt="Click a GBIF node to see its shark card"
+                    className="graph-panel-placeholder"
+                />
+            </div>
+        );
+    }
+
     const clickedShark = mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null;
     const matchedShark =
         match.matchPopulation === "gbif"
@@ -62,4 +76,3 @@ function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {
 }
 
 export default GraphNodePanel;
-
