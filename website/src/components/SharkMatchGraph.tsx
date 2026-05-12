@@ -276,6 +276,11 @@ function SharkMatchGraph() {
                             cyRef.current = cy;
                             if (lastCyInstance.current !== cy) {
                                 lastCyInstance.current = cy;
+                                cy.one("render", () => {
+                                    cy.resize();
+                                    cy.fit();
+                                    applyFilters(cy, nodeFilter, edgeFilter);
+                                });
                                 cy.on("tap", (evt: EventObject) => {
                                     const target = evt.target as any;
                                     if (target === cy) {
@@ -308,20 +313,13 @@ function SharkMatchGraph() {
                                     });
                                 });
                             }
-                            cy.one("render", () => {
-                                cy.resize();
-                                cy.fit();
-                                applyFilters(cy, nodeFilter, edgeFilter);
-                            });
                         }}
                     />}
                 </div>
-            {selectedMatch && (
                 <GraphNodePanel
                     match={selectedMatch}
                     onClose={() => setSelectedMatch(null)}
                 />
-            )}
             </div>
         </div>
     );
