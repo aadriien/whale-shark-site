@@ -234,154 +234,58 @@ def explode_shark_matches_to_occurrences(shark_matches_df: pd.DataFrame, gbif_df
     Explode shark matches into individual image occurrences with validation.
     Each row in the output represents one image occurrence for a shark ID.
     """
-    import re
-    
     print(f"Exploding {len(shark_matches_df)} shark IDs into per-image occurrences...")
-    
-    # Create lookup for GBIF data
-    gbif_lookup = gbif_df.groupby('whaleSharkID').first()[['decimalLatitude', 'decimalLongitude', 'eventDate', 'identificationID', 'occurrenceID', 'key']].to_dict('index')
-    
-    # Create lookup from key to image_id
-    key_to_image_id = dict(zip(media_matches_df['key'], media_matches_df['image_id']))
-    
-    # Parse the MIEWID column to extract all matches
-    # Format: "MIEWID: {shark_id} ({image_id}, {distance}), MIEWID: ..."
-    def parse_miewid_matches(formatted_str):
-        if pd.isna(formatted_str) or formatted_str == "":
-            return []
-        # Find all MIEWID patterns
-        pattern = r'MIEWID:\s*([^\(]+)\s*\(([^,]+),\s*([^\)]+)\)'
-        matches = re.findall(pattern, formatted_str)
-        return [(m[0].strip(), m[1].strip(), float(m[2].strip())) for m in matches]
-    
-    exploded_rows = []
-    
-    for _, row in shark_matches_df.iterrows():
-        shark_id = row['whaleSharkID']
-        miewid_col = row['MIEWID: closest_whale_shark_id (matched_image_id, distance)']
-        
-        # Get shark's own data
-        if shark_id not in gbif_lookup:
-            continue
-        
-        shark_data = gbif_lookup[shark_id]
-        lat1 = shark_data['decimalLatitude']
-        lon1 = shark_data['decimalLongitude']
-        time1 = shark_data['eventDate']
-        
-        # Parse all matched IDs
-        matched_ids = parse_miewid_matches(miewid_col)
-        
-        if not matched_ids:
-            # No matches - create a single row with UNKNOWN
-            query_key = shark_data.get('key')
-            exploded_rows.append({
-                'whaleSharkID': row.get('whaleSharkID', shark_id),
-                'identificationID': row.get('identificationID'),
-                'occurrenceID': shark_data.get('occurrenceID'),
-                'key': query_key,
-                'image_id': key_to_image_id.get(query_key, -1),
-                'decimalLatitude': lat1,
-                'decimalLongitude': lon1,
-                'eventDate': time1,
-                'Oldest Occurrence': row.get('Oldest Occurrence'),
-                'Newest Occurrence': row.get('Newest Occurrence'),
-                'country (year)': row.get('country (year)'),
-                'stateProvince - verbatimLocality (month year)': row.get('stateProvince - verbatimLocality (month year)'),
-                'matched_shark_id': np.nan,
-                'matched_image_id': np.nan,
-                'match_distance': np.nan,
-                'matched_decimalLatitude': np.nan,
-                'matched_decimalLongitude': np.nan,
-                'matched_eventDate': np.nan,
-                'distance_km': np.nan,
-                'days_between': np.nan,
-                'implied_speed_km_per_day': np.nan,
-                'plausibility': 'UNKNOWN'
-            })
-            continue
-        
-        # Create a row for each matched image
-        for matched_shark_id, matched_image_id, match_distance in matched_ids:
-            # Initialize with defaults
-            distance = np.nan
-            speed = np.nan
-            days_diff = np.nan
-            plausibility = "UNKNOWN"
-            lat2 = np.nan
-            lon2 = np.nan
-            time2 = np.nan
-            
-            try:
-                # Get matched shark data
-                if matched_shark_id in gbif_lookup:
-                    matched_data = gbif_lookup[matched_shark_id]
-                    lat2 = matched_data['decimalLatitude']
-                    lon2 = matched_data['decimalLongitude']
-                    time2 = matched_data['eventDate']
-                    
-                    # Calculate validation metrics if we have all data
-                    if pd.notna(lat1) and pd.notna(lon1) and pd.notna(time1) and \
-                       pd.notna(lat2) and pd.notna(lon2) and pd.notna(time2):
-                        
-                        distance = haversine_distance(lat1, lon1, lat2, lon2)
-                        speed = implied_speed_km_per_day(lat1, lon1, time1, lat2, lon2, time2)
-                        plausibility = categorize_plausibility(speed, distance)
-                        
-                        # Calculate days between
-                        if isinstance(time1, str):
-                            t1 = datetime.fromisoformat(time1.split('T')[0])
-                        else:
-                            t1 = time1
-                        if isinstance(time2, str):
-                            t2 = datetime.fromisoformat(time2.split('T')[0])
-                        else:
-                            t2 = time2
-                        days_diff = abs((t2 - t1).days)
-                        
-                        distance = round(distance, 2)
-                        speed = round(speed, 2) if not np.isinf(speed) else 999999.0
-            
-            except Exception as e:
-                print(f"Error processing match for {shark_id} -> {matched_shark_id}: {e}")
-                plausibility = "ERROR"
-            
-            query_key = shark_data.get('key')
-            exploded_rows.append({
-                'whaleSharkID': row.get('whaleSharkID', shark_id),
-                'identificationID': row.get('identificationID'),
-                'occurrenceID': shark_data.get('occurrenceID'),
-                'key': query_key,
-                'image_id': key_to_image_id.get(query_key, -1),
-                'decimalLatitude': lat1,
-                'decimalLongitude': lon1,
-                'eventDate': time1,
-                'Oldest Occurrence': row.get('Oldest Occurrence'),
-                'Newest Occurrence': row.get('Newest Occurrence'),
-                'country (year)': row.get('country (year)'),
-                'stateProvince - verbatimLocality (month year)': row.get('stateProvince - verbatimLocality (month year)'),
-                'matched_shark_id': matched_shark_id,
-                'matched_image_id': int(matched_image_id),
-                'match_distance': match_distance,
-                'matched_decimalLatitude': lat2,
-                'matched_decimalLongitude': lon2,
-                'matched_eventDate': time2,
-                'distance_km': distance,
-                'days_between': days_diff,
-                'implied_speed_km_per_day': speed,
-                'plausibility': plausibility
-            })
-    
-    result_df = pd.DataFrame(exploded_rows)
-    
-    print(f"Created {len(result_df)} image occurrence rows from {len(shark_matches_df)} shark IDs")
+
+    # media_matches_df already has validated per-image data (image_id, identifier, match info)
+    image_occurrences_df = media_matches_df.copy()
+    image_occurrences_df['whaleSharkID'] = image_occurrences_df['whaleSharkID'].astype(str)
+
+    # Add query occurrence lat/lon/date keyed by whaleSharkID (source of truth)
+    gbif_coords_by_shark = (
+        gbif_df.groupby('whaleSharkID').first()
+        [['decimalLatitude', 'decimalLongitude', 'eventDate']]
+        .reset_index()
+    )
+    gbif_coords_by_shark['whaleSharkID'] = gbif_coords_by_shark['whaleSharkID'].astype(str)
+    image_occurrences_df = image_occurrences_df.merge(gbif_coords_by_shark, on='whaleSharkID', how='left')
+
+    # Add shark-level summary fields
+    shark_sighting_summary = shark_matches_df[
+        ['whaleSharkID', 'Oldest Occurrence', 'Newest Occurrence',
+         'country (year)', 'stateProvince - verbatimLocality (month year)']
+    ].copy()
+    shark_sighting_summary['whaleSharkID'] = shark_sighting_summary['whaleSharkID'].astype(str)
+    image_occurrences_df = image_occurrences_df.merge(shark_sighting_summary, on='whaleSharkID', how='left')
+
+    # Rename columns to match expected output schema
+    image_occurrences_df = image_occurrences_df.rename(columns={
+        'identifier': 'identifier_url',
+        'miewid_closest_whale_shark_id': 'matched_shark_id',
+        'miewid_matched_image_id': 'matched_image_id',
+        'miewid_distance': 'match_distance',
+    })
+
+    # Select & order output columns
+    output_cols = [
+        'whaleSharkID', 'identificationID', 'occurrenceID', 'key',
+        'image_id', 'identifier_url',
+        'decimalLatitude', 'decimalLongitude', 'eventDate',
+        'Oldest Occurrence', 'Newest Occurrence',
+        'country (year)', 'stateProvince - verbatimLocality (month year)',
+        'matched_shark_id', 'matched_image_id', 'match_distance',
+        'matched_decimalLatitude', 'matched_decimalLongitude', 'matched_eventDate',
+        'distance_km', 'days_between', 'implied_speed_km_per_day', 'plausibility',
+    ]
+    image_occurrences_df = image_occurrences_df[[c for c in output_cols if c in image_occurrences_df.columns]]
+
+    print(f"Created {len(image_occurrences_df)} image occurrence rows from {image_occurrences_df['whaleSharkID'].nunique()} shark IDs")
     print(f"Validation summary:")
-    print(f"  PLAUSIBLE: {(result_df['plausibility'] == 'PLAUSIBLE').sum()}")
-    print(f"  UNCERTAIN: {(result_df['plausibility'] == 'UNCERTAIN').sum()}")
-    print(f"  IMPOSSIBLE: {(result_df['plausibility'] == 'IMPOSSIBLE').sum()}")
-    print(f"  UNKNOWN: {(result_df['plausibility'] == 'UNKNOWN').sum()}")
-    
-    return result_df
+    print(f"  PLAUSIBLE: {(image_occurrences_df['plausibility'] == 'PLAUSIBLE').sum()}")
+    print(f"  UNCERTAIN: {(image_occurrences_df['plausibility'] == 'UNCERTAIN').sum()}")
+    print(f"  IMPOSSIBLE: {(image_occurrences_df['plausibility'] == 'IMPOSSIBLE').sum()}")
+    print(f"  UNKNOWN: {(image_occurrences_df['plausibility'] == 'UNKNOWN').sum()}")
+
+    return image_occurrences_df
 
 
 def validate_shark_matches(shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame) -> pd.DataFrame:
