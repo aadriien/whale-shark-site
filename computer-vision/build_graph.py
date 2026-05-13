@@ -59,11 +59,18 @@ def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np
             y=float(coords[i][1]),
         )
 
+    url_to_image_id = dict(zip(matches_df['identifier'], matches_df['image_id'].astype(int)))
+
     for i, shark_id in enumerate(gbif_ids):
+        url = str(gbif["image_url_identifiers"][i])
+        image_id = url_to_image_id.get(url)
+        if image_id is None:
+            continue
         G.add_node(
-            f"gbif_{i}",
+            f"gbif_{image_id}",
             population="gbif",
             shark_id=str(shark_id),
+            image_id=image_id,
             x=float(coords[NINGALOO_COUNT + i][0]),
             y=float(coords[NINGALOO_COUNT + i][1]),
         )
