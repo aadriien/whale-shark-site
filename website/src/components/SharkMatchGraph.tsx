@@ -4,6 +4,7 @@ import type { ElementDefinition, StylesheetStyle, Core, EventObject, EdgeSingula
 
 import GraphNodePanel from "./GraphNodePanel";
 import type { SelectedMatch } from "./GraphNodePanel";
+import { applyFocus } from "../utils/GraphFocusUtils";
 
 
 type NodeFilter = "all" | "gbif" | "ningaloo";
@@ -286,12 +287,16 @@ function SharkMatchGraph() {
                                     const target = evt.target as any;
                                     if (target === cy) {
                                         setSelectedMatch(null);
+                                        applyFocus(cy, null);
                                         return;
                                     }
                                     if (typeof target.isNode !== "function" || !target.isNode()) return;
-                                    if (target.data("population") !== "gbif") return;
 
                                     const nodeId = target.id() as string;
+                                    applyFocus(cy, nodeId);
+
+                                    if (target.data("population") !== "gbif") return;
+                                    
                                     const clickedSharkId = target.data("shark_id") as string;
                                     const clickedImageId = parseInt(target.data("image_id"), 10);
 
