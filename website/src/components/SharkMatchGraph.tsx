@@ -13,6 +13,7 @@ type GraphNode = {
     id: string;
     population: string;
     shark_id: string;
+    image_id: number;
     x: number;
     y: number;
 };
@@ -116,7 +117,7 @@ function buildElements(
     posMap: Map<string, { x: number; y: number }>,
 ): ElementDefinition[] {
     const nodeEls: ElementDefinition[] = nodes.map((n) => ({
-        data: { id: n.id, population: n.population, shark_id: n.shark_id },
+        data: { id: n.id, population: n.population, shark_id: n.shark_id, image_id: n.image_id },
         position: posMap.get(n.id) ?? { x: 0, y: 0 },
     }));
 
@@ -272,7 +273,7 @@ function SharkMatchGraph() {
                         pixelRatio={1}
                         minZoom={0.03}
                         maxZoom={3}
-                        cy={(cy) => {
+                        cy={(cy: Core) => {
                             cyRef.current = cy;
                             if (lastCyInstance.current !== cy) {
                                 lastCyInstance.current = cy;
@@ -292,6 +293,7 @@ function SharkMatchGraph() {
 
                                     const nodeId = target.id() as string;
                                     const clickedSharkId = target.data("shark_id") as string;
+                                    const clickedImageId = parseInt(target.data("image_id"), 10);
 
                                     let bestEdge: EdgeSingular | null = null;
                                     let bestDist = Infinity;
@@ -307,6 +309,7 @@ function SharkMatchGraph() {
                                     const targetNode = cy.getElementById((bestEdge as EdgeSingular).data("target") as string);
                                     setSelectedMatch({
                                         clickedSharkId,
+                                        clickedImageId,
                                         matchSharkId: targetNode.data("shark_id") as string,
                                         matchPopulation: targetNode.data("population") as "gbif" | "ningaloo",
                                         matchDistance: bestDist,

@@ -20,11 +20,12 @@ function formatYearMonth(dateString: string) {
 
 
 
-const CondensedSharkCard = ({ shark, imageIndex = 0 }: IndividualSharkProps) => {
+const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
     // Purely for forcing re-render on shark favoriting / saving
     const [, forceRender] = useReducer((x: number) => x + 1, 0);
 
     const images = shark.image !== "Unknown" ? parseImageField(shark.image) : [];
+    const displayUrl = imageUrl ?? (images.length > 0 ? images[0].url : undefined);
 
     const sexKnown = shark.sex && shark.sex !== "Unknown";
     const stageKnown = shark.lifeStage && shark.lifeStage !== "Unknown";
@@ -92,9 +93,9 @@ const CondensedSharkCard = ({ shark, imageIndex = 0 }: IndividualSharkProps) => 
         <div className="condensed-shark-card">
             {/* Any media at top */}
             <div className="condensed-media">
-                {images.length > 0 ? (
+                {displayUrl ? (
                     <img
-                        src={(images[imageIndex] ?? images[0]).url}
+                        src={displayUrl}
                         alt={`Image of shark ${shark.id}`}
                     />
                 ) : (

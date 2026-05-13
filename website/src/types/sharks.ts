@@ -160,9 +160,10 @@ export type WhaleSharkEntryNormalized = {
     name?: string;
     gemmaName?: string;
 
-    // CV fields    
+    // CV fields
     occurrenceID?: string;
     image_id?: number;
+    identifier_url?: string;
 
     matched_shark_id?: string;
     matched_image_id?: number;
@@ -188,7 +189,7 @@ export type CondensedGridProps = {
 
 export type IndividualSharkProps = {
     shark: WhaleSharkEntryNormalized;
-    imageIndex?: number;
+    imageUrl?: string;
 };
 
 export type IndividualSharkOrNullProps = {
