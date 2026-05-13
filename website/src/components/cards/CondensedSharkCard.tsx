@@ -20,7 +20,7 @@ function formatYearMonth(dateString: string) {
 
 
 
-const CondensedSharkCard = ({ shark }: IndividualSharkProps) => {
+const CondensedSharkCard = ({ shark, imageIndex = 0 }: IndividualSharkProps) => {
     // Purely for forcing re-render on shark favoriting / saving
     const [, forceRender] = useReducer((x: number) => x + 1, 0);
 
@@ -94,7 +94,7 @@ const CondensedSharkCard = ({ shark }: IndividualSharkProps) => {
             <div className="condensed-media">
                 {images.length > 0 ? (
                     <img
-                        src={images[0].url}
+                        src={(images[imageIndex] ?? images[0]).url}
                         alt={`Image of shark ${shark.id}`}
                     />
                 ) : (

@@ -188,6 +188,7 @@ export type CondensedGridProps = {
 
 export type IndividualSharkProps = {
     shark: WhaleSharkEntryNormalized;
+    imageIndex?: number;
 };
 
 export type IndividualSharkOrNullProps = {
