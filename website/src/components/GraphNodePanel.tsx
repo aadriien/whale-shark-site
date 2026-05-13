@@ -3,19 +3,7 @@ import sharkSelectionPlaceholder from "../assets/images/chart-placeholders/globe
 import CondensedSharkCard from "./cards/CondensedSharkCard";
 import { mediaSharks, visionOccurrences } from "../utils/DataUtils";
 
-
-export type SelectedMatch = {
-    clickedSharkId: string;
-    clickedImageId: number;
-    matchSharkId: string;
-    matchPopulation: "gbif" | "ningaloo";
-    matchDistance: number;
-};
-
-type GraphNodePanelProps = {
-    match: SelectedMatch | null;
-    onClose: () => void;
-};
+import { GraphNodePanelProps } from "../types/graphs";
 
 
 function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {

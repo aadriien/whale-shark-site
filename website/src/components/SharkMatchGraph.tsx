@@ -3,31 +3,15 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { ElementDefinition, StylesheetStyle, Core, EventObject, EdgeSingular } from "cytoscape";
 
 import GraphNodePanel from "./GraphNodePanel";
-import type { SelectedMatch } from "./GraphNodePanel";
 import { applyFocus } from "../utils/GraphFocusUtils";
 
+import { 
+    NodeFilter, EdgeFilter, 
+    GraphNode, GraphEdge, 
+    GraphData, 
+    SelectedMatch 
+} from "../types/graphs";
 
-type NodeFilter = "all" | "gbif" | "ningaloo";
-type EdgeFilter = "all" | "cross" | "same" | "mutual";
-
-type GraphNode = {
-    id: string;
-    population: string;
-    shark_id: string;
-    image_id: number;
-    x: number;
-    y: number;
-};
-
-type GraphEdge = {
-    source: string;
-    target: string;
-    distance: number;
-    edge_type: string;
-    mutual: boolean;
-};
-
-type GraphData = { nodes: GraphNode[]; edges: GraphEdge[] };
 
 
 const POSITION_SCALE = 5000;
