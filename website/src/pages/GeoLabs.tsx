@@ -39,6 +39,8 @@ function GeoLabs() {
     const [viewMode, setViewMode] = useState<ViewMode>("multiple"); // "individual" or "multiple"
     
     const [selectedSharksForLab, setSelectedSharksForLab] = useState<Set<string>>(new Set()); // for multi-select mode
+    const selectedSharksForLabRef = useRef(selectedSharksForLab);
+    selectedSharksForLabRef.current = selectedSharksForLab; 
 
     // Step-through story functionality
     const [isStepMode, setIsStepMode] = useState<boolean>(false);
@@ -216,13 +218,13 @@ function GeoLabs() {
         <SavedDisplay
             {...props}
             viewMode={viewMode}
-            selectedSharksForLab={selectedSharksForLab}
+            selectedSharksForLab={selectedSharksForLabRef.current}
             onLabSelectionChange={setSelectedSharksForLab}
 
             // Disable onSelect in multiple mode
             onSelect={viewMode === "multiple" ? undefined : props.onSelect}
         />
-    ), [viewMode, selectedSharksForLab]);
+    ), [viewMode]); // selectedSharksForLab read via ref to avoid remount on selection change
     
     const handleSelectAllToggle = () => {
         if (selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))) {
