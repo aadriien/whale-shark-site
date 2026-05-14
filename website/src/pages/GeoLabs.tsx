@@ -22,6 +22,7 @@ import {
 import { mediaSharks } from "../utils/DataUtils";
 
 import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "../types/sharks";
+import { SavedSharksDisplayProps } from "../types/panels";
 import { PlottedCoordinatePoint } from "../types/coordinates";
 import { GlobeHandle } from "../types/globes";
 
@@ -203,11 +204,25 @@ function GeoLabs() {
     const handleStepChange = useCallback((stepIndex: number, point: PlottedCoordinatePoint) => {
         setCurrentStepIndex(stepIndex);
         setCurrentPoint(point);
-        
+
         if (globeHandleRef.current && point) {
             globeHandleRef.current.showSinglePoint(point);
         }
     }, []); // No dependencies since using refs & state setters
+
+    // Stable component reference for display of sharks in SharkSelector panel
+    // Can't be inline, otherwise SavedDisplay gets remounted on each GeoLabs re-render
+    const SavedDisplayComponent = useCallback((props: SavedSharksDisplayProps) => (
+        <SavedDisplay
+            {...props}
+            viewMode={viewMode}
+            selectedSharksForLab={selectedSharksForLab}
+            onLabSelectionChange={setSelectedSharksForLab}
+
+            // Disable onSelect in multiple mode
+            onSelect={viewMode === "multiple" ? undefined : props.onSelect}
+        />
+    ), [viewMode, selectedSharksForLab]);
     
     const handleSelectAllToggle = () => {
         if (selectedSharksForLab.size > 0 && Array.from(savedIds).every(id => selectedSharksForLab.has(id))) {
@@ -371,20 +386,10 @@ function GeoLabs() {
                         onSelect={handleSelectShark}
                         onReset={handleReset}
                         selectedSharkId={selectedShark ? selectedShark.id : null}
-                        DisplayComponent={(props) => (
-                            <SavedDisplay
-                                {...props}
-                                viewMode={viewMode}
-                                selectedSharksForLab={selectedSharksForLab}
-                                onLabSelectionChange={setSelectedSharksForLab}
-
-                                // Disable onSelect in multiple mode
-                                onSelect={viewMode === "multiple" ? undefined : props.onSelect}
-                            />
-                        )}
+                        DisplayComponent={SavedDisplayComponent}
                         // Disable selector while in step or timeline mode
                         disabled={isStepMode || isTimelineMode}
-                        
+
                         onFilteredSharksChange={setFilteredSharks}
                     />
                 </div>
