@@ -14,10 +14,9 @@ import { addPointsData, clearAllData } from "../utils/GlobeUtils";
 import { getFavorites, getSavedSharkIds } from "../utils/FavoritesUtils";
 import { useGlobeClick } from "../utils/GlobeClick";
 
-import { 
-    getGroupCoordinates, 
-    getSharkCoordinates, 
-    getGroupCoordinatesByTimeline 
+import {
+    getGroupCoordinates,
+    getSharkCoordinates,
 } from "../utils/CoordinateUtils";
 import { mediaSharks } from "../utils/DataUtils";
 
@@ -50,8 +49,6 @@ function GeoLabs() {
     
     // Timeline mode functionality
     const [isTimelineMode, setIsTimelineMode] = useState<boolean>(false);
-    const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
-    const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
     const sharks = mediaSharks;
 
@@ -96,19 +93,14 @@ function GeoLabs() {
     }, [savedIds, filteredSharks]);
     
     // Get coordinates for selected lab sharks (multi-select mode)
+    // Timeline filtering is handled in TimelineControls, not through this memo
     const selectedLabPointsData = useMemo(() => {
         if (selectedSharksForLab.size === 0) return [];
         const labSharkIds = Array.from(selectedSharksForLab);
 
         console.log("Plotting selected lab sharks on globe:", labSharkIds);
-        
-        // Use timeline filtering if timeline mode active
-        if (isTimelineMode && selectedMonth && selectedYear) {
-            return getGroupCoordinatesByTimeline(labSharkIds, selectedMonth, selectedYear);
-        }
-        
         return getGroupCoordinates(labSharkIds);
-    }, [selectedSharksForLab, isTimelineMode, selectedMonth, selectedYear]);
+    }, [selectedSharksForLab]);
     
     
     useEffect(() => {
@@ -257,8 +249,6 @@ function GeoLabs() {
         // Exit timeline mode if active
         if (isTimelineMode) {
             setIsTimelineMode(false);
-            setSelectedMonth(null);
-            setSelectedYear(null);
         }
         
         // Clear globe & reset to default state
@@ -276,8 +266,6 @@ function GeoLabs() {
         if (isTimelineMode) {
             // Exit timeline mode
             setIsTimelineMode(false);
-            setSelectedMonth(null);
-            setSelectedYear(null);
         } 
         else {
             // Enter timeline mode
