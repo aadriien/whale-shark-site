@@ -13,7 +13,7 @@ ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 		get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings \
 		run_vision_pipeline generate_vision_examples \
 		build_shark_graph \
-		format clean \
+		format format_website format_all clean \
 		setup_website run_website deploy_website clean_website
 
 all: setup refresh_all_gbif zip_data
@@ -125,6 +125,14 @@ build_shark_graph:
 format:
 	@which black > /dev/null || (echo "black not found. Installing..."; $(POETRY) add black)
 	@$(ACTIVATE_VENV) $(POETRY) run black src/
+	@$(ACTIVATE_VENV) $(POETRY) run ruff check --fix src/
+
+# Auto-format & lint-fix website TypeScript/React code
+format_website:
+	@cd website && npx prettier --write "src/**/*.{ts,tsx,js,jsx}" && npx eslint --fix "src/**/*.{ts,tsx}"
+
+# Format everything
+format_all: format format_website
 
 clean:
 	@echo "Removing virtual environment..."

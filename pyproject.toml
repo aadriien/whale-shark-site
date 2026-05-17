@@ -39,6 +39,18 @@ networkx = "^3.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.3.0"
+ruff = "^0.4.0"
+
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
 
 
 [build-system]
