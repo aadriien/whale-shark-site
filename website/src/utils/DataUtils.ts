@@ -303,6 +303,9 @@ function formatVisionKeyVals(obj: WhaleSharkEntryVision, keyMap: Record<string, 
         renamed.months = [];
     }
 
+    // Coerce identificationID to string (JSON stores it as a number)
+    (renamed as Record<string, unknown>).identificationID = String(obj.identificationID);
+
     // Set default values for filterable fields
     renamed.occurrences = 1;
     renamed.human = 1;
