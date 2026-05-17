@@ -123,7 +123,6 @@ build_shark_graph:
 
 # Auto-format Python code
 format:
-	@which black > /dev/null || (echo "black not found. Installing..."; $(POETRY) add black)
 	@$(ACTIVATE_VENV) $(POETRY) run black src/
 	@$(ACTIVATE_VENV) $(POETRY) run ruff check --fix src/
 
