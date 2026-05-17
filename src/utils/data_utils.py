@@ -5,10 +5,11 @@
 ###############################################################################
 
 
-import os
 import json
+import os
+from typing import Literal, Optional, Union
+
 import pandas as pd
-from typing import Optional, Union, Literal
 
 from src.utils.api_utils import (
     find_field,
@@ -22,13 +23,13 @@ def get_folder_name(file_name: str) -> str:
     if not file_name:
         raise ValueError("Error, must specify file name")
 
-    return os.path.dirname(file_name) 
+    return os.path.dirname(file_name)
 
 
 # Check valid directory (with option to create if doesn't exist)
 def folder_exists(file_name: str, create: bool = False) -> bool:
     # Extract folder in file path
-    folder = get_folder_name(file_name)  
+    folder = get_folder_name(file_name)
 
     if create and not os.path.exists(folder):
         print(f"Folder '{folder}' not found. Creating it...")
@@ -47,9 +48,9 @@ def csv_exists(csv_file: str) -> bool:
     return False
 
 
-def read_csv(csv_file: str, 
-            columns: Optional[list[str]] = None, 
-            dtype: Optional[dict] = None) -> pd.DataFrame:
+def read_csv(
+    csv_file: str, columns: Optional[list[str]] = None, dtype: Optional[dict] = None
+) -> pd.DataFrame:
     if not csv_file:
         raise ValueError("Error, must specify CSV to read")
 
@@ -79,7 +80,7 @@ def export_to_csv(csv_file: str, dataframe: pd.DataFrame) -> None:
 def export_to_json(json_file: str, output_item: Union[list, dict]) -> None:
     if not json_file:
         raise ValueError("Error, must specify JSON file path")
-    
+
     if not isinstance(output_item, (list, dict)):
         raise ValueError("Error, must export a valid list or dict")
 
@@ -90,13 +91,17 @@ def export_to_json(json_file: str, output_item: Union[list, dict]) -> None:
     _ = folder_exists(json_file, True)
     with open(json_file, "w") as f:
         # Remove all spaces to keep JSON as condensed as possible
-        json.dump(output_item, f, separators=(',', ':'))
+        json.dump(output_item, f, separators=(",", ":"))
 
-    description = f"entries: {len(output_item)}" if isinstance(output_item, list) else "object"
+    description = (
+        f"entries: {len(output_item)}" if isinstance(output_item, list) else "object"
+    )
     print(f"Exported JSON to {json_file} ({description})")
 
 
-def csv_to_json(input_csv_file: str, output_json_file: str, convert_types: Optional[bool] = False) -> None:
+def csv_to_json(
+    input_csv_file: str, output_json_file: str, convert_types: Optional[bool] = False
+) -> None:
     df = pd.read_csv(input_csv_file)
 
     if convert_types:
@@ -115,12 +120,14 @@ def csv_to_json(input_csv_file: str, output_json_file: str, convert_types: Optio
 
     with open(output_json_file, "w", encoding="utf-8") as f:
         json.dump(json_data, f, ensure_ascii=False)
-    
+
     print(f"Saved {input_csv_file} to: {output_json_file}")
 
 
-def convert_all_csvs_to_json(input_folder_path: str = DATA_FOLDER_PY_CSV, 
-                            output_folder_path: str = DATA_FOLDER_WEB_JSON) -> None:
+def convert_all_csvs_to_json(
+    input_folder_path: str = DATA_FOLDER_PY_CSV,
+    output_folder_path: str = DATA_FOLDER_WEB_JSON,
+) -> None:
     # Get list of all CSV files in folder
     for filename in os.listdir(input_folder_path):
         if filename.endswith(".csv"):
@@ -128,21 +135,20 @@ def convert_all_csvs_to_json(input_folder_path: str = DATA_FOLDER_PY_CSV,
 
             # Create name for output JSON file (same as CSV), then convert
             output_json_file = os.path.join(
-                output_folder_path, 
-                f"{os.path.splitext(filename)[0]}.json"
+                output_folder_path, f"{os.path.splitext(filename)[0]}.json"
             )
             csv_to_json(input_csv_file, output_json_file)
 
 
-def prettify_json(json_file: str, 
-                fields: Optional[list[str]] = None, 
-                limit: Optional[int] = None) -> str:
+def prettify_json(
+    json_file: str, fields: Optional[list[str]] = None, limit: Optional[int] = None
+) -> str:
     if not json_file:
         raise ValueError("Error, must specify JSON file path")
 
     with open(json_file, "r") as f:
         data = json.load(f)
-    
+
     if fields:
         if not isinstance(data, dict):
             raise ValueError("Error, JSON must be dict to specify fields")
@@ -173,6 +179,7 @@ def prettify_json(json_file: str,
 ## JSON parsing helpers
 #####
 
+
 def extract_relevant_fields(data: dict, fields: list) -> dict:
     if not data and isinstance(data, dict):
         raise ValueError("ERROR: must specify data (dict)")
@@ -188,18 +195,23 @@ def extract_relevant_fields(data: dict, fields: list) -> dict:
 ## DataFrame manipulation helpers
 #####
 
-def validate_and_dropna(dataframe: pd.DataFrame, 
-                        na_subset: Optional[list[str]] = None,
-                        how: Optional[str] = "any") -> pd.DataFrame:
+
+def validate_and_dropna(
+    dataframe: pd.DataFrame,
+    na_subset: Optional[list[str]] = None,
+    how: Optional[str] = "any",
+) -> pd.DataFrame:
     if not isinstance(dataframe, pd.DataFrame):
         raise ValueError("Error, must specify a valid DataFrame")
 
     return dataframe.dropna(subset=na_subset, how=how)
 
 
-def move_columns(dataframe: pd.DataFrame, 
-                cols_to_move: list[str], 
-                position: Union[Literal["front", "end"], int]) -> pd.DataFrame:
+def move_columns(
+    dataframe: pd.DataFrame,
+    cols_to_move: list[str],
+    position: Union[Literal["front", "end"], int],
+) -> pd.DataFrame:
     # Allow reordering of multiple columns (grouped together)
     if not isinstance(cols_to_move, list):
         raise ValueError("Error, must specify valid cols_to_move")
@@ -209,7 +221,7 @@ def move_columns(dataframe: pd.DataFrame,
         raise ValueError("Error, must specify valid position")
     if isinstance(position, str) and position not in ["front", "end"]:
         raise ValueError("Error, str position must be 'front' or 'end'")
-   
+
     cols_to_move = [col for col in cols_to_move if col in dataframe.columns]
     remaining_cols = [col for col in dataframe.columns if col not in cols_to_move]
 
@@ -217,20 +229,18 @@ def move_columns(dataframe: pd.DataFrame,
         new_order = cols_to_move + remaining_cols
     elif position == "end":
         new_order = remaining_cols + cols_to_move
-    
+
     # Constrain to valid range if int provided
     elif isinstance(position, int):
         position = max(0, min(position, len(remaining_cols)))
-        new_order = (
-            remaining_cols[:position] + 
-            cols_to_move + 
-            remaining_cols[position:]
-        )
+        new_order = remaining_cols[:position] + cols_to_move + remaining_cols[position:]
 
     return dataframe[new_order]
 
 
-def move_column_after(dataframe: pd.DataFrame, col_to_move: str, after_col: str) -> pd.DataFrame:
+def move_column_after(
+    dataframe: pd.DataFrame, col_to_move: str, after_col: str
+) -> pd.DataFrame:
     if not isinstance(col_to_move, str):
         raise ValueError("Error, must specify valid col_to_move")
     if not isinstance(after_col, str):
@@ -248,16 +258,15 @@ def move_column_after(dataframe: pd.DataFrame, col_to_move: str, after_col: str)
     return dataframe[cols]
 
 
-def standardize_column_vals(dataframe: pd.DataFrame, 
-                            col_name: str, 
-                            valid_vals: list, 
-                            fill_val) -> pd.DataFrame:
+def standardize_column_vals(
+    dataframe: pd.DataFrame, col_name: str, valid_vals: list, fill_val
+) -> pd.DataFrame:
     if not isinstance(col_name, str):
         raise ValueError("Error, must specify valid col_name")
     if not isinstance(valid_vals, list):
         raise ValueError("Error, must specify valid_vals list")
     if not all(isinstance(val, type(valid_vals[0])) for val in valid_vals):
-        raise ValueError(f"Error, fill_val type must match valid_vals type")
+        raise ValueError("Error, fill_val type must match valid_vals type")
 
     # Standardize values for column (fill with default if not in list)
     dataframe.loc[:, col_name] = dataframe[col_name].apply(
@@ -270,19 +279,26 @@ def standardize_column_vals(dataframe: pd.DataFrame,
 ## Specific DataFrame metrics to arrange / introduce
 #####
 
-def add_totals_column(source_df: pd.DataFrame, target_df: pd.DataFrame, groupby: list[str]) -> pd.DataFrame:
+
+def add_totals_column(
+    source_df: pd.DataFrame, target_df: pd.DataFrame, groupby: list[str]
+) -> pd.DataFrame:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
 
-    target_df["Total Occurrences"] = target_df.index.map(source_df.groupby(groupby).size())
-    target_df = move_columns(target_df, cols_to_move=["Total Occurrences"], position="front")
-    
+    target_df["Total Occurrences"] = target_df.index.map(
+        source_df.groupby(groupby).size()
+    )
+    target_df = move_columns(
+        target_df, cols_to_move=["Total Occurrences"], position="front"
+    )
+
     return target_df
 
 
-def get_str_with_year_range(full_str: str,
-                            after_year: Optional[int] = None, 
-                            before_year: Optional[int] = None) -> str:
+def get_str_with_year_range(
+    full_str: str, after_year: Optional[int] = None, before_year: Optional[int] = None
+) -> str:
     if not isinstance(full_str, str):
         raise ValueError("Error, must specify full_str")
 
@@ -295,16 +311,19 @@ def get_str_with_year_range(full_str: str,
     elif before_year:
         full_str += f" (before {before_year})"
 
-    else: full_str += " (all)"                        
-    
+    else:
+        full_str += " (all)"
+
     return full_str
 
 
-def add_avg_per_year(source_df: pd.DataFrame, 
-                    target_df: pd.DataFrame, 
-                    groupby: list[str],
-                    after_year: Optional[int] = None,
-                    before_year: Optional[int] = None) -> pd.DataFrame:
+def add_avg_per_year(
+    source_df: pd.DataFrame,
+    target_df: pd.DataFrame,
+    groupby: list[str],
+    after_year: Optional[int] = None,
+    before_year: Optional[int] = None,
+) -> pd.DataFrame:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
 
@@ -312,9 +331,7 @@ def add_avg_per_year(source_df: pd.DataFrame,
 
     column_name_base = "Avg Per Year"
     column_name = get_str_with_year_range(
-        column_name_base, 
-        after_year=after_year, 
-        before_year=before_year
+        column_name_base, after_year=after_year, before_year=before_year
     )
 
     if after_year and before_year:
@@ -330,16 +347,18 @@ def add_avg_per_year(source_df: pd.DataFrame,
 
     target_df[column_name] = target_df.index.map(avg_per_year)
     target_df = move_columns(target_df, cols_to_move=[column_name], position="front")
-    
+
     return target_df
 
 
-def add_top_x_metric(occurrences_df: pd.DataFrame, 
-                    target_df: pd.DataFrame,
-                    groupby: list[str],
-                    top_x: int,
-                    metric: str,
-                    column_name: str) -> pd.DataFrame:
+def add_top_x_metric(
+    occurrences_df: pd.DataFrame,
+    target_df: pd.DataFrame,
+    groupby: list[str],
+    top_x: int,
+    metric: str,
+    column_name: str,
+) -> pd.DataFrame:
     if not isinstance(groupby, list):
         raise ValueError("Error, must specify groupby")
     if not isinstance(top_x, int):
@@ -358,28 +377,21 @@ def add_top_x_metric(occurrences_df: pd.DataFrame,
 
     # Keep only top {x} {metric} per {category}
     # e.g. top 3 countries / regions visited by publishingCountry
-    top_metric["rank"] = (
-        top_metric.groupby(groupby)["count"]
-        .rank(method="first", ascending=False)
+    top_metric["rank"] = top_metric.groupby(groupby)["count"].rank(
+        method="first", ascending=False
     )
     top_metric = top_metric[top_metric["rank"] <= top_x].drop(columns=["rank", "count"])
 
     # Convert to single column format (countries separated by commas)
-    top_metric = (
-        top_metric.groupby(groupby)[metric]
-        .apply(lambda x: " > ".join(x.tolist()))
+    top_metric = top_metric.groupby(groupby)[metric].apply(
+        lambda x: " > ".join(x.tolist())
     )
-    target_df[column_name] = target_df.index.get_level_values(groupby[0]).map(top_metric)
+    target_df[column_name] = target_df.index.get_level_values(groupby[0]).map(
+        top_metric
+    )
 
     target_df = move_column_after(
-        target_df, 
-        col_to_move=column_name, 
-        after_col="Total Occurrences"
+        target_df, col_to_move=column_name, after_col="Total Occurrences"
     )
 
     return target_df
-
-
-
-
-

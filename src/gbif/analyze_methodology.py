@@ -7,8 +7,8 @@
 
 
 import re
-import pandas as pd
 
+import pandas as pd
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Classification constants
@@ -17,27 +17,28 @@ import pandas as pd
 # basisOfRecord values that resolve directly without further inspection
 BASIS_TO_METHODOLOGY = {
     "PRESERVED_SPECIMEN": "Museum Specimen",
-    "FOSSIL_SPECIMEN":    "Fossil",
-    "MATERIAL_SAMPLE":    "Genetic Sample",
-    "OCCURRENCE":         "Literature Record",
-    "MATERIAL_CITATION":  "Literature Record",
-    "OBSERVATION":        "Historical Observation",
+    "FOSSIL_SPECIMEN": "Fossil",
+    "MATERIAL_SAMPLE": "Genetic Sample",
+    "OCCURRENCE": "Literature Record",
+    "MATERIAL_CITATION": "Literature Record",
+    "OBSERVATION": "Historical Observation",
 }
 
 # (upper_bound_exclusive, label) — evaluated finest to coarsest.
 # 111,319 m is a 1-degree cell (aggregated telemetry), lands in Coarse.
 COORD_PRECISION_BINS = [
-    (100,    "GPS (<100 m)"),
-    (1_000,  "Precise (100 m–1 km)"),
+    (100, "GPS (<100 m)"),
+    (1_000, "Precise (100 m–1 km)"),
     (50_000, "Moderate (1–50 km)"),
 ]
-COORD_PRECISION_COARSE  = "Coarse (>50 km)"
+COORD_PRECISION_COARSE = "Coarse (>50 km)"
 COORD_PRECISION_UNKNOWN = "Unknown"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Per-occurrence classifiers
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 def classify_methodology(row: pd.Series) -> str:
     """
@@ -56,12 +57,12 @@ def classify_methodology(row: pd.Series) -> str:
       Photo-ID (Citizen Science)   occurrenceID links to observation.org
       Photo-ID (Human Observation) all other human sightings
     """
-    basis   = str(row.get("basisOfRecord") or "")
+    basis = str(row.get("basisOfRecord") or "")
     remarks = str(row.get("occurrenceRemarks") or "")
-    coll    = str(row.get("collectionCode") or "")
-    event   = str(row.get("eventID") or "")
-    sid     = str(row.get("whaleSharkID") or "")
-    occ_id  = str(row.get("occurrenceID") or "")
+    coll = str(row.get("collectionCode") or "")
+    event = str(row.get("eventID") or "")
+    sid = str(row.get("whaleSharkID") or "")
+    occ_id = str(row.get("occurrenceID") or "")
 
     if basis in BASIS_TO_METHODOLOGY:
         return BASIS_TO_METHODOLOGY[basis]
@@ -98,13 +99,18 @@ def classify_id_pattern(shark_id: str) -> str:
     Checked from most specific to most general to avoid false positives.
 
     Structural patterns currently present in the dataset:
-      Acoustic Tag Serial (VEMCO)  A69-XXXX-XXXXX  hardware serial (specific to VEMCO model line)
-      Satellite Tag Code           [Letter]-NNN    letter-prefixed tag codes (A-, X-, M-, etc.)
+      Acoustic Tag Serial (VEMCO)  A69-XXXX-XXXXX
+          hardware serial (specific to VEMCO model line)
+      Satellite Tag Code           [Letter]-NNN
+          letter-prefixed tag codes (A-, X-, M-, etc.)
       Photo-ID Survey Code         YYYY_[Code]NNN  year-prefixed field survey IDs
-      Platform Observation ID      9+ digits       per-observation IDs from citizen science platforms
-      Database Record ID           4–8 digits      deployment or tracking database internal references
+      Platform Observation ID      9+ digits
+          per-observation IDs from citizen science platforms
+      Database Record ID           4-8 digits
+          deployment or tracking database internal references
       Named Individual             alpha string    researcher-assigned name
-      Researcher-Assigned Code     anything else   local codes not matching known formats
+      Researcher-Assigned Code     anything else
+          local codes not matching known formats
     """
     if not shark_id or shark_id in ("nan", "None", ""):
         return "Unknown"
@@ -141,6 +147,7 @@ def classify_id_pattern(shark_id: str) -> str:
 # Occurrence-level annotation
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 def annotate_occurrences(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds per-row methodology columns to the occurrences DataFrame.
@@ -163,6 +170,7 @@ def annotate_occurrences(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 # Per-shark aggregation  (called from analyze_individuals)
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 def _classify_single_precision(uncertainty_m) -> str:
     if pd.isna(uncertainty_m):
         return COORD_PRECISION_UNKNOWN
@@ -172,8 +180,9 @@ def _classify_single_precision(uncertainty_m) -> str:
     return COORD_PRECISION_COARSE
 
 
-def assemble_methodology_metrics(occurrences_df: pd.DataFrame,
-                                 individual_sharks: pd.DataFrame) -> pd.DataFrame:
+def assemble_methodology_metrics(
+    occurrences_df: pd.DataFrame, individual_sharks: pd.DataFrame
+) -> pd.DataFrame:
     """
     Enriches the individual_sharks summary with methodology-derived columns.
 
@@ -201,17 +210,18 @@ def assemble_methodology_metrics(occurrences_df: pd.DataFrame,
 
     # Unique methodologies per shark, alphabetically sorted for consistency
     methodologies = (
-        occurrences_df
-        .dropna(subset=["whaleSharkID", "trackingMethodology"])
+        occurrences_df.dropna(subset=["whaleSharkID", "trackingMethodology"])
         .groupby("whaleSharkID")["trackingMethodology"]
         .apply(lambda x: ", ".join(sorted(set(x))))
         .rename("trackingMethodologies")
         .reset_index()
     )
-    individual_sharks = individual_sharks.merge(methodologies, on="whaleSharkID", how="left")
-    individual_sharks["trackingMethodologies"] = (
-        individual_sharks["trackingMethodologies"].fillna("Unknown")
+    individual_sharks = individual_sharks.merge(
+        methodologies, on="whaleSharkID", how="left"
     )
+    individual_sharks["trackingMethodologies"] = individual_sharks[
+        "trackingMethodologies"
+    ].fillna("Unknown")
 
     # idPattern is derivable from whaleSharkID alone — no merge needed
     shark_id_col = (
@@ -225,17 +235,22 @@ def assemble_methodology_metrics(occurrences_df: pd.DataFrame,
 
     # All unique precision levels across a shark's occurrences (no filtering)
     coord_precision = (
-        occurrences_df
-        .dropna(subset=["whaleSharkID"])
-        .assign(precLevel=lambda df: df["coordinateUncertaintyInMeters"].apply(_classify_single_precision))
+        occurrences_df.dropna(subset=["whaleSharkID"])
+        .assign(
+            precLevel=lambda df: df["coordinateUncertaintyInMeters"].apply(
+                _classify_single_precision
+            )
+        )
         .groupby("whaleSharkID")["precLevel"]
         .apply(lambda x: ", ".join(sorted(set(x))))
         .rename("coordinatePrecision")
         .reset_index()
     )
-    individual_sharks = individual_sharks.merge(coord_precision, on="whaleSharkID", how="left")
-    individual_sharks["coordinatePrecision"] = (
-        individual_sharks["coordinatePrecision"].fillna(COORD_PRECISION_UNKNOWN)
+    individual_sharks = individual_sharks.merge(
+        coord_precision, on="whaleSharkID", how="left"
     )
+    individual_sharks["coordinatePrecision"] = individual_sharks[
+        "coordinatePrecision"
+    ].fillna(COORD_PRECISION_UNKNOWN)
 
     return individual_sharks

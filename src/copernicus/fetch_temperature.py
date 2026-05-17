@@ -5,8 +5,9 @@
 ###############################################################################
 
 
-import xarray as xr
 from typing import Optional
+
+import xarray as xr
 
 from src.copernicus.fetch import get_copernicus_data
 
@@ -26,13 +27,15 @@ def aggregate_daily_to_monthly(dataset: xr.Dataset) -> xr.Dataset:
     return dataset.resample(time="MS").mean()
 
 
-def get_sea_surface_temperature_data(variables: list[str] = ["analysed_sst"],
-                                     start_date: str = "2024-01-01",
-                                     end_date: str = "2024-12-31",
-                                     lat_range: Optional[tuple[float, float]] = None,
-                                     lon_range: Optional[tuple[float, float]] = None,
-                                    ) -> xr.Dataset:
-    # Global sea surface temperature reprocessed (SST_GLO_SST_L4_REP_OBSERVATIONS_010_011)
+def get_sea_surface_temperature_data(
+    variables: list[str] = ["analysed_sst"],
+    start_date: str = "2024-01-01",
+    end_date: str = "2024-12-31",
+    lat_range: Optional[tuple[float, float]] = None,
+    lon_range: Optional[tuple[float, float]] = None,
+) -> xr.Dataset:
+    # Global sea surface temperature reprocessed
+    # (SST_GLO_SST_L4_REP_OBSERVATIONS_010_011)
     # Full name:
     #   Global Ocean OSTIA Sea Surface Temperature and Sea Ice Reprocessed
     #   L4 (daily, satellite-derived observations) (1981-ongoing)
@@ -48,15 +51,19 @@ def get_sea_surface_temperature_data(variables: list[str] = ["analysed_sst"],
     }
 
     if lat_range:
-        fetch_params.update({
-            "minimum_latitude": lat_range[0],
-            "maximum_latitude": lat_range[1],
-        })
+        fetch_params.update(
+            {
+                "minimum_latitude": lat_range[0],
+                "maximum_latitude": lat_range[1],
+            }
+        )
     if lon_range:
-        fetch_params.update({
-            "minimum_longitude": lon_range[0],
-            "maximum_longitude": lon_range[1],
-        })
+        fetch_params.update(
+            {
+                "minimum_longitude": lon_range[0],
+                "maximum_longitude": lon_range[1],
+            }
+        )
 
     daily_ds = get_copernicus_data(dataset_id, **fetch_params)
     monthly_ds = aggregate_daily_to_monthly(daily_ds)
@@ -67,5 +74,3 @@ def get_sea_surface_temperature_data(variables: list[str] = ["analysed_sst"],
 
 if __name__ == "__main__":
     temperature_ds = get_sea_surface_temperature_data()
-
-    

@@ -6,11 +6,10 @@
 
 
 import os
-from dotenv import load_dotenv
 
 import copernicusmarine
 import xarray as xr
-
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -29,4 +28,3 @@ def get_copernicus_data(dataset_id: str, **kwargs) -> xr.Dataset:
 
 if __name__ == "__main__":
     pass
-    

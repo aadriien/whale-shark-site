@@ -5,18 +5,20 @@
 ###############################################################################
 
 
-import xarray as xr
 from typing import Optional
+
+import xarray as xr
 
 from src.copernicus.fetch import get_copernicus_data
 
 
-def get_chlorophyll_data(variables: list[str] = ["CHL"],
-                         start_date: str = "2024-01-01",
-                         end_date: str = "2024-12-31",
-                         lat_range: Optional[tuple[float, float]] = None,
-                         lon_range: Optional[tuple[float, float]] = None,
-                        ) -> xr.Dataset:
+def get_chlorophyll_data(
+    variables: list[str] = ["CHL"],
+    start_date: str = "2024-01-01",
+    end_date: str = "2024-12-31",
+    lat_range: Optional[tuple[float, float]] = None,
+    lon_range: Optional[tuple[float, float]] = None,
+) -> xr.Dataset:
     # Global chlorophyll indicator (OCEANCOLOUR_GLO_BGC_L4_MY_009_104)
     # Full name:
     #   Global Ocean Colour (Copernicus-GlobColour), Bio-Geo-Chemical,
@@ -35,15 +37,19 @@ def get_chlorophyll_data(variables: list[str] = ["CHL"],
     }
 
     if lat_range:
-        fetch_params.update({
-            "minimum_latitude": lat_range[0],
-            "maximum_latitude": lat_range[1],
-        })
+        fetch_params.update(
+            {
+                "minimum_latitude": lat_range[0],
+                "maximum_latitude": lat_range[1],
+            }
+        )
     if lon_range:
-        fetch_params.update({
-            "minimum_longitude": lon_range[0],
-            "maximum_longitude": lon_range[1],
-        })
+        fetch_params.update(
+            {
+                "minimum_longitude": lon_range[0],
+                "maximum_longitude": lon_range[1],
+            }
+        )
 
     # Load full Xarray dataset & return
     chlorophyll_ds = get_copernicus_data(dataset_id, **fetch_params)
@@ -52,5 +58,3 @@ def get_chlorophyll_data(variables: list[str] = ["CHL"],
 
 if __name__ == "__main__":
     chlorophyll_ds = get_chlorophyll_data()
-    
-    

@@ -9,46 +9,47 @@ import pandas as pd
 
 from src.config import (
     MONTH_NAMES,
-    convert_ISO_code_to_country, convert_country_to_continent,
+    convert_country_to_continent,
+    convert_ISO_code_to_country,
 )
-
-from src.utils.data_utils import (
-    export_to_csv, extract_relevant_fields, move_column_after, standardize_column_vals,
-)
-
-from src.gbif.fetch import (
-    get_all_occurrences_raw,
-)
-
 from src.gbif.constants import (
     GBIF_CLEAN_CSV,
     GBIF_MEDIA_CSV,
 )
+from src.gbif.fetch import (
+    get_all_occurrences_raw,
+)
+from src.utils.data_utils import (
+    export_to_csv,
+    extract_relevant_fields,
+    move_column_after,
+    standardize_column_vals,
+)
 
 OCCURRENCE_RESULT_FIELDS = [
-    "key", 
-    "datasetKey", 
-    "publishingOrgKey", 
-    "publishingCountry", 
-    "basisOfRecord", 
-    "sex", 
-    "lifeStage", 
-    "dateIdentified", 
-    "decimalLatitude", 
-    "decimalLongitude", 
-    "coordinateUncertaintyInMeters", 
-    "continent", 
-    "stateProvince", 
-    "year", 
-    "month", 
-    "day", 
-    "eventDate", 
-    "countryCode", 
-    "country", 
-    "gbifRegion", 
-    "collectionCode", 
-    "verbatimLocality", 
-    "occurrenceID", 
+    "key",
+    "datasetKey",
+    "publishingOrgKey",
+    "publishingCountry",
+    "basisOfRecord",
+    "sex",
+    "lifeStage",
+    "dateIdentified",
+    "decimalLatitude",
+    "decimalLongitude",
+    "coordinateUncertaintyInMeters",
+    "continent",
+    "stateProvince",
+    "year",
+    "month",
+    "day",
+    "eventDate",
+    "countryCode",
+    "country",
+    "gbifRegion",
+    "collectionCode",
+    "verbatimLocality",
+    "occurrenceID",
     "organismID",
     "identificationID",
     "occurrenceRemarks",
@@ -56,7 +57,6 @@ OCCURRENCE_RESULT_FIELDS = [
     "recordedBy",
     "identifiedBy",
     "media",
-
     # recently-added fields:
     "locality",
     "verbatimEventDate",
@@ -65,17 +65,18 @@ OCCURRENCE_RESULT_FIELDS = [
 ]
 
 MEDIA_RELEVANT_FIELDS = [
-    "key", 
-    "occurrenceID", 
-    "identificationID", 
-    "whaleSharkID", 
-    "media"
+    "key",
+    "occurrenceID",
+    "identificationID",
+    "whaleSharkID",
+    "media",
 ]
 
 
 #####
 ## Handle API results
 #####
+
 
 def get_all_extracted_occurrences() -> list:
     extracted_occurrences = []
@@ -102,7 +103,10 @@ def export_gbif_occurrences() -> pd.DataFrame:
     # Convert any unhashable types (lists, dicts) to strings for duplicate detection,
     # but preserve media column so it can be exploded after cleaning
     for col in occurrences_df.columns:
-        if col != "media" and occurrences_df[col].apply(lambda x: isinstance(x, (list, dict))).any():
+        if (
+            col != "media"
+            and occurrences_df[col].apply(lambda x: isinstance(x, (list, dict))).any()
+        ):
             occurrences_df[col] = occurrences_df[col].astype(str)
 
     occurrences_df = refactor_field_values(occurrences_df)
@@ -110,22 +114,21 @@ def export_gbif_occurrences() -> pd.DataFrame:
     non_media_cols = [c for c in occurrences_df.columns if c != "media"]
     print(
         "Number of duplicate rows to drop (all columns):",
-        occurrences_df.duplicated(subset=non_media_cols).sum()
+        occurrences_df.duplicated(subset=non_media_cols).sum(),
     )
     occurrences_df.drop_duplicates(subset=non_media_cols, inplace=True)
 
     # Derive media CSV from cleaned occurrences (whaleSharkID already fully populated)
     if "media" in occurrences_df.columns:
-        media_source = (
-            occurrences_df[[c for c in MEDIA_RELEVANT_FIELDS if c in occurrences_df.columns]]
-            .drop_duplicates(subset=["key"])
-        )
+        media_source = occurrences_df[
+            [c for c in MEDIA_RELEVANT_FIELDS if c in occurrences_df.columns]
+        ].drop_duplicates(subset=["key"])
 
         media_rows = media_source.explode("media").dropna(subset=["media"])
-        media_df = pd.concat([
-            media_rows.drop("media", axis=1),
-            media_rows["media"].apply(pd.Series)
-        ], axis=1).reset_index(drop=True)
+        media_df = pd.concat(
+            [media_rows.drop("media", axis=1), media_rows["media"].apply(pd.Series)],
+            axis=1,
+        ).reset_index(drop=True)
 
         occurrences_df = occurrences_df.drop(columns=["media"])
 
@@ -139,6 +142,7 @@ def export_gbif_occurrences() -> pd.DataFrame:
 #####
 ## Format & standardize DataFrames
 #####
+
 
 def format_continents(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     if not isinstance(occurrences_df, pd.DataFrame):
@@ -162,14 +166,16 @@ def format_continents(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     occurrences_df["continent"] = occurrences_df.apply(standardize_continent, axis=1)
     return occurrences_df
 
-    
+
 def map_codes_to_countries(occurrences_df: pd.DataFrame, code_column: str) -> dict:
     if not isinstance(code_column, str):
         raise ValueError("Error, must specify code_column")
 
     # Get unique codes in occurrences, then populate map via country_converter
     unique_codes = occurrences_df[code_column].dropna().unique()
-    country_mappings = {code: convert_ISO_code_to_country(code) for code in unique_codes}
+    country_mappings = {
+        code: convert_ISO_code_to_country(code) for code in unique_codes
+    }
 
     return country_mappings
 
@@ -183,24 +189,25 @@ def format_country_names(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
     return occurrences_df
 
-    
+
 def format_publishingCountry(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     if not isinstance(occurrences_df, pd.DataFrame):
         raise ValueError("Error, must specify occurrences_df")
 
     occurrences_df.rename(
-        columns={"publishingCountry": "publishingCountryCode"}, 
-        inplace=True
+        columns={"publishingCountry": "publishingCountryCode"}, inplace=True
     )
-    country_mappings = map_codes_to_countries(occurrences_df, code_column="publishingCountryCode")
+    country_mappings = map_codes_to_countries(
+        occurrences_df, code_column="publishingCountryCode"
+    )
 
-    occurrences_df["publishingCountry"] = (
-        occurrences_df["publishingCountryCode"].replace(country_mappings)
-    )
+    occurrences_df["publishingCountry"] = occurrences_df[
+        "publishingCountryCode"
+    ].replace(country_mappings)
     occurrences_df = move_column_after(
-        occurrences_df, 
-        col_to_move="publishingCountry", 
-        after_col="publishingCountryCode"
+        occurrences_df,
+        col_to_move="publishingCountry",
+        after_col="publishingCountryCode",
     )
 
     return occurrences_df
@@ -215,9 +222,7 @@ def format_year_month_day(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     # Strip '.0' from str (e.g. 2025.0 -> 2025)
     for field in calendar_fields:
         occurrences_df[field] = (
-            occurrences_df[field]
-            .astype(str)
-            .str.replace(r"\.0$", "", regex=True)
+            occurrences_df[field].astype(str).str.replace(r"\.0$", "", regex=True)
         )
 
     occurrences_df.loc[:, "month"] = occurrences_df["month"].map(
@@ -238,9 +243,10 @@ def format_year_month_day(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 def format_sex_lifeStage(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     # Whale shark recorded sex
     occurrences_df = standardize_column_vals(
-        occurrences_df, col_name="sex", 
-        valid_vals=["Female", "Male"], 
-        fill_val="Unknown"
+        occurrences_df,
+        col_name="sex",
+        valid_vals=["Female", "Male"],
+        fill_val="Unknown",
     )
 
     # Whale shark recorded lifeStage
@@ -256,18 +262,25 @@ def fill_whaleshark_id_from_fallbacks(df: pd.DataFrame) -> pd.DataFrame:
     null_id = df["whaleSharkID"].isna()
 
     # Rule 1: occurrenceRemarks = "Shark ID: {X}"
-    # Strict match: free-text fields risk false positives with looser patterns (e.g. bare "ID:").
-    # Confirmed across multiple independent publishers, cross-validated against eventID prefix.
+    # Strict match: free-text fields risk false positives with looser
+    # patterns (e.g. bare "ID:").
+    # Confirmed across multiple independent publishers,
+    # cross-validated against eventID prefix.
     if "occurrenceRemarks" in df.columns:
-        extracted = df["occurrenceRemarks"].str.extract(r"^Shark ID:\s*(.+)$", expand=False).str.strip()
+        extracted = (
+            df["occurrenceRemarks"]
+            .str.extract(r"^Shark ID:\s*(.+)$", expand=False)
+            .str.strip()
+        )
 
-        # Abbreviate trailing org/school names to initials: "A-907 Exmouth District HS" → "A-907 EDHS"
+        # Abbreviate trailing org/school names to initials:
+        # "A-907 Exmouth District HS" → "A-907 EDHS"
         extracted = extracted.str.replace(
             r"^([A-Z]-\d+)\s+(.+)$",
-            lambda m: f"{m.group(1)} {''.join(w[0].upper() for w in m.group(2).split())}",
-            regex=True
+            lambda m: f"{m.group(1)} {''.join(w[0].upper() for w in m.group(2).split())}",  # noqa: E501
+            regex=True,
         )
-        
+
         fill = null_id & extracted.notna()
         df.loc[fill, "whaleSharkID"] = extracted[fill]
         null_id = df["whaleSharkID"].isna()
@@ -278,7 +291,9 @@ def fill_whaleshark_id_from_fallbacks(df: pd.DataFrame) -> pd.DataFrame:
     # Applied independently of Rule 1, i.e. a publisher may use this eventID convention
     # without also populating occurrenceRemarks.
     if "eventID" in df.columns:
-        extracted = df["eventID"].str.extract(r"^(.+?)-track-", expand=False).str.strip()
+        extracted = (
+            df["eventID"].str.extract(r"^(.+?)-track-", expand=False).str.strip()
+        )
         fill = null_id & extracted.notna()
         df.loc[fill, "whaleSharkID"] = extracted[fill]
 
@@ -290,16 +305,20 @@ def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     df = occurrences_df.copy()
 
     # Split entries with multiple IDs (multiple sharks) into separate rows
-    df["organismID"] = df["organismID"].fillna("").astype(str).str.split(';')
+    df["organismID"] = df["organismID"].fillna("").astype(str).str.split(";")
     df = df.explode("organismID")
 
     # Remove any spaces or weird formatting chars, e.g. "{"
     df["organismID"] = df["organismID"].str.replace(r"[{} ]", "", regex=True)
 
     # Repeat with identificationID field (just to be safe)
-    df["identificationID"] = df["identificationID"].fillna("").astype(str).str.split(';')
+    df["identificationID"] = (
+        df["identificationID"].fillna("").astype(str).str.split(";")
+    )
     df = df.explode("identificationID")
-    df["identificationID"] = df["identificationID"].str.replace(r"[{} ]", "", regex=True)
+    df["identificationID"] = df["identificationID"].str.replace(
+        r"[{} ]", "", regex=True
+    )
 
     # Replace empty strings with NaN so combine_first works
     df.replace({"organismID": {"": pd.NA}}, inplace=True)
@@ -310,35 +329,31 @@ def format_individual_shark_IDs(occurrences_df: pd.DataFrame) -> pd.DataFrame:
 
     # If whaleSharkID is still null, fall back to remarks / eventID
     # Note that this will almost certainly be telemetry data from satellite tracking,
-    # with minimal info beyond timestamps & coords (i.e. limited metadata) 
+    # with minimal info beyond timestamps & coords (i.e. limited metadata)
     df = fill_whaleshark_id_from_fallbacks(df)
 
     df = move_column_after(df, col_to_move="whaleSharkID", after_col="identificationID")
 
     df = df.reset_index(drop=True)
     return df
-    
+
 
 def refactor_field_values(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     if not isinstance(occurrences_df, pd.DataFrame):
         raise ValueError("Error, must specify occurrences_df")
 
     occurrences_df = format_continents(occurrences_df)
-    
+
     occurrences_df = format_country_names(occurrences_df)
     occurrences_df = format_publishingCountry(occurrences_df)
-    
+
     occurrences_df = format_year_month_day(occurrences_df)
     occurrences_df = format_sex_lifeStage(occurrences_df)
 
     occurrences_df = format_individual_shark_IDs(occurrences_df)
-    
-    return occurrences_df
 
+    return occurrences_df
 
 
 if __name__ == "__main__":
     occurrences_df = export_gbif_occurrences()
-
- 
-

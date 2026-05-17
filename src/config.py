@@ -8,12 +8,23 @@
 import country_converter as coco
 import pycountry_convert as pc
 
-
 COMMON_NAME = "whale shark"
 SPECIES_NAME = "rhincodon typus"
 
-MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+MONTH_NAMES = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+]
 
 
 def convert_ISO_code_to_country(country_code: str) -> str:
@@ -38,5 +49,3 @@ def convert_country_to_continent(country_name: str) -> str:
         return continent_name
     except Exception:
         return "Unknown"
-
-

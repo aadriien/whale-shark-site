@@ -6,18 +6,18 @@
 ###############################################################################
 
 import os
+
 import pandas as pd
 
+from src.copernicus.clean import convert_xarray_to_df
 from src.copernicus.fetch_chlorophyll import get_chlorophyll_data
 from src.copernicus.fetch_temperature import get_sea_surface_temperature_data
-from src.copernicus.clean import convert_xarray_to_df
 from src.utils.data_utils import export_to_csv
-
 
 WEB_DATA_DIR = "website/public/data"
 
-LAT_RANGE    = (-60, 60)   # covers full whale shark habitat range
-LON_RANGE    = (-180, 180) # global
+LAT_RANGE = (-60, 60)  # covers full whale shark habitat range
+LON_RANGE = (-180, 180)  # global
 
 TARGET_RESOLUTION_DEG = 1.0  # target output resolution for all metrics
 
@@ -25,21 +25,23 @@ METRIC_CONFIGS = {
     "chlorophyll": {
         "fetch_fn": get_chlorophyll_data,
         "variables": ["CHL"],
-        "subdir":    "chlorophyll",
-        "rename":    {"CHL": "mean_CHL"},
+        "subdir": "chlorophyll",
+        "rename": {"CHL": "mean_CHL"},
     },
     "temperature": {
         "fetch_fn": get_sea_surface_temperature_data,
         "variables": ["analysed_sst"],
-        "subdir":    "temperature",
-        "rename":    {"analysed_sst": "mean_analysed_sst"},
+        "subdir": "temperature",
+        "rename": {"analysed_sst": "mean_analysed_sst"},
     },
 }
 
 
-def export_global_data(metrics: list[str] = list(METRIC_CONFIGS.keys()),
-                       start_year: int = 2000,
-                       end_year: int = 2025) -> None:
+def export_global_data(
+    metrics: list[str] = list(METRIC_CONFIGS.keys()),
+    start_year: int = 2000,
+    end_year: int = 2025,
+) -> None:
     for metric in metrics:
         config = METRIC_CONFIGS[metric]
         output_dir = os.path.join(WEB_DATA_DIR, config["subdir"])
@@ -66,24 +68,32 @@ def export_global_data(metrics: list[str] = list(METRIC_CONFIGS.keys()),
 
                 # Compute stride from native grid spacing so it adapts automatically
                 # if dataset resolution ever changes (avoids hardcoding per metric)
-                
+
                 # This ensures 2D map renders as expected without weird cell gaps,
                 # since we're getting the float difference between 2 coordinates
                 lat_stride = max(
-                    1, 
+                    1,
                     round(
-                        TARGET_RESOLUTION_DEG / abs(
-                            float(ds.coords["latitude"].values[1] - ds.coords["latitude"].values[0])
+                        TARGET_RESOLUTION_DEG
+                        / abs(
+                            float(
+                                ds.coords["latitude"].values[1]
+                                - ds.coords["latitude"].values[0]
                             )
                         )
-                    )
+                    ),
+                )
                 lon_stride = max(
-                    1, 
+                    1,
                     round(
-                        TARGET_RESOLUTION_DEG / abs(
-                            float(ds.coords["longitude"].values[1] - ds.coords["longitude"].values[0])
+                        TARGET_RESOLUTION_DEG
+                        / abs(
+                            float(
+                                ds.coords["longitude"].values[1]
+                                - ds.coords["longitude"].values[0]
+                            )
                         )
-                    )
+                    ),
                 )
 
                 ds_sub = ds.isel(
@@ -92,8 +102,12 @@ def export_global_data(metrics: list[str] = list(METRIC_CONFIGS.keys()),
                 )
 
                 df = convert_xarray_to_df(ds_sub, variable_names=variables)
-                df = df[["time", "latitude", "longitude"] + variables].dropna(subset=variables)
-                df["time"] = pd.to_datetime(df["time"], errors="coerce").dt.strftime("%Y-%m-%d")
+                df = df[["time", "latitude", "longitude"] + variables].dropna(
+                    subset=variables
+                )
+                df["time"] = pd.to_datetime(df["time"], errors="coerce").dt.strftime(
+                    "%Y-%m-%d"
+                )
                 df = df.rename(columns=config["rename"])
 
                 export_to_csv(output_path, df)
@@ -107,4 +121,3 @@ def export_global_data(metrics: list[str] = list(METRIC_CONFIGS.keys()),
 
 if __name__ == "__main__":
     export_global_data()
-    

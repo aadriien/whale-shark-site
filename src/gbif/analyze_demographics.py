@@ -26,5 +26,3 @@ def make_lifeStage_df(occurrences_df: pd.DataFrame) -> pd.DataFrame:
     )
     life_stage_counts = life_stage_counts.add_prefix("Life Stage: ")
     return life_stage_counts
-    
-

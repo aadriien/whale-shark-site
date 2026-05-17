@@ -5,7 +5,7 @@
 ###############################################################################
 
 
-import json 
+import json
 
 
 def prettify_json(data):
@@ -29,5 +29,3 @@ def find_field(data, key):
                 return result
 
     return None  # Otherwise key not found
-
-

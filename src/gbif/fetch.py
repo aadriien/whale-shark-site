@@ -5,23 +5,20 @@
 ###############################################################################
 
 
-import requests
 import pandas as pd
+import requests
 
 from src.config import (
     SPECIES_NAME,
 )
-
+from src.gbif.constants import (
+    GBIF_RAW_CSV,
+)
 from src.utils.api_utils import (
     find_field,
 )
-
 from src.utils.data_utils import (
-    export_to_csv, 
-)
-
-from src.gbif.constants import (
-    GBIF_RAW_CSV,
+    export_to_csv,
 )
 
 BASE_URL = "https://api.gbif.org/v1"
@@ -48,11 +45,12 @@ def get_species_key(name: str = SPECIES_NAME) -> int:
     return species_key
 
 
-def get_occurrence_search(offset: int,
-                            limit: int = LIMIT,
-                            name: str = SPECIES_NAME, 
-                            key: int = get_species_key()
-                        ) -> dict:
+def get_occurrence_search(
+    offset: int,
+    limit: int = LIMIT,
+    name: str = SPECIES_NAME,
+    key: int = get_species_key(),
+) -> dict:
     if offset is None:
         raise ValueError("ERROR: missing offset")
 
@@ -60,8 +58,8 @@ def get_occurrence_search(offset: int,
     params = {
         "offset": offset,
         "limit": limit,
-        "scientificName": name, 
-        "speciesKey": key, 
+        "scientificName": name,
+        "speciesKey": key,
     }
 
     response = requests.get(url_endpoint, params=params)
@@ -83,8 +81,8 @@ def get_all_occurrences_raw() -> list:
 
         # Stop if fetched all records
         if offset + LIMIT >= raw_data.get("count", 0):
-            break  
-        
+            break
+
         offset += LIMIT
 
     # Export raw dataset
@@ -94,9 +92,5 @@ def get_all_occurrences_raw() -> list:
     return raw_occurrences
 
 
-
 if __name__ == "__main__":
     occurrences_df = get_all_occurrences_raw()
-
-
-
