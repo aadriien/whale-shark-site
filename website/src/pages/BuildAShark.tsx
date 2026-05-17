@@ -1,6 +1,5 @@
 import SharkGenerator from "../components/SharkGenerator";
 
-
 function BuildAShark() {
     return (
         <div className="page-content buildashark-wrapper">
@@ -8,11 +7,8 @@ function BuildAShark() {
 
             {/* Rendering SharkGenerator component */}
             <SharkGenerator />
-        
         </div>
     );
 }
 
 export default BuildAShark;
-
-

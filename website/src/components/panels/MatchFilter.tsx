@@ -1,10 +1,9 @@
-import { 
-    BaseFilterProps, 
-    LocationFilterProps, 
-    TimeFilterProps, 
-    SharkFilterProps 
+import {
+    BaseFilterProps,
+    LocationFilterProps,
+    TimeFilterProps,
+    SharkFilterProps,
 } from "../../types/filters";
-
 
 // Location Filters
 function LocationFilters({ criteria, onChange, countries }: LocationFilterProps) {
@@ -16,9 +15,7 @@ function LocationFilters({ criteria, onChange, countries }: LocationFilterProps)
                 Country:
                 <select
                     value={criteria.country}
-                    onChange={(e) =>
-                        onChange({ ...criteria, country: e.target.value })
-                    }
+                    onChange={(e) => onChange({ ...criteria, country: e.target.value })}
                     className="filter-select"
                 >
                     <option value="">All</option>
@@ -33,12 +30,8 @@ function LocationFilters({ criteria, onChange, countries }: LocationFilterProps)
     );
 }
 
-
 // Time Filter
-function TimeFilter({ 
-    criteria, onChange, 
-    minYear, maxYear, months 
-}: TimeFilterProps) {
+function TimeFilter({ criteria, onChange, minYear, maxYear, months }: TimeFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Time</legend>
@@ -57,11 +50,11 @@ function TimeFilter({
                             const num = parseInt(criteria.yearRange[0]);
                             const safe = isNaN(num)
                                 ? minYear
-                                : Math.max(
-                                    minYear,
-                                    Math.min(num, parseInt(criteria.yearRange[1]))
-                                );
-                            onChange({ ...criteria, yearRange: [String(safe), criteria.yearRange[1]] });
+                                : Math.max(minYear, Math.min(num, parseInt(criteria.yearRange[1])));
+                            onChange({
+                                ...criteria,
+                                yearRange: [String(safe), criteria.yearRange[1]],
+                            });
                         }}
                         className="filter-input"
                     />
@@ -77,11 +70,11 @@ function TimeFilter({
                             const num = parseInt(criteria.yearRange[1]);
                             const safe = isNaN(num)
                                 ? maxYear
-                                : Math.min(
-                                    maxYear,
-                                    Math.max(num, parseInt(criteria.yearRange[0]))
-                                );
-                            onChange({ ...criteria, yearRange: [criteria.yearRange[0], String(safe)] });
+                                : Math.min(maxYear, Math.max(num, parseInt(criteria.yearRange[0])));
+                            onChange({
+                                ...criteria,
+                                yearRange: [criteria.yearRange[0], String(safe)],
+                            });
                         }}
                         className="filter-input"
                     />
@@ -92,9 +85,7 @@ function TimeFilter({
                 Month:
                 <select
                     value={criteria.month}
-                    onChange={(e) =>
-                        onChange({ ...criteria, month: e.target.value })
-                    }
+                    onChange={(e) => onChange({ ...criteria, month: e.target.value })}
                     className="filter-select"
                 >
                     <option value="">All</option>
@@ -108,7 +99,6 @@ function TimeFilter({
         </fieldset>
     );
 }
-
 
 // Match Quality Filter
 function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
@@ -128,7 +118,7 @@ function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
                             const val = parseFloat(e.target.value);
                             onChange({
                                 ...criteria,
-                                miewidDistanceRange: [val, criteria.miewidDistanceRange?.[1] ?? 0]
+                                miewidDistanceRange: [val, criteria.miewidDistanceRange?.[1] ?? 0],
                             });
                         }}
                         className="filter-input"
@@ -143,14 +133,17 @@ function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
                             const val = parseFloat(e.target.value);
                             onChange({
                                 ...criteria,
-                                miewidDistanceRange: [criteria.miewidDistanceRange?.[0] ?? 0, val]
+                                miewidDistanceRange: [criteria.miewidDistanceRange?.[0] ?? 0, val],
                             });
                         }}
                         className="filter-input"
                     />
                 </div>
                 <div className="match-filter-hint">
-                    <small>0.0 = Perfect | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ = Different</small>
+                    <small>
+                        0.0 = Perfect | 0.5-1.0 = Very similar | 1.0-2.0 = Moderate | 2.0+ =
+                        Different
+                    </small>
                 </div>
             </label>
 
@@ -158,9 +151,7 @@ function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
                 Plausibility:
                 <select
                     value={criteria.plausibility || ""}
-                    onChange={(e) =>
-                        onChange({ ...criteria, plausibility: e.target.value })
-                    }
+                    onChange={(e) => onChange({ ...criteria, plausibility: e.target.value })}
                     className="filter-select"
                 >
                     <option value="">All</option>
@@ -202,27 +193,17 @@ function MatchQualityFilter({ criteria, onChange }: BaseFilterProps) {
     );
 }
 
-
 // Main MatchFilter component - combines all filters
 function MatchFilter({ criteria, onChange, options }: SharkFilterProps) {
-    const {
-        countries = [],
-        minYear = 2000,
-        maxYear = 2024,
-        months = [],
-    } = options;
+    const { countries = [], minYear = 2000, maxYear = 2024, months = [] } = options;
 
     return (
         <div className="match-filters-all">
-            <LocationFilters 
-                criteria={criteria} 
-                onChange={onChange} 
-                countries={countries}
-            />
-            
-            <TimeFilter 
-                criteria={criteria} 
-                onChange={onChange} 
+            <LocationFilters criteria={criteria} onChange={onChange} countries={countries} />
+
+            <TimeFilter
+                criteria={criteria}
+                onChange={onChange}
                 minYear={minYear}
                 maxYear={maxYear}
                 months={months}

@@ -7,24 +7,30 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import JEASINGS from "../utils/JEasings/JEasings";
 
-import { 
-    createGlobe, createLights, createCamera, createControls,
-    setupCameraAngles, resetGlobe, playStoryMode, highlightSharkMode, goToCoordinates
+import {
+    createGlobe,
+    createLights,
+    createCamera,
+    createControls,
+    setupCameraAngles,
+    resetGlobe,
+    playStoryMode,
+    highlightSharkMode,
+    goToCoordinates,
 } from "../utils/GlobeUtils";
 
 import { GlobeHandle, GlobeProps } from "../types/globes";
-
 
 // Weird TypeScript ForwardRef rules when ordering for type inference
 // Always props first (GlobeProps), then ref second (GlobeHandle)
 const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
     const mountRef = useRef<HTMLDivElement | null>(null);
-    
+
     // Hoist these so playStory can access them
     const globeRef = useRef<ThreeGlobe | null>(null);
     const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
     const controlsRef = useRef<OrbitControls | null>(null);
-    
+
     const pivotRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
     const yawRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
     const pitchRef = useRef<THREE.Object3D<THREE.Object3DEventMap>>(null);
@@ -34,121 +40,127 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
 
     const allowClicksRef = useRef<boolean>(props.allowClicks);
 
-    const playStory: GlobeHandle["playStory"] = async (
-        sharkID, 
-        onPointChange
-    ) => {
+    const playStory: GlobeHandle["playStory"] = async (sharkID, onPointChange) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
-        
+
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
         controlsRef.current.enabled = false;
-        
+
         resetGlobe(cameraRef.current, pitchRef);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         await playStoryMode(
-            globeRef.current, controlsRef.current, cameraRef.current, 
-            pitchRef, yawRef, sharkID, onPointChange
+            globeRef.current,
+            controlsRef.current,
+            cameraRef.current,
+            pitchRef,
+            yawRef,
+            sharkID,
+            onPointChange
         );
     };
-    
 
     // GeoLabs version: don't reset globe if shark already selected
     const playStoryFromSelection: GlobeHandle["playStoryFromSelection"] = async (
-        sharkID, 
+        sharkID,
         onPointChange
     ) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
-        
+
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
         controlsRef.current.enabled = false;
-        
+
         // Skip reset (globe already positioned correctly)
         await playStoryMode(
-            globeRef.current, controlsRef.current, cameraRef.current, 
-            pitchRef, yawRef, sharkID, onPointChange
+            globeRef.current,
+            controlsRef.current,
+            cameraRef.current,
+            pitchRef,
+            yawRef,
+            sharkID,
+            onPointChange
         );
     };
 
-
     const highlightShark: GlobeHandle["highlightShark"] = async (
-        sharkID, 
-        usePoints = false, 
+        sharkID,
+        usePoints = false,
         keepControlsDisabled = false
     ) => {
         if (!globeRef.current || !controlsRef.current || !cameraRef.current) return;
-        
+
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
         controlsRef.current.enabled = false;
 
         resetGlobe(cameraRef.current, pitchRef);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         await highlightSharkMode(
-            globeRef.current, controlsRef.current, cameraRef.current, 
-            pitchRef, yawRef, sharkID, usePoints, keepControlsDisabled
+            globeRef.current,
+            controlsRef.current,
+            cameraRef.current,
+            pitchRef,
+            yawRef,
+            sharkID,
+            usePoints,
+            keepControlsDisabled
         );
     };
-    
 
     const interruptStory: GlobeHandle["interruptStory"] = () => {
         // Clear all ongoing JEASINGS animations
         JEASINGS.removeAll();
-        
+
         // Clear all data from globe
         if (globeRef.current) {
             globeRef.current.ringsData([]);
             globeRef.current.pointsData([]);
         }
-        
+
         // Re-enable controls immediately
         if (controlsRef.current) {
             controlsRef.current.enabled = true;
         }
     };
-    
-    const showSinglePoint: GlobeHandle["showSinglePoint"] = (
-        point, 
-        disableControls = true
-    ) => {
+
+    const showSinglePoint: GlobeHandle["showSinglePoint"] = (point, disableControls = true) => {
         if (!globeRef.current || !point) return;
-        
+
         // Disable orbit controls for step mode
         if (disableControls && controlsRef.current) {
             controlsRef.current.enabled = false;
         }
-        
+
         // Clear existing data
         globeRef.current.ringsData([]);
         globeRef.current.pointsData([]);
-        
+
         // Show single point with ripple effect
-        globeRef.current.ringsData([point])
-            .ringColor(() => 'rgba(255, 255, 0, 0.8)')
+        globeRef.current
+            .ringsData([point])
+            .ringColor(() => "rgba(255, 255, 0, 0.8)")
             .ringMaxRadius(3)
             .ringPropagationSpeed(1)
             .ringRepeatPeriod(1000);
-        
+
         // Also orient to this point
         if (pitchRef && yawRef) {
             goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
         }
     };
-    
-    
+
     const enableControls: GlobeHandle["enableControls"] = () => {
         if (controlsRef.current) {
             controlsRef.current.enabled = true;
         }
     };
-    
+
     const disableControls: GlobeHandle["disableControls"] = () => {
         if (controlsRef.current) {
             controlsRef.current.enabled = false;
         }
     };
 
-    
     // Expose globe instance, playStory, highlightShark, interruptStory methods to parent
     useImperativeHandle(ref, () => ({
         getGlobe: () => globeRef.current!,
@@ -161,51 +173,45 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
         disableControls,
     }));
 
-
     // Keep track of whether open clicking allowed (shark selected in globe views?)
     useEffect(() => {
         allowClicksRef.current = props.allowClicks;
     }, [props.allowClicks]);
 
-    
     useEffect(() => {
         const globeContainer = mountRef.current;
         if (!globeContainer) return;
-        
-        
+
         const scene = new THREE.Scene();
-        
+
         const globe = createGlobe();
         scene.add(globe);
-        
-        
+
         const { ambientLight, directionalLight } = createLights();
         scene.add(ambientLight);
         scene.add(directionalLight);
-        
+
         const camera = createCamera(globeContainer);
-        
+
         const renderer = new THREE.WebGLRenderer({ antialias: true });
-        
-        
+
         // Add Euler angles for goToCoordinates storytelling
         const { pivot, yaw, pitch } = setupCameraAngles(scene, camera);
-        
+
         pivotRef.current = pivot;
         yawRef.current = yaw;
         pitchRef.current = pitch;
-        
-        
+
         const resizeCanvas = () => {
             if (!globeContainer.offsetWidth || !globeContainer.offsetHeight) return;
-            
+
             const containerWidth = globeContainer.offsetWidth;
             const containerHeight = globeContainer.offsetHeight;
-            
+
             // Increase pixel density for clarity
             renderer.setSize(containerWidth, containerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
-            
+
             camera.aspect = containerWidth / containerHeight;
             camera.updateProjectionMatrix();
         };
@@ -217,23 +223,22 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
             }
             resizeCanvas();
         };
-        
+
         // Call initGlobe initially
         initGlobe();
 
         // OrbitControls setup
         const controls = createControls(camera, renderer);
-            
+
         // Set for playStory
         globeRef.current = globe;
         cameraRef.current = camera;
         controlsRef.current = controls;
 
-
         const handleClick = (event: MouseEvent) => {
             if (!mountRef.current || !globeRef.current) return;
 
-            // Prevent override of selected shark in globe clicking 
+            // Prevent override of selected shark in globe clicking
             if (!allowClicksRef.current) {
                 console.log("Click ignored: allowClicks is false (shark already highlighted).");
                 return;
@@ -262,19 +267,18 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
                 if (props.onSharkClick) {
                     props.onSharkClick({ lat, lng });
                 }
-            } 
-            else {
+            } else {
                 console.log("No intersection with globe.");
             }
         };
 
         window.addEventListener("resize", resizeCanvas);
-        mountRef.current!.addEventListener("click", handleClick);
+        globeContainer.addEventListener("click", handleClick);
 
         const animate = () => {
             controls.update();
             JEASINGS.update();
-            
+
             renderer.render(scene, camera);
             requestAnimationFrame(animate);
         };
@@ -283,27 +287,27 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
         // Cleanup on component unmount
         return () => {
             window.removeEventListener("resize", resizeCanvas);
-            
+
             // Remove renderer's canvas
-            if (mountRef.current) mountRef.current.removeEventListener("click", handleClick);
+            globeContainer.removeEventListener("click", handleClick);
 
             if (globeContainer.contains(renderer.domElement)) {
                 globeContainer.removeChild(renderer.domElement);
             }
             renderer.dispose();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <div ref={mountRef}
-            style={{ 
-                width: "100%", 
-                height: "100%", 
+        <div
+            ref={mountRef}
+            style={{
+                width: "100%",
+                height: "100%",
             }}
         />
     );
 });
 
 export default Globe;
-
-

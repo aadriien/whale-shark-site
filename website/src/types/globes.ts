@@ -14,17 +14,14 @@ export type PlayStoryFn = (
 export type PlayStoryFromSelectionFn = PlayStoryFn;
 
 export type HighlightSharkFn = (
-    sharkID: string, 
-    usePoints?: boolean, 
+    sharkID: string,
+    usePoints?: boolean,
     keepControlsDisabled?: boolean
 ) => Promise<void>;
 
 export type InterruptStoryFn = () => void;
 
-export type ShowSinglePointFn = (
-    point: PlottedCoordinatePoint, 
-    disableControls?: boolean
-) => void;
+export type ShowSinglePointFn = (point: PlottedCoordinatePoint, disableControls?: boolean) => void;
 
 export type EnableDisableControlFn = () => void;
 
@@ -39,7 +36,6 @@ export type GlobeHandle = {
     disableControls: EnableDisableControlFn;
 };
 
-
 export type UseGlobeClickProps = {
     sharks: WhaleSharkDatasetNormalized;
     pointsData: PlottedCoordinatePoint[];
@@ -47,15 +43,12 @@ export type UseGlobeClickProps = {
     onSharkSelect: (shark: WhaleSharkEntryNormalized | null) => void;
 };
 
-
-export type SharkClickProps = { 
-    lat: number, 
-    lng: number
+export type SharkClickProps = {
+    lat: number;
+    lng: number;
 };
 
 export type GlobeProps = {
     onSharkClick?: (sharkClickProps: SharkClickProps) => void;
     allowClicks?: boolean;
 };
-
-

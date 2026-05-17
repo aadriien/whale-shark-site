@@ -1,11 +1,7 @@
 import { SharkBaseCriteria } from "../types/filters";
 
-
 // Parse URL params into criteria
-export function parseCriteria(
-    searchParams: URLSearchParams, 
-    defaults: SharkBaseCriteria
-) {
+export function parseCriteria(searchParams: URLSearchParams, defaults: SharkBaseCriteria) {
     const result: SharkBaseCriteria = { ...defaults };
     const mutableResult = result as Record<string, unknown>;
     const defaultsLookup = defaults as Record<string, unknown>;
@@ -16,14 +12,11 @@ export function parseCriteria(
 
         if (Array.isArray(defaultsLookup[key])) {
             mutableResult[key] = value.split(",");
-        }
-        else if (typeof defaultsLookup[key] === "boolean") {
+        } else if (typeof defaultsLookup[key] === "boolean") {
             mutableResult[key] = value === "true";
-        }
-        else if (typeof defaultsLookup[key] === "number") {
+        } else if (typeof defaultsLookup[key] === "number") {
             mutableResult[key] = Number(value);
-        }
-        else {
+        } else {
             mutableResult[key] = value;
         }
     }
@@ -31,12 +24,8 @@ export function parseCriteria(
     return result;
 }
 
-
 // Serialize criteria into URL params
-export function criteriaToParams(
-    criteria: SharkBaseCriteria, 
-    defaults: SharkBaseCriteria
-) {
+export function criteriaToParams(criteria: SharkBaseCriteria, defaults: SharkBaseCriteria) {
     const params = new URLSearchParams();
     const criteriaLookup = criteria as Record<string, unknown>;
     const defaultsLookup = defaults as Record<string, unknown>;
@@ -49,13 +38,10 @@ export function criteriaToParams(
             if (value.join(",") !== (def as unknown[]).join(",")) {
                 params.set(key, value.join(","));
             }
-        }
-        else if (value !== def) {
+        } else if (value !== def) {
             params.set(key, String(value));
         }
     }
-    
+
     return params;
 }
-
-

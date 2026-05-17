@@ -1,24 +1,21 @@
+import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
-import { pageMap } from "./LogbookContent"
+import { pageMap } from "./LogbookContent";
 
 import { PageContentProps } from "../../types/logbooks";
-
 
 type BlobStyle = {
     hue: number;
     borderRadius: string;
 };
 
-
 const STORAGE_KEY = "visitedPages";
-
 
 function randomRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
 
 function blobBorderRadius(min: number, max: number) {
     return `
@@ -33,7 +30,6 @@ function blobBorderRadius(min: number, max: number) {
     `;
 }
 
-
 function VisitedStamps({ currentPage }: PageContentProps) {
     // Initialize from localStorage or empty set
     const [visited, setVisited] = useState<Set<string>>(() => {
@@ -44,7 +40,7 @@ function VisitedStamps({ currentPage }: PageContentProps) {
             return new Set();
         }
     });
-    
+
     // Precompute random blob styles once
     const blobStyles = useMemo<BlobStyle[]>(
         () =>
@@ -60,21 +56,21 @@ function VisitedStamps({ currentPage }: PageContentProps) {
         localStorage.removeItem(STORAGE_KEY);
         setVisited(new Set());
     };
-    
+
     useEffect(() => {
         if (!currentPage) return;
 
-        setVisited(prev => {
+        setVisited((prev) => {
             if (prev.has(currentPage)) return prev; // no change
             const updated = new Set(prev);
             updated.add(currentPage);
-            
+
             // Save updated set to localStorage
             localStorage.setItem(STORAGE_KEY, JSON.stringify([...updated]));
             return updated;
         });
     }, [currentPage]);
-    
+
     return (
         <div className="logbook-section visited-stamps">
             <div className="visited-saved-header">
@@ -93,14 +89,20 @@ function VisitedStamps({ currentPage }: PageContentProps) {
                         <>
                             <div
                                 className="stamp-blob"
-                                style={{
-                                    "--hue": String(hue),
-                                    borderRadius,
-                                } as React.CSSProperties}
+                                style={
+                                    {
+                                        "--hue": String(hue),
+                                        borderRadius,
+                                    } as React.CSSProperties
+                                }
                             />
                             <span className="stamp-label">{label}</span>
                             {isStamped && (
-                                <span className="stamp-insignia" aria-label="Visited mark" role="img">
+                                <span
+                                    className="stamp-insignia"
+                                    aria-label="Visited mark"
+                                    role="img"
+                                >
                                     ✔️
                                 </span>
                             )}
@@ -108,10 +110,7 @@ function VisitedStamps({ currentPage }: PageContentProps) {
                     );
 
                     return (
-                        <div
-                            key={slug}
-                            className={`stamp ${isStamped ? "stamped" : ""}`}
-                        >
+                        <div key={slug} className={`stamp ${isStamped ? "stamped" : ""}`}>
                             {/* Allow users to revisit stamped pages */}
                             {isStamped ? (
                                 <Link
@@ -131,7 +130,6 @@ function VisitedStamps({ currentPage }: PageContentProps) {
             </div>
         </div>
     );
-} 
+}
 
 export default VisitedStamps;
-

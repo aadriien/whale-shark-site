@@ -14,31 +14,30 @@ import { mediaSharks } from "../utils/DataUtils";
 import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "../types/sharks";
 import { GlobeHandle } from "../types/globes";
 
-
 function GlobeViews() {
     const [searchParams, setSearchParams] = useSearchParams();
     // Initialize selected shark from URL
     const [selectedShark, setSelectedShark] = useState<WhaleSharkEntryNormalized | null>(() => {
         const sharkId = searchParams.get("selectedSharkId");
         if (sharkId) {
-            return mediaSharks.find(s => s.id === sharkId) || null;
+            return mediaSharks.find((s) => s.id === sharkId) || null;
         }
         return null;
     });
     const [allSharksVisible, setAllSharksVisible] = useState<boolean>(true);
     const [filteredSharks, setFilteredSharks] = useState<WhaleSharkDatasetNormalized>(mediaSharks); // track filtered sharks
-    
+
     const globeHandleRef = useRef<GlobeHandle>(null);
-    
+
     // Get coordinates for filtered sharks only
     const filteredPointsData = useMemo(() => {
         // Always use getGroupCoordinates to ensure consistency between sharks and coordinates
-        const filteredSharkIds = filteredSharks.map(shark => shark.id);
+        const filteredSharkIds = filteredSharks.map((shark) => shark.id);
         return getGroupCoordinates(filteredSharkIds);
     }, [filteredSharks]);
-    
+
     const sharks = mediaSharks;
-    
+
     useEffect(() => {
         // Show filtered sharks if nothing selected
         if (!selectedShark) {
@@ -48,8 +47,7 @@ function GlobeViews() {
                 addPointsData(globeInstance, filteredPointsData);
             }
             setAllSharksVisible(true);
-        } 
-        else {
+        } else {
             // When shark selected, clear points & show rings for individual
             if (globeHandleRef.current) {
                 const globeInstance = globeHandleRef.current.getGlobe();
@@ -59,7 +57,7 @@ function GlobeViews() {
             setAllSharksVisible(false);
         }
     }, [selectedShark, filteredPointsData]);
-    
+
     // Initial setup to show sharks on mount
     useEffect(() => {
         if (globeHandleRef.current) {
@@ -71,50 +69,49 @@ function GlobeViews() {
 
     // Update query param in URL if shark selected
     useEffect(() => {
-        const params = new URLSearchParams(searchParams);
-        if (selectedShark) {
-            params.set("selectedSharkId", selectedShark.id);
-        } 
-        else {
-            params.delete("selectedSharkId");
-        }
-        setSearchParams(params);
-    }, [selectedShark]);
-    
+        setSearchParams((prev) => {
+            const params = new URLSearchParams(prev);
+            if (selectedShark) {
+                params.set("selectedSharkId", selectedShark.id);
+            } else {
+                params.delete("selectedSharkId");
+            }
+            return params;
+        });
+    }, [selectedShark, setSearchParams]);
+
     // Direct call to useGlobeClick (with filtered sharks)
     const handleSelectShark = useGlobeClick({
         sharks: filteredSharks,
-        pointsData: filteredPointsData, 
+        pointsData: filteredPointsData,
         allSharksVisible: allSharksVisible,
-        onSharkSelect: setSelectedShark
+        onSharkSelect: setSelectedShark,
     });
-      
+
     const handleReset = () => {
         setSelectedShark(null);
         setAllSharksVisible(true);
     };
-    
-    
+
     return (
         <div className="page-content globeviews-wrapper">
             {/* <h1>GlobeViews Page</h1> */}
-            
-            <div className="globe-views-container">
 
+            <div className="globe-views-container">
                 {/* Shark info panel on left */}
-                <div className="info-sidebar" >
+                <div className="info-sidebar">
                     <SharkInfoPanel shark={selectedShark} />
                 </div>
-                
+
                 {/* Globe component */}
                 <div className="globe-container">
-                    <Globe 
-                        ref={globeHandleRef} 
-                        onSharkClick={handleSelectShark} 
+                    <Globe
+                        ref={globeHandleRef}
+                        onSharkClick={handleSelectShark}
                         allowClicks={!selectedShark}
                     />
                 </div>
-                
+
                 {/* Shark selector dropdown on right */}
                 <div className="shark-selector">
                     <SharkSelector
@@ -126,13 +123,9 @@ function GlobeViews() {
                         onFilteredSharksChange={setFilteredSharks}
                     />
                 </div>
-
             </div>
-
         </div>
     );
 }
-    
-export default GlobeViews;
 
-    
+export default GlobeViews;

@@ -7,7 +7,6 @@ import globeViewsPlaceholder from "../../assets/images/chart-placeholders/globe-
 
 import { ChartPlaceholderProps, ImageMap } from "../../types/charts";
 
-
 const ChartPlaceholder = ({ type, message }: ChartPlaceholderProps) => {
     const imageMap: ImageMap = {
         overview: overviewPlaceholder,
@@ -37,4 +36,3 @@ const ChartPlaceholder = ({ type, message }: ChartPlaceholderProps) => {
 };
 
 export default ChartPlaceholder;
-

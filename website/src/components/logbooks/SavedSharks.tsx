@@ -5,25 +5,23 @@ import { mediaSharks } from "../../utils/DataUtils";
 
 import { SavedSharkIDs, CondensedGridProps } from "../../types/sharks";
 
-
 const STORAGE_KEY = "savedSharks";
 
 function retrieveSharks(saved: SavedSharkIDs) {
     if (!saved || saved.size === 0) return [];
-    
+
     // Build lookup map for fast retrieval: { sharkID -> sharkObject }
-    const sharkMap = new Map(mediaSharks.map(shark => [shark.id, shark]));
+    const sharkMap = new Map(mediaSharks.map((shark) => [shark.id, shark]));
 
     // Convert set of saved IDs into shark objects, filtering out any missing
     return [...saved]
-        .map(id => sharkMap.get(id) || null)
+        .map((id) => sharkMap.get(id) || null)
         .filter((s): s is NonNullable<typeof s> => Boolean(s));
 }
 
-
 const CondensedGrid = ({ saved }: CondensedGridProps) => {
     const sharks = retrieveSharks(saved);
-    console.log(sharks)
+    console.log(sharks);
 
     return (
         <div className="condensed-shark-grid">
@@ -34,8 +32,7 @@ const CondensedGrid = ({ saved }: CondensedGridProps) => {
     );
 };
 
-
-function SavedSharks () {
+function SavedSharks() {
     // Initialize from localStorage or empty set
     const [saved, setSaved] = useState<SavedSharkIDs>(() => {
         try {
@@ -56,7 +53,7 @@ function SavedSharks () {
 
         if (isConfirmed) {
             const isConfirmedAgain = confirm(`Seriously, last chance!`);
-            
+
             if (isConfirmedAgain) {
                 localStorage.removeItem(STORAGE_KEY);
                 setSaved(new Set());
@@ -74,15 +71,10 @@ function SavedSharks () {
             </div>
 
             <div className="saved-grid">
-                {saved.size > 0 ? (
-                    <CondensedGrid saved={saved} />
-                ) : (
-                    <p>No whale sharks saved</p>
-                )}
+                {saved.size > 0 ? <CondensedGrid saved={saved} /> : <p>No whale sharks saved</p>}
             </div>
         </div>
     );
-} 
+}
 
 export default SavedSharks;
-

@@ -3,20 +3,15 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
 import GraphNodePanel from "./GraphNodePanel";
-import { 
-    GRAPH_STYLESHEET, 
-    normalizePositions, 
-    buildElements, 
-    applyFilters, 
-    initCyListeners 
+import {
+    GRAPH_STYLESHEET,
+    normalizePositions,
+    buildElements,
+    applyFilters,
+    initCyListeners,
 } from "../utils/GraphUtils";
 
-import { 
-    NodeFilter, EdgeFilter, 
-    GraphData, 
-    SelectedMatch 
-} from "../types/graphs";
-
+import { NodeFilter, EdgeFilter, GraphData, SelectedMatch } from "../types/graphs";
 
 const NODE_FILTER_LABELS: Record<NodeFilter, string> = {
     all: "All nodes",
@@ -31,12 +26,11 @@ const EDGE_FILTER_LABELS: Record<EdgeFilter, string> = {
     mutual: "Mutual matches only",
 };
 
-
 function SharkMatchGraph() {
     const [nodeFilter, setNodeFilter] = useState<NodeFilter>("all");
     const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
     const [graphData, setGraphData] = useState<GraphData | null>(null);
-    
+
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
 
     const cyRef = useRef<Core | null>(null);
@@ -49,14 +43,11 @@ function SharkMatchGraph() {
         });
     }, []);
 
-    const nodes = graphData?.nodes ?? [];
-    const edges = graphData?.edges ?? [];
+    const nodes = useMemo(() => graphData?.nodes ?? [], [graphData]);
+    const edges = useMemo(() => graphData?.edges ?? [], [graphData]);
 
     const posMap = useMemo(() => normalizePositions(nodes), [nodes]);
-    const elements = useMemo(
-        () => buildElements(nodes, edges, posMap),
-        [nodes, edges, posMap],
-    );
+    const elements = useMemo(() => buildElements(nodes, edges, posMap), [nodes, edges, posMap]);
 
     useEffect(() => {
         const el = containerRef.current;
@@ -78,9 +69,9 @@ function SharkMatchGraph() {
             <div className="graph-header">
                 <h2>Identity Match Graph</h2>
                 <p>
-                    Each node is a whale shark image. Edges connect GBIF images to their
-                    nearest embedding (vector) match. Green crosses into the Ningaloo reference
-                    database, orange stays within GBIF. Nearby nodes are visually similar images.
+                    Each node is a whale shark image. Edges connect GBIF images to their nearest
+                    embedding (vector) match. Green crosses into the Ningaloo reference database,
+                    orange stays within GBIF. Nearby nodes are visually similar images.
                 </p>
                 <div className="graph-legend">
                     <span className="legend-dot ningaloo" />
@@ -123,44 +114,41 @@ function SharkMatchGraph() {
                 <div ref={containerRef} className="cytoscape-canvas">
                     {!graphData ? (
                         <div className="graph-loading">Loading graph…</div>
-                    ) : <CytoscapeComponent
-                        elements={elements}
-                        stylesheet={GRAPH_STYLESHEET}
-                        layout={{ name: "preset" }}
-                        style={{ 
-                            width: "100%", 
-                            height: "100%", 
-                            position: "absolute", 
-                            top: "0", 
-                            left: "0" 
-                        }}
-                        userZoomingEnabled={true}
-                        userPanningEnabled={true}
-                        autoungrabify={true}
-                        boxSelectionEnabled={false}
-                        textureOnViewport={true}
-                        hideEdgesOnViewport={true}
-                        pixelRatio={1}
-                        minZoom={0.03}
-                        maxZoom={3}
-                        cy={(cy: Core) => {
-                            cyRef.current = cy;
-                            if (lastCyInstance.current !== cy) {
-                                lastCyInstance.current = cy;
-                                initCyListeners(cy, nodeFilter, edgeFilter, setSelectedMatch);
-                            }
-                        }}
-                    />}
+                    ) : (
+                        <CytoscapeComponent
+                            elements={elements}
+                            stylesheet={GRAPH_STYLESHEET}
+                            layout={{ name: "preset" }}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                position: "absolute",
+                                top: "0",
+                                left: "0",
+                            }}
+                            userZoomingEnabled={true}
+                            userPanningEnabled={true}
+                            autoungrabify={true}
+                            boxSelectionEnabled={false}
+                            textureOnViewport={true}
+                            hideEdgesOnViewport={true}
+                            pixelRatio={1}
+                            minZoom={0.03}
+                            maxZoom={3}
+                            cy={(cy: Core) => {
+                                cyRef.current = cy;
+                                if (lastCyInstance.current !== cy) {
+                                    lastCyInstance.current = cy;
+                                    initCyListeners(cy, nodeFilter, edgeFilter, setSelectedMatch);
+                                }
+                            }}
+                        />
+                    )}
                 </div>
-                <GraphNodePanel
-                    match={selectedMatch}
-                    onClose={() => setSelectedMatch(null)}
-                />
+                <GraphNodePanel match={selectedMatch} onClose={() => setSelectedMatch(null)} />
             </div>
         </div>
     );
 }
 
 export default SharkMatchGraph;
-
-

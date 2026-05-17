@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import ExtractPointsOnce from "../utils/ModelUtils";
 import GalacticOcean from "../components/animations/GalacticOcean";
 
-
 function Home() {
     // Be mindful of home screen display on mobile (adjust slightly)
     const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -22,17 +21,17 @@ function Home() {
                     {`@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');`}
                 </style>
 
-                <div 
-                    className="page-content home" 
-                    style={{ 
-                        position: "relative", 
+                <div
+                    className="page-content home"
+                    style={{
+                        position: "relative",
                         textAlign: "center",
-                        zIndex: 5 
+                        zIndex: 5,
                     }}
-                    >
+                >
                     <h1
                         style={{
-                            color: "#b2ebf2", 
+                            color: "#b2ebf2",
                             textShadow: "0 0 8px #81d4fa, 0 0 18px #4fc3f7, 0 0 30px #29b6f6",
                             fontFamily: "'Poppins', sans-serif",
                             fontWeight: 100,
@@ -50,11 +49,8 @@ function Home() {
             {/* <ExtractPointsOnce /> */}
 
             <GalacticOcean isMobile={isMobile} />
-
         </div>
     );
 }
 
 export default Home;
-
-

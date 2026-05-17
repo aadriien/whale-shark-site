@@ -3,16 +3,12 @@ import { useState, useMemo } from "react";
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 import Heatmap from "../charts/Heatmap";
 
-import { 
-    MONTHS, 
-    reshapeYearData 
-} from "../../utils/DataUtils";
+import { MONTHS, reshapeYearData } from "../../utils/DataUtils";
 
 import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
 import { HeatmapDataPoint, GBIFDataset } from "../../types/charts";
 
-    
 const flattenToHeatmapFormat = (rawData: GBIFDataset) => {
     const heatmapData: HeatmapDataPoint[] = [];
 
@@ -31,12 +27,9 @@ const flattenToHeatmapFormat = (rawData: GBIFDataset) => {
     return heatmapData;
 };
 
-    
 const getDecadeTickFormatter = (yearsArray: number[]) => {
     const shown = new Set();
-    const validDecades = new Set(
-        yearsArray.map((y) => Math.floor(y / 10) * 10)
-    );
+    const validDecades = new Set(yearsArray.map((y) => Math.floor(y / 10) * 10));
 
     return (year: number) => {
         const decade = Math.floor(+year / 10) * 10;
@@ -48,15 +41,17 @@ const getDecadeTickFormatter = (yearsArray: number[]) => {
     };
 };
 
-    
 const GBIFDecadeOccurrences = () => {
     const [selectedDecade, setSelectedDecade] = useState<string>("");
 
     const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);
-    const years = useMemo(() => Object.keys(reshaped).sort((a, b) => Number(b) - Number(a)), [reshaped]);
-    
+    const years = useMemo(
+        () => Object.keys(reshaped).sort((a, b) => Number(b) - Number(a)),
+        [reshaped]
+    );
+
     const heatmapData = useMemo(() => flattenToHeatmapFormat(calendarStatsGBIF), []);
-    
+
     const decadeGroups = useMemo(() => {
         const byDecade: Record<string, string[]> = {};
 
@@ -71,7 +66,7 @@ const GBIFDecadeOccurrences = () => {
         });
         return byDecade;
     }, [years]);
-    
+
     return (
         <>
             <label htmlFor="heatmap-decade-select" style={{ display: "block" }}>
@@ -92,39 +87,36 @@ const GBIFDecadeOccurrences = () => {
                         <option key={decade} value={decade}>
                             {decade}
                         </option>
-                ))}
+                    ))}
             </select>
 
-            {(selectedDecade && (selectedDecade === "All" || decadeGroups[selectedDecade])) ? (
+            {selectedDecade && (selectedDecade === "All" || decadeGroups[selectedDecade]) ? (
                 <Heatmap
                     data={
                         selectedDecade === "All"
-                        ? heatmapData
-                        : heatmapData.filter(
-                            d => decadeGroups[selectedDecade].includes(String(d.year))
-                        )
+                            ? heatmapData
+                            : heatmapData.filter((d) =>
+                                  decadeGroups[selectedDecade].includes(String(d.year))
+                              )
                     }
                     title={
                         selectedDecade === "All"
-                        ? "Monthly Records Heatmap (All Years)"
-                        : `Monthly Records Heatmap — ${selectedDecade}`
+                            ? "Monthly Records Heatmap (All Years)"
+                            : `Monthly Records Heatmap — ${selectedDecade}`
                     }
                     yTickFormatter={
                         selectedDecade === "All"
-                        ? getDecadeTickFormatter(heatmapData.map(d => +d.year))
-                        : undefined
+                            ? getDecadeTickFormatter(heatmapData.map((d) => +d.year))
+                            : undefined
                     }
                 />
+            ) : selectedDecade ? (
+                <p style={{ textAlign: "center" }}>No data available for this decade.</p>
             ) : (
-                selectedDecade ? (
-                    <p style={{ textAlign: "center" }}>No data available for this decade.</p>
-                ) : (
-                    <ChartPlaceholder type="heatmap" message="Select a decade to see heatmap" />
-                )
+                <ChartPlaceholder type="heatmap" message="Select a decade to see heatmap" />
             )}
         </>
     );
 };
 
 export default GBIFDecadeOccurrences;
-

@@ -1,24 +1,22 @@
 type Fact = {
-    title: string; 
-    detail: string; 
+    title: string;
+    detail: string;
 };
 
-
 const facts: Fact[] = [
-    { 
-        title: "Largest Fish", 
-        detail: "Can grow over 40 feet long!" 
+    {
+        title: "Largest Fish",
+        detail: "Can grow over 40 feet long!",
     },
-    { 
-        title: "Filter Feeder", 
-        detail: "Eats plankton, not people." 
+    {
+        title: "Filter Feeder",
+        detail: "Eats plankton, not people.",
     },
-    { 
-        title: "Unique Spots", 
-        detail: "Patterns like a fingerprint." 
+    {
+        title: "Unique Spots",
+        detail: "Patterns like a fingerprint.",
     },
 ];
-
 
 const FunFacts = () => {
     return (
@@ -38,5 +36,3 @@ const FunFacts = () => {
 };
 
 export default FunFacts;
-
-        

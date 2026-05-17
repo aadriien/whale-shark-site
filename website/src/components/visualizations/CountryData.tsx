@@ -12,7 +12,6 @@ import countryStatsGBIF from "../../assets/data/json/gbif_country_stats.json";
 
 import { GBIFRegionOccurrencesProps } from "../../types/charts";
 
-
 const GBIFCountryOccurrences = () => {
     const [selectedCountry, setSelectedCountry] = useState<string>("");
 
@@ -39,14 +38,17 @@ const GBIFCountryOccurrences = () => {
 
             <DataGrid>
                 <div className="card-data-wrapper">
-                    <DataOverview 
-                        dataset="country" 
+                    <DataOverview
+                        dataset="country"
                         filterField="country"
                         selectedFilter={selectedCountry}
                         displayFields={[
                             { label: "Total Occurrences", field: "Total Occurrences" },
                             { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
-                            { label: "Top 3 Publishing Countries", field: "Top 3 Publishing Countries" }
+                            {
+                                label: "Top 3 Publishing Countries",
+                                field: "Top 3 Publishing Countries",
+                            },
                         ]}
                     />
                 </div>
@@ -64,4 +66,3 @@ const GBIFCountryOccurrences = () => {
 };
 
 export default GBIFCountryOccurrences;
-

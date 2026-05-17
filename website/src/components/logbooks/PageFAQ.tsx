@@ -4,10 +4,9 @@ import { pageContent } from "./LogbookContent";
 
 import { FAQ, PageContentProps } from "../../types/logbooks";
 
-
 function PageFAQ({ currentPage }: PageContentProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
-    
+
     const pageOverviewFAQs = pageContent[currentPage];
 
     const toggleFAQ = (idx: number) => {
@@ -37,4 +36,3 @@ function PageFAQ({ currentPage }: PageContentProps) {
 }
 
 export default PageFAQ;
-

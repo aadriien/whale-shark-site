@@ -2,16 +2,16 @@ import { useMemo } from "react";
 
 import { DataMetricFilterProps } from "../../types/charts";
 
-
-const DataMetricFilter = ({ 
-    label, field, 
-    data, 
-    selectedValue, 
-    onChange, 
-    inline 
+const DataMetricFilter = ({
+    label,
+    field,
+    data,
+    selectedValue,
+    onChange,
+    inline,
 }: DataMetricFilterProps) => {
     const options = useMemo(() => {
-        const uniqueValues = Array.from(new Set(data.map(d => d[field])));
+        const uniqueValues = Array.from(new Set(data.map((d) => d[field])));
 
         return uniqueValues.sort((a, b) => {
             if (typeof a === "number" && typeof b === "number") return b - a;
@@ -36,7 +36,7 @@ const DataMetricFilter = ({
                 className="data-metric-filter-select"
             >
                 <option value="">{placeholder}</option>
-                
+
                 {options.map((val) => (
                     <option key={val} value={val}>
                         {val}
@@ -48,4 +48,3 @@ const DataMetricFilter = ({
 };
 
 export default DataMetricFilter;
-

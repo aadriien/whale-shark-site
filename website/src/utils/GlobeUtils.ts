@@ -1,3 +1,5 @@
+import React from "react";
+
 import * as THREE from "three";
 import ThreeGlobe from "three-globe";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -11,18 +13,14 @@ import { PlottedCoordinatePoint } from "../types/coordinates";
 import earthImg from "../assets/images/three-globe-imgs/earth-blue-marble.jpg";
 import bumpImg from "../assets/images/three-globe-imgs/earth-topology.png";
 
-
 export function createGlobe() {
-    const globe = new ThreeGlobe()
-        .globeImageUrl(earthImg)
-        .bumpImageUrl(bumpImg);
-  
+    const globe = new ThreeGlobe().globeImageUrl(earthImg).bumpImageUrl(bumpImg);
+
     globe.scale.set(1, 1, 1);
     globe.visible = true;
 
     return globe;
-};
-
+}
 
 export function createLights() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.0 * Math.PI);
@@ -31,8 +29,7 @@ export function createLights() {
     directionalLight.position.set(0, 1, 1);
 
     return { ambientLight, directionalLight };
-};
-
+}
 
 export function createCamera(globeContainer: HTMLDivElement) {
     const camera = new THREE.PerspectiveCamera(
@@ -44,13 +41,9 @@ export function createCamera(globeContainer: HTMLDivElement) {
     camera.position.set(0, 0, 200);
 
     return camera;
-};
+}
 
-
-export function createControls(
-    camera: THREE.PerspectiveCamera, 
-    renderer: THREE.WebGLRenderer
-) {
+export function createControls(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer) {
     const controls = new OrbitControls(camera, renderer.domElement);
 
     controls.enableDamping = true;
@@ -64,117 +57,97 @@ export function createControls(
     controls.maxDistance = 220;
 
     return controls;
-};
-  
+}
 
 export function setupCameraAngles(
-    scene: THREE.Scene<THREE.Object3DEventMap>, 
+    scene: THREE.Scene<THREE.Object3DEventMap>,
     camera: THREE.PerspectiveCamera
 ) {
     // Euler angles for managing globe storytelling
     const pivot = new THREE.Object3D(); // point around which globe rotates
     const yaw = new THREE.Object3D(); // y-axis (vertical), turn left/right
     const pitch = new THREE.Object3D(); // x-axis (horizontal), tilt up/down
-  
+
     scene.add(pivot);
     pivot.add(yaw);
     yaw.add(pitch);
     pitch.add(camera);
-  
-    return { pivot, yaw, pitch };
-};
 
-  
+    return { pivot, yaw, pitch };
+}
 
 // Color Interpolator for ring effects
 export function colorInterpolator(t: number) {
     // Yellow (255, 255, 0) -> Neon Cyan (0, 255, 255) transition
-    const r = Math.round(255 - t * 255);  // Transition from yellow to red
-    const g = Math.round(255);             // Keep green constant (255)
-    const b = Math.round(t * 255);        // Transition from no blue to full cyan
-    return `rgba(${r}, ${g}, ${b}, ${0.9 + (1 - t) * 0.1})`;  // Hold opacity
-};
+    const r = Math.round(255 - t * 255); // Transition from yellow to red
+    const g = Math.round(255); // Keep green constant (255)
+    const b = Math.round(t * 255); // Transition from no blue to full cyan
+    return `rgba(${r}, ${g}, ${b}, ${0.9 + (1 - t) * 0.1})`; // Hold opacity
+}
 
-
-
-export function addRingsData(
-    globe: ThreeGlobe, 
-    pointsData: PlottedCoordinatePoint[]
-) {
+export function addRingsData(globe: ThreeGlobe, pointsData: PlottedCoordinatePoint[]) {
     if (!globe) return;
 
     // Setting up the points (rings) based on "pointsData"
-    globe.ringsData(pointsData)
+    globe
+        .ringsData(pointsData)
         .ringColor(() => colorInterpolator)
         .ringMaxRadius("ringMaxSize")
-        .ringPropagationSpeed("ringPropagationSpeed") 
+        .ringPropagationSpeed("ringPropagationSpeed")
 
         // Repeat period variable (randomized delay in data)
-        .ringRepeatPeriod("ringRepeatPeriod"); 
-};
+        .ringRepeatPeriod("ringRepeatPeriod");
+}
 
-
-export function addRingsDataStatic(
-    globe: ThreeGlobe, 
-    pointsData: PlottedCoordinatePoint[]
-) {
+export function addRingsDataStatic(globe: ThreeGlobe, pointsData: PlottedCoordinatePoint[]) {
     if (!globe) return;
 
-    globe.ringsData(pointsData)
+    globe
+        .ringsData(pointsData)
         // Ring color static since no movement
         .ringColor(() => "rgba(230, 255, 50, 0.9)")
 
         // Smaller radius & zero movement
         .ringMaxRadius(0.5)
-        .ringPropagationSpeed(0) 
-        .ringRepeatPeriod(0); 
-};
-
+        .ringPropagationSpeed(0)
+        .ringRepeatPeriod(0);
+}
 
 export function clearRingsData(globe: ThreeGlobe) {
     if (!globe) return;
 
     // Clear all rings by passing empty data
-    globe.ringsData([]); 
+    globe.ringsData([]);
 }
 
-
-export function addPointsData(
-    globe: ThreeGlobe, 
-    pointsData: PlottedCoordinatePoint[]
-) {
+export function addPointsData(globe: ThreeGlobe, pointsData: PlottedCoordinatePoint[]) {
     if (!globe) return;
-    
-    globe.pointsData(pointsData)
+
+    globe
+        .pointsData(pointsData)
         .pointColor(() => "rgba(255, 255, 0, 0.8)")
         .pointRadius(0.3)
         .pointResolution(6)
         .pointAltitude(0.02);
 }
 
-
 export function clearPointsData(globe: ThreeGlobe) {
     if (!globe) return;
     globe.pointsData([]);
 }
-
 
 export function clearAllData(globe: ThreeGlobe) {
     if (!globe) return;
     globe.ringsData([]);
     globe.pointsData([]);
 }
-  
 
 export async function resetGlobe(
     camera: THREE.PerspectiveCamera,
     pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
     // Zoom out while re-centering camera
-    new JEasing(camera.position)
-        .to({ x: 0, y: 0, z: 300 }, 1000)
-        .easing(Cubic.InOut)
-        .start();
+    new JEasing(camera.position).to({ x: 0, y: 0, z: 300 }, 1000).easing(Cubic.InOut).start();
 
     // Level pitch to equator so yaw rotation doesn't arc when near poles
     new JEasing(pitchRef.current!.rotation)
@@ -184,70 +157,56 @@ export async function resetGlobe(
 
     // Zoom back to settled position (note that yaw is NOT reset)
     // goToCoordinates spins directly to target
-    new JEasing(camera.position)
-        .to({ x: 0, y: 0, z: 200 }, 1075)
-        .easing(Cubic.InOut)
-        .start();
+    new JEasing(camera.position).to({ x: 0, y: 0, z: 200 }, 1075).easing(Cubic.InOut).start();
 
     JEASINGS.update();
-};
-
+}
 
 // Returns yaw target that takes the shortest arc from currentY to targetLng,
 // avoiding the long way around when crossing globe's international date line
 function computeShortestYaw(currentY: number, targetLng: number): number {
     const targetAbsolute = (targetLng / 180) * Math.PI;
     let delta = targetAbsolute - currentY;
-    
+
     while (delta > Math.PI) delta -= 2 * Math.PI;
     while (delta < -Math.PI) delta += 2 * Math.PI;
     return currentY + delta;
 }
 
-
 // Ease camera view to coords point for globe storytelling
 export function goToCoordinates(
-    lat: number, lng: number,
+    lat: number,
+    lng: number,
     pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
     yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
     new JEasing(pitchRef.current!.rotation)
         // Convert latitude to radians, & animate over 1000 ms (1 sec)
-        .to(
-            { x: (lat / 180) * Math.PI * -1 },
-            1000
-        )
+        .to({ x: (lat / 180) * Math.PI * -1 }, 1000)
         .easing(Cubic.InOut)
-        .start()
+        .start();
 
     new JEasing(yawRef.current!.rotation)
         // Animate via shortest arc to avoid spinning the long way around
-        .to(
-            { y: computeShortestYaw(yawRef.current!.rotation.y, lng) },
-            1000
-        )
+        .to({ y: computeShortestYaw(yawRef.current!.rotation.y, lng) }, 1000)
         .easing(Cubic.InOut)
-        .start()
-};
-
+        .start();
+}
 
 export async function playStoryMode(
     globe: ThreeGlobe,
     controls: OrbitControls,
     camera: THREE.PerspectiveCamera,
     pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
-    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>, 
-    sharkID: string, 
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
+    sharkID: string,
     onPointChange?: (point: PlottedCoordinatePoint) => void
 ) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
-    
+
     // Have camera zoom into globe gradually, over 2.5 sec period
-    new JEasing(camera.position)
-        .to({ z: 150 }, 2500) 
-        .easing(Cubic.InOut)
-        .start();
+    new JEasing(camera.position).to({ z: 150 }, 2500).easing(Cubic.InOut).start();
 
     console.log(`Playing story for shark ID: ${sharkID}`);
 
@@ -259,19 +218,19 @@ export async function playStoryMode(
 
         // Wait 2 sec after zoom in before starting story
         if (i == 0) {
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
         }
-    
+
         // Show ripple for this current singular point
         addRingsData(globe, [point]);
 
         // Align text display of coords (+ timestamp) with ripple plotting
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         if (onPointChange) {
             onPointChange(point);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
     }
 
     // Clear final ripple & restore orbit controls after story told
@@ -279,38 +238,33 @@ export async function playStoryMode(
         clearAllData(globe);
         controls.enabled = true;
     }, 1000);
-};
-
+}
 
 export async function highlightSharkMode(
     globe: ThreeGlobe,
     controls: OrbitControls,
     camera: THREE.PerspectiveCamera,
     pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
-    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>, 
-    sharkID: string, 
-    usePoints: boolean = false, 
+    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
+    sharkID: string,
+    usePoints: boolean = false,
     keepControlsDisabled: boolean = false
 ) {
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
-    
+
     // Have camera zoom into globe gradually, over 2.5 sec period
-    new JEasing(camera.position)
-        .to({ z: 150 }, 2500) 
-        .easing(Cubic.InOut)
-        .start();
+    new JEasing(camera.position).to({ z: 150 }, 2500).easing(Cubic.InOut).start();
 
     console.log(`Highlighting shark ID: ${sharkID} with ${usePoints ? "points" : "ripples"}`);
 
     // Show either points or ripples for this whale shark
     if (usePoints) {
         addPointsData(globe, sortedPointsData);
-    } 
-    else {
+    } else {
         addRingsData(globe, sortedPointsData);
     }
-    
+
     const point = sortedPointsData[0];
     goToCoordinates(point.lat, point.lng, pitchRef, yawRef);
 
@@ -320,7 +274,4 @@ export async function highlightSharkMode(
             controls.enabled = true;
         }, 2500);
     }
-};
-
-
-
+}

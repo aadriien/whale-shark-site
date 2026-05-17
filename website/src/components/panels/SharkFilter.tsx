@@ -1,11 +1,10 @@
-import { 
-    BaseFilterProps, 
-    LocationFilterProps, 
-    TimeFilterProps, 
+import {
+    BaseFilterProps,
+    LocationFilterProps,
+    TimeFilterProps,
     MetadataFilterProps,
-    SharkFilterProps 
+    SharkFilterProps,
 } from "../../types/filters";
-
 
 // Media Filter
 function MediaFilter({ criteria, onChange }: BaseFilterProps) {
@@ -19,7 +18,7 @@ function MediaFilter({ criteria, onChange }: BaseFilterProps) {
                     onChange={() =>
                         onChange({
                             ...criteria,
-                            showOnlyWithMedia: !criteria.showOnlyWithMedia
+                            showOnlyWithMedia: !criteria.showOnlyWithMedia,
                         })
                     }
                 />
@@ -29,11 +28,12 @@ function MediaFilter({ criteria, onChange }: BaseFilterProps) {
     );
 }
 
-
 // Location Filters
-function LocationFilters({ 
-    criteria, onChange, 
-    countries, publishingCountries 
+function LocationFilters({
+    criteria,
+    onChange,
+    countries,
+    publishingCountries,
 }: LocationFilterProps) {
     return (
         <fieldset className="filter-group">
@@ -43,9 +43,7 @@ function LocationFilters({
                 Country:
                 <select
                     value={criteria.country}
-                    onChange={(e) =>
-                        onChange({ ...criteria, country: e.target.value })
-                    }
+                    onChange={(e) => onChange({ ...criteria, country: e.target.value })}
                     className="filter-select"
                 >
                     <option value="">All</option>
@@ -61,9 +59,7 @@ function LocationFilters({
                 Publishing Country:
                 <select
                     value={criteria.publishingCountry}
-                    onChange={(e) =>
-                        onChange({ ...criteria, publishingCountry: e.target.value })
-                    }
+                    onChange={(e) => onChange({ ...criteria, publishingCountry: e.target.value })}
                     className="filter-select"
                 >
                     <option value="">All</option>
@@ -78,12 +74,8 @@ function LocationFilters({
     );
 }
 
-
 // Time Filter
-function TimeFilter({ 
-    criteria, onChange, 
-    minYear, maxYear, months 
-}: TimeFilterProps) {
+function TimeFilter({ criteria, onChange, minYear, maxYear, months }: TimeFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Time</legend>
@@ -96,9 +88,9 @@ function TimeFilter({
                         value={criteria.yearRange[0]}
                         onChange={(e) => {
                             const val = e.target.value;
-                            onChange({ 
-                                ...criteria, 
-                                yearRange: [val, criteria.yearRange[1]] 
+                            onChange({
+                                ...criteria,
+                                yearRange: [val, criteria.yearRange[1]],
                             });
                         }}
                         // Validate int min bounds on click away
@@ -106,13 +98,10 @@ function TimeFilter({
                             const num = parseInt(criteria.yearRange[0]);
                             const safe = isNaN(num)
                                 ? minYear
-                                : Math.max(
-                                    minYear,
-                                    Math.min(num, parseInt(criteria.yearRange[1]))
-                                );
-                            onChange({ 
-                                ...criteria, 
-                                yearRange: [String(safe), criteria.yearRange[1]] 
+                                : Math.max(minYear, Math.min(num, parseInt(criteria.yearRange[1])));
+                            onChange({
+                                ...criteria,
+                                yearRange: [String(safe), criteria.yearRange[1]],
                             });
                         }}
                         className="filter-input"
@@ -123,9 +112,9 @@ function TimeFilter({
                         value={criteria.yearRange[1]}
                         onChange={(e) => {
                             const val = e.target.value;
-                            onChange({ 
-                                ...criteria, 
-                                yearRange: [criteria.yearRange[0], val] 
+                            onChange({
+                                ...criteria,
+                                yearRange: [criteria.yearRange[0], val],
                             });
                         }}
                         // Validate int max bounds on click away
@@ -133,13 +122,10 @@ function TimeFilter({
                             const num = parseInt(criteria.yearRange[1]);
                             const safe = isNaN(num)
                                 ? maxYear
-                                : Math.min(
-                                    maxYear,
-                                    Math.max(num, parseInt(criteria.yearRange[0]))
-                                );
-                            onChange({ 
-                                ...criteria, 
-                                yearRange: [criteria.yearRange[0], String(safe)] 
+                                : Math.min(maxYear, Math.max(num, parseInt(criteria.yearRange[0])));
+                            onChange({
+                                ...criteria,
+                                yearRange: [criteria.yearRange[0], String(safe)],
                             });
                         }}
                         className="filter-input"
@@ -151,9 +137,7 @@ function TimeFilter({
                 Month:
                 <select
                     value={criteria.month}
-                    onChange={(e) =>
-                        onChange({ ...criteria, month: e.target.value })
-                    }
+                    onChange={(e) => onChange({ ...criteria, month: e.target.value })}
                     className="filter-select"
                 >
                     <option value="">All</option>
@@ -168,12 +152,8 @@ function TimeFilter({
     );
 }
 
-
 // Metadata Filters
-function MetadataFilters({ 
-    criteria, onChange, 
-    minRecords, maxRecords 
-}: MetadataFilterProps) {
+function MetadataFilters({ criteria, onChange, minRecords, maxRecords }: MetadataFilterProps) {
     return (
         <fieldset className="filter-group">
             <legend>Metadata</legend>
@@ -183,9 +163,9 @@ function MetadataFilters({
                     type="checkbox"
                     checked={criteria.hasOccurrenceNotes}
                     onChange={() =>
-                        onChange({ 
-                            ...criteria, 
-                            hasOccurrenceNotes: !criteria.hasOccurrenceNotes 
+                        onChange({
+                            ...criteria,
+                            hasOccurrenceNotes: !criteria.hasOccurrenceNotes,
                         })
                     }
                 />
@@ -210,10 +190,7 @@ function MetadataFilters({
                             onChange({ ...criteria, minRecords: minRecords });
                             return;
                         }
-                        const clamped = Math.max(
-                            minRecords,
-                            Math.min(num, maxRecords)
-                        );
+                        const clamped = Math.max(minRecords, Math.min(num, maxRecords));
                         onChange({ ...criteria, minRecords: clamped });
                     }}
                     className="filter-input"
@@ -222,7 +199,6 @@ function MetadataFilters({
         </fieldset>
     );
 }
-
 
 // Biological Filters
 function BiologicalFilters({ criteria, onChange }: BaseFilterProps) {
@@ -263,9 +239,7 @@ function BiologicalFilters({ criteria, onChange }: BaseFilterProps) {
                 Observation Type:
                 <select
                     value={criteria.observationType}
-                    onChange={(e) =>
-                        onChange({ ...criteria, observationType: e.target.value })
-                    }
+                    onChange={(e) => onChange({ ...criteria, observationType: e.target.value })}
                     className="filter-select"
                 >
                     <option value="">All</option>
@@ -277,7 +251,6 @@ function BiologicalFilters({ criteria, onChange }: BaseFilterProps) {
     );
 }
 
-
 // Main SharkFilter component (purely controlled)
 function SharkFilter({ criteria, onChange, options }: SharkFilterProps) {
     const {
@@ -287,39 +260,38 @@ function SharkFilter({ criteria, onChange, options }: SharkFilterProps) {
         maxYear = 2024,
         months = [],
         minRecords = 1,
-        maxRecords = 100
+        maxRecords = 100,
     } = options;
 
     return (
         <div className="shark-filters scrollable-filters">
             <MediaFilter criteria={criteria} onChange={onChange} />
-            
-            <LocationFilters 
-                criteria={criteria} 
-                onChange={onChange} 
+
+            <LocationFilters
+                criteria={criteria}
+                onChange={onChange}
                 countries={countries}
                 publishingCountries={publishingCountries}
             />
-            
-            <TimeFilter 
-                criteria={criteria} 
-                onChange={onChange} 
+
+            <TimeFilter
+                criteria={criteria}
+                onChange={onChange}
                 minYear={minYear}
                 maxYear={maxYear}
                 months={months}
             />
-            
-            <MetadataFilters 
-                criteria={criteria} 
-                onChange={onChange} 
+
+            <MetadataFilters
+                criteria={criteria}
+                onChange={onChange}
                 minRecords={minRecords}
                 maxRecords={maxRecords}
             />
-            
+
             <BiologicalFilters criteria={criteria} onChange={onChange} />
         </div>
     );
 }
 
 export default SharkFilter;
-

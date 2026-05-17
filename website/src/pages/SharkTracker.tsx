@@ -8,7 +8,6 @@ import { storySharks } from "../utils/DataUtils";
 import { PlottedCoordinatePoint } from "../types/coordinates";
 import { GlobeHandle } from "../types/globes";
 
-
 function SharkTracker() {
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [playingSharkId, setPlayingSharkId] = useState<string | null>(null);
@@ -28,14 +27,16 @@ function SharkTracker() {
 
         // Reset isPlaying state when story finished
         // (buttons disabled while story playing)
-        globeHandleRef.current?.playStory(sharkId, (point) => {
-            setCurrentPoint(point);
-        }).finally(() => {
-            // Clear after story ends
-            setIsPlaying(false);  
-            setPlayingSharkId(null);
-            setCurrentPoint(null); 
-        });
+        globeHandleRef.current
+            ?.playStory(sharkId, (point) => {
+                setCurrentPoint(point);
+            })
+            .finally(() => {
+                // Clear after story ends
+                setIsPlaying(false);
+                setPlayingSharkId(null);
+                setCurrentPoint(null);
+            });
     };
 
     return (
@@ -45,10 +46,10 @@ function SharkTracker() {
             <div className="globe-cards-container">
                 {/* Left Shark Cards */}
                 <div className="side-column">
-                    <SharkGrid 
-                        sharks={leftSharks} 
-                        onPlayStory={handlePlayStory} 
-                        isPlaying={isPlaying} 
+                    <SharkGrid
+                        sharks={leftSharks}
+                        onPlayStory={handlePlayStory}
+                        isPlaying={isPlaying}
                         playingSharkId={playingSharkId ?? ""}
                     />
                 </div>
@@ -56,7 +57,7 @@ function SharkTracker() {
                 {/* Globe */}
                 <div className="globe-container" style={{ position: "relative" }}>
                     <Globe ref={globeHandleRef} />
-                    <div 
+                    <div
                         style={{
                             position: "absolute",
                             bottom: 10,
@@ -68,19 +69,28 @@ function SharkTracker() {
                             padding: "2px 0",
 
                             // Fully transparent (no strip blocking globe), but soft highlight
-                            backgroundColor: "rgba(0, 0, 0, 0)", 
+                            backgroundColor: "rgba(0, 0, 0, 0)",
                             textShadow: "0 0 8px rgba(0, 255, 255, 0.9)",
 
                             // Ensure clicks pass through to globe canvas
-                            pointerEvents: "none",  
+                            pointerEvents: "none",
                             userSelect: "none",
                         }}
                     >
                         {currentPoint ? (
                             <>
-                                Lat: <span style={{ fontWeight: "bold" }}>{currentPoint.lat.toFixed(3)}</span>,{" "}
-                                Lng: <span style={{ fontWeight: "bold" }}>{currentPoint.lng.toFixed(3)}</span> —{" "}
-                                Date: <span style={{ fontWeight: "bold" }}>{currentPoint.date || "N/A"}</span>
+                                Lat:{" "}
+                                <span style={{ fontWeight: "bold" }}>
+                                    {currentPoint.lat.toFixed(3)}
+                                </span>
+                                , Lng:{" "}
+                                <span style={{ fontWeight: "bold" }}>
+                                    {currentPoint.lng.toFixed(3)}
+                                </span>{" "}
+                                — Date:{" "}
+                                <span style={{ fontWeight: "bold" }}>
+                                    {currentPoint.date || "N/A"}
+                                </span>
                             </>
                         ) : (
                             "Story playback info will appear here"
@@ -90,10 +100,10 @@ function SharkTracker() {
 
                 {/* Right Shark Cards */}
                 <div className="side-column">
-                    <SharkGrid 
-                        sharks={rightSharks} 
-                        onPlayStory={handlePlayStory} 
-                        isPlaying={isPlaying} 
+                    <SharkGrid
+                        sharks={rightSharks}
+                        onPlayStory={handlePlayStory}
+                        isPlaying={isPlaying}
                         playingSharkId={playingSharkId ?? ""}
                     />
                 </div>
@@ -103,5 +113,3 @@ function SharkTracker() {
 }
 
 export default SharkTracker;
-
-

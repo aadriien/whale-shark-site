@@ -1,17 +1,13 @@
-import type { 
-    Core, 
-    ElementDefinition, 
-    EdgeSingular, 
-    EventObject, 
-    StylesheetStyle 
+import type {
+    Core,
+    ElementDefinition,
+    EdgeSingular,
+    EventObject,
+    NodeSingular,
+    StylesheetStyle,
 } from "cytoscape";
 
-import type { 
-    GraphNode, GraphEdge, 
-    NodeFilter, EdgeFilter, 
-    SelectedMatch 
-} from "../types/graphs";
-
+import type { GraphNode, GraphEdge, NodeFilter, EdgeFilter, SelectedMatch } from "../types/graphs";
 
 const POSITION_SCALE = 5000;
 const EDGE_OPACITY_MIN = 0.15;
@@ -24,7 +20,6 @@ const HIGHLIGHT_BORDER = {
     "border-color": "#ffd700",
     "border-opacity": 1,
 } as const;
-
 
 export const GRAPH_STYLESHEET: StylesheetStyle[] = [
     {
@@ -73,15 +68,14 @@ export const GRAPH_STYLESHEET: StylesheetStyle[] = [
     },
 ];
 
-
-export function normalizePositions(
-    nodes: GraphNode[]
-): Map<string, { x: number; y: number }> {
+export function normalizePositions(nodes: GraphNode[]): Map<string, { x: number; y: number }> {
     const xs = nodes.map((n) => n.x);
     const ys = nodes.map((n) => n.y);
 
-    const xMin = Math.min(...xs), xMax = Math.max(...xs);
-    const yMin = Math.min(...ys), yMax = Math.max(...ys);
+    const xMin = Math.min(...xs),
+        xMax = Math.max(...xs);
+    const yMin = Math.min(...ys),
+        yMax = Math.max(...ys);
 
     const xRange = xMax - xMin || 1;
     const yRange = yMax - yMin || 1;
@@ -96,18 +90,17 @@ export function normalizePositions(
     return posMap;
 }
 
-
 export function buildElements(
     nodes: GraphNode[],
     edges: GraphEdge[],
-    posMap: Map<string, { x: number; y: number }>,
+    posMap: Map<string, { x: number; y: number }>
 ): ElementDefinition[] {
     const nodeEls: ElementDefinition[] = nodes.map((n) => ({
-        data: { 
-            id: n.id, 
-            population: n.population, 
-            shark_id: n.shark_id, 
-            image_id: n.image_id 
+        data: {
+            id: n.id,
+            population: n.population,
+            shark_id: n.shark_id,
+            image_id: n.image_id,
         },
         position: posMap.get(n.id) ?? { x: 0, y: 0 },
     }));
@@ -132,35 +125,26 @@ export function buildElements(
     return [...nodeEls, ...edgeEls];
 }
 
-
-export function applyFilters(
-    cy: Core, 
-    nodeFilter: NodeFilter, 
-    edgeFilter: EdgeFilter
-) {
+export function applyFilters(cy: Core, nodeFilter: NodeFilter, edgeFilter: EdgeFilter) {
     cy.batch(() => {
         cy.nodes().style("display", "element");
         cy.edges().style("display", "element");
 
         if (nodeFilter === "gbif") {
             cy.nodes("[population = 'ningaloo']").style("display", "none");
-        } 
-        else if (nodeFilter === "ningaloo") {
+        } else if (nodeFilter === "ningaloo") {
             cy.nodes("[population = 'gbif']").style("display", "none");
         }
 
         if (edgeFilter === "cross") {
             cy.edges("[edge_type != 'gbif_to_ningaloo']").style("display", "none");
-        } 
-        else if (edgeFilter === "same") {
+        } else if (edgeFilter === "same") {
             cy.edges("[edge_type != 'gbif_to_gbif']").style("display", "none");
-        } 
-        else if (edgeFilter === "mutual") {
+        } else if (edgeFilter === "mutual") {
             cy.edges("[?mutual != true]").style("display", "none");
         }
     });
 }
-
 
 export function applyFocus(cy: Core, focusedNodeId: string | null) {
     // removeStyle falls back to stylesheet, so edges recover data (opacity) automatically
@@ -173,14 +157,13 @@ export function applyFocus(cy: Core, focusedNodeId: string | null) {
     if (focusedNode.empty()) return;
 
     const featured = focusedNode.closedNeighborhood();
-    const dimmed   = cy.elements().not(featured);
+    const dimmed = cy.elements().not(featured);
 
     dimmed.nodes().style("opacity", NODE_DIM_OPACITY);
     dimmed.edges().style("opacity", EDGE_DIM_OPACITY);
     featured.edges().style("opacity", 1);
     focusedNode.style(HIGHLIGHT_BORDER);
 }
-
 
 function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
     const clickedNode = cy.getElementById(nodeId);
@@ -197,24 +180,21 @@ function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
 
     if (!bestEdge) return null;
 
-    const targetNode = cy.getElementById(
-        (bestEdge as EdgeSingular).data("target") as string
-    );
+    const targetNode = cy.getElementById((bestEdge as EdgeSingular).data("target") as string);
     return {
-        clickedSharkId:  clickedNode.data("shark_id") as string,
-        clickedImageId:  parseInt(clickedNode.data("image_id"), 10),
-        matchSharkId:    targetNode.data("shark_id") as string,
+        clickedSharkId: clickedNode.data("shark_id") as string,
+        clickedImageId: parseInt(clickedNode.data("image_id"), 10),
+        matchSharkId: targetNode.data("shark_id") as string,
         matchPopulation: targetNode.data("population") as "gbif" | "ningaloo",
-        matchDistance:   bestDist,
+        matchDistance: bestDist,
     };
 }
-
 
 export function initCyListeners(
     cy: Core,
     nodeFilter: NodeFilter,
     edgeFilter: EdgeFilter,
-    onSelect: (match: SelectedMatch | null) => void,
+    onSelect: (match: SelectedMatch | null) => void
 ) {
     cy.one("render", () => {
         cy.resize();
@@ -223,15 +203,15 @@ export function initCyListeners(
     });
 
     cy.on("tap", (evt: EventObject) => {
-        const target = evt.target as any;
-        if (target === cy) {
+        if (evt.target === cy) {
             onSelect(null);
             applyFocus(cy, null);
             return;
         }
-        if (typeof target.isNode !== "function" || !target.isNode()) return;
+        const target = evt.target as NodeSingular;
+        if (!target.isNode()) return;
 
-        const nodeId = target.id() as string;
+        const nodeId = target.id();
         applyFocus(cy, nodeId);
 
         if (target.data("population") !== "gbif") return;
@@ -239,5 +219,3 @@ export function initCyListeners(
         if (match) onSelect(match);
     });
 }
-
-

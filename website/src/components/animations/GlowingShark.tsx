@@ -1,21 +1,20 @@
 import { useRef, useEffect } from "react";
 import p5 from "p5";
 
-import SharkModelPoints2D from "../../assets/data/json/shark_model_extracted_points_2d.json";
+// import SharkModelPoints2D from "../../assets/data/json/shark_model_extracted_points_2d.json";
 import SharkModelPoints3D from "../../assets/data/json/shark_model_extracted_points_3d.json";
-
 
 function GlowingShark() {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Recreate whale shark by plotting points extracted from 3D model 
+    // Recreate whale shark by plotting points extracted from 3D model
     // 3660 total from full .glb, or 2275 for just "WhaleSharkRigging" (no "ocean" or "particles")
     const rawPoints = Object.values(SharkModelPoints3D);
 
     // Compute bounds to center & scale shark
-    const xs = rawPoints.map(p => p.x);
-    const ys = rawPoints.map(p => p.y);
-    const zs = rawPoints.map(p => p.z);
+    const xs = rawPoints.map((p) => p.x);
+    const ys = rawPoints.map((p) => p.y);
+    const zs = rawPoints.map((p) => p.z);
 
     const minX = Math.min(...xs);
     const maxX = Math.max(...xs);
@@ -35,18 +34,23 @@ function GlowingShark() {
     console.log("Sample point:", rawPoints[0]);
 
     console.log("Shark bounds:", {
-        minX, maxX,
-        minY, maxY,
-        minZ, maxZ,
-        centerX, centerY, centerZ,
-        scaleFactor
+        minX,
+        maxX,
+        minY,
+        maxY,
+        minZ,
+        maxZ,
+        centerX,
+        centerY,
+        centerZ,
+        scaleFactor,
     });
 
     // Recenter & scale all points
-    const pointsArray = rawPoints.map(p => ({
+    const pointsArray = rawPoints.map((p) => ({
         x: (p.x - centerX) * scaleFactor,
         y: (p.y - centerY) * scaleFactor,
-        z: (p.z - centerZ) * scaleFactor
+        z: (p.z - centerZ) * scaleFactor,
     }));
     const totalDots = pointsArray.length;
 
@@ -59,7 +63,7 @@ function GlowingShark() {
                 canvasWidth = containerRef.current!.offsetWidth;
                 canvasHeight = containerRef.current!.offsetHeight;
 
-                p.createCanvas(canvasWidth, canvasHeight, p.WEBGL); 
+                p.createCanvas(canvasWidth, canvasHeight, p.WEBGL);
                 p.colorMode(p.HSB, 360, 100, 100, 100); // HSB easier color control
                 p.frameRate(30); // animation speed
             };
@@ -81,7 +85,7 @@ function GlowingShark() {
                 for (let i = 0; i < totalDots; i += stride) {
                     const point = pointsArray[i];
 
-                    // Stable pulse for glow 
+                    // Stable pulse for glow
                     const pulse = 0.5 + 0.5 * p.sin(p.millis() / 1000 + i);
 
                     // Stable hue cycling over time
@@ -101,19 +105,21 @@ function GlowingShark() {
             };
 
             const drawGlowingDot3D = (
-                p: p5, 
-                x: number, y: number, z: number, 
-                pulseAmount: number, 
+                p: p5,
+                x: number,
+                y: number,
+                z: number,
+                pulseAmount: number,
                 hue: number
             ) => {
                 p.push();
                 p.translate(x, y, z);
                 p.noStroke();
-                p.blendMode(p.SCREEN);  // SCREEN for glowing additive effect
+                p.blendMode(p.SCREEN); // SCREEN for glowing additive effect
 
                 for (let radiusFactor = 0.0; radiusFactor < 0.025; radiusFactor += 0.0025) {
                     // Outer glow (brightness with radius)
-                    p.fill(hue, 100, radiusFactor * 200, 100); 
+                    p.fill(hue, 100, radiusFactor * 200, 100);
                     p.sphere(p.width * radiusFactor * 0.3, 3);
 
                     // Inner glow (pulse + inverse brightness)
@@ -189,12 +195,10 @@ function GlowingShark() {
             p5Instance.remove();
             resizeObserver.disconnect();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return (
-        <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
-    );
+    return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;
 }
 
 export default GlowingShark;
-

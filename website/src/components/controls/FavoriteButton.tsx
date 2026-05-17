@@ -4,7 +4,6 @@ import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils";
 
 import { FavoriteButtonProps } from "../../types/logbooks";
 
-
 const FavoriteButton = ({ sharkId, className = "favorite-button" }: FavoriteButtonProps) => {
     // Purely for forcing re-render on shark favoriting / saving
     const [_, forceRender] = useState<Record<string, never>>({});
@@ -41,4 +40,3 @@ const FavoriteButton = ({ sharkId, className = "favorite-button" }: FavoriteButt
 };
 
 export default FavoriteButton;
-

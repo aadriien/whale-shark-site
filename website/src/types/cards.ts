@@ -4,7 +4,7 @@ import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "./sharks
 
 export type SharkCardBaseProps = {
     onPlayStory: (id: string) => void;
-    isPlaying: boolean; 
+    isPlaying: boolean;
     playingSharkId: string;
 };
 
@@ -15,5 +15,3 @@ export type SharkCardProps = SharkCardBaseProps & {
 export type SharkGridProps = SharkCardBaseProps & {
     sharks: WhaleSharkDatasetNormalized;
 };
-
-

@@ -5,7 +5,6 @@ import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils";
 
 import { IndividualSharkProps } from "../../types/sharks";
 
-
 function formatYearMonth(dateString: string) {
     const date = new Date(dateString);
     if (Number.isNaN(date.getTime())) return "";
@@ -18,8 +17,6 @@ function formatYearMonth(dateString: string) {
     return date.toLocaleDateString(undefined, options);
 }
 
-
-
 const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
     // Purely for forcing re-render on shark favoriting / saving
     const [, forceRender] = useReducer((x: number) => x + 1, 0);
@@ -30,18 +27,15 @@ const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
     const sexKnown = shark.sex && shark.sex !== "Unknown";
     const stageKnown = shark.lifeStage && shark.lifeStage !== "Unknown";
 
-    // Build traits description line 
+    // Build traits description line
     let traitsDescription: string = "";
     if (sexKnown && stageKnown) {
         traitsDescription = ` ${shark.sex!.toLowerCase()} ${shark.lifeStage!.toLowerCase()}`;
-    }
-    else if (sexKnown) {
+    } else if (sexKnown) {
         traitsDescription = ` ${shark.sex!.toLowerCase()} (life stage unknown)`;
-    }
-    else if (stageKnown) {
+    } else if (stageKnown) {
         traitsDescription = ` ${shark.lifeStage!.toLowerCase()} (sex unknown)`;
-    }
-    else {
+    } else {
         traitsDescription = ` (sex & life stage unknown)`;
     }
 
@@ -53,25 +47,19 @@ const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
     if (shark.occurrences === 1) {
         if (oldestFormatted) {
             dateRange = `in ${oldestFormatted}`;
-        } 
-        else if (newestFormatted) {
+        } else if (newestFormatted) {
             dateRange = `in ${newestFormatted}`;
-        } 
-        else {
+        } else {
             dateRange = "(date unknown)";
         }
-    } 
-    else {
+    } else {
         if (oldestFormatted && newestFormatted) {
             dateRange = `between ${oldestFormatted} - ${newestFormatted}`;
-        } 
-        else if (oldestFormatted) {
+        } else if (oldestFormatted) {
             dateRange = `from ${oldestFormatted}`;
-        } 
-        else if (newestFormatted) {
+        } else if (newestFormatted) {
             dateRange = `until ${newestFormatted}`;
-        } 
-        else {
+        } else {
             dateRange = "(date unknown)";
         }
     }
@@ -82,11 +70,7 @@ const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
 
     // Extract unique countries
     const uniqueCountries: string[] = Array.from(
-        new Set(
-            (shark.countries ?? "")
-                .split(",")
-                .map((entry) => entry.trim().split(" (")[0])
-        )
+        new Set((shark.countries ?? "").split(",").map((entry) => entry.trim().split(" (")[0]))
     ).sort();
 
     return (
@@ -94,10 +78,7 @@ const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
             {/* Any media at top */}
             <div className="condensed-media">
                 {displayUrl ? (
-                    <img
-                        src={displayUrl}
-                        alt={`Image of shark ${shark.id}`}
-                    />
+                    <img src={displayUrl} alt={`Image of shark ${shark.id}`} />
                 ) : (
                     <span className="no-image">No image available</span>
                 )}
@@ -125,12 +106,9 @@ const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
             <p className="condensed-records">{recordsDescription}</p>
 
             {/* Places visited */}
-            <p className="condensed-places">
-                Visited: {uniqueCountries.join(", ")}
-            </p>
+            <p className="condensed-places">Visited: {uniqueCountries.join(", ")}</p>
         </div>
     );
 };
 
 export default CondensedSharkCard;
-

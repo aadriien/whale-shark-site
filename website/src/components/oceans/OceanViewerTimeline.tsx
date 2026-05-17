@@ -4,7 +4,6 @@ import { ALL_MONTHS, formatMonthKey } from "../../utils/OceanViewerUtils";
 
 import { OceanViewerTimelineProps } from "../../types/controls";
 
-
 const OceanViewerTimeline = ({
     sliderIndex,
     onSliderChange,
@@ -15,14 +14,8 @@ const OceanViewerTimeline = ({
     return (
         <div className="ocean-viewer-controls">
             <div className="ocean-viewer-month-header">
-                <span className="ocean-viewer-month-label">
-                    {formatMonthKey(currentMonth)}
-                </span>
-                {isLoadingDataset && (
-                    <span className="ocean-viewer-loading">
-                        loading data…
-                    </span>
-                )}
+                <span className="ocean-viewer-month-label">{formatMonthKey(currentMonth)}</span>
+                {isLoadingDataset && <span className="ocean-viewer-loading">loading data…</span>}
             </div>
 
             <input
@@ -44,4 +37,3 @@ const OceanViewerTimeline = ({
 };
 
 export default OceanViewerTimeline;
-

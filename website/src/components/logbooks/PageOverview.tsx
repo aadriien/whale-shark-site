@@ -2,8 +2,7 @@ import { pageContent } from "./LogbookContent";
 
 import { PageContentProps } from "../../types/logbooks";
 
-
-function PageOverview ({ currentPage }: PageContentProps) {
+function PageOverview({ currentPage }: PageContentProps) {
     const pageOverviewFAQs = pageContent[currentPage];
 
     return (
@@ -13,7 +12,6 @@ function PageOverview ({ currentPage }: PageContentProps) {
             </div>
         </div>
     );
-} 
+}
 
 export default PageOverview;
-

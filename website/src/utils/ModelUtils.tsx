@@ -2,21 +2,18 @@ import { useEffect } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 
-
 type Point3D = {
     x: number;
     y: number;
     z: number;
-}
+};
 
 type Point2D = {
     x: number;
     y: number;
-}
-
+};
 
 const SHARK_MODEL_fantasy = "./models/whale_shark_3D_model_fantasy.glb";
-
 
 function ExtractPointsOnce() {
     useEffect(() => {
@@ -72,7 +69,6 @@ function ExtractPointsOnce() {
                     y: (p.y - minY2D) / rangeY2D,
                 }));
 
-
                 // ==== 3D NORMALIZATION (preserves aspect ratio using largest axis range) ====
 
                 const minX = Math.min(...vertices3D.map((p) => p.x));
@@ -94,7 +90,6 @@ function ExtractPointsOnce() {
                     z: (p.z - minZ) / maxRange,
                 }));
 
-
                 // Output JSON in console (2D + 3D versions)
                 console.log("Normalized 2D Points:");
                 console.log(JSON.stringify(normalizedPoints2D));
@@ -104,7 +99,7 @@ function ExtractPointsOnce() {
             },
             undefined,
             (error) => {
-                    console.error("Error loading model:", error);
+                console.error("Error loading model:", error);
             }
         );
     }, []);
@@ -113,4 +108,3 @@ function ExtractPointsOnce() {
 }
 
 export default ExtractPointsOnce;
-

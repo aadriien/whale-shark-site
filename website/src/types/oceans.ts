@@ -1,6 +1,5 @@
 import L from "leaflet";
 
-
 /* Oceans types */
 
 export type OceanMapHandle = {
@@ -25,4 +24,3 @@ export type OceanViewerMetricsToggleProps = {
     datasetKey: string;
     onDatasetChange: (key: string) => void;
 };
-

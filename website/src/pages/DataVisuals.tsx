@@ -3,12 +3,10 @@ import ContinentData from "../components/visualizations/ContinentData";
 import CountryData from "../components/visualizations/CountryData";
 import PublishingCountryData from "../components/visualizations/PublishingCountryData";
 
-
 function DataVisuals() {
     return (
         <div className="page-content">
             <div className="full-data-grid">
-
                 <div className="grid-section section-calendar">
                     <CalendarData />
                 </div>
@@ -24,12 +22,9 @@ function DataVisuals() {
                 <div className="grid-section section-publishing">
                     <PublishingCountryData />
                 </div>
-
             </div>
         </div>
     );
 }
 
 export default DataVisuals;
-
-

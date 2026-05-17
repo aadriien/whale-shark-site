@@ -2,12 +2,11 @@ import * as THREE from "three";
 
 import { BlobParticleGroupProps, AnimateBlobGroupProps } from "../../types/animations";
 
-
 function createBlobParticles({
-    baseColors, 
-    particleCount = 500, 
-    spaceScale = 2, 
-    pointSize = 12
+    baseColors,
+    particleCount = 500,
+    spaceScale = 2,
+    pointSize = 12,
 }: BlobParticleGroupProps) {
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -22,7 +21,7 @@ function createBlobParticles({
     function noiseOffset(x: number, y: number, z: number, i: number) {
         return (
             // Higher values == more spiky / misshapen / blobby shape
-            Math.sin(x * 7 + i) * 3.2 + 
+            Math.sin(x * 7 + i) * 3.2 +
             Math.cos(y * 9 + i * 1.5) * 2.7 +
             Math.sin(z * 8 + i * 0.7) * 3.2
         );
@@ -35,15 +34,15 @@ function createBlobParticles({
             y = (Math.random() * 2 - 1) * radiusY;
             z = (Math.random() * 2 - 1) * radiusZ;
         } while (
-            (x * x) / (radiusX * radiusX) 
-            + (y * y) / (radiusY * radiusY) 
-            + (z * z) / (radiusZ * radiusZ) 
-            > 1
+            (x * x) / (radiusX * radiusX) +
+                (y * y) / (radiusY * radiusY) +
+                (z * z) / (radiusZ * radiusZ) >
+            1
         );
 
         // Apply noise offset on each axis separately to get irregular shape
-        x += noiseOffset(x, y, z, i) * 0.5; 
-        y += noiseOffset(y, z, x, i + 1000) * 0.4; 
+        x += noiseOffset(x, y, z, i) * 0.5;
+        y += noiseOffset(y, z, x, i + 1000) * 0.4;
         z += noiseOffset(z, x, y, i + 2000) * 0.5;
 
         positions[i * 3] = x;
@@ -59,7 +58,7 @@ function createBlobParticles({
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute("color", new THREE.BufferAttribute(colorsArray, 3));
 
-    // Create smooth radial gradient texture for points 
+    // Create smooth radial gradient texture for points
     const size = 128;
     const canvas = document.createElement("canvas");
     canvas.width = size;
@@ -68,14 +67,7 @@ function createBlobParticles({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const gradient = ctx.createRadialGradient(
-        size / 2, 
-        size / 2, 
-        0, 
-        size / 2, 
-        size / 2, 
-        size / 2
-    );
+    const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
     gradient.addColorStop(0, "rgba(255, 255, 255, 0.9)");
     gradient.addColorStop(0.6, "rgba(255, 255, 255, 0.3)");
     gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
@@ -102,19 +94,18 @@ function createBlobParticles({
     return points;
 }
 
-
-function animateBlobParticles({ 
-    blobGroup, 
-    moveVector, 
-    oscillation, 
-    bounds 
+function animateBlobParticles({
+    blobGroup,
+    moveVector,
+    oscillation,
+    bounds,
 }: AnimateBlobGroupProps) {
-    if (!moveVector || ! oscillation || !bounds) return;
+    if (!moveVector || !oscillation || !bounds) return;
 
-    const axisIndex = { "x": 0, "y": 1, "z": 2 };
+    const axisIndex = { x: 0, y: 1, z: 2 };
     const rangeX = bounds.maxX - bounds.minX;
 
-    blobGroup.traverse(child => {
+    blobGroup.traverse((child) => {
         if (child instanceof THREE.Points && child.userData.positions) {
             const { positions, particleCount, geometry } = child.userData;
 
@@ -134,8 +125,16 @@ function animateBlobParticles({
             for (let i = 0; i < particleCount; i++) {
                 // Smoothly adjust velocities toward target moveVector
                 velocities[i * 3] = THREE.MathUtils.lerp(velocities[i * 3], moveVector.x, 0.05);
-                velocities[i * 3 + 1] = THREE.MathUtils.lerp(velocities[i * 3 + 1], moveVector.y, 0.05);
-                velocities[i * 3 + 2] = THREE.MathUtils.lerp(velocities[i * 3 + 2], moveVector.z, 0.05);
+                velocities[i * 3 + 1] = THREE.MathUtils.lerp(
+                    velocities[i * 3 + 1],
+                    moveVector.y,
+                    0.05
+                );
+                velocities[i * 3 + 2] = THREE.MathUtils.lerp(
+                    velocities[i * 3 + 2],
+                    moveVector.z,
+                    0.05
+                );
 
                 // Apply velocity to position
                 positions[i * 3] += velocities[i * 3];
@@ -145,19 +144,30 @@ function animateBlobParticles({
                 // Apply oscillations
                 if (oscillation.axis1) {
                     positions[i * 3 + axisIndex[oscillation.axis1]] +=
-                        Math.sin(positions[i * 3] * oscillation.frequency1 + i) * oscillation.amplitude1;
+                        Math.sin(positions[i * 3] * oscillation.frequency1 + i) *
+                        oscillation.amplitude1;
                 }
                 if (oscillation.axis2) {
                     positions[i * 3 + axisIndex[oscillation.axis2]] +=
-                        Math.sin(positions[i * 3] * oscillation.frequency2 + i) * oscillation.amplitude2;
+                        Math.sin(positions[i * 3] * oscillation.frequency2 + i) *
+                        oscillation.amplitude2;
                 }
 
                 // Smooth modular wrap on X axis
-                positions[i * 3] = ((positions[i * 3] - bounds.minX) % rangeX + rangeX) % rangeX + bounds.minX;
+                positions[i * 3] =
+                    ((((positions[i * 3] - bounds.minX) % rangeX) + rangeX) % rangeX) + bounds.minX;
 
                 // Softly jitter Y & Z toward bounds on wrap (not strictly needed here anymore)
-                positions[i * 3 + 1] = THREE.MathUtils.clamp(positions[i * 3 + 1], bounds.minY, bounds.maxY);
-                positions[i * 3 + 2] = THREE.MathUtils.clamp(positions[i * 3 + 2], bounds.minZ, bounds.maxZ);
+                positions[i * 3 + 1] = THREE.MathUtils.clamp(
+                    positions[i * 3 + 1],
+                    bounds.minY,
+                    bounds.maxY
+                );
+                positions[i * 3 + 2] = THREE.MathUtils.clamp(
+                    positions[i * 3 + 2],
+                    bounds.minZ,
+                    bounds.maxZ
+                );
             }
 
             geometry.attributes.position.needsUpdate = true;
@@ -165,17 +175,19 @@ function animateBlobParticles({
     });
 }
 
-
 function createBlobGroup({
     baseColors,
     particleCount = 250,
     spaceScale = 2.6,
     pointSize = 13,
     clickableRadius = 50,
-    name = "blob"
+    name = "blob",
 }: BlobParticleGroupProps) {
     const blobGroup = createBlobParticles({
-        baseColors, particleCount, spaceScale, pointSize
+        baseColors,
+        particleCount,
+        spaceScale,
+        pointSize,
     });
     if (!blobGroup) return;
 
@@ -183,11 +195,11 @@ function createBlobGroup({
     const clickable = new THREE.Mesh(
         new THREE.SphereGeometry(clickableRadius, 16, 16), // size based on blob spread
         new THREE.MeshBasicMaterial({ visible: false })
-        // new THREE.MeshBasicMaterial({ 
-        //     color: baseColors[0].getHex(), 
-        //     wireframe: true, 
-        //     opacity: 0.5, 
-        //     transparent: true 
+        // new THREE.MeshBasicMaterial({
+        //     color: baseColors[0].getHex(),
+        //     wireframe: true,
+        //     opacity: 0.5,
+        //     transparent: true
         // })
     );
     clickable.name = name;
@@ -199,33 +211,40 @@ function createBlobGroup({
     return blobGroup;
 }
 
-
 function animateBlobGroup({
     blobGroup,
     moveVector = new THREE.Vector3(0, 0, 0),
     oscillation = {
-        axis1: "z", amplitude1: 0.025, frequency1: 0.12,
-        axis2: "y", amplitude2: 0.006, frequency2: 0.06,
+        axis1: "z",
+        amplitude1: 0.025,
+        frequency1: 0.12,
+        axis2: "y",
+        amplitude2: 0.006,
+        frequency2: 0.06,
     },
-    bounds = { 
-        minX: -60, maxX: 60, 
-        minY: 0, maxY: 70, 
-        minZ: -60, maxZ: 60 
-    }
+    bounds = {
+        minX: -60,
+        maxX: 60,
+        minY: 0,
+        maxY: 70,
+        minZ: -60,
+        maxZ: 60,
+    },
 }: AnimateBlobGroupProps) {
     animateBlobParticles({ blobGroup, moveVector, oscillation, bounds });
 
     // Find points object inside blobGroup
     const points = blobGroup.children.find(
         (child): child is THREE.Points =>
-            child instanceof THREE.Points &&
-            !!child.userData.positions
+            child instanceof THREE.Points && !!child.userData.positions
     );
     if (!points) return;
 
     // Calculate average center of particles
     const { positions, particleCount } = points.userData;
-    let avgX = 0, avgY = 0, avgZ = 0;
+    let avgX = 0,
+        avgY = 0,
+        avgZ = 0;
 
     for (let i = 0; i < particleCount; i++) {
         avgX += positions[i * 3];
@@ -243,13 +262,12 @@ function animateBlobGroup({
     }
 }
 
-
 export function createReef() {
     const coralColors = [
-        new THREE.Color("#ff775c"),  // vibrant coral
-        new THREE.Color("#ff9f80"),  // warm peach
-        new THREE.Color("#fcb1a0"),  // soft coral pink
-        new THREE.Color("#ff6845"),  // deeper coral orange
+        new THREE.Color("#ff775c"), // vibrant coral
+        new THREE.Color("#ff9f80"), // warm peach
+        new THREE.Color("#fcb1a0"), // soft coral pink
+        new THREE.Color("#ff6845"), // deeper coral orange
     ];
     return createBlobGroup({
         baseColors: coralColors,
@@ -257,34 +275,39 @@ export function createReef() {
         spaceScale: 1.2,
         pointSize: 13,
         clickableRadius: 50,
-        name: "reef"
+        name: "reef",
     });
 }
-
 
 export function animateReef(reefGroup: THREE.Points) {
     animateBlobGroup({
-        blobGroup: reefGroup, 
+        blobGroup: reefGroup,
         moveVector: new THREE.Vector3(0.035, 0, 0),
         oscillation: {
-            axis1: "z", amplitude1: 0.025, frequency1: 0.12,
-            axis2: "y", amplitude2: 0.006, frequency2: 0.06,
+            axis1: "z",
+            amplitude1: 0.025,
+            frequency1: 0.12,
+            axis2: "y",
+            amplitude2: 0.006,
+            frequency2: 0.06,
         },
-        bounds: { 
-            minX: -60, maxX: 60, 
-            minY: 0, maxY: 70, 
-            minZ: -60, maxZ: 60 
+        bounds: {
+            minX: -60,
+            maxX: 60,
+            minY: 0,
+            maxY: 70,
+            minZ: -60,
+            maxZ: 60,
         },
     });
 }
 
-
 export function createCurrent() {
     const currentColors = [
-        new THREE.Color("#1e4023"),  // deep forest green
-        new THREE.Color("#2e6b3b"),  // mossy earth green
-        new THREE.Color("#4fa35d"),  // medium leafy green
-        new THREE.Color("#90e17d"),  // bright fern green 
+        new THREE.Color("#1e4023"), // deep forest green
+        new THREE.Color("#2e6b3b"), // mossy earth green
+        new THREE.Color("#4fa35d"), // medium leafy green
+        new THREE.Color("#90e17d"), // bright fern green
     ];
     return createBlobGroup({
         baseColors: currentColors,
@@ -292,26 +315,29 @@ export function createCurrent() {
         spaceScale: 1.2,
         pointSize: 13,
         clickableRadius: 50,
-        name: "current"
+        name: "current",
     });
 }
-
 
 export function animateCurrent(currentGroup: THREE.Points) {
     animateBlobGroup({
-        blobGroup: currentGroup, 
-        moveVector: new THREE.Vector3(-0.035, 0, 0), 
+        blobGroup: currentGroup,
+        moveVector: new THREE.Vector3(-0.035, 0, 0),
         oscillation: {
-            axis1: "z", amplitude1: 0.025, frequency1: 0.12,
-            axis2: "y", amplitude2: 0.006, frequency2: 0.06,
-        }, 
-        bounds: { 
-            minX: -60, maxX: 60, 
-            minY: 0, maxY: 70, 
-            minZ: -60, maxZ: 60 
+            axis1: "z",
+            amplitude1: 0.025,
+            frequency1: 0.12,
+            axis2: "y",
+            amplitude2: 0.006,
+            frequency2: 0.06,
+        },
+        bounds: {
+            minX: -60,
+            maxX: 60,
+            minY: 0,
+            maxY: 70,
+            minZ: -60,
+            maxZ: 60,
         },
     });
 }
-
-
-

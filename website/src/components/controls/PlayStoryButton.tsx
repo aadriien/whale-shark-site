@@ -1,11 +1,13 @@
 import { PlayStoryButtonProps } from "types/controls";
 
-
-const PlayStoryButton = ({ 
-    shark, 
-    onPlayStory, isPlaying, playingSharkId, 
-    showPauseForGeoLabs = false, 
-    onToggleStepMode, isStepMode = false 
+const PlayStoryButton = ({
+    shark,
+    onPlayStory,
+    isPlaying,
+    playingSharkId,
+    showPauseForGeoLabs = false,
+    onToggleStepMode,
+    isStepMode = false,
 }: PlayStoryButtonProps) => {
     if (!shark) return null;
 
@@ -61,4 +63,3 @@ const PlayStoryButton = ({
 };
 
 export default PlayStoryButton;
-

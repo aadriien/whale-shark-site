@@ -1,3 +1,5 @@
+import React from "react";
+
 /* Filter types */
 
 export type SharkBaseCriteria = {
@@ -28,7 +30,6 @@ export type SharkMatchCriteria = SharkBaseCriteria & SharkMatchFields;
 
 export type SharkCriteria = SharkBaseCriteria & Partial<SharkMatchFields>;
 
-
 export type SharkFilterOptions = {
     countries: string[];
     publishingCountries?: string[];
@@ -40,7 +41,6 @@ export type SharkFilterOptions = {
     minRecords?: number;
     maxRecords?: number;
 };
-
 
 export type BaseFilterProps = {
     criteria: SharkCriteria;
@@ -66,5 +66,3 @@ export type MetadataFilterProps = BaseFilterProps & {
 export type SharkFilterProps = BaseFilterProps & {
     options: SharkFilterOptions;
 };
-
-

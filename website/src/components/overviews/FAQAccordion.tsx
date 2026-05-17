@@ -2,22 +2,20 @@ import { useState } from "react";
 
 import { FAQ } from "../../types/logbooks";
 
-
 const faqs = [
-    { 
-        q: "Are whale sharks dangerous?", 
-        a: "No, they're harmless filter feeders." 
+    {
+        q: "Are whale sharks dangerous?",
+        a: "No, they're harmless filter feeders.",
     },
-    { 
-        q: "How long do they live?", 
-        a: "70-100 years in the wild." 
+    {
+        q: "How long do they live?",
+        a: "70-100 years in the wild.",
     },
 ];
 
-
 const FAQAccordion = () => {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
-    
+
     return (
         <section className="faq-accordion">
             <h2>FAQs</h2>
@@ -28,7 +26,7 @@ const FAQAccordion = () => {
                         <button onClick={() => setOpenIndex(openIndex === index ? null : index)}>
                             {q}
                         </button>
-                            {openIndex === index && <p>{a}</p>}
+                        {openIndex === index && <p>{a}</p>}
                     </div>
                 ))}
             </div>
@@ -37,5 +35,3 @@ const FAQAccordion = () => {
 };
 
 export default FAQAccordion;
-
-        

@@ -1,8 +1,8 @@
 import { getCode } from "country-list";
 
-import storySharkOptions from "../assets/data/json/gbif_story_sharks_named.json";
+// import storySharkOptions from "../assets/data/json/gbif_story_sharks_named.json";
 import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.json";
-import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
+// import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
 import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json";
 import visionSharkData from "../assets/data/json/GBIF_shark_image_occurrences_validated.json";
 
@@ -10,82 +10,97 @@ import coordinatesData from "../assets/data/json/gbif_shark_tracking.json";
 
 import { GBIFDataset, YearMonthsMapping } from "../types/charts";
 
-import { 
-    WhaleSharkEntryLLM, WhaleSharkDatasetLLM, 
-    WhaleSharkEntryRegular, WhaleSharkDatasetRegular, 
-    WhaleSharkEntryVision, WhaleSharkDatasetVision,
-    WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized,
-    ImagesWithMetadata
+import {
+    WhaleSharkEntryLLM,
+    WhaleSharkDatasetLLM,
+    WhaleSharkEntryRegular,
+    WhaleSharkDatasetRegular,
+    WhaleSharkEntryVision,
+    WhaleSharkDatasetVision,
+    WhaleSharkEntryNormalized,
+    WhaleSharkDatasetNormalized,
+    ImagesWithMetadata,
 } from "../types/sharks";
 import { WhaleSharkCoordinates } from "../types/coordinates";
 
-
 export const MONTHS: string[] = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
 ];
 
 export const FULLMONTHS: string[] = [
-    "January", "February", "March", "April", "May", "June", 
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
 ];
 
+// const sharksOfInterest: string[] = [
+//     "101373b", // total: 5 --> Male Adult --> Belize (2011), Guatemala (2011), Honduras (2011), Trinidad and Tobago (2011)
+//     "101376a", // total: 11 --> Male Adult --> Colombia (2011), Cuba (2010), Mexico (2010), Mexico (year Unknown), Nicaragua (2011), United States (2010)
+//     "57829", // total: 12 --> Male Adult --> Australia (2019), Australia (year Unknown), Indonesia (2018)
+//     "101373a", // total: 21 --> Male Adult --> Bahamas (2010), Canada (2010), Cuba (2010), Mexico (2010), Mexico (year Unknown), United States (2010), United States (year Unknown)
+//     "Ranger", // total: 25 --> Unknown Unknown --> Ecuador (2011), Ecuador (2015), Peru (2016)
+//     "101371a", // total: 28 --> Female Juvenile --> Bahamas (2010), Bahamas (2011), Cuba (2010), Mexico (2010), Mexico (year Unknown), United States (2010), United States (2011), United States (year Unknown)
+//     "57828", // total: 29 --> Male Subadult --> Australia (2018), Australia (year Unknown), Indonesia (2018), Indonesia (year Unknown)
+//     "112470", // total: 31 --> Male Subadult --> Mexico (2013), Mexico (year Unknown), United States (2013), United States (year Unknown)
+//     "57821", // total: 35 --> Female Subadult --> Australia (year Unknown), Christmas Island (2018), Cocos (Keeling) Islands (2018)
+//     "George", // total: 106 --> Unknown Unknown --> Colombia (2015), Ecuador (2015), Ecuador (2016)
+// ];
 
-const sharksOfInterest: string[] = [
-    "101373b", // total: 5 --> Male Adult --> Belize (2011), Guatemala (2011), Honduras (2011), Trinidad and Tobago (2011)
-    "101376a", // total: 11 --> Male Adult --> Colombia (2011), Cuba (2010), Mexico (2010), Mexico (year Unknown), Nicaragua (2011), United States (2010)
-    "57829", // total: 12 --> Male Adult --> Australia (2019), Australia (year Unknown), Indonesia (2018)
-    "101373a", // total: 21 --> Male Adult --> Bahamas (2010), Canada (2010), Cuba (2010), Mexico (2010), Mexico (year Unknown), United States (2010), United States (year Unknown)
-    "Ranger", // total: 25 --> Unknown Unknown --> Ecuador (2011), Ecuador (2015), Peru (2016)
-    "101371a", // total: 28 --> Female Juvenile --> Bahamas (2010), Bahamas (2011), Cuba (2010), Mexico (2010), Mexico (year Unknown), United States (2010), United States (2011), United States (year Unknown)
-    "57828", // total: 29 --> Male Subadult --> Australia (2018), Australia (year Unknown), Indonesia (2018), Indonesia (year Unknown)
-    "112470", // total: 31 --> Male Subadult --> Mexico (2013), Mexico (year Unknown), United States (2013), United States (year Unknown)
-    "57821", // total: 35 --> Female Subadult --> Australia (year Unknown), Christmas Island (2018), Cocos (Keeling) Islands (2018)
-    "George", // total: 106 --> Unknown Unknown --> Colombia (2015), Ecuador (2015), Ecuador (2016)
-];
-
-const selectedSharkIDs: string[] = [
-    "101376a",
-    "101373a",
-    "Ranger",
-    "101371a",
-    "57828",
-    "57821",
-];
+const selectedSharkIDs: string[] = ["101376a", "101373a", "Ranger", "101371a", "57828", "57821"];
 
 const genImagesSubdir: string = "shark-tracker-genAI-images";
 
 export const selectedSharkGenImages: Record<string, string> = {
     "101376a": `${genImagesSubdir}/sir-chomps-a-lot.png`,
     "101373a": `${genImagesSubdir}/captain-caribbean.png`,
-    "Ranger": `${genImagesSubdir}/sirena-splash.png`,
+    Ranger: `${genImagesSubdir}/sirena-splash.png`,
     "101371a": `${genImagesSubdir}/ashen-quest.png`,
     "57828": `${genImagesSubdir}/captain-glitterfin.png`,
     "57821": `${genImagesSubdir}/neonika-sparkfluke.png`,
 };
 
 const keyMap: Record<string, string> = {
-    "whaleSharkID": "id",
+    whaleSharkID: "id",
     "LLM-Gen Image (API)": "cartoonImageURL",
     "LLM-Gen Name (openai API)": "name",
     "LLM-Gen Name (gemma:2b local)": "gemmaName",
     "Total Occurrences": "occurrences",
     "Oldest Occurrence": "oldest",
     "Newest Occurrence": "newest",
-    "HUMAN_OBSERVATION": "human",
-    "MACHINE_OBSERVATION": "machine",
+    HUMAN_OBSERVATION: "human",
+    MACHINE_OBSERVATION: "machine",
     "lifeStage (year)": "lifeStage",
     "country (year)": "countries",
     "stateProvince - verbatimLocality (month year)": "regions",
 };
 
 const keyMapHasMedia: Record<string, string> = {
-    "whaleSharkID": "id",
+    whaleSharkID: "id",
     "Total Occurrences": "occurrences",
     "Oldest Occurrence": "oldest",
     "Newest Occurrence": "newest",
-    "HUMAN_OBSERVATION": "human",
-    "MACHINE_OBSERVATION": "machine",
+    HUMAN_OBSERVATION: "human",
+    MACHINE_OBSERVATION: "machine",
     "lifeStage (year)": "lifeStage",
     "continent (year)": "continent",
     "publishingCountry (year)": "publishing",
@@ -96,14 +111,13 @@ const keyMapHasMedia: Record<string, string> = {
 };
 
 const keyMapVision: Record<string, string> = {
-    "whaleSharkID": "id",
+    whaleSharkID: "id",
     "Oldest Occurrence": "oldest",
     "Newest Occurrence": "newest",
     "country (year)": "countries",
     "stateProvince - verbatimLocality (month year)": "regions",
-    "match_distance": "miewid_match_distance",
+    match_distance: "miewid_match_distance",
 };
-
 
 // Generic mapper for both LLM & regular datasets
 function mapSharks(
@@ -112,9 +126,9 @@ function mapSharks(
     filterIDs?: string[]
 ): WhaleSharkDatasetNormalized {
     return rawData
-        .filter(shark => !filterIDs || filterIDs.includes(shark.whaleSharkID))
-        .map(shark => formatKeyVals(shark, keyMap));
-};
+        .filter((shark) => !filterIDs || filterIDs.includes(shark.whaleSharkID))
+        .map((shark) => formatKeyVals(shark, keyMap));
+}
 
 // Filtered & mapped LLM dataset
 export const storySharks = mapSharks(selectedStorySharks, keyMap, selectedSharkIDs);
@@ -122,59 +136,53 @@ export const storySharks = mapSharks(selectedStorySharks, keyMap, selectedSharkI
 // Mapped regular dataset (no filtering needed)
 export const mediaSharks = mapSharks(allSharkData, keyMapHasMedia);
 
-
 export function cleanLifestage(obj: WhaleSharkEntryNormalized) {
     const rawLifeStage = obj.lifeStage;
-  
+
     const cleanedLifeStage =
         rawLifeStage
             ?.split(",")
-            .map(stage => stage.trim())
-            .find(stage => !stage.toLowerCase().startsWith("unknown"))
+            .map((stage) => stage.trim())
+            .find((stage) => !stage.toLowerCase().startsWith("unknown"))
             ?.replace(/\s*\(\d{4}\)/, "") || "Unknown";
-  
-    return cleanedLifeStage;
-};
 
+    return cleanedLifeStage;
+}
 
 export function extractContinents(continent: string) {
     if (!continent) return [];
-    
+
     const continents = continent
         .split(",")
-        .map(c => c.trim().replace(/\s*\(.*?\)/, "")) // Remove dates in parentheses
-        .map(c => {
+        .map((c) => c.trim().replace(/\s*\(.*?\)/, "")) // Remove dates in parentheses
+        .map((c) => {
             const parts = c.split(" ");
             if (parts[0] === "North" || parts[0] === "South") return parts[0] + " America";
             return c;
         });
-        
+
     // Remove duplicate continents before returning
     return [...new Set(continents)];
-};
-
+}
 
 export function getCountryCode(countryName: string) {
     const trimmed = countryName.trim();
     const code = getCode(trimmed);
 
     return code ? code.toLowerCase() : null;
-};  
-
+}
 
 export function getDate(region: string = "") {
     // Match text inside parentheses
-    const match = region.match(/\(([^)]+)\)/); 
+    const match = region.match(/\(([^)]+)\)/);
     return match ? match[1] : "Unknown";
-};
-
+}
 
 export function parseSpecificRegion(regionEntry: string = "") {
     // Everything before the date
-    const match = regionEntry.match(/^(.+?)\s*\([^)]*\)$/); 
+    const match = regionEntry.match(/^(.+?)\s*\([^)]*\)$/);
     return match ? match[1].trim() : regionEntry;
-};
-
+}
 
 export function parseRemarks(str: string = "") {
     if (!str || str === "Unknown") return "None";
@@ -184,16 +192,19 @@ export function parseRemarks(str: string = "") {
 
     // Filter out telemetry aggregation remarks
     const filtered = matches.filter(
-        remark => !remark.trim().startsWith("Telemetry locations aggregated per species per 1-degree cell")
+        (remark) =>
+            !remark
+                .trim()
+                .startsWith("Telemetry locations aggregated per species per 1-degree cell")
     );
 
     return filtered.length > 0 ? filtered.join(", ") : "None";
-};
-
+}
 
 export function parseImageField(imageField: string = "") {
     // Split on comma that separates entries, not commas inside parentheses
-    const entries: string[] = imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/gi) || [];
+    const entries: string[] =
+        imageField.match(/(https?:\/\/[^\s,]+(?:jpg|png|jpeg)(?:\s*\([^)]*\))?)/gi) || [];
 
     return entries.map((entry) => {
         const [urlPart, metaPart] = entry.split(/\s*\(/);
@@ -206,21 +217,20 @@ export function parseImageField(imageField: string = "") {
         return {
             url,
             license: licenseMatch ? licenseMatch[1].trim() : "Unknown",
-            creator: creatorMatch ? creatorMatch[1].trim() : "Unknown"
+            creator: creatorMatch ? creatorMatch[1].trim() : "Unknown",
         };
     }) as ImagesWithMetadata;
-};
-
+}
 
 function extractMonths(obj: WhaleSharkEntryNormalized) {
     let sharkMonths: string[] = [];
     const sharkCoordData: WhaleSharkCoordinates | undefined = coordinatesData.find(
-        shark => shark.whaleSharkID === obj.id
+        (shark) => shark.whaleSharkID === obj.id
     );
-    
+
     if (sharkCoordData && sharkCoordData.coordinates) {
         // Process each coordinate/occurrence for given shark
-        sharkCoordData.coordinates.forEach(coord => {
+        sharkCoordData.coordinates.forEach((coord) => {
             if (coord.eventDate) {
                 const date = new Date(coord.eventDate);
                 if (!isNaN(date.getTime())) {
@@ -233,15 +243,14 @@ function extractMonths(obj: WhaleSharkEntryNormalized) {
 
     // Remove duplicate months before returning
     return [...new Set(sharkMonths)];
-};
-
+}
 
 export const reshapeYearData = (rawData: GBIFDataset) => {
     const byYear: YearMonthsMapping = {};
 
     rawData.forEach((row) => {
         const year = row["year"] as number;
-        
+
         byYear[year] = MONTHS.map((month) => ({
             label: month,
             value: +row[month] || 0,
@@ -251,9 +260,8 @@ export const reshapeYearData = (rawData: GBIFDataset) => {
     return byYear;
 };
 
-
 function formatKeyVals(
-    obj: WhaleSharkEntryLLM | WhaleSharkEntryRegular, 
+    obj: WhaleSharkEntryLLM | WhaleSharkEntryRegular,
     keyMap: Record<string, string>
 ) {
     // Adjust column names for easier access in shark card
@@ -270,17 +278,13 @@ function formatKeyVals(
     renamed.months = extractMonths(renamed);
 
     return renamed;
-};
+}
 
-
-function formatVisionKeyVals(
-    obj: WhaleSharkEntryVision,
-    keyMap: Record<string, string>
-) {
+function formatVisionKeyVals(obj: WhaleSharkEntryVision, keyMap: Record<string, string>) {
     // Adjust column names for easier access
     const renamed: WhaleSharkEntryNormalized = Object.fromEntries(
         Object.entries(obj).map(([key, value]) => [keyMap[key] || key, value])
-    ) as any;
+    ) as unknown as WhaleSharkEntryNormalized;
 
     // Parse country from "country (year)" field
     if (renamed.countries) {
@@ -292,12 +296,10 @@ function formatVisionKeyVals(
         const date = new Date(obj.eventDate);
         if (!isNaN(date.getTime())) {
             renamed.months = [FULLMONTHS[date.getMonth()]];
-        } 
-        else {
+        } else {
             renamed.months = [];
         }
-    } 
-    else {
+    } else {
         renamed.months = [];
     }
 
@@ -319,16 +321,14 @@ function formatVisionKeyVals(
     return renamed;
 }
 
-
 function aggregatePlausibility(plausibilities: string[]): string {
     if (plausibilities.includes("PLAUSIBLE")) return "PLAUSIBLE";
     if (plausibilities.includes("UNCERTAIN")) return "UNCERTAIN";
     if (plausibilities.includes("IMPOSSIBLE")) return "IMPOSSIBLE";
     return "UNKNOWN";
-};
+}
 
-
-// Mapper for vision dataset 
+// Mapper for vision dataset
 function mapVisionSharks(
     rawData: WhaleSharkDatasetVision,
     keyMap: Record<string, string>
@@ -336,39 +336,37 @@ function mapVisionSharks(
     // Temporary type for aggregation that includes plausibilities array
     type SharkWithPlausibilities = WhaleSharkEntryNormalized & { plausibilities: string[] };
     const sharkMap: Record<string, SharkWithPlausibilities> = {};
-    
-    rawData.forEach(occurrence => {
+
+    rawData.forEach((occurrence) => {
         const sharkId = occurrence.whaleSharkID;
-        
+
         if (!sharkMap[sharkId]) {
             sharkMap[sharkId] = {
                 ...formatVisionKeyVals(occurrence, keyMap),
-                plausibilities: []
+                plausibilities: [],
             };
         }
-        
+
         // Collect plausibilities for aggregation
         if (occurrence.plausibility) {
             sharkMap[sharkId].plausibilities.push(occurrence.plausibility);
         }
     });
-    
+
     // Remove temp plausibilities array & add aggregated plausibility
-    return Object.values(sharkMap).map(shark => {
+    return Object.values(sharkMap).map((shark) => {
         const { plausibilities, ...sharkData } = shark;
         return {
             ...sharkData,
-            plausibility: aggregatePlausibility(plausibilities)
+            plausibility: aggregatePlausibility(plausibilities),
         };
     });
-};
+}
 
 // Aggregated vision sharks (one per whale shark ID, for filtering/selection)
 export const visionSharks = mapVisionSharks(visionSharkData, keyMapVision);
 
 // Raw vision occurrences (one per image occurrence, for display)
-export const visionOccurrences = visionSharkData.map(
-    occurrence => formatVisionKeyVals(occurrence, keyMapVision)
+export const visionOccurrences = visionSharkData.map((occurrence) =>
+    formatVisionKeyVals(occurrence, keyMapVision)
 );
-
-

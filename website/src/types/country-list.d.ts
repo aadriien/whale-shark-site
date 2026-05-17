@@ -7,5 +7,3 @@ declare module "country-list" {
     export function getCodes(): string[];
     export function getData(): { code: string; name: string }[];
 }
-
-

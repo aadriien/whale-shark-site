@@ -10,17 +10,15 @@ import { createSummaryDataset, createCalendarHeatmapData } from "../../utils/Sel
 
 import { LabSelectionPanelProps } from "../../types/panels";
 
-
-function LabSelectionPanel({ 
-    selectedSharksForLab, 
-    savedIds, 
+function LabSelectionPanel({
+    selectedSharksForLab,
+    savedIds,
     sharks,
-    onSelectAllToggle 
+    onSelectAllToggle,
 }: LabSelectionPanelProps) {
-
     const selectedSharks = useMemo(() => {
         if (selectedSharksForLab.size === 0) return [];
-        return sharks.filter(shark => selectedSharksForLab.has(shark.id));
+        return sharks.filter((shark) => selectedSharksForLab.has(shark.id));
     }, [selectedSharksForLab, sharks]);
 
     const selectedSharksDataset = useMemo(() => {
@@ -36,15 +34,14 @@ function LabSelectionPanel({
     return (
         <>
             <div className="multi-select-info">
-
                 <div className="multi-select-header">
                     <h4>Selected for Lab ({selectedSharksForLab.size}):</h4>
                     <label className="select-all-container">
-                        <input 
-                            type="checkbox" 
+                        <input
+                            type="checkbox"
                             checked={
-                                selectedSharksForLab.size > 0 && 
-                                Array.from(savedIds).every(id => selectedSharksForLab.has(id))
+                                selectedSharksForLab.size > 0 &&
+                                Array.from(savedIds).every((id) => selectedSharksForLab.has(id))
                             }
                             onChange={onSelectAllToggle}
                             className="select-all-checkbox"
@@ -54,58 +51,50 @@ function LabSelectionPanel({
                 </div>
 
                 <div className="selected-sharks-list">
-                    {selectedSharksForLab.size > 0 
-                        ? Array.from(selectedSharksForLab).join(", ") 
-                        : "None in lab"
-                    }
+                    {selectedSharksForLab.size > 0
+                        ? Array.from(selectedSharksForLab).join(", ")
+                        : "None in lab"}
                 </div>
-
             </div>
 
             <div className="overview-container">
-                <DataOverview 
+                <DataOverview
                     dataset={selectedSharksDataset}
                     filterField="lab" // special key word for DataOverview
                     selectedFilter={
-                        selectedSharksForLab.size > 0 
-                        ? `${selectedSharksForLab.size} Selected Sharks` 
-                        : ""
+                        selectedSharksForLab.size > 0
+                            ? `${selectedSharksForLab.size} Selected Sharks`
+                            : ""
                     }
                     displayFields={[
-                        { 
-                            label: "Total Occurrences", 
-                            field: "Total Occurrences" 
+                        {
+                            label: "Total Occurrences",
+                            field: "Total Occurrences",
                         },
-                        { 
-                            label: "Top 3 Publishing Countries", 
-                            field: "Top 3 Publishing Countries" 
-                        }
+                        {
+                            label: "Top 3 Publishing Countries",
+                            field: "Top 3 Publishing Countries",
+                        },
                     ]}
                 />
             </div>
-            
+
             <div className="heatmap-container">
                 {selectedSharksForLab.size > 0 && selectedSharksHeatmapData.length > 0 ? (
-                    <Heatmap 
+                    <Heatmap
                         data={selectedSharksHeatmapData}
                         title={`Lab Sharks Record Timeline`}
                     />
                 ) : (
-                    <ChartPlaceholder 
-                        type="heatmap" 
-                        message="Add sharks to lab for heatmap" 
-                    />
+                    <ChartPlaceholder type="heatmap" message="Add sharks to lab for heatmap" />
                 )}
             </div>
-            
+
             <div className="radial-heatmap-container">
-                <SexLifeStageData 
-                    sharks={selectedSharks}
-                />
+                <SexLifeStageData sharks={selectedSharks} />
             </div>
         </>
     );
 }
 
 export default LabSelectionPanel;
-

@@ -1,71 +1,69 @@
 /* Shark data types */
 
-// Applicable for data in `gbif_story_shark_images.json` 
+// Applicable for data in `gbif_story_shark_images.json`
 export type WhaleSharkEntryLLM = {
     whaleSharkID: string;
-    
+
     "LLM-Gen Image (API)": string;
     "LLM-Gen Name (gemma:2b local)": string;
     "LLM-Gen Name (openai API)": string;
-    
+
     "Total Occurrences": number;
     "Oldest Occurrence": string; // date string
     "Newest Occurrence": string; // date string
-    
+
     HUMAN_OBSERVATION: number;
     MACHINE_OBSERVATION: number;
-    
+
     sex: string;
-    
+
     "lifeStage (year)": string;
     "country (year)": string;
     "stateProvince - verbatimLocality (month year)": string;
-    
+
     "occurrenceRemarks (eventDate)": string;
     "lat:decimalLatitude long:decimalLongitude (eventDate)": string;
-    
+
     "imageURL (license, creator)": string;
 };
 
 export type WhaleSharkDatasetLLM = WhaleSharkEntryLLM[];
 
-
-// Applicable for data in `gbif_individual_sharks_stats.json` 
+// Applicable for data in `gbif_individual_sharks_stats.json`
 export type WhaleSharkEntryRegular = {
     whaleSharkID: string;
-    
+
     "Total Occurrences": number;
-    
+
     organismID: string;
     identificationID: string;
-    
+
     "Oldest Occurrence": string; // date string
     "Newest Occurrence": string; // date string
-    
+
     HUMAN_OBSERVATION: number;
     MACHINE_OBSERVATION: number;
-    
+
     sex: string;
-    
+
     "lifeStage (year)": string;
     "continent (year)": string;
     "publishingCountry (year)": string;
     "country (year)": string;
     "stateProvince - verbatimLocality (month year)": string;
-    
+
     "occurrenceRemarks (eventDate)": string;
     "lat:decimalLatitude long:decimalLongitude (eventDate)": string;
-    
+
     "imageURL (license, creator)": string;
 };
 
 export type WhaleSharkDatasetRegular = WhaleSharkEntryRegular[];
 
-
-// Applicable for data in `GBIF_shark_image_occurrences_validated.json` 
+// Applicable for data in `GBIF_shark_image_occurrences_validated.json`
 export type WhaleSharkEntryVision = {
     whaleSharkID: string;
-        
+
     identificationID: string;
     occurrenceID: string;
 
@@ -76,7 +74,7 @@ export type WhaleSharkEntryVision = {
     decimalLongitude: number | null;
 
     eventDate: string; // date string
-    
+
     "Oldest Occurrence": string; // date string
     "Newest Occurrence": string; // date string
 
@@ -102,8 +100,7 @@ export type WhaleSharkEntryVision = {
 
 export type WhaleSharkDatasetVision = WhaleSharkEntryVision[];
 
-
-// Applicable for data in `GBIF_media_matches.json` 
+// Applicable for data in `GBIF_media_matches.json`
 export type WhaleSharkMediaEntry = {
     image_id: number;
     key: number;
@@ -128,8 +125,7 @@ export type WhaleSharkMediaEntry = {
 
 export type WhaleSharkDatasetMedia = WhaleSharkMediaEntry[];
 
-
-// Applicable after string mapping for field names 
+// Applicable after string mapping for field names
 // Works for both datasets (LLM + regular), hence optional fields
 export type WhaleSharkEntryNormalized = {
     id: string;
@@ -179,13 +175,11 @@ export type WhaleSharkEntryNormalized = {
 
 export type WhaleSharkDatasetNormalized = WhaleSharkEntryNormalized[];
 
-
 export type SavedSharkIDs = Set<string>;
 
 export type CondensedGridProps = {
     saved: SavedSharkIDs;
 };
-
 
 export type IndividualSharkProps = {
     shark: WhaleSharkEntryNormalized;
@@ -196,7 +190,6 @@ export type IndividualSharkOrNullProps = {
     shark: WhaleSharkEntryNormalized | null;
 };
 
-
 export type ImageMetadata = {
     url: string;
     license: string;
@@ -204,5 +197,3 @@ export type ImageMetadata = {
 };
 
 export type ImagesWithMetadata = ImageMetadata[];
-
-

@@ -1,13 +1,12 @@
 import { OCEAN_DATASETS, sharkMarkerHtml } from "../../utils/OceanViewerUtils";
 
-
-const OceanViewerLegend = ( { datasetKey }: {datasetKey: string}) => {
+const OceanViewerLegend = ({ datasetKey }: { datasetKey: string }) => {
     const config = OCEAN_DATASETS[datasetKey as keyof typeof OCEAN_DATASETS];
 
     const gradientStyle = {
-        background: `linear-gradient(to right, ${
-            config.gradientStops.map((v) => config.colorScale(v)).join(", ")
-        })`,
+        background: `linear-gradient(to right, ${config.gradientStops
+            .map((v) => config.colorScale(v))
+            .join(", ")})`,
     };
 
     return (
@@ -30,4 +29,3 @@ const OceanViewerLegend = ( { datasetKey }: {datasetKey: string}) => {
 };
 
 export default OceanViewerLegend;
-

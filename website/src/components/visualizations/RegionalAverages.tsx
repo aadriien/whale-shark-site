@@ -5,7 +5,6 @@ import BarChart from "../charts/BarChart";
 
 import { GBIFRegionOccurrencesProps } from "../../types/charts";
 
-
 const AVG_COLUMNS: string[] = [
     "Avg Per Year (all)",
     "Avg Per Year (after 2020)",
@@ -14,18 +13,11 @@ const AVG_COLUMNS: string[] = [
     "Avg Per Year (before 2000)",
 ];
 
-
-const GBIFRegionAverages = ({ 
-    regionData, 
-    metric, 
-    selectedRegion 
-}: GBIFRegionOccurrencesProps) => {
+const GBIFRegionAverages = ({ regionData, metric, selectedRegion }: GBIFRegionOccurrencesProps) => {
     const barChartData = useMemo(() => {
         if (!selectedRegion) return [];
 
-        const regionRow = regionData.find(
-            (row) => row[metric] === selectedRegion
-        );
+        const regionRow = regionData.find((row) => row[metric] === selectedRegion);
 
         if (!regionRow) return [];
 
@@ -43,12 +35,13 @@ const GBIFRegionAverages = ({
                 value: Number(regionRow[col]) || 0,
             };
         });
-    }, [selectedRegion]);
+    }, [selectedRegion, metric, regionData]);
 
     return (
-        <div className="region-occurrence-card" 
-            style={{ 
-                width: "100%", 
+        <div
+            className="region-occurrence-card"
+            style={{
+                width: "100%",
                 height: "100%",
             }}
         >
@@ -59,19 +52,16 @@ const GBIFRegionAverages = ({
                     data={barChartData}
                     title={`Mean Occurrences by Decade — ${selectedRegion}`}
                 />
+            ) : selectedRegion ? (
+                <p style={{ textAlign: "center" }}>No data available for this ${metric}.</p>
             ) : (
-                selectedRegion ? (
-                    <p style={{ textAlign: "center" }}>No data available for this ${metric}.</p>
-                ) : (
-                    <ChartPlaceholder 
-                        type="bar" 
-                        message={`Select a ${metric} to see records by decade`} 
-                    />
-                )
+                <ChartPlaceholder
+                    type="bar"
+                    message={`Select a ${metric} to see records by decade`}
+                />
             )}
         </div>
     );
 };
 
 export default GBIFRegionAverages;
-

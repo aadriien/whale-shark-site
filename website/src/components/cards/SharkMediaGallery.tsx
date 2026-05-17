@@ -4,7 +4,6 @@ import { parseImageField } from "../../utils/DataUtils";
 
 import { IndividualSharkProps } from "../../types/sharks";
 
-
 const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
     const [expandedImageIndex, setExpandedImageIndex] = useState<number | null>(null);
 
@@ -14,25 +13,22 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
     const openImage = (index: number) => setExpandedImageIndex(index);
     const closeImage = () => setExpandedImageIndex(null);
 
-    // Keyboard navigation for image carousel 
+    // Keyboard navigation for image carousel
     useEffect(() => {
         if (expandedImageIndex === null) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "ArrowLeft") {
                 setExpandedImageIndex((idx) => Math.max(idx! - 1, 0));
-            }
-            else if (e.key === "ArrowRight") {
+            } else if (e.key === "ArrowRight") {
                 setExpandedImageIndex((idx) => Math.min(idx! + 1, images.length - 1));
-            } 
-            else if (e.key === "Escape") {
+            } else if (e.key === "Escape") {
                 closeImage();
             }
         };
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-        
     }, [expandedImageIndex, images.length]);
 
     return (
@@ -42,14 +38,16 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
                 {images.length > 0 ? (
                     images.map((img, idx) => (
                         <div key={idx} className="shark-image-card">
-                            <img 
-                                src={img.url} 
-                                alt={`Shark image ${idx}`} 
+                            <img
+                                src={img.url}
+                                alt={`Shark image ${idx}`}
                                 onClick={() => openImage(idx)}
                                 style={{ cursor: "pointer" }}
                             />
                             <p className="shark-image-meta">
-                                <small>📸 Creator: {img.creator} | {img.license}</small>
+                                <small>
+                                    📸 Creator: {img.creator} | {img.license}
+                                </small>
                             </p>
                         </div>
                     ))
@@ -64,31 +62,38 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
                     <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
                         <button
                             className="carousel-button left"
-                            onClick={() => setExpandedImageIndex(prev => Math.max(prev! - 1, 0))}
+                            onClick={() => setExpandedImageIndex((prev) => Math.max(prev! - 1, 0))}
                             disabled={expandedImageIndex === 0}
                         >
                             &lt; {/* Left arrow for image carousel */}
                         </button>
 
                         <div className="overlay-image-wrapper">
-                            <img 
-                                src={images[expandedImageIndex].url} 
-                                alt={`Expanded shark image ${expandedImageIndex}`} 
+                            <img
+                                src={images[expandedImageIndex].url}
+                                alt={`Expanded shark image ${expandedImageIndex}`}
                             />
                             <p className="overlay-meta">
-                                📸 Creator: {images[expandedImageIndex].creator} | {images[expandedImageIndex].license}
+                                📸 Creator: {images[expandedImageIndex].creator} |{" "}
+                                {images[expandedImageIndex].license}
                             </p>
                         </div>
 
                         <button
                             className="carousel-button right"
-                            onClick={() => setExpandedImageIndex(prev => Math.min(prev! + 1, images.length - 1))}
+                            onClick={() =>
+                                setExpandedImageIndex((prev) =>
+                                    Math.min(prev! + 1, images.length - 1)
+                                )
+                            }
                             disabled={expandedImageIndex === images.length - 1}
                         >
                             &gt; {/* Right arrow for image carousel */}
                         </button>
 
-                        <button className="close-button" onClick={closeImage}>X</button>
+                        <button className="close-button" onClick={closeImage}>
+                            X
+                        </button>
                     </div>
                 </div>
             )}
@@ -97,4 +102,3 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
 };
 
 export default SharkMediaGallery;
-

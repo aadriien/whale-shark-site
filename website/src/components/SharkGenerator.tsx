@@ -1,8 +1,8 @@
+import React from "react";
 import { useState, useEffect } from "react";
 import { getNames } from "country-list";
 
 import { fetchImageLLM } from "../utils/LLMUtils";
-
 
 type FormData = {
     name: string;
@@ -11,7 +11,6 @@ type FormData = {
     researcherPOV: string;
 };
 
-
 // Populate list of all countries from "country-list" npm package
 const countries: string[] = getNames();
 
@@ -19,7 +18,7 @@ const MAX_INPUT_LENGTH = {
     name: 50,
     age: 3,
     country: 80,
-    researcherPOV: 150
+    researcherPOV: 150,
 };
 
 const sanitizeInput = (input: string): string => {
@@ -43,10 +42,10 @@ const isValidForm = (data: FormData) => {
 
     return true;
 };
- 
+
 const SharkGenerator = () => {
     // State to hold image content (or placeholder text)
-    const [imageContent, setImageContent] = useState<React.ReactElement | null>(null); 
+    const [imageContent, setImageContent] = useState<React.ReactElement | null>(null);
 
     const defaultText = (
         <p id="default-text">
@@ -60,7 +59,7 @@ const SharkGenerator = () => {
         name: "",
         age: "",
         country: "",
-        researcherPOV: ""
+        researcherPOV: "",
     });
 
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
@@ -108,14 +107,14 @@ const SharkGenerator = () => {
             And get *CREATIVE*! Make it zesty. Make it interesting. Add background detail.${nbsp}
             Maybe even add details for ${formData.name}'s country, ${formData.country}!${nbsp}
             Do *NOT* include any text or letters in the image.\n
-        `
+        `;
 
         console.log("User form data:", formData);
         console.log("Prompt sent to LLM:", imagePrompt);
 
         // Harness random each time (0 - 99999) to make images unique
         const seed = Math.floor(Math.random() * 1000000);
-        fetchImageLLM({imagePrompt, params: { seed: seed }, setImageContent});
+        fetchImageLLM({ imagePrompt, params: { seed: String(seed) }, setImageContent });
     };
 
     // Clear form data & reset status after submission
@@ -124,26 +123,24 @@ const SharkGenerator = () => {
             name: "",
             age: "",
             country: "",
-            researcherPOV: ""
+            researcherPOV: "",
         });
 
         // Reset submission status & image container
-        setFormSubmitted(false); 
+        setFormSubmitted(false);
         setImageContent(null);
     };
 
     return (
         <div className="shark-generator">
             <form className="shark-generator-form" onSubmit={handleFormSubmit}>
-
                 <label>
                     <div className="label-text">
                         What's your name?
-                        <div className="label-subtext">
-                            Or your nickname?
-                        </div>
+                        <div className="label-subtext">Or your nickname?</div>
                     </div>
-                    <input disabled={formSubmitted}
+                    <input
+                        disabled={formSubmitted}
                         type="text"
                         name="name"
                         value={formData.name}
@@ -159,7 +156,8 @@ const SharkGenerator = () => {
                             (Don't worry, everyone's whale-come here!)
                         </div>
                     </div>
-                    <input disabled={formSubmitted}
+                    <input
+                        disabled={formSubmitted}
                         type="number"
                         name="age"
                         value={formData.age}
@@ -167,15 +165,16 @@ const SharkGenerator = () => {
                         onChange={handleChange}
                     />
                 </label>
-                
+
                 <label>
                     <div className="label-text">
-                        What's your home country? 
+                        What's your home country?
                         <div className="label-subtext">
                             Or, which country would you like to visit?
                         </div>
                     </div>
-                    <input disabled={formSubmitted}
+                    <input
+                        disabled={formSubmitted}
                         type="text"
                         name="country"
                         list="country-options"
@@ -195,7 +194,8 @@ const SharkGenerator = () => {
                         What would a researcher studying humans say about you?
                         <div className="label-subtext"></div>
                     </div>
-                    <input disabled={formSubmitted}
+                    <input
+                        disabled={formSubmitted}
                         type="text"
                         name="researcherPOV"
                         value={formData.researcherPOV}
@@ -211,21 +211,16 @@ const SharkGenerator = () => {
                     </button>
 
                     {/* Submit inputs button */}
-                    <button type="submit">
-                        Submit
-                    </button>
+                    <button type="submit">Submit</button>
                 </div>
-
             </form>
 
             <div id="generated-image-container">
                 {/* Conditionally render imageContent or defaultText */}
                 {imageContent || defaultText}
             </div>
-
         </div>
     );
 };
 
 export default SharkGenerator;
-

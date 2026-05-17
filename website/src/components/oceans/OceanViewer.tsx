@@ -11,7 +11,8 @@ import OceanViewerTimeline from "./OceanViewerTimeline";
 import {
     ALL_MONTHS,
     OCEAN_DATASETS,
-    SHARK_MAP, SHARK_OBS,
+    SHARK_MAP,
+    SHARK_OBS,
     POINT_TO_SHARK_ID,
     processOceanDataset,
     sharkMarkerHtml,
@@ -21,7 +22,6 @@ import {
 import { OceanGridPoint } from "../../types/coordinates";
 import { OceanMapHandle } from "../../types/oceans";
 import { PlottedCoordinatePoint } from "../../types/coordinates";
-
 
 function bindSharkPopup(marker: L.Marker, pt: PlottedCoordinatePoint) {
     const sharkID = POINT_TO_SHARK_ID.get(pt.id);
@@ -44,20 +44,17 @@ function bindSharkPopup(marker: L.Marker, pt: PlottedCoordinatePoint) {
 
         popup.on("remove", () => root.unmount());
         marker.bindPopup(popup);
-    } 
-    else {
-        marker.bindPopup(
-            `<b>Whale Shark</b><br>ID: ${sharkID ?? pt.id}<br>Date: ${pt.date}`
-        );
+    } else {
+        marker.bindPopup(`<b>Whale Shark</b><br>ID: ${sharkID ?? pt.id}<br>Date: ${pt.date}`);
     }
 }
-
 
 export default function OceanViewer() {
     const mapHandleRef = useRef<OceanMapHandle>(null);
     const abortRef = useRef<AbortController | null>(null);
 
-    const [datasetToProcess, setDatasetToProcess] = useState<keyof typeof OCEAN_DATASETS>("chlorophyll");
+    const [datasetToProcess, setDatasetToProcess] =
+        useState<keyof typeof OCEAN_DATASETS>("chlorophyll");
     const [sliderIndex, setSliderIndex] = useState(ALL_MONTHS.length - 1);
     const [yearDataset, setYearGridData] = useState<Record<string, OceanGridPoint[]>>({});
     const [loadedYear, setLoadedYear] = useState<number | null>(null);
@@ -94,7 +91,7 @@ export default function OceanViewer() {
                     setIsLoadingDataset(false);
                 }
             });
-    }, [sliderIndex, loadedYear]);
+    }, [sliderIndex, loadedYear, datasetToProcess]);
 
     // Re-render map layers when month or chlorophyll data changes
     useEffect(() => {
@@ -111,11 +108,16 @@ export default function OceanViewer() {
         dataLayer.clearLayers();
         for (const pt of yearDataset[month] ?? []) {
             L.rectangle(
-                [[pt.lat, pt.lng], [pt.lat + 1, pt.lng + 1]],
+                [
+                    [pt.lat, pt.lng],
+                    [pt.lat + 1, pt.lng + 1],
+                ],
                 {
                     renderer: leafletRenderer,
                     color: "transparent",
-                    fillColor: datasetConfig.colorScale(Math.max(scaleDomainMin, (pt[primaryDataField] as number) || scaleDomainMin)),
+                    fillColor: datasetConfig.colorScale(
+                        Math.max(scaleDomainMin, (pt[primaryDataField] as number) || scaleDomainMin)
+                    ),
                     fillOpacity: 0.75,
                     weight: 0,
                 }
@@ -135,7 +137,7 @@ export default function OceanViewer() {
             bindSharkPopup(marker, pt);
             marker.addTo(sharkLayer);
         }
-    }, [sliderIndex, yearDataset]);
+    }, [sliderIndex, yearDataset, datasetToProcess]);
 
     return (
         <div className="ocean-viewer">
@@ -143,7 +145,9 @@ export default function OceanViewer() {
                 <OceanViewerMap ref={mapHandleRef} />
                 <OceanViewerMetricsToggle
                     datasetKey={datasetToProcess}
-                    onDatasetChange={(key) => setDatasetToProcess(key as keyof typeof OCEAN_DATASETS)}
+                    onDatasetChange={(key) =>
+                        setDatasetToProcess(key as keyof typeof OCEAN_DATASETS)
+                    }
                 />
             </div>
 
@@ -157,4 +161,3 @@ export default function OceanViewer() {
         </div>
     );
 }
-

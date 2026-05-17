@@ -1,16 +1,16 @@
+import React from "react";
+
 import { WhaleSharkDatasetNormalized } from "./sharks";
 import { SharkClickProps } from "./globes";
-
 
 /* Panel types */
 
 export type LabSelectionPanelProps = {
-    selectedSharksForLab: Set<string>; 
+    selectedSharksForLab: Set<string>;
     savedIds: Set<string>;
     sharks: WhaleSharkDatasetNormalized;
     onSelectAllToggle: React.ChangeEventHandler<HTMLInputElement>;
 };
-
 
 export type ContinentDisplayProps = {
     sharks: WhaleSharkDatasetNormalized;
@@ -18,32 +18,28 @@ export type ContinentDisplayProps = {
     selectedSharkId: string;
 };
 
-
 export type SavedSharksDisplayProps = {
-    sharks: WhaleSharkDatasetNormalized; 
-    onSelect?: (id: string) => void; 
-    selectedSharkId: string; 
-    viewMode: string; 
-    selectedSharksForLab: Set<string>; 
+    sharks: WhaleSharkDatasetNormalized;
+    onSelect?: (id: string) => void;
+    selectedSharkId: string;
+    viewMode: string;
+    selectedSharksForLab: Set<string>;
     onLabSelectionChange: (value: Set<string>) => void;
 };
 
-
 export type SharkSelectorProps = {
-    sharks: WhaleSharkDatasetNormalized; 
+    sharks: WhaleSharkDatasetNormalized;
     onSelect: (arg: SharkClickProps | string) => void;
-    onReset: () => void; 
-    selectedSharkId: string | null; 
+    onReset: () => void;
+    selectedSharkId: string | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     DisplayComponent: React.ComponentType<any>;
     disabled?: boolean;
-    onFilteredSharksChange: React.Dispatch<React.SetStateAction<WhaleSharkDatasetNormalized>>; 
+    onFilteredSharksChange: React.Dispatch<React.SetStateAction<WhaleSharkDatasetNormalized>>;
 };
-
 
 export type MatchSharkSelectorProps = {
-    sharks: WhaleSharkDatasetNormalized; 
+    sharks: WhaleSharkDatasetNormalized;
     onSharkSelect: (id: string) => void;
-    selectedSharkId: string; 
+    selectedSharkId: string;
 };
-
-

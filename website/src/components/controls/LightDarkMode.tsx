@@ -2,21 +2,20 @@ import { useState, useEffect } from "react";
 
 import { LightDarkToggleProps } from "../../types/pages";
 
-
 function LightDarkToggle({ theme, setTheme }: LightDarkToggleProps) {
     const [isNight, setIsNight] = useState<boolean>(theme === "dark");
-    
+
     // Keep in sync when parent theme changes
     useEffect(() => {
         setIsNight(theme === "dark");
     }, [theme]);
-    
+
     const toggle = () => {
         const newTheme = isNight ? "light" : "dark";
         setTheme(newTheme);
         setIsNight(!isNight);
     };
-    
+
     return (
         <button
             onClick={toggle}
@@ -42,4 +41,3 @@ function LightDarkToggle({ theme, setTheme }: LightDarkToggleProps) {
 }
 
 export default LightDarkToggle;
-

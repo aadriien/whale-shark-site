@@ -2,7 +2,7 @@
 
 declare module "three/examples/jsm/loaders/GLTFLoader" {
     import { Loader, LoadingManager, Group } from "three";
-    
+
     export class GLTFLoader extends Loader {
         constructor(manager?: LoadingManager);
         load(
@@ -13,5 +13,3 @@ declare module "three/examples/jsm/loaders/GLTFLoader" {
         ): void;
     }
 }
-
-

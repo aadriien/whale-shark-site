@@ -1,17 +1,15 @@
 import { useState } from "react";
 
-
 type SharkImageCV = {
-    id: number; 
-    name: string; 
-    description: string; 
-    creator: string; 
-    license: string; 
+    id: number;
+    name: string;
+    description: string;
+    creator: string;
+    license: string;
 };
 
-
 // Sample data for demo images
-function createWhaleSharkImage({id, name, description, creator, license}: SharkImageCV) {
+function createWhaleSharkImage({ id, name, description, creator, license }: SharkImageCV) {
     return {
         id,
         name,
@@ -20,41 +18,40 @@ function createWhaleSharkImage({id, name, description, creator, license}: SharkI
         segmentation: `./cv-demos/shark_${id}_segmentation.jpg`,
         description,
         creator,
-        license
+        license,
     };
 }
 
 const demoImages = [
     createWhaleSharkImage({
-        id: 3070393848, 
-        name: "Whale Shark #1", 
+        id: 3070393848,
+        name: "Whale Shark #1",
         description: "TBD.. description currently a WIP",
         creator: "stefzanirato",
-        license: "CC BY-NC [Attribution-NonCommercial]"
+        license: "CC BY-NC [Attribution-NonCommercial]",
     }),
     createWhaleSharkImage({
-        id: 3338151009, 
-        name: "Whale Shark #2", 
+        id: 3338151009,
+        name: "Whale Shark #2",
         description: "TBD.. description currently a WIP",
         creator: "Carlos Gajón Bermúdez",
-        license: "CC BY-NC [Attribution-NonCommercial]"
+        license: "CC BY-NC [Attribution-NonCommercial]",
     }),
     createWhaleSharkImage({
-        id: 4177294484, 
-        name: "Whale Shark #3", 
+        id: 4177294484,
+        name: "Whale Shark #3",
         description: "TBD.. description currently a WIP",
         creator: "Nathan Cook",
-        license: "CC BY-NC [Attribution-NonCommercial]"
+        license: "CC BY-NC [Attribution-NonCommercial]",
     }),
     createWhaleSharkImage({
-        id: 4900906641, 
-        name: "Whale Shark #4", 
+        id: 4900906641,
+        name: "Whale Shark #4",
         description: "TBD.. description currently a WIP",
         creator: "Slunky",
-        license: "CC BY [Attribution]"
+        license: "CC BY [Attribution]",
     }),
 ];
-
 
 const InteractiveDemo = () => {
     const [selectedImage, setSelectedImage] = useState(demoImages[0]);
@@ -86,8 +83,8 @@ const InteractiveDemo = () => {
         <section className="interactive-demo">
             <h2>Try It Yourself</h2>
             <p>
-                Select a real-world whale shark below and explore how computer vision 
-                processes the same image through various AI-powered analytical stages.
+                Select a real-world whale shark below and explore how computer vision processes the
+                same image through various AI-powered analytical stages.
             </p>
 
             {/* Image Selection */}
@@ -96,7 +93,7 @@ const InteractiveDemo = () => {
 
                 <div className="image-thumbnails">
                     {demoImages.map((image) => (
-                        <div 
+                        <div
                             key={image.id}
                             className={`thumbnail ${selectedImage.id === image.id ? "active" : ""}`}
                             onClick={() => setSelectedImage(image)}
@@ -105,7 +102,9 @@ const InteractiveDemo = () => {
                                 <img src={image.original} alt={image.name} />
 
                                 <p className="shark-image-meta">
-                                    <small>📸 Creator: {image.creator} | {image.license}</small>
+                                    <small>
+                                        📸 Creator: {image.creator} | {image.license}
+                                    </small>
                                 </p>
                             </div>
 
@@ -116,27 +115,26 @@ const InteractiveDemo = () => {
                         </div>
                     ))}
                 </div>
-
             </div>
 
             {/* Analysis View Controls */}
             <div className="view-controls">
                 <h3>Analysis View:</h3>
-                
+
                 <div className="control-buttons">
-                    <button 
+                    <button
                         className={activeView === "Original" ? "active" : ""}
-                        onClick={() => setActiveView('Original')}
+                        onClick={() => setActiveView("Original")}
                     >
                         Original Image
                     </button>
-                    <button 
+                    <button
                         className={activeView === "BBOX" ? "active" : ""}
                         onClick={() => setActiveView("BBOX")}
                     >
                         Bounding Box
                     </button>
-                    <button 
+                    <button
                         className={activeView === "Segmentation" ? "active" : ""}
                         onClick={() => setActiveView("Segmentation")}
                     >
@@ -149,35 +147,39 @@ const InteractiveDemo = () => {
             <div className="demo-display">
                 <div className="image-container">
                     <div className="image-wrapper-large">
-                        <img 
-                            src={getCurrentImageSrc()} 
+                        <img
+                            src={getCurrentImageSrc()}
                             alt={`${selectedImage.name} - ${activeView}`}
                             className="demo-image"
                         />
 
                         <p className="shark-image-meta">
-                            <small>📸 Creator: {selectedImage.creator} | {selectedImage.license}</small>
+                            <small>
+                                📸 Creator: {selectedImage.creator} | {selectedImage.license}
+                            </small>
                         </p>
                     </div>
                 </div>
-                
-                <div className="analysis-info">
-                    <h3>{selectedImage.name} - {activeView}</h3>
 
-                    <p className="view-description">
-                        {getViewDescription()}
-                    </p>
+                <div className="analysis-info">
+                    <h3>
+                        {selectedImage.name} - {activeView}
+                    </h3>
+
+                    <p className="view-description">{getViewDescription()}</p>
 
                     <div className="image-details">
-                        <p><strong>Description:</strong> {selectedImage.description}</p>
-                        <p><strong>Current View:</strong> {activeView} Analysis</p>
+                        <p>
+                            <strong>Description:</strong> {selectedImage.description}
+                        </p>
+                        <p>
+                            <strong>Current View:</strong> {activeView} Analysis
+                        </p>
                     </div>
                 </div>
             </div>
-
         </section>
     );
 };
 
 export default InteractiveDemo;
-

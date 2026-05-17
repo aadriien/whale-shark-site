@@ -5,22 +5,19 @@ import CVApplications from "../components/overviews/CVApplications";
 import SharkMatchViewer from "../components/SharkMatchViewer";
 import SharkMatchGraph from "../components/SharkMatchGraph";
 
-
 function SharkVision() {
     return (
         <div className="page-content shark-vision-wrapper">
             {/* <h1>Whale Shark Computer Vision</h1> */}
-            
+
             <CVHeroIntro />
             <CVPipeline />
             <InteractiveDemo />
             <CVApplications />
             <SharkMatchViewer />
             <SharkMatchGraph />
-
         </div>
     );
 }
 
 export default SharkVision;
-

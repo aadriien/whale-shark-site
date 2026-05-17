@@ -10,18 +10,13 @@ import { FULLMONTHS } from "../../utils/DataUtils";
 import { MatchSharkSelectorProps } from "../../types/panels";
 import { SharkCriteria } from "../../types/filters";
 
-
-function MatchSharkSelector({ 
-    sharks,
-    onSharkSelect,
-    selectedSharkId
-}: MatchSharkSelectorProps) {
+function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSharkSelectorProps) {
     // Compute filter options from shark data
     const countries = extractUniqueSortedRegions(sharks, "countries");
 
-    const allYears = sharks.flatMap(
-        s => [parseInt(s.oldest), parseInt(s.newest)]
-    ).filter(y => !isNaN(y));
+    const allYears = sharks
+        .flatMap((s) => [parseInt(s.oldest), parseInt(s.newest)])
+        .filter((y) => !isNaN(y));
 
     const minYear = allYears.length > 0 ? Math.min(...allYears) : 2000;
     const maxYear = allYears.length > 0 ? Math.max(...allYears) : 2024;
@@ -29,27 +24,30 @@ function MatchSharkSelector({
     const months = FULLMONTHS;
 
     // Memoize default criteria (combined shark and match filters)
-    const defaultCriteria: SharkCriteria = useMemo(() => ({
-        // Location & time
-        country: "",
-        yearRange: [String(minYear), String(maxYear)],
-        month: "",
+    const defaultCriteria: SharkCriteria = useMemo(
+        () => ({
+            // Location & time
+            country: "",
+            yearRange: [String(minYear), String(maxYear)],
+            month: "",
 
-        // Match quality
-        miewidDistanceRange: [0, 5.0],
-        showOnlyConfidentMatches: false,
-        hasMatchedImages: false,
-        plausibility: "",
+            // Match quality
+            miewidDistanceRange: [0, 5.0],
+            showOnlyConfidentMatches: false,
+            hasMatchedImages: false,
+            plausibility: "",
 
-        // Keep for filterSharks compatibility
-        showOnlyWithMedia: false,
-        hasOccurrenceNotes: false,
-        minRecords: 1,
-        sex: "",
-        lifeStage: "",  
-        publishingCountry: "", 
-        observationType: "", 
-    }), [minYear, maxYear]);
+            // Keep for filterSharks compatibility
+            showOnlyWithMedia: false,
+            hasOccurrenceNotes: false,
+            minRecords: 1,
+            sex: "",
+            lifeStage: "",
+            publishingCountry: "",
+            observationType: "",
+        }),
+        [minYear, maxYear]
+    );
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [criteria, setCriteria] = useState<SharkCriteria>(() =>
@@ -70,6 +68,7 @@ function MatchSharkSelector({
     useEffect(() => {
         const params = criteriaToParams(criteria, defaultCriteria);
         setSearchParams(params);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [criteria]);
 
     // Prepare filter options
@@ -83,29 +82,28 @@ function MatchSharkSelector({
     return (
         <div className="match-shark-selector">
             <div className="match-selector-buttons">
-                <button 
+                <button
                     onClick={() => setShowFilters((prev) => !prev)}
                     className={`match-toggle-filter-button ${showFilters ? "active" : ""}`}
                 >
                     {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
                 </button>
-                <button 
-                    onClick={handleReset}
-                    className="match-reset-filters-button"
-                >
+                <button onClick={handleReset} className="match-reset-filters-button">
                     Reset Filters
                 </button>
             </div>
 
             <div className="match-list-header">
-                <span>Showing {filteredSharks.length} of {sharks.length} sharks</span>
+                <span>
+                    Showing {filteredSharks.length} of {sharks.length} sharks
+                </span>
             </div>
 
             {showFilters && (
                 <div className="match-filters-section">
-                    <MatchFilter 
-                        criteria={criteria} 
-                        onChange={setCriteria} 
+                    <MatchFilter
+                        criteria={criteria}
+                        onChange={setCriteria}
                         options={filterOptions}
                     />
                 </div>
@@ -125,12 +123,16 @@ function MatchSharkSelector({
                             </div>
                             <div>
                                 {shark.miewid_match_distance && (
-                                    <span className={`match-distance-value ${shark.miewid_match_distance < 1.0 ? "good" : "moderate"}`}>
+                                    <span
+                                        className={`match-distance-value ${shark.miewid_match_distance < 1.0 ? "good" : "moderate"}`}
+                                    >
                                         {shark.miewid_match_distance}
                                     </span>
                                 )}
                                 {shark.plausibility && (
-                                    <span className={`match-plausibility plausibility-${shark.plausibility.toLowerCase()}`}>
+                                    <span
+                                        className={`match-plausibility plausibility-${shark.plausibility.toLowerCase()}`}
+                                    >
                                         {shark.plausibility}
                                     </span>
                                 )}
@@ -144,4 +146,3 @@ function MatchSharkSelector({
 }
 
 export default MatchSharkSelector;
-

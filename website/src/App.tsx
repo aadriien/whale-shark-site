@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from "react";
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom"
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Logbook from "./components/HelperLogbook";
@@ -22,19 +22,16 @@ const SharkVision = lazy(() => import("./pages/SharkVision"));
 const BuildAShark = lazy(() => import("./pages/BuildAShark"));
 const Animation = lazy(() => import("./pages/Animation"));
 
-
 function App() {
     const [isLogbookOpen, setIsLogbookOpen] = useState<boolean>(false);
-  
+
     const [theme, setTheme] = useState<LightDarkTheme>(() => {
         // Check localStorage first for light / dark mode, then system preference
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme === "light" || savedTheme === "dark") {
             return savedTheme;
         }
-        return window.matchMedia(
-            "(prefers-color-scheme: dark)"
-        ).matches ? "dark" : "light";
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     });
 
     useEffect(() => {
@@ -47,31 +44,26 @@ function App() {
         const savedTheme = localStorage.getItem("theme");
         if (!savedTheme) {
             const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-            const handler = (e: MediaQueryListEvent) => setTheme(
-                e.matches ? "dark" : "light"
-            );
-            
+            const handler = (e: MediaQueryListEvent) => setTheme(e.matches ? "dark" : "light");
+
             mediaQuery.addEventListener("change", handler);
             return () => mediaQuery.removeEventListener("change", handler);
         }
     }, []);
 
-
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <HashRouter>
                 {/* Navbar outside Routes so it's always shown on pages */}
-                <Navbar 
+                <Navbar
                     isLogbookOpen={isLogbookOpen}
                     setIsLogbookOpen={setIsLogbookOpen}
-                    theme={theme} 
+                    theme={theme}
                     setTheme={setTheme}
                 />
 
                 {/* Logbook overlay (conditionally rendered) */}
-                {isLogbookOpen && (
-                    <Logbook setIsLogbookOpen={setIsLogbookOpen} />
-                )}
+                {isLogbookOpen && <Logbook setIsLogbookOpen={setIsLogbookOpen} />}
 
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />
@@ -95,9 +87,7 @@ function App() {
                 </Routes>
             </HashRouter>
         </Suspense>
-    )
+    );
 }
 
 export default App;
-
-

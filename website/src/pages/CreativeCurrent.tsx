@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 
 import { PageMetadata } from "../types/pages";
 
-
 function CreativeCurrent() {
     const pages: PageMetadata[] = [
         {
@@ -21,7 +20,6 @@ function CreativeCurrent() {
 
     return (
         <div className="page-content research-creative-wrapper">
-            
             <div className="research-creative-hero-content">
                 <h1>Welcome to the Creative Current</h1>
                 <p>Dive into imagination. Construct dynamic paths. Build whale sharks.</p>
@@ -29,14 +27,14 @@ function CreativeCurrent() {
 
             <div className="research-creative-intro">
                 <p className="tagline">
-                    Creative Current is the playful and innovative sandbox of our whale shark experience. 
+                    Creative Current is the playful and innovative sandbox of our whale shark
+                    experience.
                 </p>
-                <p>    
-                    Here you can invent your own shark, toy with the software behind 3D animations, 
-                    and discover exciting ways to engage with the many wonders of our ocean. 
-
-                    Whether you're an eager creator or simply an enthusiastic technologist, this
-                    section will invite you to harness your experimental side and lean into the fun.
+                <p>
+                    Here you can invent your own shark, toy with the software behind 3D animations,
+                    and discover exciting ways to engage with the many wonders of our ocean. Whether
+                    you're an eager creator or simply an enthusiastic technologist, this section
+                    will invite you to harness your experimental side and lean into the fun.
                 </p>
             </div>
 
@@ -56,4 +54,3 @@ function CreativeCurrent() {
 }
 
 export default CreativeCurrent;
-

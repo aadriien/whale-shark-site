@@ -1,20 +1,20 @@
+import React from "react";
+
 import { WhaleSharkEntryNormalized } from "./sharks";
 import { PlottedCoordinatePoint } from "./coordinates";
 import { GlobeHandle } from "./globes";
 
-
 /* Controls types */
 
 export type PlayStoryButtonProps = {
-    shark: WhaleSharkEntryNormalized; 
+    shark: WhaleSharkEntryNormalized;
     onPlayStory?: (id: string) => void;
-    isPlaying?: boolean; 
-    playingSharkId?: string; 
-    showPauseForGeoLabs?: boolean; 
+    isPlaying?: boolean;
+    playingSharkId?: string;
+    showPauseForGeoLabs?: boolean;
     onToggleStepMode?: () => void;
     isStepMode?: boolean;
 };
-
 
 export type TimelineButtonProps = {
     onToggleTimelineMode: () => void;
@@ -27,17 +27,15 @@ export type TimelineSelectorProps = {
     currentYear: number;
     isVisible: boolean;
     availableSharks: string[];
-    plottedCoordinates: PlottedCoordinatePoint[]
+    plottedCoordinates: PlottedCoordinatePoint[];
 };
-
 
 export type TimelineControlsProps = {
     globeRef: React.RefObject<GlobeHandle | null>;
     selectedSharksForLab: Set<string>;
-    onToggleTimelineMode: () => void; 
+    onToggleTimelineMode: () => void;
     isTimelineMode: boolean;
 };
-
 
 export type StoryStepSliderProps = {
     shark: WhaleSharkEntryNormalized;
@@ -46,7 +44,6 @@ export type StoryStepSliderProps = {
     isVisible: boolean;
 };
 
-
 export type OceanViewerTimelineProps = {
     sliderIndex: number;
     onSliderChange: (index: number) => void;
@@ -54,5 +51,3 @@ export type OceanViewerTimelineProps = {
     isLoadingDataset: boolean;
     datasetKey: string;
 };
-
-

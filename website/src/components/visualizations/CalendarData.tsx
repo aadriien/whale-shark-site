@@ -17,13 +17,15 @@ import calendarStatsGBIF from "../../assets/data/json/gbif_calendar_stats.json";
 
 import { MonthsMapping } from "../../types/charts";
 
-    
 const GBIFCalendarOccurrences = () => {
-    const [selectedYear, setSelectedYear] = useState<string>(""); 
+    const [selectedYear, setSelectedYear] = useState<string>("");
 
-    const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);    
-    const monthlyData: MonthsMapping[] = useMemo(() => reshaped[Number(selectedYear)] || [], [selectedYear, reshaped]);
-        
+    const reshaped = useMemo(() => reshapeYearData(calendarStatsGBIF), []);
+    const monthlyData: MonthsMapping[] = useMemo(
+        () => reshaped[Number(selectedYear)] || [],
+        [selectedYear, reshaped]
+    );
+
     return (
         <>
             <div className="section-header">
@@ -43,16 +45,19 @@ const GBIFCalendarOccurrences = () => {
                 <div className="card-data-wrapper">
                     <DecadeData />
                 </div>
-                
+
                 <div className="card-data-wrapper">
-                    <DataOverview 
-                        dataset="calendar" 
+                    <DataOverview
+                        dataset="calendar"
                         filterField="year"
                         selectedFilter={selectedYear}
                         displayFields={[
                             { label: "Total Occurrences", field: "Total Occurrences" },
                             { label: "Unique Sharks (with ID)", field: "Unique Sharks (with ID)" },
-                            { label: "Top 3 Publishing Countries", field: "Top 3 Publishing Countries" }
+                            {
+                                label: "Top 3 Publishing Countries",
+                                field: "Top 3 Publishing Countries",
+                            },
                         ]}
                     />
                 </div>
@@ -63,12 +68,13 @@ const GBIFCalendarOccurrences = () => {
                             data={monthlyData}
                             title={`Shark Records by Month — ${selectedYear}`}
                         />
+                    ) : selectedYear ? (
+                        <p style={{ textAlign: "center" }}>No data available for this year.</p>
                     ) : (
-                        selectedYear ? (
-                            <p style={{ textAlign: "center" }}>No data available for this year.</p>
-                        ) : (
-                            <ChartPlaceholder type="bar" message="Select a year to see monthly records" />
-                        )
+                        <ChartPlaceholder
+                            type="bar"
+                            message="Select a year to see monthly records"
+                        />
                     )}
                 </div>
 
@@ -81,4 +87,3 @@ const GBIFCalendarOccurrences = () => {
 };
 
 export default GBIFCalendarOccurrences;
-

@@ -8,16 +8,14 @@ type Mode = "simple" | "segmented" | "smooth";
 
 export type HoverBlobName = "reef" | "current";
 
-
 export type BlobParticleGroupProps = {
-    baseColors: THREE.Color[]; 
+    baseColors: THREE.Color[];
     particleCount: number;
     spaceScale: number;
     pointSize: number;
     clickableRadius?: number;
     name?: string;
 };
-
 
 type Oscillation = {
     axis1: Axes;
@@ -47,14 +45,12 @@ export type AnimateBlobGroupProps = {
     bounds?: Bounds;
 };
 
-
 export type SegmentDataItem = {
     segmentIndex: number;
     segmentPos: number;
 };
 
 export type SegmentData = SegmentDataItem[];
-
 
 export type WaveProps = {
     basePositions: Float32Array<ArrayBuffer>;
@@ -73,11 +69,9 @@ export type ApplyRippleProps = WaveProps & {
     mode: Mode;
 };
 
-
 export type GalacticOceanProps = {
     isMobile: boolean;
 };
-
 
 type BlobConfigs = {
     opacity: number;
@@ -91,11 +85,8 @@ type ParticleBlob = {
 
 export type ParticleBlobs = Record<HoverBlobName, ParticleBlob>;
 
-
 export type SetActiveBlobProps = {
     particleBlobs: ParticleBlobs;
     activeName?: HoverBlobName | null;
     sourceObject?: THREE.Object3D | null;
 };
-
-

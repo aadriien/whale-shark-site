@@ -1,21 +1,20 @@
-import { WhaleSharkDatasetNormalized } from "./sharks";
+import React from "react";
 
+import { WhaleSharkDatasetNormalized } from "./sharks";
 
 /* Chart types */
 
-export type ChartPlaceholderProps = { 
-    type: string; 
-    message: string; 
+export type ChartPlaceholderProps = {
+    type: string;
+    message: string;
 };
 
 export type ImageMap = Record<string, string>;
 
-
-export type SvgDimensions = { 
-    width: number; 
-    height: number 
+export type SvgDimensions = {
+    width: number;
+    height: number;
 };
-
 
 export type BarChartDataPoint = {
     label: string;
@@ -26,7 +25,6 @@ export type BarChartProps = {
     data: BarChartDataPoint[];
     title?: string;
 };
-
 
 export type HeatmapDataPoint = {
     year: number;
@@ -39,7 +37,6 @@ export type HeatmapProps = {
     title?: string;
     yTickFormatter?: (value: number) => string;
 };
-
 
 export type RadialHeatmapDataPoint = Record<string, string | number>;
 
@@ -58,17 +55,16 @@ export type RadialHeatmapProps = {
     pieData?: PieDataPoint[];
 };
 
-
 export type GBIFDataEntry = Record<string, string | number>;
 
 export type GBIFDataset = GBIFDataEntry[];
 
-export type DatasetMapping = Record<string, GBIFDataset>; 
+export type DatasetMapping = Record<string, GBIFDataset>;
 
 export type DisplayField = {
     label: string;
     field: string;
-    formatter?: (value: any) => React.ReactNode;
+    formatter?: (value: string | number) => React.ReactNode;
 };
 
 export type DataOverviewProps = {
@@ -80,7 +76,6 @@ export type DataOverviewProps = {
     displayFields?: DisplayField[];
     selectedFilter?: string;
 };
-
 
 export type DataMetricFilterProps = {
     label: string;
@@ -94,7 +89,6 @@ export type DataMetricFilterProps = {
     inline: boolean;
 };
 
-
 export type MonthsMapping = {
     label: string;
     value: number;
@@ -102,13 +96,11 @@ export type MonthsMapping = {
 
 export type YearMonthsMapping = Record<number, MonthsMapping[]>;
 
-
 export type GBIFRegionOccurrencesProps = {
-    regionData: GBIFDataset; 
-    metric: string; 
+    regionData: GBIFDataset;
+    metric: string;
     selectedRegion: string;
 };
-
 
 export type SexLifeStageDataProps = {
     selectedYear?: string;
@@ -116,5 +108,3 @@ export type SexLifeStageDataProps = {
     sharks?: WhaleSharkDatasetNormalized;
     title?: string;
 };
-
-

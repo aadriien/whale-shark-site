@@ -6,10 +6,9 @@ import "leaflet/dist/leaflet.css";
 
 import { OceanMapHandle } from "../../types/oceans";
 
-
 // Weird TypeScript ForwardRef rules when ordering for type inference
 // Always props first ({}), then ref second (OceanMapHandle)
-const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
+const OceanViewerMap = forwardRef<OceanMapHandle, object>((_, ref) => {
     const mapElRef = useRef<HTMLDivElement>(null);
     const mapRef = useRef<L.Map | null>(null);
     const dataLayerRef = useRef<L.LayerGroup | null>(null);
@@ -17,9 +16,15 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
     const rendererRef = useRef<L.Canvas | null>(null);
 
     useImperativeHandle(ref, () => ({
-        get dataLayer() { return dataLayerRef.current; },
-        get sharkLayer() { return sharkLayerRef.current; },
-        get renderer() { return rendererRef.current; },
+        get dataLayer() {
+            return dataLayerRef.current;
+        },
+        get sharkLayer() {
+            return sharkLayerRef.current;
+        },
+        get renderer() {
+            return rendererRef.current;
+        },
     }));
 
     useEffect(() => {
@@ -43,10 +48,9 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
         });
 
         // Dark base, no labels
-        L.tileLayer(
-            "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png",
-            { maxZoom: 10 }
-        ).addTo(map);
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png", {
+            maxZoom: 10,
+        }).addTo(map);
 
         mapRef.current = map;
         dataLayerRef.current = L.layerGroup().addTo(map);
@@ -72,11 +76,14 @@ const OceanViewerMap = forwardRef<OceanMapHandle, {}>((_, ref) => {
             fitToContainer();
         }, 0);
 
-        return () => { observer.disconnect(); map.remove(); mapRef.current = null; };
+        return () => {
+            observer.disconnect();
+            map.remove();
+            mapRef.current = null;
+        };
     }, []);
 
     return <div ref={mapElRef} className="ocean-viewer-map" />;
 });
 
 export default OceanViewerMap;
-

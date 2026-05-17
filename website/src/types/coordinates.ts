@@ -1,6 +1,6 @@
 /* Coordinates types */
 
-// Applicable for data in `gbif_shark_tracking.json` 
+// Applicable for data in `gbif_shark_tracking.json`
 export type CoordinatePoint = {
     lat: number;
     long: number;
@@ -16,7 +16,6 @@ export type WhaleSharkCoordinates = {
 
 export type WhaleSharkCoordinateDataset = WhaleSharkCoordinates[];
 
-
 export type PlottedCoordinatePoint = {
     id: string;
     lat: number;
@@ -28,8 +27,7 @@ export type PlottedCoordinatePoint = {
     ringRepeatPeriod: number;
 };
 
-
-// Base type for grid-based Copernicus marine data 
+// Base type for grid-based Copernicus marine data
 // (lat/lng always present, extra fields vary by dataset)
 export type OceanGridPoint = {
     lat: number;
@@ -43,4 +41,3 @@ export type ChlorophyllGridPoint = {
     lng: number;
     meanCHL: number;
 };
-

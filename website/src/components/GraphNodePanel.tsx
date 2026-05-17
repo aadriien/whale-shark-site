@@ -5,7 +5,6 @@ import { mediaSharks, visionOccurrences } from "../utils/DataUtils";
 
 import { GraphNodePanelProps } from "../types/graphs";
 
-
 function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {
     if (!match) {
         return (
@@ -29,9 +28,11 @@ function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {
     const clickedOccurrence = sharkOccurrences.find((occ) => occ.image_id === match.clickedImageId);
     const imageURL = clickedOccurrence?.identifier_url;
 
-    const image_ids = sharkOccurrences.map(s => s.image_id);
-    console.log(`valid shark image IDs include: ${image_ids.join(", ")}`)
-    console.log(`clicked image ID ${match.clickedImageId} with URL ${imageURL} for shark ID ${clickedShark?.id}`)
+    const image_ids = sharkOccurrences.map((s) => s.image_id);
+    console.log(`valid shark image IDs include: ${image_ids.join(", ")}`);
+    console.log(
+        `clicked image ID ${match.clickedImageId} with URL ${imageURL} for shark ID ${clickedShark?.id}`
+    );
 
     return (
         <div className="graph-node-panel">
@@ -53,7 +54,10 @@ function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {
             <div className="graph-panel-section">
                 <span className="graph-panel-label">
                     Closest match
-                    <span className="graph-panel-distance"> · dist {match.matchDistance.toFixed(4)}</span>
+                    <span className="graph-panel-distance">
+                        {" "}
+                        · dist {match.matchDistance.toFixed(4)}
+                    </span>
                 </span>
                 {match.matchPopulation === "gbif" ? (
                     matchedShark ? (

@@ -4,26 +4,20 @@ import SharkModelPoints3D from "../../assets/data/json/shark_model_extracted_poi
 
 import { SegmentData, WaveProps, ApplyRippleProps } from "../../types/animations";
 
-function computeWave({
-    basePositions, 
-    time, wavelength, speed
-}: WaveProps) {
+function computeWave({ basePositions, time, wavelength, speed }: WaveProps) {
     const waveValues = new Float32Array(basePositions.length / 3);
 
     for (let i = 0; i < basePositions.length / 3; i++) {
         // Use Y axis to run wave lengthwise
-        const y = basePositions[i * 3 + 1]; 
+        const y = basePositions[i * 3 + 1];
         waveValues[i] = Math.sin(y * wavelength + time * speed);
     }
     return waveValues;
 }
 
-
-function computeSegments(
-    basePositions: Float32Array<ArrayBuffer>, 
-    numSegments: number
-) {
-    let minY = Infinity, maxY = -Infinity;
+function computeSegments(basePositions: Float32Array<ArrayBuffer>, numSegments: number) {
+    let minY = Infinity,
+        maxY = -Infinity;
 
     for (let i = 0; i < basePositions.length / 3; i++) {
         // Use Y axis to segment body lengthwise
@@ -32,7 +26,7 @@ function computeSegments(
         if (y > maxY) maxY = y;
     }
     const segmentSize = (maxY - minY) / numSegments;
-    
+
     // Assign each point to segment index & fractional position in segment
     const segmentData: SegmentData = new Array(basePositions.length / 3);
     for (let i = 0; i < basePositions.length / 3; i++) {
@@ -46,7 +40,6 @@ function computeSegments(
     }
     return { minY, maxY, segmentSize, segmentData };
 }
-
 
 function applyRipple({
     positions,
@@ -63,19 +56,18 @@ function applyRipple({
 }: ApplyRippleProps) {
     const axisIndex = { x: 0, y: 1, z: 2 }[axis];
     if (axisIndex === undefined) return;
-    
+
     const pointCount = basePositions.length / 3;
-    
+
     // Compute wave values & body segments based on Y axis
-    const waveValues = computeWave({ 
-        basePositions, 
-        time, wavelength, speed 
+    const waveValues = computeWave({
+        basePositions,
+        time,
+        wavelength,
+        speed,
     });
-    const { minY, maxY, segmentSize, segmentData } = computeSegments(
-        basePositions, 
-        numSegments
-    );
-    
+    const { minY, maxY, segmentSize, segmentData } = computeSegments(basePositions, numSegments);
+
     // Precompute segment ripple offsets with taper flipped (tail = higher Y)
     const segmentOffsets: number[] = new Array(numSegments).fill(0);
     if (mode !== "simple") {
@@ -91,41 +83,44 @@ function applyRipple({
             segmentOffsets[i] = amplitude * taper * Math.sin(phase);
         }
     }
-    
+
     for (let i = 0; i < pointCount; i++) {
         const baseX = basePositions[i * 3];
         const baseY = basePositions[i * 3 + 1];
         const baseZ = basePositions[i * 3 + 2];
-        
+
         // Flipped normalized Y (0 = tail, 1 = head)
         const normY = 1 - (baseY - minY) / (maxY - minY);
         let ripple = 0;
-        
+
         switch (mode) {
-            case "simple":
+            case "simple": {
                 let taperSimple = 0;
                 if (normY > taperStart) {
                     taperSimple = Math.pow((normY - taperStart) / (1 - taperStart), taperPower);
                 }
                 ripple = amplitude * taperSimple * waveValues[i];
                 break;
-            
-            case "segmented":
+            }
+
+            case "segmented": {
                 const segIndex = segmentData[i].segmentIndex;
                 ripple = segmentOffsets[segIndex] || 0;
                 break;
-            
-            case "smooth":
+            }
+
+            case "smooth": {
                 const { segmentIndex, segmentPos } = segmentData[i];
                 const nextSeg = Math.min(segmentIndex + 1, numSegments - 1);
 
                 const offsetLow = segmentOffsets[segmentIndex] || 0;
                 const offsetHigh = segmentOffsets[nextSeg] || 0;
-                
+
                 ripple = (1 - segmentPos) * offsetLow + segmentPos * offsetHigh;
                 break;
+            }
         }
-        
+
         // Apply ripple displacement on chosen axis
         positions[i * 3] = baseX;
         positions[i * 3 + 1] = baseY;
@@ -134,27 +129,30 @@ function applyRipple({
     }
 }
 
-
 function createCircleTexture() {
     // Use bigger canvas for smoother gradient in sprites
-    const size = 128; 
-    const canvas = document.createElement('canvas');
+    const size = 128;
+    const canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, size, size);
 
     // Create radial gradient with multiple stops for smooth falloff
     const gradient = ctx.createRadialGradient(
-        size / 2, size / 2, size * 0.05,  // inner radius (bright core)
-        size / 2, size / 2, size / 2      // outer radius (fade out)
+        size / 2,
+        size / 2,
+        size * 0.05, // inner radius (bright core)
+        size / 2,
+        size / 2,
+        size / 2 // outer radius (fade out)
     );
 
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');      // bright center
-    gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.3)');  // soft middle glow
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');      // transparent edge
+    gradient.addColorStop(0, "rgba(255, 255, 255, 1)"); // bright center
+    gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.3)"); // soft middle glow
+    gradient.addColorStop(1, "rgba(255, 255, 255, 0)"); // transparent edge
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, size, size);
@@ -164,26 +162,25 @@ function createCircleTexture() {
     return texture;
 }
 
-
 export function GlowSharkAnimated() {
     // Load & center points cloud
     const rawPoints = Object.values(SharkModelPoints3D);
-    
-    const xs = rawPoints.map(p => p.x);
-    const ys = rawPoints.map(p => p.y);
-    const zs = rawPoints.map(p => p.z);
-    
+
+    const xs = rawPoints.map((p) => p.x);
+    const ys = rawPoints.map((p) => p.y);
+    const zs = rawPoints.map((p) => p.z);
+
     const centerX = (Math.min(...xs) + Math.max(...xs)) / 2;
     const centerY = (Math.min(...ys) + Math.max(...ys)) / 2;
     const centerZ = (Math.min(...zs) + Math.max(...zs)) / 2;
-    
+
     const maxSpan = Math.max(
         Math.max(...xs) - Math.min(...xs),
         Math.max(...ys) - Math.min(...ys),
         Math.max(...zs) - Math.min(...zs)
     );
     const scaleFactor = 200 / maxSpan;
-    
+
     const positions = new Float32Array(rawPoints.length * 3);
     const basePositions = new Float32Array(rawPoints.length * 3); // store original layout
 
@@ -194,29 +191,29 @@ export function GlowSharkAnimated() {
         const x = (p.x - centerX) * scaleFactor;
         const y = -(p.y - centerY) * scaleFactor;
         const z = (p.z - centerZ) * scaleFactor;
-        
+
         // More verbose than 1 liner `positions.set([x, y, z], i * 3)`
         // BUT better performance for animation b/c avoids creatng temporary arrays
         positions[i * 3] = x;
         positions[i * 3 + 1] = y;
         positions[i * 3 + 2] = z;
-        
+
         basePositions[i * 3] = x;
         basePositions[i * 3 + 1] = y;
         basePositions[i * 3 + 2] = z;
-        
+
         // Start with cyan-ish glow, to animate later
-        color.setHSL((i / rawPoints.length), 1.0, 0.6);
+        color.setHSL(i / rawPoints.length, 1.0, 0.6);
         colors.set([color.r, color.g, color.b], i * 3);
     });
-    
+
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
     const sprite = createCircleTexture();
     const material = new THREE.PointsMaterial({
-        size: 4.5, 
+        size: 4.5,
         map: sprite,
         vertexColors: true,
         transparent: true,
@@ -226,42 +223,42 @@ export function GlowSharkAnimated() {
         depthTest: false,
         sizeAttenuation: true,
     });
-    
+
     const shark = new THREE.Points(geometry, material);
     // Shark facing front means nose to left side of user (sideways)
     shark.rotation.set(-Math.PI / 2, 0, Math.PI / 2);
-    
+
     // Define control points for shark path around screen bounds
     const pathPoints = [
-        new THREE.Vector3(-650, -250, -100),    // start far left, low deep
-        new THREE.Vector3(-440, -210, 0),       // combined gentle rise & rightward start
-        new THREE.Vector3(-210, -80, 70),       // sweeping right & up
-        new THREE.Vector3(290, 40, 170),        // far right peak, higher up 
-        new THREE.Vector3(10, 0, 340),          // close to camera peak
-        new THREE.Vector3(-150, 40, 200),  
-        new THREE.Vector3(-370, -50, -70),      // prepping descent
+        new THREE.Vector3(-650, -250, -100), // start far left, low deep
+        new THREE.Vector3(-440, -210, 0), // combined gentle rise & rightward start
+        new THREE.Vector3(-210, -80, 70), // sweeping right & up
+        new THREE.Vector3(290, 40, 170), // far right peak, higher up
+        new THREE.Vector3(10, 0, 340), // close to camera peak
+        new THREE.Vector3(-150, 40, 200),
+        new THREE.Vector3(-370, -50, -70), // prepping descent
         new THREE.Vector3(-320, -150, -70),
-        new THREE.Vector3(-250, -280, 120),     // deep dive start & dip 
-        new THREE.Vector3(-10, -150, 270),      // upward diagonal toward camera
-        new THREE.Vector3(40, 160, 340),        // approaching camera, gentle rise
-        new THREE.Vector3(90, 220, 350),        // near top, capped y, diagonal swim
+        new THREE.Vector3(-250, -280, 120), // deep dive start & dip
+        new THREE.Vector3(-10, -150, 270), // upward diagonal toward camera
+        new THREE.Vector3(40, 160, 340), // approaching camera, gentle rise
+        new THREE.Vector3(90, 220, 350), // near top, capped y, diagonal swim
         new THREE.Vector3(170, 110, 360),
-        new THREE.Vector3(280, 55, 150),        // softened right sweep & descend
-        new THREE.Vector3(180, -180, -140),     // deep dive bottom
-        new THREE.Vector3(-150, -120, -60),     // gentle pull back left & up
-        new THREE.Vector3(-600, -200, 20),      // reef blob anchor far left
-        new THREE.Vector3(-400, -310, 60),      // softened intermediate reef point
-        new THREE.Vector3(150, -210, 110),  
-        new THREE.Vector3(600, -180, 80),       // current blob anchor far right
-        new THREE.Vector3(500, -100, 90),       // widened loop back point
-        new THREE.Vector3(-110, -180, 150), 
-        new THREE.Vector3(-500, -250, -90),     // curl back to start area
+        new THREE.Vector3(280, 55, 150), // softened right sweep & descend
+        new THREE.Vector3(180, -180, -140), // deep dive bottom
+        new THREE.Vector3(-150, -120, -60), // gentle pull back left & up
+        new THREE.Vector3(-600, -200, 20), // reef blob anchor far left
+        new THREE.Vector3(-400, -310, 60), // softened intermediate reef point
+        new THREE.Vector3(150, -210, 110),
+        new THREE.Vector3(600, -180, 80), // current blob anchor far right
+        new THREE.Vector3(500, -100, 90), // widened loop back point
+        new THREE.Vector3(-110, -180, 150),
+        new THREE.Vector3(-500, -250, -90), // curl back to start area
     ];
-    
+
     // Create a smooth curve path (looped for continuous movement)
     const curve = new THREE.CatmullRomCurve3(pathPoints);
-    curve.closed = true; 
-    
+    curve.closed = true;
+
     return {
         shark,
         geometry,
@@ -275,13 +272,13 @@ export function GlowSharkAnimated() {
                 const pulse = 0.5 + 0.5 * Math.sin(time + i * 0.01);
 
                 color.setHSL(hue, 1.0, 0.5 + 0.2 * pulse);
-                
+
                 colors[i * 3] = color.r;
                 colors[i * 3 + 1] = color.g;
                 colors[i * 3 + 2] = color.b;
             }
             geometry.attributes.color.needsUpdate = true;
-            
+
             // Introduce ripple effect to simulate swimming motion
             applyRipple({
                 positions,
@@ -297,23 +294,21 @@ export function GlowSharkAnimated() {
                 mode: "smooth", // "simple", "segmented", "smooth"
             });
             geometry.attributes.position.needsUpdate = true;
-            
+
             // Move shark along curve (40 sec to complete 1 loop)
-            const loopDuration = 40; 
+            const loopDuration = 40;
             const t = (time % loopDuration) / loopDuration; // normalized time [0,1]
-            const nextT = (t + 0.01) % 1; 
+            const nextT = (t + 0.01) % 1;
             const currentPos = curve.getPointAt(t);
             const nextPos = curve.getPointAt(nextT);
-            
+
             shark.position.copy(currentPos);
             shark.up.set(0, 1, 0); // keep consistent up vector
             shark.lookAt(nextPos);
-            
+
             // Ensure "front" of shark == nose facing "lookAt"
             shark.rotateX(-Math.PI / 2);
             shark.rotateZ(Math.PI);
         },
     };
 }
-
-

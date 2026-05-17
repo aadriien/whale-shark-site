@@ -7,14 +7,15 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 
-import { 
-    createReef, animateReef, 
-    createCurrent, animateCurrent 
-} from "./ReefCurrentAnimated";
+import { createReef, animateReef, createCurrent, animateCurrent } from "./ReefCurrentAnimated";
 import { GlowSharkAnimated } from "./GlowSharkAnimated";
 
-import { GalacticOceanProps, HoverBlobName, ParticleBlobs, SetActiveBlobProps } from "../../types/animations";
-
+import {
+    GalacticOceanProps,
+    HoverBlobName,
+    ParticleBlobs,
+    SetActiveBlobProps,
+} from "../../types/animations";
 
 function createNebula(scene: THREE.Scene) {
     // Stars particle system
@@ -115,7 +116,6 @@ function createNebula(scene: THREE.Scene) {
     return { stars, nebula };
 }
 
-
 function createOcean(scene: THREE.Scene) {
     // Ocean plane in scene
     const oceanGeometry = new THREE.PlaneGeometry(2430, 800, 80, 40);
@@ -132,10 +132,11 @@ function createOcean(scene: THREE.Scene) {
         // forming a rounded curve inward near the top.
 
         const heightHalf = 400;
-        // const widthHalf = 7000; 
+        // const widthHalf = 7000;
         const widthHalf = 0;
 
-        if (y > heightHalf * 0.7) { // top 30% of plane height
+        if (y > heightHalf * 0.7) {
+            // top 30% of plane height
             // Calculate how far y is from top edge
             const distFromTop = heightHalf - y; // 0 at top edge, increasing downward
 
@@ -152,7 +153,6 @@ function createOcean(scene: THREE.Scene) {
         }
     }
     positionAttr.needsUpdate = true;
-
 
     // Ocean vertex shader: subtle wave displacements with time
     const oceanVertexShader = `
@@ -183,7 +183,6 @@ function createOcean(scene: THREE.Scene) {
         }
     `;
 
-
     const oceanMaterial = new THREE.ShaderMaterial({
         vertexShader: oceanVertexShader,
         fragmentShader: oceanFragmentShader,
@@ -203,17 +202,15 @@ function createOcean(scene: THREE.Scene) {
 
     const oceanMesh = new THREE.Mesh(oceanGeometry, oceanMaterial);
     oceanMesh.rotation.x = -Math.PI * (50 / 180);
-    oceanMesh.position.y = 300; 
+    oceanMesh.position.y = 300;
     scene.add(oceanMesh);
 
     return oceanMaterial;
 }
 
-
 function GalacticOcean({ isMobile }: GalacticOceanProps) {
     const [hoveredText, setHoveredText] = useState<HoverBlobName | null>(null); // "reef" | "current" | null
     const [hoveredBlob, setHoveredBlob] = useState<HoverBlobName | null>(null); // "reef" | "current" | null
-    const [hoveredScreenPos, setHoveredScreenPos] = useState({ x: 0, y: 0 });
 
     const currentHovered = useRef<HoverBlobName | null>(null);
     const currentColliding = useRef<HoverBlobName | null>(null);
@@ -230,12 +227,11 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
     const isReefActive = hoveredBlob === "reef" || hoveredText === "reef";
     const isCurrentActive = hoveredBlob === "current" || hoveredText === "current";
 
-
     // Reusable helper to activate particle blob glow on mouse hover or shark collision
     function setActiveBlob({
-        particleBlobs, 
-        activeName = null, 
-        sourceObject = null
+        particleBlobs,
+        activeName = null,
+        sourceObject = null,
     }: SetActiveBlobProps) {
         // Reset all particles first
         Object.entries(particleBlobs).forEach(([name, { blob, original }]) => {
@@ -261,10 +257,6 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
             const vector = new THREE.Vector3();
             vector.setFromMatrixPosition(blobGroup.matrixWorld);
             vector.project(cameraRef.current);
-
-            const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
-            const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
-            setHoveredScreenPos({ x, y });
         }
 
         // Cursor handling (optional: only do this for mouse hover)
@@ -273,9 +265,9 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         }
     }
 
-
     useEffect(() => {
         if (!mountRef.current) return;
+        const mount = mountRef.current;
 
         // Scene & camera setup
         const scene = new THREE.Scene();
@@ -294,7 +286,7 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setClearColor(0x000010);
-        mountRef.current.appendChild(renderer.domElement);
+        mount.appendChild(renderer.domElement);
 
         // Controls (static)
         const controls = new OrbitControls(camera, renderer.domElement);
@@ -306,19 +298,17 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         const ambientLight = new THREE.AmbientLight(0x8888aa, 1);
         scene.add(ambientLight);
 
-
         // Create starry nebula & rippling ocean, then add into scene
         const { stars, nebula } = createNebula(scene);
         const oceanMaterial = createOcean(scene);
 
-
         // Create glowing whale shark & add to scene
-        const { 
-            shark, 
-            geometry, 
-            basePositions, 
-            curve, 
-            update: updateShark 
+        const {
+            shark,
+            geometry,
+            basePositions: _basePositions,
+            curve,
+            update: updateShark,
         } = GlowSharkAnimated();
         shark.scale.set(1, 1, 1);
         scene.add(shark);
@@ -333,7 +323,6 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         const curveLine = new THREE.Line(curveGeometry, curveMaterial);
         scene.add(curveLine);
 
-
         // Create research reef & creative current objects
         const reef = createReef();
         if (!reef) return;
@@ -345,8 +334,8 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         current.scale.set(1.8, 1.8, 1.8);
         scene.add(current);
 
-        reef.position.set(-530, -210, 0); 
-        current.position.set(530, -210, 0); 
+        reef.position.set(-530, -210, 0);
+        current.position.set(530, -210, 0);
 
         reef.rotation.set(Math.PI / 2.7, 0.9, 0);
         current.rotation.set(Math.PI / 2.7, -0.9, 0);
@@ -354,30 +343,30 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         // Add their invisible meshes to clickable list
         reef.traverse((child) => {
             if (child instanceof THREE.Mesh && child.name === "reef") {
-                clickableMeshes.current.push(child)
-            };
+                clickableMeshes.current.push(child);
+            }
         });
         current.traverse((child) => {
             if (child instanceof THREE.Mesh && child.name === "current") {
-                clickableMeshes.current.push(child)
-            };
+                clickableMeshes.current.push(child);
+            }
         });
 
         // Store particle blobs + their original material states
         const particleBlobs: ParticleBlobs = {
-            reef: { 
-                blob: null, 
-                original: { 
-                    opacity: 1, 
-                    size: 1 
-                } 
+            reef: {
+                blob: null,
+                original: {
+                    opacity: 1,
+                    size: 1,
+                },
             },
-            current: { 
-                blob: null, 
-                original: { 
-                    opacity: 1, 
-                    size: 1 
-                } 
+            current: {
+                blob: null,
+                original: {
+                    opacity: 1,
+                    size: 1,
+                },
             },
         };
 
@@ -408,7 +397,6 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
             return intersects.length > 0 ? intersects[0] : null;
         }
 
-
         const handleClick = (event: MouseEvent) => {
             const intersect = getIntersectedClickable(event);
             if (intersect) {
@@ -416,14 +404,12 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
 
                 if (name === "reef") {
                     navigate("/research");
-                } 
-                else if (name === "current") {
+                } else if (name === "current") {
                     navigate("/creative");
                 }
             }
         };
-        mountRef.current.addEventListener("click", handleClick);
-
+        mount.addEventListener("click", handleClick);
 
         const handleHover = (event: MouseEvent) => {
             const intersect = getIntersectedClickable(event);
@@ -433,23 +419,21 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
                 const hoveredName = intersect.object.name as HoverBlobName;
 
                 if (hoveredName !== currentHovered.current) {
-                    setActiveBlob({ 
-                        particleBlobs: particleBlobs, 
-                        activeName: hoveredName, 
-                        sourceObject: intersect.object 
+                    setActiveBlob({
+                        particleBlobs: particleBlobs,
+                        activeName: hoveredName,
+                        sourceObject: intersect.object,
                     });
                     currentHovered.current = hoveredName;
                 }
-            } 
-            else {
+            } else {
                 if (currentHovered.current !== null) {
                     setActiveBlob({ particleBlobs });
                     currentHovered.current = null;
                 }
             }
         };
-        mountRef.current.addEventListener("mousemove", handleHover);
-
+        mount.addEventListener("mousemove", handleHover);
 
         // Activate glowing particle effect when shark swims through blob
         function checkSharkCollision() {
@@ -481,22 +465,23 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
             }
 
             if (collidedName !== currentColliding.current) {
-                setActiveBlob({ 
-                    particleBlobs: particleBlobs, 
-                    activeName: collidedName 
+                setActiveBlob({
+                    particleBlobs: particleBlobs,
+                    activeName: collidedName,
                 }); // no need for screen project
                 currentColliding.current = collidedName;
             }
         }
         checkSharkCollision();
 
-
         // Post-processing setup
         const composer = new EffectComposer(renderer);
         composer.addPass(new RenderPass(scene, camera));
         const bloomPass = new UnrealBloomPass(
             new THREE.Vector2(window.innerWidth, window.innerHeight),
-            1.2, 1, 0.3
+            1.2,
+            1,
+            0.3
         );
         composer.addPass(bloomPass);
 
@@ -536,13 +521,10 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         return () => {
             window.removeEventListener("resize", onResize);
 
-            if (
-                mountRef.current &&
-                renderer.domElement.parentElement === mountRef.current
-            ) {
-                mountRef.current.removeChild(renderer.domElement);
-                mountRef.current.removeEventListener("click", handleClick);
-                mountRef.current.removeEventListener("mousemove", handleHover);
+            if (mount && renderer.domElement.parentElement === mount) {
+                mount.removeChild(renderer.domElement);
+                mount.removeEventListener("click", handleClick);
+                mount.removeEventListener("mousemove", handleHover);
             }
             renderer.dispose();
         };
@@ -570,29 +552,29 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
                         onMouseEnter={() => setHoveredText("reef")}
                         onMouseLeave={() => setHoveredText(null)}
                         style={{
-                            position: 'absolute',
-                            top: '190px',
-                            left: '60px',
+                            position: "absolute",
+                            top: "190px",
+                            left: "60px",
                             fontFamily: "'Poppins', 'Montserrat', sans-serif",
-                            fontStyle: 'italic',
+                            fontStyle: "italic",
                             fontWeight: 500,
-                            fontSize: '2.2rem',
-                            textTransform: 'lowercase',
-                            whiteSpace: 'nowrap',
+                            fontSize: "2.2rem",
+                            textTransform: "lowercase",
+                            whiteSpace: "nowrap",
 
-                            pointerEvents: 'auto',
-                            cursor: 'pointer',
-                            userSelect: 'none',
+                            pointerEvents: "auto",
+                            cursor: "pointer",
+                            userSelect: "none",
 
                             margin: 0,
                             padding: 0,
-                            letterSpacing: '0.2em',
+                            letterSpacing: "0.2em",
                             zIndex: 1000,
-                            background: 'transparent',
+                            background: "transparent",
 
                             // Bright white on hover, faint coral otherwise
-                            color: isReefActive ? '#fff' : 'rgba(255, 192, 203, 0.3)', 
-                            filter: 'blur(1.2px)',
+                            color: isReefActive ? "#fff" : "rgba(255, 192, 203, 0.3)",
+                            filter: "blur(1.2px)",
                             opacity: 1,
                             textShadow: isReefActive
                                 ? `
@@ -607,22 +589,22 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
                                     0 0 3px #feb47b44,
                                     0 0 6px #feb47b22
                                 `,
-                            transition: 'color 0.6s ease, text-shadow 0.8s ease',
-                            textAlign: 'left',
-                            display: 'inline-block',
-                            transformOrigin: 'center',
-                            transform: 'scaleX(1.5) scaleY(0.7)',
-                            animation: 'wave 3.5s ease-in-out infinite',
+                            transition: "color 0.6s ease, text-shadow 0.8s ease",
+                            textAlign: "left",
+                            display: "inline-block",
+                            transformOrigin: "center",
+                            transform: "scaleX(1.5) scaleY(0.7)",
+                            animation: "wave 3.5s ease-in-out infinite",
                         }}
                     >
                         {[..."research reef"].map((char, i) => (
                             <span
                                 key={i}
                                 style={{
-                                    display: 'inline-block',
+                                    display: "inline-block",
                                     transform: `translateY(${Math.sin(i * 1.3) * 3}px)`,
-                                    transition: 'transform 0.5s ease-in-out',
-                                    willChange: 'transform',
+                                    transition: "transform 0.5s ease-in-out",
+                                    willChange: "transform",
                                 }}
                             >
                                 {char}
@@ -634,31 +616,31 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
                     <div
                         onClick={() => navigate("/creative")}
                         onMouseEnter={() => setHoveredText("current")}
-                        onMouseLeave={() =>  setHoveredText(null)}
+                        onMouseLeave={() => setHoveredText(null)}
                         style={{
-                            position: 'absolute',
-                            top: '190px',
-                            right: '60px',
+                            position: "absolute",
+                            top: "190px",
+                            right: "60px",
                             fontFamily: "'Poppins', 'Montserrat', sans-serif",
-                            fontStyle: 'italic',
+                            fontStyle: "italic",
                             fontWeight: 500,
-                            fontSize: '2.2rem',
-                            textTransform: 'lowercase',
-                            whiteSpace: 'nowrap',
-                            
-                            pointerEvents: 'auto',
-                            cursor: 'pointer',
-                            userSelect: 'none',
+                            fontSize: "2.2rem",
+                            textTransform: "lowercase",
+                            whiteSpace: "nowrap",
+
+                            pointerEvents: "auto",
+                            cursor: "pointer",
+                            userSelect: "none",
 
                             margin: 0,
                             padding: 0,
-                            letterSpacing: '0.2em',
+                            letterSpacing: "0.2em",
                             zIndex: 1000,
-                            background: 'transparent',
+                            background: "transparent",
 
                             // Bright white on hover, faint green otherwise
-                            color: isCurrentActive ? '#fff' : 'rgba(152, 251, 152, 0.3)', 
-                            filter: 'blur(1.2px)',
+                            color: isCurrentActive ? "#fff" : "rgba(152, 251, 152, 0.3)",
+                            filter: "blur(1.2px)",
                             opacity: 1,
                             textShadow: isCurrentActive
                                 ? `
@@ -673,22 +655,22 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
                                     0 0 3px #1de9b644,
                                     0 0 6px #1de9b622
                                 `,
-                            transition: 'color 0.6s ease, text-shadow 0.8s ease',
-                            textAlign: 'right',
-                            display: 'inline-block',
-                            transformOrigin: 'center',
-                            transform: 'scaleX(1.5) scaleY(0.7)',
-                            animation: 'wave 3.5s ease-in-out infinite',
+                            transition: "color 0.6s ease, text-shadow 0.8s ease",
+                            textAlign: "right",
+                            display: "inline-block",
+                            transformOrigin: "center",
+                            transform: "scaleX(1.5) scaleY(0.7)",
+                            animation: "wave 3.5s ease-in-out infinite",
                         }}
                     >
                         {[..."creative current"].map((char, i) => (
                             <span
                                 key={i}
                                 style={{
-                                    display: 'inline-block',
+                                    display: "inline-block",
                                     transform: `translateY(${Math.sin(i * 1.3) * 3}px)`,
-                                    transition: 'transform 0.5s ease-in-out',
-                                    willChange: 'transform',
+                                    transition: "transform 0.5s ease-in-out",
+                                    willChange: "transform",
                                 }}
                             >
                                 {char}
@@ -711,4 +693,3 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
 }
 
 export default GalacticOcean;
-

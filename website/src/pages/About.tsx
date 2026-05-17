@@ -4,7 +4,6 @@ import FunFacts from "../components/overviews/FunFacts";
 import ConservationStatus from "../components/overviews/ConservationStatus";
 import FAQAccordion from "../components/overviews/FAQAccordion";
 
-
 function About() {
     return (
         <div className="page-content about-page-wrapper">
@@ -15,10 +14,8 @@ function About() {
             <FunFacts />
             <ConservationStatus />
             <FAQAccordion />
-        
         </div>
     );
 }
 
 export default About;
-
