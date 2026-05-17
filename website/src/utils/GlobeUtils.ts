@@ -168,27 +168,22 @@ export function clearAllData(globe: ThreeGlobe) {
 
 export async function resetGlobe(
     camera: THREE.PerspectiveCamera,
-    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
-    yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
+    pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
-    // Start with camera zooming out.. far!
+    // Zoom out while re-centering camera
     new JEasing(camera.position)
         .to({ x: 0, y: 0, z: 300 }, 1000)
         .easing(Cubic.InOut)
         .start();
 
-    // Then reset pitch & yaw rotations
+    // Level pitch to equator so yaw rotation doesn't arc when near poles
     new JEasing(pitchRef.current!.rotation)
         .to({ x: 0, y: 0, z: 0 }, 1025)
         .easing(Cubic.InOut)
         .start();
 
-    new JEasing(yawRef.current!.rotation)
-        .to({ x: 0, y: 0, z: 0 }, 1050)
-        .easing(Cubic.InOut)
-        .start();
-
-    // Finally, animate camera's zoom to reset position
+    // Zoom back to settled position (note that yaw is NOT reset)
+    // goToCoordinates spins directly to target
     new JEasing(camera.position)
         .to({ x: 0, y: 0, z: 200 }, 1075)
         .easing(Cubic.InOut)
@@ -196,6 +191,18 @@ export async function resetGlobe(
 
     JEASINGS.update();
 };
+
+
+// Returns yaw target that takes the shortest arc from currentY to targetLng,
+// avoiding the long way around when crossing globe's international date line
+function computeShortestYaw(currentY: number, targetLng: number): number {
+    const targetAbsolute = (targetLng / 180) * Math.PI;
+    let delta = targetAbsolute - currentY;
+    
+    while (delta > Math.PI) delta -= 2 * Math.PI;
+    while (delta < -Math.PI) delta += 2 * Math.PI;
+    return currentY + delta;
+}
 
 
 // Ease camera view to coords point for globe storytelling
@@ -214,9 +221,9 @@ export function goToCoordinates(
         .start()
 
     new JEasing(yawRef.current!.rotation)
-        // Convert longitude to radians, & animate over 1000 ms (1 sec)
+        // Animate via shortest arc to avoid spinning the long way around
         .to(
-            { y: (lng / 180) * Math.PI },
+            { y: computeShortestYaw(yawRef.current!.rotation.y, lng) },
             1000
         )
         .easing(Cubic.InOut)

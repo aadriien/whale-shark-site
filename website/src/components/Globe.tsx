@@ -43,9 +43,9 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
         controlsRef.current.enabled = false;
         
-        resetGlobe(cameraRef.current, pitchRef, yawRef);
+        resetGlobe(cameraRef.current, pitchRef);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         await playStoryMode(
             globeRef.current, controlsRef.current, cameraRef.current, 
             pitchRef, yawRef, sharkID, onPointChange
@@ -81,9 +81,9 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
         // Disable orbit controls BEFORE any animation (to be resumed once finished)
         controlsRef.current.enabled = false;
 
-        resetGlobe(cameraRef.current, pitchRef, yawRef);
+        resetGlobe(cameraRef.current, pitchRef);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         await highlightSharkMode(
             globeRef.current, controlsRef.current, cameraRef.current, 
             pitchRef, yawRef, sharkID, usePoints, keepControlsDisabled
