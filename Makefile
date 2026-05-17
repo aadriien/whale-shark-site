@@ -13,7 +13,7 @@ ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 		get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings \
 		run_vision_pipeline generate_vision_examples \
 		build_shark_graph \
-		format format_website format_all clean \
+		format format_vision format_website format_all clean \
 		setup_website run_website deploy_website clean_website
 
 all: setup refresh_all_gbif zip_data
@@ -121,17 +121,22 @@ build_shark_graph:
 
 
 
-# Auto-format Python code
+# Auto-format Python code (ETL for wildlife data)
 format:
 	@$(ACTIVATE_VENV) $(POETRY) run black src/
 	@$(ACTIVATE_VENV) $(POETRY) run ruff check --fix src/
+
+# Auto-format Python code (computer vision files)
+format_vision:
+	@$(ACTIVATE_VENV) $(POETRY) run black computer-vision/
+	@$(ACTIVATE_VENV) $(POETRY) run ruff check --fix computer-vision/
 
 # Auto-format & lint-fix website TypeScript/React code
 format_website:
 	@cd website && npx prettier --write "src/**/*.{ts,tsx,js,jsx}" && npx eslint --fix "src/**/*.{ts,tsx}"
 
 # Format everything
-format_all: format format_website
+format_all: format format_vision format_website
 
 clean:
 	@echo "Removing virtual environment..."
