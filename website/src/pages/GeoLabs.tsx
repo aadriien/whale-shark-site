@@ -101,19 +101,21 @@ function GeoLabs() {
         if (!globeHandleRef.current) return;
 
         const globeInstance = globeHandleRef.current.getGlobe();
-        clearAllData(globeInstance);
 
         // Nothing plotted during step mode
         if (isStepMode) {
+            clearAllData(globeInstance);
             setAllSharksVisible(false);
             return;
         }
 
-        // Nothing plotted during timeline mode initially
+        // TimelineSelector manages globe state (clears + plots on its own effect)
         if (isTimelineMode) {
             setAllSharksVisible(false);
             return;
         }
+
+        clearAllData(globeInstance);
 
         if (viewMode === "individual") {
             if (selectedShark) {
