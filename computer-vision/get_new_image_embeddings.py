@@ -5,37 +5,37 @@
 ###############################################################################
 
 
-import torch
 import warnings
-import requests
-import numpy as np
-import pandas as pd
-from PIL import Image
 from io import BytesIO
 
+import numpy as np
+import pandas as pd
+import requests
+import torch
 import torchvision.transforms as transforms
-from transformers import AutoModel # For MiewID
-from transformers import AutoImageProcessor, AutoModel as HF_AutoModel # For DINOv2
-
-
-from src.utils.data_utils import (
-    read_csv, folder_exists,
-)
-
+from PIL import Image
 from src.gbif.clean import (
     GBIF_MEDIA_CSV,
 )
-
-from .handle_yolo_model import (
-    get_yolo_model, 
+from src.utils.data_utils import (
+    folder_exists,
+    read_csv,
 )
+from transformers import (  # For DINOv2
+    AutoImageProcessor,
+    AutoModel,  # For MiewID
+)
+from transformers import AutoModel as HF_AutoModel
 
 from .CONSTANTS import GBIF_OUTPUT_NPZ_FILE
-
+from .handle_yolo_model import (
+    get_yolo_model,
+)
 
 # ---------- MiewID embeddings model ----------
 
 _EMBEDDINGS_MODEL = None
+
 
 def get_embeddings_model():
     global _EMBEDDINGS_MODEL
@@ -47,8 +47,7 @@ def get_embeddings_model():
             MODEL_TAG_MiewIDmsv3 = "conservationxlabs/miewid-msv3"
 
             _EMBEDDINGS_MODEL = AutoModel.from_pretrained(
-                MODEL_TAG_MiewIDmsv3, 
-                trust_remote_code=True
+                MODEL_TAG_MiewIDmsv3, trust_remote_code=True
             )
 
     return _EMBEDDINGS_MODEL
@@ -58,6 +57,7 @@ def get_embeddings_model():
 
 _DINOV2_MODEL = None
 _DINOV2_PROCESSOR = None
+
 
 def get_dinov2_model():
     global _DINOV2_MODEL, _DINOV2_PROCESSOR
@@ -71,42 +71,41 @@ def get_dinov2_model():
 
 # Step 1: Open gbif_media.csv & read all entries (grab images)
 
+
 def get_image_records() -> pd.DataFrame:
-    media_df = read_csv(GBIF_MEDIA_CSV, dtype={"key": str, "whaleSharkID": str, "identificationID": str})
+    media_df = read_csv(
+        GBIF_MEDIA_CSV, dtype={"key": str, "whaleSharkID": str, "identificationID": str}
+    )
 
     # Keep only relevant columns
     RELEVANT_COLUMNS = [
-        "key", # maps to key in regular GBIF occurrence dataset
+        "key",  # maps to key in regular GBIF occurrence dataset
         "whaleSharkID",
         "occurrenceID",
         "identificationID",
         "format",
         "references",
-        "identifier" # image URL (often in AWS S3 bucket)
+        "identifier",  # image URL (often in AWS S3 bucket)
     ]
     media_df = media_df[RELEVANT_COLUMNS]
 
     # Enforce essential fields for embedding
-    REQUIRED_FOR_EMBEDDING = [
-        "key", 
-        "whaleSharkID", 
-        "identifier"
-    ]
+    REQUIRED_FOR_EMBEDDING = ["key", "whaleSharkID", "identifier"]
     media_df_clean = media_df.dropna(subset=REQUIRED_FOR_EMBEDDING)
     media_df_clean.reset_index(drop=True, inplace=True)
 
     return media_df_clean
 
 
-
 # Step 2: Use YOLOv8 model to detect shark object & create bounding box
+
 
 def calculate_bbox(image: Image.Image) -> list[float]:
     # Visualize bounding box result (display image with cropped rectangle)
     model, _, _ = get_yolo_model()
     results = model(image, conf=0.1, iou=0.4)
-    
-    # Try displaying image with BBOX 
+
+    # Try displaying image with BBOX
     # try:
     #     results[0].show()
     # except Exception as e:
@@ -121,14 +120,14 @@ def calculate_bbox(image: Image.Image) -> list[float]:
 
     # Access object detections
     for box in boxes:
-        cls_id = int(box.cls[0]) # Class ID
-        confidence = float(box.conf[0]) # Confidence score
-        label = model.names[cls_id] # Class label (e.g. "shark")
+        cls_id = int(box.cls[0])  # Class ID
+        confidence = float(box.conf[0])  # Confidence score
+        label = model.names[cls_id]  # Class label (e.g. "shark")
 
         print(f"Detected: {label}, with confidence: {confidence}")
 
         # Return BBOX coordinates (xyxy format, converting tensor to list)
-        return box.xyxy[0].tolist()  
+        return box.xyxy[0].tolist()
 
     # Select box with highest confidence
     best_idx = boxes.conf.argmax().item()
@@ -138,16 +137,18 @@ def calculate_bbox(image: Image.Image) -> list[float]:
     return best_box
 
 
+# Step 3a: Use Hugging Face MiewID-msv3 model to generate image embedding
 
-# Step 3a: Use Hugging Face MiewID-msv3 model to generate image embedding 
 
 def compute_embedding(cropped_img: Image.Image) -> np.ndarray:
     # Load preprocessing pipeline
-    preprocess = transforms.Compose([
-        transforms.Resize((440, 440)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
+    preprocess = transforms.Compose(
+        [
+            transforms.Resize((440, 440)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
 
     # Extract embedding via model
     input_tensor = preprocess(cropped_img).unsqueeze(0)
@@ -160,6 +161,7 @@ def compute_embedding(cropped_img: Image.Image) -> np.ndarray:
 
 # Step 3b: Use Hugging Face DINOv2 model to generate image embedding
 
+
 def compute_dinov2_embedding(cropped_img: Image.Image) -> np.ndarray:
     processor, model = get_dinov2_model()
     inputs = processor(images=cropped_img, return_tensors="pt")
@@ -167,19 +169,19 @@ def compute_dinov2_embedding(cropped_img: Image.Image) -> np.ndarray:
     with torch.no_grad():
         outputs = model(**inputs)
         # Use mean pooling on last hidden states to get embedding vector
-        embedding = outputs.last_hidden_state.mean(dim=1)  
+        embedding = outputs.last_hidden_state.mean(dim=1)
 
     return embedding.squeeze().cpu().numpy()
 
 
 # Intermediate steps: Handle media records iteration, temp image download, etc
 
+
 def load_image_from_url(url: str) -> Image.Image:
     response = requests.get(url, timeout=10)
-    response.raise_for_status() 
+    response.raise_for_status()
 
     return Image.open(BytesIO(response.content)).convert("RGB")
-
 
 
 def process_single_image(row) -> dict:
@@ -193,9 +195,8 @@ def process_single_image(row) -> dict:
         # YOLO-style BBOX + cropping [x1, y1, x2, y2]
         width, height = image.size
         x1, y1, x2, y2 = [
-            max(0, min(coord, dim)) 
-            for coord, dim 
-            in zip(bbox, [width, height, width, height])
+            max(0, min(coord, dim))
+            for coord, dim in zip(bbox, [width, height, width, height])
         ]
 
         cropped = image.crop((x1, y1, x2, y2))
@@ -220,7 +221,6 @@ def process_single_image(row) -> dict:
         return {}
 
 
-
 def process_all_images(media_df: pd.DataFrame) -> None:
     results = []
 
@@ -238,7 +238,9 @@ def process_all_images(media_df: pd.DataFrame) -> None:
     whaleSharkIDs = np.array([str(r["whaleSharkID (GBIF)"]) for r in results])
     occurrenceIDs = np.array([str(r["occurrenceID (GBIF)"]) for r in results])
     identificationIDs = np.array([str(r["identificationID (GBIF)"]) for r in results])
-    image_url_identifiers = np.array([str(r["image_url (GBIF identifier)"]) for r in results])
+    image_url_identifiers = np.array(
+        [str(r["image_url (GBIF identifier)"]) for r in results]
+    )
 
     # Confirm folder to hold embeddings exists, then save to .npz file
     _ = folder_exists(GBIF_OUTPUT_NPZ_FILE, True)
@@ -251,11 +253,13 @@ def process_all_images(media_df: pd.DataFrame) -> None:
         whaleSharkIDs=whaleSharkIDs,
         occurrenceIDs=occurrenceIDs,
         identificationIDs=identificationIDs,
-        image_url_identifiers=image_url_identifiers
+        image_url_identifiers=image_url_identifiers,
     )
 
-    print(f"Saved {len(miewid_embeddings)} embeddings (MiewID + DINOv2) to: {GBIF_OUTPUT_NPZ_FILE}")
-
+    print(
+        f"Saved {len(miewid_embeddings)} embeddings (MiewID + DINOv2)"
+        f" to: {GBIF_OUTPUT_NPZ_FILE}"
+    )
 
 
 def view_npz_file() -> None:
@@ -280,7 +284,7 @@ def view_npz_file() -> None:
 
     # Print first few values to inspect
     print("First 3 embeddings (+ their associated metadata):")
-    for i in range(min(3, len(miewid_embeddings))):  
+    for i in range(min(3, len(miewid_embeddings))):
         print(f"Embedding {i+1}:")
         print(f"  MiewID Embedding: {miewid_embeddings[i]}")
         print(f"  DINOv2 Embedding: {dinov2_embeddings[i]}")
@@ -293,7 +297,6 @@ def view_npz_file() -> None:
         print("-" * 50)  # Separator for readability
 
 
-
 if __name__ == "__main__":
     gbif_media_df = get_image_records()
     print(f"Size of media file: {gbif_media_df.shape[0]}")
@@ -304,7 +307,3 @@ if __name__ == "__main__":
     process_all_images(gbif_media_df)
 
     view_npz_file()
-
-
-
-

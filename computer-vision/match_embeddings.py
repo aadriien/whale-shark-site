@@ -5,43 +5,43 @@
 ###############################################################################
 
 
+import json
+import unicodedata
+from typing import Tuple
+
 import faiss
 import numpy as np
 import pandas as pd
-from typing import Tuple
-
-import json
-import unicodedata
-
-
-from src.utils.data_utils import (
-    read_csv, export_to_csv,
-)
-
 from src.gbif.constants import (
     GBIF_INDIVIDUAL_SHARKS_STATS_CSV,
 )
-
-from .CONSTANTS import (
-    OUTPUT_NPZ_FILE, GBIF_OUTPUT_NPZ_FILE,
-    GBIF_MEDIA_MATCHES_FILE, GBIF_INDIVIDUAL_MATCHES_FILE,
-    GBIF_MEDIA_MATCHES_JSON, GBIF_INDIVIDUAL_MATCHES_JSON,
+from src.utils.data_utils import (
+    export_to_csv,
+    read_csv,
 )
 
+from .CONSTANTS import (
+    GBIF_INDIVIDUAL_MATCHES_FILE,
+    GBIF_INDIVIDUAL_MATCHES_JSON,
+    GBIF_MEDIA_MATCHES_FILE,
+    GBIF_MEDIA_MATCHES_JSON,
+    GBIF_OUTPUT_NPZ_FILE,
+    OUTPUT_NPZ_FILE,
+)
 from .get_new_image_embeddings import (
     get_image_records,
 )
 
-
-# L2 DISTANCE SCALE (for normalized values, to judge match likelihood): 
+# L2 DISTANCE SCALE (for normalized values, to judge match likelihood):
 #   0.0: Perfect match (identical vectors)
 #   0.5 - 1.0: Very similar (vectors close together)
 #   2.0: Moderate similarity (vectors somewhat different)
 #   4.0: Completely different (vectors far apart)
 
-def perform_search(known_embeddings: np.ndarray, 
-                    query_embeddings: np.ndarray, 
-                    k: int = 1) -> Tuple[np.ndarray, np.ndarray]:
+
+def perform_search(
+    known_embeddings: np.ndarray, query_embeddings: np.ndarray, k: int = 1
+) -> Tuple[np.ndarray, np.ndarray]:
     # Normalize embeddings to make comparison more meaningful
     def normalize_L2(x: np.ndarray) -> np.ndarray:
         return x / np.linalg.norm(x, axis=1, keepdims=True)
@@ -50,43 +50,44 @@ def perform_search(known_embeddings: np.ndarray,
     query_embeddings = normalize_L2(query_embeddings)
 
     # Add all known embeddings to index
-    index = faiss.IndexFlatL2(known_embeddings.shape[1])  
-    index.add(known_embeddings)  
+    index = faiss.IndexFlatL2(known_embeddings.shape[1])
+    index.add(known_embeddings)
 
     # Search for top {k} matches
     distances, indices = index.search(query_embeddings, k)
     return distances, indices
 
 
-
-def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False) -> list[dict]:
+def identify_sharks(
+    known_data: dict, new_data: dict, compare_all: bool = False
+) -> list[dict]:
     query_miewid = new_data["miewid_embeddings"]
     query_dino = new_data["dinov2_embeddings"]
     query_ids = new_data["whaleSharkIDs"].astype(str)
-    
+
     results = []
-    
+
     if compare_all:
         # Combine known & new embeddings into single dataset
         all_miewid = np.vstack([known_data["miewid_embeddings"], query_miewid])
         all_dino = np.vstack([known_data["dinov2_embeddings"], query_dino])
-        
+
         # Combine metadata (use whaleSharkID for new data, whale_shark_names for known)
         known_ids = known_data["whale_shark_names"]
         all_ids = np.concatenate([known_ids, query_ids])
-        
+
         # Search against all embeddings (get more matches to skip same shark ID)
         # Need extra matches in case top results have same shark ID
         distances_miewid, indices_miewid = perform_search(all_miewid, all_miewid, k=50)
         distances_dino, indices_dino = perform_search(all_dino, all_dino, k=50)
-        
+
         # Process only new data results (skip known data)
         known_count = len(known_data["miewid_embeddings"])
-        
+
         for i in range(len(query_miewid)):
             global_idx = known_count + i
             current_shark_id = query_ids[i]
-            
+
             # Find first match with different shark ID (skip self image & same shark)
             idx_miewid = None
             dist_miewid = None
@@ -97,34 +98,56 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
                     idx_miewid = candidate_idx
                     dist_miewid = distances_miewid[global_idx][k]
                     break
-            
+
             idx_dino = None
             dist_dino = None
             for k in range(len(indices_dino[global_idx])):
                 candidate_idx = indices_dino[global_idx][k]
-                
+
                 if all_ids[candidate_idx] != current_shark_id:
                     idx_dino = candidate_idx
                     dist_dino = distances_dino[global_idx][k]
                     break
-            
+
             result = {
-                "image_id": i, # renamed from query_index for clarity
-
+                "image_id": i,  # renamed from query_index for clarity
                 # MIEWID match
-                "miewid_closest_whale_shark_id": all_ids[idx_miewid] if idx_miewid is not None else "N/A",
-                "miewid_matched_image_id": (idx_miewid - known_count) if (idx_miewid is not None and idx_miewid >= known_count) else -1,
-                "miewid_matched_annotation_id": (idx_miewid - known_count) if (idx_miewid is not None and idx_miewid >= known_count) else -1,
-                "miewid_distance": round(float(dist_miewid), 4) if dist_miewid is not None else 999.0,
-
+                "miewid_closest_whale_shark_id": (
+                    all_ids[idx_miewid] if idx_miewid is not None else "N/A"
+                ),
+                "miewid_matched_image_id": (
+                    (idx_miewid - known_count)
+                    if (idx_miewid is not None and idx_miewid >= known_count)
+                    else -1
+                ),
+                "miewid_matched_annotation_id": (
+                    (idx_miewid - known_count)
+                    if (idx_miewid is not None and idx_miewid >= known_count)
+                    else -1
+                ),
+                "miewid_distance": (
+                    round(float(dist_miewid), 4) if dist_miewid is not None else 999.0
+                ),
                 # DINOv2 match
-                "dinov2_closest_whale_shark_id": all_ids[idx_dino] if idx_dino is not None else "N/A",
-                "dinov2_matched_image_id": (idx_dino - known_count) if (idx_dino is not None and idx_dino >= known_count) else -1,
-                "dinov2_matched_annotation_id": (idx_dino - known_count) if (idx_dino is not None and idx_dino >= known_count) else -1,
-                "dinov2_distance": round(float(dist_dino), 4) if dist_dino is not None else 999.0,
+                "dinov2_closest_whale_shark_id": (
+                    all_ids[idx_dino] if idx_dino is not None else "N/A"
+                ),
+                "dinov2_matched_image_id": (
+                    (idx_dino - known_count)
+                    if (idx_dino is not None and idx_dino >= known_count)
+                    else -1
+                ),
+                "dinov2_matched_annotation_id": (
+                    (idx_dino - known_count)
+                    if (idx_dino is not None and idx_dino >= known_count)
+                    else -1
+                ),
+                "dinov2_distance": (
+                    round(float(dist_dino), 4) if dist_dino is not None else 999.0
+                ),
             }
             results.append(result)
-    
+
     else:
         # Compare new data only against known source of truth
         known_miewid = known_data["miewid_embeddings"]
@@ -146,14 +169,12 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
             dist_dino = distances_dino[i][0]
 
             result = {
-                "image_id": i, # renamed from query_index for clarity
-
+                "image_id": i,  # renamed from query_index for clarity
                 # MIEWID match
                 "miewid_closest_whale_shark_id": whale_shark_names[idx_miewid],
                 "miewid_matched_image_id": image_ids[idx_miewid],
                 "miewid_matched_annotation_id": annotation_ids[idx_miewid],
                 "miewid_distance": round(float(dist_miewid), 4),
-
                 # DINOv2 match
                 "dinov2_closest_whale_shark_id": whale_shark_names[idx_dino],
                 "dinov2_matched_image_id": image_ids[idx_dino],
@@ -168,14 +189,14 @@ def identify_sharks(known_data: dict, new_data: dict, compare_all: bool = False)
 def normalize_string(s):
     if not isinstance(s, str):
         return s
-    
-    # Normalize unicode to decomposed form, then encode to ASCII 
-    normalized = unicodedata.normalize('NFKD', s)
-    return normalized.encode('ascii', 'ignore').decode('ascii')
+
+    # Normalize unicode to decomposed form, then encode to ASCII
+    normalized = unicodedata.normalize("NFKD", s)
+    return normalized.encode("ascii", "ignore").decode("ascii")
 
 
 def export_to_json(filepath: str, df: pd.DataFrame) -> None:
-    data = df.to_dict('records')
+    data = df.to_dict("records")
 
     # Normalize string values to handle accents & special characters
     normalized_data = []
@@ -197,7 +218,7 @@ def export_to_json(filepath: str, df: pd.DataFrame) -> None:
 
         normalized_data.append(normalized_record)
 
-    with open(filepath, 'w', encoding='utf-8') as f:
+    with open(filepath, "w", encoding="utf-8") as f:
         json.dump(normalized_data, f, indent=2, default=str, ensure_ascii=True)
 
     print(f"Exported {len(normalized_data)} records to {filepath}")
@@ -228,67 +249,83 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
     miewid_cols = [
         "miewid_closest_whale_shark_id",
         "miewid_matched_image_id",
-        "miewid_distance"
+        "miewid_distance",
     ]
     miewid_colname = "MIEWID: closest_whale_shark_id (matched_image_id, distance)"
 
-    miewid_df = media_matches_df.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
-            miewid_fmt.format(*vals)
-            for vals in zip(*(x[col] for col in miewid_cols))
-        ))),
-        include_groups=False
-    ).reset_index(name=miewid_colname)
+    miewid_df = (
+        media_matches_df.groupby("whaleSharkID")
+        .apply(
+            lambda x: ", ".join(
+                sorted(
+                    set(
+                        miewid_fmt.format(*vals)
+                        for vals in zip(*(x[col] for col in miewid_cols))
+                    )
+                )
+            ),
+            include_groups=False,
+        )
+        .reset_index(name=miewid_colname)
+    )
 
     # --- FORMAT & GROUP FOR DINOV2 ---
     dino_fmt = "DINOV2: {0} ({1}, {2})"
     dino_cols = [
         "dinov2_closest_whale_shark_id",
         "dinov2_matched_image_id",
-        "dinov2_distance"
+        "dinov2_distance",
     ]
     dino_colname = "DINOV2: closest_whale_shark_id (matched_image_id, distance)"
 
-    dino_df = media_matches_df.groupby("whaleSharkID").apply(
-        lambda x: ", ".join(sorted(set(
-            dino_fmt.format(*vals)
-            for vals in zip(*(x[col] for col in dino_cols))
-        ))),
-        include_groups=False
-    ).reset_index(name=dino_colname)
+    dino_df = (
+        media_matches_df.groupby("whaleSharkID")
+        .apply(
+            lambda x: ", ".join(
+                sorted(
+                    set(
+                        dino_fmt.format(*vals)
+                        for vals in zip(*(x[col] for col in dino_cols))
+                    )
+                )
+            ),
+            include_groups=False,
+        )
+        .reset_index(name=dino_colname)
+    )
 
     # --- Merge all formatted columns ---
-    individual_sharks = (
-        individual_sharks
-        .merge(miewid_df, on="whaleSharkID", how="left")
-        .merge(dino_df, on="whaleSharkID", how="left")
-    )
+    individual_sharks = individual_sharks.merge(
+        miewid_df, on="whaleSharkID", how="left"
+    ).merge(dino_df, on="whaleSharkID", how="left")
 
     export_to_csv(GBIF_INDIVIDUAL_MATCHES_FILE, individual_sharks)
     export_to_json(GBIF_INDIVIDUAL_MATCHES_JSON, individual_sharks)
 
 
-
 if __name__ == "__main__":
     # `known_data` consists of (all NumPy arrays):
     #   - embeddings
-    #   - image_ids 
-    #   - annotation_ids 
-    #   - whale_shark_names 
+    #   - image_ids
+    #   - annotation_ids
+    #   - whale_shark_names
     known_data = np.load(OUTPUT_NPZ_FILE)
 
     # `new_data` consists of (all NumPy arrays):
     #   - embeddings
-    #   - bboxes 
-    #   - image_id_keys 
+    #   - bboxes
+    #   - image_id_keys
     #   - whaleSharkIDs
-    #   - occurrenceIDs 
-    #   - identificationIDs 
-    #   - image_url_identifiers 
+    #   - occurrenceIDs
+    #   - identificationIDs
+    #   - image_url_identifiers
     new_data = np.load(GBIF_OUTPUT_NPZ_FILE)
 
-    # Compare all embeddings against each other (set to True to find matches within GBIF dataset)
-    results = identify_sharks(known_data=known_data, new_data=new_data, compare_all=True)
+    # Compare all embeddings against each other
+    # (set to True to find matches within GBIF dataset)
+    results = identify_sharks(
+        known_data=known_data, new_data=new_data, compare_all=True
+    )
     results_df = pd.DataFrame(results)
 
     gbif_media_df = get_image_records()
@@ -299,17 +336,13 @@ if __name__ == "__main__":
 
     # enriched_df = gbif_media_df.reset_index(drop=True).join(results_df)
 
-
     # Add index used for matching explicitly & merge
     results_df["image_id"] = results_df["image_id"].astype(int)
     gbif_media_df = gbif_media_df.reset_index().rename(columns={"index": "image_id"})
 
     enriched_df = pd.merge(gbif_media_df, results_df, on="image_id", how="inner")
 
-
     export_to_csv(GBIF_MEDIA_MATCHES_FILE, enriched_df)
     export_to_json(GBIF_MEDIA_MATCHES_JSON, enriched_df)
 
     validate_matches(enriched_df)
-
-

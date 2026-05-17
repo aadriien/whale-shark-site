@@ -6,15 +6,17 @@
 
 
 import json
+
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
 import umap
 
 from .CONSTANTS import (
-    OUTPUT_NPZ_FILE, 
-    GBIF_OUTPUT_NPZ_FILE, GBIF_MEDIA_MATCHES_FILE,
+    GBIF_MEDIA_MATCHES_FILE,
+    GBIF_OUTPUT_NPZ_FILE,
     GRAPH_DATA_FILE,
+    OUTPUT_NPZ_FILE,
 )
 
 
@@ -40,7 +42,9 @@ def build_umap_coords(ningaloo: dict, gbif: dict) -> np.ndarray:
     return coords
 
 
-def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np.ndarray) -> nx.DiGraph:
+def build_graph(
+    ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np.ndarray
+) -> nx.DiGraph:
     # Ningaloo occupies [0, NINGALOO_COUNT) in the combined FAISS index;
     # GBIF occupies [NINGALOO_COUNT, NINGALOO_COUNT + GBIF_COUNT)
     NINGALOO_COUNT = len(ningaloo["miewid_embeddings"])
@@ -59,7 +63,9 @@ def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np
             y=float(coords[i][1]),
         )
 
-    url_to_image_id = dict(zip(matches_df['identifier'], matches_df['image_id'].astype(int)))
+    url_to_image_id = dict(
+        zip(matches_df["identifier"], matches_df["image_id"].astype(int))
+    )
 
     for i, shark_id in enumerate(gbif_ids):
         url = str(gbif["image_url_identifiers"][i])
@@ -75,7 +81,8 @@ def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np
             y=float(coords[NINGALOO_COUNT + i][1]),
         )
 
-    # compare_all=True stores GBIF-local index for GBIF→GBIF matches, -1 for Ningaloo matches.
+    # compare_all=True stores GBIF-local index for GBIF→GBIF matches,
+    # or -1 for Ningaloo matches.
     # Look up Ningaloo nodes by shark name so -1 rows can still produce edges.
     ningaloo_name_to_idx = {str(name): i for i, name in enumerate(ningaloo_names)}
 
@@ -96,7 +103,9 @@ def build_graph(ningaloo: dict, gbif: dict, matches_df: pd.DataFrame, coords: np
             edge_type = "gbif_to_ningaloo"
 
         if G.has_node(source) and G.has_node(target):
-            G.add_edge(source, target, distance=distance, edge_type=edge_type, mutual=False)
+            G.add_edge(
+                source, target, distance=distance, edge_type=edge_type, mutual=False
+            )
 
     # Flag mutual edges: A→B is mutual if B→A also exists in the match results
     for u, v in list(G.edges()):
@@ -118,7 +127,9 @@ def export_graph(G: nx.DiGraph) -> None:
 
     graph_data = {
         "nodes": nodes,
-        "edges": [{"source": u, "target": v, **attrs} for u, v, attrs in G.edges(data=True)],
+        "edges": [
+            {"source": u, "target": v, **attrs} for u, v, attrs in G.edges(data=True)
+        ],
     }
 
     with open(GRAPH_DATA_FILE, "w", encoding="utf-8") as f:
@@ -127,8 +138,10 @@ def export_graph(G: nx.DiGraph) -> None:
     exported_nodes = len(nodes)
     skipped = G.number_of_nodes() - exported_nodes
     print(f"Saved graph data: {GRAPH_DATA_FILE}")
-    print(f"  {exported_nodes} nodes ({skipped} isolated ningaloo nodes skipped), {G.number_of_edges()} edges")
-
+    print(
+        f"  {exported_nodes} nodes ({skipped} isolated ningaloo nodes skipped),"
+        f" {G.number_of_edges()} edges"
+    )
 
 
 if __name__ == "__main__":
@@ -139,4 +152,3 @@ if __name__ == "__main__":
     G = build_graph(ningaloo, gbif, matches_df, coords)
 
     export_graph(G)
-

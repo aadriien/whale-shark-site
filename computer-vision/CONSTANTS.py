@@ -14,7 +14,10 @@ LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED = "whaleshark.coco_extracted"
 
 # COCO dataset paths (annotations, images, YOLO config)
 SPECIFIC_DATASET_FOLDER = "whaleshark.coco"
-FULL_PATH_TO_DATASET_FOLDER = f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}/{SPECIFIC_DATASET_FOLDER}"
+FULL_PATH_TO_DATASET_FOLDER = (
+    f"{EXTRACTED_DATA_FOLDER}/{LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED}"
+    f"/{SPECIFIC_DATASET_FOLDER}"
+)
 
 ANNOTATIONS_PATH = f"{FULL_PATH_TO_DATASET_FOLDER}/annotations/instances_train2020.json"
 IMAGES_PATH = f"{FULL_PATH_TO_DATASET_FOLDER}/images/train2020"
@@ -34,8 +37,12 @@ GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
 GBIF_MEDIA_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches.csv"
 GBIF_INDIVIDUAL_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches.csv"
 
-VALIDATED_MEDIA_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches_validated.csv"
-VALIDATED_SHARK_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches_validated.csv"
+VALIDATED_MEDIA_MATCHES_FILE = (
+    f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches_validated.csv"
+)
+VALIDATED_SHARK_MATCHES_FILE = (
+    f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches_validated.csv"
+)
 
 # JSON outputs (website assets)
 JSON_OUTPUT_FOLDER = "./website/src/assets/data/json"
@@ -53,4 +60,3 @@ BBOX_SEGMENTATION_FOLDER = f"{VISION_IMAGES_FOLDER}/bbox-segmentation"
 
 # Match graph output (website asset)
 GRAPH_DATA_FILE = f"{JSON_OUTPUT_FOLDER}/graph_data.json"
-

@@ -5,13 +5,14 @@
 ###############################################################################
 
 
-import os
 import json
+import os
+
 import yaml
 
 
 def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> None:
-    # Create folder to hold labels 
+    # Create folder to hold labels
     os.makedirs(output_labels_dir, exist_ok=True)
 
     with open(coco_json_path, "r") as f:
@@ -57,11 +58,10 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
         label_file_path = os.path.join(output_labels_dir, f"{image_basename}.txt")
 
         # Overwrite file, NO appending (otherwise duplicates mess up model training)
-        with open(label_file_path, "w") as label_file:  
+        with open(label_file_path, "w") as label_file:
             label_file.write("\n".join(labels) + "\n")
 
     print(f"YOLOv8 labels written to: {output_labels_dir}")
-
 
 
 ###############################################################################
@@ -76,15 +76,12 @@ def create_coco_to_yolo_labels(coco_json_path: str, output_labels_dir: str) -> N
 ###############################################################################
 
 
-
-def create_data_yaml(base_dir: str, output_yaml_path: str) -> None: 
+def create_data_yaml(base_dir: str, output_yaml_path: str) -> None:
     data = {
         "path": base_dir,
         "train": "images/train2020",
         "val": "images/train2020",
-        "names": {
-            0: "whale_shark"
-        },
+        "names": {0: "whale_shark"},
     }
 
     with open(f"{base_dir}/{output_yaml_path}", "w") as f:
@@ -100,7 +97,3 @@ def create_data_yaml(base_dir: str, output_yaml_path: str) -> None:
 # create_data_yaml("whaleshark.coco", "data.yaml")
 #
 ###############################################################################
-
-
-
-

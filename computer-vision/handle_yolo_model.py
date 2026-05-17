@@ -7,27 +7,22 @@
 
 import os
 import re
-import torch
 from typing import Tuple
-from ultralytics import YOLO
 
-
+import torch
 from src.utils.data_utils import (
     folder_exists,
 )
-
-from .CONSTANTS import (
-    FULL_PATH_TO_DATASET_FOLDER,
-    YAML_FILE,
-    PROJECT_RUNS_TRAINS_PATH,
-)
+from ultralytics import YOLO
 
 from .coco_to_yolo import (
-    create_coco_to_yolo_labels, create_data_yaml, 
+    create_data_yaml,
 )
-
-
-
+from .CONSTANTS import (
+    FULL_PATH_TO_DATASET_FOLDER,
+    PROJECT_RUNS_TRAINS_PATH,
+    YAML_FILE,
+)
 
 # Internal cache for ad hoc reference
 _MODEL_YOLOv8 = None
@@ -36,19 +31,20 @@ _experiment_name = None
 
 
 # Identify resume point for YOLOv8n model training
-def get_latest_experiment_folder(project_path: str, base_name: str = "shark_detection") -> str:
+def get_latest_experiment_folder(
+    project_path: str, base_name: str = "shark_detection"
+) -> str:
     folders = [f for f in os.listdir(project_path) if f.startswith(base_name)]
     if not folders:
-        return None  
+        return None
 
     folders_with_ids = [
-        (f, int(re.search(r'\d+$', f).group()) if re.search(r'\d+$', f) else 0)
+        (f, int(re.search(r"\d+$", f).group()) if re.search(r"\d+$", f) else 0)
         for f in folders
     ]
     latest = max(folders_with_ids, key=lambda x: x[1])[0]
 
     return os.path.join(project_path, latest)
-
 
 
 def get_yolo_model() -> Tuple[YOLO, bool, str]:
@@ -81,7 +77,6 @@ def get_yolo_model() -> Tuple[YOLO, bool, str]:
     return _MODEL_YOLOv8, _resume_flag, _experiment_name
 
 
-
 def freeze_yolo_model():
     model, _, _ = get_yolo_model()
 
@@ -93,18 +88,17 @@ def freeze_yolo_model():
     print("Note: All non-detection layers frozen (backbone COCO)")
 
 
-
 def train_yolo_model() -> None:
     model, resume_flag, experiment_name = get_yolo_model()
 
     # Freeze layers of model to keep COCO base intelligence while fine-tuning
     freeze_yolo_model()
 
-    # Confirm folder for results of training model exists 
+    # Confirm folder for results of training model exists
     _ = folder_exists(PROJECT_RUNS_TRAINS_PATH, True)
 
     # Attempt to check if CUDA is available, handle error if on Mac (no CUDA)
-    # Use Nvidia GPU where possible, otherwise just fall back to CPU 
+    # Use Nvidia GPU where possible, otherwise just fall back to CPU
     try:
         if torch.cuda.is_available():
             print("Success, PyTorch with CUDA available!")
@@ -127,22 +121,21 @@ def train_yolo_model() -> None:
 
     epochs = 50
 
-    print(f"Model training overview: ")
+    print("Model training overview: ")
     print(f"  Epochs: {epochs}")
     print(f"  Batch: {batch}")
     print(f"  Device: {device}")
 
     model.train(
-        data=YAML_FILE, 
-        epochs=epochs, 
-        batch=batch, 
+        data=YAML_FILE,
+        epochs=epochs,
+        batch=batch,
         imgsz=640,  # YOLO recommends 640x640 image size
-        project=PROJECT_RUNS_TRAINS_PATH,  # Where to store training results 
+        project=PROJECT_RUNS_TRAINS_PATH,  # Where to store training results
         name=experiment_name,  # Some variation of `shark_detection`
         resume=resume_flag,
-        device=device  
+        device=device,
     )
-
 
 
 def prep_data_for_yolo() -> None:
@@ -156,11 +149,7 @@ def prep_data_for_yolo() -> None:
     current_working_dir = os.getcwd()
     base_dir = os.path.join(current_working_dir, FULL_PATH_TO_DATASET_FOLDER)
 
-    create_data_yaml(
-        base_dir=base_dir,
-        output_yaml_path="data.yaml"
-    )
-
+    create_data_yaml(base_dir=base_dir, output_yaml_path="data.yaml")
 
 
 if __name__ == "__main__":
@@ -169,7 +158,3 @@ if __name__ == "__main__":
     # train_yolo_model()
 
     print("Nothing running.. just a placeholder!")
-
-
-
-

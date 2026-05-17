@@ -6,51 +6,48 @@
 ###############################################################################
 
 
-import cv2
 import warnings
-import requests
+from io import BytesIO
+from typing import List, Optional, Tuple
+
+import cv2
 import numpy as np
 import pandas as pd
-
+import requests
 from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
-from typing import Optional, Tuple, List
+from src.gbif.clean import (
+    GBIF_MEDIA_CSV,
+)
+from src.utils.data_utils import (
+    folder_exists,
+    read_csv,
+)
 
 # Use separate model (yolov8n-seg) for segmentation
 from ultralytics import YOLO
 
-
-from .handle_yolo_model import (
-    get_yolo_model, 
-)
-
-from src.utils.data_utils import (
-    read_csv, folder_exists,
-)
-
-from src.gbif.clean import (
-    GBIF_MEDIA_CSV,
-)
-
-
 from .CONSTANTS import (
-    ORIGINAL_FOLDER, BBOX_FOLDER, SEGMENTATION_FOLDER, 
+    BBOX_FOLDER,
     BBOX_SEGMENTATION_FOLDER,
+    ORIGINAL_FOLDER,
+    SEGMENTATION_FOLDER,
 )
-
+from .handle_yolo_model import (
+    get_yolo_model,
+)
 
 # Segmentation model cache
 _SEGMENTATION_MODEL = None
 
 
 def get_yolo_segmentation_model():
-    # Load & cache YOLO segmentation model (yolov8n-seg.pt) 
+    # Load & cache YOLO segmentation model (yolov8n-seg.pt)
     global _SEGMENTATION_MODEL
-    
+
     if _SEGMENTATION_MODEL is None:
         print("Loading YOLOv8 segmentation model (yolov8n-seg.pt)...")
         _SEGMENTATION_MODEL = YOLO("yolov8n-seg.pt")
-    
+
     return _SEGMENTATION_MODEL
 
 
@@ -65,33 +62,33 @@ def setup_output_directories() -> None:
 def load_image_from_url(url: str) -> Optional[Image.Image]:
     try:
         response = requests.get(url, timeout=10)
-        response.raise_for_status() 
+        response.raise_for_status()
         return Image.open(BytesIO(response.content)).convert("RGB")
-    
+
     except Exception as e:
         print(f"Failed to load image from {url}: {e}")
         return None
 
 
 def get_sample_image_records(num_samples: int = 20) -> pd.DataFrame:
-    # Get subset of image records from GBIF media CSV for processing 
+    # Get subset of image records from GBIF media CSV for processing
     media_df = read_csv(GBIF_MEDIA_CSV)
-    
+
     # Keep only relevant columns
     RELEVANT_COLUMNS = [
         "key",
-        "occurrenceID", 
-        "identificationID", 
-        "format", 
-        "references", 
-        "identifier" # image URL
+        "occurrenceID",
+        "identificationID",
+        "format",
+        "references",
+        "identifier",  # image URL
     ]
     media_df = media_df[RELEVANT_COLUMNS]
-    
+
     # Clean & sample
     media_df_clean = media_df.dropna(subset=RELEVANT_COLUMNS)
     media_df_clean.reset_index(drop=True, inplace=True)
-    
+
     # Return random sample
     sample_size = min(num_samples, len(media_df_clean))
     return media_df_clean.sample(n=sample_size, random_state=42).reset_index(drop=True)
@@ -102,11 +99,11 @@ def run_yolo_inference(image: Image.Image) -> Tuple[List, List]:
     # Uses original trained model for BBOXES, & separate segmentation model for masks
     bbox_results = []
     segmentation_results = []
-    
+
     # Get BBOXes from ordinary fine-tuned model
     bbox_model, _, _ = get_yolo_model()
     bbox_results_raw = bbox_model(image, conf=0.25, iou=0.4)
-    
+
     for result in bbox_results_raw:
         if result.boxes is not None:
             boxes = result.boxes
@@ -115,20 +112,18 @@ def run_yolo_inference(image: Image.Image) -> Tuple[List, List]:
                 cls_id = int(box.cls[0])
                 confidence = float(box.conf[0])
                 label = bbox_model.names[cls_id]
-                xyxy = box.xyxy[0].tolist() # [x1, y1, x2, y2]
-                
-                bbox_results.append({
-                    'class': label,
-                    'confidence': confidence,
-                    'bbox': xyxy
-                })
-    
+                xyxy = box.xyxy[0].tolist()  # [x1, y1, x2, y2]
+
+                bbox_results.append(
+                    {"class": label, "confidence": confidence, "bbox": xyxy}
+                )
+
     # Get segmentation masks from segmentation model
     seg_model = get_yolo_segmentation_model()
     seg_results_raw = seg_model(image, conf=0.25, iou=0.4)
-    
+
     for result in seg_results_raw:
-        if hasattr(result, 'masks') and result.masks is not None:
+        if hasattr(result, "masks") and result.masks is not None:
             masks = result.masks
             print(f"  Found {len(masks)} segmentation masks from seg model")
 
@@ -136,117 +131,124 @@ def run_yolo_inference(image: Image.Image) -> Tuple[List, List]:
                 cls_id = int(result.boxes.cls[i])
                 confidence = float(result.boxes.conf[i])
                 label = seg_model.names[cls_id]
-                
+
                 # Get mask data, with correct indexing for each mask
-                mask_data = mask.data[i].cpu().numpy() 
-                
-                segmentation_results.append({
-                    'class': label,
-                    'confidence': confidence,
-                    'mask': mask_data
-                })
+                mask_data = mask.data[i].cpu().numpy()
+
+                segmentation_results.append(
+                    {"class": label, "confidence": confidence, "mask": mask_data}
+                )
         else:
             print("  No segmentation masks found from seg model")
-    
-    print(f"  Total: {len(bbox_results)} bboxes from trained model, {len(segmentation_results)} masks from seg model")
+
+    print(
+        f"  Total: {len(bbox_results)} bboxes from trained model,"
+        f" {len(segmentation_results)} masks from seg model"
+    )
     return bbox_results, segmentation_results
 
 
 def draw_bounding_boxes(image: Image.Image, bbox_results: List) -> Image.Image:
-    # Draw bounding boxes with labels on image 
+    # Draw bounding boxes with labels on image
     img_with_boxes = image.copy()
     draw = ImageDraw.Draw(img_with_boxes)
-    
+
     try:
         font = ImageFont.truetype("Arial.ttf", 24)
-    except:
+    except Exception:
         try:
             font = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 24)
-        except:
+        except Exception:
             font = ImageFont.load_default()
-    
+
     # Color palette for different classes
     colors = [
-        (255, 0, 0),    # Red
-        (0, 255, 0),    # Green
-        (0, 0, 255),    # Blue
+        (255, 0, 0),  # Red
+        (0, 255, 0),  # Green
+        (0, 0, 255),  # Blue
         (255, 255, 0),  # Yellow
         (255, 0, 255),  # Magenta
         (0, 255, 255),  # Cyan
     ]
-    
+
     for i, detection in enumerate(bbox_results):
-        x1, y1, x2, y2 = detection['bbox']
-        label = detection['class']
-        confidence = detection['confidence']
-        
+        x1, y1, x2, y2 = detection["bbox"]
+        label = detection["class"]
+        confidence = detection["confidence"]
+
         # Select color, draw BBOX, & prep text label
         color = colors[i % len(colors)]
         draw.rectangle([x1, y1, x2, y2], outline=color, width=3)
         label_text = f"{label}: {confidence:.2f}"
-        
+
         # Get text BBOX for background
         bbox = draw.textbbox((0, 0), label_text, font=font)
         text_width = bbox[2] - bbox[0]
         text_height = bbox[3] - bbox[1]
-        
+
         # Draw label background & text
-        draw.rectangle([x1, y1-text_height-6, x1+text_width+6, y1], fill=color)        
-        draw.text((x1+3, y1-text_height-3), label_text, fill=(255, 255, 255), font=font)
-    
+        draw.rectangle([x1, y1 - text_height - 6, x1 + text_width + 6, y1], fill=color)
+        draw.text(
+            (x1 + 3, y1 - text_height - 3), label_text, fill=(255, 255, 255), font=font
+        )
+
     return img_with_boxes
 
 
-def draw_segmentation_masks(image: Image.Image, segmentation_results: List) -> Image.Image:
+def draw_segmentation_masks(
+    image: Image.Image, segmentation_results: List
+) -> Image.Image:
     # Color palette for different classes (with alpha)
     colors = [
-        (255, 0, 0, 128),    # Semi-transparent Red
-        (0, 255, 0, 128),    # Semi-transparent Green
-        (0, 0, 255, 128),    # Semi-transparent Blue
+        (255, 0, 0, 128),  # Semi-transparent Red
+        (0, 255, 0, 128),  # Semi-transparent Green
+        (0, 0, 255, 128),  # Semi-transparent Blue
         (255, 255, 0, 128),  # Semi-transparent Yellow
         (255, 0, 255, 128),  # Semi-transparent Magenta
         (0, 255, 255, 128),  # Semi-transparent Cyan
     ]
-    
+
     # Create overlay image with alpha channel
-    overlay = Image.new('RGBA', image.size, (0, 0, 0, 0))
-    
+    overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
+
     for i, detection in enumerate(segmentation_results):
-        mask = detection['mask']
-        label = detection['class']
-        confidence = detection['confidence']
-        
+        mask = detection["mask"]
+        label = detection["class"]
+        confidence = detection["confidence"]
+
         print(f"    Processing mask for {label} (confidence: {confidence:.2f})")
         print(f"    Mask shape: {mask.shape}, Image size: {image.size}")
-        
+
         # Resize mask to match image dimensions if needed
         # PIL size is (width, height), numpy is (height, width)
-        if mask.shape != image.size[::-1]:  
+        if mask.shape != image.size[::-1]:
             print(f"    Resizing mask from {mask.shape} to {image.size[::-1]}")
-            mask = cv2.resize(mask.astype(np.float32), image.size, interpolation=cv2.INTER_NEAREST)
-        
+            mask = cv2.resize(
+                mask.astype(np.float32), image.size, interpolation=cv2.INTER_NEAREST
+            )
+
         # Convert mask to boolean
-        mask_bool = mask > 0.5        
+        mask_bool = mask > 0.5
         color = colors[i % len(colors)]
-        
+
         # Create mask image more efficiently
-        mask_array = np.zeros((*image.size[::-1], 4), dtype=np.uint8) # RGBA array
-        
+        mask_array = np.zeros((*image.size[::-1], 4), dtype=np.uint8)  # RGBA array
+
         # Apply color to mask pixels where mask is True
         mask_array[mask_bool] = color
-        
+
         # Convert to PIL & composite
-        mask_img = Image.fromarray(mask_array, 'RGBA')
+        mask_img = Image.fromarray(mask_array, "RGBA")
         overlay = Image.alpha_composite(overlay, mask_img)
-    
+
     # Composite overlay onto original image
-    if overlay.mode == 'RGBA':
+    if overlay.mode == "RGBA":
         # Convert original to RGBA for compositing
-        img_rgba = image.convert('RGBA')
+        img_rgba = image.convert("RGBA")
         result = Image.alpha_composite(img_rgba, overlay)
 
-        return result.convert('RGB')
-    
+        return result.convert("RGB")
+
     return image
 
 
@@ -255,21 +257,24 @@ def process_image_for_vision_examples(row: pd.Series) -> bool:
     try:
         image_url = row["identifier"]
         image = load_image_from_url(image_url)
-        
+
         if image is None:
             return False
-        
+
         print(f"Processing image: {row['key']} ({image.size})")
-        
+
         # Run YOLO inference
         bbox_results, segmentation_results = run_yolo_inference(image)
-        
+
         if not bbox_results and not segmentation_results:
             print(f"  No detections found in image {row['key']}")
             return False
-        
-        print(f"  Found {len(bbox_results)} bboxes, {len(segmentation_results)} segmentation masks")
-        
+
+        print(
+            f"  Found {len(bbox_results)} bboxes,"
+            f" {len(segmentation_results)} segmentation masks"
+        )
+
         # Generate filename
         image_key = row["key"]
         base_filename = f"shark_{image_key}"
@@ -277,14 +282,14 @@ def process_image_for_vision_examples(row: pd.Series) -> bool:
         original_path = f"{ORIGINAL_FOLDER}/{base_filename}_original.jpg"
         image.save(original_path, "JPEG", quality=95)
         print(f"  Saved original image: {original_path}")
-        
+
         # Generate & save BBOX version
         if bbox_results:
             bbox_image = draw_bounding_boxes(image, bbox_results)
             bbox_path = f"{BBOX_FOLDER}/{base_filename}_bbox.jpg"
             bbox_image.save(bbox_path, "JPEG", quality=95)
             print(f"  Saved BBOX image: {bbox_path}")
-        
+
         # Generate & save segmentation version
         if segmentation_results:
             seg_image = draw_segmentation_masks(image, segmentation_results)
@@ -297,12 +302,14 @@ def process_image_for_vision_examples(row: pd.Series) -> bool:
             bbox_image = draw_bounding_boxes(image, bbox_results)
             seg_bbox_image = draw_segmentation_masks(bbox_image, segmentation_results)
 
-            seg_bbox_path = f"{BBOX_SEGMENTATION_FOLDER}/{base_filename}_bbox_segmentation.jpg"
+            seg_bbox_path = (
+                f"{BBOX_SEGMENTATION_FOLDER}/{base_filename}_bbox_segmentation.jpg"
+            )
             seg_bbox_image.save(seg_bbox_path, "JPEG", quality=95)
             print(f"  Saved BBOX + segmentation image: {seg_bbox_path}")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"Error processing image {row.get('key', 'unknown')}: {e}")
         return False
@@ -310,21 +317,24 @@ def process_image_for_vision_examples(row: pd.Series) -> bool:
 
 def generate_vision_examples(num_samples: int = 10) -> None:
     print(f"Generating vision examples for {num_samples} sample images...")
-    
+
     # Setup output directories & get sample images
     setup_output_directories()
-    
+
     sample_df = get_sample_image_records(num_samples)
     print(f"Selected {len(sample_df)} images for processing")
-    
+
     # Process each image
     successful_count = 0
     for _, row in sample_df.iterrows():
         if process_image_for_vision_examples(row):
             successful_count += 1
-    
-    print(f"\nCompleted! Successfully processed {successful_count}/{len(sample_df)} images")
-    print(f"Results saved to:")
+
+    print(
+        f"\nCompleted! Successfully processed"
+        f" {successful_count}/{len(sample_df)} images"
+    )
+    print("Results saved to:")
     print(f"  - Bounding boxes: {BBOX_FOLDER}")
     print(f"  - Segmentation masks: {SEGMENTATION_FOLDER}")
     print(f"  - BBOX / Segmentation: {BBOX_SEGMENTATION_FOLDER}")
@@ -333,7 +343,5 @@ def generate_vision_examples(num_samples: int = 10) -> None:
 if __name__ == "__main__":
     # Suppress warnings for cleaner output
     warnings.filterwarnings("ignore")
-    
+
     generate_vision_examples(num_samples=300)
-
-

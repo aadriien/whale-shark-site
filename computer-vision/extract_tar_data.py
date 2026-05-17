@@ -11,10 +11,11 @@ from src.utils.data_utils import (
     folder_exists,
 )
 
-
 from .CONSTANTS import (
-    TRAINING_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_TAR,
-    EXTRACTED_DATA_FOLDER, LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
+    EXTRACTED_DATA_FOLDER,
+    LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
+    LILA_NINGALOO_ARZOUMANIAN_COCO_TAR,
+    TRAINING_DATA_FOLDER,
 )
 
 
@@ -23,7 +24,8 @@ def extract_from_tarfile(tar_file: str, extracted_folder_destination: str) -> No
     if not tar_file:
         raise ValueError("Error, must specify tar_file")
 
-    # Whatever is compressed in .tar file, organized into new folder (target destination)
+    # Whatever is compressed in .tar file, organized into new folder
+    # (target destination)
     if not extracted_folder_destination:
         raise ValueError("Error, must specify extracted_folder_destination")
 
@@ -42,7 +44,6 @@ def extract_from_tarfile(tar_file: str, extracted_folder_destination: str) -> No
 
 if __name__ == "__main__":
     extract_from_tarfile(
-        tar_file=LILA_NINGALOO_ARZOUMANIAN_COCO_TAR, 
-        extracted_folder_destination=LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED
+        tar_file=LILA_NINGALOO_ARZOUMANIAN_COCO_TAR,
+        extracted_folder_destination=LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
     )
-
