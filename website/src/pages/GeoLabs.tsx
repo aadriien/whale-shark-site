@@ -124,7 +124,7 @@ function GeoLabs() {
         if (viewMode === "individual") {
             if (selectedShark) {
                 // Individual mode with shark selected - show only that shark's points
-                globeHandleRef.current.highlightShark(selectedShark.id, true);
+                globeHandleRef.current.highlightShark(selectedShark.id, true, false);
                 setAllSharksVisible(false);
             } 
             else {
@@ -188,6 +188,7 @@ function GeoLabs() {
             if (globeHandleRef.current && selectedShark) {
                 // Disable controls, clear points, & prepare for step mode
                 globeHandleRef.current.disableControls();
+                globeHandleRef.current.highlightShark(selectedShark.id, true, true);
                 
                 const globeInstance = globeHandleRef.current.getGlobe();
                 clearAllData(globeInstance);
