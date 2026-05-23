@@ -13,6 +13,27 @@ import { PlottedCoordinatePoint } from "../types/coordinates";
 import earthImg from "../assets/images/three-globe-imgs/earth-blue-marble.jpg";
 import bumpImg from "../assets/images/three-globe-imgs/earth-topology.png";
 
+// Named views as lat/lng for ocean/coast areas relevant to whale shark data
+// goToCoordinates, yaw, pitch all operate in lat/lng space, so store views same way
+const GLOBE_VIEWS = {
+    gulfOfGuinea: { lat: 0, lng: 0 }, // Atlantic equator / West Africa
+    mozambiqueChannel: { lat: -18, lng: 38 }, // East Africa coast
+    westernIndianOcean: { lat: -10, lng: 45 }, // Tanzania / Kenya
+    arabianSea: { lat: 12, lng: 50 }, // Horn of Africa
+    ningalooReef: { lat: -22, lng: 113 }, // W. Australia
+    bayOfBengal: { lat: 8, lng: 80 }, // Sri Lanka
+    coralTriangle: { lat: 5, lng: 120 }, // Philippines / Indonesia
+    gulfOfMexico: { lat: 20, lng: -87 }, // Caribbean
+    bajaCalifornia: { lat: 24, lng: -110 }, // Sea of Cortez
+    galapagos: { lat: 0, lng: -90 }, // Eastern Pacific
+} as const;
+
+const DEFAULT_VIEW = GLOBE_VIEWS.coralTriangle;
+
+// Camera sits along local Z-axis of pitch rig so yaw/pitch rotations map
+// cleanly to lng/lat. Zoom is purely radial (changing z)
+const RESTING_DISTANCE = 200;
+
 export function createGlobe() {
     const globe = new ThreeGlobe().globeImageUrl(earthImg).bumpImageUrl(bumpImg);
 
@@ -38,7 +59,7 @@ export function createCamera(globeContainer: HTMLDivElement) {
         0.1,
         1000
     );
-    camera.position.set(0, 0, 200);
+    camera.position.set(0, 0, RESTING_DISTANCE);
 
     return camera;
 }
@@ -72,6 +93,10 @@ export function setupCameraAngles(
     pivot.add(yaw);
     yaw.add(pitch);
     pitch.add(camera);
+
+    // Seed orientation from DEFAULT_VIEW so rig opens facing the right region
+    yaw.rotation.y = (DEFAULT_VIEW.lng / 180) * Math.PI;
+    pitch.rotation.x = -(DEFAULT_VIEW.lat / 180) * Math.PI;
 
     return { pivot, yaw, pitch };
 }
@@ -145,23 +170,32 @@ export function clearAllData(globe: ThreeGlobe) {
 const ROTATION_EPSILON = 0.001; // ~0.057 degrees, imperceptible
 const POSITION_EPSILON = 0.5;
 
+// Camera is always along local Z-axis of the pitch rig, so zoom is purely radial
+function scaledViewPosition(distance: number) {
+    return { x: 0, y: 0, z: distance };
+}
+
 export async function resetGlobe(
     camera: THREE.PerspectiveCamera,
     pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
-    const cameraAtTarget = Math.abs(camera.position.z - 200) < POSITION_EPSILON;
+    const cameraAtTarget = Math.abs(camera.position.length() - RESTING_DISTANCE) < POSITION_EPSILON;
     const pitchAtEquator =
         Math.abs(pitchRef.current!.rotation.x) < ROTATION_EPSILON &&
         Math.abs(pitchRef.current!.rotation.y) < ROTATION_EPSILON &&
         Math.abs(pitchRef.current!.rotation.z) < ROTATION_EPSILON;
 
     if (!cameraAtTarget) {
-        // Zoom out while re-centering camera
-        new JEasing(camera.position).to({ x: 0, y: 0, z: 300 }, 1000).easing(Cubic.InOut).start();
-
-        // Zoom back to settled position (note that yaw is NOT reset)
-        // goToCoordinates spins directly to target
-        new JEasing(camera.position).to({ x: 0, y: 0, z: 200 }, 1075).easing(Cubic.InOut).start();
+        // Zoom out along default view axis, then settle back (yaw is NOT reset)
+        // Note that goToCoordinates spins directly to target
+        new JEasing(camera.position)
+            .to(scaledViewPosition(RESTING_DISTANCE * 1.5), 1000)
+            .easing(Cubic.InOut)
+            .start();
+        new JEasing(camera.position)
+            .to({ x: 0, y: 0, z: RESTING_DISTANCE }, 1075)
+            .easing(Cubic.InOut)
+            .start();
     }
 
     if (!pitchAtEquator) {
@@ -226,8 +260,11 @@ export async function playStoryMode(
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
 
-    // Have camera zoom into globe gradually, over 2.5 sec period
-    new JEasing(camera.position).to({ z: 150 }, 2500).easing(Cubic.InOut).start();
+    // Zoom in along default view axis (75% of resting distance), over 2.5 sec
+    new JEasing(camera.position)
+        .to(scaledViewPosition(RESTING_DISTANCE * 0.75), 2500)
+        .easing(Cubic.InOut)
+        .start();
 
     console.log(`Playing story for shark ID: ${sharkID}`);
 
@@ -274,8 +311,11 @@ export async function highlightSharkMode(
     const sortedPointsData = getSharkCoordinates(sharkID);
     if (!globe || !sortedPointsData.length) return;
 
-    // Have camera zoom into globe gradually, over 2.5 sec period
-    new JEasing(camera.position).to({ z: 150 }, 2500).easing(Cubic.InOut).start();
+    // Zoom in along default view axis (75% of resting distance), over 2.5 sec
+    new JEasing(camera.position)
+        .to(scaledViewPosition(RESTING_DISTANCE * 0.75), 2500)
+        .easing(Cubic.InOut)
+        .start();
 
     console.log(`Highlighting shark ID: ${sharkID} with ${usePoints ? "points" : "ripples"}`);
 
