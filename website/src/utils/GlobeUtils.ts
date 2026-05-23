@@ -142,22 +142,35 @@ export function clearAllData(globe: ThreeGlobe) {
     globe.pointsData([]);
 }
 
+const ROTATION_EPSILON = 0.001; // ~0.057 degrees, imperceptible
+const POSITION_EPSILON = 0.5;
+
 export async function resetGlobe(
     camera: THREE.PerspectiveCamera,
     pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
-    // Zoom out while re-centering camera
-    new JEasing(camera.position).to({ x: 0, y: 0, z: 300 }, 1000).easing(Cubic.InOut).start();
+    const cameraAtTarget = Math.abs(camera.position.z - 200) < POSITION_EPSILON;
+    const pitchAtEquator =
+        Math.abs(pitchRef.current!.rotation.x) < ROTATION_EPSILON &&
+        Math.abs(pitchRef.current!.rotation.y) < ROTATION_EPSILON &&
+        Math.abs(pitchRef.current!.rotation.z) < ROTATION_EPSILON;
 
-    // Level pitch to equator so yaw rotation doesn't arc when near poles
-    new JEasing(pitchRef.current!.rotation)
-        .to({ x: 0, y: 0, z: 0 }, 1025)
-        .easing(Cubic.InOut)
-        .start();
+    if (!cameraAtTarget) {
+        // Zoom out while re-centering camera
+        new JEasing(camera.position).to({ x: 0, y: 0, z: 300 }, 1000).easing(Cubic.InOut).start();
 
-    // Zoom back to settled position (note that yaw is NOT reset)
-    // goToCoordinates spins directly to target
-    new JEasing(camera.position).to({ x: 0, y: 0, z: 200 }, 1075).easing(Cubic.InOut).start();
+        // Zoom back to settled position (note that yaw is NOT reset)
+        // goToCoordinates spins directly to target
+        new JEasing(camera.position).to({ x: 0, y: 0, z: 200 }, 1075).easing(Cubic.InOut).start();
+    }
+
+    if (!pitchAtEquator) {
+        // Level pitch to equator so yaw rotation doesn't arc when near poles
+        new JEasing(pitchRef.current!.rotation)
+            .to({ x: 0, y: 0, z: 0 }, 1025)
+            .easing(Cubic.InOut)
+            .start();
+    }
 
     JEASINGS.update();
 }
@@ -180,17 +193,25 @@ export function goToCoordinates(
     pitchRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>,
     yawRef: React.RefObject<THREE.Object3D<THREE.Object3DEventMap> | null>
 ) {
-    new JEasing(pitchRef.current!.rotation)
-        // Convert latitude to radians, & animate over 1000 ms (1 sec)
-        .to({ x: (lat / 180) * Math.PI * -1 }, 1000)
-        .easing(Cubic.InOut)
-        .start();
+    // Animate via shortest arc to avoid spinning the long way around
+    const targetPitch = (lat / 180) * Math.PI * -1;
+    const targetYaw = computeShortestYaw(yawRef.current!.rotation.y, lng);
 
-    new JEasing(yawRef.current!.rotation)
-        // Animate via shortest arc to avoid spinning the long way around
-        .to({ y: computeShortestYaw(yawRef.current!.rotation.y, lng) }, 1000)
-        .easing(Cubic.InOut)
-        .start();
+    if (Math.abs(pitchRef.current!.rotation.x - targetPitch) >= ROTATION_EPSILON) {
+        // Take converted latitude (radians), & animate over 1000 ms (1 sec)
+        new JEasing(pitchRef.current!.rotation)
+            .to({ x: targetPitch }, 1000)
+            .easing(Cubic.InOut)
+            .start();
+    }
+
+    if (Math.abs(targetYaw - yawRef.current!.rotation.y) >= ROTATION_EPSILON) {
+        // Take converted longitude (radians), & animate over 1000 ms (1 sec)
+        new JEasing(yawRef.current!.rotation)
+            .to({ y: targetYaw }, 1000)
+            .easing(Cubic.InOut)
+            .start();
+    }
 }
 
 export async function playStoryMode(
