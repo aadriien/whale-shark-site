@@ -21,6 +21,12 @@ const HIGHLIGHT_BORDER = {
     "border-opacity": 1,
 } as const;
 
+const SAME_SHARK_BORDER = {
+    "border-width": 2,
+    "border-color": "#e2e8f0",
+    "border-opacity": 1,
+} as const;
+
 const NINGALOO_COLOR = "#525252";
 
 export const CONTINENT_COLORS: Record<string, string> = {
@@ -195,12 +201,20 @@ export function applyFocus(cy: Core, focusedNodeId: string | null) {
     const focusedNode = cy.getElementById(focusedNodeId);
     if (focusedNode.empty()) return;
 
-    const featured = focusedNode.closedNeighborhood();
-    const dimmed = cy.elements().not(featured);
+    // Get the sharkID from the selected node in the graph.
+    // Then highlight all other images (nodes) for that sharkID's record.
+    // Also highlight the closest matched image (distinct shark),
+    // showing the connection via an edge between the nodes
+    const sharkId = focusedNode.data("shark_id") as string;
+    const sameSharkNodes = cy.nodes(`[shark_id = "${sharkId}"]`).not(focusedNode);
+    const matchNeighborhood = focusedNode.closedNeighborhood();
 
-    dimmed.nodes().style("opacity", NODE_DIM_OPACITY);
-    featured.edges().style("display", "element").style("opacity", 1);
+    const allHighlightedNodes = matchNeighborhood.nodes().union(sameSharkNodes);
+    cy.nodes().not(allHighlightedNodes).style("opacity", NODE_DIM_OPACITY);
+
+    matchNeighborhood.edges().style("display", "element").style("opacity", 1);
     focusedNode.style(HIGHLIGHT_BORDER);
+    sameSharkNodes.style(SAME_SHARK_BORDER);
 }
 
 function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
