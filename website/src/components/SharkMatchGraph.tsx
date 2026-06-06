@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
@@ -13,13 +13,7 @@ import {
 } from "../utils/GraphUtils";
 import { mediaSharks, extractContinents } from "../utils/DataUtils";
 
-import {
-    NodeFilter,
-    EdgeFilter,
-    ContinentFilter,
-    GraphData,
-    SelectedMatch,
-} from "../types/graphs";
+import { NodeFilter, EdgeFilter, GraphData, SelectedMatch } from "../types/graphs";
 
 const NODE_FILTER_LABELS: Record<NodeFilter, string> = {
     all: "All nodes",
@@ -34,8 +28,16 @@ const EDGE_FILTER_LABELS: Record<EdgeFilter, string> = {
     mutual: "Mutual matches only",
 };
 
-const CONTINENT_FILTER_LABELS: Record<ContinentFilter, string> = {
-    all: "All regions",
+const CONTINENT_NAMES: string[] = [
+    "North America",
+    "Asia",
+    "Oceania",
+    "Africa",
+    "South America",
+    "Europe",
+];
+
+const CONTINENT_LABEL: Record<string, string> = {
     "North America": "North America",
     Asia: "Asia",
     Oceania: "Oceania",
@@ -49,7 +51,7 @@ const NINGALOO_COLOR = "#525252";
 function SharkMatchGraph() {
     const [nodeFilter, setNodeFilter] = useState<NodeFilter>("all");
     const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
-    const [continentFilter, setContinentFilter] = useState<ContinentFilter>("all");
+    const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
     const [graphData, setGraphData] = useState<GraphData | null>(null);
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
@@ -98,8 +100,20 @@ function SharkMatchGraph() {
     }, []);
 
     useEffect(() => {
-        if (cyRef.current) applyFilters(cyRef.current, nodeFilter, edgeFilter, continentFilter);
-    }, [nodeFilter, edgeFilter, continentFilter]);
+        if (cyRef.current) applyFilters(cyRef.current, nodeFilter, edgeFilter, continentFilters);
+    }, [nodeFilter, edgeFilter, continentFilters]);
+
+    const toggleContinent = useCallback((name: string) => {
+        setContinentFilters((prev) => {
+            const next = new Set(prev);
+            if (next.has(name)) {
+                next.delete(name);
+            } else {
+                next.add(name);
+            }
+            return next;
+        });
+    }, []);
 
     return (
         <div className="shark-match-graph-section">
@@ -107,9 +121,9 @@ function SharkMatchGraph() {
                 <h2>Identity Match Graph</h2>
                 <p>
                     Each node is a whale shark image, colored by the continent where it was
-                    recorded. Gray squares are Ningaloo reference images. Nearby nodes are
-                    visually similar images, according to the computer vision model. Click
-                    any node to highlight its nearest embedding match and see details.
+                    recorded. Gray squares are Ningaloo reference images. Nearby nodes are visually
+                    similar images, according to the computer vision model. Click any node to
+                    highlight its nearest embedding match and see details.
                 </p>
                 <div className="graph-legend">
                     <span className="legend-square" style={{ background: NINGALOO_COLOR }} />
@@ -118,10 +132,7 @@ function SharkMatchGraph() {
                         .filter(([name]) => name !== "Unknown")
                         .map(([name, color]) => (
                             <span key={name} style={{ display: "contents" }}>
-                                <span
-                                    className="legend-dot"
-                                    style={{ background: color }}
-                                />
+                                <span className="legend-dot" style={{ background: color }} />
                                 <span className="legend-label">{name}</span>
                             </span>
                         ))}
@@ -141,13 +152,19 @@ function SharkMatchGraph() {
                     ))}
                 </div>
                 <div className="filter-group">
-                    {(Object.keys(CONTINENT_FILTER_LABELS) as ContinentFilter[]).map((f) => (
+                    <button
+                        className={`graph-filter-btn${continentFilters.size === 0 ? " active" : ""}`}
+                        onClick={() => setContinentFilters(new Set())}
+                    >
+                        All regions
+                    </button>
+                    {CONTINENT_NAMES.map((name) => (
                         <button
-                            key={f}
-                            className={`graph-filter-btn${continentFilter === f ? " active" : ""}`}
-                            onClick={() => setContinentFilter(f)}
+                            key={name}
+                            className={`graph-filter-btn${continentFilters.has(name) ? " active" : ""}`}
+                            onClick={() => toggleContinent(name)}
                         >
-                            {CONTINENT_FILTER_LABELS[f]}
+                            {CONTINENT_LABEL[name]}
                         </button>
                     ))}
                 </div>
@@ -197,7 +214,7 @@ function SharkMatchGraph() {
                                         cy,
                                         nodeFilter,
                                         edgeFilter,
-                                        continentFilter,
+                                        continentFilters,
                                         setSelectedMatch
                                     );
                                 }

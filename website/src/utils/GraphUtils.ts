@@ -1,5 +1,6 @@
 import type {
     Core,
+    Css,
     ElementDefinition,
     EdgeSingular,
     EventObject,
@@ -7,14 +8,7 @@ import type {
     StylesheetStyle,
 } from "cytoscape";
 
-import type {
-    GraphNode,
-    GraphEdge,
-    NodeFilter,
-    EdgeFilter,
-    ContinentFilter,
-    SelectedMatch,
-} from "../types/graphs";
+import type { GraphNode, GraphEdge, NodeFilter, EdgeFilter, SelectedMatch } from "../types/graphs";
 
 const POSITION_SCALE = 5000;
 const EDGE_OPACITY_MIN = 0.15;
@@ -49,14 +43,14 @@ export const GRAPH_STYLESHEET: StylesheetStyle[] = [
             "border-color": "#000",
             "border-opacity": 0.25,
             label: "",
-            shape: "ellipse" as unknown as StylesheetStyle["style"]["shape"],
+            shape: "ellipse" as Css.NodeShape,
             "background-color": CONTINENT_COLORS["Unknown"],
         },
     },
     {
         selector: "node[population = 'ningaloo']",
         style: {
-            shape: "rectangle" as unknown as StylesheetStyle["style"]["shape"],
+            shape: "rectangle" as Css.NodeShape,
             "background-color": NINGALOO_COLOR,
             "border-color": "#888",
             "border-opacity": 0.5,
@@ -73,7 +67,7 @@ export const GRAPH_STYLESHEET: StylesheetStyle[] = [
     {
         selector: "edge",
         style: {
-            display: "none" as unknown as StylesheetStyle["style"]["display"],
+            display: "none" as Css.PropertyValue<EdgeSingular, "none" | "element">,
             width: 1,
             opacity: "data(opacity)" as unknown as number,
             "curve-style": "straight",
@@ -164,7 +158,7 @@ export function applyFilters(
     cy: Core,
     nodeFilter: NodeFilter,
     edgeFilter: EdgeFilter,
-    continentFilter: ContinentFilter
+    continentFilters: Set<string>
 ) {
     cy.batch(() => {
         cy.nodes().style("display", "element");
@@ -178,10 +172,14 @@ export function applyFilters(
 
         // edgeFilter is preserved for future edge toggle; no-op while edges are hidden by default
 
-        if (continentFilter !== "all") {
-            cy.nodes(
-                `[population = 'gbif'][continent != '${continentFilter}']`
-            ).style("display", "none");
+        if (continentFilters.size > 0) {
+            // Hide GBIF nodes not in the selected set.
+            // Chained != selectors are AND, so this matches nodes that aren't among the
+            // selected continents (i.e. can filter on multiple continents)
+            const hideSelector =
+                "[population = 'gbif']" +
+                [...continentFilters].map((c) => `[continent != '${c}']`).join("");
+            cy.nodes(hideSelector).style("display", "none");
         }
     });
 }
@@ -234,13 +232,13 @@ export function initCyListeners(
     cy: Core,
     nodeFilter: NodeFilter,
     edgeFilter: EdgeFilter,
-    continentFilter: ContinentFilter,
+    continentFilters: Set<string>,
     onSelect: (match: SelectedMatch | null) => void
 ) {
     cy.one("render", () => {
         cy.resize();
         cy.fit();
-        applyFilters(cy, nodeFilter, edgeFilter, continentFilter);
+        applyFilters(cy, nodeFilter, edgeFilter, continentFilters);
     });
 
     cy.on("tap", (evt: EventObject) => {
