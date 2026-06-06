@@ -3,6 +3,7 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
 import GraphNodePanel from "./GraphNodePanel";
+import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
 import {
     GRAPH_STYLESHEET,
     CONTINENT_COLORS,
@@ -223,6 +224,7 @@ function SharkMatchGraph() {
                     )}
                 </div>
                 <GraphNodePanel match={selectedMatch} onClose={() => setSelectedMatch(null)} />
+                <GraphSharkImagesPanel match={selectedMatch} onClose={() => setSelectedMatch(null)} />
             </div>
         </div>
     );

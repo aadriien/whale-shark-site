@@ -203,3 +203,74 @@
     font-size: 0.9rem;
 }
 
+/* GraphSharkImagesPanel */
+
+.graph-panel-image-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 4px;
+    border-radius: 4px;
+}
+
+.graph-panel-image-row--selected {
+    outline: 1px solid var(--border-color, #ddd);
+    background: var(--bg-primary, #fff);
+}
+
+.graph-panel-thumbnail {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.graph-panel-thumbnail--missing {
+    background:
+        repeating-linear-gradient(
+            45deg,
+            var(--condensed-media-stripe-light),
+            var(--condensed-media-stripe-light) 5px,
+            var(--condensed-media-stripe-dark) 5px,
+            var(--condensed-media-stripe-dark) 10px
+        ),
+        linear-gradient(135deg, var(--condensed-media-bg-start), var(--condensed-media-bg-end));
+}
+
+.graph-panel-row-arrow {
+    flex-shrink: 0;
+    opacity: 0.4;
+    font-size: 0.85rem;
+}
+
+.graph-panel-match-id {
+    font-size: 0.72rem;
+    font-family: monospace;
+    opacity: 0.75;
+    word-break: break-all;
+    flex: 1;
+}
+
+.graph-panel-vote-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 0.8rem;
+    padding: 2px 0;
+}
+
+.graph-panel-vote-id {
+    font-family: monospace;
+    opacity: 0.8;
+    min-width: 0;
+    word-break: break-all;
+    text-align: left;
+}
+
+.graph-panel-vote-count {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
