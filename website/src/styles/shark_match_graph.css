@@ -32,18 +32,12 @@
     flex-shrink: 0;
 }
 
-.shark-match-graph-section .legend-dot.ningaloo { background: #4682b4; }
-.shark-match-graph-section .legend-dot.gbif     { background: #e8735a; }
-
-.shark-match-graph-section .legend-line {
+.shark-match-graph-section .legend-square {
     display: inline-block;
-    width: 24px;
-    height: 2px;
+    width: 10px;
+    height: 10px;
     flex-shrink: 0;
 }
-
-.shark-match-graph-section .legend-line.cross  { background: #3cb371; }
-.shark-match-graph-section .legend-line.within { background: #ffa500; }
 
 .shark-match-graph-section .legend-label {
     margin-right: 8px;

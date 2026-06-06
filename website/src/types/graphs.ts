@@ -4,6 +4,15 @@ export type NodeFilter = "all" | "gbif" | "ningaloo";
 
 export type EdgeFilter = "all" | "cross" | "same" | "mutual";
 
+export type ContinentFilter =
+    | "all"
+    | "North America"
+    | "Asia"
+    | "Oceania"
+    | "Africa"
+    | "South America"
+    | "Europe";
+
 export type GraphNode = {
     id: string;
     population: string;

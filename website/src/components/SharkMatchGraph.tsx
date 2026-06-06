@@ -5,13 +5,21 @@ import type { Core } from "cytoscape";
 import GraphNodePanel from "./GraphNodePanel";
 import {
     GRAPH_STYLESHEET,
+    CONTINENT_COLORS,
     normalizePositions,
     buildElements,
     applyFilters,
     initCyListeners,
 } from "../utils/GraphUtils";
+import { mediaSharks, extractContinents } from "../utils/DataUtils";
 
-import { NodeFilter, EdgeFilter, GraphData, SelectedMatch } from "../types/graphs";
+import {
+    NodeFilter,
+    EdgeFilter,
+    ContinentFilter,
+    GraphData,
+    SelectedMatch,
+} from "../types/graphs";
 
 const NODE_FILTER_LABELS: Record<NodeFilter, string> = {
     all: "All nodes",
@@ -26,9 +34,22 @@ const EDGE_FILTER_LABELS: Record<EdgeFilter, string> = {
     mutual: "Mutual matches only",
 };
 
+const CONTINENT_FILTER_LABELS: Record<ContinentFilter, string> = {
+    all: "All regions",
+    "North America": "North America",
+    Asia: "Asia",
+    Oceania: "Oceania",
+    Africa: "Africa",
+    "South America": "South America",
+    Europe: "Europe",
+};
+
+const NINGALOO_COLOR = "#525252";
+
 function SharkMatchGraph() {
     const [nodeFilter, setNodeFilter] = useState<NodeFilter>("all");
     const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
+    const [continentFilter, setContinentFilter] = useState<ContinentFilter>("all");
     const [graphData, setGraphData] = useState<GraphData | null>(null);
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
@@ -43,11 +64,27 @@ function SharkMatchGraph() {
         });
     }, []);
 
+    const sharkContinentMap = useMemo(() => {
+        const map = new Map<string, string>();
+        for (const shark of mediaSharks) {
+            if (shark.continent) {
+                const continents = extractContinents(shark.continent);
+                map.set(shark.id, continents[0] ?? "Unknown");
+            } else {
+                map.set(shark.id, "Unknown");
+            }
+        }
+        return map;
+    }, []);
+
     const nodes = useMemo(() => graphData?.nodes ?? [], [graphData]);
     const edges = useMemo(() => graphData?.edges ?? [], [graphData]);
 
     const posMap = useMemo(() => normalizePositions(nodes), [nodes]);
-    const elements = useMemo(() => buildElements(nodes, edges, posMap), [nodes, edges, posMap]);
+    const elements = useMemo(
+        () => buildElements(nodes, edges, posMap, sharkContinentMap),
+        [nodes, edges, posMap, sharkContinentMap]
+    );
 
     useEffect(() => {
         const el = containerRef.current;
@@ -61,27 +98,33 @@ function SharkMatchGraph() {
     }, []);
 
     useEffect(() => {
-        if (cyRef.current) applyFilters(cyRef.current, nodeFilter, edgeFilter);
-    }, [nodeFilter, edgeFilter]);
+        if (cyRef.current) applyFilters(cyRef.current, nodeFilter, edgeFilter, continentFilter);
+    }, [nodeFilter, edgeFilter, continentFilter]);
 
     return (
         <div className="shark-match-graph-section">
             <div className="graph-header">
                 <h2>Identity Match Graph</h2>
                 <p>
-                    Each node is a whale shark image. Edges connect GBIF images to their nearest
-                    embedding (vector) match. Green crosses into the Ningaloo reference database,
-                    orange stays within GBIF. Nearby nodes are visually similar images.
+                    Each node is a whale shark image, colored by the continent where it was
+                    recorded. Gray squares are Ningaloo reference images. Nearby nodes are
+                    visually similar images, according to the computer vision model. Click
+                    any node to highlight its nearest embedding match and see details.
                 </p>
                 <div className="graph-legend">
-                    <span className="legend-dot ningaloo" />
+                    <span className="legend-square" style={{ background: NINGALOO_COLOR }} />
                     <span className="legend-label">Ningaloo (reference)</span>
-                    <span className="legend-dot gbif" />
-                    <span className="legend-label">GBIF (query)</span>
-                    <span className="legend-line cross" />
-                    <span className="legend-label">GBIF x Ningaloo</span>
-                    <span className="legend-line within" />
-                    <span className="legend-label">GBIF x GBIF</span>
+                    {(Object.entries(CONTINENT_COLORS) as [string, string][])
+                        .filter(([name]) => name !== "Unknown")
+                        .map(([name, color]) => (
+                            <span key={name} style={{ display: "contents" }}>
+                                <span
+                                    className="legend-dot"
+                                    style={{ background: color }}
+                                />
+                                <span className="legend-label">{name}</span>
+                            </span>
+                        ))}
                 </div>
             </div>
 
@@ -94,6 +137,17 @@ function SharkMatchGraph() {
                             onClick={() => setNodeFilter(f)}
                         >
                             {NODE_FILTER_LABELS[f]}
+                        </button>
+                    ))}
+                </div>
+                <div className="filter-group">
+                    {(Object.keys(CONTINENT_FILTER_LABELS) as ContinentFilter[]).map((f) => (
+                        <button
+                            key={f}
+                            className={`graph-filter-btn${continentFilter === f ? " active" : ""}`}
+                            onClick={() => setContinentFilter(f)}
+                        >
+                            {CONTINENT_FILTER_LABELS[f]}
                         </button>
                     ))}
                 </div>
@@ -139,7 +193,13 @@ function SharkMatchGraph() {
                                 cyRef.current = cy;
                                 if (lastCyInstance.current !== cy) {
                                     lastCyInstance.current = cy;
-                                    initCyListeners(cy, nodeFilter, edgeFilter, setSelectedMatch);
+                                    initCyListeners(
+                                        cy,
+                                        nodeFilter,
+                                        edgeFilter,
+                                        continentFilter,
+                                        setSelectedMatch
+                                    );
                                 }
                             }}
                         />

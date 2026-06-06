@@ -7,19 +7,37 @@ import type {
     StylesheetStyle,
 } from "cytoscape";
 
-import type { GraphNode, GraphEdge, NodeFilter, EdgeFilter, SelectedMatch } from "../types/graphs";
+import type {
+    GraphNode,
+    GraphEdge,
+    NodeFilter,
+    EdgeFilter,
+    ContinentFilter,
+    SelectedMatch,
+} from "../types/graphs";
 
 const POSITION_SCALE = 5000;
 const EDGE_OPACITY_MIN = 0.15;
 
 const NODE_DIM_OPACITY = 0.08;
-const EDGE_DIM_OPACITY = 0.05;
 
 const HIGHLIGHT_BORDER = {
     "border-width": 3,
     "border-color": "#ffd700",
     "border-opacity": 1,
 } as const;
+
+const NINGALOO_COLOR = "#525252";
+
+export const CONTINENT_COLORS: Record<string, string> = {
+    "North America": "#F59E0B",
+    Asia: "#06B6D4",
+    Oceania: "#8B5CF6",
+    Africa: "#10B981",
+    "South America": "#F43F5E",
+    Europe: "#6366F1",
+    Unknown: "#9CA3AF",
+};
 
 export const GRAPH_STYLESHEET: StylesheetStyle[] = [
     {
@@ -29,21 +47,33 @@ export const GRAPH_STYLESHEET: StylesheetStyle[] = [
             height: 12,
             "border-width": 1,
             "border-color": "#000",
-            "border-opacity": 1,
+            "border-opacity": 0.25,
             label: "",
+            shape: "ellipse" as unknown as StylesheetStyle["style"]["shape"],
+            "background-color": CONTINENT_COLORS["Unknown"],
         },
     },
     {
         selector: "node[population = 'ningaloo']",
-        style: { "background-color": "#4682b4" },
+        style: {
+            shape: "rectangle" as unknown as StylesheetStyle["style"]["shape"],
+            "background-color": NINGALOO_COLOR,
+            "border-color": "#888",
+            "border-opacity": 0.5,
+        },
     },
-    {
-        selector: "node[population = 'gbif']",
-        style: { "background-color": "#e8735a" },
-    },
+    // Continent color rules for GBIF nodes
+    ...Object.entries(CONTINENT_COLORS).map(
+        ([continent, color]) =>
+            ({
+                selector: `node[population = 'gbif'][continent = '${continent}']`,
+                style: { "background-color": color },
+            }) as StylesheetStyle
+    ),
     {
         selector: "edge",
         style: {
+            display: "none" as unknown as StylesheetStyle["style"]["display"],
             width: 1,
             opacity: "data(opacity)" as unknown as number,
             "curve-style": "straight",
@@ -93,7 +123,8 @@ export function normalizePositions(nodes: GraphNode[]): Map<string, { x: number;
 export function buildElements(
     nodes: GraphNode[],
     edges: GraphEdge[],
-    posMap: Map<string, { x: number; y: number }>
+    posMap: Map<string, { x: number; y: number }>,
+    sharkContinentMap: Map<string, string>
 ): ElementDefinition[] {
     const nodeEls: ElementDefinition[] = nodes.map((n) => ({
         data: {
@@ -101,6 +132,10 @@ export function buildElements(
             population: n.population,
             shark_id: n.shark_id,
             image_id: n.image_id,
+            continent:
+                n.population === "gbif"
+                    ? (sharkContinentMap.get(n.shark_id) ?? "Unknown")
+                    : undefined,
         },
         position: posMap.get(n.id) ?? { x: 0, y: 0 },
     }));
@@ -125,10 +160,15 @@ export function buildElements(
     return [...nodeEls, ...edgeEls];
 }
 
-export function applyFilters(cy: Core, nodeFilter: NodeFilter, edgeFilter: EdgeFilter) {
+export function applyFilters(
+    cy: Core,
+    nodeFilter: NodeFilter,
+    edgeFilter: EdgeFilter,
+    continentFilter: ContinentFilter
+) {
     cy.batch(() => {
         cy.nodes().style("display", "element");
-        cy.edges().style("display", "element");
+        cy.edges().style("display", "none");
 
         if (nodeFilter === "gbif") {
             cy.nodes("[population = 'ningaloo']").style("display", "none");
@@ -136,20 +176,21 @@ export function applyFilters(cy: Core, nodeFilter: NodeFilter, edgeFilter: EdgeF
             cy.nodes("[population = 'gbif']").style("display", "none");
         }
 
-        if (edgeFilter === "cross") {
-            cy.edges("[edge_type != 'gbif_to_ningaloo']").style("display", "none");
-        } else if (edgeFilter === "same") {
-            cy.edges("[edge_type != 'gbif_to_gbif']").style("display", "none");
-        } else if (edgeFilter === "mutual") {
-            cy.edges("[?mutual != true]").style("display", "none");
+        // edgeFilter is preserved for future edge toggle; no-op while edges are hidden by default
+
+        if (continentFilter !== "all") {
+            cy.nodes(
+                `[population = 'gbif'][continent != '${continentFilter}']`
+            ).style("display", "none");
         }
     });
 }
 
 export function applyFocus(cy: Core, focusedNodeId: string | null) {
-    // removeStyle falls back to stylesheet, so edges recover data (opacity) automatically
     cy.elements().removeStyle("opacity");
     cy.nodes().removeStyle("border-width border-color border-opacity");
+    // Always re-hide all edges, then selectively show neighborhood edges below
+    cy.edges().style("display", "none");
 
     if (!focusedNodeId) return;
 
@@ -160,8 +201,7 @@ export function applyFocus(cy: Core, focusedNodeId: string | null) {
     const dimmed = cy.elements().not(featured);
 
     dimmed.nodes().style("opacity", NODE_DIM_OPACITY);
-    dimmed.edges().style("opacity", EDGE_DIM_OPACITY);
-    featured.edges().style("opacity", 1);
+    featured.edges().style("display", "element").style("opacity", 1);
     focusedNode.style(HIGHLIGHT_BORDER);
 }
 
@@ -194,12 +234,13 @@ export function initCyListeners(
     cy: Core,
     nodeFilter: NodeFilter,
     edgeFilter: EdgeFilter,
+    continentFilter: ContinentFilter,
     onSelect: (match: SelectedMatch | null) => void
 ) {
     cy.one("render", () => {
         cy.resize();
         cy.fit();
-        applyFilters(cy, nodeFilter, edgeFilter);
+        applyFilters(cy, nodeFilter, edgeFilter, continentFilter);
     });
 
     cy.on("tap", (evt: EventObject) => {
