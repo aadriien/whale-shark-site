@@ -8,12 +8,18 @@ import type {
     StylesheetStyle,
 } from "cytoscape";
 
-import type { GraphNode, GraphEdge, NodeFilter, EdgeFilter, SelectedMatch } from "../types/graphs";
+import type {
+    GraphNode,
+    GraphEdge,
+    EdgeFilterState,
+    GraphViewParams,
+    SelectedMatch,
+} from "../types/graphs";
 
 const POSITION_SCALE = 5000;
 const EDGE_OPACITY_MIN = 0.15;
 
-const NODE_DIM_OPACITY = 0.08;
+const DIM_OPACITY = 0.08;
 
 const HIGHLIGHT_BORDER = {
     "border-width": 3,
@@ -172,41 +178,35 @@ export function buildElements(
     return [...nodeEls, ...edgeEls];
 }
 
-// Translate the edge toggle into a Cytoscape selector fragment.
-// "*" (rather than "") for "all", since empty-string selector matches nothing,
-// but "*" matches every element & still chains correctly with "[source = ...]"
-function edgeTypeSelector(edgeFilter: EdgeFilter): string {
-    switch (edgeFilter) {
-        case "same":
-            return "[edge_type = 'gbif_to_gbif']";
-        case "cross":
-            return "[edge_type = 'gbif_to_ningaloo']";
-        case "mutual":
-            return "[?mutual]";
-        default:
-            return "*";
-    }
+// "*" matches every edge. Note that an empty-string selector would match nothing
+function ambientEdgeSelector({ population, mutualOnly }: EdgeFilterState): string {
+    const fragments: string[] = [];
+
+    if (population === "same") fragments.push("[edge_type = 'gbif_to_gbif']");
+    else if (population === "cross") fragments.push("[edge_type = 'gbif_to_ningaloo']");
+
+    if (mutualOnly) fragments.push("[?mutual]");
+    return fragments.length > 0 ? fragments.join("") : "*";
 }
 
-export function applyFilters(
+// Single source of truth for what's visible / highlighted
+// Recomputes the whole view from scratch, so there's no "restore previous state"
+// path to keep in sync (e.g. when defocusing back to the ambient filtered view)
+export function applyGraphView(
     cy: Core,
-    nodeFilter: NodeFilter,
-    edgeFilter: EdgeFilter,
-    continentFilters: Set<string>
+    { nodeFilter, edgeFilter, continentFilters, focusedNodeId }: GraphViewParams
 ) {
     cy.batch(() => {
+        cy.elements().removeStyle("opacity");
+        cy.nodes().removeStyle("border-width border-color border-opacity");
+
         cy.nodes().style("display", "element");
-        cy.edges().style("display", "none");
 
         if (nodeFilter === "gbif") {
             cy.nodes("[population = 'ningaloo']").style("display", "none");
         } else if (nodeFilter === "ningaloo") {
             cy.nodes("[population = 'gbif']").style("display", "none");
         }
-
-        // edgeFilter takes effect once a node is focused (see applyFocus) -
-        // edges stay hidden by default regardless, so there's nothing to do here.
-        void edgeFilter;
 
         if (continentFilters.size > 0) {
             // Hide GBIF nodes not in the selected set.
@@ -217,55 +217,59 @@ export function applyFilters(
                 [...continentFilters].map((c) => `[continent != '${c}']`).join("");
             cy.nodes(hideSelector).style("display", "none");
         }
+
+        const ambientEdges = cy.edges(ambientEdgeSelector(edgeFilter));
+
+        // A "mutual matches only" overview is only meaningful for nodes that
+        // actually have one. Drop the rest so the clusters stand out
+        if (edgeFilter.mutualOnly) {
+            cy.nodes().not(ambientEdges.connectedNodes()).style("display", "none");
+        }
+
+        cy.edges().style("display", "none");
+        ambientEdges.style("display", "element");
+
+        const focusedNode = focusedNodeId ? cy.getElementById(focusedNodeId) : null;
+        if (!focusedNode || focusedNode.empty()) return;
+
+        // Clicking a node always reveals & highlights its full neighborhood, i.e.
+        // its other images plus its closest match, regardless of ambient filters
+        const sharkId = focusedNode.data("shark_id") as string;
+        const sameSharkNodes = cy.nodes(`[shark_id = "${sharkId}"]`).not(focusedNode);
+
+        const matchNeighborhood = focusedNode.closedNeighborhood();
+        const allHighlighted = matchNeighborhood.nodes().union(sameSharkNodes);
+
+        allHighlighted.style("display", "element");
+        cy.nodes().not(allHighlighted).style("opacity", DIM_OPACITY);
+
+        // Other visible-but-irrelevant ambient edges dim too, not just nodes
+        ambientEdges.not(matchNeighborhood.edges()).style("opacity", DIM_OPACITY);
+        matchNeighborhood.edges().style("display", "element").style("opacity", 1);
+
+        focusedNode.style(HIGHLIGHT_BORDER);
+        sameSharkNodes.style(SAME_SHARK_BORDER);
     });
 }
 
-export function applyFocus(cy: Core, focusedNodeId: string | null, edgeFilter: EdgeFilter) {
-    cy.elements().removeStyle("opacity");
-    cy.nodes().removeStyle("border-width border-color border-opacity");
-    // Always re-hide all edges, then selectively show neighborhood edges below
-    cy.edges().style("display", "none");
-
-    if (!focusedNodeId) return;
-
-    const focusedNode = cy.getElementById(focusedNodeId);
-    if (focusedNode.empty()) return;
-
-    // Get the sharkID from the selected node in the graph.
-    // Then highlight all other images (nodes) for that sharkID's record.
-    // Also highlight the closest matched image (distinct shark),
-    // showing the connection via an edge between the nodes.
-    // GBIF nodes can carry both a gbif_to_gbif and a gbif_to_ningaloo edge,
-    // so the edge toggle decides which of those neighbors get shown/highlighted.
-    const sharkId = focusedNode.data("shark_id") as string;
-    const sameSharkNodes = cy.nodes(`[shark_id = "${sharkId}"]`).not(focusedNode);
-    const visibleEdges = focusedNode.connectedEdges(edgeTypeSelector(edgeFilter));
-
-    const allHighlightedNodes = visibleEdges
-        .connectedNodes()
-        .union(focusedNode)
-        .union(sameSharkNodes);
-    cy.nodes().not(allHighlightedNodes).style("opacity", NODE_DIM_OPACITY);
-
-    visibleEdges.style("display", "element").style("opacity", 1);
-    focusedNode.style(HIGHLIGHT_BORDER);
-    sameSharkNodes.style(SAME_SHARK_BORDER);
-}
-
-function findBestMatch(cy: Core, nodeId: string, edgeFilter: EdgeFilter): SelectedMatch | null {
+function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
     const clickedNode = cy.getElementById(nodeId);
+    const outgoing = cy.edges(`[source = "${nodeId}"]`);
+
+    // gbif_to_gbif and gbif_to_ningaloo distances come from separate FAISS
+    // searches and aren't on a comparable scale, so the GBIF match always wins
+    const gbifEdges = outgoing.filter("[edge_type = 'gbif_to_gbif']");
+    const candidates = gbifEdges.length > 0 ? gbifEdges : outgoing;
+
     let bestEdge: EdgeSingular | null = null;
     let bestDist = Infinity;
-
-    cy.edges(`[source = "${nodeId}"]${edgeTypeSelector(edgeFilter)}`).forEach(
-        (edge: EdgeSingular) => {
-            const d = edge.data("distance") as number;
-            if (d < bestDist) {
-                bestDist = d;
-                bestEdge = edge;
-            }
+    candidates.forEach((edge: EdgeSingular) => {
+        const d = edge.data("distance") as number;
+        if (d < bestDist) {
+            bestDist = d;
+            bestEdge = edge;
         }
-    );
+    });
 
     if (!bestEdge) return null;
 
@@ -281,34 +285,32 @@ function findBestMatch(cy: Core, nodeId: string, edgeFilter: EdgeFilter): Select
 
 export function initCyListeners(
     cy: Core,
-    nodeFilter: NodeFilter,
-    edgeFilterRef: { current: EdgeFilter },
-    continentFilters: Set<string>,
-    onSelect: (match: SelectedMatch | null) => void
+    viewRef: { current: GraphViewParams },
+    onSelect: (match: SelectedMatch | null) => void,
+    onFocusChange: (nodeId: string | null) => void
 ) {
-    // Listeners below are registered once per Cytoscape instance, but the edge
-    // toggle is reactive React state. Read it through a ref so taps always see
-    // latest value rather than the one captured when listeners were attached
+    // Listeners are registered once; read view params through a ref so taps
+    // see latest values rather than what was captured at registration time
     cy.one("render", () => {
         cy.resize();
         cy.fit();
-        applyFilters(cy, nodeFilter, edgeFilterRef.current, continentFilters);
+        applyGraphView(cy, viewRef.current);
     });
 
     cy.on("tap", (evt: EventObject) => {
         if (evt.target === cy) {
             onSelect(null);
-            applyFocus(cy, null, edgeFilterRef.current);
+            onFocusChange(null);
             return;
         }
         const target = evt.target as NodeSingular;
         if (!target.isNode()) return;
 
         const nodeId = target.id();
-        applyFocus(cy, nodeId, edgeFilterRef.current);
+        onFocusChange(nodeId);
 
         if (target.data("population") !== "gbif") return;
-        const match = findBestMatch(cy, nodeId, edgeFilterRef.current);
+        const match = findBestMatch(cy, nodeId);
         if (match) onSelect(match);
     });
 }

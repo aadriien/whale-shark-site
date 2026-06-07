@@ -72,6 +72,11 @@
     border-color: var(--accent-dark-blue, #1a3a5c);
 }
 
+.shark-match-graph-section .graph-filter-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 .shark-match-graph-section .cytoscape-canvas {
     position: relative;
     overflow: hidden;

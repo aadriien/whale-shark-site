@@ -9,12 +9,18 @@ import {
     CONTINENT_COLORS,
     normalizePositions,
     buildElements,
-    applyFilters,
+    applyGraphView,
     initCyListeners,
 } from "../utils/GraphUtils";
 import { mediaSharks, extractContinents } from "../utils/DataUtils";
 
-import { NodeFilter, EdgeFilter, GraphData, SelectedMatch } from "../types/graphs";
+import {
+    NodeFilter,
+    EdgePopulationFilter,
+    GraphViewParams,
+    GraphData,
+    SelectedMatch,
+} from "../types/graphs";
 
 const NODE_FILTER_LABELS: Record<NodeFilter, string> = {
     all: "All nodes",
@@ -22,11 +28,10 @@ const NODE_FILTER_LABELS: Record<NodeFilter, string> = {
     ningaloo: "Ningaloo only",
 };
 
-const EDGE_FILTER_LABELS: Record<EdgeFilter, string> = {
+const EDGE_POPULATION_LABELS: Record<EdgePopulationFilter, string> = {
     all: "All matches",
-    cross: "GBIF x Ningaloo",
     same: "GBIF x GBIF",
-    mutual: "Mutual matches only",
+    cross: "GBIF x Ningaloo",
 };
 
 const CONTINENT_NAMES: string[] = [
@@ -51,18 +56,38 @@ const NINGALOO_COLOR = "#525252";
 
 function SharkMatchGraph() {
     const [nodeFilter, setNodeFilter] = useState<NodeFilter>("all");
-    const [edgeFilter, setEdgeFilter] = useState<EdgeFilter>("all");
+    const [edgePopulationFilter, setEdgePopulationFilter] = useState<EdgePopulationFilter>("same");
+
+    const [mutualOnly, setMutualOnly] = useState(true);
     const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
+    
     const [graphData, setGraphData] = useState<GraphData | null>(null);
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
+    const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
+
+    // Filters cascade: a continent only describes GBIF sharks, so picking one
+    // implies a GBIF-only node view; a GBIF-only view in turn only has
+    // GBIF x GBIF matches to show. These "effective" values fold that logic in,
+    // so the buttons always reflect what's actually applied to the graph.
+    const effectiveNodeFilter: NodeFilter = continentFilters.size > 0 ? "gbif" : nodeFilter;
+    const effectiveEdgePopulation: EdgePopulationFilter =
+        effectiveNodeFilter === "gbif" ? "same" : edgePopulationFilter;
+    const edgePopulationLocked = effectiveNodeFilter !== "all";
+    const mutualLocked = effectiveEdgePopulation === "cross";
+    const effectiveMutualOnly = mutualLocked ? false : mutualOnly;
 
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const lastCyInstance = useRef<Core | null>(null);
-    // Cytoscape tap listeners are registered once; this ref lets them read
-    // latest edge toggle value instead of what's captured at registration time
-    const edgeFilterRef = useRef<EdgeFilter>(edgeFilter);
+    // Cytoscape's tap listeners are registered once; this ref lets them read
+    // the latest view params instead of what was captured at registration time
+    const viewRef = useRef<GraphViewParams>({
+        nodeFilter: effectiveNodeFilter,
+        edgeFilter: { population: effectiveEdgePopulation, mutualOnly: effectiveMutualOnly },
+        continentFilters,
+        focusedNodeId,
+    });
 
     useEffect(() => {
         import("../assets/data/json/graph_data.json").then((mod) => {
@@ -104,9 +129,29 @@ function SharkMatchGraph() {
     }, []);
 
     useEffect(() => {
-        edgeFilterRef.current = edgeFilter;
-        if (cyRef.current) applyFilters(cyRef.current, nodeFilter, edgeFilter, continentFilters);
-    }, [nodeFilter, edgeFilter, continentFilters]);
+        const params: GraphViewParams = {
+            nodeFilter: effectiveNodeFilter,
+            edgeFilter: { population: effectiveEdgePopulation, mutualOnly: effectiveMutualOnly },
+            continentFilters,
+            focusedNodeId,
+        };
+        viewRef.current = params;
+        if (cyRef.current) applyGraphView(cyRef.current, params);
+    }, [
+        effectiveNodeFilter,
+        effectiveEdgePopulation,
+        effectiveMutualOnly,
+        continentFilters,
+        focusedNodeId,
+    ]);
+
+    // A continent only applies to GBIF sharks, so picking "All nodes" or
+    // "Ningaloo only" clears any active continent selection (and vice versa:
+    // picking a continent while "Ningaloo only" is active resets to "All nodes")
+    const handleNodeFilterClick = useCallback((filter: NodeFilter) => {
+        setNodeFilter(filter);
+        if (filter !== "gbif") setContinentFilters(new Set());
+    }, []);
 
     const toggleContinent = useCallback((name: string) => {
         setContinentFilters((prev) => {
@@ -118,6 +163,7 @@ function SharkMatchGraph() {
             }
             return next;
         });
+        setNodeFilter((current) => (current === "ningaloo" ? "all" : current));
     }, []);
 
     return (
@@ -149,8 +195,8 @@ function SharkMatchGraph() {
                     {(Object.keys(NODE_FILTER_LABELS) as NodeFilter[]).map((f) => (
                         <button
                             key={f}
-                            className={`graph-filter-btn${nodeFilter === f ? " active" : ""}`}
-                            onClick={() => setNodeFilter(f)}
+                            className={`graph-filter-btn${effectiveNodeFilter === f ? " active" : ""}`}
+                            onClick={() => handleNodeFilterClick(f)}
                         >
                             {NODE_FILTER_LABELS[f]}
                         </button>
@@ -174,15 +220,23 @@ function SharkMatchGraph() {
                     ))}
                 </div>
                 <div className="filter-group">
-                    {(Object.keys(EDGE_FILTER_LABELS) as EdgeFilter[]).map((f) => (
+                    {(Object.keys(EDGE_POPULATION_LABELS) as EdgePopulationFilter[]).map((f) => (
                         <button
                             key={f}
-                            className={`graph-filter-btn${edgeFilter === f ? " active" : ""}`}
-                            onClick={() => setEdgeFilter(f)}
+                            className={`graph-filter-btn${effectiveEdgePopulation === f ? " active" : ""}`}
+                            disabled={edgePopulationLocked}
+                            onClick={() => setEdgePopulationFilter(f)}
                         >
-                            {EDGE_FILTER_LABELS[f]}
+                            {EDGE_POPULATION_LABELS[f]}
                         </button>
                     ))}
+                    <button
+                        className={`graph-filter-btn${effectiveMutualOnly ? " active" : ""}`}
+                        disabled={mutualLocked}
+                        onClick={() => setMutualOnly((m) => !m)}
+                    >
+                        Mutual matches only
+                    </button>
                 </div>
             </div>
 
@@ -215,13 +269,7 @@ function SharkMatchGraph() {
                                 cyRef.current = cy;
                                 if (lastCyInstance.current !== cy) {
                                     lastCyInstance.current = cy;
-                                    initCyListeners(
-                                        cy,
-                                        nodeFilter,
-                                        edgeFilterRef,
-                                        continentFilters,
-                                        setSelectedMatch
-                                    );
+                                    initCyListeners(cy, viewRef, setSelectedMatch, setFocusedNodeId);
                                 }
                             }}
                         />
