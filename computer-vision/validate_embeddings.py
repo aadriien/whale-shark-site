@@ -562,6 +562,20 @@ if __name__ == "__main__":
     media_matches_file = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches.csv"
     media_matches_df = read_csv(media_matches_file)
 
+    # Each *_closest_whale_shark_id family is now population-homogeneous
+    # (all-numeric GBIF whaleSharkIDs, or all-UUID Ningaloo names), so pandas
+    # can infer some as int64 on reload. Force them back to strings so they
+    # match how IDs are keyed (as strings) in the downstream website JSON.
+    closest_id_cols = [
+        "miewid_gbif_closest_whale_shark_id",
+        "miewid_ningaloo_closest_whale_shark_id",
+        "dinov2_gbif_closest_whale_shark_id",
+        "dinov2_ningaloo_closest_whale_shark_id",
+    ]
+    for col in closest_id_cols:
+        if col in media_matches_df.columns:
+            media_matches_df[col] = media_matches_df[col].astype(str)
+
     # Validate media matches
     validated_media_df = validate_media_matches(media_matches_df, gbif_df, media_df)
 
