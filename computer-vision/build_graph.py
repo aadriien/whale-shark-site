@@ -50,6 +50,7 @@ def build_graph(
     NINGALOO_COUNT = len(ningaloo["miewid_embeddings"])
 
     ningaloo_names = ningaloo["whale_shark_names"]
+    ningaloo_image_ids = ningaloo["image_ids"]
     gbif_ids = gbif["whaleSharkIDs"]
 
     G = nx.DiGraph()
@@ -81,31 +82,45 @@ def build_graph(
             y=float(coords[NINGALOO_COUNT + i][1]),
         )
 
-    # compare_all=True stores GBIF-local index for GBIF→GBIF matches,
-    # or -1 for Ningaloo matches.
-    # Look up Ningaloo nodes by shark name so -1 rows can still produce edges.
-    ningaloo_name_to_idx = {str(name): i for i, name in enumerate(ningaloo_names)}
+    # Each GBIF image carries two parallel match families: its closest
+    # *other* GBIF shark (gbif_to_gbif) & its closest Ningaloo source-of-truth
+    # shark (gbif_to_ningaloo). This means up to 2 outgoing edges per GBIF node.
+    # Look up Ningaloo targets by image_id (unique per image; a shark's name
+    # is shared across all of its images, so it can't identify a single node).
+    ningaloo_image_id_to_idx = {
+        int(image_id): i for i, image_id in enumerate(ningaloo_image_ids)
+    }
 
     for _, row in matches_df.iterrows():
         source = f"gbif_{int(row['image_id'])}"
-        matched_idx = int(row["miewid_matched_image_id"])
-        distance = float(row["miewid_distance"])
+        if not G.has_node(source):
+            continue
 
-        if matched_idx >= 0:
-            target = f"gbif_{matched_idx}"
-            edge_type = "gbif_to_gbif"
-        else:
-            closest_id = str(row["miewid_closest_whale_shark_id"])
-            ningaloo_idx = ningaloo_name_to_idx.get(closest_id)
-            if ningaloo_idx is None:
-                continue
+        gbif_match_idx = int(row["miewid_gbif_matched_image_id"])
+        if gbif_match_idx >= 0:
+            target = f"gbif_{gbif_match_idx}"
+            if G.has_node(target):
+                G.add_edge(
+                    source,
+                    target,
+                    distance=float(row["miewid_gbif_distance"]),
+                    edge_type="gbif_to_gbif",
+                    mutual=False,
+                )
+
+        ningaloo_idx = ningaloo_image_id_to_idx.get(
+            int(row["miewid_ningaloo_matched_image_id"])
+        )
+        if ningaloo_idx is not None:
             target = f"ningaloo_{ningaloo_idx}"
-            edge_type = "gbif_to_ningaloo"
-
-        if G.has_node(source) and G.has_node(target):
-            G.add_edge(
-                source, target, distance=distance, edge_type=edge_type, mutual=False
-            )
+            if G.has_node(target):
+                G.add_edge(
+                    source,
+                    target,
+                    distance=float(row["miewid_ningaloo_distance"]),
+                    edge_type="gbif_to_ningaloo",
+                    mutual=False,
+                )
 
     # Flag mutual edges: A→B is mutual if B→A also exists in the match results
     for u, v in list(G.edges()):
