@@ -60,6 +60,9 @@ function SharkMatchGraph() {
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const lastCyInstance = useRef<Core | null>(null);
+    // Cytoscape tap listeners are registered once; this ref lets them read
+    // latest edge toggle value instead of what's captured at registration time
+    const edgeFilterRef = useRef<EdgeFilter>(edgeFilter);
 
     useEffect(() => {
         import("../assets/data/json/graph_data.json").then((mod) => {
@@ -101,6 +104,7 @@ function SharkMatchGraph() {
     }, []);
 
     useEffect(() => {
+        edgeFilterRef.current = edgeFilter;
         if (cyRef.current) applyFilters(cyRef.current, nodeFilter, edgeFilter, continentFilters);
     }, [nodeFilter, edgeFilter, continentFilters]);
 
@@ -214,7 +218,7 @@ function SharkMatchGraph() {
                                     initCyListeners(
                                         cy,
                                         nodeFilter,
-                                        edgeFilter,
+                                        edgeFilterRef,
                                         continentFilters,
                                         setSelectedMatch
                                     );
