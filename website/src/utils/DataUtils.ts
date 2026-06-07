@@ -117,6 +117,7 @@ const keyMapVision: Record<string, string> = {
     "country (year)": "countries",
     "stateProvince - verbatimLocality (month year)": "regions",
     match_distance: "miewid_match_distance",
+    match_distance_ningaloo: "miewid_match_distance_ningaloo",
 };
 
 // Generic mapper for both LLM & regular datasets
@@ -316,6 +317,8 @@ function formatVisionKeyVals(obj: WhaleSharkEntryVision, keyMap: Record<string, 
     renamed.occurrenceID = obj.occurrenceID;
     renamed.matched_shark_id = obj.matched_shark_id ?? undefined;
     renamed.matched_image_id = obj.matched_image_id ?? undefined;
+    renamed.matched_shark_id_ningaloo = obj.matched_shark_id_ningaloo ?? undefined;
+    renamed.matched_image_id_ningaloo = obj.matched_image_id_ningaloo ?? undefined;
     renamed.distance_km = obj.distance_km ?? undefined;
     renamed.days_between = obj.days_between ?? undefined;
     renamed.implied_speed_km_per_day = obj.implied_speed_km_per_day ?? undefined;

@@ -299,6 +299,22 @@ function SharkMatchViewer() {
                                                             </p>
                                                         )}
                                                     </div>
+                                                    {occurrence?.matched_shark_id_ningaloo && (
+                                                        <div className="match-ningaloo-note">
+                                                            <span className="match-ningaloo-label">
+                                                                Closest Ningaloo Match:
+                                                            </span>
+                                                            <span className="match-ningaloo-id">
+                                                                {occurrence.matched_shark_id_ningaloo}
+                                                            </span>
+                                                            <span className="match-ningaloo-distance">
+                                                                (distance:{" "}
+                                                                {occurrence.miewid_match_distance_ningaloo ??
+                                                                    "N/A"}
+                                                                )
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                 </>
                                             );
                                         })()}

@@ -86,6 +86,11 @@ export type WhaleSharkEntryVision = {
 
     match_distance: number | null;
 
+    matched_shark_id_ningaloo: string | null;
+    matched_image_id_ningaloo: number | null;
+
+    match_distance_ningaloo: number | null;
+
     matched_decimalLatitude?: number | null;
     matched_decimalLongitude?: number | null;
 
@@ -112,15 +117,25 @@ export type WhaleSharkMediaEntry = {
     references: string;
     identifier: string;
 
-    miewid_closest_whale_shark_id: string;
-    miewid_matched_image_id: number;
-    miewid_matched_annotation_id: number;
-    miewid_distance: number;
+    miewid_gbif_closest_whale_shark_id: string;
+    miewid_gbif_matched_image_id: number;
+    miewid_gbif_matched_annotation_id: number;
+    miewid_gbif_distance: number;
 
-    dinov2_closest_whale_shark_id: string;
-    dinov2_matched_image_id: number;
-    dinov2_matched_annotation_id: number;
-    dinov2_distance: number;
+    miewid_ningaloo_closest_whale_shark_id: string;
+    miewid_ningaloo_matched_image_id: number;
+    miewid_ningaloo_matched_annotation_id: number;
+    miewid_ningaloo_distance: number;
+
+    dinov2_gbif_closest_whale_shark_id: string;
+    dinov2_gbif_matched_image_id: number;
+    dinov2_gbif_matched_annotation_id: number;
+    dinov2_gbif_distance: number;
+
+    dinov2_ningaloo_closest_whale_shark_id: string;
+    dinov2_ningaloo_matched_image_id: number;
+    dinov2_ningaloo_matched_annotation_id: number;
+    dinov2_ningaloo_distance: number;
 };
 
 export type WhaleSharkDatasetMedia = WhaleSharkMediaEntry[];
@@ -165,6 +180,11 @@ export type WhaleSharkEntryNormalized = {
     matched_image_id?: number;
 
     miewid_match_distance?: number;
+
+    matched_shark_id_ningaloo?: string;
+    matched_image_id_ningaloo?: number;
+
+    miewid_match_distance_ningaloo?: number;
 
     distance_km?: number;
     days_between?: number;

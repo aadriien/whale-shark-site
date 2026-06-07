@@ -611,6 +611,36 @@
     margin: 0;
 }
 
+.match-ningaloo-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.match-ningaloo-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-size: 0.75rem;
+}
+
+.match-ningaloo-id {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.match-ningaloo-distance {
+    color: var(--text-muted);
+}
+
 
 /* No Selection State */
 .match-no-selection {
