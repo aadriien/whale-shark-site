@@ -59,8 +59,9 @@ function SharkMatchGraph() {
     const [edgePopulationFilter, setEdgePopulationFilter] = useState<EdgePopulationFilter>("same");
 
     const [mutualOnly, setMutualOnly] = useState(true);
+    const [showEdges, setShowEdges] = useState(true);
     const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
-    
+
     const [graphData, setGraphData] = useState<GraphData | null>(null);
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
@@ -84,7 +85,7 @@ function SharkMatchGraph() {
     // the latest view params instead of what was captured at registration time
     const viewRef = useRef<GraphViewParams>({
         nodeFilter: effectiveNodeFilter,
-        edgeFilter: { population: effectiveEdgePopulation, mutualOnly: effectiveMutualOnly },
+        edgeFilter: { population: effectiveEdgePopulation, mutualOnly: effectiveMutualOnly, showEdges },
         continentFilters,
         focusedNodeId,
     });
@@ -131,7 +132,11 @@ function SharkMatchGraph() {
     useEffect(() => {
         const params: GraphViewParams = {
             nodeFilter: effectiveNodeFilter,
-            edgeFilter: { population: effectiveEdgePopulation, mutualOnly: effectiveMutualOnly },
+            edgeFilter: {
+                population: effectiveEdgePopulation,
+                mutualOnly: effectiveMutualOnly,
+                showEdges,
+            },
             continentFilters,
             focusedNodeId,
         };
@@ -141,6 +146,7 @@ function SharkMatchGraph() {
         effectiveNodeFilter,
         effectiveEdgePopulation,
         effectiveMutualOnly,
+        showEdges,
         continentFilters,
         focusedNodeId,
     ]);
@@ -236,6 +242,12 @@ function SharkMatchGraph() {
                         onClick={() => setMutualOnly((m) => !m)}
                     >
                         Mutual matches only
+                    </button>
+                    <button
+                        className={`graph-filter-btn${showEdges ? " active" : ""}`}
+                        onClick={() => setShowEdges((s) => !s)}
+                    >
+                        Show match lines
                     </button>
                 </div>
             </div>

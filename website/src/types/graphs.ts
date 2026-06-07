@@ -10,6 +10,7 @@ export type EdgePopulationFilter = "all" | "cross" | "same";
 export type EdgeFilterState = {
     population: EdgePopulationFilter;
     mutualOnly: boolean;
+    showEdges: boolean;
 };
 
 export type GraphViewParams = {

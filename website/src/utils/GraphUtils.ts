@@ -227,7 +227,7 @@ export function applyGraphView(
         }
 
         cy.edges().style("display", "none");
-        ambientEdges.style("display", "element");
+        if (edgeFilter.showEdges) ambientEdges.style("display", "element");
 
         const focusedNode = focusedNodeId ? cy.getElementById(focusedNodeId) : null;
         if (!focusedNode || focusedNode.empty()) return;
