@@ -149,7 +149,11 @@ def validate_media_matches(
         .to_dict("index")
     )
 
-    # Create indexed media dataframe (miewid_matched_image_id is an index into this)
+    # Geo/temporal validation only applies to GBIF<->GBIF matches. The Ningaloo
+    # matches have no comparable occurrence data (lat/lon/date) in this pipeline,
+    # so miewid_ningaloo_*/dinov2_ningaloo_* columns simply pass through untouched.
+
+    # Create indexed media dataframe (miewid_gbif_matched_image_id indexes into this)
     media_df_indexed = media_df.reset_index(drop=True)
 
     # Calculate distance, speed, days between, and plausibility for each match
@@ -173,7 +177,7 @@ def validate_media_matches(
 
         try:
             query_key = row["key"]
-            matched_image_key = row.get("miewid_matched_image_id")
+            matched_image_key = row.get("miewid_gbif_matched_image_id")
 
             # Get query occurrence data
             if query_key in gbif_lookup:
@@ -310,13 +314,19 @@ def explode_shark_matches_to_occurrences(
         shark_sighting_summary, on="whaleSharkID", how="left"
     )
 
-    # Rename columns to match expected output schema
+    # Rename columns to match expected output schema.
+    # Unsuffixed names stay the GBIF<->GBIF "default lens" (preserving the
+    # existing website schema). Ningaloo matches ride alongside as a parallel,
+    # explicitly-suffixed family for a future toggle between the two views.
     image_occurrences_df = image_occurrences_df.rename(
         columns={
             "identifier": "identifier_url",
-            "miewid_closest_whale_shark_id": "matched_shark_id",
-            "miewid_matched_image_id": "matched_image_id",
-            "miewid_distance": "match_distance",
+            "miewid_gbif_closest_whale_shark_id": "matched_shark_id",
+            "miewid_gbif_matched_image_id": "matched_image_id",
+            "miewid_gbif_distance": "match_distance",
+            "miewid_ningaloo_closest_whale_shark_id": "matched_shark_id_ningaloo",
+            "miewid_ningaloo_matched_image_id": "matched_image_id_ningaloo",
+            "miewid_ningaloo_distance": "match_distance_ningaloo",
         }
     )
 
@@ -345,6 +355,9 @@ def explode_shark_matches_to_occurrences(
         "days_between",
         "implied_speed_km_per_day",
         "plausibility",
+        "matched_shark_id_ningaloo",
+        "matched_image_id_ningaloo",
+        "match_distance_ningaloo",
     ]
     image_occurrences_df = image_occurrences_df[
         [c for c in output_cols if c in image_occurrences_df.columns]
@@ -365,15 +378,131 @@ def explode_shark_matches_to_occurrences(
     return image_occurrences_df
 
 
+def validate_shark_match_family(
+    shark_matches_df: pd.DataFrame, gbif_lookup: dict, label: str, summary_colname: str
+) -> dict:
+    """
+    Extract the matched shark ID from a formatted match summary column
+    (e.g. "MIEWID GBIF: shark (image_id, distance), ...") and compute
+    geographical/temporal plausibility against GBIF occurrence data.
+
+    Matches pointing outside the GBIF lookup (e.g. Ningaloo shark names) always
+    resolve to UNKNOWN, since there's no occurrence data to validate against.
+    """
+    import re
+
+    pattern = re.escape(label) + r":\s*([^\(]+)"
+
+    def extract_matched_id(formatted_str):
+        if pd.isna(formatted_str):
+            return None
+        match = re.search(pattern, formatted_str)
+        return match.group(1).strip() if match else None
+
+    matched_ids = shark_matches_df[summary_colname].apply(extract_matched_id)
+
+    # Calculate distance, speed, days between, and plausibility
+    distances, speeds, days_between, plausibilities = [], [], [], []
+    matched_lats, matched_lons, matched_dates = [], [], []
+
+    for shark_id, matched_id in zip(shark_matches_df["whaleSharkID"], matched_ids):
+        lat2 = lon2 = time2 = np.nan
+        try:
+            has_comparable_data = (
+                shark_id in gbif_lookup
+                and pd.notna(matched_id)
+                and matched_id in gbif_lookup
+            )
+
+            if not has_comparable_data:
+                plausibility = "UNKNOWN"
+                distance = speed = days_diff = np.nan
+            else:
+                # Get query shark data
+                shark_data = gbif_lookup[shark_id]
+                lat1 = shark_data["decimalLatitude"]
+                lon1 = shark_data["decimalLongitude"]
+                time1 = shark_data["eventDate"]
+
+                # Get matched shark data
+                matched_data = gbif_lookup[matched_id]
+                lat2 = matched_data["decimalLatitude"]
+                lon2 = matched_data["decimalLongitude"]
+                time2 = matched_data["eventDate"]
+
+                if (
+                    pd.notna(lat1)
+                    and pd.notna(lon1)
+                    and pd.notna(time1)
+                    and pd.notna(lat2)
+                    and pd.notna(lon2)
+                    and pd.notna(time2)
+                ):
+                    distance = haversine_distance(lat1, lon1, lat2, lon2)
+                    speed = implied_speed_km_per_day(
+                        lat1, lon1, time1, lat2, lon2, time2
+                    )
+                    plausibility = categorize_plausibility(speed, distance)
+
+                    # Calculate days between (skip if speed is NaN; date not specific)
+                    days_diff = np.nan
+                    if not np.isnan(speed):
+                        t1 = (
+                            datetime.fromisoformat(time1.split("T")[0])
+                            if isinstance(time1, str)
+                            else time1
+                        )
+                        t2 = (
+                            datetime.fromisoformat(time2.split("T")[0])
+                            if isinstance(time2, str)
+                            else time2
+                        )
+                        days_diff = abs((t2 - t1).days)
+
+                    distance = round(distance, 2)
+                    speed = round(speed, 2) if not np.isinf(speed) else 999999.0
+                else:
+                    plausibility = "UNKNOWN"
+                    distance = speed = days_diff = np.nan
+
+            plausibilities.append(plausibility)
+            distances.append(distance)
+            speeds.append(speed)
+            days_between.append(days_diff)
+
+        except Exception as e:
+            print(f"Error validating {label} row: {e}")
+            plausibilities.append("ERROR")
+            distances.append(np.nan)
+            speeds.append(np.nan)
+            days_between.append(np.nan)
+
+        matched_lats.append(lat2)
+        matched_lons.append(lon2)
+        matched_dates.append(time2)
+
+    # Return validation columns
+    return {
+        "matched_decimalLatitude": matched_lats,
+        "matched_decimalLongitude": matched_lons,
+        "matched_eventDate": matched_dates,
+        "distance_km": distances,
+        "days_between": days_between,
+        "implied_speed_km_per_day": speeds,
+        "plausibility": plausibilities,
+    }
+
+
 def validate_shark_matches(
     shark_matches_df: pd.DataFrame, gbif_df: pd.DataFrame
 ) -> pd.DataFrame:
     """
-    Validate shark ID matches by checking geographical and temporal plausibility.
+    Validate shark ID matches by checking geographical and temporal plausibility,
+    in parallel for the closest-GBIF-match and closest-Ningaloo-match columns.
     """
     print(f"Validating {len(shark_matches_df)} shark ID matches...")
 
-    # Drop DINOv2 columns if they exist
+    # Drop DINOv2 columns if they exist (validation only runs on MIEWID matches)
     dinov2_cols = [col for col in shark_matches_df.columns if "dinov2" in col.lower()]
     if dinov2_cols:
         shark_matches_df = shark_matches_df.drop(columns=dinov2_cols)
@@ -386,143 +515,35 @@ def validate_shark_matches(
         .to_dict("index")
     )
 
-    # Extract matched shark ID from the formatted string
-    # Format: "MIEWID: {shark_id} ({image_id}, {distance})"
-    import re
+    # Run plausibility validation in parallel for the GBIF-closest and
+    # Ningaloo-closest match columns. The Ningaloo pass always resolves to
+    # UNKNOWN (Ningaloo names aren't in gbif_lookup), but produces the same
+    # column shape so a future UI can toggle between the two consistently.
+    match_families = [("gbif", "MIEWID GBIF"), ("ningaloo", "MIEWID NINGALOO")]
 
-    def extract_matched_id(formatted_str):
-        if pd.isna(formatted_str):
-            return None
-        match = re.search(r"MIEWID:\s*([^\(]+)", formatted_str)
-        if match:
-            return match.group(1).strip()
-        return None
-
-    shark_matches_df["matched_shark_id"] = shark_matches_df[
-        "MIEWID: closest_whale_shark_id (matched_image_id, distance)"
-    ].apply(extract_matched_id)
-
-    # Calculate distance, speed, days between, and plausibility
-    distances = []
-    speeds = []
-    days_between = []
-    plausibilities = []
-    matched_lats = []
-    matched_lons = []
-    matched_dates = []
-
-    for _, row in shark_matches_df.iterrows():
-        try:
-            shark_id = row["whaleSharkID"]
-            matched_id = row["matched_shark_id"]
-
-            # Get query shark data
-            if shark_id not in gbif_lookup:
-                distances.append(np.nan)
-                speeds.append(np.nan)
-                days_between.append(np.nan)
-                plausibilities.append("UNKNOWN")
-                matched_lats.append(np.nan)
-                matched_lons.append(np.nan)
-                matched_dates.append(np.nan)
-                continue
-
-            shark_data = gbif_lookup[shark_id]
-            lat1 = shark_data["decimalLatitude"]
-            lon1 = shark_data["decimalLongitude"]
-            time1 = shark_data["eventDate"]
-
-            # Get matched shark data
-            if pd.isna(matched_id) or matched_id not in gbif_lookup:
-                distances.append(np.nan)
-                speeds.append(np.nan)
-                days_between.append(np.nan)
-                plausibilities.append("UNKNOWN")
-                matched_lats.append(np.nan)
-                matched_lons.append(np.nan)
-                matched_dates.append(np.nan)
-                continue
-
-            matched_data = gbif_lookup[matched_id]
-            lat2 = matched_data["decimalLatitude"]
-            lon2 = matched_data["decimalLongitude"]
-            time2 = matched_data["eventDate"]
-
-            if (
-                pd.notna(lat1)
-                and pd.notna(lon1)
-                and pd.notna(time1)
-                and pd.notna(lat2)
-                and pd.notna(lon2)
-                and pd.notna(time2)
-            ):
-
-                distance = haversine_distance(lat1, lon1, lat2, lon2)
-                speed = implied_speed_km_per_day(lat1, lon1, time1, lat2, lon2, time2)
-                plausibility = categorize_plausibility(speed, distance)
-
-                # Calculate days between (skip if speed is NaN — date not specific)
-                if not np.isnan(speed):
-                    if isinstance(time1, str):
-                        t1 = datetime.fromisoformat(time1.split("T")[0])
-                    else:
-                        t1 = time1
-                    if isinstance(time2, str):
-                        t2 = datetime.fromisoformat(time2.split("T")[0])
-                    else:
-                        t2 = time2
-                    days_diff = abs((t2 - t1).days)
-
-                matched_lats.append(lat2)
-                matched_lons.append(lon2)
-                matched_dates.append(time2)
-                distances.append(round(distance, 2))
-                speeds.append(round(speed, 2) if not np.isinf(speed) else 999999.0)
-                days_between.append(days_diff)
-                plausibilities.append(plausibility)
-            else:
-                matched_lats.append(lat2)
-                matched_lons.append(lon2)
-                matched_dates.append(time2)
-                distances.append(np.nan)
-                speeds.append(np.nan)
-                days_between.append(np.nan)
-                plausibilities.append("UNKNOWN")
-
-        except Exception as e:
-            print(f"Error validating row: {e}")
-            distances.append(np.nan)
-            speeds.append(np.nan)
-            days_between.append(np.nan)
-            plausibilities.append("ERROR")
-            matched_lats.append(np.nan)
-            matched_lons.append(np.nan)
-            matched_dates.append(np.nan)
-
-    # Add validation columns
-    shark_matches_df["matched_decimalLatitude"] = matched_lats
-    shark_matches_df["matched_decimalLongitude"] = matched_lons
-    shark_matches_df["matched_eventDate"] = matched_dates
-    shark_matches_df["distance_km"] = distances
-    shark_matches_df["days_between"] = days_between
-    shark_matches_df["implied_speed_km_per_day"] = speeds
-    shark_matches_df["plausibility"] = plausibilities
+    for suffix, label in match_families:
+        summary_colname = (
+            f"{label}: closest_whale_shark_id (matched_image_id, distance)"
+        )
+        validation = validate_shark_match_family(
+            shark_matches_df, gbif_lookup, label, summary_colname
+        )
+        for col_name, values in validation.items():
+            shark_matches_df[f"{col_name}_{suffix}"] = values
 
     # Remove duplicates based on whaleSharkID
     shark_matches_df = shark_matches_df.drop_duplicates(
         subset=["whaleSharkID"], keep="first"
     )
 
-    # Clean up temporary columns
-    shark_matches_df = shark_matches_df.drop(
-        columns=["matched_shark_id"], errors="ignore"
-    )
-
     print("Validation complete:")
-    print(f"  PLAUSIBLE: {(shark_matches_df['plausibility'] == 'PLAUSIBLE').sum()}")
-    print(f"  UNCERTAIN: {(shark_matches_df['plausibility'] == 'UNCERTAIN').sum()}")
-    print(f"  IMPOSSIBLE: {(shark_matches_df['plausibility'] == 'IMPOSSIBLE').sum()}")
-    print(f"  UNKNOWN: {(shark_matches_df['plausibility'] == 'UNKNOWN').sum()}")
+    for suffix, _ in match_families:
+        col = f"plausibility_{suffix}"
+        print(f"  {suffix.upper()}:")
+        print(f"    PLAUSIBLE: {(shark_matches_df[col] == 'PLAUSIBLE').sum()}")
+        print(f"    UNCERTAIN: {(shark_matches_df[col] == 'UNCERTAIN').sum()}")
+        print(f"    IMPOSSIBLE: {(shark_matches_df[col] == 'IMPOSSIBLE').sum()}")
+        print(f"    UNKNOWN: {(shark_matches_df[col] == 'UNKNOWN').sum()}")
 
     return shark_matches_df
 
@@ -532,7 +553,7 @@ if __name__ == "__main__":
     print("Loading GBIF clean data...")
     gbif_df = read_csv(GBIF_CLEAN_CSV)
 
-    # Load GBIF media data (needed to map miewid_matched_image_id back to keys)
+    # Load GBIF media data (needed to map miewid_gbif_matched_image_id back to keys)
     print("Loading GBIF media data...")
     media_df = read_csv(GBIF_MEDIA_CSV)
 
@@ -554,18 +575,23 @@ if __name__ == "__main__":
     shark_matches_file = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches.csv"
     shark_matches_df = read_csv(shark_matches_file)
 
-    # Validate shark ID matches (legacy format)
+    # Validate shark ID matches
     validated_shark_df = validate_shark_matches(shark_matches_df, gbif_df)
 
-    # Drop unnecessary columns before exporting
+    # Drop unnecessary validation columns before exporting (kept only for the
+    # console summary above; both gbif and ningaloo families get dropped here)
     columns_to_drop = [
-        "matched_decimalLatitude",
-        "matched_decimalLongitude",
-        "matched_eventDate",
-        "distance_km",
-        "days_between",
-        "implied_speed_km_per_day",
-        "plausibility",
+        f"{base}_{suffix}"
+        for suffix in ("gbif", "ningaloo")
+        for base in (
+            "matched_decimalLatitude",
+            "matched_decimalLongitude",
+            "matched_eventDate",
+            "distance_km",
+            "days_between",
+            "implied_speed_km_per_day",
+            "plausibility",
+        )
     ]
     shark_df_for_export = validated_shark_df.drop(
         columns=columns_to_drop, errors="ignore"
