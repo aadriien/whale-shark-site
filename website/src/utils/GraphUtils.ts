@@ -29,6 +29,9 @@ const SAME_SHARK_BORDER = {
 
 const NINGALOO_COLOR = "#525252";
 
+const GBIF_TO_NINGALOO_COLOR = "#3cb371";
+const GBIF_TO_GBIF_COLOR = "#e8a020";
+
 export const CONTINENT_COLORS: Record<string, string> = {
     "North America": "#F59E0B",
     Asia: "#06B6D4",
@@ -77,20 +80,29 @@ export const GRAPH_STYLESHEET: StylesheetStyle[] = [
             width: 1,
             opacity: "data(opacity)" as unknown as number,
             "curve-style": "straight",
-            "target-arrow-shape": "none",
+            "target-arrow-shape": "triangle",
+            "arrow-scale": 0.8,
         },
     },
     {
         selector: "edge[edge_type = 'gbif_to_ningaloo']",
-        style: { "line-color": "#3cb371" },
+        style: {
+            "line-color": GBIF_TO_NINGALOO_COLOR,
+            "target-arrow-color": GBIF_TO_NINGALOO_COLOR,
+            "source-arrow-color": GBIF_TO_NINGALOO_COLOR,
+        },
     },
     {
         selector: "edge[edge_type = 'gbif_to_gbif']",
-        style: { "line-color": "#e8a020" },
+        style: {
+            "line-color": GBIF_TO_GBIF_COLOR,
+            "target-arrow-color": GBIF_TO_GBIF_COLOR,
+            "source-arrow-color": GBIF_TO_GBIF_COLOR,
+        },
     },
     {
         selector: "edge[?mutual]",
-        style: { width: 2.5 },
+        style: { width: 2.5, "source-arrow-shape": "triangle" },
     },
     {
         selector: "node:active",
