@@ -37,6 +37,16 @@ GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
 GBIF_MEDIA_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches.csv"
 GBIF_INDIVIDUAL_MATCHES_FILE = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_matches.csv"
 
+# Plausibility-filtered match outputs (candidates excluded if geo/temporal
+# implied travel speed makes them IMPOSSIBLE). Powers build_graph.py, while
+# the unfiltered files above continue to power the SharkMatchViewer.
+GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE = (
+    f"{NEW_EMBEDDINGS_FOLDER}/GBIF_plausible_media_matches.csv"
+)
+GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_FILE = (
+    f"{NEW_EMBEDDINGS_FOLDER}/GBIF_plausible_shark_matches.csv"
+)
+
 VALIDATED_MEDIA_MATCHES_FILE = (
     f"{NEW_EMBEDDINGS_FOLDER}/GBIF_media_matches_validated.csv"
 )
@@ -48,6 +58,12 @@ VALIDATED_SHARK_MATCHES_FILE = (
 JSON_OUTPUT_FOLDER = "./website/src/assets/data/json"
 GBIF_MEDIA_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_media_matches.json"
 GBIF_INDIVIDUAL_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_shark_matches.json"
+GBIF_PLAUSIBLE_MEDIA_MATCHES_JSON = (
+    f"{JSON_OUTPUT_FOLDER}/GBIF_plausible_media_matches.json"
+)
+GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_JSON = (
+    f"{JSON_OUTPUT_FOLDER}/GBIF_plausible_shark_matches.json"
+)
 VALIDATED_MEDIA_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_media_matches_validated.json"
 VALIDATED_SHARK_MATCHES_JSON = f"{JSON_OUTPUT_FOLDER}/GBIF_shark_matches_validated.json"
 
