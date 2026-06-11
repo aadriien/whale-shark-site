@@ -13,8 +13,8 @@ import pandas as pd
 import umap
 
 from .CONSTANTS import (
-    GBIF_MEDIA_MATCHES_FILE,
     GBIF_OUTPUT_NPZ_FILE,
+    GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE,
     GRAPH_DATA_FILE,
     OUTPUT_NPZ_FILE,
 )
@@ -23,7 +23,7 @@ from .CONSTANTS import (
 def load_data() -> tuple[dict, dict, pd.DataFrame]:
     ningaloo = np.load(OUTPUT_NPZ_FILE, allow_pickle=True)
     gbif = np.load(GBIF_OUTPUT_NPZ_FILE, allow_pickle=True)
-    matches_df = pd.read_csv(GBIF_MEDIA_MATCHES_FILE)
+    matches_df = pd.read_csv(GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE)
     return ningaloo, gbif, matches_df
 
 

@@ -11,6 +11,7 @@ ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 		generate_shark_names_images generate_shark_names generate_shark_images \
 		extract_tar process_annotations train_model \
 		get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings \
+		match_plausible_shark_embeddings \
 		run_vision_pipeline generate_vision_examples \
 		build_shark_graph \
 		format format_vision format_website format_all clean \
@@ -106,8 +107,13 @@ match_shark_embeddings:
 validate_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.validate_embeddings
 
+# Identify plausible-only matches (excludes geo/temporal IMPOSSIBLE candidates);
+# powers the match graph in build_graph.py
+match_plausible_shark_embeddings:
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.match_plausible_embeddings
+
 # Run full CV matching pipeline sequentially (embeddings → matches → validation)
-run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings
+run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings match_plausible_shark_embeddings
 
 
 # Generate CV examples with YOLO bounding boxes & segmentation masks
