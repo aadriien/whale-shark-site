@@ -1,5 +1,5 @@
 ###############################################################################
-##  `shark_plausibility.py`                                                  ##
+##  `assess_shark_match_plausibility.py`                                     ##
 ##                                                                           ##
 ##  Purpose: Maps each whaleSharkID to the set of other whaleSharkIDs it     ##
 ##           CANNOT be, based on geographic/temporal plausibility            ##
@@ -11,7 +11,6 @@ from typing import Dict, Set
 
 import numpy as np
 import pandas as pd
-
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import read_csv
 
@@ -42,7 +41,9 @@ def build_exclusion_map(
     first = gbif_df.groupby("whaleSharkID").first().reset_index()
     first["whaleSharkID"] = first["whaleSharkID"].astype(str)
 
-    valid = first.dropna(subset=["decimalLatitude", "decimalLongitude", "eventDate"]).copy()
+    valid = first.dropna(
+        subset=["decimalLatitude", "decimalLongitude", "eventDate"]
+    ).copy()
     valid["_ordinal"] = valid["eventDate"].apply(_event_date_to_ordinal)
     valid = valid.dropna(subset=["_ordinal"])
 
@@ -57,9 +58,10 @@ def build_exclusion_map(
     # Vectorized haversine distance (km) between every pair of sharks
     dlat = lat[:, None] - lat[None, :]
     dlon = lon[:, None] - lon[None, :]
-    a = np.sin(dlat / 2) ** 2 + np.cos(lat[:, None]) * np.cos(lat[None, :]) * np.sin(
-        dlon / 2
-    ) ** 2
+    a = (
+        np.sin(dlat / 2) ** 2
+        + np.cos(lat[:, None]) * np.cos(lat[None, :]) * np.sin(dlon / 2) ** 2
+    )
     distance = 6371.0 * 2 * np.arcsin(np.sqrt(np.clip(a, 0, 1)))
 
     # Implied travel speed (km/day) between every pair of sharks

@@ -16,6 +16,7 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_INDIVIDUAL_SHARKS_STATS_CSV
 from src.utils.data_utils import export_to_csv, read_csv
 
+from .assess_shark_match_plausibility import build_exclusion_map
 from .CONSTANTS import (
     GBIF_OUTPUT_NPZ_FILE,
     GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_FILE,
@@ -26,7 +27,6 @@ from .CONSTANTS import (
 )
 from .get_new_image_embeddings import get_image_records
 from .match_embeddings import export_to_json, format_match_summary, perform_search
-from .shark_plausibility import build_exclusion_map
 
 
 def find_first_different_shark(
