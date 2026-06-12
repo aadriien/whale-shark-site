@@ -70,10 +70,16 @@ def searoute_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> flo
     node1 = M.kdtree.query((lon1, lat1))
     node2 = M.kdtree.query((lon2, lat2))
 
-    distance = _distances_from_node(node1).get(node2)
-    if distance is None:
+    network_distance = _distances_from_node(node1).get(node2)
+    if network_distance is None:
         return haversine_distance(lat1, lon1, lat2, lon2)
-    return distance
+
+    # "Last mile" from each point to its nearest network node
+    # Without this, 2 points snapping to the same node would report
+    # as being 0km apart regardless of their actual distance
+    snap1 = haversine_distance(lat1, lon1, node1[1], node1[0])
+    snap2 = haversine_distance(lat2, lon2, node2[1], node2[0])
+    return snap1 + network_distance + snap2
 
 
 def searoute_distance_matrix(lat: np.ndarray, lon: np.ndarray) -> np.ndarray:
@@ -98,7 +104,16 @@ def searoute_distance_matrix(lat: np.ndarray, lon: np.ndarray) -> np.ndarray:
         haversine = haversine_distance_matrix(lat, lon)
         distance = np.where(np.isnan(distance), haversine, distance)
 
-    return distance
+    # "Last mile" from each point to its nearest network node
+    # Without this, 2 points snapping to the same node would report
+    # as being 0km apart regardless of their actual distance
+    snap_distance = np.array(
+        [
+            haversine_distance(lat_i, lon_i, node[1], node[0])
+            for lat_i, lon_i, node in zip(lat, lon, nodes)
+        ]
+    )
+    return distance + snap_distance[:, None] + snap_distance[None, :]
 
 
 def calculate_distance(
