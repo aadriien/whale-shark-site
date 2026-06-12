@@ -29289,10 +29289,10 @@
     },
     {
       "source": "gbif_69",
-      "target": "gbif_81",
-      "distance": 1.029,
+      "target": "gbif_1524",
+      "distance": 1.0371,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_69",
@@ -29433,13 +29433,6 @@
       "distance": 1.3382,
       "edge_type": "gbif_to_ningaloo",
       "mutual": false
-    },
-    {
-      "source": "gbif_81",
-      "target": "gbif_69",
-      "distance": 1.029,
-      "edge_type": "gbif_to_gbif",
-      "mutual": true
     },
     {
       "source": "gbif_81",
@@ -30073,8 +30066,8 @@
     },
     {
       "source": "gbif_144",
-      "target": "gbif_146",
-      "distance": 0.0,
+      "target": "gbif_428",
+      "distance": 1.0719,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -30087,10 +30080,10 @@
     },
     {
       "source": "gbif_146",
-      "target": "gbif_144",
-      "distance": 0.0,
+      "target": "gbif_428",
+      "distance": 1.0719,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_146",
@@ -31753,10 +31746,10 @@
     },
     {
       "source": "gbif_277",
-      "target": "gbif_279",
-      "distance": 1.0495,
+      "target": "gbif_1198",
+      "distance": 1.2032,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_277",
@@ -31767,10 +31760,10 @@
     },
     {
       "source": "gbif_278",
-      "target": "gbif_281",
-      "distance": 0.9086,
+      "target": "gbif_1689",
+      "distance": 1.183,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_278",
@@ -31781,10 +31774,10 @@
     },
     {
       "source": "gbif_279",
-      "target": "gbif_277",
-      "distance": 1.0495,
+      "target": "gbif_169",
+      "distance": 1.1263,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_279",
@@ -31809,10 +31802,10 @@
     },
     {
       "source": "gbif_281",
-      "target": "gbif_278",
-      "distance": 0.9086,
+      "target": "gbif_1465",
+      "distance": 1.0377,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_281",
@@ -33027,10 +33020,10 @@
     },
     {
       "source": "gbif_377",
-      "target": "gbif_383",
-      "distance": 1.0835,
+      "target": "gbif_20",
+      "distance": 1.153,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_377",
@@ -33094,13 +33087,6 @@
       "distance": 0.9297,
       "edge_type": "gbif_to_ningaloo",
       "mutual": false
-    },
-    {
-      "source": "gbif_383",
-      "target": "gbif_377",
-      "distance": 1.0835,
-      "edge_type": "gbif_to_gbif",
-      "mutual": true
     },
     {
       "source": "gbif_383",
@@ -33219,7 +33205,7 @@
       "target": "gbif_400",
       "distance": 1.0636,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_392",
@@ -33328,8 +33314,8 @@
     },
     {
       "source": "gbif_400",
-      "target": "gbif_423",
-      "distance": 0.9387,
+      "target": "gbif_392",
+      "distance": 1.0636,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -33580,8 +33566,8 @@
     },
     {
       "source": "gbif_420",
-      "target": "gbif_400",
-      "distance": 0.9691,
+      "target": "gbif_457",
+      "distance": 1.251,
       "edge_type": "gbif_to_gbif",
       "mutual": false
     },
@@ -33608,8 +33594,8 @@
     },
     {
       "source": "gbif_422",
-      "target": "gbif_400",
-      "distance": 1.0257,
+      "target": "gbif_856",
+      "distance": 1.1143,
       "edge_type": "gbif_to_gbif",
       "mutual": false
     },
@@ -33622,8 +33608,8 @@
     },
     {
       "source": "gbif_423",
-      "target": "gbif_400",
-      "distance": 0.9387,
+      "target": "gbif_856",
+      "distance": 0.9789,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -33678,8 +33664,8 @@
     },
     {
       "source": "gbif_428",
-      "target": "gbif_443",
-      "distance": 0.7795,
+      "target": "gbif_144",
+      "distance": 1.0719,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -33881,10 +33867,10 @@
     },
     {
       "source": "gbif_443",
-      "target": "gbif_428",
-      "distance": 0.7795,
+      "target": "gbif_1889",
+      "distance": 1.0091,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_443",
@@ -36460,7 +36446,7 @@
       "target": "gbif_1005",
       "distance": 1.274,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_651",
@@ -37913,6 +37899,13 @@
     },
     {
       "source": "gbif_775",
+      "target": "gbif_1349",
+      "distance": 1.1089,
+      "edge_type": "gbif_to_gbif",
+      "mutual": false
+    },
+    {
+      "source": "gbif_775",
       "target": "ningaloo_5436",
       "distance": 1.1492,
       "edge_type": "gbif_to_ningaloo",
@@ -38938,7 +38931,7 @@
       "target": "gbif_423",
       "distance": 0.9789,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_856",
@@ -39827,7 +39820,7 @@
       "target": "gbif_2234",
       "distance": 1.2578,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_929",
@@ -40114,7 +40107,7 @@
       "target": "gbif_1615",
       "distance": 1.0962,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_956",
@@ -40657,10 +40650,10 @@
     },
     {
       "source": "gbif_1005",
-      "target": "gbif_925",
-      "distance": 1.27,
+      "target": "gbif_651",
+      "distance": 1.274,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_1005",
@@ -40727,8 +40720,8 @@
     },
     {
       "source": "gbif_1010",
-      "target": "gbif_1019",
-      "distance": 1.0754,
+      "target": "gbif_2384",
+      "distance": 1.1836,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -40741,8 +40734,8 @@
     },
     {
       "source": "gbif_1011",
-      "target": "gbif_1019",
-      "distance": 1.2239,
+      "target": "gbif_2384",
+      "distance": 1.309,
       "edge_type": "gbif_to_gbif",
       "mutual": false
     },
@@ -40811,10 +40804,10 @@
     },
     {
       "source": "gbif_1019",
-      "target": "gbif_1010",
-      "distance": 1.0754,
+      "target": "gbif_2384",
+      "distance": 1.2627,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1019",
@@ -40825,8 +40818,8 @@
     },
     {
       "source": "gbif_1020",
-      "target": "gbif_1010",
-      "distance": 1.1463,
+      "target": "gbif_1490",
+      "distance": 1.2214,
       "edge_type": "gbif_to_gbif",
       "mutual": false
     },
@@ -41941,7 +41934,7 @@
       "target": "gbif_1959",
       "distance": 1.2437,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_1122",
@@ -42092,10 +42085,10 @@
     },
     {
       "source": "gbif_1134",
-      "target": "gbif_1136",
-      "distance": 1.0653,
+      "target": "gbif_132",
+      "distance": 1.1909,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1134",
@@ -42117,13 +42110,6 @@
       "distance": 1.1825,
       "edge_type": "gbif_to_ningaloo",
       "mutual": false
-    },
-    {
-      "source": "gbif_1136",
-      "target": "gbif_1134",
-      "distance": 1.0653,
-      "edge_type": "gbif_to_gbif",
-      "mutual": true
     },
     {
       "source": "gbif_1136",
@@ -43373,10 +43359,10 @@
     },
     {
       "source": "gbif_1244",
-      "target": "gbif_1252",
-      "distance": 0.0,
+      "target": "gbif_96",
+      "distance": 1.1833,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1244",
@@ -43387,10 +43373,10 @@
     },
     {
       "source": "gbif_1245",
-      "target": "gbif_1251",
-      "distance": 0.0,
+      "target": "gbif_2468",
+      "distance": 1.1483,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1245",
@@ -43401,16 +43387,23 @@
     },
     {
       "source": "gbif_1246",
-      "target": "gbif_1250",
-      "distance": 0.0,
+      "target": "gbif_563",
+      "distance": 1.1359,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1246",
       "target": "ningaloo_2142",
       "distance": 1.154,
       "edge_type": "gbif_to_ningaloo",
+      "mutual": false
+    },
+    {
+      "source": "gbif_1247",
+      "target": "gbif_2062",
+      "distance": 1.1587,
+      "edge_type": "gbif_to_gbif",
       "mutual": false
     },
     {
@@ -43450,10 +43443,10 @@
     },
     {
       "source": "gbif_1250",
-      "target": "gbif_1246",
-      "distance": 0.0,
+      "target": "gbif_563",
+      "distance": 1.1359,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1250",
@@ -43464,10 +43457,10 @@
     },
     {
       "source": "gbif_1251",
-      "target": "gbif_1245",
-      "distance": 0.0,
+      "target": "gbif_2468",
+      "distance": 1.1483,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1251",
@@ -43478,10 +43471,10 @@
     },
     {
       "source": "gbif_1252",
-      "target": "gbif_1244",
-      "distance": 0.0,
+      "target": "gbif_96",
+      "distance": 1.1833,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1252",
@@ -43618,10 +43611,10 @@
     },
     {
       "source": "gbif_1273",
-      "target": "gbif_1275",
-      "distance": 1.1462,
+      "target": "gbif_991",
+      "distance": 1.4404,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1273",
@@ -43646,10 +43639,10 @@
     },
     {
       "source": "gbif_1275",
-      "target": "gbif_1273",
-      "distance": 1.1462,
+      "target": "gbif_9",
+      "distance": 1.2215,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1275",
@@ -45438,6 +45431,13 @@
     },
     {
       "source": "gbif_1433",
+      "target": "gbif_2222",
+      "distance": 1.2327,
+      "edge_type": "gbif_to_gbif",
+      "mutual": true
+    },
+    {
+      "source": "gbif_1433",
       "target": "ningaloo_1939",
       "distance": 1.1431,
       "edge_type": "gbif_to_ningaloo",
@@ -46866,8 +46866,8 @@
     },
     {
       "source": "gbif_1556",
-      "target": "gbif_1511",
-      "distance": 1.2049,
+      "target": "gbif_375",
+      "distance": 1.2427,
       "edge_type": "gbif_to_gbif",
       "mutual": false
     },
@@ -47076,7 +47076,7 @@
     },
     {
       "source": "gbif_1575",
-      "target": "gbif_1574",
+      "target": "gbif_1620",
       "distance": 1.1392,
       "edge_type": "gbif_to_gbif",
       "mutual": false
@@ -47552,10 +47552,10 @@
     },
     {
       "source": "gbif_1614",
-      "target": "gbif_1615",
-      "distance": 1.0802,
+      "target": "gbif_1033",
+      "distance": 1.2203,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1614",
@@ -47566,8 +47566,8 @@
     },
     {
       "source": "gbif_1615",
-      "target": "gbif_1614",
-      "distance": 1.0802,
+      "target": "gbif_956",
+      "distance": 1.0962,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -47909,10 +47909,10 @@
     },
     {
       "source": "gbif_1640",
-      "target": "gbif_1644",
-      "distance": 0.0,
+      "target": "gbif_1637",
+      "distance": 1.1396,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1640",
@@ -47923,10 +47923,10 @@
     },
     {
       "source": "gbif_1642",
-      "target": "gbif_1645",
-      "distance": 1.0322,
+      "target": "gbif_1784",
+      "distance": 1.2,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1642",
@@ -47951,10 +47951,10 @@
     },
     {
       "source": "gbif_1644",
-      "target": "gbif_1640",
-      "distance": 0.0,
+      "target": "gbif_1637",
+      "distance": 1.1396,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1644",
@@ -47965,10 +47965,10 @@
     },
     {
       "source": "gbif_1645",
-      "target": "gbif_1642",
-      "distance": 1.0322,
+      "target": "gbif_1182",
+      "distance": 1.1718,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1645",
@@ -49967,8 +49967,8 @@
     },
     {
       "source": "gbif_1812",
-      "target": "gbif_1816",
-      "distance": 1.1737,
+      "target": "gbif_2183",
+      "distance": 1.1785,
       "edge_type": "gbif_to_gbif",
       "mutual": false
     },
@@ -50240,6 +50240,13 @@
     },
     {
       "source": "gbif_1832",
+      "target": "gbif_926",
+      "distance": 1.2166,
+      "edge_type": "gbif_to_gbif",
+      "mutual": false
+    },
+    {
+      "source": "gbif_1832",
       "target": "ningaloo_5950",
       "distance": 1.3824,
       "edge_type": "gbif_to_ningaloo",
@@ -50464,10 +50471,10 @@
     },
     {
       "source": "gbif_1851",
-      "target": "gbif_1853",
-      "distance": 0.1224,
+      "target": "gbif_725",
+      "distance": 1.1841,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1851",
@@ -50492,10 +50499,10 @@
     },
     {
       "source": "gbif_1853",
-      "target": "gbif_1851",
-      "distance": 0.1224,
+      "target": "gbif_725",
+      "distance": 1.1648,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1853",
@@ -51871,8 +51878,8 @@
     },
     {
       "source": "gbif_1959",
-      "target": "gbif_1966",
-      "distance": 1.1841,
+      "target": "gbif_1122",
+      "distance": 1.2437,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -51969,10 +51976,10 @@
     },
     {
       "source": "gbif_1966",
-      "target": "gbif_1959",
-      "distance": 1.1841,
+      "target": "gbif_1122",
+      "distance": 1.3055,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_1966",
@@ -53061,10 +53068,10 @@
     },
     {
       "source": "gbif_2063",
-      "target": "gbif_2064",
-      "distance": 0.0,
+      "target": "gbif_1311",
+      "distance": 1.317,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_2063",
@@ -53075,10 +53082,10 @@
     },
     {
       "source": "gbif_2064",
-      "target": "gbif_2063",
-      "distance": 0.0,
+      "target": "gbif_1311",
+      "distance": 1.317,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_2064",
@@ -54702,7 +54709,7 @@
       "target": "gbif_2341",
       "distance": 1.2439,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_2201",
@@ -54982,7 +54989,7 @@
       "target": "gbif_1433",
       "distance": 1.2327,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_2222",
@@ -55102,6 +55109,13 @@
       "distance": 1.3631,
       "edge_type": "gbif_to_ningaloo",
       "mutual": false
+    },
+    {
+      "source": "gbif_2234",
+      "target": "gbif_929",
+      "distance": 1.2578,
+      "edge_type": "gbif_to_gbif",
+      "mutual": true
     },
     {
       "source": "gbif_2234",
@@ -56106,10 +56120,10 @@
     },
     {
       "source": "gbif_2316",
-      "target": "gbif_2341",
-      "distance": 1.2361,
+      "target": "gbif_1600",
+      "distance": 1.2623,
       "edge_type": "gbif_to_gbif",
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "gbif_2316",
@@ -56421,8 +56435,8 @@
     },
     {
       "source": "gbif_2341",
-      "target": "gbif_2316",
-      "distance": 1.2361,
+      "target": "gbif_2201",
+      "distance": 1.2439,
       "edge_type": "gbif_to_gbif",
       "mutual": true
     },
@@ -56809,7 +56823,7 @@
       "target": "gbif_1010",
       "distance": 1.1836,
       "edge_type": "gbif_to_gbif",
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "gbif_2384",
