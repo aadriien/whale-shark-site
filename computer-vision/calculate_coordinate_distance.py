@@ -60,12 +60,32 @@ def _distances_from_node(node: tuple) -> dict:
     return nx.single_source_dijkstra_path_length(sr.setup_M(), node, weight="weight")
 
 
-def searoute_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+def searoute_distance_precise(
+    lat1: float, lon1: float, lat2: float, lon2: float
+) -> float:
+    """
+    Shortest water-only route distance (km) between two points, routed
+    directly on the exact coordinates (no node-snapping lookup table).
+    Much slower than searoute_distance: one bidirectional Dijkstra per call.
+    """
+    route = sr.searoute([lon1, lat1], [lon2, lat2], append_orig_dest=True)
+    return route["properties"]["length"]
+
+
+def searoute_distance(
+    lat1: float, lon1: float, lat2: float, lon2: float, precise: bool = False
+) -> float:
     """
     Shortest water-only route distance (km) between two points, via
     searoute's marine network graph. Falls back to haversine if no route
     exists between the snapped points.
+
+    precise: if True, route directly on the exact coordinates instead of
+    snapping to the nearest marine-network node. Precise will be slower.
     """
+    if precise:
+        return searoute_distance_precise(lat1, lon1, lat2, lon2)
+
     M = sr.setup_M()
     node1 = M.kdtree.query((lon1, lat1))
     node2 = M.kdtree.query((lon2, lat2))
@@ -82,17 +102,33 @@ def searoute_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> flo
     return snap1 + network_distance + snap2
 
 
-def searoute_distance_matrix(lat: np.ndarray, lon: np.ndarray) -> np.ndarray:
+def searoute_distance_matrix(
+    lat: np.ndarray, lon: np.ndarray, precise: bool = False
+) -> np.ndarray:
     """
-    Ocean-routed distance (km) between every pair of points. Each point is
-    snapped to its nearest marine-network node, and pairwise distances
-    between the (far fewer) unique nodes are computed via Dijkstra and
-    broadcast back out to the full NxN matrix. lat/lon are in degrees.
+    Ocean-routed distance (km) between every pair of points.
+    Coordinates (lat/lon) are in degrees.
+
+    precise: if True, route directly on the exact coordinates for every pair
+    (slower). Otherwise, each point is snapped to its nearest marine-network
+    node, and pairwise distances between the (far fewer) unique nodes are
+    computed via Dijkstra and broadcast back out to the full NxN matrix.
     """
+    total_nodes = len(lat)
+
+    if precise:
+        distance = np.zeros((total_nodes, total_nodes))
+        for i in range(total_nodes):
+            for j in range(i + 1, total_nodes):
+                d = searoute_distance_precise(lat[i], lon[i], lat[j], lon[j])
+                distance[i, j] = d
+                distance[j, i] = d
+        return distance
+
     M = sr.setup_M()
     nodes = [M.kdtree.query((lon_i, lat_i)) for lat_i, lon_i in zip(lat, lon)]
 
-    distance = np.full((len(nodes), len(nodes)), np.nan)
+    distance = np.full((total_nodes, total_nodes), np.nan)
     for i, node1 in enumerate(nodes):
         lengths = _distances_from_node(node1)
         for j, node2 in enumerate(nodes):
@@ -117,25 +153,34 @@ def searoute_distance_matrix(lat: np.ndarray, lon: np.ndarray) -> np.ndarray:
 
 
 def calculate_distance(
-    lat1: float, lon1: float, lat2: float, lon2: float, use_searoute: bool = False
+    lat1: float,
+    lon1: float,
+    lat2: float,
+    lon2: float,
+    use_searoute: bool = False,
+    precise: bool = False,
 ) -> float:
     """
     Distance (km) between two points: ocean-routed via searoute if
     use_searoute is True, otherwise great-circle (haversine).
+
+    precise: only relevant when use_searoute is True (searoute_distance)
     """
     if use_searoute:
-        return searoute_distance(lat1, lon1, lat2, lon2)
+        return searoute_distance(lat1, lon1, lat2, lon2, precise=precise)
     return haversine_distance(lat1, lon1, lat2, lon2)
 
 
 def calculate_distance_matrix(
-    lat: np.ndarray, lon: np.ndarray, use_searoute: bool = False
+    lat: np.ndarray, lon: np.ndarray, use_searoute: bool = False, precise: bool = False
 ) -> np.ndarray:
     """
     Pairwise distance matrix (km) between every point: ocean-routed via
     searoute if use_searoute is True, otherwise great-circle (haversine).
     lat/lon are in degrees.
+
+    precise: only relevant when use_searoute is True (searoute_distance_matrix)
     """
     if use_searoute:
-        return searoute_distance_matrix(lat, lon)
+        return searoute_distance_matrix(lat, lon, precise=precise)
     return haversine_distance_matrix(lat, lon)
