@@ -5,7 +5,6 @@
 ###############################################################################
 
 from datetime import datetime
-from math import asin, cos, radians, sin, sqrt
 from typing import Tuple
 
 import numpy as np
@@ -13,6 +12,7 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_MEDIA_CSV
 from src.utils.data_utils import export_to_csv, read_csv
 
+from .calculate_coordinate_distance import calculate_distance
 from .CONSTANTS import (
     NEW_EMBEDDINGS_FOLDER,
     VALIDATED_MEDIA_MATCHES_FILE,
@@ -23,26 +23,6 @@ from .CONSTANTS import (
 from .match_embeddings import export_to_json
 
 
-def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    """
-    Calculate great-circle distance (in km) between two points on Earth.
-    """
-    R = 6371.0  # Earth's radius in kilometers
-
-    # Convert degrees to radians
-    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
-
-    # Differences
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-
-    # Haversine formula
-    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-    c = 2 * asin(sqrt(a))
-    distance = R * c
-    return distance
-
-
 def implied_speed_km_per_day(
     lat1: float, lon1: float, time1: str, lat2: float, lon2: float, time2: str
 ) -> float:
@@ -50,7 +30,7 @@ def implied_speed_km_per_day(
     Calculate implied travel speed (km/day) between two timestamped coordinates.
     """
     # Distance in km
-    d = haversine_distance(lat1, lon1, lat2, lon2)
+    d = calculate_distance(lat1, lon1, lat2, lon2, use_searoute=True)
 
     # Time difference in days
     try:
@@ -210,7 +190,9 @@ def validate_media_matches(
                             and pd.notna(time2)
                         ):
 
-                            distance = haversine_distance(lat1, lon1, lat2, lon2)
+                            distance = calculate_distance(
+                                lat1, lon1, lat2, lon2, use_searoute=True
+                            )
                             speed = implied_speed_km_per_day(
                                 lat1, lon1, time1, lat2, lon2, time2
                             )
@@ -438,7 +420,9 @@ def validate_shark_match_family(
                     and pd.notna(lon2)
                     and pd.notna(time2)
                 ):
-                    distance = haversine_distance(lat1, lon1, lat2, lon2)
+                    distance = calculate_distance(
+                        lat1, lon1, lat2, lon2, use_searoute=True
+                    )
                     speed = implied_speed_km_per_day(
                         lat1, lon1, time1, lat2, lon2, time2
                     )

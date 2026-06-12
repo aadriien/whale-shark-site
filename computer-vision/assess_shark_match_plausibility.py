@@ -14,6 +14,8 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import read_csv
 
+from .calculate_coordinate_distance import calculate_distance_matrix
+
 
 def _event_date_to_ordinal(date_value) -> float:
     if pd.isna(date_value):
@@ -51,18 +53,12 @@ def build_exclusion_map(
         return {}
 
     ids = valid["whaleSharkID"].to_numpy()
-    lat = np.radians(valid["decimalLatitude"].to_numpy(dtype=float))
-    lon = np.radians(valid["decimalLongitude"].to_numpy(dtype=float))
+    lat = valid["decimalLatitude"].to_numpy(dtype=float)
+    lon = valid["decimalLongitude"].to_numpy(dtype=float)
     days = valid["_ordinal"].to_numpy(dtype=float)
 
-    # Vectorized haversine distance (km) between every pair of sharks
-    dlat = lat[:, None] - lat[None, :]
-    dlon = lon[:, None] - lon[None, :]
-    a = (
-        np.sin(dlat / 2) ** 2
-        + np.cos(lat[:, None]) * np.cos(lat[None, :]) * np.sin(dlon / 2) ** 2
-    )
-    distance = 6371.0 * 2 * np.arcsin(np.sqrt(np.clip(a, 0, 1)))
+    # Ocean-routed distance (km) between every pair of sharks
+    distance = calculate_distance_matrix(lat, lon, use_searoute=True)
 
     # Implied travel speed (km/day) between every pair of sharks
     delta_days = np.abs(days[:, None] - days[None, :])
