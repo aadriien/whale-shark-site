@@ -11,7 +11,10 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import umap
+from src.gbif.constants import GBIF_CLEAN_CSV
+from src.utils.data_utils import read_csv
 
+from .assess_shark_match_plausibility import build_exclusion_map
 from .CONSTANTS import (
     GBIF_OUTPUT_NPZ_FILE,
     GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE,
@@ -131,19 +134,95 @@ def build_graph(
     return G
 
 
-def export_graph(G: nx.DiGraph) -> None:
+def assign_clusters(G: nx.DiGraph) -> dict[str, int]:
+    # Group GBIF nodes by transitive chains of gbif_to_gbif matches only
+    # (edge direction doesn't matter for identity grouping, so weakly
+    # connected components collapse e.g. A->B->C into one cluster even if
+    # A and C have no direct edge between them). 
+    # gbif_to_ningaloo edges are excluded here: they're unfiltered 
+    # (k=1, different ID namespace), and a handful of "least-bad" Ningaloo 
+    # hub matches would otherwise collapse most of the graph into one 
+    # mega-cluster. Ningaloo is side context, not part of this analysis.
+    gbif_only = nx.DiGraph()
+    gbif_only.add_nodes_from(
+        n for n, attrs in G.nodes(data=True) if attrs.get("population") == "gbif"
+    )
+    gbif_only.add_edges_from(
+        (u, v)
+        for u, v, attrs in G.edges(data=True)
+        if attrs.get("edge_type") == "gbif_to_gbif"
+    )
+
+    clusters: dict[str, int] = {}
+    for cluster_id, component in enumerate(nx.weakly_connected_components(gbif_only)):
+        for node in component:
+            clusters[node] = cluster_id
+    return clusters
+
+
+def find_contradictions(
+    G: nx.DiGraph, clusters: dict[str, int], exclusion_map: dict[str, set[str]]
+) -> dict[int, list[tuple[str, str]]]:
+    """
+    A cluster is contradictory if it contains >=2 GBIF whaleSharkIDs that the
+    exclusion map says CANNOT be the same shark (geo/temporally IMPOSSIBLE).
+    Direct matches already skip excluded pairs, so any contradiction here
+    comes from a longer chain (A~B~C) implying an impossible link (A~C).
+    """
+    cluster_shark_ids: dict[int, set[str]] = {}
+    for node, attrs in G.nodes(data=True):
+        if attrs.get("population") != "gbif":
+            continue
+        cluster_shark_ids.setdefault(clusters[node], set()).add(attrs["shark_id"])
+
+    contradictions: dict[int, list[tuple[str, str]]] = {}
+
+    for cluster_id, shark_ids in cluster_shark_ids.items():
+        for shark_id in shark_ids:
+            for other in exclusion_map.get(shark_id, set()) & shark_ids:
+                pair = tuple(sorted((shark_id, other)))
+                pairs = contradictions.setdefault(cluster_id, [])
+
+                if pair not in pairs:
+                    pairs.append(pair)
+
+    return contradictions
+
+
+def export_graph(
+    G: nx.DiGraph,
+    clusters: dict[str, int],
+    contradictions: dict[int, list[tuple[str, str]]],
+) -> None:
     connected = {n for edge in G.edges() for n in edge}
 
     nodes = []
     for nid, attrs in G.nodes(data=True):
         if attrs.get("population") == "ningaloo" and nid not in connected:
             continue
-        nodes.append({"id": nid, **attrs})
+        # Ningaloo nodes aren't part of gbif_to_gbif clustering (side context,
+        # not under analysis), so they have no cluster_id
+        cluster_id = clusters.get(nid)
+        nodes.append(
+            {
+                "id": nid,
+                **attrs,
+                "cluster_id": cluster_id,
+                "contradiction": cluster_id in contradictions,
+            }
+        )
 
     graph_data = {
         "nodes": nodes,
         "edges": [
             {"source": u, "target": v, **attrs} for u, v, attrs in G.edges(data=True)
+        ],
+        "contradictions": [
+            {
+                "cluster_id": cluster_id,
+                "conflicting_shark_ids": [list(pair) for pair in pairs],
+            }
+            for cluster_id, pairs in contradictions.items()
         ],
     }
 
@@ -157,6 +236,10 @@ def export_graph(G: nx.DiGraph) -> None:
         f"  {exported_nodes} nodes ({skipped} isolated ningaloo nodes skipped),"
         f" {G.number_of_edges()} edges"
     )
+    print(
+        f"  {len(set(clusters.values()))} clusters,"
+        f" {len(contradictions)} with contradictions"
+    )
 
 
 if __name__ == "__main__":
@@ -166,4 +249,11 @@ if __name__ == "__main__":
 
     G = build_graph(ningaloo, gbif, matches_df, coords)
 
-    export_graph(G)
+    print("Loading GBIF clean data for exclusion map...")
+    gbif_clean_df = read_csv(GBIF_CLEAN_CSV)
+    exclusion_map = build_exclusion_map(gbif_clean_df)
+
+    clusters = assign_clusters(G)
+    contradictions = find_contradictions(G, clusters, exclusion_map)
+
+    export_graph(G, clusters, contradictions)
