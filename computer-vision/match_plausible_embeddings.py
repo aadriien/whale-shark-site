@@ -193,6 +193,39 @@ def identify_sharks(
     return results
 
 
+def translate_npz_positions_to_image_ids(
+    results_df: pd.DataFrame, new_data: dict, gbif_media_df: pd.DataFrame
+) -> pd.DataFrame:
+    # process_all_images() silently skips images that fail (download/YOLO
+    # errors), so new_data's arrays are a compacted subsequence of
+    # get_image_records(): npz position i doesn't generally correspond to
+    # image_id i. Recover the true image_id for each npz position via the
+    # GBIF media key recorded alongside each embedding.
+    key_to_image_id = dict(
+        zip(gbif_media_df["key"].astype(str), gbif_media_df["image_id"])
+    )
+    npz_pos_to_image_id = {
+        i: int(key_to_image_id[key])
+        for i, key in enumerate(new_data["image_id_keys"].astype(str))
+        if key in key_to_image_id
+    }
+
+    def translate(npz_pos) -> int:
+        npz_pos = int(npz_pos)
+        return npz_pos_to_image_id.get(npz_pos, -1) if npz_pos >= 0 else -1
+
+    for col in [
+        "image_id",
+        "miewid_gbif_matched_image_id",
+        "miewid_gbif_matched_annotation_id",
+        "dinov2_gbif_matched_image_id",
+        "dinov2_gbif_matched_annotation_id",
+    ]:
+        results_df[col] = results_df[col].apply(translate)
+
+    return results_df
+
+
 def validate_matches(media_matches_df: pd.DataFrame) -> None:
     media_sharks_df = read_csv(GBIF_INDIVIDUAL_SHARKS_STATS_CSV)
 
@@ -261,8 +294,11 @@ if __name__ == "__main__":
     gbif_media_df = get_image_records()
 
     # Add index used for matching explicitly & merge
-    results_df["image_id"] = results_df["image_id"].astype(int)
     gbif_media_df = gbif_media_df.reset_index().rename(columns={"index": "image_id"})
+
+    results_df = translate_npz_positions_to_image_ids(
+        results_df, new_data, gbif_media_df
+    )
 
     enriched_df = pd.merge(gbif_media_df, results_df, on="image_id", how="inner")
 
