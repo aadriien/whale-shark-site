@@ -10,7 +10,7 @@ export type EdgePopulationFilter = "all" | "cross" | "same";
 export type EdgeFilterState = {
     population: EdgePopulationFilter;
     mutualOnly: boolean;
-    showEdges: boolean;
+    hideEdges: boolean;
 };
 
 export type GraphViewParams = {
@@ -22,6 +22,19 @@ export type GraphViewParams = {
     contradictionsOnly: boolean;
     showContradictionPath: boolean;
 };
+
+// The 8 togglable filter dimensions, used by FILTER_CONSTRAINTS in GraphUtils
+// to resolve cross-filter dependencies (e.g. "mutual matches only" implies
+// "GBIF only" nodes with "GBIF x GBIF" edge connections)
+export type FilterKey =
+    | "gbif_only"
+    | "ningaloo_only"
+    | "gbif_gbif"
+    | "gbif_ningaloo"
+    | "mutual_only"
+    | "continents"
+    | "no_contradictions"
+    | "contradictions_only";
 
 export type ContinentFilter =
     | "all"

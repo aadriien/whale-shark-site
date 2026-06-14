@@ -16,7 +16,81 @@ import type {
     EdgeFilterState,
     GraphViewParams,
     SelectedMatch,
+    FilterKey,
 } from "../types/graphs";
+
+// Filter dependency table: when a key is active, the listed targets are
+// forced to that value (true = forced on, false = forced off) regardless of
+// the user's own toggle for that target. Targets forced either way become
+// "locked", i.e. their buttons are disabled, since toggling them would have
+// no effect (resolution would just reassert the forced value).
+export const FILTER_CONSTRAINTS: Record<FilterKey, Partial<Record<FilterKey, boolean>>> = {
+    gbif_only: { gbif_gbif: true, gbif_ningaloo: false },
+    ningaloo_only: {
+        gbif_gbif: false,
+        gbif_ningaloo: false,
+        continents: false,
+        mutual_only: false,
+        no_contradictions: false,
+        contradictions_only: false,
+    },
+    gbif_gbif: { gbif_only: true, ningaloo_only: false },
+    gbif_ningaloo: {
+        gbif_only: false,
+        ningaloo_only: false,
+        mutual_only: false,
+        continents: false,
+        no_contradictions: false,
+        contradictions_only: false,
+    },
+    mutual_only: { gbif_only: true },
+    continents: { gbif_only: true },
+    no_contradictions: { gbif_only: true, contradictions_only: false },
+    contradictions_only: { gbif_only: true, mutual_only: true, no_contradictions: false },
+};
+
+export type ResolvedFilters = {
+    active: Set<FilterKey>;
+    locked: Set<FilterKey>;
+};
+
+// Propagates FILTER_CONSTRAINTS to a fixed point, starting from the filters
+// the user has directly turned on. Forced-on targets join `active`;
+// forced-off targets are dropped from (+ kept out of) `active`. Any target
+// forced by a filter OTHER than itself is `locked`, i.e. its button can't be
+// toggled, since the constraint would just reassert itself.
+export function resolveFilters(userActive: Set<FilterKey>): ResolvedFilters {
+    const active = new Set(userActive);
+    const forcedOff = new Set<FilterKey>();
+    const locked = new Set<FilterKey>();
+
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const key of [...active]) {
+            if (!active.has(key)) continue;
+
+            for (const [target, value] of Object.entries(FILTER_CONSTRAINTS[key as FilterKey])) {
+                const targetKey = target as FilterKey;
+                if (value) {
+                    if (!active.has(targetKey)) {
+                        active.add(targetKey);
+                        changed = true;
+                    }
+                } else {
+                    if (!forcedOff.has(targetKey)) {
+                        forcedOff.add(targetKey);
+                        changed = true;
+                    }
+                    if (active.delete(targetKey)) changed = true;
+                }
+                if (targetKey !== key) locked.add(targetKey);
+            }
+        }
+    }
+
+    return { active, locked };
+}
 
 const POSITION_SCALE = 5000;
 const EDGE_OPACITY_MIN = 0.15;
@@ -343,8 +417,8 @@ export function applyGraphView(
             cy.nodes().not(ambientEdges.connectedNodes()).style("display", "none");
         }
 
-        cy.edges().style("display", "none");
-        if (edgeFilter.showEdges) ambientEdges.style("display", "element");
+        cy.edges().style("display", "element");
+        if (edgeFilter.hideEdges) ambientEdges.style("display", "none");
 
         const focusedNode = focusedNodeId ? cy.getElementById(focusedNodeId) : null;
         if (!focusedNode || focusedNode.empty()) return;
