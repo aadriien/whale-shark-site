@@ -305,7 +305,8 @@ export function applyGraphView(
 ) {
     cy.batch(() => {
         cy.elements().removeStyle("opacity");
-        cy.nodes().removeStyle("border-width border-color border-opacity");
+        cy.nodes().removeStyle("border-width border-color border-opacity border-style");
+        cy.edges().removeStyle("line-color target-arrow-color source-arrow-color width z-index");
 
         cy.nodes().style("display", "element");
 
