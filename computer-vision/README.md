@@ -50,6 +50,14 @@ Node positions are 2D UMAP coordinates projected from the full MiewID embedding 
 
 Edge weight = `miewid_distance` (L2 on normalized vectors; lower = stronger match). Edges are flagged as **mutual** (A→B and B→A both exist) or **one-sided**.
 
+### Clusters & Contradictions
+
+GBIF nodes are additionally grouped into `cluster_id`s via transitive chains of `gbif_to_gbif` edges (weakly connected components, e.g. A→B→C joins A, B, and C into one cluster even with no direct A↔C edge). `gbif_to_ningaloo` edges are excluded from clustering; they're unfiltered (k=1, different ID namespace), and a handful of "least-bad" Ningaloo hub matches would otherwise collapse most of the graph into one mega-cluster. Ningaloo nodes have `cluster_id: null`.
+
+A cluster is flagged `contradiction: true` if it contains two `whaleSharkID`s that `assess_shark_match_plausibility.py`'s exclusion map says CANNOT be the same shark (geo/temporally IMPOSSIBLE). 
+
+Direct matches already skip excluded pairs, so a contradiction means a *chain* of individually-plausible matches (A~B, B~C) transitively implies an impossible link (A~C). The top-level `contradictions` array lists each such cluster with its conflicting `whaleSharkID` pairs.
+
 ### Running
 
 ```sh
