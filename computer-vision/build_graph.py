@@ -135,14 +135,19 @@ def build_graph(
 
 
 def assign_clusters(G: nx.DiGraph) -> dict[str, int]:
-    # Group GBIF nodes by transitive chains of gbif_to_gbif matches only
-    # (edge direction doesn't matter for identity grouping, so weakly
+    # Group GBIF nodes by transitive chains of MUTUAL gbif_to_gbif matches
+    # only (edge direction doesn't matter for identity grouping, so weakly
     # connected components collapse e.g. A->B->C into one cluster even if
-    # A and C have no direct edge between them). 
-    # gbif_to_ningaloo edges are excluded here: they're unfiltered 
-    # (k=1, different ID namespace), and a handful of "least-bad" Ningaloo 
-    # hub matches would otherwise collapse most of the graph into one 
+    # A and C have no direct edge between them).
+    # gbif_to_ningaloo edges are excluded here: they're unfiltered
+    # (k=1, different ID namespace), and a handful of "least-bad" Ningaloo
+    # hub matches would otherwise collapse most of the graph into one
     # mega-cluster. Ningaloo is side context, not part of this analysis.
+    # One-directional top-1 matches are excluded too: a single non-reciprocal
+    # "least-bad" match is enough to bridge otherwise-unrelated nodes, which
+    # is how nearly the whole GBIF population can end up in a single cluster.
+    # Requiring mutual agreement (A's top-1 is B AND B's top-1 is A) keeps
+    # only the much stronger reciprocal signal for the image/node.
     gbif_only = nx.DiGraph()
     gbif_only.add_nodes_from(
         n for n, attrs in G.nodes(data=True) if attrs.get("population") == "gbif"
@@ -150,7 +155,7 @@ def assign_clusters(G: nx.DiGraph) -> dict[str, int]:
     gbif_only.add_edges_from(
         (u, v)
         for u, v, attrs in G.edges(data=True)
-        if attrs.get("edge_type") == "gbif_to_gbif"
+        if attrs.get("edge_type") == "gbif_to_gbif" and attrs.get("mutual")
     )
 
     clusters: dict[str, int] = {}
