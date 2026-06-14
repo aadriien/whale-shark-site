@@ -299,6 +299,7 @@ export function applyGraphView(
         edgeFilter,
         continentFilters,
         focusedNodeId,
+        noContradictions,
         contradictionsOnly,
         showContradictionPath,
     }: GraphViewParams
@@ -328,7 +329,9 @@ export function applyGraphView(
 
         // Isolate clusters flagged by the contradiction-detection pass
         // (transitive chains of matches implying a geo/temporally impossible link)
-        if (contradictionsOnly) {
+        if (noContradictions) {
+            cy.nodes("[?contradiction]").style("display", "none");
+        } else if (contradictionsOnly) {
             cy.nodes().not("[?contradiction]").style("display", "none");
         }
 

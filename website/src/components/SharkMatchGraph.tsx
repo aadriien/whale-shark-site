@@ -62,6 +62,8 @@ function SharkMatchGraph() {
     const [showEdges, setShowEdges] = useState(true);
     const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
 
+    const [noContradictions, setNoContradictions] = useState(true);
+
     const [contradictionsOnly, setContradictionsOnly] = useState(false);
     const [showContradictionPath, setShowContradictionPath] = useState(false);
 
@@ -95,6 +97,7 @@ function SharkMatchGraph() {
         },
         continentFilters,
         focusedNodeId,
+        noContradictions,
         contradictionsOnly,
         showContradictionPath,
     });
@@ -149,6 +152,7 @@ function SharkMatchGraph() {
             },
             continentFilters,
             focusedNodeId,
+            noContradictions,
             contradictionsOnly,
             showContradictionPath,
         };
@@ -161,6 +165,7 @@ function SharkMatchGraph() {
         showEdges,
         continentFilters,
         focusedNodeId,
+        noContradictions,
         contradictionsOnly,
         showContradictionPath,
     ]);
@@ -274,7 +279,15 @@ function SharkMatchGraph() {
                         Show match lines
                     </button>
                     <button
+                        className={`graph-filter-btn${noContradictions ? " active" : ""}`}
+                        disabled={contradictionsOnly}
+                        onClick={() => setNoContradictions((c) => !c)}
+                    >
+                        No transitive contradictions
+                    </button>
+                    <button
                         className={`graph-filter-btn${contradictionsOnly ? " active" : ""}`}
+                        disabled={noContradictions}
                         onClick={() => setContradictionsOnly((c) => !c)}
                     >
                         Contradictions only

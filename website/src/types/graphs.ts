@@ -18,6 +18,7 @@ export type GraphViewParams = {
     edgeFilter: EdgeFilterState;
     continentFilters: Set<string>;
     focusedNodeId: string | null;
+    noContradictions: boolean;
     contradictionsOnly: boolean;
     showContradictionPath: boolean;
 };
