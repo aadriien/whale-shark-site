@@ -34,7 +34,8 @@ export type FilterKey =
     | "mutual_only"
     | "continents"
     | "no_contradictions"
-    | "contradictions_only";
+    | "contradictions_only"
+    | "hide_edges";
 
 export type ContinentFilter =
     | "all"

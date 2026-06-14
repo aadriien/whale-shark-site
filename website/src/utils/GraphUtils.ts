@@ -33,6 +33,7 @@ export const FILTER_CONSTRAINTS: Record<FilterKey, Partial<Record<FilterKey, boo
         mutual_only: false,
         no_contradictions: false,
         contradictions_only: false,
+        hide_edges: true,
     },
     gbif_gbif: { gbif_only: true, ningaloo_only: false },
     gbif_ningaloo: {
@@ -47,6 +48,7 @@ export const FILTER_CONSTRAINTS: Record<FilterKey, Partial<Record<FilterKey, boo
     continents: { gbif_only: true },
     no_contradictions: { gbif_only: true, contradictions_only: false },
     contradictions_only: { gbif_only: true, mutual_only: true, no_contradictions: false },
+    hide_edges: {},
 };
 
 export type ResolvedFilters = {
@@ -59,6 +61,11 @@ export type ResolvedFilters = {
 // forced-off targets are dropped from (+ kept out of) `active`. Any target
 // forced by a filter OTHER than itself is `locked`, i.e. its button can't be
 // toggled, since the constraint would just reassert itself.
+//
+// Exception: a key the user directly turned on is never locked, even if some
+// OTHER active key's constraints force it back to the same value (e.g.
+// gbif_only <-> gbif_gbif force each other). Otherwise the user's own
+// selection would become un-toggleable, with no way to undo it.
 export function resolveFilters(userActive: Set<FilterKey>): ResolvedFilters {
     const active = new Set(userActive);
     const forcedOff = new Set<FilterKey>();
@@ -84,7 +91,7 @@ export function resolveFilters(userActive: Set<FilterKey>): ResolvedFilters {
                     }
                     if (active.delete(targetKey)) changed = true;
                 }
-                if (targetKey !== key) locked.add(targetKey);
+                if (targetKey !== key && !userActive.has(targetKey)) locked.add(targetKey);
             }
         }
     }
@@ -417,8 +424,10 @@ export function applyGraphView(
             cy.nodes().not(ambientEdges.connectedNodes()).style("display", "none");
         }
 
-        cy.edges().style("display", "element");
-        if (edgeFilter.hideEdges) ambientEdges.style("display", "none");
+        // hideEdges hides ALL edges, not just the ambient subset.
+        // Otherwise e.g. non-mutual edges stay visible when "mutual only"
+        // narrows ambientEdges down to a subset of edge_type
+        cy.edges().style("display", edgeFilter.hideEdges ? "none" : "element");
 
         const focusedNode = focusedNodeId ? cy.getElementById(focusedNodeId) : null;
         if (!focusedNode || focusedNode.empty()) return;

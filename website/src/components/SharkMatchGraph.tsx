@@ -57,10 +57,9 @@ const CONTINENT_LABEL: Record<string, string> = {
 const NINGALOO_COLOR = "#525252";
 
 function SharkMatchGraph() {
-    // The 8 filter dimensions start with nothing active (show all).
+    // The 9 filter dimensions start with nothing active (show all).
     // "continents" is derived from continentFilters being non-empty.
     const [activeFilters, setActiveFilters] = useState<Set<FilterKey>>(new Set());
-    const [hideEdges, setHideEdges] = useState(false);
     const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
 
     const [showContradictionPath, setShowContradictionPath] = useState(false);
@@ -98,13 +97,27 @@ function SharkMatchGraph() {
     const mutualOnly = active.has("mutual_only");
     const noContradictions = active.has("no_contradictions");
     const contradictionsOnly = active.has("contradictions_only");
+    const hideEdges = active.has("hide_edges");
 
-    const nodeFilterLocked = locked.has("gbif_only") || locked.has("ningaloo_only");
+    // gbif_only/gbif_gbif are only ever forced ON by other filters, and
+    // ningaloo_only/gbif_ningaloo are only ever forced OFF. So a forced-on
+    // "true" key locks both itself and "all/none" (that option becomes
+    // unreachable), while a forced-off "false" key only locks itself.
+    const nodeFilterLocked: Record<NodeFilter, boolean> = {
+        all: locked.has("gbif_only"),
+        gbif: locked.has("gbif_only"),
+        ningaloo: locked.has("ningaloo_only"),
+    };
     const continentsLocked = locked.has("continents");
-    const edgePopulationLocked = locked.has("gbif_gbif") || locked.has("gbif_ningaloo");
+    const edgePopulationLocked: Record<EdgePopulationFilter, boolean> = {
+        all: locked.has("gbif_gbif"),
+        same: locked.has("gbif_gbif"),
+        cross: locked.has("gbif_ningaloo"),
+    };
     const mutualLocked = locked.has("mutual_only");
     const noContradictionsLocked = locked.has("no_contradictions");
     const contradictionsOnlyLocked = locked.has("contradictions_only");
+    const hideEdgesLocked = locked.has("hide_edges");
 
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -281,7 +294,7 @@ function SharkMatchGraph() {
                         <button
                             key={f}
                             className={`graph-filter-btn${nodeFilter === f ? " active" : ""}`}
-                            disabled={nodeFilterLocked}
+                            disabled={nodeFilterLocked[f]}
                             onClick={() => handleNodeFilterClick(f)}
                         >
                             {NODE_FILTER_LABELS[f]}
@@ -312,7 +325,7 @@ function SharkMatchGraph() {
                         <button
                             key={f}
                             className={`graph-filter-btn${edgePopulation === f ? " active" : ""}`}
-                            disabled={edgePopulationLocked}
+                            disabled={edgePopulationLocked[f]}
                             onClick={() => handleEdgePopulationClick(f)}
                         >
                             {EDGE_POPULATION_LABELS[f]}
@@ -327,7 +340,8 @@ function SharkMatchGraph() {
                     </button>
                     <button
                         className={`graph-filter-btn${hideEdges ? " active" : ""}`}
-                        onClick={() => setHideEdges((s) => !s)}
+                        disabled={hideEdgesLocked}
+                        onClick={() => toggleFilter("hide_edges")}
                     >
                         Hide match lines
                     </button>
