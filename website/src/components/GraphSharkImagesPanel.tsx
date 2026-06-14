@@ -1,7 +1,7 @@
 import sharkSelectionPlaceholder from "../assets/images/chart-placeholders/globe-views.svg";
 
 import { visionOccurrences } from "../utils/DataUtils";
-import { GraphNodePanelProps } from "../types/graphs";
+import { GraphImagesPanelProps } from "../types/graphs";
 
 const imageIdToUrl = new Map<number, string>(
     visionOccurrences
@@ -9,7 +9,7 @@ const imageIdToUrl = new Map<number, string>(
         .map((occ) => [occ.image_id as number, occ.identifier_url as string])
 );
 
-function GraphSharkImagesPanel({ match, onClose }: GraphNodePanelProps) {
+function GraphSharkImagesPanel({ match, onClose }: GraphImagesPanelProps) {
     if (!match) {
         return (
             <div className="graph-node-panel graph-node-panel--empty">

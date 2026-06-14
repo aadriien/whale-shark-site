@@ -39,6 +39,12 @@
     flex-shrink: 0;
 }
 
+.shark-match-graph-section .legend-dot--contradiction {
+    background: transparent;
+    border: 2px dashed var(--error);
+    box-sizing: border-box;
+}
+
 .shark-match-graph-section .legend-label {
     margin-right: 8px;
 }
@@ -186,6 +192,24 @@
 .graph-panel-ningaloo-id {
     font-size: 0.9rem;
     font-family: monospace;
+}
+
+.graph-panel-contradiction {
+    border: 1px solid var(--error);
+    border-radius: 6px;
+    padding: 10px;
+    background: color-mix(in srgb, var(--error) 12%, var(--bg-primary));
+}
+
+.graph-panel-contradiction .graph-panel-label {
+    color: var(--error);
+    opacity: 1;
+}
+
+.graph-panel-contradiction p {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .graph-node-panel--empty {

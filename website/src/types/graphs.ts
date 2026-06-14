@@ -18,6 +18,8 @@ export type GraphViewParams = {
     edgeFilter: EdgeFilterState;
     continentFilters: Set<string>;
     focusedNodeId: string | null;
+    contradictionsOnly: boolean;
+    showContradictionPath: boolean;
 };
 
 export type ContinentFilter =
@@ -36,6 +38,8 @@ export type GraphNode = {
     image_id: number;
     x: number;
     y: number;
+    cluster_id: number | null;
+    contradiction: boolean;
 };
 
 export type GraphEdge = {
@@ -46,7 +50,16 @@ export type GraphEdge = {
     mutual: boolean;
 };
 
-export type GraphData = { nodes: GraphNode[]; edges: GraphEdge[] };
+export type ContradictionEntry = {
+    cluster_id: number;
+    conflicting_shark_ids: [string, string][];
+};
+
+export type GraphData = {
+    nodes: GraphNode[];
+    edges: GraphEdge[];
+    contradictions: ContradictionEntry[];
+};
 
 export type SelectedMatch = {
     clickedSharkId: string;
@@ -54,9 +67,17 @@ export type SelectedMatch = {
     matchSharkId: string;
     matchPopulation: "gbif" | "ningaloo";
     matchDistance: number;
+    conflictingSharkIds: string[];
 };
 
 export type GraphNodePanelProps = {
+    match: SelectedMatch | null;
+    onClose: () => void;
+    showContradictionPath: boolean;
+    onToggleContradictionPath: () => void;
+};
+
+export type GraphImagesPanelProps = {
     match: SelectedMatch | null;
     onClose: () => void;
 };

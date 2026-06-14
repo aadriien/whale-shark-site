@@ -62,6 +62,9 @@ function SharkMatchGraph() {
     const [showEdges, setShowEdges] = useState(true);
     const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
 
+    const [contradictionsOnly, setContradictionsOnly] = useState(false);
+    const [showContradictionPath, setShowContradictionPath] = useState(false);
+
     const [graphData, setGraphData] = useState<GraphData | null>(null);
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
@@ -85,9 +88,15 @@ function SharkMatchGraph() {
     // the latest view params instead of what was captured at registration time
     const viewRef = useRef<GraphViewParams>({
         nodeFilter: effectiveNodeFilter,
-        edgeFilter: { population: effectiveEdgePopulation, mutualOnly: effectiveMutualOnly, showEdges },
+        edgeFilter: {
+            population: effectiveEdgePopulation,
+            mutualOnly: effectiveMutualOnly,
+            showEdges,
+        },
         continentFilters,
         focusedNodeId,
+        contradictionsOnly,
+        showContradictionPath,
     });
 
     useEffect(() => {
@@ -111,11 +120,12 @@ function SharkMatchGraph() {
 
     const nodes = useMemo(() => graphData?.nodes ?? [], [graphData]);
     const edges = useMemo(() => graphData?.edges ?? [], [graphData]);
+    const contradictions = useMemo(() => graphData?.contradictions ?? [], [graphData]);
 
     const posMap = useMemo(() => normalizePositions(nodes), [nodes]);
     const elements = useMemo(
-        () => buildElements(nodes, edges, posMap, sharkContinentMap),
-        [nodes, edges, posMap, sharkContinentMap]
+        () => buildElements(nodes, edges, posMap, sharkContinentMap, contradictions),
+        [nodes, edges, posMap, sharkContinentMap, contradictions]
     );
 
     useEffect(() => {
@@ -139,6 +149,8 @@ function SharkMatchGraph() {
             },
             continentFilters,
             focusedNodeId,
+            contradictionsOnly,
+            showContradictionPath,
         };
         viewRef.current = params;
         if (cyRef.current) applyGraphView(cyRef.current, params);
@@ -149,7 +161,15 @@ function SharkMatchGraph() {
         showEdges,
         continentFilters,
         focusedNodeId,
+        contradictionsOnly,
+        showContradictionPath,
     ]);
+
+    // The path toggle is contextual to whichever contradiction node is
+    // currently focused; reset it so it doesn't silently carry over
+    useEffect(() => {
+        setShowContradictionPath(false);
+    }, [focusedNodeId]);
 
     // A continent only applies to GBIF sharks, so picking "All nodes" or
     // "Ningaloo only" clears any active continent selection (and vice versa:
@@ -193,6 +213,10 @@ function SharkMatchGraph() {
                                 <span className="legend-label">{name}</span>
                             </span>
                         ))}
+                    <span className="legend-dot legend-dot--contradiction" />
+                    <span className="legend-label">
+                        Contradiction (chain implies an impossible match)
+                    </span>
                 </div>
             </div>
 
@@ -249,6 +273,12 @@ function SharkMatchGraph() {
                     >
                         Show match lines
                     </button>
+                    <button
+                        className={`graph-filter-btn${contradictionsOnly ? " active" : ""}`}
+                        onClick={() => setContradictionsOnly((c) => !c)}
+                    >
+                        Contradictions only
+                    </button>
                 </div>
             </div>
 
@@ -281,14 +311,27 @@ function SharkMatchGraph() {
                                 cyRef.current = cy;
                                 if (lastCyInstance.current !== cy) {
                                     lastCyInstance.current = cy;
-                                    initCyListeners(cy, viewRef, setSelectedMatch, setFocusedNodeId);
+                                    initCyListeners(
+                                        cy,
+                                        viewRef,
+                                        setSelectedMatch,
+                                        setFocusedNodeId
+                                    );
                                 }
                             }}
                         />
                     )}
                 </div>
-                <GraphNodePanel match={selectedMatch} onClose={() => setSelectedMatch(null)} />
-                <GraphSharkImagesPanel match={selectedMatch} onClose={() => setSelectedMatch(null)} />
+                <GraphNodePanel
+                    match={selectedMatch}
+                    onClose={() => setSelectedMatch(null)}
+                    showContradictionPath={showContradictionPath}
+                    onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
+                />
+                <GraphSharkImagesPanel
+                    match={selectedMatch}
+                    onClose={() => setSelectedMatch(null)}
+                />
             </div>
         </div>
     );

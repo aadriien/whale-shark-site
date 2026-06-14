@@ -2,6 +2,7 @@ import type {
     Core,
     Css,
     ElementDefinition,
+    CollectionReturnValue,
     EdgeSingular,
     EventObject,
     NodeSingular,
@@ -11,6 +12,7 @@ import type {
 import type {
     GraphNode,
     GraphEdge,
+    ContradictionEntry,
     EdgeFilterState,
     GraphViewParams,
     SelectedMatch,
@@ -20,6 +22,10 @@ const POSITION_SCALE = 5000;
 const EDGE_OPACITY_MIN = 0.15;
 
 const DIM_OPACITY = 0.08;
+
+// Cytoscape's style engine can't resolve CSS custom properties (e.g. var(--error)),
+// so the contradiction color is hardcoded here to match themes.css's --error
+const CONTRADICTION_COLOR = "#f44336";
 
 const HIGHLIGHT_BORDER = {
     "border-width": 3,
@@ -31,6 +37,24 @@ const SAME_SHARK_BORDER = {
     "border-width": 2,
     "border-color": "#e2e8f0",
     "border-opacity": 1,
+} as const;
+
+// The specific node, elsewhere in this cluster, whose shark_id contradicts
+// the focused node's (solid, vs. dashed "somewhere in here" cluster border)
+const CONTRADICTION_TARGET_BORDER = {
+    "border-width": 4,
+    "border-color": CONTRADICTION_COLOR,
+    "border-style": "solid" as Css.LineStyle,
+    "border-opacity": 1,
+} as const;
+
+const CONTRADICTION_PATH_EDGE = {
+    width: 5,
+    "line-color": CONTRADICTION_COLOR,
+    "target-arrow-color": CONTRADICTION_COLOR,
+    "source-arrow-color": CONTRADICTION_COLOR,
+    opacity: 1,
+    "z-index": 999,
 } as const;
 
 const NINGALOO_COLOR = "#525252";
@@ -111,6 +135,15 @@ export const GRAPH_STYLESHEET: StylesheetStyle[] = [
         style: { width: 2.5, "source-arrow-shape": "triangle" },
     },
     {
+        selector: "node[?contradiction]",
+        style: {
+            "border-width": 3,
+            "border-color": CONTRADICTION_COLOR,
+            "border-style": "dashed" as Css.LineStyle,
+            "border-opacity": 1,
+        },
+    },
+    {
         selector: "node:active",
         style: { "overlay-opacity": 0 },
     },
@@ -138,25 +171,92 @@ export function normalizePositions(nodes: GraphNode[]): Map<string, { x: number;
     return posMap;
 }
 
+// For a focused contradiction node, finds the nearest node in the same
+// cluster whose shark_id is one of focused node's conflicting_shark_ids,
+// plus the chain of matches connecting the two (weighted by embedding
+// distance, so the chain's weakest link is also its longest edge)
+export function findContradictionPath(
+    cy: Core,
+    focusedNode: NodeSingular
+): { targetNode: NodeSingular; pathElements: CollectionReturnValue } | null {
+    if (!focusedNode.data("contradiction")) return null;
+
+    const clusterId = focusedNode.data("cluster_id") as number;
+    const conflictingSharkIds = (focusedNode.data("conflicting_shark_ids") as string[]) ?? [];
+    if (conflictingSharkIds.length === 0) return null;
+
+    const clusterNodes = cy.nodes(`[cluster_id = ${clusterId}]`);
+    const candidates = clusterNodes.filter((n) =>
+        conflictingSharkIds.includes(n.data("shark_id") as string)
+    );
+    if (candidates.empty()) return null;
+
+    const clusterEdges = cy
+        .edges("[edge_type = 'gbif_to_gbif']")
+        .filter((e) => e.source().data("cluster_id") === clusterId);
+
+    const dijkstra = clusterNodes.union(clusterEdges).dijkstra({
+        root: focusedNode,
+        weight: (edge) => edge.data("distance") as number,
+        directed: false,
+    });
+
+    let targetNode: NodeSingular | null = null;
+    let bestDist = Infinity;
+    candidates.forEach((n) => {
+        const d = dijkstra.distanceTo(n);
+        if (d < bestDist) {
+            bestDist = d;
+            targetNode = n;
+        }
+    });
+    if (!targetNode) return null;
+
+    return { targetNode, pathElements: dijkstra.pathTo(targetNode) };
+}
+
 export function buildElements(
     nodes: GraphNode[],
     edges: GraphEdge[],
     posMap: Map<string, { x: number; y: number }>,
-    sharkContinentMap: Map<string, string>
+    sharkContinentMap: Map<string, string>,
+    contradictions: ContradictionEntry[]
 ): ElementDefinition[] {
-    const nodeEls: ElementDefinition[] = nodes.map((n) => ({
-        data: {
-            id: n.id,
-            population: n.population,
-            shark_id: n.shark_id,
-            image_id: n.image_id,
-            continent:
-                n.population === "gbif"
-                    ? (sharkContinentMap.get(n.shark_id) ?? "Unknown")
-                    : undefined,
-        },
-        position: posMap.get(n.id) ?? { x: 0, y: 0 },
-    }));
+    // Per cluster_id, the set of whaleSharkIDs flagged as mutually exclusive
+    const clusterConflicts = new Map<number, [string, string][]>(
+        contradictions.map((c) => [c.cluster_id, c.conflicting_shark_ids])
+    );
+
+    const nodeEls: ElementDefinition[] = nodes.map((n) => {
+        // For a contradiction node, which other shark_id(s) in its cluster
+        // is it specifically flagged as conflicting with
+        const conflictingSharkIds = n.contradiction
+            ? [
+                  ...new Set(
+                      (clusterConflicts.get(n.cluster_id as number) ?? [])
+                          .filter((pair) => pair.includes(n.shark_id))
+                          .map((pair) => pair.find((id) => id !== n.shark_id) as string)
+                  ),
+              ]
+            : [];
+
+        return {
+            data: {
+                id: n.id,
+                population: n.population,
+                shark_id: n.shark_id,
+                image_id: n.image_id,
+                cluster_id: n.cluster_id,
+                contradiction: n.contradiction,
+                conflicting_shark_ids: conflictingSharkIds,
+                continent:
+                    n.population === "gbif"
+                        ? (sharkContinentMap.get(n.shark_id) ?? "Unknown")
+                        : undefined,
+            },
+            position: posMap.get(n.id) ?? { x: 0, y: 0 },
+        };
+    });
 
     const distances = edges.map((e) => e.distance);
     const dMin = Math.min(...distances);
@@ -194,7 +294,14 @@ function ambientEdgeSelector({ population, mutualOnly }: EdgeFilterState): strin
 // path to keep in sync (e.g. when defocusing back to the ambient filtered view)
 export function applyGraphView(
     cy: Core,
-    { nodeFilter, edgeFilter, continentFilters, focusedNodeId }: GraphViewParams
+    {
+        nodeFilter,
+        edgeFilter,
+        continentFilters,
+        focusedNodeId,
+        contradictionsOnly,
+        showContradictionPath,
+    }: GraphViewParams
 ) {
     cy.batch(() => {
         cy.elements().removeStyle("opacity");
@@ -216,6 +323,12 @@ export function applyGraphView(
                 "[population = 'gbif']" +
                 [...continentFilters].map((c) => `[continent != '${c}']`).join("");
             cy.nodes(hideSelector).style("display", "none");
+        }
+
+        // Isolate clusters flagged by the contradiction-detection pass
+        // (transitive chains of matches implying a geo/temporally impossible link)
+        if (contradictionsOnly) {
+            cy.nodes().not("[?contradiction]").style("display", "none");
         }
 
         const ambientEdges = cy.edges(ambientEdgeSelector(edgeFilter));
@@ -249,6 +362,20 @@ export function applyGraphView(
 
         focusedNode.style(HIGHLIGHT_BORDER);
         sameSharkNodes.style(SAME_SHARK_BORDER);
+
+        // Pinpoint the specific node elsewhere in this cluster that the focused
+        // node contradicts, and (optionally) the chain of matches between them
+        const contradictionPath = findContradictionPath(cy, focusedNode);
+        if (contradictionPath) {
+            const { targetNode, pathElements } = contradictionPath;
+            targetNode.style(CONTRADICTION_TARGET_BORDER);
+            targetNode.style("display", "element").style("opacity", 1);
+
+            if (showContradictionPath) {
+                pathElements.style("display", "element").style("opacity", 1);
+                pathElements.edges().style(CONTRADICTION_PATH_EDGE);
+            }
+        }
     });
 }
 
@@ -274,12 +401,28 @@ function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
     if (!bestEdge) return null;
 
     const targetNode = cy.getElementById((bestEdge as EdgeSingular).data("target") as string);
+
+    // Contradiction flags can land on any one of a shark's images, but the
+    // images / match-tally panels list every image for this shark_id.
+    // Pool conflicting_shark_ids across all of that shark's nodes (not just
+    // clicked one), or a contradiction on a sibling image goes unflagged
+    const sharkId = clickedNode.data("shark_id") as string;
+    const sameSharkNodes = cy.nodes(`[shark_id = "${sharkId}"]`);
+    const conflictingSharkIds = [
+        ...new Set(
+            sameSharkNodes
+                .map((n) => (n.data("conflicting_shark_ids") as string[] | undefined) ?? [])
+                .flat()
+        ),
+    ];
+
     return {
-        clickedSharkId: clickedNode.data("shark_id") as string,
+        clickedSharkId: sharkId,
         clickedImageId: parseInt(clickedNode.data("image_id"), 10),
         matchSharkId: targetNode.data("shark_id") as string,
         matchPopulation: targetNode.data("population") as "gbif" | "ningaloo",
         matchDistance: bestDist,
+        conflictingSharkIds,
     };
 }
 

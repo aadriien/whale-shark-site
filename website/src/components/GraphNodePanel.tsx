@@ -5,7 +5,12 @@ import { mediaSharks, visionOccurrences } from "../utils/DataUtils";
 
 import { GraphNodePanelProps } from "../types/graphs";
 
-function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {
+function GraphNodePanel({
+    match,
+    onClose,
+    showContradictionPath,
+    onToggleContradictionPath,
+}: GraphNodePanelProps) {
     if (!match) {
         return (
             <div className="graph-node-panel graph-node-panel--empty">
@@ -72,6 +77,28 @@ function GraphNodePanel({ match, onClose }: GraphNodePanelProps) {
                     </div>
                 )}
             </div>
+
+            {match.conflictingSharkIds.length > 0 && (
+                <>
+                    <div className="graph-panel-divider" />
+                    <div className="graph-panel-section graph-panel-contradiction">
+                        <span className="graph-panel-label">Contradiction</span>
+                        <p>
+                            A chain of matches links this image to whaleSharkID
+                            {match.conflictingSharkIds.length > 1 ? "s" : ""}{" "}
+                            {match.conflictingSharkIds.join(", ")}, but geo/temporal data says
+                            that's IMPOSSIBLE for the same individual. The node with a solid red
+                            border is the specific image that conflicts with this one.
+                        </p>
+                        <button
+                            className={`graph-filter-btn${showContradictionPath ? " active" : ""}`}
+                            onClick={onToggleContradictionPath}
+                        >
+                            {showContradictionPath ? "Hide" : "Show"} chain to conflicting image
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
 }
