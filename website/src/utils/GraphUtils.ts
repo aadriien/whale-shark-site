@@ -140,16 +140,16 @@ const CONTRADICTION_PATH_EDGE = {
 
 const NINGALOO_COLOR = "#525252";
 
-const GBIF_TO_NINGALOO_COLOR = "#3cb371";
-const GBIF_TO_GBIF_COLOR = "#e8a020";
+const GBIF_TO_NINGALOO_COLOR = "#f1d781";
+const GBIF_TO_GBIF_COLOR = "#8fb9b5";
 
 export const CONTINENT_COLORS: Record<string, string> = {
-    "North America": "#F59E0B",
-    Asia: "#06B6D4",
-    Oceania: "#8B5CF6",
-    Africa: "#10B981",
-    "South America": "#F43F5E",
-    Europe: "#6366F1",
+    "North America": "#f59f0b",
+    Asia: "#15a347",
+    Oceania: "#2266ed",
+    Africa: "#f86c96",
+    "South America": "#d30b0b",
+    Europe: "#6b387c",
     Unknown: "#9CA3AF",
 };
 
@@ -416,18 +416,20 @@ export function applyGraphView(
             cy.nodes().not("[?contradiction]").style("display", "none");
         }
 
-        const ambientEdges = cy.edges(ambientEdgeSelector(edgeFilter));
+        const ambientSelector = ambientEdgeSelector(edgeFilter);
+        const ambientEdges = cy.edges(ambientSelector);
 
-        // A "mutual matches only" overview is only meaningful for nodes that
-        // actually have one. Drop the rest so the clusters stand out
-        if (edgeFilter.mutualOnly) {
+        // A narrowed edge-population/mutual filter is only meaningful for
+        // nodes that actually have a matching edge. Drop the rest so e.g.
+        // "GBIF x Ningaloo" shows only the GBIF<->Ningaloo pairs (and their
+        // Ningaloo targets), not every GBIF cluster too
+        if (ambientSelector !== "*") {
             cy.nodes().not(ambientEdges.connectedNodes()).style("display", "none");
         }
 
-        // hideEdges hides ALL edges, not just the ambient subset.
-        // Otherwise e.g. non-mutual edges stay visible when "mutual only"
-        // narrows ambientEdges down to a subset of edge_type
-        cy.edges().style("display", edgeFilter.hideEdges ? "none" : "element");
+        // Only ambient edges are shown; hideEdges hides everything
+        cy.edges().style("display", "none");
+        if (!edgeFilter.hideEdges) ambientEdges.style("display", "element");
 
         const focusedNode = focusedNodeId ? cy.getElementById(focusedNodeId) : null;
         if (!focusedNode || focusedNode.empty()) return;
