@@ -116,9 +116,11 @@ const HIGHLIGHT_BORDER = {
 
 const SAME_SHARK_BORDER = {
     "border-width": 2,
-    "border-color": "#e2e8f0",
+    "border-color": "#2b2a2a",
     "border-opacity": 1,
 } as const;
+
+const HIGHLIGHT_Z_INDEX = 10;
 
 // The specific node, elsewhere in this cluster, whose shark_id contradicts
 // the focused node's (solid, vs. dashed "somewhere in here" cluster border)
@@ -387,7 +389,7 @@ export function applyGraphView(
 ) {
     cy.batch(() => {
         cy.elements().removeStyle("opacity");
-        cy.nodes().removeStyle("border-width border-color border-opacity border-style");
+        cy.nodes().removeStyle("border-width border-color border-opacity border-style z-index");
         cy.edges().removeStyle("line-color target-arrow-color source-arrow-color width z-index");
 
         cy.nodes().style("display", "element");
@@ -442,12 +444,16 @@ export function applyGraphView(
         const matchNeighborhood = focusedNode.closedNeighborhood();
         const allHighlighted = matchNeighborhood.nodes().union(sameSharkNodes);
 
-        allHighlighted.style("display", "element");
+        allHighlighted.style("display", "element").style("z-index", HIGHLIGHT_Z_INDEX);
         cy.nodes().not(allHighlighted).style("opacity", DIM_OPACITY);
 
         // Other visible-but-irrelevant ambient edges dim too, not just nodes
         ambientEdges.not(matchNeighborhood.edges()).style("opacity", DIM_OPACITY);
-        matchNeighborhood.edges().style("display", "element").style("opacity", 1);
+        matchNeighborhood
+            .edges()
+            .style("display", "element")
+            .style("opacity", 1)
+            .style("z-index", HIGHLIGHT_Z_INDEX);
 
         focusedNode.style(HIGHLIGHT_BORDER);
         sameSharkNodes.style(SAME_SHARK_BORDER);
@@ -458,10 +464,16 @@ export function applyGraphView(
         if (contradictionPath) {
             const { targetNode, pathElements } = contradictionPath;
             targetNode.style(CONTRADICTION_TARGET_BORDER);
-            targetNode.style("display", "element").style("opacity", 1);
+            targetNode
+                .style("display", "element")
+                .style("opacity", 1)
+                .style("z-index", HIGHLIGHT_Z_INDEX);
 
             if (showContradictionPath) {
-                pathElements.style("display", "element").style("opacity", 1);
+                pathElements
+                    .style("display", "element")
+                    .style("opacity", 1)
+                    .style("z-index", HIGHLIGHT_Z_INDEX);
                 pathElements.edges().style(CONTRADICTION_PATH_EDGE);
             }
         }
