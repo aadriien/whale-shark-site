@@ -99,4 +99,5 @@ export type GraphNodePanelProps = {
 export type GraphImagesPanelProps = {
     match: SelectedMatch | null;
     onClose: () => void;
+    onSelectImage: (imageId: number) => void;
 };

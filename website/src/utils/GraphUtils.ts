@@ -87,14 +87,19 @@ export function resolveFilters(userActive: Set<FilterKey>): ResolvedFilters {
                         active.add(targetKey);
                         changed = true;
                     }
+                    // Mutual reinforcement (target forced to the same "on" state
+                    // the user already chose) doesn't lock it, so it stays
+                    // toggleable. A forced-off target always conflicts with the
+                    // user's choice, so it's locked regardless.
+                    if (targetKey !== key && !userActive.has(targetKey)) locked.add(targetKey);
                 } else {
                     if (!forcedOff.has(targetKey)) {
                         forcedOff.add(targetKey);
                         changed = true;
                     }
                     if (active.delete(targetKey)) changed = true;
+                    if (targetKey !== key) locked.add(targetKey);
                 }
-                if (targetKey !== key && !userActive.has(targetKey)) locked.add(targetKey);
             }
         }
     }
@@ -534,7 +539,7 @@ export function applyGraphView(
     });
 }
 
-function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
+export function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
     const clickedNode = cy.getElementById(nodeId);
     const outgoing = cy.edges(`[source = "${nodeId}"]`);
 

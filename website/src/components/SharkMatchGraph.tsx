@@ -12,6 +12,7 @@ import {
     applyGraphView,
     initCyListeners,
     resolveFilters,
+    findBestMatch,
 } from "../utils/GraphUtils";
 import { mediaSharks, extractContinents } from "../utils/DataUtils";
 
@@ -269,6 +270,20 @@ function SharkMatchGraph() {
         });
     }, []);
 
+    // Selecting an image from the side panel acts like clicking its node
+    const handleSelectImage = useCallback((imageId: number) => {
+        const cy = cyRef.current;
+        if (!cy) return;
+
+        const nodeId = `gbif_${imageId}`;
+        const node = cy.getElementById(nodeId);
+        if (node.empty()) return;
+
+        setFocusedNodeId(nodeId);
+        const match = findBestMatch(cy, nodeId);
+        if (match) setSelectedMatch(match);
+    }, []);
+
     return (
         <div className="shark-match-graph-section">
             <div className="graph-header">
@@ -420,6 +435,7 @@ function SharkMatchGraph() {
                 <GraphSharkImagesPanel
                     match={selectedMatch}
                     onClose={() => setSelectedMatch(null)}
+                    onSelectImage={handleSelectImage}
                 />
             </div>
         </div>

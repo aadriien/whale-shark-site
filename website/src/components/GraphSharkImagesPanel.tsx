@@ -9,7 +9,7 @@ const imageIdToUrl = new Map<number, string>(
         .map((occ) => [occ.image_id as number, occ.identifier_url as string])
 );
 
-function GraphSharkImagesPanel({ match, onClose }: GraphImagesPanelProps) {
+function GraphSharkImagesPanel({ match, onClose, onSelectImage }: GraphImagesPanelProps) {
     if (!match) {
         return (
             <div className="graph-node-panel graph-node-panel--empty">
@@ -61,6 +61,7 @@ function GraphSharkImagesPanel({ match, onClose }: GraphImagesPanelProps) {
                             <div
                                 key={occ.image_id}
                                 className={`graph-panel-image-row${occ.image_id === clickedImageId ? " graph-panel-image-row--selected" : ""}${contradictionImageIds.includes(occ.image_id as number) ? " graph-panel-image-row--contradiction" : ""}`}
+                                onClick={() => onSelectImage(occ.image_id as number)}
                             >
                                 {occ.identifier_url ? (
                                     <img
