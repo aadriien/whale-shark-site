@@ -159,12 +159,21 @@ function SharkMatchGraph() {
 
     const nodes = useMemo(() => graphData?.nodes ?? [], [graphData]);
     const edges = useMemo(() => graphData?.edges ?? [], [graphData]);
-    const contradictions = useMemo(() => graphData?.contradictions ?? [], [graphData]);
+    const contradictionsMutual = useMemo(() => graphData?.contradictions_mutual ?? [], [graphData]);
+    const contradictionsAll = useMemo(() => graphData?.contradictions_all ?? [], [graphData]);
 
     const posMap = useMemo(() => normalizePositions(nodes), [nodes]);
     const elements = useMemo(
-        () => buildElements(nodes, edges, posMap, sharkContinentMap, contradictions),
-        [nodes, edges, posMap, sharkContinentMap, contradictions]
+        () =>
+            buildElements(
+                nodes,
+                edges,
+                posMap,
+                sharkContinentMap,
+                contradictionsMutual,
+                contradictionsAll
+            ),
+        [nodes, edges, posMap, sharkContinentMap, contradictionsMutual, contradictionsAll]
     );
 
     useEffect(() => {

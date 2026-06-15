@@ -44,10 +44,13 @@ export const FILTER_CONSTRAINTS: Record<FilterKey, Partial<Record<FilterKey, boo
         no_contradictions: false,
         contradictions_only: false,
     },
-    mutual_only: { gbif_only: true },
+    // Contradictions are structurally impossible under mutual-only clustering
+    // (see assign_clusters in build_graph.py), so the contradiction-related
+    // toggles are degenerate there and get locked off.
+    mutual_only: { gbif_only: true, contradictions_only: false, no_contradictions: false },
     continents: { gbif_only: true },
     no_contradictions: { gbif_only: true, contradictions_only: false },
-    contradictions_only: { gbif_only: true, mutual_only: true, no_contradictions: false },
+    contradictions_only: { gbif_only: true, mutual_only: false, no_contradictions: false },
     hide_edges: {},
 };
 
@@ -298,30 +301,53 @@ export function findContradictionPath(
     return { targetNode, pathElements: dijkstra.pathTo(targetNode) };
 }
 
+// Per cluster_id, the set of whaleSharkIDs flagged as mutually exclusive
+function buildClusterConflicts(contradictions: ContradictionEntry[]): Map<number, string[][]> {
+    return new Map(contradictions.map((c) => [c.cluster_id, c.conflicting_shark_ids]));
+}
+
+// For a contradiction node, which other shark_id(s) in its cluster it's
+// specifically flagged as conflicting with
+function conflictingSharkIdsFor(
+    clusterConflicts: Map<number, string[][]>,
+    clusterId: number | null,
+    contradiction: boolean,
+    sharkId: string
+): string[] {
+    if (!contradiction) return [];
+    return [
+        ...new Set(
+            (clusterConflicts.get(clusterId as number) ?? [])
+                .filter((pair) => pair.includes(sharkId))
+                .map((pair) => pair.find((id) => id !== sharkId) as string)
+        ),
+    ];
+}
+
 export function buildElements(
     nodes: GraphNode[],
     edges: GraphEdge[],
     posMap: Map<string, { x: number; y: number }>,
     sharkContinentMap: Map<string, string>,
-    contradictions: ContradictionEntry[]
+    contradictionsMutual: ContradictionEntry[],
+    contradictionsAll: ContradictionEntry[]
 ): ElementDefinition[] {
-    // Per cluster_id, the set of whaleSharkIDs flagged as mutually exclusive
-    const clusterConflicts = new Map<number, [string, string][]>(
-        contradictions.map((c) => [c.cluster_id, c.conflicting_shark_ids])
-    );
+    const clusterConflictsMutual = buildClusterConflicts(contradictionsMutual);
+    const clusterConflictsAll = buildClusterConflicts(contradictionsAll);
 
     const nodeEls: ElementDefinition[] = nodes.map((n) => {
-        // For a contradiction node, which other shark_id(s) in its cluster
-        // is it specifically flagged as conflicting with
-        const conflictingSharkIds = n.contradiction
-            ? [
-                  ...new Set(
-                      (clusterConflicts.get(n.cluster_id as number) ?? [])
-                          .filter((pair) => pair.includes(n.shark_id))
-                          .map((pair) => pair.find((id) => id !== n.shark_id) as string)
-                  ),
-              ]
-            : [];
+        const conflictingMutual = conflictingSharkIdsFor(
+            clusterConflictsMutual,
+            n.cluster_id_mutual,
+            n.contradiction_mutual,
+            n.shark_id
+        );
+        const conflictingAll = conflictingSharkIdsFor(
+            clusterConflictsAll,
+            n.cluster_id_all,
+            n.contradiction_all,
+            n.shark_id
+        );
 
         return {
             data: {
@@ -329,9 +355,18 @@ export function buildElements(
                 population: n.population,
                 shark_id: n.shark_id,
                 image_id: n.image_id,
-                cluster_id: n.cluster_id,
-                contradiction: n.contradiction,
-                conflicting_shark_ids: conflictingSharkIds,
+                cluster_id_mutual: n.cluster_id_mutual,
+                cluster_id_all: n.cluster_id_all,
+                contradiction_mutual: n.contradiction_mutual,
+                contradiction_all: n.contradiction_all,
+                conflicting_shark_ids_mutual: conflictingMutual,
+                conflicting_shark_ids_all: conflictingAll,
+                // "Active" fields, kept in sync with the mutual-only toggle
+                // by applyGraphView. Initialized to the "all matches" view,
+                // matching the default mutualOnly = false state.
+                cluster_id: n.cluster_id_all,
+                contradiction: n.contradiction_all,
+                conflicting_shark_ids: conflictingAll,
                 continent:
                     n.population === "gbif"
                         ? (sharkContinentMap.get(n.shark_id) ?? "Unknown")
@@ -388,6 +423,25 @@ export function applyGraphView(
     }: GraphViewParams
 ) {
     cy.batch(() => {
+        // Sync displayed graph contents with cluster / contradiction choice
+        const useMutual = edgeFilter.mutualOnly;
+        cy.nodes().forEach((n) => {
+            n.data(
+                "cluster_id",
+                useMutual ? n.data("cluster_id_mutual") : n.data("cluster_id_all")
+            );
+            n.data(
+                "contradiction",
+                useMutual ? n.data("contradiction_mutual") : n.data("contradiction_all")
+            );
+            n.data(
+                "conflicting_shark_ids",
+                useMutual
+                    ? n.data("conflicting_shark_ids_mutual")
+                    : n.data("conflicting_shark_ids_all")
+            );
+        });
+
         cy.elements().removeStyle("opacity");
         cy.nodes().removeStyle("border-width border-color border-opacity border-style z-index");
         cy.edges().removeStyle("line-color target-arrow-color source-arrow-color width z-index");

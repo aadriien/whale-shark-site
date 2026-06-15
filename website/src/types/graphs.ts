@@ -53,8 +53,10 @@ export type GraphNode = {
     image_id: number;
     x: number;
     y: number;
-    cluster_id: number | null;
-    contradiction: boolean;
+    cluster_id_mutual: number | null;
+    cluster_id_all: number | null;
+    contradiction_mutual: boolean;
+    contradiction_all: boolean;
 };
 
 export type GraphEdge = {
@@ -67,13 +69,14 @@ export type GraphEdge = {
 
 export type ContradictionEntry = {
     cluster_id: number;
-    conflicting_shark_ids: [string, string][];
+    conflicting_shark_ids: string[][];
 };
 
 export type GraphData = {
     nodes: GraphNode[];
     edges: GraphEdge[];
-    contradictions: ContradictionEntry[];
+    contradictions_mutual: ContradictionEntry[];
+    contradictions_all: ContradictionEntry[];
 };
 
 export type SelectedMatch = {

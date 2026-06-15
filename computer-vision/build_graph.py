@@ -134,20 +134,18 @@ def build_graph(
     return G
 
 
-def assign_clusters(G: nx.DiGraph) -> dict[str, int]:
-    # Group GBIF nodes by transitive chains of MUTUAL gbif_to_gbif matches
-    # only (edge direction doesn't matter for identity grouping, so weakly
-    # connected components collapse e.g. A->B->C into one cluster even if
-    # A and C have no direct edge between them).
-    # gbif_to_ningaloo edges are excluded here: they're unfiltered
-    # (k=1, different ID namespace), and a handful of "least-bad" Ningaloo
-    # hub matches would otherwise collapse most of the graph into one
-    # mega-cluster. Ningaloo is side context, not part of this analysis.
-    # One-directional top-1 matches are excluded too: a single non-reciprocal
-    # "least-bad" match is enough to bridge otherwise-unrelated nodes, which
-    # is how nearly the whole GBIF population can end up in a single cluster.
-    # Requiring mutual agreement (A's top-1 is B AND B's top-1 is A) keeps
-    # only the much stronger reciprocal signal for the image/node.
+def assign_clusters(G: nx.DiGraph, mutual_only: bool) -> dict[str, int]:
+    # Group GBIF nodes into weakly connected components of gbif_to_gbif
+    # matches (transitive chains, e.g. A->B->C become one cluster).
+    # gbif_to_ningaloo edges are always excluded: unfiltered (k=1, different
+    # ID namespace) Ningaloo hub matches would collapse the graph into one
+    # mega-cluster.
+    
+    # mutual_only restricts to reciprocal top-1 matches (A's top-1 is B AND
+    # B's top-1 is A). Since each node has exactly one outgoing gbif_to_gbif
+    # edge, mutual components are always singletons or pairs, never longer
+    # chains, so contradictions (see find_contradictions) are impossible by
+    # construction in this mode, not an empirical finding.
     gbif_only = nx.DiGraph()
     gbif_only.add_nodes_from(
         n for n, attrs in G.nodes(data=True) if attrs.get("population") == "gbif"
@@ -155,7 +153,8 @@ def assign_clusters(G: nx.DiGraph) -> dict[str, int]:
     gbif_only.add_edges_from(
         (u, v)
         for u, v, attrs in G.edges(data=True)
-        if attrs.get("edge_type") == "gbif_to_gbif" and attrs.get("mutual")
+        if attrs.get("edge_type") == "gbif_to_gbif"
+        and (not mutual_only or attrs.get("mutual"))
     )
 
     clusters: dict[str, int] = {}
@@ -194,10 +193,24 @@ def find_contradictions(
     return contradictions
 
 
+def contradiction_entries(
+    contradictions: dict[int, list[tuple[str, str]]]
+) -> list[dict]:
+    return [
+        {
+            "cluster_id": cluster_id,
+            "conflicting_shark_ids": [list(pair) for pair in pairs],
+        }
+        for cluster_id, pairs in contradictions.items()
+    ]
+
+
 def export_graph(
     G: nx.DiGraph,
-    clusters: dict[str, int],
-    contradictions: dict[int, list[tuple[str, str]]],
+    clusters_mutual: dict[str, int],
+    clusters_all: dict[str, int],
+    contradictions_mutual: dict[int, list[tuple[str, str]]],
+    contradictions_all: dict[int, list[tuple[str, str]]],
 ) -> None:
     connected = {n for edge in G.edges() for n in edge}
 
@@ -207,13 +220,16 @@ def export_graph(
             continue
         # Ningaloo nodes aren't part of gbif_to_gbif clustering (side context,
         # not under analysis), so they have no cluster_id
-        cluster_id = clusters.get(nid)
+        cluster_id_mutual = clusters_mutual.get(nid)
+        cluster_id_all = clusters_all.get(nid)
         nodes.append(
             {
                 "id": nid,
                 **attrs,
-                "cluster_id": cluster_id,
-                "contradiction": cluster_id in contradictions,
+                "cluster_id_mutual": cluster_id_mutual,
+                "cluster_id_all": cluster_id_all,
+                "contradiction_mutual": cluster_id_mutual in contradictions_mutual,
+                "contradiction_all": cluster_id_all in contradictions_all,
             }
         )
 
@@ -222,13 +238,8 @@ def export_graph(
         "edges": [
             {"source": u, "target": v, **attrs} for u, v, attrs in G.edges(data=True)
         ],
-        "contradictions": [
-            {
-                "cluster_id": cluster_id,
-                "conflicting_shark_ids": [list(pair) for pair in pairs],
-            }
-            for cluster_id, pairs in contradictions.items()
-        ],
+        "contradictions_mutual": contradiction_entries(contradictions_mutual),
+        "contradictions_all": contradiction_entries(contradictions_all),
     }
 
     with open(GRAPH_DATA_FILE, "w", encoding="utf-8") as f:
@@ -242,8 +253,13 @@ def export_graph(
         f" {G.number_of_edges()} edges"
     )
     print(
-        f"  {len(set(clusters.values()))} clusters,"
-        f" {len(contradictions)} with contradictions"
+        f"  mutual only: {len(set(clusters_mutual.values()))} clusters,"
+        f" {len(contradictions_mutual)} with contradictions"
+        " (guaranteed: max cluster size 2)"
+    )
+    print(
+        f"  all matches: {len(set(clusters_all.values()))} clusters,"
+        f" {len(contradictions_all)} with contradictions"
     )
 
 
@@ -258,7 +274,11 @@ if __name__ == "__main__":
     gbif_clean_df = read_csv(GBIF_CLEAN_CSV)
     exclusion_map = build_exclusion_map(gbif_clean_df)
 
-    clusters = assign_clusters(G)
-    contradictions = find_contradictions(G, clusters, exclusion_map)
+    clusters_mutual = assign_clusters(G, mutual_only=True)
+    clusters_all = assign_clusters(G, mutual_only=False)
+    contradictions_mutual = find_contradictions(G, clusters_mutual, exclusion_map)
+    contradictions_all = find_contradictions(G, clusters_all, exclusion_map)
 
-    export_graph(G, clusters, contradictions)
+    export_graph(
+        G, clusters_mutual, clusters_all, contradictions_mutual, contradictions_all
+    )
