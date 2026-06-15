@@ -571,6 +571,16 @@ function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
         ),
     ];
 
+    // Which of this shark's images carry the contradiction themselves
+    // (as opposed to merely sharing a cluster with one)
+    const contradictionImageIds = sameSharkNodes
+        .filter(
+            (n) =>
+                n.data("contradiction") &&
+                ((n.data("conflicting_shark_ids") as string[] | undefined) ?? []).length > 0
+        )
+        .map((n) => n.data("image_id") as number);
+
     return {
         clickedSharkId: sharkId,
         clickedImageId: parseInt(clickedNode.data("image_id"), 10),
@@ -578,6 +588,7 @@ function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
         matchPopulation: targetNode.data("population") as "gbif" | "ningaloo",
         matchDistance: bestDist,
         conflictingSharkIds,
+        contradictionImageIds,
     };
 }
 

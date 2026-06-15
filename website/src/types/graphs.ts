@@ -86,6 +86,7 @@ export type SelectedMatch = {
     matchPopulation: "gbif" | "ningaloo";
     matchDistance: number;
     conflictingSharkIds: string[];
+    contradictionImageIds: number[];
 };
 
 export type GraphNodePanelProps = {

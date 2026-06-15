@@ -83,19 +83,33 @@ function GraphNodePanel({
                     <div className="graph-panel-divider" />
                     <div className="graph-panel-section graph-panel-contradiction">
                         <span className="graph-panel-label">Contradiction</span>
-                        <p>
-                            A chain of matches links this image to whaleSharkID
-                            {match.conflictingSharkIds.length > 1 ? "s" : ""}{" "}
-                            {match.conflictingSharkIds.join(", ")}, but geo/temporal data says
-                            that's IMPOSSIBLE for the same individual. The node with a solid red
-                            border is the specific image that conflicts with this one.
-                        </p>
-                        <button
-                            className={`graph-filter-btn${showContradictionPath ? " active" : ""}`}
-                            onClick={onToggleContradictionPath}
-                        >
-                            {showContradictionPath ? "Hide" : "Show"} chain to conflicting image
-                        </button>
+                        {match.contradictionImageIds.includes(match.clickedImageId) ? (
+                            <>
+                                <p>
+                                    A chain of matches links this image to whaleSharkID
+                                    {match.conflictingSharkIds.length > 1 ? "s" : ""}{" "}
+                                    {match.conflictingSharkIds.join(", ")}, but geo/temporal data
+                                    says that's IMPOSSIBLE for the same individual. The node with a
+                                    solid red border is the specific image that conflicts with this
+                                    one.
+                                </p>
+                                <button
+                                    className={`graph-filter-btn${showContradictionPath ? " active" : ""}`}
+                                    onClick={onToggleContradictionPath}
+                                >
+                                    {showContradictionPath ? "Hide" : "Show"} chain to conflicting
+                                    whale shark image
+                                </button>
+                            </>
+                        ) : (
+                            <p>
+                                Another image of this shark has a chain of matches linking it to
+                                whaleSharkID{match.conflictingSharkIds.length > 1 ? "s" : ""}{" "}
+                                {match.conflictingSharkIds.join(", ")}, which geo/temporal data
+                                says is IMPOSSIBLE for the same individual. It's outlined in red in
+                                the images panel.
+                            </p>
+                        )}
                     </div>
                 </>
             )}

@@ -22,7 +22,7 @@ function GraphSharkImagesPanel({ match, onClose }: GraphImagesPanelProps) {
         );
     }
 
-    const { clickedSharkId, clickedImageId } = match;
+    const { clickedSharkId, clickedImageId, contradictionImageIds } = match;
 
     const sharkOccurrences = visionOccurrences.filter((occ) => occ.id === clickedSharkId);
 
@@ -46,9 +46,7 @@ function GraphSharkImagesPanel({ match, onClose }: GraphImagesPanelProps) {
             </button>
 
             <div className="graph-panel-section">
-                <span className="graph-panel-label">
-                    Other Images · Shark {clickedSharkId}
-                </span>
+                <span className="graph-panel-label">Other Images · Shark {clickedSharkId}</span>
 
                 {sharkOccurrences.length === 0 ? (
                     <p className="graph-panel-missing">No occurrences found for this shark</p>
@@ -62,7 +60,7 @@ function GraphSharkImagesPanel({ match, onClose }: GraphImagesPanelProps) {
                         return (
                             <div
                                 key={occ.image_id}
-                                className={`graph-panel-image-row${occ.image_id === clickedImageId ? " graph-panel-image-row--selected" : ""}`}
+                                className={`graph-panel-image-row${occ.image_id === clickedImageId ? " graph-panel-image-row--selected" : ""}${contradictionImageIds.includes(occ.image_id as number) ? " graph-panel-image-row--contradiction" : ""}`}
                             >
                                 {occ.identifier_url ? (
                                     <img

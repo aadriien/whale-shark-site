@@ -244,7 +244,11 @@
 
 .graph-panel-image-row--selected {
     outline: 1px solid var(--border-color, #ddd);
-    background: var(--bg-primary, #fff);
+    background: var(--primary-green, #fff);
+}
+
+.graph-panel-image-row--contradiction {
+    border: 2px solid var(--error);
 }
 
 .graph-panel-thumbnail {
