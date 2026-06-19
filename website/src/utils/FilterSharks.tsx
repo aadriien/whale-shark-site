@@ -57,20 +57,29 @@ export function filterSharks(sharks: WhaleSharkDatasetNormalized, filters: Shark
         }
 
         // ---------- TIME RANGE ----------
-        if (filters.yearRange) {
-            const yearMin = parseInt(shark.oldest);
-            const yearMax = parseInt(shark.newest);
-            const filterMin = parseInt(filters.yearRange[0]);
-            const filterMax = parseInt(filters.yearRange[1]);
-
-            if (isNaN(yearMin) || isNaN(yearMax) || yearMax < filterMin || yearMin > filterMax) {
-                return false;
-            }
-        }
+        const minFilterYear = filters.yearRange ? parseInt(filters.yearRange[0]) : null;
+        const maxFilterYear = filters.yearRange ? parseInt(filters.yearRange[1]) : null;
 
         if (filters.month) {
-            const match = shark.months?.some((c) => c.includes(filters.month));
-            if (!match) return false;
+            const years = shark.monthsToYears?.[filters.month];
+            if (!years) return false;
+
+            // Month x year range should sync if both are provided as filters
+            if (minFilterYear != null && maxFilterYear != null) {
+                if (!years.some((y) => y >= minFilterYear && y <= maxFilterYear)) return false;
+            }
+        } else if (minFilterYear != null && maxFilterYear != null) {
+            const yearMin = parseInt(shark.oldest);
+            const yearMax = parseInt(shark.newest);
+
+            if (
+                isNaN(yearMin) ||
+                isNaN(yearMax) ||
+                yearMax < minFilterYear ||
+                yearMin > maxFilterYear
+            ) {
+                return false;
+            }
         }
 
         // ---------- METADATA ----------

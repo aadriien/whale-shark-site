@@ -161,7 +161,7 @@ export type WhaleSharkEntryNormalized = {
     publishing?: string;
     regions?: string;
 
-    months?: string[];
+    monthsToYears?: Record<string, number[]>;
 
     remarks?: string;
     image?: string;

@@ -223,8 +223,9 @@ export function parseImageField(imageField: string = "") {
     }) as ImagesWithMetadata;
 }
 
-function extractMonths(obj: WhaleSharkEntryNormalized) {
-    let sharkMonths: string[] = [];
+function extractMonthsToYears(obj: WhaleSharkEntryNormalized): Record<string, number[]> {
+    const monthsToYears: Record<string, number[]> = {};
+
     const sharkCoordData: WhaleSharkCoordinates | undefined = coordinatesData.find(
         (shark) => shark.whaleSharkID === obj.id
     );
@@ -236,14 +237,20 @@ function extractMonths(obj: WhaleSharkEntryNormalized) {
                 const date = new Date(coord.eventDate);
                 if (!isNaN(date.getTime())) {
                     const month = FULLMONTHS[date.getMonth()];
-                    sharkMonths.push(month);
+                    const year = date.getFullYear();
+
+                    if (!monthsToYears[month]) {
+                        monthsToYears[month] = [];
+                    }
+                    if (!monthsToYears[month].includes(year)) {
+                        monthsToYears[month].push(year);
+                    }
                 }
             }
         });
     }
 
-    // Remove duplicate months before returning
-    return [...new Set(sharkMonths)];
+    return monthsToYears;
 }
 
 export const reshapeYearData = (rawData: GBIFDataset) => {
@@ -276,7 +283,7 @@ function formatKeyVals(
     }
 
     // Add new field for all months where shark had records
-    renamed.months = extractMonths(renamed);
+    renamed.monthsToYears = extractMonthsToYears(renamed);
 
     return renamed;
 }
@@ -296,12 +303,13 @@ function formatVisionKeyVals(obj: WhaleSharkEntryVision, keyMap: Record<string, 
     if (obj.eventDate) {
         const date = new Date(obj.eventDate);
         if (!isNaN(date.getTime())) {
-            renamed.months = [FULLMONTHS[date.getMonth()]];
+            const month = FULLMONTHS[date.getMonth()];
+            renamed.monthsToYears = { [month]: [date.getFullYear()] };
         } else {
-            renamed.months = [];
+            renamed.monthsToYears = {};
         }
     } else {
-        renamed.months = [];
+        renamed.monthsToYears = {};
     }
 
     // Coerce identificationID to string (JSON stores it as a number)
