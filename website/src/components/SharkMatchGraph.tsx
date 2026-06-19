@@ -99,6 +99,7 @@ function SharkMatchGraph() {
     const noContradictions = active.has("no_contradictions");
     const contradictionsOnly = active.has("contradictions_only");
     const hideEdges = active.has("hide_edges");
+    const strongOnly = active.has("strong_only");
 
     // gbif_only/gbif_gbif are only ever forced ON by other filters, and
     // ningaloo_only/gbif_ningaloo are only ever forced OFF. So a forced-on
@@ -119,6 +120,7 @@ function SharkMatchGraph() {
     const noContradictionsLocked = locked.has("no_contradictions");
     const contradictionsOnlyLocked = locked.has("contradictions_only");
     const hideEdgesLocked = locked.has("hide_edges");
+    const strongLocked = locked.has("strong_only");
 
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -131,6 +133,7 @@ function SharkMatchGraph() {
             population: edgePopulation,
             mutualOnly,
             hideEdges,
+            strongOnly,
         },
         continentFilters,
         focusedNodeId,
@@ -195,6 +198,7 @@ function SharkMatchGraph() {
                 population: edgePopulation,
                 mutualOnly,
                 hideEdges,
+                strongOnly,
             },
             continentFilters,
             focusedNodeId,
@@ -209,6 +213,7 @@ function SharkMatchGraph() {
         edgePopulation,
         mutualOnly,
         hideEdges,
+        strongOnly,
         continentFilters,
         focusedNodeId,
         noContradictions,
@@ -382,6 +387,13 @@ function SharkMatchGraph() {
                         onClick={() => toggleFilter("contradictions_only")}
                     >
                         Contradictions only
+                    </button>
+                    <button
+                        className={`graph-filter-btn${strongOnly ? " active" : ""}`}
+                        disabled={strongLocked}
+                        onClick={() => toggleFilter("strong_only")}
+                    >
+                        Strong matches only
                     </button>
                 </div>
             </div>

@@ -52,6 +52,7 @@ export const FILTER_CONSTRAINTS: Record<FilterKey, Partial<Record<FilterKey, boo
     no_contradictions: { gbif_only: true, contradictions_only: false },
     contradictions_only: { gbif_only: true, mutual_only: false, no_contradictions: false },
     hide_edges: {},
+    strong_only: { ningaloo_only: false },
 };
 
 export type ResolvedFilters = {
@@ -402,13 +403,14 @@ export function buildElements(
 }
 
 // "*" matches every edge. Note that an empty-string selector would match nothing
-function ambientEdgeSelector({ population, mutualOnly }: EdgeFilterState): string {
+function ambientEdgeSelector({ population, mutualOnly, strongOnly }: EdgeFilterState): string {
     const fragments: string[] = [];
 
     if (population === "same") fragments.push("[edge_type = 'gbif_to_gbif']");
     else if (population === "cross") fragments.push("[edge_type = 'gbif_to_ningaloo']");
 
     if (mutualOnly) fragments.push("[?mutual]");
+    if (strongOnly) fragments.push("[distance < 1]");
     return fragments.length > 0 ? fragments.join("") : "*";
 }
 
