@@ -95,6 +95,7 @@ process_annotations:
 train_model:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.handle_yolo_model
 
+
 # Generate embeddings (+ BBOXes) for new images of unknown sharks
 get_new_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.get_new_image_embeddings
@@ -113,17 +114,17 @@ match_plausible_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.match_plausible_embeddings
 
 # Run full CV matching pipeline sequentially (embeddings → matches → validation)
-run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings match_plausible_shark_embeddings
-
-
-# Generate CV examples with YOLO bounding boxes & segmentation masks
-generate_vision_examples:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.generate_vision_examples
+run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings match_plausible_shark_embeddings build_shark_graph
 
 
 # Build match graph: UMAP projection + networkx graph construction
 build_shark_graph:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.build_graph
+
+
+# Generate CV examples with YOLO bounding boxes & segmentation masks
+generate_vision_examples:
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.generate_vision_examples
 
 
 
