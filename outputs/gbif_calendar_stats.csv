@@ -1,13 +1,13 @@
 year,Total Occurrences,Unique Sharks (with ID),Top 3 Publishing Countries,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,HUMAN_OBSERVATION,MACHINE_OBSERVATION,Sex: Female,Sex: Male,Sex: Unknown,Life Stage: Adult,Life Stage: Immature,Life Stage: Juvenile,Life Stage: Mature,Life Stage: Subadult,Life Stage: Unknown
-2026,78,66,United States > Israel > Australia,25,16,15,21,1,0,0,0,0,0,0,0,73,5,2,5,71,9,0,2,0,0,67
-2025,183,168,United States > Australia > Mexico,11,10,9,14,10,16,22,22,24,17,12,16,182,1,3,4,176,19,0,2,0,0,162
-2024,536,204,Australia > United States > Mexico,120,91,50,52,64,30,42,29,16,13,10,19,212,320,6,1,529,9,0,10,0,0,517
+2026,91,79,United States > Australia > Israel,25,16,15,21,14,0,0,0,0,0,0,0,86,5,2,6,83,9,0,2,0,0,80
+2025,186,171,United States > Australia > Mexico,11,10,9,14,10,17,22,24,24,17,12,16,185,1,3,4,179,20,0,2,0,0,164
+2024,537,205,Australia > United States > Mexico,120,91,50,52,64,30,42,29,16,13,11,19,213,320,6,1,530,9,0,10,0,0,518
 2023,364,164,Australia > United States > Mexico,7,6,17,18,8,18,24,27,20,11,59,149,171,193,1,2,361,14,0,14,0,0,336
-2022,112,95,United States > Mexico > Australia,4,8,8,12,3,9,9,9,12,11,17,10,112,0,3,0,109,6,0,5,0,0,101
+2022,113,96,United States > Mexico > Australia,4,8,8,12,3,9,9,10,12,11,17,10,113,0,3,0,110,6,0,6,0,0,101
 2021,81,57,United States > Australia > Mexico,5,4,6,14,6,4,9,8,2,9,4,10,75,0,5,2,74,11,0,8,0,0,62
-2020,79,69,United States > Mexico > Australia,11,13,14,0,1,3,8,8,5,11,4,1,77,0,4,1,74,6,0,4,0,0,69
-2019,709,125,Australia > United States > Mexico,134,128,87,202,50,25,16,25,15,12,8,7,141,568,9,4,696,15,0,10,0,0,684
-2018,1284,107,Australia > United States > Netherlands,254,135,145,142,78,40,81,131,77,148,40,13,146,1136,48,36,1200,25,0,11,8,44,1196
+2020,81,71,United States > Mexico > Australia,12,13,14,0,1,3,8,8,5,11,5,1,79,0,4,1,76,6,0,4,0,0,71
+2019,711,127,Australia > United States > Mexico,134,128,87,202,50,25,17,25,15,12,9,7,143,568,9,4,698,15,0,10,0,0,686
+2018,1285,108,Australia > United States > Netherlands,254,135,146,142,78,40,81,131,77,148,40,13,147,1136,48,36,1201,25,0,11,8,44,1197
 2017,1923,123,Australia > Ecuador > United States,143,14,56,47,80,80,411,289,337,217,182,67,155,1764,65,159,1699,10,6,8,12,8,1879
 2016,1990,140,Ecuador > Australia > United States,200,99,36,27,36,95,123,143,414,347,343,127,136,1852,67,60,1863,16,2,10,8,2,1952
 2015,3094,103,Australia > Ecuador > United States,26,4,6,8,3,24,383,667,635,750,259,329,114,2975,10,63,3021,7,2,22,6,0,3057
@@ -20,7 +20,7 @@ year,Total Occurrences,Unique Sharks (with ID),Top 3 Publishing Countries,Jan,Fe
 2008,27,11,United States > Australia > Netherlands,2,0,3,4,5,2,4,2,2,1,0,2,27,0,0,4,23,2,2,2,2,0,19
 2007,22,14,United States > France > Benin,0,1,2,2,2,0,3,2,3,2,0,5,20,0,0,0,22,4,0,0,0,0,18
 2006,9,6,United States > France > Colombia,0,0,0,3,1,0,3,1,0,0,1,0,8,0,2,0,7,0,0,2,0,0,7
-2005,15,6,United States > France > Australia,1,0,0,0,2,3,2,2,2,2,0,1,13,0,1,1,13,1,0,0,1,0,13
+2005,15,5,United States > France > Australia,1,0,0,0,2,3,2,2,2,2,0,1,13,0,1,1,13,1,0,0,1,0,13
 2004,6,1,France > Japan > United States,0,0,0,0,1,0,1,0,0,1,3,0,6,0,0,0,6,0,0,0,0,0,6
 2003,4,2,United States > Australia > Belgium,0,0,1,0,0,0,0,0,2,0,0,1,3,0,0,0,4,0,0,0,0,0,4
 2002,11,2,Venezuela > United States > Benin,1,0,0,4,0,1,0,4,0,0,1,0,9,0,0,1,10,0,0,0,0,0,11
