@@ -11,7 +11,7 @@ export type EdgeFilterState = {
     population: EdgePopulationFilter;
     mutualOnly: boolean;
     hideEdges: boolean;
-    strongOnly: boolean;
+    distanceRange: [number, number];
 };
 
 export type GraphViewParams = {
@@ -36,8 +36,7 @@ export type FilterKey =
     | "continents"
     | "no_contradictions"
     | "contradictions_only"
-    | "hide_edges"
-    | "strong_only";
+    | "hide_edges";
 
 export type ContinentFilter =
     | "all"

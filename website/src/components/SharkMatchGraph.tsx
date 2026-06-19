@@ -7,6 +7,8 @@ import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
 import {
     GRAPH_STYLESHEET,
     CONTINENT_COLORS,
+    DISTANCE_RANGE_DEFAULT,
+    isDistanceFiltering,
     normalizePositions,
     buildElements,
     applyGraphView,
@@ -63,6 +65,8 @@ function SharkMatchGraph() {
     const [activeFilters, setActiveFilters] = useState<Set<FilterKey>>(new Set());
     const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
 
+    const [distanceRange, setDistanceRange] = useState<[number, number]>(DISTANCE_RANGE_DEFAULT);
+
     const [showContradictionPath, setShowContradictionPath] = useState(false);
 
     const [graphData, setGraphData] = useState<GraphData | null>(null);
@@ -77,8 +81,9 @@ function SharkMatchGraph() {
     const userActiveFilters = useMemo(() => {
         const next = new Set(activeFilters);
         if (continentFilters.size > 0) next.add("continents");
+        if (isDistanceFiltering(distanceRange)) next.delete("ningaloo_only");
         return next;
-    }, [activeFilters, continentFilters]);
+    }, [activeFilters, continentFilters, distanceRange]);
 
     const { active, locked } = useMemo(
         () => resolveFilters(userActiveFilters),
@@ -99,16 +104,16 @@ function SharkMatchGraph() {
     const noContradictions = active.has("no_contradictions");
     const contradictionsOnly = active.has("contradictions_only");
     const hideEdges = active.has("hide_edges");
-    const strongOnly = active.has("strong_only");
 
     // gbif_only/gbif_gbif are only ever forced ON by other filters, and
     // ningaloo_only/gbif_ningaloo are only ever forced OFF. So a forced-on
     // "true" key locks both itself and "all/none" (that option becomes
     // unreachable), while a forced-off "false" key only locks itself.
+    const distanceActive = isDistanceFiltering(distanceRange);
     const nodeFilterLocked: Record<NodeFilter, boolean> = {
         all: locked.has("gbif_only"),
         gbif: locked.has("gbif_only"),
-        ningaloo: locked.has("ningaloo_only"),
+        ningaloo: locked.has("ningaloo_only") || distanceActive,
     };
     const continentsLocked = locked.has("continents");
     const edgePopulationLocked: Record<EdgePopulationFilter, boolean> = {
@@ -120,7 +125,6 @@ function SharkMatchGraph() {
     const noContradictionsLocked = locked.has("no_contradictions");
     const contradictionsOnlyLocked = locked.has("contradictions_only");
     const hideEdgesLocked = locked.has("hide_edges");
-    const strongLocked = locked.has("strong_only");
 
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -133,7 +137,7 @@ function SharkMatchGraph() {
             population: edgePopulation,
             mutualOnly,
             hideEdges,
-            strongOnly,
+            distanceRange,
         },
         continentFilters,
         focusedNodeId,
@@ -198,7 +202,7 @@ function SharkMatchGraph() {
                 population: edgePopulation,
                 mutualOnly,
                 hideEdges,
-                strongOnly,
+                distanceRange,
             },
             continentFilters,
             focusedNodeId,
@@ -213,7 +217,7 @@ function SharkMatchGraph() {
         edgePopulation,
         mutualOnly,
         hideEdges,
-        strongOnly,
+        distanceRange,
         continentFilters,
         focusedNodeId,
         noContradictions,
@@ -388,13 +392,33 @@ function SharkMatchGraph() {
                     >
                         Contradictions only
                     </button>
-                    <button
-                        className={`graph-filter-btn${strongOnly ? " active" : ""}`}
-                        disabled={strongLocked}
-                        onClick={() => toggleFilter("strong_only")}
-                    >
-                        Strong matches only
-                    </button>
+                    <label className="graph-distance-range">
+                        Distance:
+                        <input
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max={distanceRange[1]}
+                            value={distanceRange[0]}
+                            onChange={(e) => {
+                                const val = parseFloat(e.target.value);
+                                if (!isNaN(val)) setDistanceRange([val, distanceRange[1]]);
+                            }}
+                            className="graph-range-input"
+                        />
+                        <span>to</span>
+                        <input
+                            type="number"
+                            step="0.1"
+                            min={distanceRange[0]}
+                            value={distanceRange[1]}
+                            onChange={(e) => {
+                                const val = parseFloat(e.target.value);
+                                if (!isNaN(val)) setDistanceRange([distanceRange[0], val]);
+                            }}
+                            className="graph-range-input"
+                        />
+                    </label>
                 </div>
             </div>
 

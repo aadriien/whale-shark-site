@@ -52,7 +52,6 @@ export const FILTER_CONSTRAINTS: Record<FilterKey, Partial<Record<FilterKey, boo
     no_contradictions: { gbif_only: true, contradictions_only: false },
     contradictions_only: { gbif_only: true, mutual_only: false, no_contradictions: false },
     hide_edges: {},
-    strong_only: { ningaloo_only: false },
 };
 
 export type ResolvedFilters = {
@@ -403,14 +402,24 @@ export function buildElements(
 }
 
 // "*" matches every edge. Note that an empty-string selector would match nothing
-function ambientEdgeSelector({ population, mutualOnly, strongOnly }: EdgeFilterState): string {
+export const DISTANCE_RANGE_DEFAULT: [number, number] = [0, 5.0];
+
+export function isDistanceFiltering(range: [number, number]): boolean {
+    return range[0] > DISTANCE_RANGE_DEFAULT[0] || range[1] < DISTANCE_RANGE_DEFAULT[1];
+}
+
+function ambientEdgeSelector({ population, mutualOnly, distanceRange }: EdgeFilterState): string {
     const fragments: string[] = [];
 
     if (population === "same") fragments.push("[edge_type = 'gbif_to_gbif']");
     else if (population === "cross") fragments.push("[edge_type = 'gbif_to_ningaloo']");
 
     if (mutualOnly) fragments.push("[?mutual]");
-    if (strongOnly) fragments.push("[distance < 1]");
+
+    const [min, max] = distanceRange;
+    if (min > DISTANCE_RANGE_DEFAULT[0]) fragments.push(`[distance >= ${min}]`);
+    if (max < DISTANCE_RANGE_DEFAULT[1]) fragments.push(`[distance <= ${max}]`);
+
     return fragments.length > 0 ? fragments.join("") : "*";
 }
 
