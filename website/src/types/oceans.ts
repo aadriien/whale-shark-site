@@ -7,7 +7,7 @@ export type OceanMapHandle = {
 };
 
 export type OceanDatasetConfig = {
-    csvPath: (year: number, month: string) => string;
+    dataPath: (year: number, month: string) => string;
     latField: string;
     lngField: string;
     dataFields: Record<string, string>;
