@@ -1,11 +1,9 @@
-import L from "leaflet";
+import maplibregl from "maplibre-gl";
 
 /* Oceans types */
 
 export type OceanMapHandle = {
-    dataLayer: L.LayerGroup | null;
-    sharkLayer: L.LayerGroup | null;
-    renderer: L.Canvas | null;
+    map: maplibregl.Map | null;
 };
 
 export type OceanDatasetConfig = {

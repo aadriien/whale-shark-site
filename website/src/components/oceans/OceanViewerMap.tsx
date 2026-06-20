@@ -1,80 +1,77 @@
 import { useEffect, useRef } from "react";
 import { forwardRef, useImperativeHandle } from "react";
 
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { Protocol } from "pmtiles";
+import { noLabels } from "protomaps-themes-base";
 
 import { OceanMapHandle } from "../../types/oceans";
 
-// Weird TypeScript ForwardRef rules when ordering for type inference
-// Always props first ({}), then ref second (OceanMapHandle)
-const OceanViewerMap = forwardRef<OceanMapHandle, object>((_, ref) => {
+// TODO: replace PMTiles basemap URL (see https://maps.protomaps.com/builds/)
+const PMTILES_URL = "https://build.protomaps.com/20260620.pmtiles";
+
+let protocolRegistered = false;
+function ensureProtocol() {
+    if (protocolRegistered) return;
+    const protocol = new Protocol();
+    maplibregl.addProtocol("pmtiles", protocol.tile);
+    protocolRegistered = true;
+}
+
+type OceanViewerMapProps = { onLoad?: () => void };
+
+const OceanViewerMap = forwardRef<OceanMapHandle, OceanViewerMapProps>(({ onLoad }, ref) => {
     const mapElRef = useRef<HTMLDivElement>(null);
-    const mapRef = useRef<L.Map | null>(null);
-    const dataLayerRef = useRef<L.LayerGroup | null>(null);
-    const sharkLayerRef = useRef<L.LayerGroup | null>(null);
-    const rendererRef = useRef<L.Canvas | null>(null);
+    const mapRef = useRef<maplibregl.Map | null>(null);
+    const onLoadRef = useRef(onLoad);
+    onLoadRef.current = onLoad;
 
     useImperativeHandle(ref, () => ({
-        get dataLayer() {
-            return dataLayerRef.current;
-        },
-        get sharkLayer() {
-            return sharkLayerRef.current;
-        },
-        get renderer() {
-            return rendererRef.current;
+        get map() {
+            return mapRef.current;
         },
     }));
 
     useEffect(() => {
         if (!mapElRef.current || mapRef.current) return;
 
-        const renderer = L.canvas({ padding: 0.5 });
-        rendererRef.current = renderer;
+        // Confirm MapLibre PMTiles protocol is in place
+        ensureProtocol();
 
-        // maxBounds clamps panning to the data coverage area (lat ±60°)
-        const dataBounds = L.latLngBounds([-60, -180], [60, 180]);
-
-        const map = L.map(mapElRef.current, {
+        const map = new maplibregl.Map({
+            container: mapElRef.current,
+            style: {
+                version: 8,
+                glyphs: "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf",
+                sources: {
+                    protomaps: {
+                        type: "vector",
+                        url: `pmtiles://${PMTILES_URL}`,
+                        attribution:
+                            '<a href="https://protomaps.com">Protomaps</a> · <a href="https://openstreetmap.org">OpenStreetMap</a>',
+                    },
+                },
+                layers: noLabels("protomaps", "dark"),
+            },
             center: [0, 0],
-            zoom: 2,
-            minZoom: 2,
+            zoom: 1.5,
+            minZoom: 1.5,
             maxZoom: 5,
-            zoomSnap: 0.5,
             attributionControl: false,
-            maxBounds: dataBounds,
-            maxBoundsViscosity: 1.0,
         });
 
-        // Dark base, no labels
-        L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png", {
-            maxZoom: 10,
-        }).addTo(map);
-
         mapRef.current = map;
-        dataLayerRef.current = L.layerGroup().addTo(map);
-        sharkLayerRef.current = L.layerGroup().addTo(map);
 
-        // Recompute minZoom and re-fit whenever the container resizes.
-        // At zoom z the world is 256 * 2^z px wide, so the minimum zoom
-        // that fills the container without blank edges is log2(width / 256).
-        // Padding is subtracted so minZoom stays consistent with border gap.
-        const MAP_PADDING = 72;
-        const fitToContainer = () => {
-            if (!mapElRef.current) return;
-            const minZoom = Math.log2((mapElRef.current.clientWidth - MAP_PADDING * 2) / 256);
-            map.setMinZoom(minZoom);
-            map.fitBounds(dataBounds, { padding: [MAP_PADDING, MAP_PADDING] });
-        };
+        map.on("load", () => {
+            map.resize();
+            onLoadRef.current?.();
+        });
 
-        const observer = new ResizeObserver(fitToContainer);
+        const observer = new ResizeObserver(() => {
+            map.resize();
+        });
         observer.observe(mapElRef.current);
-
-        setTimeout(() => {
-            map.invalidateSize();
-            fitToContainer();
-        }, 0);
 
         return () => {
             observer.disconnect();

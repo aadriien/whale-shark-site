@@ -220,15 +220,10 @@
     width: 230px;
 }
 
-.shark-card-popup .leaflet-popup-content-wrapper {
+.shark-card-popup .maplibregl-popup-content {
     padding: 0;
     border-radius: 8px;
     overflow: hidden;
-}
-
-.shark-card-popup .leaflet-popup-content {
-    margin: 0 !important;
-    width: auto !important;
 }
 
 .shark-card-popup .condensed-shark-card {
