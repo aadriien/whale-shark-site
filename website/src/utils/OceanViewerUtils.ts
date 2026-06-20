@@ -11,9 +11,10 @@ const SHARK_MARKER_PATH =
 
 export const SHARK_MARKER_SIZE: [number, number] = [40, 18];
 
-export function sharkMarkerHtml(color: string): string {
-    const [w, h] = SHARK_MARKER_SIZE;
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 46" width="${w}" height="${h}"><path fill="${color}" stroke="black" stroke-width="4" fill-rule="evenodd" d="${SHARK_MARKER_PATH}"/></svg>`;
+export function sharkMarkerHtml(color: string, w?: number, h?: number): string {
+    const width = w ?? SHARK_MARKER_SIZE[0];
+    const height = h ?? SHARK_MARKER_SIZE[1];
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 46" width="${width}" height="${height}"><path fill="${color}" stroke="black" stroke-width="4" fill-rule="evenodd" d="${SHARK_MARKER_PATH}"/></svg>`;
 }
 
 // Chlorophyll scale (logarithmic, mg/m³)

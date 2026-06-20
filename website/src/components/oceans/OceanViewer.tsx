@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot, Root } from "react-dom/client";
 
 import maplibregl from "maplibre-gl";
@@ -11,12 +11,16 @@ import OceanViewerTimeline from "./OceanViewerTimeline";
 import {
     ALL_MONTHS,
     OCEAN_DATASETS,
-    SHARK_MAP,
     SHARK_OBS,
-    POINT_TO_SHARK_ID,
     processOceanDataset,
-    sharkMarkerHtml,
 } from "../../utils/OceanViewerUtils";
+
+import {
+    clusterSharkObservations,
+    createSharkMarkerEl,
+    getClusterRadius,
+    getSharkIDForPoint,
+} from "../../utils/OceanViewerSharkMarkers";
 
 import type { FeatureCollection } from "geojson";
 
@@ -58,16 +62,8 @@ function buildGridGeoJSON(
     };
 }
 
-function createSharkMarkerEl(color: string): HTMLDivElement {
-    const el = document.createElement("div");
-    el.innerHTML = sharkMarkerHtml(color);
-    el.style.cursor = "pointer";
-    return el;
-}
-
 function createSharkPopup(pt: PlottedCoordinatePoint): maplibregl.Popup {
-    const sharkID = POINT_TO_SHARK_ID.get(pt.id);
-    const found = sharkID ? SHARK_MAP.get(sharkID) : undefined;
+    const { sharkID, shark } = getSharkIDForPoint(pt);
 
     const container = document.createElement("div");
     container.className = "shark-card-popup-container";
@@ -79,9 +75,9 @@ function createSharkPopup(pt: PlottedCoordinatePoint): maplibregl.Popup {
 
     let root: Root | null = null;
 
-    if (found) {
+    if (shark) {
         root = createRoot(container);
-        root.render(<CondensedSharkCard shark={found} />);
+        root.render(<CondensedSharkCard shark={shark} />);
     } else {
         container.innerHTML = `<b>Whale Shark</b><br>ID: ${sharkID ?? pt.id}<br>Date: ${pt.date}`;
     }
@@ -97,17 +93,32 @@ export default function OceanViewer() {
 
     const [datasetToProcess, setDatasetToProcess] =
         useState<keyof typeof OCEAN_DATASETS>("chlorophyll");
+
     const [sliderIndex, setSliderIndex] = useState(ALL_MONTHS.length - 1);
     const [yearDataset, setYearGridData] = useState<Record<string, OceanGridPoint[]>>({});
     const [loadedYear, setLoadedYear] = useState<number | null>(null);
+    
     const [isLoadingDataset, setIsLoadingDataset] = useState(false);
     const [mapReady, setMapReady] = useState(false);
+    const [zoom, setZoom] = useState(1.5);
 
     // Reset cache when metric changes so load effect re-fetches new dataset
     useEffect(() => {
         setLoadedYear(null);
         setYearGridData({});
     }, [datasetToProcess]);
+
+    const handleZoom = useCallback(() => {
+        const map = mapHandleRef.current?.map;
+        if (map) setZoom(map.getZoom());
+    }, []);
+
+    useEffect(() => {
+        const map = mapHandleRef.current?.map;
+        if (!map || !mapReady) return;
+        map.on("zoomend", handleZoom);
+        return () => { map.off("zoomend", handleZoom); };
+    }, [mapReady, handleZoom]);
 
     // Lazy-load per-year dataset CSV when selected year or dataset changes
     useEffect(() => {
@@ -136,13 +147,14 @@ export default function OceanViewer() {
             });
     }, [sliderIndex, loadedYear, datasetToProcess]);
 
-    // Re-render map layers when month or chlorophyll data changes
+    // Update ocean grid data layer to reflect latest selections
     useEffect(() => {
         const map = mapHandleRef.current?.map;
         if (!map || !mapReady) return;
 
         const month = ALL_MONTHS[sliderIndex];
         const datasetConfig = OCEAN_DATASETS[datasetToProcess];
+        
         const primaryDataField = Object.keys(datasetConfig.dataFields)[0];
         const scaleDomainMin = datasetConfig.colorScale.domain()[0];
 
@@ -165,29 +177,43 @@ export default function OceanViewer() {
                 paint: {
                     "fill-color": ["get", "color"],
                     "fill-opacity": 0.75,
+                    "fill-antialias": false,
                 },
             });
         }
+    }, [sliderIndex, yearDataset, datasetToProcess, mapReady]);
 
-        // Clear previous shark markers
+    // Render shark markers (re-clusters on zoom change)
+    useEffect(() => {
+        const map = mapHandleRef.current?.map;
+        if (!map || !mapReady) return;
+
         for (const m of sharkMarkersRef.current) m.remove();
         sharkMarkersRef.current = [];
 
-        for (const pt of SHARK_OBS[month] ?? []) {
-            const el = createSharkMarkerEl(datasetConfig.sharkColor);
-            const popup = createSharkPopup(pt);
+        const month = ALL_MONTHS[sliderIndex];
+        const rawPoints = SHARK_OBS[month] ?? [];
+        if (rawPoints.length === 0) return;
+
+        const datasetConfig = OCEAN_DATASETS[datasetToProcess];
+        const radiusDeg = getClusterRadius(zoom);
+        const clustered = clusterSharkObservations(rawPoints, radiusDeg);
+
+        for (const obs of clustered) {
+            const el = createSharkMarkerEl(datasetConfig.sharkColor, obs.count, zoom);
+            const popup = createSharkPopup(obs.pt);
 
             const marker = new maplibregl.Marker({
                 element: el,
                 anchor: "center",
             })
-                .setLngLat([pt.lng, pt.lat])
+                .setLngLat([obs.lng, obs.lat])
                 .setPopup(popup)
                 .addTo(map);
 
             sharkMarkersRef.current.push(marker);
         }
-    }, [sliderIndex, yearDataset, datasetToProcess, mapReady]);
+    }, [sliderIndex, datasetToProcess, mapReady, zoom]);
 
     return (
         <div className="ocean-viewer">
