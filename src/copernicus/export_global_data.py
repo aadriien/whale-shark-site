@@ -2,7 +2,7 @@
 ##  `export_global_data.py`                                                  ##
 ##                                                                           ##
 ##  Purpose: Exports global Copernicus data CSVs for the OceanViewer         ##
-##  Output:  website/public/data/{metric}/global_{YYYY}_{metric}.csv         ##
+##  Out:  website/public/data/{metric}/{YYYY}/global_{YYYY-MM}_{metric}.csv  ##
 ###############################################################################
 
 import os
@@ -27,14 +27,20 @@ METRIC_CONFIGS = {
         "variables": ["CHL"],
         "subdir": "chlorophyll",
         "rename": {"CHL": "mean_CHL"},
+        "value_col": "mean_CHL",
+        "value_precision": 3,
     },
     "temperature": {
         "fetch_fn": get_sea_surface_temperature_data,
         "variables": ["analysed_sst"],
         "subdir": "temperature",
         "rename": {"analysed_sst": "mean_analysed_sst"},
+        "value_col": "mean_analysed_sst",
+        "value_precision": 2,
     },
 }
+
+COORD_PRECISION = 2
 
 
 def export_global_data(
@@ -46,14 +52,17 @@ def export_global_data(
         config = METRIC_CONFIGS[metric]
         output_dir = os.path.join(WEB_DATA_DIR, config["subdir"])
         variables = config["variables"]
+        value_col = config["value_col"]
+        value_precision = config["value_precision"]
 
         print(f"Exporting global {metric} {start_year}-{end_year} to {output_dir}/\n")
 
         for year in range(start_year, end_year + 1):
-            output_path = os.path.join(output_dir, f"global_{year}_{metric}.csv")
+            year_dir = os.path.join(output_dir, str(year))
 
-            if os.path.exists(output_path):
-                print(f"  {year}: already exists, skipping")
+            # Check if this year is already fully exported (12 monthly files)
+            if os.path.isdir(year_dir) and len(os.listdir(year_dir)) == 12:
+                print(f"  {year}: already exists (12 months), skipping")
                 continue
 
             print(f"  {year}: fetching from Copernicus Marine...")
@@ -105,13 +114,34 @@ def export_global_data(
                 df = df[["time", "latitude", "longitude"] + variables].dropna(
                     subset=variables
                 )
-                df["time"] = pd.to_datetime(df["time"], errors="coerce").dt.strftime(
-                    "%Y-%m-%d"
-                )
+                df["time"] = pd.to_datetime(df["time"], errors="coerce")
                 df = df.rename(columns=config["rename"])
 
-                export_to_csv(output_path, df)
-                print(f"  {year}: exported {len(df):,} rows")
+                # Truncate float precision
+                df["latitude"] = df["latitude"].round(COORD_PRECISION)
+                df["longitude"] = df["longitude"].round(COORD_PRECISION)
+                df[value_col] = df[value_col].round(value_precision)
+                df = df.dropna(subset=[value_col])
+
+                os.makedirs(year_dir, exist_ok=True)
+                total_rows = 0
+
+                for month_num in range(1, 13):
+                    month_df = df[df["time"].dt.month == month_num]
+                    if month_df.empty:
+                        continue
+
+                    month_df = month_df.copy()
+                    month_df["time"] = month_df["time"].dt.strftime("%Y-%m-%d")
+
+                    month_str = f"{month_num:02d}"
+                    out_path = os.path.join(
+                        year_dir, f"global_{year}-{month_str}_{metric}.csv"
+                    )
+                    export_to_csv(out_path, month_df)
+                    total_rows += len(month_df)
+
+                print(f"  {year}: exported {total_rows:,} rows across 12 months")
 
             except Exception as e:
                 print(f"  {year}: failed — {e}")
