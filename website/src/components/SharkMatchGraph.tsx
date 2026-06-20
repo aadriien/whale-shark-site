@@ -5,8 +5,8 @@ import type { Core } from "cytoscape";
 import GraphNodePanel from "./GraphNodePanel";
 import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
 import {
-    GRAPH_STYLESHEET,
-    CONTINENT_COLORS,
+    getGraphColors,
+    buildGraphStylesheet,
     DISTANCE_RANGE_DEFAULT,
     isDistanceFiltering,
     normalizePositions,
@@ -57,9 +57,26 @@ const CONTINENT_LABEL: Record<string, string> = {
     Europe: "Europe",
 };
 
-const NINGALOO_COLOR = "#525252";
-
 function SharkMatchGraph() {
+    // Detect current theme so Cytoscape (which can't read CSS vars) gets
+    // the right color set, & re-renders when user toggles the theme
+    const [isDark, setIsDark] = useState(
+        () => document.documentElement.getAttribute("data-theme") === "dark"
+    );
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            setIsDark(document.documentElement.getAttribute("data-theme") === "dark");
+        });
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+        });
+        return () => observer.disconnect();
+    }, []);
+
+    const graphColors = useMemo(() => getGraphColors(isDark), [isDark]);
+    const graphStylesheet = useMemo(() => buildGraphStylesheet(graphColors), [graphColors]);
+
     // The 9 filter dimensions start with nothing active (show all).
     // "continents" is derived from continentFilters being non-empty.
     const [activeFilters, setActiveFilters] = useState<Set<FilterKey>>(new Set());
@@ -144,6 +161,7 @@ function SharkMatchGraph() {
         noContradictions,
         contradictionsOnly,
         showContradictionPath,
+        colors: graphColors,
     });
 
     useEffect(() => {
@@ -209,6 +227,7 @@ function SharkMatchGraph() {
             noContradictions,
             contradictionsOnly,
             showContradictionPath,
+            colors: graphColors,
         };
         viewRef.current = params;
         if (cyRef.current) applyGraphView(cyRef.current, params);
@@ -223,6 +242,7 @@ function SharkMatchGraph() {
         noContradictions,
         contradictionsOnly,
         showContradictionPath,
+        graphColors,
     ]);
 
     // The path toggle is contextual to whichever contradiction node is
@@ -304,9 +324,9 @@ function SharkMatchGraph() {
                     highlight its nearest embedding match and see details.
                 </p>
                 <div className="graph-legend">
-                    <span className="legend-square" style={{ background: NINGALOO_COLOR }} />
+                    <span className="legend-square" style={{ background: graphColors.ningaloo }} />
                     <span className="legend-label">Ningaloo (reference)</span>
-                    {(Object.entries(CONTINENT_COLORS) as [string, string][])
+                    {(Object.entries(graphColors.continents) as [string, string][])
                         .filter(([name]) => name !== "Unknown")
                         .map(([name, color]) => (
                             <span key={name} style={{ display: "contents" }}>
@@ -423,13 +443,19 @@ function SharkMatchGraph() {
             </div>
 
             <div className="graph-canvas-row">
+                <GraphNodePanel
+                    match={selectedMatch}
+                    onClose={() => setSelectedMatch(null)}
+                    showContradictionPath={showContradictionPath}
+                    onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
+                />
                 <div ref={containerRef} className="cytoscape-canvas">
                     {!graphData ? (
                         <div className="graph-loading">Loading graph…</div>
                     ) : (
                         <CytoscapeComponent
                             elements={elements}
-                            stylesheet={GRAPH_STYLESHEET}
+                            stylesheet={graphStylesheet}
                             layout={{ name: "preset" }}
                             style={{
                                 width: "100%",
@@ -462,12 +488,6 @@ function SharkMatchGraph() {
                         />
                     )}
                 </div>
-                <GraphNodePanel
-                    match={selectedMatch}
-                    onClose={() => setSelectedMatch(null)}
-                    showContradictionPath={showContradictionPath}
-                    onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
-                />
                 <GraphSharkImagesPanel
                     match={selectedMatch}
                     onClose={() => setSelectedMatch(null)}

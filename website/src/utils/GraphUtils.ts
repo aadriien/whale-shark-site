@@ -15,6 +15,7 @@ import type {
     ContradictionEntry,
     EdgeFilterState,
     GraphViewParams,
+    GraphThemeColors,
     SelectedMatch,
     FilterKey,
 } from "../types/graphs";
@@ -109,136 +110,139 @@ export function resolveFilters(userActive: Set<FilterKey>): ResolvedFilters {
 
 const POSITION_SCALE = 5000;
 const EDGE_OPACITY_MIN = 0.15;
-
-const DIM_OPACITY = 0.08;
-
-// Cytoscape's style engine can't resolve CSS custom properties (e.g. var(--error)),
-// so the contradiction color is hardcoded here to match themes.css's --error
-const CONTRADICTION_COLOR = "#f44336";
-
-const HIGHLIGHT_BORDER = {
-    "border-width": 3,
-    "border-color": "#ffd700",
-    "border-opacity": 1,
-} as const;
-
-const SAME_SHARK_BORDER = {
-    "border-width": 2,
-    "border-color": "#2b2a2a",
-    "border-opacity": 1,
-} as const;
-
 const HIGHLIGHT_Z_INDEX = 10;
 
-// The specific node, elsewhere in this cluster, whose shark_id contradicts
-// the focused node's (solid, vs. dashed "somewhere in here" cluster border)
-const CONTRADICTION_TARGET_BORDER = {
-    "border-width": 4,
-    "border-color": CONTRADICTION_COLOR,
-    "border-style": "solid" as Css.LineStyle,
-    "border-opacity": 1,
-} as const;
-
-const CONTRADICTION_PATH_EDGE = {
-    width: 5,
-    "line-color": CONTRADICTION_COLOR,
-    "target-arrow-color": CONTRADICTION_COLOR,
-    "source-arrow-color": CONTRADICTION_COLOR,
-    opacity: 1,
-    "z-index": 999,
-} as const;
-
-const NINGALOO_COLOR = "#525252";
-
-const GBIF_TO_NINGALOO_COLOR = "#f1d781";
-const GBIF_TO_GBIF_COLOR = "#8fb9b5";
-
-export const CONTINENT_COLORS: Record<string, string> = {
-    "North America": "#f59f0b",
-    Asia: "#15a347",
-    Oceania: "#2266ed",
-    Africa: "#f86c96",
-    "South America": "#d30b0b",
-    Europe: "#6b387c",
-    Unknown: "#9CA3AF",
+// Cytoscape's style engine can't resolve CSS custom properties (e.g. var(--error)),
+// so graph colors are defined per-theme here to match themes.css
+const LIGHT_COLORS: GraphThemeColors = {
+    contradiction: "#f44336",
+    highlightBorder: "#ffd700",
+    sameSharkBorder: "#2b2a2a",
+    ningaloo: "#525252",
+    gbifToNingaloo: "#f1d781",
+    gbifToGbif: "#8fb9b5",
+    nodeBorder: "#000",
+    nodeBorderOpacity: 0.25,
+    ningalooBorder: "#888",
+    ningalooBorderOpacity: 0.5,
+    dimOpacity: 0.08,
+    continents: {
+        "North America": "#f59f0b",
+        Asia: "#15a347",
+        Oceania: "#2266ed",
+        Africa: "#f86c96",
+        "South America": "#d30b0b",
+        Europe: "#6b387c",
+        Unknown: "#9CA3AF",
+    },
 };
 
-export const GRAPH_STYLESHEET: StylesheetStyle[] = [
-    {
-        selector: "node",
-        style: {
-            width: 12,
-            height: 12,
-            "border-width": 1,
-            "border-color": "#000",
-            "border-opacity": 0.25,
-            label: "",
-            shape: "ellipse" as Css.NodeShape,
-            "background-color": CONTINENT_COLORS["Unknown"],
+const DARK_COLORS: GraphThemeColors = {
+    contradiction: "#ef5350",
+    highlightBorder: "#ffd700",
+    sameSharkBorder: "#c0c0c0",
+    ningaloo: "#a0a0a0",
+    gbifToNingaloo: "#f5e0a0",
+    gbifToGbif: "#a8d4cf",
+    nodeBorder: "#999",
+    nodeBorderOpacity: 0.4,
+    ningalooBorder: "#bbb",
+    ningalooBorderOpacity: 0.6,
+    dimOpacity: 0.12,
+    continents: {
+        "North America": "#f5b740",
+        Asia: "#22c95e",
+        Oceania: "#4488ff",
+        Africa: "#ff8aac",
+        "South America": "#f03030",
+        Europe: "#9560ab",
+        Unknown: "#b0b8c4",
+    },
+};
+
+export function getGraphColors(isDark: boolean): GraphThemeColors {
+    return isDark ? DARK_COLORS : LIGHT_COLORS;
+}
+
+// Builds the Cytoscape stylesheet from theme-aware colors
+export function buildGraphStylesheet(colors: GraphThemeColors): StylesheetStyle[] {
+    return [
+        {
+            selector: "node",
+            style: {
+                width: 12,
+                height: 12,
+                "border-width": 1,
+                "border-color": colors.nodeBorder,
+                "border-opacity": colors.nodeBorderOpacity,
+                label: "",
+                shape: "ellipse" as Css.NodeShape,
+                "background-color": colors.continents["Unknown"],
+            },
         },
-    },
-    {
-        selector: "node[population = 'ningaloo']",
-        style: {
-            shape: "rectangle" as Css.NodeShape,
-            "background-color": NINGALOO_COLOR,
-            "border-color": "#888",
-            "border-opacity": 0.5,
+        {
+            selector: "node[population = 'ningaloo']",
+            style: {
+                shape: "rectangle" as Css.NodeShape,
+                "background-color": colors.ningaloo,
+                "border-color": colors.ningalooBorder,
+                "border-opacity": colors.ningalooBorderOpacity,
+            },
         },
-    },
-    // Continent color rules for GBIF nodes
-    ...Object.entries(CONTINENT_COLORS).map(
-        ([continent, color]) =>
-            ({
-                selector: `node[population = 'gbif'][continent = '${continent}']`,
-                style: { "background-color": color },
-            }) as StylesheetStyle
-    ),
-    {
-        selector: "edge",
-        style: {
-            display: "none" as Css.PropertyValue<EdgeSingular, "none" | "element">,
-            width: 1,
-            opacity: "data(opacity)" as unknown as number,
-            "curve-style": "straight",
-            "target-arrow-shape": "triangle",
-            "arrow-scale": 0.8,
+        // Continent color rules for GBIF nodes
+        ...Object.entries(colors.continents).map(
+            ([continent, color]) =>
+                ({
+                    selector: `node[population = 'gbif'][continent = '${continent}']`,
+                    style: { "background-color": color },
+                }) as StylesheetStyle
+        ),
+        {
+            selector: "edge",
+            style: {
+                display: "none" as Css.PropertyValue<EdgeSingular, "none" | "element">,
+                width: 1,
+                opacity: "data(opacity)" as unknown as number,
+                "curve-style": "straight",
+                "target-arrow-shape": "triangle",
+                "arrow-scale": 0.8,
+            },
         },
-    },
-    {
-        selector: "edge[edge_type = 'gbif_to_ningaloo']",
-        style: {
-            "line-color": GBIF_TO_NINGALOO_COLOR,
-            "target-arrow-color": GBIF_TO_NINGALOO_COLOR,
-            "source-arrow-color": GBIF_TO_NINGALOO_COLOR,
+        {
+            selector: "edge[edge_type = 'gbif_to_ningaloo']",
+            style: {
+                "line-color": colors.gbifToNingaloo,
+                "target-arrow-color": colors.gbifToNingaloo,
+                "source-arrow-color": colors.gbifToNingaloo,
+            },
         },
-    },
-    {
-        selector: "edge[edge_type = 'gbif_to_gbif']",
-        style: {
-            "line-color": GBIF_TO_GBIF_COLOR,
-            "target-arrow-color": GBIF_TO_GBIF_COLOR,
-            "source-arrow-color": GBIF_TO_GBIF_COLOR,
+        {
+            selector: "edge[edge_type = 'gbif_to_gbif']",
+            style: {
+                "line-color": colors.gbifToGbif,
+                "target-arrow-color": colors.gbifToGbif,
+                "source-arrow-color": colors.gbifToGbif,
+            },
         },
-    },
-    {
-        selector: "edge[?mutual]",
-        style: { width: 2.5, "source-arrow-shape": "triangle" },
-    },
-    {
-        selector: "node[?contradiction]",
-        style: {
-            "border-width": 3,
-            "border-color": CONTRADICTION_COLOR,
-            "border-style": "dashed" as Css.LineStyle,
-            "border-opacity": 1,
+        {
+            selector: "edge[?mutual]",
+            style: { width: 2.5, "source-arrow-shape": "triangle" },
         },
-    },
-    {
-        selector: "node:active",
-        style: { "overlay-opacity": 0 },
-    },
-];
+        {
+            selector: "node[?contradiction]",
+            style: {
+                "border-width": 3,
+                "border-color": colors.contradiction,
+                "border-style": "dashed" as Css.LineStyle,
+                "border-opacity": 1,
+            },
+        },
+        {
+            selector: "node:active",
+            style: { "overlay-opacity": 0 },
+        },
+    ];
+}
 
 export function normalizePositions(nodes: GraphNode[]): Map<string, { x: number; y: number }> {
     const xs = nodes.map((n) => n.x);
@@ -436,6 +440,7 @@ export function applyGraphView(
         noContradictions,
         contradictionsOnly,
         showContradictionPath,
+        colors,
     }: GraphViewParams
 ) {
     cy.batch(() => {
@@ -515,25 +520,40 @@ export function applyGraphView(
         const allHighlighted = matchNeighborhood.nodes().union(sameSharkNodes);
 
         allHighlighted.style("display", "element").style("z-index", HIGHLIGHT_Z_INDEX);
-        cy.nodes().not(allHighlighted).style("opacity", DIM_OPACITY);
+        cy.nodes().not(allHighlighted).style("opacity", colors.dimOpacity);
 
         // Other visible-but-irrelevant ambient edges dim too, not just nodes
-        ambientEdges.not(matchNeighborhood.edges()).style("opacity", DIM_OPACITY);
+        ambientEdges.not(matchNeighborhood.edges()).style("opacity", colors.dimOpacity);
         matchNeighborhood
             .edges()
             .style("display", "element")
             .style("opacity", 1)
             .style("z-index", HIGHLIGHT_Z_INDEX);
 
-        focusedNode.style(HIGHLIGHT_BORDER);
-        sameSharkNodes.style(SAME_SHARK_BORDER);
+        focusedNode.style({
+            "border-width": 3,
+            "border-color": colors.highlightBorder,
+            "border-opacity": 1,
+        });
+        sameSharkNodes.style({
+            "border-width": 2,
+            "border-color": colors.sameSharkBorder,
+            "border-opacity": 1,
+        });
 
         // Pinpoint the specific node elsewhere in this cluster that the focused
         // node contradicts, and (optionally) the chain of matches between them
         const contradictionPath = findContradictionPath(cy, focusedNode);
         if (contradictionPath) {
             const { targetNode, pathElements } = contradictionPath;
-            targetNode.style(CONTRADICTION_TARGET_BORDER);
+            // The specific node, elsewhere in this cluster, whose shark_id contradicts
+            // the focused node's (solid, vs. dashed "somewhere in here" cluster border)
+            targetNode.style({
+                "border-width": 4,
+                "border-color": colors.contradiction,
+                "border-style": "solid" as Css.LineStyle,
+                "border-opacity": 1,
+            });
             targetNode
                 .style("display", "element")
                 .style("opacity", 1)
@@ -544,7 +564,14 @@ export function applyGraphView(
                     .style("display", "element")
                     .style("opacity", 1)
                     .style("z-index", HIGHLIGHT_Z_INDEX);
-                pathElements.edges().style(CONTRADICTION_PATH_EDGE);
+                pathElements.edges().style({
+                    width: 5,
+                    "line-color": colors.contradiction,
+                    "target-arrow-color": colors.contradiction,
+                    "source-arrow-color": colors.contradiction,
+                    opacity: 1,
+                    "z-index": 999,
+                });
             }
         }
     });

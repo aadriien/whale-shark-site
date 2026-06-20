@@ -54,6 +54,10 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 16px;
+    background: var(--surface-secondary);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-tertiary);
 }
 
 .shark-match-graph-section .filter-group {
@@ -64,18 +68,20 @@
 
 .shark-match-graph-section .graph-filter-btn {
     padding: 6px 16px;
-    border: 1px solid var(--border-color, #ccc);
+    border: 1px solid var(--border-secondary);
     border-radius: 20px;
     background: transparent;
+    color: var(--text-secondary);
     cursor: pointer;
     font-size: 0.85rem;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
+.shark-match-graph-section .graph-filter-btn:hover:not(:disabled),
 .shark-match-graph-section .graph-filter-btn.active {
-    background: var(--accent-dark-blue, #1a3a5c);
-    color: #fff;
-    border-color: var(--accent-dark-blue, #1a3a5c);
+    background: var(--accent-dark-blue);
+    color: var(--bg-primary);
+    border-color: var(--accent-dark-blue);
 }
 
 .shark-match-graph-section .graph-filter-btn:disabled {
@@ -83,24 +89,38 @@
     cursor: not-allowed;
 }
 
+.graph-panel-contradiction .graph-filter-btn {
+    color: var(--error);
+    background: var(--bg-primary);
+    border-color: var(--error);
+}
+
+.graph-panel-contradiction .graph-filter-btn:hover:not(:disabled),
+.graph-panel-contradiction .graph-filter-btn.active {
+    color: var(--conservation-bg);
+    background: var(--error);
+    border-color: var(--error);
+}
+
 .shark-match-graph-section .graph-distance-range {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 0.85rem;
+    color: var(--text-secondary);
     padding: 4px 12px;
-    border: 1px solid var(--border-color, #ccc);
+    border: 1px solid var(--border-secondary);
     border-radius: 20px;
 }
 
 .shark-match-graph-section .graph-range-input {
     width: 3.5rem;
     padding: 2px 4px;
-    border: 1px solid var(--border-color, #ccc);
+    border: 1px solid var(--border-secondary);
     border-radius: 4px;
     font-size: 0.85rem;
     text-align: center;
-    background: var(--bg-primary, #fff);
+    background: var(--bg-primary);
     color: inherit;
 }
 
@@ -109,9 +129,9 @@
     overflow: hidden;
     width: 100%;
     height: 600px;
-    border: 1px solid var(--border-color, #ddd);
+    border: 1px solid var(--border-tertiary);
     border-radius: 8px;
-    background: var(--bg-secondary, #f8f8f8);
+    background: var(--bg-secondary);
     text-align: left !important;
 }
 
@@ -137,9 +157,9 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    border: 1px solid var(--border-color, #ddd);
+    border: 1px solid var(--border-tertiary);
     border-radius: 8px;
-    background: var(--bg-secondary, #f8f8f8);
+    background: var(--bg-tertiary);
     padding: 12px;
     overflow-y: auto;
     position: relative;
@@ -185,7 +205,7 @@
 
 .graph-panel-divider {
     height: 1px;
-    background: var(--border-color, #ddd);
+    background: var(--border-tertiary);
 }
 
 .graph-panel-missing {
@@ -195,7 +215,7 @@
 }
 
 .graph-panel-ningaloo {
-    border: 1px solid var(--border-color, #ddd);
+    border: 1px solid var(--border-tertiary);
     border-radius: 6px;
     padding: 16px 12px;
     text-align: center;
@@ -219,7 +239,7 @@
     border: 1px solid var(--error);
     border-radius: 6px;
     padding: 10px;
-    background: color-mix(in srgb, var(--error) 12%, var(--bg-primary));
+    background: var(--conservation-bg);
 }
 
 .graph-panel-contradiction .graph-panel-label {
@@ -261,12 +281,13 @@
     gap: 8px;
     padding: 3px 4px;
     border-radius: 4px;
+    border: 1px solid var(--border-tertiary);
     cursor: pointer;
 }
 
 .graph-panel-image-row--selected {
-    outline: 1px solid var(--border-color, #ddd);
-    background: var(--primary-green, #fff);
+    outline: 1px solid var(--border-tertiary);
+    background: var(--primary-green);
 }
 
 .graph-panel-image-row--contradiction {

@@ -14,6 +14,21 @@ export type EdgeFilterState = {
     distanceRange: [number, number];
 };
 
+export type GraphThemeColors = {
+    contradiction: string;
+    highlightBorder: string;
+    sameSharkBorder: string;
+    ningaloo: string;
+    gbifToNingaloo: string;
+    gbifToGbif: string;
+    nodeBorder: string;
+    nodeBorderOpacity: number;
+    ningalooBorder: string;
+    ningalooBorderOpacity: number;
+    dimOpacity: number;
+    continents: Record<string, string>;
+};
+
 export type GraphViewParams = {
     nodeFilter: NodeFilter;
     edgeFilter: EdgeFilterState;
@@ -22,6 +37,7 @@ export type GraphViewParams = {
     noContradictions: boolean;
     contradictionsOnly: boolean;
     showContradictionPath: boolean;
+    colors: GraphThemeColors;
 };
 
 // The 8 togglable filter dimensions, used by FILTER_CONSTRAINTS in GraphUtils
