@@ -1,6 +1,8 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 
+import GoatCounter from "components/GoatCounter";
+
 import Navbar from "./components/Navbar";
 import Logbook from "./components/HelperLogbook";
 
@@ -54,6 +56,9 @@ function App() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <HashRouter>
+                {/* Track per-page visits via GoatCounter */}
+                <GoatCounter code="whaleshark" />
+
                 {/* Navbar outside Routes so it's always shown on pages */}
                 <Navbar
                     isLogbookOpen={isLogbookOpen}
