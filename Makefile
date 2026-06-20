@@ -168,6 +168,7 @@ setup_website:
 	npm install cytoscape react-cytoscapejs @types/cytoscape && \
 	npm install country-list && \
 	npm install lucide-react && \
+	npm install maplibre-gl pmtiles protomaps-themes-base && \
 	npm install gh-pages --save-dev && \
 	echo "Checking npm version..." && \
 	npm install -g npm@latest
