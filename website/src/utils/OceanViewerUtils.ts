@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { asyncBufferFromUrl, parquetReadObjects } from "hyparquet";
+import { parquetReadObjects } from "hyparquet";
 
 import { mediaSharks, MONTHS } from "./DataUtils";
 import { getSharkCoordinates } from "./CoordinateUtils";
@@ -128,8 +128,10 @@ export async function processOceanMonth(
     const config = OCEAN_DATASETS[datasetKey];
     const url = config.dataPath(year, month);
 
-    const file = await asyncBufferFromUrl({ url, requestInit: { signal } });
-    const rows = await parquetReadObjects({ file }) as Record<string, number>[];
+    const response = await fetch(url, { signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const arrayBuffer = await response.arrayBuffer();
+    const rows = await parquetReadObjects({ file: arrayBuffer }) as Record<string, number>[];
 
     const dataEntries = Object.entries(config.dataFields);
 
