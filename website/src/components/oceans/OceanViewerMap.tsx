@@ -3,21 +3,11 @@ import { forwardRef, useImperativeHandle } from "react";
 
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Protocol } from "pmtiles";
 import { noLabels } from "protomaps-themes-base";
 
 import { OceanMapHandle } from "../../types/oceans";
 
-// TODO: replace PMTiles basemap URL (see https://maps.protomaps.com/builds/)
-const PMTILES_URL = "https://build.protomaps.com/20260620.pmtiles";
-
-let protocolRegistered = false;
-function ensureProtocol() {
-    if (protocolRegistered) return;
-    const protocol = new Protocol();
-    maplibregl.addProtocol("pmtiles", protocol.tile);
-    protocolRegistered = true;
-}
+const PROTOMAPS_API_KEY = import.meta.env.VITE_PROTOMAPS_API_KEY;
 
 type OceanViewerMapProps = { onLoad?: () => void };
 
@@ -36,9 +26,6 @@ const OceanViewerMap = forwardRef<OceanMapHandle, OceanViewerMapProps>(({ onLoad
     useEffect(() => {
         if (!mapElRef.current || mapRef.current) return;
 
-        // Confirm MapLibre PMTiles protocol is in place
-        ensureProtocol();
-
         const map = new maplibregl.Map({
             container: mapElRef.current,
             style: {
@@ -47,7 +34,7 @@ const OceanViewerMap = forwardRef<OceanMapHandle, OceanViewerMapProps>(({ onLoad
                 sources: {
                     protomaps: {
                         type: "vector",
-                        url: `pmtiles://${PMTILES_URL}`,
+                        url: `https://api.protomaps.com/tiles/v4.json?key=${PROTOMAPS_API_KEY}`,
                         attribution:
                             '<a href="https://protomaps.com">Protomaps</a> · <a href="https://openstreetmap.org">OpenStreetMap</a>',
                     },
