@@ -1,8 +1,8 @@
 ###############################################################################
 ##  `export_global_data.py`                                                  ##
 ##                                                                           ##
-##  Purpose: Exports global Copernicus data CSVs for the OceanViewer         ##
-##  Out:  website/public/data/{metric}/{YYYY}/global_{YYYY-MM}_{metric}.csv  ##
+##  Purpose: Exports global Copernicus data as Parquet for the OceanViewer   ##
+##  —> website/public/data/{metric}/{YYYY}/global_{YYYY-MM}_{metric}.parquet ##
 ###############################################################################
 
 import os
@@ -12,7 +12,6 @@ import pandas as pd
 from src.copernicus.clean import convert_xarray_to_df
 from src.copernicus.fetch_chlorophyll import get_chlorophyll_data
 from src.copernicus.fetch_temperature import get_sea_surface_temperature_data
-from src.utils.data_utils import export_to_csv
 
 WEB_DATA_DIR = "website/public/data"
 
@@ -131,15 +130,16 @@ def export_global_data(
                     if month_df.empty:
                         continue
 
-                    month_df = month_df.copy()
-                    month_df["time"] = month_df["time"].dt.strftime("%Y-%m-%d")
+                    month_df = month_df[["latitude", "longitude", value_col]].copy()
+                    month_df = month_df.astype("float32")
 
                     month_str = f"{month_num:02d}"
                     out_path = os.path.join(
-                        year_dir, f"global_{year}-{month_str}_{metric}.csv"
+                        year_dir, f"global_{year}-{month_str}_{metric}.parquet"
                     )
-                    export_to_csv(out_path, month_df)
+                    month_df.to_parquet(out_path, index=False, engine="pyarrow")
                     total_rows += len(month_df)
+                    print(f"    {year}-{month_str}: {len(month_df):,} rows → {os.path.getsize(out_path) // 1024} KB")
 
                 print(f"  {year}: exported {total_rows:,} rows across 12 months")
 
