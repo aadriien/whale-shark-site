@@ -42,8 +42,8 @@ export const SST_SCALE = d3.scaleSequential().domain([0, 35]).interpolator(SST_I
 
 export const OCEAN_DATASETS = {
     chlorophyll: {
-        csvPath: (year: number) => `/data/chlorophyll/global_${year}_chlorophyll.csv`,
-        timeField: "time",
+        csvPath: (year: number, month: string) =>
+            `/data/chlorophyll/${year}/global_${year}-${month}_chlorophyll.csv`,
         latField: "latitude",
         lngField: "longitude",
         dataFields: { meanCHL: "mean_CHL" },
@@ -53,8 +53,8 @@ export const OCEAN_DATASETS = {
         sharkColor: "#ff7700",
     },
     temperature: {
-        csvPath: (year: number) => `/data/temperature/global_${year}_temperature.csv`,
-        timeField: "time",
+        csvPath: (year: number, month: string) =>
+            `/data/temperature/${year}/global_${year}-${month}_temperature.csv`,
         latField: "latitude",
         lngField: "longitude",
         dataFields: { meanSST: "mean_analysed_sst" },
@@ -116,14 +116,15 @@ function buildSharkIndex(): Record<string, PlottedCoordinatePoint[]> {
 
 export const SHARK_OBS = buildSharkIndex();
 
-// Fetch & parse Copernicus Marine dataset
-export async function fetchOceanCSV(
+// Fetch & parse a single month's Copernicus Marine dataset
+export async function fetchMonthCSV(
     datasetKey: keyof typeof OCEAN_DATASETS,
     year: number,
+    month: string,
     signal: AbortSignal
 ): Promise<string> {
     const { csvPath } = OCEAN_DATASETS[datasetKey];
-    const r = await fetch(csvPath(year), { signal });
+    const r = await fetch(csvPath(year, month), { signal });
 
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return r.text();
@@ -132,40 +133,37 @@ export async function fetchOceanCSV(
 export function parseOceanCSV(
     text: string,
     config: OceanDatasetConfig
-): Record<string, OceanGridPoint[]> {
+): OceanGridPoint[] {
     // Extract info from dataset to build out grid points for the map
-    const index: Record<string, OceanGridPoint[]> = {};
+    const points: OceanGridPoint[] = [];
 
     for (const row of d3.csvParse(text)) {
-        const timeVal = row[config.timeField];
         const latVal = row[config.latField];
         const lngVal = row[config.lngField];
 
-        if (!timeVal || !latVal || !lngVal) continue;
+        if (!latVal || !lngVal) continue;
 
         const hasData = Object.values(config.dataFields).some((col) => row[col] && row[col] !== "");
         if (!hasData) continue;
-
-        const month = timeVal.slice(0, 7);
-        if (!index[month]) index[month] = [];
 
         const point: OceanGridPoint = { lat: +latVal, lng: +lngVal };
         for (const [outputField, csvCol] of Object.entries(config.dataFields)) {
             const val = row[csvCol];
             if (val && val !== "") point[outputField] = +val;
         }
-        index[month].push(point);
+        points.push(point);
     }
-    return index;
+    return points;
 }
 
-export async function processOceanDataset(
+export async function processOceanMonth(
     datasetKey: keyof typeof OCEAN_DATASETS,
     year: number,
+    month: string,
     signal: AbortSignal
-): Promise<Record<string, OceanGridPoint[]>> {
+): Promise<OceanGridPoint[]> {
     // Identify the relevant dataset, then extract values
     const config = OCEAN_DATASETS[datasetKey];
-    const text = await fetchOceanCSV(datasetKey, year, signal);
+    const text = await fetchMonthCSV(datasetKey, year, month, signal);
     return parseOceanCSV(text, config);
 }

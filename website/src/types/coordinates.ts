@@ -35,7 +35,7 @@ export type OceanGridPoint = {
     [field: string]: number;
 };
 
-// Applicable for Copernicus chlorophyll CSV data (global_{YYYY}_chlorophyll.csv)
+// Applicable for Copernicus chlorophyll CSV data (global_{YYYY-MM}_chlorophyll.csv)
 export type ChlorophyllGridPoint = {
     lat: number;
     lng: number;

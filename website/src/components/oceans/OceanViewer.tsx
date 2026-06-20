@@ -12,7 +12,7 @@ import {
     ALL_MONTHS,
     OCEAN_DATASETS,
     SHARK_OBS,
-    processOceanDataset,
+    processOceanMonth,
 } from "../../utils/OceanViewerUtils";
 
 import {
@@ -90,22 +90,22 @@ export default function OceanViewer() {
     const mapHandleRef = useRef<OceanMapHandle>(null);
     const abortRef = useRef<AbortController | null>(null);
     const sharkMarkersRef = useRef<maplibregl.Marker[]>([]);
+    const monthCacheRef = useRef<Record<string, OceanGridPoint[]>>({});
 
     const [datasetToProcess, setDatasetToProcess] =
         useState<keyof typeof OCEAN_DATASETS>("chlorophyll");
 
     const [sliderIndex, setSliderIndex] = useState(ALL_MONTHS.length - 1);
-    const [yearDataset, setYearGridData] = useState<Record<string, OceanGridPoint[]>>({});
-    const [loadedYear, setLoadedYear] = useState<number | null>(null);
-    
+    const [monthPoints, setMonthPoints] = useState<OceanGridPoint[]>([]);
+
     const [isLoadingDataset, setIsLoadingDataset] = useState(false);
     const [mapReady, setMapReady] = useState(false);
     const [zoom, setZoom] = useState(1.5);
 
-    // Reset cache when metric changes so load effect re-fetches new dataset
+    // Clear cache when metric changes
     useEffect(() => {
-        setLoadedYear(null);
-        setYearGridData({});
+        monthCacheRef.current = {};
+        setMonthPoints([]);
     }, [datasetToProcess]);
 
     const handleZoom = useCallback(() => {
@@ -120,46 +120,50 @@ export default function OceanViewer() {
         return () => { map.off("zoomend", handleZoom); };
     }, [mapReady, handleZoom]);
 
-    // Lazy-load per-year dataset CSV when selected year or dataset changes
+    // Fetch the selected month's data (with cache)
     useEffect(() => {
-        const year = +ALL_MONTHS[sliderIndex].slice(0, 4);
-        if (year === loadedYear) return;
+        const monthKey = ALL_MONTHS[sliderIndex];
+        const cacheKey = `${datasetToProcess}:${monthKey}`;
+
+        if (monthCacheRef.current[cacheKey]) {
+            setMonthPoints(monthCacheRef.current[cacheKey]);
+            return;
+        }
 
         abortRef.current?.abort();
         const controller = new AbortController();
         abortRef.current = controller;
 
-        setIsLoadingDataset(true);
-        setYearGridData({});
+        const [yearStr, monthStr] = monthKey.split("-");
 
-        processOceanDataset(datasetToProcess, year, controller.signal)
-            .then((data) => {
-                setYearGridData(data);
-                setLoadedYear(year);
+        setIsLoadingDataset(true);
+
+        processOceanMonth(datasetToProcess, +yearStr, monthStr, controller.signal)
+            .then((points) => {
+                monthCacheRef.current[cacheKey] = points;
+                setMonthPoints(points);
                 setIsLoadingDataset(false);
             })
             .catch((err) => {
                 if (err.name !== "AbortError") {
-                    setYearGridData({}); // 404 / error: show nothing, don't retry
-                    setLoadedYear(year);
+                    setMonthPoints([]);
                     setIsLoadingDataset(false);
                 }
             });
-    }, [sliderIndex, loadedYear, datasetToProcess]);
+    }, [sliderIndex, datasetToProcess]);
 
     // Update ocean grid data layer to reflect latest selections
     useEffect(() => {
         const map = mapHandleRef.current?.map;
         if (!map || !mapReady) return;
 
-        const month = ALL_MONTHS[sliderIndex];
         const datasetConfig = OCEAN_DATASETS[datasetToProcess];
-        
+
         const primaryDataField = Object.keys(datasetConfig.dataFields)[0];
         const scaleDomainMin = datasetConfig.colorScale.domain()[0];
 
         const geojson = buildGridGeoJSON(
-            yearDataset[month] ?? [],
+            monthPoints,
             primaryDataField,
             datasetConfig.colorScale,
             scaleDomainMin
@@ -181,7 +185,7 @@ export default function OceanViewer() {
                 },
             });
         }
-    }, [sliderIndex, yearDataset, datasetToProcess, mapReady]);
+    }, [monthPoints, datasetToProcess, mapReady]);
 
     // Render shark markers (re-clusters on zoom change)
     useEffect(() => {
