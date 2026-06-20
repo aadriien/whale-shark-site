@@ -1,8 +1,18 @@
+import {
+    Fingerprint,
+    TrendingUp,
+    Eye,
+    Ruler,
+    Map,
+    HeartPulse,
+    type LucideIcon,
+} from "lucide-react";
+
 type Application = {
     title: string;
     description: string;
     impact: string;
-    icon: string;
+    icon: LucideIcon;
 };
 
 const applications: Application[] = [
@@ -11,42 +21,42 @@ const applications: Application[] = [
         description:
             "Each whale shark has a unique spot pattern. Computer vision can match and identify individuals from pictures.",
         impact: "Track migration patterns and population dynamics",
-        icon: "🆔",
+        icon: Fingerprint,
     },
     {
         title: "Population Monitoring",
         description:
             "Automated tracking of whale sharks in large datasets helps scientists monitor population health and trends over time.",
         impact: "Assess conservation status and effectiveness",
-        icon: "📈",
+        icon: TrendingUp,
     },
     {
         title: "Behavior Analysis",
         description:
             "AI can detect and classify whale shark behaviors like feeding, mating, and social interactions from video footage.",
         impact: "Understand ecological roles and habitat needs",
-        icon: "🎭",
+        icon: Eye,
     },
     {
         title: "Size Estimation",
         description:
             "Computer vision algorithms can measure whale shark length and estimate age, crucial for understanding growth rates.",
         impact: "Study life cycles and reproductive maturity",
-        icon: "📏",
+        icon: Ruler,
     },
     {
         title: "Habitat Mapping",
         description:
             "By analyzing where whale sharks are detected in images, researchers can map critical habitats and migration corridors.",
         impact: "Inform marine protected area planning",
-        icon: "🗺️",
+        icon: Map,
     },
     {
         title: "Health Assessment",
         description:
             "AI can detect injuries, scars, and parasites on whale sharks, helping monitor individual and population health.",
         impact: "Identify threats and conservation priorities",
-        icon: "🏥",
+        icon: HeartPulse,
     },
 ];
 
@@ -64,7 +74,9 @@ const CVApplications = () => {
                 {applications.map((app: Application, i: number) => (
                     <div key={i} className="application-card">
                         <div className="app-header">
-                            <span className="app-icon">{app.icon}</span>
+                            <span className="app-icon">
+                                <app.icon className="app-svg-icon" />
+                            </span>
                             <h3>{app.title}</h3>
                         </div>
                         <p className="app-description">{app.description}</p>

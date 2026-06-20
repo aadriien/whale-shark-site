@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { Camera, Crosshair, Scissors, Search, BarChart3, type LucideIcon } from "lucide-react";
 
 type PipelineStep = {
     title: string;
     description: string;
-    icon: string;
+    icon: LucideIcon;
 };
 
 const pipelineSteps: PipelineStep[] = [
@@ -11,31 +12,31 @@ const pipelineSteps: PipelineStep[] = [
         title: "Image Acquisition",
         description:
             "Underwater cameras and drones capture high-resolution images and videos of whale sharks in their natural habitat.",
-        icon: "📷",
+        icon: Camera,
     },
     {
         title: "Object Detection",
         description:
             "AI algorithms scan images to locate and identify whale sharks, drawing bounding boxes around detected individuals.",
-        icon: "🎯",
+        icon: Crosshair,
     },
     {
         title: "Segmentation",
         description:
             "Advanced models create precise pixel-level masks that outline the exact shape and boundaries of each whale shark.",
-        icon: "✂️",
+        icon: Scissors,
     },
     {
         title: "Pattern Recognition",
         description:
             "Computer vision analyzes the spot patterns and scars that are unique to each whale shark for individual identification.",
-        icon: "🔍",
+        icon: Search,
     },
     {
         title: "Data Analysis",
         description:
             "Extracted features are processed to re-identify known whale sharks by matching their embeddings in a database.",
-        icon: "📊",
+        icon: BarChart3,
     },
 ];
 
@@ -60,28 +61,36 @@ const CVPipeline = () => {
                 </p>
 
                 <div className="pipeline-steps">
-                    {pipelineSteps.map((step: PipelineStep, i: number) => (
-                        <div key={i} className="pipeline-step">
-                            <div className="step-header clickable" onClick={() => toggleStep(i)}>
-                                <span className="step-icon">{step.icon}</span>
-                                <h3>
-                                    {step.title}
-                                    {i < pipelineSteps.length - 1}
-                                </h3>
-                                <span
-                                    className={`expand-icon ${expandedSteps[i] ? "expanded" : ""}`}
+                    {pipelineSteps.map((step: PipelineStep, i: number) => {
+                        const Icon = step.icon;
+                        return (
+                            <div key={i} className="pipeline-step">
+                                <div
+                                    className="step-header clickable"
+                                    onClick={() => toggleStep(i)}
                                 >
-                                    ▼
-                                </span>
-                            </div>
-
-                            {expandedSteps[i] && (
-                                <div className="step-content">
-                                    <p>{step.description}</p>
+                                    <span className="step-icon">
+                                        <Icon className="step-svg-icon" />
+                                    </span>
+                                    <h3>
+                                        {step.title}
+                                        {i < pipelineSteps.length - 1}
+                                    </h3>
+                                    <span
+                                        className={`expand-icon ${expandedSteps[i] ? "expanded" : ""}`}
+                                    >
+                                        ▼
+                                    </span>
                                 </div>
-                            )}
-                        </div>
-                    ))}
+
+                                {expandedSteps[i] && (
+                                    <div className="step-content">
+                                        <p>{step.description}</p>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -94,7 +103,7 @@ const CVPipeline = () => {
 
                     <p className="shark-image-meta">
                         <small>
-                            📸 Creator: richardtenbrinke | CC BY-NC [Attribution-NonCommercial]
+                            <Camera className="credit-icon" /> Creator: richardtenbrinke | CC BY-NC [Attribution-NonCommercial]
                         </small>
                     </p>
                 </div>

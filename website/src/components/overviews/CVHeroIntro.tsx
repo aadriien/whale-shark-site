@@ -1,3 +1,5 @@
+import { Camera } from "lucide-react";
+
 const CVHeroIntro = () => {
     return (
         <div className="cv-hero-intro">
@@ -44,7 +46,7 @@ const CVHeroIntro = () => {
 
                         <p className="shark-image-meta">
                             <small>
-                                📸 Creator: Ryan E. Gray | CC BY-NC [Attribution-NonCommercial]
+                                <Camera className="credit-icon" /> Creator: Ryan E. Gray | CC BY-NC [Attribution-NonCommercial]
                             </small>
                         </p>
                     </div>

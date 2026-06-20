@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Camera } from "lucide-react";
 
 import { mediaSharks, visionSharks, visionOccurrences, parseImageField } from "../utils/DataUtils";
 
@@ -161,7 +162,7 @@ function SharkMatchViewer() {
                                             />
                                             <p className="shark-image-meta">
                                                 <small>
-                                                    📸 Creator: {queryImage?.creator} |{" "}
+                                                    <Camera className="credit-icon" /> Creator: {queryImage?.creator} |{" "}
                                                     {queryImage?.license}
                                                 </small>
                                             </p>
@@ -261,7 +262,7 @@ function SharkMatchViewer() {
                                                         />
                                                         <p className="shark-image-meta">
                                                             <small>
-                                                                📸 Creator: {matchImage?.creator} |{" "}
+                                                                <Camera className="credit-icon" /> Creator: {matchImage?.creator} |{" "}
                                                                 {matchImage?.license}
                                                             </small>
                                                         </p>

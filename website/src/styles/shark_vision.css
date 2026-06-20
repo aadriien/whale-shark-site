@@ -55,6 +55,13 @@
     opacity: 1;
 }
 
+.credit-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    margin-right: 0.25em;
+}
+
 
 /* Pipeline Component */
 .cv-pipeline {
@@ -111,6 +118,12 @@
     min-width: 3.5rem;
     height: 3.5rem;
     flex-shrink: 0;
+    color: #fff;
+}
+
+.step-svg-icon {
+    width: 1em;
+    height: 1em;
 }
 
 .pipeline-step h3 {
@@ -458,6 +471,12 @@
     justify-content: center;
     min-width: 4rem;
     height: 4rem;
+    color: #fff;
+}
+
+.app-svg-icon {
+    width: 1em;
+    height: 1em;
 }
 
 .application-card h3 {

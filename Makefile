@@ -167,6 +167,7 @@ setup_website:
 	npm install --save-dev @types/three @types/d3 @types/p5 @types/react-router-dom && \
 	npm install cytoscape react-cytoscapejs @types/cytoscape && \
 	npm install country-list && \
+	npm install lucide-react && \
 	npm install gh-pages --save-dev && \
 	echo "Checking npm version..." && \
 	npm install -g npm@latest

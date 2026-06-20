@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Camera } from "lucide-react";
 
 import { parseImageField } from "../../utils/DataUtils";
 
@@ -46,7 +47,7 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
                             />
                             <p className="shark-image-meta">
                                 <small>
-                                    📸 Creator: {img.creator} | {img.license}
+                                    <Camera className="credit-icon" /> Creator: {img.creator} | {img.license}
                                 </small>
                             </p>
                         </div>
@@ -74,7 +75,7 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
                                 alt={`Expanded shark image ${expandedImageIndex}`}
                             />
                             <p className="overlay-meta">
-                                📸 Creator: {images[expandedImageIndex].creator} |{" "}
+                                <Camera className="credit-icon" /> Creator: {images[expandedImageIndex].creator} |{" "}
                                 {images[expandedImageIndex].license}
                             </p>
                         </div>

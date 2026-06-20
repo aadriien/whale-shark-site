@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Camera } from "lucide-react";
 
 type SharkImageCV = {
     id: number;
@@ -103,7 +104,7 @@ const InteractiveDemo = () => {
 
                                 <p className="shark-image-meta">
                                     <small>
-                                        📸 Creator: {image.creator} | {image.license}
+                                        <Camera className="credit-icon" /> Creator: {image.creator} | {image.license}
                                     </small>
                                 </p>
                             </div>
@@ -155,7 +156,7 @@ const InteractiveDemo = () => {
 
                         <p className="shark-image-meta">
                             <small>
-                                📸 Creator: {selectedImage.creator} | {selectedImage.license}
+                                <Camera className="credit-icon" /> Creator: {selectedImage.creator} | {selectedImage.license}
                             </small>
                         </p>
                     </div>
