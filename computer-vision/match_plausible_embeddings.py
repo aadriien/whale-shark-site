@@ -9,8 +9,6 @@
 ###############################################################################
 
 
-from typing import Tuple
-
 import numpy as np
 import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_INDIVIDUAL_SHARKS_STATS_CSV
@@ -26,31 +24,9 @@ from .CONSTANTS import (
     OUTPUT_NPZ_FILE,
 )
 from .get_new_image_embeddings import get_image_records
-from .match_embeddings import export_to_json, format_match_summary, perform_search
-
-
-def find_first_different_shark(
-    indices: np.ndarray,
-    distances: np.ndarray,
-    candidate_ids: np.ndarray,
-    current_shark_id: str,
-    excluded_ids: set[str],
-    exclude_index: int | None = None,
-) -> Tuple[int | None, float | None]:
-    # Scan ranked candidates for the first one that belongs to a different
-    # shark AND is not geographically/temporally IMPOSSIBLE for this shark
-    # (skip the query's own image when searching a dataset against itself)
-    for rank, candidate_idx in enumerate(indices):
-        if exclude_index is not None and candidate_idx == exclude_index:
-            continue
-        candidate_id = candidate_ids[candidate_idx]
-        if candidate_id == current_shark_id:
-            continue
-        if candidate_id in excluded_ids:
-            continue
-        return int(candidate_idx), float(distances[rank])
-
-    return None, None
+from .match_embeddings import export_to_json, format_match_summary
+from .utils.embedding_utils import perform_search
+from .utils.shark_matching_utils import find_first_different_shark
 
 
 def identify_sharks(

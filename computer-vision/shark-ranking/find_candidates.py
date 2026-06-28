@@ -12,7 +12,8 @@ from typing import Dict, Set, Tuple
 
 import numpy as np
 
-from ..match_embeddings import perform_search
+from ..utils.embedding_utils import perform_search
+from ..utils.shark_matching_utils import find_top_n_different_sharks
 
 # FAISS k=500: brute-force IndexFlatL2 computes all distances regardless of k,
 # so this is generous headroom to guarantee we find enough different plausible
@@ -21,47 +22,6 @@ FAISS_K = 500
 
 # Per image, extract this many different plausible sharks from FAISS results
 CANDIDATES_PER_IMAGE = 10
-
-
-def find_top_n_different_sharks(
-    indices: np.ndarray,
-    distances: np.ndarray,
-    candidate_ids: np.ndarray,
-    current_shark_id: str,
-    excluded_ids: Set[str],
-    exclude_index: int,
-    n: int = CANDIDATES_PER_IMAGE,
-) -> list[Tuple[str, float]]:
-    """
-    Scan one image's FAISS results for the top N different plausible sharks.
-    Skips same-shark images and geographically/temporally impossible matches.
-
-    Returns list of (shark_id, distance) tuples, up to `n` entries.
-    """
-    found: list[Tuple[str, float]] = []
-    seen_sharks: Set[str] = set()
-
-    for rank, candidate_idx in enumerate(indices):
-        if candidate_idx == exclude_index:
-            continue
-
-        shark_id = candidate_ids[candidate_idx]
-
-        # Skip same shark & already-found sharks
-        if shark_id == current_shark_id or shark_id in seen_sharks:
-            continue
-
-        # Skip geographically/temporally impossible matches
-        if shark_id in excluded_ids:
-            continue
-
-        found.append((shark_id, float(distances[rank])))
-        seen_sharks.add(shark_id)
-
-        if len(found) >= n:
-            break
-
-    return found
 
 
 def generate_candidate_pairs(

@@ -6,13 +6,9 @@
 
 
 import warnings
-from io import BytesIO
 
 import numpy as np
 import pandas as pd
-import requests
-import torch
-import torchvision.transforms as transforms
 from PIL import Image
 from src.gbif.clean import (
     GBIF_MEDIA_CSV,
@@ -30,6 +26,12 @@ from transformers import AutoModel as HF_AutoModel
 from .CONSTANTS import GBIF_OUTPUT_NPZ_FILE
 from .handle_yolo_model import (
     get_yolo_model,
+)
+from .utils.embedding_utils import (
+    build_miewid_preprocess,
+    compute_dinov2_embedding,
+    compute_miewid_embedding,
+    load_image_from_url,
 )
 
 # ---------- MiewID embeddings model ----------
@@ -139,55 +141,35 @@ def calculate_bbox(image: Image.Image) -> list[float]:
 
 # Step 3a: Use Hugging Face MiewID-msv3 model to generate image embedding
 
+_MIEWID_PREPROCESS = None
 
-def compute_embedding(cropped_img: Image.Image) -> np.ndarray:
-    # Load preprocessing pipeline
-    preprocess = transforms.Compose(
-        [
-            transforms.Resize((440, 440)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
-    )
+
+def get_miewid_embedding(cropped_img: Image.Image) -> np.ndarray:
+    global _MIEWID_PREPROCESS
+
+    # Build preprocessing pipeline once, then reuse
+    if _MIEWID_PREPROCESS is None:
+        _MIEWID_PREPROCESS = build_miewid_preprocess()
 
     # Extract embedding via model
-    input_tensor = preprocess(cropped_img).unsqueeze(0)
-    with torch.no_grad():
-        model = get_embeddings_model()
-        output = model(input_tensor)
-
-    return output.squeeze().cpu().numpy()
+    model = get_embeddings_model()
+    return compute_miewid_embedding(cropped_img, model, _MIEWID_PREPROCESS)
 
 
 # Step 3b: Use Hugging Face DINOv2 model to generate image embedding
 
 
-def compute_dinov2_embedding(cropped_img: Image.Image) -> np.ndarray:
+def get_dinov2_embedding(cropped_img: Image.Image) -> np.ndarray:
     processor, model = get_dinov2_model()
-    inputs = processor(images=cropped_img, return_tensors="pt")
-
-    with torch.no_grad():
-        outputs = model(**inputs)
-        # Use mean pooling on last hidden states to get embedding vector
-        embedding = outputs.last_hidden_state.mean(dim=1)
-
-    return embedding.squeeze().cpu().numpy()
-
-
-# Intermediate steps: Handle media records iteration, temp image download, etc
-
-
-def load_image_from_url(url: str) -> Image.Image:
-    response = requests.get(url, timeout=10)
-    response.raise_for_status()
-
-    return Image.open(BytesIO(response.content)).convert("RGB")
+    return compute_dinov2_embedding(cropped_img, processor, model)
 
 
 def process_single_image(row) -> dict:
     try:
         # Download image temporarily (using PIL), then pass to YOLOv8
         image = load_image_from_url(row["identifier"])
+        if image is None:
+            return {}
         bbox = calculate_bbox(image)
         if not bbox:
             return {}
@@ -202,8 +184,8 @@ def process_single_image(row) -> dict:
         cropped = image.crop((x1, y1, x2, y2))
 
         # Calculate both embeddings
-        miewid_embedding = compute_embedding(cropped)
-        dinov2_embedding = compute_dinov2_embedding(cropped)
+        miewid_embedding = get_miewid_embedding(cropped)
+        dinov2_embedding = get_dinov2_embedding(cropped)
 
         return {
             "miewid_embedding": miewid_embedding,

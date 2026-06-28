@@ -7,9 +7,12 @@
 ###############################################################################
 
 
-from typing import Dict, List, NamedTuple, Set, Tuple
+from typing import Dict, NamedTuple, Set, Tuple
 
 import numpy as np
+
+from ..utils.embedding_utils import compute_pairwise_distances, normalize_l2
+from ..utils.shark_matching_utils import group_images_by_shark
 
 
 class PairStats(NamedTuple):
@@ -23,27 +26,6 @@ class PairStats(NamedTuple):
     distance_median: float
     distance_mean: float
     distance_max: float
-
-
-def group_images_by_shark(shark_ids: np.ndarray) -> Dict[str, List[int]]:
-    """Map each whaleSharkID to list of NPZ indices for its images."""
-    groups: Dict[str, List[int]] = {}
-    for idx, shark_id in enumerate(shark_ids):
-        groups.setdefault(shark_id, []).append(idx)
-    return groups
-
-
-def compute_pairwise_distances(
-    embeddings_a: np.ndarray, embeddings_b: np.ndarray
-) -> np.ndarray:
-    """
-    Compute full NxM squared L2 distance matrix between 2 sets of
-    embeddings. Uses squared L2 to match FAISS IndexFlatL2, which returns
-    squared distances. Expects L2-normalized vectors.
-    """
-    # diff[i, j] = embeddings_a[i] - embeddings_b[j]
-    diff = embeddings_a[:, None, :] - embeddings_b[None, :, :]
-    return np.sum(diff ** 2, axis=2)
 
 
 def aggregate_pair_stats(
@@ -76,8 +58,7 @@ def compare_all_pairs(
     and aggregate stats. Returns a dict keyed by (shark_id_a, shark_id_b).
     """
     # L2-normalize once upfront (consistent with FAISS search normalization)
-    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
-    normalized = embeddings / norms
+    normalized = normalize_l2(embeddings)
 
     shark_to_indices = group_images_by_shark(shark_ids)
 
@@ -112,8 +93,7 @@ def build_pairwise_detail(
     For each winning shark pair, build per-image-pair detail rows with
     individual distances and image URLs (for frontend thumbnails).
     """
-    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
-    normalized = embeddings / norms
+    normalized = normalize_l2(embeddings)
 
     shark_to_indices = group_images_by_shark(shark_ids)
     rows: list[dict] = []

@@ -116,7 +116,7 @@ def build_ranking_dataframe(
         })
 
     df = pd.DataFrame(rows)
-    df = df.sort_values("distance_median").reset_index(drop=True)
+    df = df.sort_values(["distance_median", "whaleSharkID"]).reset_index(drop=True)
     return df
 
 
@@ -167,6 +167,9 @@ if __name__ == "__main__":
 
     pairwise_rows = build_pairwise_detail(embeddings, shark_ids, image_urls, winning_pairs)
     pairwise_df = pd.DataFrame(pairwise_rows)
+    pairwise_df = pairwise_df.sort_values(
+        ["shark_id_a", "shark_id_b", "distance"]
+    ).reset_index(drop=True)
 
     print(f"Exporting pairwise distances ({len(pairwise_df)} image pairs)...")
     export_to_csv(SHARK_PAIRWISE_CSV, pairwise_df)

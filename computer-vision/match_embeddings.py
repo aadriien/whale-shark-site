@@ -7,9 +7,7 @@
 
 import json
 import unicodedata
-from typing import Tuple
 
-import faiss
 import numpy as np
 import pandas as pd
 from src.gbif.constants import (
@@ -31,49 +29,8 @@ from .CONSTANTS import (
 from .get_new_image_embeddings import (
     get_image_records,
 )
-
-# L2 DISTANCE SCALE (for normalized values, to judge match likelihood):
-#   0.0: Perfect match (identical vectors)
-#   0.5 - 1.0: Very similar (vectors close together)
-#   2.0: Moderate similarity (vectors somewhat different)
-#   4.0: Completely different (vectors far apart)
-
-
-def perform_search(
-    known_embeddings: np.ndarray, query_embeddings: np.ndarray, k: int = 1
-) -> Tuple[np.ndarray, np.ndarray]:
-    # Normalize embeddings to make comparison more meaningful
-    def normalize_L2(x: np.ndarray) -> np.ndarray:
-        return x / np.linalg.norm(x, axis=1, keepdims=True)
-
-    known_embeddings = normalize_L2(known_embeddings)
-    query_embeddings = normalize_L2(query_embeddings)
-
-    # Add all known embeddings to index
-    index = faiss.IndexFlatL2(known_embeddings.shape[1])
-    index.add(known_embeddings)
-
-    # Search for top {k} matches
-    distances, indices = index.search(query_embeddings, k)
-    return distances, indices
-
-
-def find_first_different_shark(
-    indices: np.ndarray,
-    distances: np.ndarray,
-    candidate_ids: np.ndarray,
-    current_shark_id: str,
-    exclude_index: int | None = None,
-) -> Tuple[int | None, float | None]:
-    # Scan ranked candidates for the first one belonging to a different shark
-    # (skip the query's own image when searching a dataset against itself)
-    for rank, candidate_idx in enumerate(indices):
-        if exclude_index is not None and candidate_idx == exclude_index:
-            continue
-        if candidate_ids[candidate_idx] != current_shark_id:
-            return int(candidate_idx), float(distances[rank])
-
-    return None, None
+from .utils.embedding_utils import perform_search  # noqa: F401
+from .utils.shark_matching_utils import find_first_different_shark  # noqa: F401
 
 
 def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:

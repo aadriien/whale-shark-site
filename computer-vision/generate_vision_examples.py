@@ -7,13 +7,11 @@
 
 
 import warnings
-from io import BytesIO
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 import cv2
 import numpy as np
 import pandas as pd
-import requests
 from PIL import Image, ImageDraw, ImageFont
 from src.gbif.clean import (
     GBIF_MEDIA_CSV,
@@ -35,6 +33,7 @@ from .CONSTANTS import (
 from .handle_yolo_model import (
     get_yolo_model,
 )
+from .utils.embedding_utils import load_image_from_url
 
 # Segmentation model cache
 _SEGMENTATION_MODEL = None
@@ -58,16 +57,6 @@ def setup_output_directories() -> None:
 
     print(f"Output directories created: {BBOX_FOLDER}, {SEGMENTATION_FOLDER}")
 
-
-def load_image_from_url(url: str) -> Optional[Image.Image]:
-    try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        return Image.open(BytesIO(response.content)).convert("RGB")
-
-    except Exception as e:
-        print(f"Failed to load image from {url}: {e}")
-        return None
 
 
 def get_sample_image_records(num_samples: int = 20) -> pd.DataFrame:
