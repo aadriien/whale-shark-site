@@ -126,6 +126,7 @@ if __name__ == "__main__":
     gbif_data = np.load(GBIF_OUTPUT_NPZ_FILE)
     embeddings = gbif_data["miewid_embeddings"]
     shark_ids = gbif_data["whaleSharkIDs"].astype(str)
+    image_urls = gbif_data["image_url_identifiers"]
 
     print(f"  {len(embeddings)} images across {len(set(shark_ids))} unique sharks")
 
@@ -164,7 +165,7 @@ if __name__ == "__main__":
     winning_pairs = collect_winning_pairs(best_matches)
     print(f"Computing image-pair detail for {len(winning_pairs)} winning pairs...")
 
-    pairwise_rows = build_pairwise_detail(embeddings, shark_ids, winning_pairs)
+    pairwise_rows = build_pairwise_detail(embeddings, shark_ids, image_urls, winning_pairs)
     pairwise_df = pd.DataFrame(pairwise_rows)
 
     print(f"Exporting pairwise distances ({len(pairwise_df)} image pairs)...")

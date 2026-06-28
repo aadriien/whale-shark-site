@@ -105,11 +105,12 @@ def compare_all_pairs(
 def build_pairwise_detail(
     embeddings: np.ndarray,
     shark_ids: np.ndarray,
+    image_urls: np.ndarray,
     winning_pairs: Set[Tuple[str, str]],
 ) -> list[dict]:
     """
     For each winning shark pair, build per-image-pair detail rows with
-    individual distances. These power photo-by-photo breakdown in frontend.
+    individual distances and image URLs (for frontend thumbnails).
     """
     norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
     normalized = embeddings / norms
@@ -132,9 +133,9 @@ def build_pairwise_detail(
             for j, idx_b in enumerate(indices_b):
                 rows.append({
                     "shark_id_a": shark_a,
-                    "image_index_a": idx_a,
+                    "image_url_a": str(image_urls[idx_a]),
                     "shark_id_b": shark_b,
-                    "image_index_b": idx_b,
+                    "image_url_b": str(image_urls[idx_b]),
                     "distance": round(float(dist_matrix[i, j]), 4),
                 })
 
