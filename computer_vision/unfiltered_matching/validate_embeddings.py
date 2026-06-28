@@ -12,8 +12,8 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_MEDIA_CSV
 from src.utils.data_utils import export_to_csv, read_csv
 
-from .calculate_coordinate_distance import calculate_distance
-from .CONSTANTS import (
+from ..vision_utils.coordinate_distance_utils import calculate_distance
+from ..CONSTANTS import (
     NEW_EMBEDDINGS_FOLDER,
     VALIDATED_MEDIA_MATCHES_FILE,
     VALIDATED_MEDIA_MATCHES_JSON,

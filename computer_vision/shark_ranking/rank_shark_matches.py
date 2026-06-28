@@ -16,8 +16,8 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import export_to_csv, read_csv
 
-from ..assess_shark_match_plausibility import build_exclusion_map
-from ..match_embeddings import export_to_json
+from ..vision_utils.plausibility_utils import build_exclusion_map
+from ..unfiltered_matching.match_embeddings import export_to_json
 from .compare_shark_pairs import PairStats, build_pairwise_detail, compare_all_pairs
 from .constants import (
     GBIF_OUTPUT_NPZ_FILE,

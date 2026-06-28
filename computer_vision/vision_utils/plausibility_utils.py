@@ -14,7 +14,7 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import read_csv
 
-from .calculate_coordinate_distance import calculate_distance_matrix
+from .coordinate_distance_utils import calculate_distance_matrix
 
 
 def _event_date_to_ordinal(date_value) -> float:

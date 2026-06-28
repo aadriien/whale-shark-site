@@ -1,37 +1,39 @@
 ###############################################################################
-##  `match_plausible_embeddings.py`                                          ##
+##  `match_embeddings.py`                                                    ##
 ##                                                                           ##
-##  Purpose: Mirrors match_embeddings.py, but excludes candidates that are   ##
-##           geographically/temporally IMPOSSIBLE matches for a given shark. ##
-##           Output powers build_graph.py; the unfiltered match_embeddings   ##
-##           output continues to power the SharkMatchViewer (with its own    ##
-##           per-match plausibility flag from validate_embeddings.py).       ##
+##  Purpose: Compares new images to known source of truth to identify sharks ##
 ###############################################################################
 
 
+import json
+import unicodedata
+
 import numpy as np
 import pandas as pd
-from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_INDIVIDUAL_SHARKS_STATS_CSV
-from src.utils.data_utils import export_to_csv, read_csv
+from src.gbif.constants import (
+    GBIF_INDIVIDUAL_SHARKS_STATS_CSV,
+)
+from src.utils.data_utils import (
+    export_to_csv,
+    read_csv,
+)
 
-from .assess_shark_match_plausibility import build_exclusion_map
-from .CONSTANTS import (
+from ..CONSTANTS import (
+    GBIF_INDIVIDUAL_MATCHES_FILE,
+    GBIF_INDIVIDUAL_MATCHES_JSON,
+    GBIF_MEDIA_MATCHES_FILE,
+    GBIF_MEDIA_MATCHES_JSON,
     GBIF_OUTPUT_NPZ_FILE,
-    GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_FILE,
-    GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_JSON,
-    GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE,
-    GBIF_PLAUSIBLE_MEDIA_MATCHES_JSON,
     OUTPUT_NPZ_FILE,
 )
-from .get_new_image_embeddings import get_image_records
-from .match_embeddings import export_to_json, format_match_summary
-from .utils.embedding_utils import perform_search
-from .utils.shark_matching_utils import find_first_different_shark
+from ..one_offs.get_new_image_embeddings import (
+    get_image_records,
+)
+from ..vision_utils.embedding_utils import perform_search  # noqa: F401
+from ..vision_utils.shark_matching_utils import find_first_different_shark  # noqa: F401
 
 
-def identify_sharks(
-    known_data: dict, new_data: dict, exclusion_map: dict[str, set[str]]
-) -> list[dict]:
+def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:
     query_miewid = new_data["miewid_embeddings"]
     query_dino = new_data["dinov2_embeddings"]
     query_ids = new_data["whaleSharkIDs"].astype(str)
@@ -44,14 +46,13 @@ def identify_sharks(
 
     # Closest match within GBIF: search the GBIF set against itself.
     # A shark can have many of its own images ranked first, so scan deep
-    # enough (k=50) to find the first genuinely different, plausible shark.
+    # enough (k=50) to find the first genuinely different shark.
     gbif_dist_miewid, gbif_idx_miewid = perform_search(query_miewid, query_miewid, k=50)
     gbif_dist_dino, gbif_idx_dino = perform_search(query_dino, query_dino, k=50)
 
     # Closest match within Ningaloo: search the Ningaloo source-of-truth set.
-    # Ningaloo names live in a different ID namespace than GBIF whaleSharkIDs,
-    # so the exclusion map (keyed by GBIF whaleSharkIDs) never matches here.
-    # These searches are effectively unfiltered, same as match_embeddings.py.
+    # GBIF whaleSharkIDs and Ningaloo whale_shark_names are different ID schemes,
+    # so a same-ID collision is unlikely - a shallow scan (k=5) is just a guardrail.
     ningaloo_dist_miewid, ningaloo_idx_miewid = perform_search(
         known_miewid, query_miewid, k=5
     )
@@ -60,14 +61,12 @@ def identify_sharks(
     results = []
     for i in range(len(query_miewid)):
         current_shark_id = query_ids[i]
-        excluded_ids = exclusion_map.get(current_shark_id, set())
 
         idx_gbif_miewid, dist_gbif_miewid = find_first_different_shark(
             gbif_idx_miewid[i],
             gbif_dist_miewid[i],
             query_ids,
             current_shark_id,
-            excluded_ids,
             exclude_index=i,
         )
         idx_gbif_dino, dist_gbif_dino = find_first_different_shark(
@@ -75,7 +74,6 @@ def identify_sharks(
             gbif_dist_dino[i],
             query_ids,
             current_shark_id,
-            excluded_ids,
             exclude_index=i,
         )
         idx_ningaloo_miewid, dist_ningaloo_miewid = find_first_different_shark(
@@ -83,19 +81,14 @@ def identify_sharks(
             ningaloo_dist_miewid[i],
             known_names,
             current_shark_id,
-            set(),
         )
         idx_ningaloo_dino, dist_ningaloo_dino = find_first_different_shark(
-            ningaloo_idx_dino[i],
-            ningaloo_dist_dino[i],
-            known_names,
-            current_shark_id,
-            set(),
+            ningaloo_idx_dino[i], ningaloo_dist_dino[i], known_names, current_shark_id
         )
 
         result = {
             "image_id": i,  # renamed from query_index for clarity
-            # MIEWID - closest plausible match within GBIF (new_data)
+            # MIEWID - closest match within GBIF (new_data)
             "miewid_gbif_closest_whale_shark_id": (
                 query_ids[idx_gbif_miewid] if idx_gbif_miewid is not None else "N/A"
             ),
@@ -129,7 +122,7 @@ def identify_sharks(
                 if dist_ningaloo_miewid is not None
                 else 999.0
             ),
-            # DINOv2 - closest plausible match within GBIF (new_data)
+            # DINOv2 - closest match within GBIF (new_data)
             "dinov2_gbif_closest_whale_shark_id": (
                 query_ids[idx_gbif_dino] if idx_gbif_dino is not None else "N/A"
             ),
@@ -169,51 +162,69 @@ def identify_sharks(
     return results
 
 
-def translate_npz_positions_to_image_ids(
-    results_df: pd.DataFrame, new_data: dict, gbif_media_df: pd.DataFrame
+def normalize_string(s):
+    if not isinstance(s, str):
+        return s
+
+    # Normalize unicode to decomposed form, then encode to ASCII
+    normalized = unicodedata.normalize("NFKD", s)
+    return normalized.encode("ascii", "ignore").decode("ascii")
+
+
+def export_to_json(filepath: str, df: pd.DataFrame) -> None:
+    data = df.to_dict("records")
+
+    # Normalize string values to handle accents & special characters
+    normalized_data = []
+
+    for record in data:
+        normalized_record = {}
+
+        for key, value in record.items():
+            # Normalize both keys & values
+            normalized_key = normalize_string(key)
+
+            if pd.isna(value):
+                # Use None so JSON becomes null
+                normalized_record[normalized_key] = None
+            elif isinstance(value, str):
+                normalized_record[normalized_key] = normalize_string(value)
+            else:
+                normalized_record[normalized_key] = value
+
+        normalized_data.append(normalized_record)
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(normalized_data, f, indent=2, default=str, ensure_ascii=True)
+
+    print(f"Exported {len(normalized_data)} records to {filepath}")
+
+
+def format_match_summary(
+    media_matches_df: pd.DataFrame, label: str, prefix: str
 ) -> pd.DataFrame:
-    # process_all_images() silently skips images that fail (download/YOLO
-    # errors), so new_data's arrays are a compacted subsequence of
-    # get_image_records(): npz position i doesn't generally correspond to
-    # image_id i. Recover the true image_id for each npz position via the
-    # GBIF media key recorded alongside each embedding. 
-    # A single GBIF `key` (occurrence record) can bundle many photos, so 
-    # `key` alone isn't unique per image. Pair it with `identifier` 
-    # (photo URL), which together uniquely identify a gbif_media_df row.
-    key_to_image_id = dict(
-        zip(
-            zip(
-                gbif_media_df["key"].astype(str),
-                gbif_media_df["identifier"].astype(str),
+    # Groups per-image matches into a single "{label}: shark (image_id, distance)"
+    # summary string per whaleSharkID, for the given column family (e.g. "miewid_gbif")
+    fmt = label + ": {0} ({1}, {2})"
+    cols = [
+        f"{prefix}_closest_whale_shark_id",
+        f"{prefix}_matched_image_id",
+        f"{prefix}_distance",
+    ]
+    colname = f"{label}: closest_whale_shark_id (matched_image_id, distance)"
+
+    return (
+        media_matches_df.groupby("whaleSharkID")
+        .apply(
+            lambda x: ", ".join(
+                sorted(
+                    set(fmt.format(*vals) for vals in zip(*(x[col] for col in cols)))
+                )
             ),
-            gbif_media_df["image_id"],
+            include_groups=False,
         )
+        .reset_index(name=colname)
     )
-    npz_pos_to_image_id = {
-        i: int(key_to_image_id[(key, identifier)])
-        for i, (key, identifier) in enumerate(
-            zip(
-                new_data["image_id_keys"].astype(str),
-                new_data["image_url_identifiers"].astype(str),
-            )
-        )
-        if (key, identifier) in key_to_image_id
-    }
-
-    def translate(npz_pos) -> int:
-        npz_pos = int(npz_pos)
-        return npz_pos_to_image_id.get(npz_pos, -1) if npz_pos >= 0 else -1
-
-    for col in [
-        "image_id",
-        "miewid_gbif_matched_image_id",
-        "miewid_gbif_matched_annotation_id",
-        "dinov2_gbif_matched_image_id",
-        "dinov2_gbif_matched_annotation_id",
-    ]:
-        results_df[col] = results_df[col].apply(translate)
-
-    return results_df
 
 
 def validate_matches(media_matches_df: pd.DataFrame) -> None:
@@ -221,11 +232,13 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
 
     RELEVANT_COLUMNS = [
         "whaleSharkID",
+        # "organismID",
         "identificationID",
         "Oldest Occurrence",
         "Newest Occurrence",
         "country (year)",
         "stateProvince - verbatimLocality (month year)",
+        # "imageURL (license, creator)"
     ]
     media_sharks_df = media_sharks_df[RELEVANT_COLUMNS]
     individual_sharks = media_sharks_df.dropna(subset=["whaleSharkID"]).copy()
@@ -247,8 +260,8 @@ def validate_matches(media_matches_df: pd.DataFrame) -> None:
             summary_df, on="whaleSharkID", how="left"
         )
 
-    export_to_csv(GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_FILE, individual_sharks)
-    export_to_json(GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_JSON, individual_sharks)
+    export_to_csv(GBIF_INDIVIDUAL_MATCHES_FILE, individual_sharks)
+    export_to_json(GBIF_INDIVIDUAL_MATCHES_JSON, individual_sharks)
 
 
 if __name__ == "__main__":
@@ -269,30 +282,26 @@ if __name__ == "__main__":
     #   - image_url_identifiers
     new_data = np.load(GBIF_OUTPUT_NPZ_FILE)
 
-    print("Loading GBIF clean data for plausibility filtering...")
-    gbif_df = read_csv(GBIF_CLEAN_CSV)
-    exclusion_map = build_exclusion_map(gbif_df)
-    print(f"  {len(exclusion_map)} sharks have at least one IMPOSSIBLE pairing")
-
-    # For each GBIF image, find its closest plausible match within GBIF
-    # (new_data) and its closest match within Ningaloo (known_data) separately
-    results = identify_sharks(
-        known_data=known_data, new_data=new_data, exclusion_map=exclusion_map
-    )
+    # For each GBIF image, find its closest match within GBIF (new_data)
+    # and its closest match within Ningaloo (known_data) separately
+    results = identify_sharks(known_data=known_data, new_data=new_data)
     results_df = pd.DataFrame(results)
 
     gbif_media_df = get_image_records()
+    # print(f"Size of media file: {gbif_media_df.shape[0]}")
+
+    # test_df = gbif_media_df.head(10)
+    # enriched_df = test_df.reset_index(drop=True).join(results_df)
+
+    # enriched_df = gbif_media_df.reset_index(drop=True).join(results_df)
 
     # Add index used for matching explicitly & merge
+    results_df["image_id"] = results_df["image_id"].astype(int)
     gbif_media_df = gbif_media_df.reset_index().rename(columns={"index": "image_id"})
-
-    results_df = translate_npz_positions_to_image_ids(
-        results_df, new_data, gbif_media_df
-    )
 
     enriched_df = pd.merge(gbif_media_df, results_df, on="image_id", how="inner")
 
-    export_to_csv(GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE, enriched_df)
-    export_to_json(GBIF_PLAUSIBLE_MEDIA_MATCHES_JSON, enriched_df)
+    export_to_csv(GBIF_MEDIA_MATCHES_FILE, enriched_df)
+    export_to_json(GBIF_MEDIA_MATCHES_JSON, enriched_df)
 
     validate_matches(enriched_df)

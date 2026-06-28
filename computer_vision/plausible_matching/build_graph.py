@@ -14,8 +14,8 @@ import umap
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import read_csv
 
-from .assess_shark_match_plausibility import build_exclusion_map
-from .CONSTANTS import (
+from ..vision_utils.plausibility_utils import build_exclusion_map
+from ..CONSTANTS import (
     GBIF_OUTPUT_NPZ_FILE,
     GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE,
     GRAPH_DATA_FILE,

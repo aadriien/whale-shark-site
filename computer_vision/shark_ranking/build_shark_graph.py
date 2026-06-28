@@ -18,8 +18,8 @@ import umap
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import read_csv
 
-from ..assess_shark_match_plausibility import build_exclusion_map
-from ..utils.shark_matching_utils import group_images_by_shark
+from ..vision_utils.plausibility_utils import build_exclusion_map
+from ..vision_utils.shark_matching_utils import group_images_by_shark
 from .constants import (
     GBIF_OUTPUT_NPZ_FILE,
     SHARK_GRAPH_DATA_FILE,

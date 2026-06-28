@@ -18,27 +18,27 @@ website/public/models/*
 website/public/videos/*
 !website/public/videos/whaleshark_960_540_30fps.mp4
 
-computer-vision/training-data/*
-computer-vision/extracted-data/*
+computer_vision/data/inputs/training_data/*
+computer_vision/data/inputs/extracted_data/*
 
-computer-vision/embeddings-database/*
-computer-vision/new-embeddings/*
+computer_vision/data/outputs/embeddings_database/*
+computer_vision/data/outputs/new_embeddings/*
 
-computer-vision/vision-images/original/*
-computer-vision/vision-images/bbox/*
-computer-vision/vision-images/segmentation/*
-computer-vision/vision-images/bbox-segmentation/*
+computer_vision/data/outputs/vision_images/original/*
+computer_vision/data/outputs/vision_images/bbox/*
+computer_vision/data/outputs/vision_images/segmentation/*
+computer_vision/data/outputs/vision_images/bbox-segmentation/*
 
-!computer-vision/training-data/.gitkeep
-!computer-vision/extracted-data/.gitkeep
+!computer_vision/data/inputs/training_data/.gitkeep
+!computer_vision/data/inputs/extracted_data/.gitkeep
 
-!computer-vision/embeddings-database/.gitkeep
-!computer-vision/new-embeddings/.gitkeep
+!computer_vision/data/outputs/embeddings_database/.gitkeep
+!computer_vision/data/outputs/new_embeddings/.gitkeep
 
-!computer-vision/vision-images/original/.gitkeep
-!computer-vision/vision-images/bbox/.gitkeep
-!computer-vision/vision-images/segmentation/.gitkeep
-!computer-vision/vision-images/bbox-segmentation/.gitkeep
+!computer_vision/data/outputs/vision_images/original/.gitkeep
+!computer_vision/data/outputs/vision_images/bbox/.gitkeep
+!computer_vision/data/outputs/vision_images/segmentation/.gitkeep
+!computer_vision/data/outputs/vision_images/bbox-segmentation/.gitkeep
 
 yolov8n.pt
 yolov8n-seg.pt

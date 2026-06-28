@@ -18,7 +18,7 @@ from ultralytics import YOLO
 from .coco_to_yolo import (
     create_data_yaml,
 )
-from .CONSTANTS import (
+from ..CONSTANTS import (
     FULL_PATH_TO_DATASET_FOLDER,
     PROJECT_RUNS_TRAINS_PATH,
     YAML_FILE,

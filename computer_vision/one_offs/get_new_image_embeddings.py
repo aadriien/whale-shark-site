@@ -23,11 +23,11 @@ from transformers import (  # For DINOv2
 )
 from transformers import AutoModel as HF_AutoModel
 
-from .CONSTANTS import GBIF_OUTPUT_NPZ_FILE
-from .handle_yolo_model import (
+from ..CONSTANTS import GBIF_OUTPUT_NPZ_FILE
+from ..raw_training.handle_yolo_model import (
     get_yolo_model,
 )
-from .utils.embedding_utils import (
+from ..vision_utils.embedding_utils import (
     build_miewid_preprocess,
     compute_dinov2_embedding,
     compute_miewid_embedding,

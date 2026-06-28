@@ -11,8 +11,8 @@ from typing import Dict, NamedTuple, Set, Tuple
 
 import numpy as np
 
-from ..utils.embedding_utils import compute_pairwise_distances, normalize_l2
-from ..utils.shark_matching_utils import group_images_by_shark
+from ..vision_utils.embedding_utils import compute_pairwise_distances, normalize_l2
+from ..vision_utils.shark_matching_utils import group_images_by_shark
 
 
 class PairStats(NamedTuple):

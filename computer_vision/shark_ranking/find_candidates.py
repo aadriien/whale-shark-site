@@ -12,8 +12,8 @@ from typing import Dict, Set, Tuple
 
 import numpy as np
 
-from ..utils.embedding_utils import perform_search
-from ..utils.shark_matching_utils import find_top_n_different_sharks
+from ..vision_utils.embedding_utils import perform_search
+from ..vision_utils.shark_matching_utils import find_top_n_different_sharks
 
 # FAISS k=500: brute-force IndexFlatL2 computes all distances regardless of k,
 # so this is generous headroom to guarantee we find enough different plausible

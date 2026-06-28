@@ -24,16 +24,16 @@ from src.utils.data_utils import (
 # Use separate model (yolov8n-seg) for segmentation
 from ultralytics import YOLO
 
-from .CONSTANTS import (
+from ..CONSTANTS import (
     BBOX_FOLDER,
     BBOX_SEGMENTATION_FOLDER,
     ORIGINAL_FOLDER,
     SEGMENTATION_FOLDER,
 )
-from .handle_yolo_model import (
+from ..raw_training.handle_yolo_model import (
     get_yolo_model,
 )
-from .utils.embedding_utils import load_image_from_url
+from ..vision_utils.embedding_utils import load_image_from_url
 
 # Segmentation model cache
 _SEGMENTATION_MODEL = None
