@@ -350,3 +350,69 @@
     font-variant-numeric: tabular-nums;
 }
 
+/* SharkRankingStatsPanel */
+
+.graph-panel-mutual {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--accent-dark-blue);
+}
+
+.shark-ranking-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.shark-ranking-stat {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    border: 1px solid var(--border-tertiary);
+    border-radius: 6px;
+    text-align: center;
+}
+
+.shark-ranking-stat-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.55;
+}
+
+.shark-ranking-stat-value {
+    font-size: 0.95rem;
+    font-family: monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.shark-ranking-pair-count {
+    font-size: 0.78rem;
+    opacity: 0.65;
+    text-align: center;
+    margin: 0;
+}
+
+.shark-ranking-pair-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 0.78rem;
+    padding: 2px 0;
+}
+
+.shark-ranking-pair-images {
+    font-family: monospace;
+    opacity: 0.7;
+    font-size: 0.72rem;
+}
+
+.shark-ranking-pair-dist {
+    font-family: monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+}
+

@@ -4,6 +4,7 @@ import InteractiveDemo from "../components/overviews/InteractiveDemo";
 import CVApplications from "../components/overviews/CVApplications";
 import SharkMatchViewer from "../components/SharkMatchViewer";
 import SharkMatchGraph from "../components/SharkMatchGraph";
+import SharkRankingGraph from "../components/shark-ranking-graph/SharkRankingGraph";
 
 function SharkVision() {
     return (
@@ -16,6 +17,7 @@ function SharkVision() {
             <CVApplications />
             <SharkMatchViewer />
             <SharkMatchGraph />
+            <SharkRankingGraph />
         </div>
     );
 }
