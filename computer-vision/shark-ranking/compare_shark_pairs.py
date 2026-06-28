@@ -37,12 +37,13 @@ def compute_pairwise_distances(
     embeddings_a: np.ndarray, embeddings_b: np.ndarray
 ) -> np.ndarray:
     """
-    Compute full NxM L2 distance matrix between 2 sets of embeddings.
-    Expects L2-normalized vectors (consistent with perform_search).
+    Compute full NxM squared L2 distance matrix between 2 sets of
+    embeddings. Uses squared L2 to match FAISS IndexFlatL2, which returns
+    squared distances. Expects L2-normalized vectors.
     """
     # diff[i, j] = embeddings_a[i] - embeddings_b[j]
     diff = embeddings_a[:, None, :] - embeddings_b[None, :, :]
-    return np.linalg.norm(diff, axis=2)
+    return np.sum(diff ** 2, axis=2)
 
 
 def aggregate_pair_stats(
