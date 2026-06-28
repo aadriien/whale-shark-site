@@ -14,6 +14,7 @@ ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 		match_plausible_shark_embeddings \
 		run_vision_pipeline generate_vision_examples \
 		build_shark_graph \
+		rank_shark_matches build_shark_ranking_graph run_shark_ranking_pipeline \
 		format format_vision format_website format_all clean \
 		setup_website run_website deploy_website clean_website
 
@@ -113,13 +114,25 @@ validate_shark_embeddings:
 match_plausible_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.match_plausible_embeddings
 
-# Run full CV matching pipeline sequentially (embeddings → matches → validation)
+# Run full CV matching pipeline sequentially (embeddings -> matches -> validation)
 run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings match_plausible_shark_embeddings build_shark_graph
 
 
 # Build match graph: UMAP projection + networkx graph construction
 build_shark_graph:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.build_graph
+
+
+# Rank sharks by aggregate MiewID distance across all image pairs (GBIF only)
+rank_shark_matches:
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.shark-ranking.rank_shark_matches
+
+# Build shark-level graph: UMAP on centroids + networkx graph construction
+build_shark_ranking_graph:
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.shark-ranking.build_shark_graph
+
+# Run full shark ranking pipeline sequentially (ranking -> graph)
+run_shark_ranking_pipeline: rank_shark_matches build_shark_ranking_graph
 
 
 # Generate CV examples with YOLO bounding boxes & segmentation masks
