@@ -21,7 +21,8 @@ from transformers import (
     AutoModel,  # For MiewID & DINOv2
 )
 
-from ..CONSTANTS import ANNOTATIONS_PATH, IMAGES_PATH, OUTPUT_NPZ_FILE
+from ..root_constants import OUTPUT_NPZ_FILE
+from .raw_training_constants import ANNOTATIONS_PATH, IMAGES_PATH
 
 ###############################################################################
 # ——> DATASET FIELDS FOR LILA NINGALOO:

@@ -17,6 +17,7 @@ from ..vision_utils.shark_matching_utils import group_images_by_shark
 
 class PairStats(NamedTuple):
     """Aggregate distance statistics for one shark pair."""
+
     shark_id_a: str
     shark_id_b: str
     image_count_a: int
@@ -111,12 +112,14 @@ def build_pairwise_detail(
 
         for i, idx_a in enumerate(indices_a):
             for j, idx_b in enumerate(indices_b):
-                rows.append({
-                    "shark_id_a": shark_a,
-                    "image_url_a": str(image_urls[idx_a]),
-                    "shark_id_b": shark_b,
-                    "image_url_b": str(image_urls[idx_b]),
-                    "distance": round(float(dist_matrix[i, j]), 4),
-                })
+                rows.append(
+                    {
+                        "shark_id_a": shark_a,
+                        "image_url_a": str(image_urls[idx_a]),
+                        "shark_id_b": shark_b,
+                        "image_url_b": str(image_urls[idx_b]),
+                        "distance": round(float(dist_matrix[i, j]), 4),
+                    }
+                )
 
     return rows

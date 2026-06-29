@@ -20,7 +20,7 @@ from src.utils.data_utils import read_csv
 
 from ..vision_utils.plausibility_utils import build_exclusion_map
 from ..vision_utils.shark_matching_utils import group_images_by_shark
-from .constants import (
+from .shark_ranking_constants import (
     GBIF_OUTPUT_NPZ_FILE,
     SHARK_GRAPH_DATA_FILE,
     SHARK_RANKING_CSV,
@@ -36,9 +36,9 @@ def compute_shark_centroids(
     """
     shark_to_indices = group_images_by_shark(shark_ids)
     ordered_ids = sorted(shark_to_indices.keys())
-    centroids = np.array([
-        embeddings[shark_to_indices[sid]].mean(axis=0) for sid in ordered_ids
-    ])
+    centroids = np.array(
+        [embeddings[shark_to_indices[sid]].mean(axis=0) for sid in ordered_ids]
+    )
     return centroids, ordered_ids
 
 
@@ -59,8 +59,10 @@ def build_graph(
     best match. Edges carry aggregate distance stats.
     """
     # Map shark_id -> UMAP coordinates
-    coord_map = {sid: (float(coords[i][0]), float(coords[i][1]))
-                 for i, sid in enumerate(ordered_ids)}
+    coord_map = {
+        sid: (float(coords[i][0]), float(coords[i][1]))
+        for i, sid in enumerate(ordered_ids)
+    }
 
     G = nx.DiGraph()
 
@@ -149,17 +151,16 @@ def export_graph(
     nodes = []
     for nid, attrs in G.nodes(data=True):
         cluster_id = clusters.get(nid)
-        nodes.append({
-            "id": nid,
-            **attrs,
-            "cluster_id": cluster_id,
-            "contradiction": cluster_id in contradictions,
-        })
+        nodes.append(
+            {
+                "id": nid,
+                **attrs,
+                "cluster_id": cluster_id,
+                "contradiction": cluster_id in contradictions,
+            }
+        )
 
-    edges = [
-        {"source": u, "target": v, **attrs}
-        for u, v, attrs in G.edges(data=True)
-    ]
+    edges = [{"source": u, "target": v, **attrs} for u, v, attrs in G.edges(data=True)]
 
     contradiction_entries = [
         {

@@ -24,16 +24,16 @@ from src.utils.data_utils import (
 # Use separate model (yolov8n-seg) for segmentation
 from ultralytics import YOLO
 
-from ..CONSTANTS import (
+from ..raw_training.handle_yolo_model import (
+    get_yolo_model,
+)
+from ..vision_utils.embedding_utils import load_image_from_url
+from .one_offs_constants import (
     BBOX_FOLDER,
     BBOX_SEGMENTATION_FOLDER,
     ORIGINAL_FOLDER,
     SEGMENTATION_FOLDER,
 )
-from ..raw_training.handle_yolo_model import (
-    get_yolo_model,
-)
-from ..vision_utils.embedding_utils import load_image_from_url
 
 # Segmentation model cache
 _SEGMENTATION_MODEL = None
@@ -56,7 +56,6 @@ def setup_output_directories() -> None:
     _ = folder_exists(SEGMENTATION_FOLDER, True)
 
     print(f"Output directories created: {BBOX_FOLDER}, {SEGMENTATION_FOLDER}")
-
 
 
 def get_sample_image_records(num_samples: int = 20) -> pd.DataFrame:

@@ -86,33 +86,33 @@ generate_shark_images:
 
 # Open up tarfile to get .coco dataset (for Hugging Face computer vision model)
 extract_tar:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.extract_tar_data
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.raw_training.extract_tar_data
 
 # Build source of truth whale shark library (embeddings x IDs)
 process_annotations:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.process_annotations
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.raw_training.process_annotations
 
 # Train YOLOv8 CV model for improved shark object detection
 train_model:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.handle_yolo_model
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.raw_training.handle_yolo_model
 
 
 # Generate embeddings (+ BBOXes) for new images of unknown sharks
 get_new_shark_embeddings:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.get_new_image_embeddings
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.one_offs.get_new_image_embeddings
 
 # Identify matches for unknown sharks based on source of truth
 match_shark_embeddings:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.match_embeddings
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.unfiltered_matching.match_embeddings
 
 # Leverage proof by contradiction to check match results
 validate_shark_embeddings:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.validate_embeddings
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.unfiltered_matching.validate_embeddings
 
 # Identify plausible-only matches (excludes geo/temporal IMPOSSIBLE candidates);
 # powers the match graph in build_graph.py
 match_plausible_shark_embeddings:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.match_plausible_embeddings
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.plausible_matching.match_plausible_embeddings
 
 # Run full CV matching pipeline sequentially (embeddings -> matches -> validation)
 run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings match_plausible_shark_embeddings build_shark_graph
@@ -120,16 +120,16 @@ run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_sh
 
 # Build match graph: UMAP projection + networkx graph construction
 build_shark_graph:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.build_graph
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.plausible_matching.build_graph
 
 
 # Rank sharks by aggregate MiewID distance across all image pairs (GBIF only)
 rank_shark_matches:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.shark-ranking.rank_shark_matches
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.shark_ranking.rank_shark_matches
 
 # Build shark-level graph: UMAP on centroids + networkx graph construction
 build_shark_ranking_graph:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.shark-ranking.build_shark_graph
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.shark_ranking.build_shark_graph
 
 # Run full shark ranking pipeline sequentially (ranking -> graph)
 run_shark_ranking_pipeline: rank_shark_matches build_shark_ranking_graph
@@ -137,7 +137,7 @@ run_shark_ranking_pipeline: rank_shark_matches build_shark_ranking_graph
 
 # Generate CV examples with YOLO bounding boxes & segmentation masks
 generate_vision_examples:
-	@$(ACTIVATE_VENV) $(POETRY) run python -m computer-vision.generate_vision_examples
+	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.one_offs.generate_vision_examples
 
 
 
@@ -148,8 +148,8 @@ format:
 
 # Auto-format Python code (computer vision files)
 format_vision:
-	@$(ACTIVATE_VENV) $(POETRY) run black computer-vision/
-	@$(ACTIVATE_VENV) $(POETRY) run ruff check --fix computer-vision/
+	@$(ACTIVATE_VENV) $(POETRY) run black computer_vision/
+	@$(ACTIVATE_VENV) $(POETRY) run ruff check --fix computer_vision/
 
 # Auto-format & lint-fix website TypeScript/React code
 format_website:

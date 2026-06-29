@@ -12,15 +12,15 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_MEDIA_CSV
 from src.utils.data_utils import export_to_csv, read_csv
 
+from ..root_constants import NEW_EMBEDDINGS_FOLDER
 from ..vision_utils.coordinate_distance_utils import calculate_distance
-from ..CONSTANTS import (
-    NEW_EMBEDDINGS_FOLDER,
+from ..vision_utils.io_utils import export_to_json
+from .unfiltered_matching_constants import (
     VALIDATED_MEDIA_MATCHES_FILE,
     VALIDATED_MEDIA_MATCHES_JSON,
     VALIDATED_SHARK_MATCHES_FILE,
     VALIDATED_SHARK_MATCHES_JSON,
 )
-from .match_embeddings import export_to_json
 
 
 def implied_speed_km_per_day(

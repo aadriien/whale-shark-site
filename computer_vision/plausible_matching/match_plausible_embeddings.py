@@ -14,19 +14,24 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV, GBIF_INDIVIDUAL_SHARKS_STATS_CSV
 from src.utils.data_utils import export_to_csv, read_csv
 
-from ..vision_utils.plausibility_utils import build_exclusion_map
-from ..CONSTANTS import (
+from ..root_constants import (
     GBIF_OUTPUT_NPZ_FILE,
+    OUTPUT_NPZ_FILE,
+)
+from ..vision_utils.embedding_utils import perform_search
+from ..vision_utils.io_utils import (
+    export_to_json,
+    format_match_summary,
+    get_image_records,
+)
+from ..vision_utils.plausibility_utils import build_exclusion_map
+from ..vision_utils.shark_matching_utils import find_first_different_shark
+from .plausible_matching_constants import (
     GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_FILE,
     GBIF_PLAUSIBLE_INDIVIDUAL_MATCHES_JSON,
     GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE,
     GBIF_PLAUSIBLE_MEDIA_MATCHES_JSON,
-    OUTPUT_NPZ_FILE,
 )
-from ..one_offs.get_new_image_embeddings import get_image_records
-from ..unfiltered_matching.match_embeddings import export_to_json, format_match_summary
-from ..vision_utils.embedding_utils import perform_search
-from ..vision_utils.shark_matching_utils import find_first_different_shark
 
 
 def identify_sharks(
@@ -176,9 +181,9 @@ def translate_npz_positions_to_image_ids(
     # errors), so new_data's arrays are a compacted subsequence of
     # get_image_records(): npz position i doesn't generally correspond to
     # image_id i. Recover the true image_id for each npz position via the
-    # GBIF media key recorded alongside each embedding. 
-    # A single GBIF `key` (occurrence record) can bundle many photos, so 
-    # `key` alone isn't unique per image. Pair it with `identifier` 
+    # GBIF media key recorded alongside each embedding.
+    # A single GBIF `key` (occurrence record) can bundle many photos, so
+    # `key` alone isn't unique per image. Pair it with `identifier`
     # (photo URL), which together uniquely identify a gbif_media_df row.
     key_to_image_id = dict(
         zip(

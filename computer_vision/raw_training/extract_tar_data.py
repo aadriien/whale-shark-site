@@ -11,7 +11,7 @@ from src.utils.data_utils import (
     folder_exists,
 )
 
-from ..CONSTANTS import (
+from .raw_training_constants import (
     EXTRACTED_DATA_FOLDER,
     LILA_NINGALOO_ARZOUMANIAN_COCO_EXTRACTED,
     LILA_NINGALOO_ARZOUMANIAN_COCO_TAR,

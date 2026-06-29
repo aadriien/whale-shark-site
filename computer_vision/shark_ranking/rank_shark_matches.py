@@ -16,17 +16,17 @@ import pandas as pd
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import export_to_csv, read_csv
 
+from ..vision_utils.io_utils import export_to_json
 from ..vision_utils.plausibility_utils import build_exclusion_map
-from ..unfiltered_matching.match_embeddings import export_to_json
 from .compare_shark_pairs import PairStats, build_pairwise_detail, compare_all_pairs
-from .constants import (
+from .find_candidates import generate_candidate_pairs
+from .shark_ranking_constants import (
     GBIF_OUTPUT_NPZ_FILE,
     SHARK_PAIRWISE_CSV,
     SHARK_PAIRWISE_JSON,
     SHARK_RANKING_CSV,
     SHARK_RANKING_JSON,
 )
-from .find_candidates import generate_candidate_pairs
 
 
 def rank_matches(
@@ -102,18 +102,20 @@ def build_ranking_dataframe(
     """Assemble shark ranking summary as a DataFrame."""
     rows = []
     for shark_id, stats in best_matches.items():
-        rows.append({
-            "whaleSharkID": shark_id,
-            "image_count": shark_image_counts.get(shark_id, 0),
-            "best_match_shark_id": stats.shark_id_b,
-            "best_match_image_count": shark_image_counts.get(stats.shark_id_b, 0),
-            "pair_count": stats.pair_count,
-            "distance_min": stats.distance_min,
-            "distance_median": stats.distance_median,
-            "distance_mean": stats.distance_mean,
-            "distance_max": stats.distance_max,
-            "is_mutual": shark_id in mutual_sharks,
-        })
+        rows.append(
+            {
+                "whaleSharkID": shark_id,
+                "image_count": shark_image_counts.get(shark_id, 0),
+                "best_match_shark_id": stats.shark_id_b,
+                "best_match_image_count": shark_image_counts.get(stats.shark_id_b, 0),
+                "pair_count": stats.pair_count,
+                "distance_min": stats.distance_min,
+                "distance_median": stats.distance_median,
+                "distance_mean": stats.distance_mean,
+                "distance_max": stats.distance_max,
+                "is_mutual": shark_id in mutual_sharks,
+            }
+        )
 
     df = pd.DataFrame(rows)
     df = df.sort_values(["distance_median", "whaleSharkID"]).reset_index(drop=True)
@@ -152,10 +154,10 @@ if __name__ == "__main__":
     print(f"  {len(mutual_sharks)} sharks have mutual best matches")
 
     # Step 5: Build & export shark ranking summary
-    shark_image_counts = {
-        sid: int(np.sum(shark_ids == sid)) for sid in set(shark_ids)
-    }
-    ranking_df = build_ranking_dataframe(best_matches, mutual_sharks, shark_image_counts)
+    shark_image_counts = {sid: int(np.sum(shark_ids == sid)) for sid in set(shark_ids)}
+    ranking_df = build_ranking_dataframe(
+        best_matches, mutual_sharks, shark_image_counts
+    )
 
     print(f"\nExporting shark rankings ({len(ranking_df)} sharks)...")
     export_to_csv(SHARK_RANKING_CSV, ranking_df)
@@ -165,7 +167,9 @@ if __name__ == "__main__":
     winning_pairs = collect_winning_pairs(best_matches)
     print(f"Computing image-pair detail for {len(winning_pairs)} winning pairs...")
 
-    pairwise_rows = build_pairwise_detail(embeddings, shark_ids, image_urls, winning_pairs)
+    pairwise_rows = build_pairwise_detail(
+        embeddings, shark_ids, image_urls, winning_pairs
+    )
     pairwise_df = pd.DataFrame(pairwise_rows)
     pairwise_df = pairwise_df.sort_values(
         ["shark_id_a", "shark_id_b", "distance"]

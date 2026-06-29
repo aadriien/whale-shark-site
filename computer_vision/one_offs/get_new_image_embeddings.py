@@ -10,12 +10,8 @@ import warnings
 import numpy as np
 import pandas as pd
 from PIL import Image
-from src.gbif.clean import (
-    GBIF_MEDIA_CSV,
-)
 from src.utils.data_utils import (
     folder_exists,
-    read_csv,
 )
 from transformers import (  # For DINOv2
     AutoImageProcessor,
@@ -23,16 +19,17 @@ from transformers import (  # For DINOv2
 )
 from transformers import AutoModel as HF_AutoModel
 
-from ..CONSTANTS import GBIF_OUTPUT_NPZ_FILE
 from ..raw_training.handle_yolo_model import (
     get_yolo_model,
 )
+from ..root_constants import GBIF_OUTPUT_NPZ_FILE
 from ..vision_utils.embedding_utils import (
     build_miewid_preprocess,
     compute_dinov2_embedding,
     compute_miewid_embedding,
     load_image_from_url,
 )
+from ..vision_utils.io_utils import get_image_records  # noqa: F401
 
 # ---------- MiewID embeddings model ----------
 
@@ -72,31 +69,6 @@ def get_dinov2_model():
 
 
 # Step 1: Open gbif_media.csv & read all entries (grab images)
-
-
-def get_image_records() -> pd.DataFrame:
-    media_df = read_csv(
-        GBIF_MEDIA_CSV, dtype={"key": str, "whaleSharkID": str, "identificationID": str}
-    )
-
-    # Keep only relevant columns
-    RELEVANT_COLUMNS = [
-        "key",  # maps to key in regular GBIF occurrence dataset
-        "whaleSharkID",
-        "occurrenceID",
-        "identificationID",
-        "format",
-        "references",
-        "identifier",  # image URL (often in AWS S3 bucket)
-    ]
-    media_df = media_df[RELEVANT_COLUMNS]
-
-    # Enforce essential fields for embedding
-    REQUIRED_FOR_EMBEDDING = ["key", "whaleSharkID", "identifier"]
-    media_df_clean = media_df.dropna(subset=REQUIRED_FOR_EMBEDDING)
-    media_df_clean.reset_index(drop=True, inplace=True)
-
-    return media_df_clean
 
 
 # Step 2: Use YOLOv8 model to detect shark object & create bounding box

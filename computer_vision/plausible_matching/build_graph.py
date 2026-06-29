@@ -14,12 +14,14 @@ import umap
 from src.gbif.constants import GBIF_CLEAN_CSV
 from src.utils.data_utils import read_csv
 
-from ..vision_utils.plausibility_utils import build_exclusion_map
-from ..CONSTANTS import (
+from ..root_constants import (
     GBIF_OUTPUT_NPZ_FILE,
+    OUTPUT_NPZ_FILE,
+)
+from ..vision_utils.plausibility_utils import build_exclusion_map
+from .plausible_matching_constants import (
     GBIF_PLAUSIBLE_MEDIA_MATCHES_FILE,
     GRAPH_DATA_FILE,
-    OUTPUT_NPZ_FILE,
 )
 
 
@@ -140,7 +142,7 @@ def assign_clusters(G: nx.DiGraph, mutual_only: bool) -> dict[str, int]:
     # gbif_to_ningaloo edges are always excluded: unfiltered (k=1, different
     # ID namespace) Ningaloo hub matches would collapse the graph into one
     # mega-cluster.
-    
+
     # mutual_only restricts to reciprocal top-1 matches (A's top-1 is B AND
     # B's top-1 is A). Since each node has exactly one outgoing gbif_to_gbif
     # edge, mutual components are always singletons or pairs, never longer

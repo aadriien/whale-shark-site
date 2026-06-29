@@ -7,9 +7,9 @@
 
 
 # Re-export shared input paths from the parent pipeline
-from ..CONSTANTS import GBIF_OUTPUT_NPZ_FILE  # noqa: F401
+from ..root_constants import GBIF_OUTPUT_NPZ_FILE  # noqa: F401
 
-SHARK_RANKING_FOLDER = "computer-vision/new-embeddings/shark-ranking"
+SHARK_RANKING_FOLDER = "computer_vision/data/outputs/new_embeddings/shark_ranking"
 JSON_OUTPUT_FOLDER = "./website/src/assets/data/json/shark-ranking"
 
 # One row per shark: best match + aggregate distance stats

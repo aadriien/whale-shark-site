@@ -5,9 +5,6 @@
 ###############################################################################
 
 
-import json
-import unicodedata
-
 import numpy as np
 import pandas as pd
 from src.gbif.constants import (
@@ -18,19 +15,23 @@ from src.utils.data_utils import (
     read_csv,
 )
 
-from ..CONSTANTS import (
+from ..root_constants import (
+    GBIF_OUTPUT_NPZ_FILE,
+    OUTPUT_NPZ_FILE,
+)
+from ..vision_utils.embedding_utils import perform_search  # noqa: F401
+from ..vision_utils.io_utils import (
+    export_to_json,
+    format_match_summary,
+    get_image_records,
+)  # noqa: F401
+from ..vision_utils.shark_matching_utils import find_first_different_shark  # noqa: F401
+from .unfiltered_matching_constants import (
     GBIF_INDIVIDUAL_MATCHES_FILE,
     GBIF_INDIVIDUAL_MATCHES_JSON,
     GBIF_MEDIA_MATCHES_FILE,
     GBIF_MEDIA_MATCHES_JSON,
-    GBIF_OUTPUT_NPZ_FILE,
-    OUTPUT_NPZ_FILE,
 )
-from ..one_offs.get_new_image_embeddings import (
-    get_image_records,
-)
-from ..vision_utils.embedding_utils import perform_search  # noqa: F401
-from ..vision_utils.shark_matching_utils import find_first_different_shark  # noqa: F401
 
 
 def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:
@@ -160,71 +161,6 @@ def identify_sharks(known_data: dict, new_data: dict) -> list[dict]:
         results.append(result)
 
     return results
-
-
-def normalize_string(s):
-    if not isinstance(s, str):
-        return s
-
-    # Normalize unicode to decomposed form, then encode to ASCII
-    normalized = unicodedata.normalize("NFKD", s)
-    return normalized.encode("ascii", "ignore").decode("ascii")
-
-
-def export_to_json(filepath: str, df: pd.DataFrame) -> None:
-    data = df.to_dict("records")
-
-    # Normalize string values to handle accents & special characters
-    normalized_data = []
-
-    for record in data:
-        normalized_record = {}
-
-        for key, value in record.items():
-            # Normalize both keys & values
-            normalized_key = normalize_string(key)
-
-            if pd.isna(value):
-                # Use None so JSON becomes null
-                normalized_record[normalized_key] = None
-            elif isinstance(value, str):
-                normalized_record[normalized_key] = normalize_string(value)
-            else:
-                normalized_record[normalized_key] = value
-
-        normalized_data.append(normalized_record)
-
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(normalized_data, f, indent=2, default=str, ensure_ascii=True)
-
-    print(f"Exported {len(normalized_data)} records to {filepath}")
-
-
-def format_match_summary(
-    media_matches_df: pd.DataFrame, label: str, prefix: str
-) -> pd.DataFrame:
-    # Groups per-image matches into a single "{label}: shark (image_id, distance)"
-    # summary string per whaleSharkID, for the given column family (e.g. "miewid_gbif")
-    fmt = label + ": {0} ({1}, {2})"
-    cols = [
-        f"{prefix}_closest_whale_shark_id",
-        f"{prefix}_matched_image_id",
-        f"{prefix}_distance",
-    ]
-    colname = f"{label}: closest_whale_shark_id (matched_image_id, distance)"
-
-    return (
-        media_matches_df.groupby("whaleSharkID")
-        .apply(
-            lambda x: ", ".join(
-                sorted(
-                    set(fmt.format(*vals) for vals in zip(*(x[col] for col in cols)))
-                )
-            ),
-            include_groups=False,
-        )
-        .reset_index(name=colname)
-    )
 
 
 def validate_matches(media_matches_df: pd.DataFrame) -> None:
