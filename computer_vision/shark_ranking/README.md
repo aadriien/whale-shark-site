@@ -1,145 +1,122 @@
-# Shark-Level Ranking Pipeline — Implementation Plan
+# Shark-Level Ranking Pipeline
 
 ## Overview
 
-A new, self-contained pipeline that determines the best **shark-to-shark** match
+A self-contained pipeline that determines the best **shark-to-shark** match
 for every GBIF whale shark, based on aggregate MiewID embedding distances across
-all image pairs. Completely separate from the existing image-level matching in
-`match_embeddings.py` / `match_plausible_embeddings.py` — no existing files or
-outputs are modified.
+all image pairs. Separate from the image-level matching in
+`unfiltered_matching/` and `plausible_matching/`.
 
 ---
 
 ## Directory Structure
 
 ```
-computer-vision/
-  shark-ranking/                    <-- new subdirectory
+computer_vision/
+  shark_ranking/
     __init__.py
-    constants.py                    <-- output paths for this feature only
-    find_candidates.py              <-- FAISS search → candidate shark pairs
+    shark_ranking_constants.py      <-- output paths for this feature
+    find_candidates.py              <-- FAISS search -> candidate shark pairs
     compare_shark_pairs.py          <-- pairwise distance matrices + aggregation
-    rank_shark_matches.py           <-- main orchestrator: load → rank → export
+    rank_shark_matches.py           <-- main orchestrator: load -> rank -> export
     build_shark_graph.py            <-- UMAP + graph construction + JSON export
 ```
 
 ---
 
-## File 1: `constants.py`
+## `shark_ranking_constants.py`
 
-Output path constants scoped to this feature. Mirrors the pattern in
-`computer-vision/CONSTANTS.py` but only defines new paths.
-
-### Paths
+Output path constants scoped to this feature. Re-imports `GBIF_OUTPUT_NPZ_FILE`
+from `root_constants.py`.
 
 | Constant | Path | Purpose |
 |----------|------|---------|
-| `SHARK_RANKING_CSV` | `computer-vision/new-embeddings/GBIF_shark_rankings.csv` | One row per shark: best match + aggregate stats |
-| `SHARK_RANKING_JSON` | `website/src/assets/data/json/GBIF_shark_rankings.json` | Same, for frontend consumption |
-| `SHARK_PAIRWISE_CSV` | `computer-vision/new-embeddings/GBIF_shark_pairwise_distances.csv` | One row per image-pair within each candidate shark pair |
-| `SHARK_PAIRWISE_JSON` | `website/src/assets/data/json/GBIF_shark_pairwise_distances.json` | Same, for frontend (powers the right panel detail view) |
-| `SHARK_GRAPH_DATA_FILE` | `website/src/assets/data/json/shark_graph_data.json` | Graph JSON for the new shark-level Cytoscape graph |
-
-Also re-imports shared input paths from parent `CONSTANTS.py`:
-- `GBIF_OUTPUT_NPZ_FILE` (GBIF embeddings)
+| `SHARK_RANKING_CSV` | `computer_vision/data/outputs/new_embeddings/shark_ranking/GBIF_shark_rankings.csv` | One row per shark: best match + aggregate stats |
+| `SHARK_RANKING_JSON` | `website/src/assets/data/json/shark-ranking/GBIF_shark_rankings.json` | Same, for frontend consumption |
+| `SHARK_PAIRWISE_CSV` | `computer_vision/data/outputs/new_embeddings/shark_ranking/GBIF_shark_pairwise_distances.csv` | One row per image-pair within each candidate shark pair |
+| `SHARK_PAIRWISE_JSON` | `website/src/assets/data/json/shark-ranking/GBIF_shark_pairwise_distances.json` | Same, for frontend (powers the right panel detail view) |
+| `SHARK_GRAPH_DATA_FILE` | `website/src/assets/data/json/shark-ranking/shark_graph_data.json` | Graph JSON for the new shark-level Cytoscape graph |
 
 ---
 
-## File 2: `find_candidates.py`
+## `find_candidates.py`
 
-### Purpose
-
-Use FAISS to find image-level neighbors, then extract candidate shark pairs
+Uses FAISS to find image-level neighbors, then extracts candidate shark pairs
 worth investigating at the aggregate level.
 
-### Functions
+### Algorithm
 
 ```
-find_candidates.py
-├── normalize_embeddings()           — L2-normalize embedding vectors
-├── find_top_n_different_sharks()    — scan one image's FAISS results for N
-│                                      different plausible sharks (skips same-
-│                                      shark images and excluded sharks)
-└── generate_candidate_pairs()       — runs FAISS search (k=500), calls
-                                       find_top_n_different_sharks for each
-                                       image (top 10), returns the union of
-                                       all candidate shark pairs
-```
+Step 1: FAISS search (k=500)
+  - L2-normalize all MiewID embeddings
+  - FAISS IndexFlatL2 search: each image against all images
 
-### Details
+Step 2: Candidate extraction
+  - For each image, scan results to extract top 10 different plausible sharks
+    (skip same-shark images, skip excluded sharks per exclusion map)
+  - Collect the union of all candidate shark pairs across all images
+    A pair (A, B) is a candidate if ANY image of A has B in its top-10
+  - Pairs are stored as sorted tuples to avoid (A,B)/(B,A) duplication
+```
 
 - **Input**: MiewID embeddings, whaleSharkIDs, exclusion map
 - **Output**: `set[tuple[str, str]]` — unordered set of candidate shark pairs
-- FAISS `IndexFlatL2`, k=500
-- For each image, scan FAISS results to find top 10 different plausible sharks
-  (skip same-shark images, skip excluded sharks per exclusion map)
-- A pair (A, B) is a candidate if ANY image of A has B in its top-10
-- Pairs are stored as sorted tuples to avoid (A,B)/(B,A) duplication
+- Shared utils used: `perform_search` (embedding_utils), `find_top_n_different_sharks` (shark_matching_utils)
 
 ---
 
-## File 3: `compare_shark_pairs.py`
+## `compare_shark_pairs.py`
 
-### Purpose
+For a set of candidate shark pairs, computes the full N×M pairwise distance
+matrix across all their images and produces aggregate stats.
 
-For a set of candidate shark pairs, compute the full N×M pairwise distance
-matrix across all their images and produce aggregate stats.
-
-### Functions
+### Algorithm
 
 ```
-compare_shark_pairs.py
-├── group_images_by_shark()          — whaleSharkID → list of NPZ indices
-├── compute_pairwise_distances()     — full N×M L2 distance matrix for one
-│                                      shark pair (on normalized embeddings)
-├── aggregate_pair_stats()           — min/median/mean/max/count from a
-│                                      distance matrix
-└── compare_all_pairs()              — iterates candidate pairs, calls the
-                                       above, returns dict of pair → stats
-                                       and list of per-image-pair rows
+Step 1: Group images by whaleSharkID (shark -> list of embedding indices)
+
+Step 2: For each candidate pair (A, B):
+  - Extract A's MiewID embeddings (N vectors) and B's (M vectors)
+  - Compute full N×M squared L2 distance matrix (on normalized embeddings)
+  - Compute aggregate stats: min, median, mean, max, count (N×M)
+
+Step 3: For winning pairs, record every image-pair distance + URL
+  (for the frontend detail export with thumbnails)
 ```
 
-### Details
-
-- **Input**: normalized embeddings, whaleSharkIDs, set of candidate pairs
-- **Output**:
-  - `dict[(str, str), PairStats]` — aggregate stats per candidate pair
-  - `list[dict]` — per-image-pair detail rows (all pairs, not just winners;
-    filtering to winners happens in the orchestrator)
-- Distance matrix: `np.linalg.norm(A[:, None] - B[None, :], axis=2)`
-  (equivalent to pairwise L2 on already-normalized vectors)
+- Uses squared L2 distance to match FAISS IndexFlatL2 scale
+- Shared utils used: `compute_pairwise_distances`, `normalize_l2` (embedding_utils), `group_images_by_shark` (shark_matching_utils)
 
 ---
 
-## File 4: `rank_shark_matches.py`
-
-### Purpose
+## `rank_shark_matches.py`
 
 Main orchestrator. Loads data, calls `find_candidates` and
 `compare_shark_pairs`, picks the best match per shark, detects mutual matches,
 and exports results.
 
-### Functions
+### Algorithm
 
 ```
-rank_shark_matches.py
-├── rank_matches()                   — for each shark, among all its candidate
-│                                      pairs, pick the one with the lowest
-│                                      median distance as its best match
-├── detect_mutual_matches()          — flag pairs where A's best is B AND
-│                                      B's best is A
-├── filter_pairwise_to_winners()     — trim image-pair detail rows to only
-│                                      include pairs where (A, B) is A's best
-│                                      match or B's best match
-└── __main__                         — orchestrates:
-                                       1. load NPZ + GBIF clean CSV
-                                       2. build exclusion map
-                                       3. generate_candidate_pairs()
-                                       4. compare_all_pairs()
-                                       5. rank_matches()
-                                       6. detect_mutual_matches()
-                                       7. filter_pairwise_to_winners()
-                                       8. export CSV + JSON
+Step 1: Load data
+  - Load GBIF embeddings from NPZ (MiewID only)
+  - Load GBIF clean CSV for plausibility
+  - Build exclusion map via plausibility_utils.build_exclusion_map()
+
+Step 2: Generate candidate shark pairs via FAISS
+  - generate_candidate_pairs()
+
+Step 3: Compute pairwise distances for all candidate pairs
+  - compare_all_pairs()
+
+Step 4: Rank and select best match per shark
+  - For each shark, among all its candidate pairs, pick the one with
+    the lowest median distance as its "best match"
+  - Record whether the match is mutual (A's best is B AND B's best is A)
+
+Step 5: Export
+  - Shark ranking summary -> CSV + JSON
+  - Image-pair detail for winning pairs -> CSV + JSON
 ```
 
 ### Shark Ranking Summary Schema (one row per shark)
@@ -151,10 +128,10 @@ rank_shark_matches.py
 | `best_match_shark_id` | whaleSharkID of the closest matching shark |
 | `best_match_image_count` | Number of images for the matched shark |
 | `pair_count` | N × M (total image pairs compared) |
-| `distance_min` | Minimum pairwise MiewID distance |
-| `distance_median` | Median pairwise MiewID distance |
-| `distance_mean` | Mean pairwise MiewID distance |
-| `distance_max` | Maximum pairwise MiewID distance |
+| `distance_min` | Minimum pairwise MiewID distance (squared L2) |
+| `distance_median` | Median pairwise MiewID distance (squared L2) |
+| `distance_mean` | Mean pairwise MiewID distance (squared L2) |
+| `distance_max` | Maximum pairwise MiewID distance (squared L2) |
 | `is_mutual` | True if the matched shark's best match is this shark |
 
 ### Image Pair Detail Schema (one row per image-image pair)
@@ -162,49 +139,46 @@ rank_shark_matches.py
 | Column | Description |
 |--------|-------------|
 | `shark_id_a` | whaleSharkID of shark A |
-| `image_index_a` | NPZ position of image A |
+| `image_url_a` | Image URL for shark A's image |
 | `shark_id_b` | whaleSharkID of shark B |
-| `image_index_b` | NPZ position of image B |
-| `distance` | L2 distance (MiewID, normalized) |
+| `image_url_b` | Image URL for shark B's image |
+| `distance` | Squared L2 distance (MiewID, normalized) |
 
 Only pairs where (A, B) is A's best match OR B's best match are included
 in the detail export (not all candidate pairs — just the ones that "won").
 
 ---
 
-## File 5: `build_shark_graph.py`
+## `build_shark_graph.py`
 
-### Purpose
-
-Construct a shark-level graph for the frontend: one node per shark, edges
+Constructs a shark-level graph for the frontend: one node per shark, edges
 representing best-match relationships, with UMAP layout.
 
 ### Algorithm
 
 ```
 Step 1: Load data
-  - Load shark ranking summary (CSV or from rank_shark_matches output)
+  - Load shark ranking summary (CSV from rank_shark_matches output)
   - Load GBIF embeddings from NPZ (for UMAP projection)
 
 Step 2: Compute shark-level embeddings for UMAP
   - For each shark, average all its MiewID image embeddings into one
     centroid vector
-  - Run UMAP on the centroid vectors → 2D coordinates per shark
+  - Run UMAP on the centroid vectors -> 2D coordinates per shark
 
 Step 3: Build graph
   - Nodes: one per shark, with UMAP (x, y), image_count, whaleSharkID
   - Edges: directed, from each shark to its best_match_shark_id
     - Carries: distance_median, distance_min, distance_max, is_mutual
-  - Flag mutual edges (A→B exists AND B→A exists)
+  - Flag mutual edges (A->B exists AND B->A exists)
 
 Step 4: Detect contradictions
-  - Reuse cluster + contradiction logic from existing build_graph.py
-    (weakly connected components, exclusion map check)
+  - Weakly connected components of the directed graph
   - At shark level, contradictions mean: a transitive chain of best-match
     edges links two sharks that the exclusion map says are IMPOSSIBLE
 
 Step 5: Export
-  - Shark graph JSON → website/src/assets/data/json/shark_graph_data.json
+  - Shark graph JSON -> website/src/assets/data/json/shark-ranking/shark_graph_data.json
 ```
 
 ### Graph JSON Schema
@@ -242,18 +216,6 @@ Step 5: Export
 }
 ```
 
-### Functions
-
-```
-build_shark_graph.py
-├── compute_shark_centroids()     — average image embeddings per shark
-├── build_umap_coords()           — UMAP on centroid vectors
-├── build_graph()                  — nodes + edges from ranking summary
-├── assign_clusters()              — weakly connected components
-├── find_contradictions()          — exclusion map check on clusters
-└── export_graph()                 — write shark_graph_data.json
-```
-
 ---
 
 ## Key Design Decisions
@@ -268,31 +230,32 @@ build_shark_graph.py
 - **Top 10 candidate sharks per image.** Balances breadth with a manageable
   candidate set. The union across all images for a shark will typically be
   larger (a shark with 5 images might surface 30+ unique candidate sharks).
-- **Normalization.** L2-normalize embeddings before FAISS search AND before
-  pairwise distance computation, consistent with `match_embeddings.perform_search`.
+- **Squared L2 distances.** Consistent with FAISS IndexFlatL2 output scale.
 
 ---
 
 ## Dependencies
 
-Imports from existing codebase (read-only, no modifications):
+Imports from shared `vision_utils/`:
 
 | Import | Source |
 |--------|--------|
-| `build_exclusion_map` | `computer-vision/assess_shark_match_plausibility.py` |
-| `perform_search` | `computer-vision/match_embeddings.py` |
-| `export_to_json` | `computer-vision/match_embeddings.py` |
-| `GBIF_OUTPUT_NPZ_FILE` | `computer-vision/CONSTANTS.py` |
+| `build_exclusion_map` | `vision_utils/plausibility_utils.py` |
+| `perform_search` | `vision_utils/embedding_utils.py` |
+| `find_top_n_different_sharks` | `vision_utils/shark_matching_utils.py` |
+| `group_images_by_shark` | `vision_utils/shark_matching_utils.py` |
+| `compute_pairwise_distances`, `normalize_l2` | `vision_utils/embedding_utils.py` |
+| `export_to_json` | `vision_utils/io_utils.py` |
+
+Imports from `root_constants.py`:
+
+| Import | Source |
+|--------|--------|
+| `GBIF_OUTPUT_NPZ_FILE` | `root_constants.py` (via `shark_ranking_constants.py`) |
+
+External:
+
+| Import | Source |
+|--------|--------|
 | `GBIF_CLEAN_CSV` | `src/gbif/constants.py` |
 | `read_csv`, `export_to_csv` | `src/utils/data_utils.py` |
-
----
-
-## What This Does NOT Touch
-
-- `match_embeddings.py` — unchanged
-- `match_plausible_embeddings.py` — unchanged
-- `build_graph.py` — unchanged
-- `graph_data.json` — unchanged (the image-level graph)
-- Any existing CSV/JSON outputs
-- Any frontend code (separate effort)
