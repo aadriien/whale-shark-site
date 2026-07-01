@@ -252,7 +252,7 @@ function SharkRankingGraph() {
                         Median image distance:
                         <input
                             type="number"
-                            step="0.01"
+                            step="0.05"
                             min="0"
                             max={distanceRange[1]}
                             value={distanceRange[0]}

@@ -11,19 +11,16 @@ import type {
     SelectedSharkMatch,
 } from "../types/shark-ranking-graphs";
 
+import { resolveFilters as resolveFiltersGeneric } from "./graph/filters";
 import {
-    resolveFilters as resolveFiltersGeneric,
     normalizePositions as normalizePositionsCore,
     isDistanceFiltering as isDistanceFilteringCore,
-    buildClusterConflicts,
-    conflictingSharkIdsFor,
-    buildBaseStylesheet,
-    findContradictionPathGeneric,
-    runApplyGraphView,
-    findBestMatchGeneric,
-    initCyListenersGeneric,
     EDGE_OPACITY_MIN,
-} from "./graphCore";
+} from "./graph/layout";
+import { buildClusterConflicts, conflictingSharkIdsFor, findContradictionPathGeneric } from "./graph/contradictions";
+import { buildBaseStylesheet } from "./graph/stylesheet";
+import { findBestMatchGeneric } from "./graph/bestMatch";
+import { runApplyGraphView, initCyListenersGeneric } from "./graph/view";
 
 // Filter dependency table: simpler than the image graph since there are
 // no population (GBIF/Ningaloo) axes. Contradictions are structurally

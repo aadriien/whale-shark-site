@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { StylesheetStyle } from "cytoscape";
 
-import { getGraphColors } from "../utils/graphCore";
+import { getGraphColors } from "../utils/graph/theme";
 import type { GraphThemeColors } from "../types/graphs";
 
 // Detects the current theme so Cytoscape (which can't read CSS vars) gets

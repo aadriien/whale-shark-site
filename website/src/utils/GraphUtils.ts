@@ -11,20 +11,17 @@ import type {
     FilterKey,
 } from "../types/graphs";
 
+import { resolveFilters as resolveFiltersGeneric } from "./graph/filters";
 import {
-    resolveFilters as resolveFiltersGeneric,
     normalizePositions as normalizePositionsCore,
     isDistanceFiltering as isDistanceFilteringCore,
-    buildClusterConflicts,
-    conflictingSharkIdsFor,
-    buildBaseStylesheet,
-    findContradictionPathGeneric,
-    runApplyGraphView,
-    findBestMatchGeneric,
-    initCyListenersGeneric,
     EDGE_OPACITY_MIN,
-    getGraphColors,
-} from "./graphCore";
+} from "./graph/layout";
+import { buildClusterConflicts, conflictingSharkIdsFor, findContradictionPathGeneric } from "./graph/contradictions";
+import { buildBaseStylesheet } from "./graph/stylesheet";
+import { findBestMatchGeneric } from "./graph/bestMatch";
+import { runApplyGraphView, initCyListenersGeneric } from "./graph/view";
+import { getGraphColors } from "./graph/theme";
 
 export { getGraphColors };
 
