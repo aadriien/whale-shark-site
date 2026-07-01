@@ -265,7 +265,7 @@ function SharkRankingGraph() {
                         <span>to</span>
                         <input
                             type="number"
-                            step="0.01"
+                            step="0.05"
                             min={distanceRange[0]}
                             value={distanceRange[1]}
                             onChange={(e) => {
