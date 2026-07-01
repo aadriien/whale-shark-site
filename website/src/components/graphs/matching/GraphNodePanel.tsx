@@ -1,28 +1,14 @@
-import sharkSelectionPlaceholder from "../assets/images/chart-placeholders/globe-views.svg";
+import CondensedSharkCard from "../../cards/CondensedSharkCard";
+import { mediaSharks, visionOccurrences } from "../../../utils/DataUtils";
+import GraphPanelShell from "../../panels/GraphPanelShell";
 
-import CondensedSharkCard from "./cards/CondensedSharkCard";
-import { mediaSharks, visionOccurrences } from "../utils/DataUtils";
+import { GraphNodePanelProps, SelectedMatch } from "../../../types/graphs";
 
-import { GraphNodePanelProps } from "../types/graphs";
-
-function GraphNodePanel({
-    match,
-    onClose,
-    showContradictionPath,
-    onToggleContradictionPath,
-}: GraphNodePanelProps) {
-    if (!match) {
-        return (
-            <div className="graph-node-panel graph-node-panel--empty">
-                <img
-                    src={sharkSelectionPlaceholder}
-                    alt="Click a GBIF node to see its shark card"
-                    className="graph-panel-placeholder"
-                />
-            </div>
-        );
-    }
-
+function renderBody(
+    match: SelectedMatch,
+    showContradictionPath: boolean,
+    onToggleContradictionPath: () => void
+) {
     const clickedShark = mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null;
     const matchedShark =
         match.matchPopulation === "gbif"
@@ -40,11 +26,7 @@ function GraphNodePanel({
     );
 
     return (
-        <div className="graph-node-panel">
-            <button className="graph-panel-close" onClick={onClose} aria-label="Close panel">
-                ✕
-            </button>
-
+        <>
             <div className="graph-panel-section">
                 <span className="graph-panel-label">Selected image</span>
                 {clickedShark ? (
@@ -113,7 +95,24 @@ function GraphNodePanel({
                     </div>
                 </>
             )}
-        </div>
+        </>
+    );
+}
+
+function GraphNodePanel({
+    match,
+    onClose,
+    showContradictionPath,
+    onToggleContradictionPath,
+}: GraphNodePanelProps) {
+    return (
+        <GraphPanelShell
+            isEmpty={!match}
+            emptyAlt="Click a GBIF node to see its shark card"
+            onClose={onClose}
+        >
+            {match && renderBody(match, showContradictionPath, onToggleContradictionPath)}
+        </GraphPanelShell>
     );
 }
 

@@ -4,7 +4,7 @@ import type { Core } from "cytoscape";
 
 import SharkRankingNodePanel from "./SharkRankingNodePanel";
 import SharkRankingStatsPanel from "./SharkRankingStatsPanel";
-import { getGraphColors } from "../../utils/GraphUtils";
+import FilterButton from "../../controls/FilterButton";
 import {
     buildGraphStylesheet,
     DISTANCE_RANGE_DEFAULT,
@@ -14,15 +14,17 @@ import {
     initCyListeners,
     resolveFilters,
     findBestMatch,
-} from "./SharkRankingGraphUtils";
-import { mediaSharks, extractContinents } from "../../utils/DataUtils";
+} from "../../../utils/SharkRankingGraphUtils";
+import { useGraphTheme } from "../../../hooks/useGraphTheme";
+import { useCyResize } from "../../../hooks/useCyResize";
+import { useSharkContinentMap } from "../../../hooks/useSharkContinentMap";
 
 import {
     SharkRankingFilterKey,
     SharkRankingViewParams,
     SharkRankingGraphData,
     SelectedSharkMatch,
-} from "../../types/shark-ranking-graphs";
+} from "../../../types/shark-ranking-graphs";
 
 const CONTINENT_NAMES: string[] = [
     "North America",
@@ -34,22 +36,8 @@ const CONTINENT_NAMES: string[] = [
 ];
 
 function SharkRankingGraph() {
-    const [isDark, setIsDark] = useState(
-        () => document.documentElement.getAttribute("data-theme") === "dark"
-    );
-    useEffect(() => {
-        const observer = new MutationObserver(() => {
-            setIsDark(document.documentElement.getAttribute("data-theme") === "dark");
-        });
-        observer.observe(document.documentElement, {
-            attributes: true,
-            attributeFilter: ["data-theme"],
-        });
-        return () => observer.disconnect();
-    }, []);
-
-    const graphColors = useMemo(() => getGraphColors(isDark), [isDark]);
-    const graphStylesheet = useMemo(() => buildGraphStylesheet(graphColors), [graphColors]);
+    const { colors: graphColors, stylesheet: graphStylesheet } =
+        useGraphTheme(buildGraphStylesheet);
 
     const [activeFilters, setActiveFilters] = useState<Set<SharkRankingFilterKey>>(new Set());
     const [continentFilters, setContinentFilters] = useState<Set<string>>(new Set());
@@ -102,23 +90,12 @@ function SharkRankingGraph() {
     });
 
     useEffect(() => {
-        import("../../assets/data/json/shark-ranking/shark_graph_data.json").then((mod) => {
+        import("../../../assets/data/json/shark-ranking/shark_graph_data.json").then((mod) => {
             setGraphData(mod.default as SharkRankingGraphData);
         });
     }, []);
 
-    const sharkContinentMap = useMemo(() => {
-        const map = new Map<string, string>();
-        for (const shark of mediaSharks) {
-            if (shark.continent) {
-                const continents = extractContinents(shark.continent);
-                map.set(shark.id, continents[0] ?? "Unknown");
-            } else {
-                map.set(shark.id, "Unknown");
-            }
-        }
-        return map;
-    }, []);
+    const sharkContinentMap = useSharkContinentMap();
 
     const nodes = useMemo(() => graphData?.nodes ?? [], [graphData]);
     const edges = useMemo(() => graphData?.edges ?? [], [graphData]);
@@ -130,16 +107,7 @@ function SharkRankingGraph() {
         [nodes, edges, posMap, sharkContinentMap, contradictions]
     );
 
-    useEffect(() => {
-        const el = containerRef.current;
-        if (!el) return;
-        const observer = new ResizeObserver(() => {
-            cyRef.current?.resize();
-            cyRef.current?.fit();
-        });
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, []);
+    useCyResize(containerRef, cyRef);
 
     useEffect(() => {
         const params: SharkRankingViewParams = {
@@ -233,53 +201,53 @@ function SharkRankingGraph() {
 
             <div className="graph-controls">
                 <div className="filter-group">
-                    <button
-                        className={`graph-filter-btn${continentFilters.size === 0 ? " active" : ""}`}
+                    <FilterButton
+                        active={continentFilters.size === 0}
                         disabled={continentsLocked}
                         onClick={() => setContinentFilters(new Set())}
                     >
                         All regions
-                    </button>
+                    </FilterButton>
                     {CONTINENT_NAMES.map((name) => (
-                        <button
+                        <FilterButton
                             key={name}
-                            className={`graph-filter-btn${continentFilters.has(name) ? " active" : ""}`}
+                            active={continentFilters.has(name)}
                             disabled={continentsLocked}
                             onClick={() => toggleContinent(name)}
                         >
                             {name}
-                        </button>
+                        </FilterButton>
                     ))}
                 </div>
                 <div className="filter-group">
-                    <button
-                        className={`graph-filter-btn${mutualOnly ? " active" : ""}`}
+                    <FilterButton
+                        active={mutualOnly}
                         disabled={mutualLocked}
                         onClick={() => toggleFilter("mutual_only")}
                     >
                         Mutual matches only
-                    </button>
-                    <button
-                        className={`graph-filter-btn${hideEdges ? " active" : ""}`}
+                    </FilterButton>
+                    <FilterButton
+                        active={hideEdges}
                         disabled={hideEdgesLocked}
                         onClick={() => toggleFilter("hide_edges")}
                     >
                         Hide match lines
-                    </button>
-                    <button
-                        className={`graph-filter-btn${noContradictions ? " active" : ""}`}
+                    </FilterButton>
+                    <FilterButton
+                        active={noContradictions}
                         disabled={noContradictionsLocked}
                         onClick={() => toggleFilter("no_contradictions")}
                     >
                         No transitive contradictions
-                    </button>
-                    <button
-                        className={`graph-filter-btn${contradictionsOnly ? " active" : ""}`}
+                    </FilterButton>
+                    <FilterButton
+                        active={contradictionsOnly}
                         disabled={contradictionsOnlyLocked}
                         onClick={() => toggleFilter("contradictions_only")}
                     >
                         Contradictions only
-                    </button>
+                    </FilterButton>
                     <label className="graph-distance-range">
                         Median image distance:
                         <input

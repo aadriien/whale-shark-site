@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 
-import sharkSelectionPlaceholder from "../../assets/images/chart-placeholders/globe-views.svg";
-
-import { SharkRankingStatsPanelProps } from "../../types/shark-ranking-graphs";
+import GraphPanelShell from "../../panels/GraphPanelShell";
+import { SharkRankingStatsPanelProps } from "../../../types/shark-ranking-graphs";
 
 type PairwiseRow = {
     shark_id_a: string;
@@ -20,7 +19,7 @@ function loadPairwiseData(): Promise<PairwiseRow[]> {
     if (_pairwiseData) return Promise.resolve(_pairwiseData);
     if (_pairwisePromise) return _pairwisePromise;
 
-    _pairwisePromise = import("../../assets/data/json/shark-ranking/GBIF_shark_pairwise_distances.json")
+    _pairwisePromise = import("../../../assets/data/json/shark-ranking/GBIF_shark_pairwise_distances.json")
         .then((mod) => {
             _pairwiseData = mod.default as PairwiseRow[];
             return _pairwiseData;
@@ -43,32 +42,14 @@ function usePairwiseData(sharkIdA: string | null, sharkIdB: string | null): Pair
 // Kick off load so data is ready by the time user clicks a node
 loadPairwiseData();
 
-function SharkRankingStatsPanel({ match, onClose }: SharkRankingStatsPanelProps) {
-    const pairRows = usePairwiseData(
-        match?.clickedSharkId ?? null,
-        match?.matchSharkId ?? null
-    );
-
-    if (!match) {
-        return (
-            <div className="graph-node-panel graph-node-panel--empty">
-                <img
-                    src={sharkSelectionPlaceholder}
-                    alt="Click a node to see match statistics"
-                    className="graph-panel-placeholder"
-                />
-            </div>
-        );
-    }
-
+function renderBody(
+    match: NonNullable<SharkRankingStatsPanelProps["match"]>,
+    pairRows: PairwiseRow[]
+) {
     const sortedPairs = [...pairRows].sort((a, b) => a.distance - b.distance);
 
     return (
-        <div className="graph-node-panel">
-            <button className="graph-panel-close" onClick={onClose} aria-label="Close panel">
-                ✕
-            </button>
-
+        <>
             <div className="graph-panel-section">
                 <span className="graph-panel-label">Aggregate Distance Stats</span>
                 <div className="shark-ranking-stats-grid">
@@ -128,7 +109,20 @@ function SharkRankingStatsPanel({ match, onClose }: SharkRankingStatsPanelProps)
                     </div>
                 </>
             )}
-        </div>
+        </>
+    );
+}
+
+function SharkRankingStatsPanel({ match, onClose }: SharkRankingStatsPanelProps) {
+    const pairRows = usePairwiseData(
+        match?.clickedSharkId ?? null,
+        match?.matchSharkId ?? null
+    );
+
+    return (
+        <GraphPanelShell isEmpty={!match} emptyAlt="Click a node to see match statistics" onClose={onClose}>
+            {match && renderBody(match, pairRows)}
+        </GraphPanelShell>
     );
 }
 

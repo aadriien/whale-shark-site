@@ -1,37 +1,19 @@
-import sharkSelectionPlaceholder from "../../assets/images/chart-placeholders/globe-views.svg";
+import CondensedSharkCard from "../../cards/CondensedSharkCard";
+import { mediaSharks } from "../../../utils/DataUtils";
+import GraphPanelShell from "../../panels/GraphPanelShell";
 
-import CondensedSharkCard from "../cards/CondensedSharkCard";
-import { mediaSharks } from "../../utils/DataUtils";
+import { SharkRankingNodePanelProps, SelectedSharkMatch } from "../../../types/shark-ranking-graphs";
 
-import { SharkRankingNodePanelProps } from "../../types/shark-ranking-graphs";
-
-function SharkRankingNodePanel({
-    match,
-    onClose,
-    showContradictionPath,
-    onToggleContradictionPath,
-}: SharkRankingNodePanelProps) {
-    if (!match) {
-        return (
-            <div className="graph-node-panel graph-node-panel--empty">
-                <img
-                    src={sharkSelectionPlaceholder}
-                    alt="Click a node to see its shark card"
-                    className="graph-panel-placeholder"
-                />
-            </div>
-        );
-    }
-
+function renderBody(
+    match: SelectedSharkMatch,
+    showContradictionPath: boolean,
+    onToggleContradictionPath: () => void
+) {
     const clickedShark = mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null;
     const matchedShark = mediaSharks.find((s) => s.id === match.matchSharkId) ?? null;
 
     return (
-        <div className="graph-node-panel">
-            <button className="graph-panel-close" onClick={onClose} aria-label="Close panel">
-                ✕
-            </button>
-
+        <>
             <div className="graph-panel-section">
                 <span className="graph-panel-label">Selected shark</span>
                 {clickedShark ? (
@@ -50,9 +32,7 @@ function SharkRankingNodePanel({
                         {" "}
                         · median {match.distanceMedian.toFixed(4)}
                     </span>
-                    {match.isMutual && (
-                        <span className="graph-panel-mutual"> · mutual</span>
-                    )}
+                    {match.isMutual && <span className="graph-panel-mutual"> · mutual</span>}
                 </span>
                 {matchedShark ? (
                     <CondensedSharkCard shark={matchedShark} />
@@ -82,7 +62,20 @@ function SharkRankingNodePanel({
                     </div>
                 </>
             )}
-        </div>
+        </>
+    );
+}
+
+function SharkRankingNodePanel({
+    match,
+    onClose,
+    showContradictionPath,
+    onToggleContradictionPath,
+}: SharkRankingNodePanelProps) {
+    return (
+        <GraphPanelShell isEmpty={!match} emptyAlt="Click a node to see its shark card" onClose={onClose}>
+            {match && renderBody(match, showContradictionPath, onToggleContradictionPath)}
+        </GraphPanelShell>
     );
 }
 

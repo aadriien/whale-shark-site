@@ -1,7 +1,6 @@
-import sharkSelectionPlaceholder from "../assets/images/chart-placeholders/globe-views.svg";
-
-import { visionOccurrences } from "../utils/DataUtils";
-import { GraphImagesPanelProps } from "../types/graphs";
+import { visionOccurrences } from "../../../utils/DataUtils";
+import GraphPanelShell from "../../panels/GraphPanelShell";
+import { GraphImagesPanelProps } from "../../../types/graphs";
 
 const imageIdToUrl = new Map<number, string>(
     visionOccurrences
@@ -10,18 +9,21 @@ const imageIdToUrl = new Map<number, string>(
 );
 
 function GraphSharkImagesPanel({ match, onClose, onSelectImage }: GraphImagesPanelProps) {
-    if (!match) {
-        return (
-            <div className="graph-node-panel graph-node-panel--empty">
-                <img
-                    src={sharkSelectionPlaceholder}
-                    alt="Click a GBIF node to see all images for that shark"
-                    className="graph-panel-placeholder"
-                />
-            </div>
-        );
-    }
+    return (
+        <GraphPanelShell
+            isEmpty={!match}
+            emptyAlt="Click a GBIF node to see all images for that shark"
+            onClose={onClose}
+        >
+            {match && renderBody(match, onSelectImage)}
+        </GraphPanelShell>
+    );
+}
 
+function renderBody(
+    match: NonNullable<GraphImagesPanelProps["match"]>,
+    onSelectImage: GraphImagesPanelProps["onSelectImage"]
+) {
     const { clickedSharkId, clickedImageId, contradictionImageIds } = match;
 
     const sharkOccurrences = visionOccurrences.filter((occ) => occ.id === clickedSharkId);
@@ -40,11 +42,7 @@ function GraphSharkImagesPanel({ match, onClose, onSelectImage }: GraphImagesPan
         .sort((a, b) => b.count - a.count);
 
     return (
-        <div className="graph-node-panel">
-            <button className="graph-panel-close" onClick={onClose} aria-label="Close panel">
-                ✕
-            </button>
-
+        <>
             <div className="graph-panel-section">
                 <span className="graph-panel-label">Other Images · Shark {clickedSharkId}</span>
 
@@ -105,7 +103,7 @@ function GraphSharkImagesPanel({ match, onClose, onSelectImage }: GraphImagesPan
                     </div>
                 </>
             )}
-        </div>
+        </>
     );
 }
 
