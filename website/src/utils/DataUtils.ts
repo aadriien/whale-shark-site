@@ -4,7 +4,7 @@ import { getCode } from "country-list";
 import selectedStorySharks from "../assets/data/json/gbif_story_shark_images.json";
 // import hasMediaSharks from "../assets/data/json/gbif_media_sharks.json";
 import allSharkData from "../assets/data/json/gbif_individual_sharks_stats.json";
-import visionSharkData from "../assets/data/json/GBIF_shark_image_occurrences_validated.json";
+import visionSharkData from "../assets/data/json/matching/unfiltered/GBIF_shark_image_occurrences_validated.json";
 
 import coordinatesData from "../assets/data/json/gbif_shark_tracking.json";
 

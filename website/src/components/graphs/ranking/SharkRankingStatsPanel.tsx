@@ -19,7 +19,7 @@ function loadPairwiseData(): Promise<PairwiseRow[]> {
     if (_pairwiseData) return Promise.resolve(_pairwiseData);
     if (_pairwisePromise) return _pairwisePromise;
 
-    _pairwisePromise = import("../../../assets/data/json/shark-ranking/GBIF_shark_pairwise_distances.json")
+    _pairwisePromise = import("../../../assets/data/json/matching/ranking/GBIF_shark_pairwise_distances.json")
         .then((mod) => {
             _pairwiseData = mod.default as PairwiseRow[];
             return _pairwiseData;

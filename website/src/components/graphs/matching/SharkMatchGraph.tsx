@@ -151,7 +151,7 @@ function SharkMatchGraph() {
     });
 
     useEffect(() => {
-        import("../../../assets/data/json/graph_data.json").then((mod) => {
+        import("../../../assets/data/json/matching/plausible/graph_data.json").then((mod) => {
             setGraphData(mod.default as GraphData);
         });
     }, []);

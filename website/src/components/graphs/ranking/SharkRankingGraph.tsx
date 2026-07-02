@@ -90,7 +90,7 @@ function SharkRankingGraph() {
     });
 
     useEffect(() => {
-        import("../../../assets/data/json/shark-ranking/shark_graph_data.json").then((mod) => {
+        import("../../../assets/data/json/matching/ranking/shark_graph_data.json").then((mod) => {
             setGraphData(mod.default as SharkRankingGraphData);
         });
     }, []);
