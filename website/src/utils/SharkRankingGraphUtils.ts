@@ -1,15 +1,14 @@
 import type { Core, ElementDefinition, NodeSingular, StylesheetStyle } from "cytoscape";
 
-import type { GraphThemeColors } from "../types/graphs";
-
 import type {
+    GraphThemeColors,
     SharkRankingNode,
     SharkRankingEdge,
-    SharkRankingContradiction,
+    ContradictionEntry,
     SharkRankingFilterKey,
     SharkRankingViewParams,
     SelectedSharkMatch,
-} from "../types/shark-ranking-graphs";
+} from "../types/graphs";
 
 import { resolveFilters as resolveFiltersGeneric } from "./graph/filters";
 import {
@@ -64,7 +63,7 @@ export function buildElements(
     edges: SharkRankingEdge[],
     posMap: Map<string, { x: number; y: number }>,
     sharkContinentMap: Map<string, string>,
-    contradictions: SharkRankingContradiction[]
+    contradictions: ContradictionEntry[]
 ): ElementDefinition[] {
     const clusterConflicts = buildClusterConflicts(contradictions);
 

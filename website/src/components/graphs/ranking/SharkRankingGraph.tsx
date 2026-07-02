@@ -24,7 +24,7 @@ import {
     SharkRankingViewParams,
     SharkRankingGraphData,
     SelectedSharkMatch,
-} from "../../../types/shark-ranking-graphs";
+} from "../../../types/graphs";
 
 const CONTINENT_NAMES: string[] = [
     "North America",

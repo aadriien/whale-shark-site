@@ -1,12 +1,9 @@
 import type { Core, CollectionReturnValue, NodeSingular } from "cytoscape";
 
-export type ClusterConflictEntry = {
-    cluster_id: number;
-    conflicting_shark_ids: string[][];
-};
+import type { ContradictionEntry } from "../../types/graphs";
 
 // Per cluster_id, the set of whaleSharkID pairs flagged as mutually exclusive
-export function buildClusterConflicts(entries: ClusterConflictEntry[]): Map<number, string[][]> {
+export function buildClusterConflicts(entries: ContradictionEntry[]): Map<number, string[][]> {
     return new Map(entries.map((c) => [c.cluster_id, c.conflicting_shark_ids]));
 }
 

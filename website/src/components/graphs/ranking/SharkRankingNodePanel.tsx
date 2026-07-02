@@ -2,7 +2,7 @@ import CondensedSharkCard from "../../cards/CondensedSharkCard";
 import { mediaSharks } from "../../../utils/DataUtils";
 import GraphPanelShell from "../../panels/GraphPanelShell";
 
-import { SharkRankingNodePanelProps, SelectedSharkMatch } from "../../../types/shark-ranking-graphs";
+import { SharkRankingNodePanelProps, SelectedSharkMatch } from "../../../types/graphs";
 
 function renderBody(
     match: SelectedSharkMatch,
