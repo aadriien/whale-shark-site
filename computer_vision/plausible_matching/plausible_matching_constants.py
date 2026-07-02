@@ -6,7 +6,10 @@
 ###############################################################################
 
 
-from ..root_constants import JSON_OUTPUT_FOLDER, NEW_EMBEDDINGS_FOLDER
+from ..root_constants import JSON_OUTPUT_MATCHING_FOLDER, NEW_EMBEDDINGS_FOLDER
+
+# Scoped under shared matching JSON output folder to mirror this subdir's name
+JSON_OUTPUT_FOLDER = f"{JSON_OUTPUT_MATCHING_FOLDER}/plausible"
 
 # Plausibility-filtered match outputs (candidates excluded if geo/temporal
 # implied travel speed makes them IMPOSSIBLE). Powers build_graph.py, while

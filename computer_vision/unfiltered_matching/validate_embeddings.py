@@ -18,6 +18,8 @@ from ..vision_utils.io_utils import export_to_json
 from .unfiltered_matching_constants import (
     VALIDATED_MEDIA_MATCHES_FILE,
     VALIDATED_MEDIA_MATCHES_JSON,
+    VALIDATED_OCCURRENCES_FILE,
+    VALIDATED_OCCURRENCES_JSON,
     VALIDATED_SHARK_MATCHES_FILE,
     VALIDATED_SHARK_MATCHES_JSON,
 )
@@ -607,15 +609,11 @@ if __name__ == "__main__":
     )
 
     # Export exploded data
-    exploded_csv = f"{NEW_EMBEDDINGS_FOLDER}/GBIF_shark_image_occurrences_validated.csv"
-    exploded_json = (
-        "./website/src/assets/data/json/GBIF_shark_image_occurrences_validated.json"
-    )
     print("Exporting per-image occurrences to CSV and JSON...")
-    export_to_csv(exploded_csv, exploded_df)
-    export_to_json(exploded_json, exploded_df)
+    export_to_csv(VALIDATED_OCCURRENCES_FILE, exploded_df)
+    export_to_json(VALIDATED_OCCURRENCES_JSON, exploded_df)
 
     print("\nValidation complete!")
     print(f"  Media matches: {VALIDATED_MEDIA_MATCHES_FILE}")
     print(f"  Shark ID matches: {VALIDATED_SHARK_MATCHES_FILE}")
-    print(f"  Shark image occurrences: {exploded_csv}")
+    print(f"  Shark image occurrences: {VALIDATED_OCCURRENCES_FILE}")

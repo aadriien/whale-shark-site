@@ -15,4 +15,5 @@ NEW_EMBEDDINGS_FOLDER = "computer_vision/data/outputs/new_embeddings"
 GBIF_OUTPUT_NPZ_FILE = f"{NEW_EMBEDDINGS_FOLDER}/gbif_media_embeddings.npz"
 
 # JSON outputs (website assets, base path for subdir constants)
-JSON_OUTPUT_FOLDER = "./website/src/assets/data/json"
+JSON_OUTPUT_ROOT_FOLDER = "./website/src/assets/data/json"
+JSON_OUTPUT_MATCHING_FOLDER = f"{JSON_OUTPUT_ROOT_FOLDER}/matching"

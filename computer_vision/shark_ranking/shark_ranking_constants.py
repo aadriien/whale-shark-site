@@ -7,10 +7,14 @@
 
 
 # Re-export shared input paths from the parent pipeline
-from ..root_constants import GBIF_OUTPUT_NPZ_FILE  # noqa: F401
+from ..root_constants import (
+    GBIF_OUTPUT_NPZ_FILE,  # noqa: F401
+    JSON_OUTPUT_MATCHING_FOLDER,
+)
 
 SHARK_RANKING_FOLDER = "computer_vision/data/outputs/new_embeddings/shark_ranking"
-JSON_OUTPUT_FOLDER = "./website/src/assets/data/json/shark-ranking"
+# Scoped under shared matching JSON output folder to mirror this subdir's name
+JSON_OUTPUT_FOLDER = f"{JSON_OUTPUT_MATCHING_FOLDER}/ranking"
 
 # One row per shark: best match + aggregate distance stats
 SHARK_RANKING_CSV = f"{SHARK_RANKING_FOLDER}/GBIF_shark_rankings.csv"
