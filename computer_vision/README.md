@@ -64,7 +64,7 @@ Direct matches already skip excluded pairs, so a contradiction means a *chain* o
 make build_shark_graph
 ```
 
-Output written to `website/src/assets/data/json/graph_data.json`.
+Output written to `website/src/assets/data/json/matching/plausible/graph_data.json`.
 
 
 ## Acknowledgements

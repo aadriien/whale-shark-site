@@ -32,10 +32,10 @@ from `root_constants.py`.
 | Constant | Path | Purpose |
 |----------|------|---------|
 | `SHARK_RANKING_CSV` | `computer_vision/data/outputs/new_embeddings/shark_ranking/GBIF_shark_rankings.csv` | One row per shark: best match + aggregate stats |
-| `SHARK_RANKING_JSON` | `website/src/assets/data/json/shark-ranking/GBIF_shark_rankings.json` | Same, for frontend consumption |
+| `SHARK_RANKING_JSON` | `website/src/assets/data/json/matching/ranking/GBIF_shark_rankings.json` | Same, for frontend consumption |
 | `SHARK_PAIRWISE_CSV` | `computer_vision/data/outputs/new_embeddings/shark_ranking/GBIF_shark_pairwise_distances.csv` | One row per image-pair within each candidate shark pair |
-| `SHARK_PAIRWISE_JSON` | `website/src/assets/data/json/shark-ranking/GBIF_shark_pairwise_distances.json` | Same, for frontend (powers the right panel detail view) |
-| `SHARK_GRAPH_DATA_FILE` | `website/src/assets/data/json/shark-ranking/shark_graph_data.json` | Graph JSON for the new shark-level Cytoscape graph |
+| `SHARK_PAIRWISE_JSON` | `website/src/assets/data/json/matching/ranking/GBIF_shark_pairwise_distances.json` | Same, for frontend (powers the right panel detail view) |
+| `SHARK_GRAPH_DATA_FILE` | `website/src/assets/data/json/matching/ranking/shark_graph_data.json` | Graph JSON for the new shark-level Cytoscape graph |
 
 ---
 
@@ -178,7 +178,7 @@ Step 4: Detect contradictions
     edges links two sharks that the exclusion map says are IMPOSSIBLE
 
 Step 5: Export
-  - Shark graph JSON -> website/src/assets/data/json/shark-ranking/shark_graph_data.json
+  - Shark graph JSON -> website/src/assets/data/json/matching/ranking/shark_graph_data.json
 ```
 
 ### Graph JSON Schema
