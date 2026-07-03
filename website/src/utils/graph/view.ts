@@ -14,6 +14,8 @@ export type ApplyGraphViewConfig = {
     contradictionsOnly: boolean;
     showContradictionPath: boolean;
     colors: GraphThemeColors;
+    savedOnly: boolean;
+    savedSharkIds: Set<string>;
 
     // Properties to clear from edges on every re-apply. Graphs that write
     // edge line-color inline (contradiction-path highlighting on top of
@@ -42,6 +44,8 @@ export function runApplyGraphView(cy: Core, config: ApplyGraphViewConfig) {
         contradictionsOnly,
         showContradictionPath,
         colors,
+        savedOnly,
+        savedSharkIds,
         edgeResetProps,
         ambientSelector,
         ambientEdges,
@@ -70,6 +74,12 @@ export function runApplyGraphView(cy: Core, config: ApplyGraphViewConfig) {
                 (continentFilterPrefix ?? "") +
                 [...continentFilters].map((c) => `[continent != '${c}']`).join("");
             cy.nodes(hideSelector).style("display", "none");
+        }
+
+        if (savedOnly) {
+            cy.nodes()
+                .filter((n) => !savedSharkIds.has(n.data("shark_id") as string))
+                .style("display", "none");
         }
 
         // Isolate clusters flagged by the contradiction-detection pass

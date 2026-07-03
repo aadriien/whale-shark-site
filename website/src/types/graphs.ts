@@ -2,13 +2,14 @@
 
 /* ---- Filters ---- */
 
-// The 5 filter dimensions common to both graphs
+// The 6 filter dimensions common to both graphs
 export type SharedFilterKey =
     | "mutual_only"
     | "continents"
     | "no_contradictions"
     | "contradictions_only"
-    | "hide_edges";
+    | "hide_edges"
+    | "saved_only";
 
 export type NodeFilter = "all" | "gbif" | "ningaloo";
 
@@ -24,7 +25,7 @@ export type EdgeFilterState = {
     distanceRange: [number, number];
 };
 
-// The 9 togglable filter dimensions for the match graph (the 5 shared ones
+// The 10 togglable filter dimensions for the match graph (the 6 shared ones
 // plus 4 population-specific ones), used by FILTER_CONSTRAINTS in GraphUtils
 // to resolve cross-filter dependencies (e.g. "mutual matches only" implies
 // "GBIF only" nodes with "GBIF x GBIF" edge connections)
@@ -73,6 +74,8 @@ type BaseViewParams = {
     contradictionsOnly: boolean;
     showContradictionPath: boolean;
     colors: GraphThemeColors;
+    savedOnly: boolean;
+    savedSharkIds: Set<string>;
 };
 
 export type GraphViewParams = BaseViewParams & {

@@ -34,6 +34,7 @@ export const FILTER_CONSTRAINTS: Record<
     no_contradictions: { contradictions_only: false },
     contradictions_only: { no_contradictions: false },
     hide_edges: {},
+    saved_only: {},
 };
 
 export type ResolvedFilters = {
@@ -145,6 +146,8 @@ export function applyGraphView(cy: Core, params: SharkRankingViewParams) {
         contradictionsOnly,
         showContradictionPath,
         colors,
+        savedOnly,
+        savedSharkIds,
     } = params;
 
     const ambientSelector = ambientEdgeSelector(edgeFilter.mutualOnly, edgeFilter.distanceRange);
@@ -158,6 +161,8 @@ export function applyGraphView(cy: Core, params: SharkRankingViewParams) {
         contradictionsOnly,
         showContradictionPath,
         colors,
+        savedOnly,
+        savedSharkIds,
         edgeResetProps: "width z-index",
         ambientSelector,
         ambientEdges,

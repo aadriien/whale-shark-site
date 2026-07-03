@@ -62,6 +62,7 @@ export const FILTER_CONSTRAINTS: Record<FilterKey, Partial<Record<FilterKey, boo
     no_contradictions: { gbif_only: true, contradictions_only: false },
     contradictions_only: { gbif_only: true, mutual_only: false, no_contradictions: false },
     hide_edges: {},
+    saved_only: { gbif_only: true },
 };
 
 export type ResolvedFilters = {
@@ -226,6 +227,8 @@ export function applyGraphView(cy: Core, params: GraphViewParams) {
         contradictionsOnly,
         showContradictionPath,
         colors,
+        savedOnly,
+        savedSharkIds,
     } = params;
 
     const ambientSelector = ambientEdgeSelector(edgeFilter);
@@ -239,6 +242,8 @@ export function applyGraphView(cy: Core, params: GraphViewParams) {
         contradictionsOnly,
         showContradictionPath,
         colors,
+        savedOnly,
+        savedSharkIds,
         edgeResetProps: "line-color target-arrow-color source-arrow-color width z-index",
         ambientSelector,
         ambientEdges,

@@ -18,6 +18,7 @@ import {
 import { useGraphTheme } from "../../../hooks/useGraphTheme";
 import { useCyResize } from "../../../hooks/useCyResize";
 import { useSharkContinentMap } from "../../../hooks/useSharkContinentMap";
+import { useSavedSharkIds } from "../../../hooks/useSavedSharkIds";
 
 import {
     SharkRankingFilterKey,
@@ -65,12 +66,16 @@ function SharkRankingGraph() {
     const noContradictions = active.has("no_contradictions");
     const contradictionsOnly = active.has("contradictions_only");
     const hideEdges = active.has("hide_edges");
+    const savedOnly = active.has("saved_only");
+
+    const savedSharkIds = useSavedSharkIds();
 
     const continentsLocked = locked.has("continents");
     const mutualLocked = locked.has("mutual_only");
     const noContradictionsLocked = locked.has("no_contradictions");
     const contradictionsOnlyLocked = locked.has("contradictions_only");
     const hideEdgesLocked = locked.has("hide_edges");
+    const savedOnlyLocked = locked.has("saved_only");
 
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -87,6 +92,8 @@ function SharkRankingGraph() {
         contradictionsOnly,
         showContradictionPath,
         colors: graphColors,
+        savedOnly,
+        savedSharkIds,
     });
 
     useEffect(() => {
@@ -122,6 +129,8 @@ function SharkRankingGraph() {
             contradictionsOnly,
             showContradictionPath,
             colors: graphColors,
+            savedOnly,
+            savedSharkIds,
         };
         viewRef.current = params;
         if (cyRef.current) applyGraphView(cyRef.current, params);
@@ -135,6 +144,8 @@ function SharkRankingGraph() {
         contradictionsOnly,
         showContradictionPath,
         graphColors,
+        savedOnly,
+        savedSharkIds,
     ]);
 
     useEffect(() => {
@@ -218,6 +229,13 @@ function SharkRankingGraph() {
                             {name}
                         </FilterButton>
                     ))}
+                    <FilterButton
+                        active={savedOnly}
+                        disabled={savedOnlyLocked}
+                        onClick={() => toggleFilter("saved_only")}
+                    >
+                        My Saved Sharks Only
+                    </FilterButton>
                 </div>
                 <div className="filter-group">
                     <FilterButton
