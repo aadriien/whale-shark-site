@@ -1,4 +1,5 @@
 import CondensedSharkCard from "../../cards/CondensedSharkCard";
+import MatchButton from "../../controls/MatchButton";
 import { mediaSharks, visionOccurrences } from "../../../utils/DataUtils";
 import GraphPanelShell from "../../panels/GraphPanelShell";
 
@@ -27,6 +28,8 @@ function renderBody(
 
     return (
         <>
+            <MatchButton querySharkId={match.clickedSharkId} matchedSharkId={match.matchSharkId} />
+
             <div className="graph-panel-section">
                 <span className="graph-panel-label">Selected image</span>
                 {clickedShark ? (

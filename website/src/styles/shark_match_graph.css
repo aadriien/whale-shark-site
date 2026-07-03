@@ -190,6 +190,31 @@
     gap: 6px;
 }
 
+.graph-panel-match-btn {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-secondary);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.graph-panel-match-btn:hover {
+    background: var(--accent-dark-blue);
+    color: var(--bg-primary);
+    border-color: var(--accent-dark-blue);
+}
+
+.graph-panel-match-btn.active {
+    background: var(--primary-green);
+    color: var(--text-primary);
+    border-color: var(--primary-green);
+}
+
 .graph-panel-label {
     font-size: 0.72rem;
     font-weight: 600;

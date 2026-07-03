@@ -33,6 +33,15 @@ export type FavoriteButtonProps = {
     className?: string;
 };
 
+export type MatchedPair = {
+    querySharkId: string;
+    matchedSharkId: string;
+};
+
+export type MatchButtonProps = MatchedPair & {
+    className?: string;
+};
+
 export type LogbookProps = {
     setIsLogbookOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
