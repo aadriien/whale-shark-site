@@ -78,10 +78,14 @@ export function normalizePositions(nodes: GraphNode[]): Map<string, { x: number;
     return normalizePositionsCore(nodes);
 }
 
+// Kept in sync with applyGraphView's baseNodeSize below, since the latter
+// scales up from this as the stylesheet's starting point
+const NODE_SIZE = 12;
+
 // Builds the Cytoscape stylesheet from theme-aware colors
 export function buildGraphStylesheet(colors: GraphThemeColors): StylesheetStyle[] {
     return buildBaseStylesheet(colors, {
-        nodeSize: 12,
+        nodeSize: NODE_SIZE,
         continentNodeSelector: (continent) =>
             `node[population = 'gbif'][continent = '${continent}']`,
         extraNodeRules: [
@@ -244,6 +248,7 @@ export function applyGraphView(cy: Core, params: GraphViewParams) {
         colors,
         savedOnly,
         savedSharkIds,
+        baseNodeSize: NODE_SIZE,
         edgeResetProps: "line-color target-arrow-color source-arrow-color width z-index",
         ambientSelector,
         ambientEdges,

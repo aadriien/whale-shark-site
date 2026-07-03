@@ -3,6 +3,7 @@ import type { Core, Css, EdgeCollection, NodeCollection, NodeSingular } from "cy
 import type { GraphThemeColors } from "../../types/graphs";
 
 import type { ContradictionPathResult } from "./contradictions";
+import { computeNodeSizeScale } from "./scaling";
 
 export const HIGHLIGHT_Z_INDEX = 10;
 
@@ -16,6 +17,10 @@ export type ApplyGraphViewConfig = {
     colors: GraphThemeColors;
     savedOnly: boolean;
     savedSharkIds: Set<string>;
+
+    // Base node width / height (px) from stylesheet; scaled up as filters
+    // thin out the visible node count, so sparse graphs stay legible
+    baseNodeSize: number;
 
     // Properties to clear from edges on every re-apply. Graphs that write
     // edge line-color inline (contradiction-path highlighting on top of
@@ -46,6 +51,7 @@ export function runApplyGraphView(cy: Core, config: ApplyGraphViewConfig) {
         colors,
         savedOnly,
         savedSharkIds,
+        baseNodeSize,
         edgeResetProps,
         ambientSelector,
         ambientEdges,
@@ -97,6 +103,15 @@ export function runApplyGraphView(cy: Core, config: ApplyGraphViewConfig) {
         if (ambientSelector !== "*") {
             cy.nodes().not(ambientEdges.connectedNodes()).style("display", "none");
         }
+
+        // Scale node size to how sparse the current view is
+        const totalNodeCount = cy.nodes().length;
+        const visibleNodeCount = cy.nodes(":visible").length;
+        const nodeScale = computeNodeSizeScale(visibleNodeCount, totalNodeCount);
+        cy.nodes().style({
+            width: baseNodeSize * nodeScale,
+            height: baseNodeSize * nodeScale,
+        });
 
         // Only ambient edges are shown; hideEdges hides everything
         cy.edges().style("display", "none");

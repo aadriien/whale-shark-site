@@ -52,9 +52,13 @@ export function normalizePositions(
     return normalizePositionsCore(nodes);
 }
 
+// Kept in sync with applyGraphView's baseNodeSize below, since the latter
+// scales up from this as the stylesheet's starting point
+const NODE_SIZE = 14;
+
 export function buildGraphStylesheet(colors: GraphThemeColors): StylesheetStyle[] {
     return buildBaseStylesheet(colors, {
-        nodeSize: 14,
+        nodeSize: NODE_SIZE,
         edgeLineColor: colors.gbifToGbif,
     });
 }
@@ -163,6 +167,7 @@ export function applyGraphView(cy: Core, params: SharkRankingViewParams) {
         colors,
         savedOnly,
         savedSharkIds,
+        baseNodeSize: NODE_SIZE,
         edgeResetProps: "width z-index",
         ambientSelector,
         ambientEdges,
