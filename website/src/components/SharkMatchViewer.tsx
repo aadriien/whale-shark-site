@@ -4,6 +4,7 @@ import { Camera } from "lucide-react";
 
 import { mediaSharks, visionSharks, visionOccurrences, parseImageField } from "../utils/DataUtils";
 
+import FavoriteButton from "./controls/FavoriteButton";
 import MatchSharkSelector from "./panels/MatchSharkSelector";
 
 import { ImageMetadata, ImagesWithMetadata } from "types/sharks";
@@ -144,6 +145,9 @@ function SharkMatchViewer() {
                                                 <span className="match-shark-id-value">
                                                     {sharkInfo?.id}
                                                 </span>
+                                                {sharkInfo?.id ? (
+                                                    <FavoriteButton sharkId={sharkInfo.id} />
+                                                ) : null}
                                             </div>
                                             <div className="match-shark-details-row">
                                                 <span className="match-shark-meta">
@@ -243,6 +247,13 @@ function SharkMatchViewer() {
                                                             <span className="match-shark-id-value">
                                                                 {occurrence?.matched_shark_id}
                                                             </span>
+                                                            {occurrence?.matched_shark_id ? (
+                                                                <FavoriteButton
+                                                                    sharkId={
+                                                                        occurrence.matched_shark_id
+                                                                    }
+                                                                />
+                                                            ) : null}
                                                         </div>
                                                         <div className="match-shark-details-row">
                                                             <span className="match-shark-meta">
