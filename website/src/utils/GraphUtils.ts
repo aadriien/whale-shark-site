@@ -1,4 +1,4 @@
-import type { Core, Css, ElementDefinition, EdgeSingular, NodeSingular, StylesheetStyle } from "cytoscape";
+import type { Core, Css, ElementDefinition, NodeSingular, StylesheetStyle } from "cytoscape";
 
 import type {
     GraphNode,
@@ -17,7 +17,11 @@ import {
     isDistanceFiltering as isDistanceFilteringCore,
     EDGE_OPACITY_MIN,
 } from "./graph/layout";
-import { buildClusterConflicts, conflictingSharkIdsFor, findContradictionPathGeneric } from "./graph/contradictions";
+import {
+    buildClusterConflicts,
+    conflictingSharkIdsFor,
+    findContradictionPathGeneric,
+} from "./graph/contradictions";
 import { buildBaseStylesheet } from "./graph/stylesheet";
 import { findBestMatchGeneric } from "./graph/bestMatch";
 import { runApplyGraphView, initCyListenersGeneric } from "./graph/view";
@@ -77,7 +81,8 @@ export function normalizePositions(nodes: GraphNode[]): Map<string, { x: number;
 export function buildGraphStylesheet(colors: GraphThemeColors): StylesheetStyle[] {
     return buildBaseStylesheet(colors, {
         nodeSize: 12,
-        continentNodeSelector: (continent) => `node[population = 'gbif'][continent = '${continent}']`,
+        continentNodeSelector: (continent) =>
+            `node[population = 'gbif'][continent = '${continent}']`,
         extraNodeRules: [
             {
                 selector: "node[population = 'ningaloo']",
@@ -190,7 +195,7 @@ export function buildElements(
 }
 
 // "*" matches every edge. Note that an empty-string selector would match nothing
-export const DISTANCE_RANGE_DEFAULT: [number, number] = [0, 5.0];
+export const DISTANCE_RANGE_DEFAULT: [number, number] = [0, 4.0];
 
 export function isDistanceFiltering(range: [number, number]): boolean {
     return isDistanceFilteringCore(range, DISTANCE_RANGE_DEFAULT);

@@ -221,6 +221,18 @@ function SharkRankingGraph() {
                 </div>
                 <div className="filter-group">
                     <FilterButton
+                        active={!mutualOnly && !hideEdges && !noContradictions && !contradictionsOnly}
+                        disabled={
+                            mutualLocked &&
+                            hideEdgesLocked &&
+                            noContradictionsLocked &&
+                            contradictionsOnlyLocked
+                        }
+                        onClick={() => setActiveFilters(new Set())}
+                    >
+                        All matches
+                    </FilterButton>
+                    <FilterButton
                         active={mutualOnly}
                         disabled={mutualLocked}
                         onClick={() => toggleFilter("mutual_only")}
