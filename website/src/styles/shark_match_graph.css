@@ -258,6 +258,34 @@
     justify-content: center;
 }
 
+/* Mobile: graph on top (full width), panels side by side below.
+   Mirrors globe-views-container pattern (globe_views.css), which
+   uses same "main visual flanked by two side panels" layout. */
+@media (max-width: 960px) {
+    .shark-match-graph-section .graph-canvas-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .shark-match-graph-section .graph-canvas-row .cytoscape-canvas {
+        order: -1;
+        flex: 1 1 100%;
+        height: 22rem;
+        margin-bottom: 1rem;
+    }
+
+    .shark-match-graph-section .graph-canvas-row .graph-node-panel {
+        order: 0;
+        flex: 1 1 45%;
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: 22rem;
+    }
+}
+
 .graph-panel-placeholder {
     width: 100%;
     max-width: 200px;
