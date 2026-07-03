@@ -239,7 +239,9 @@ function SharkRankingGraph() {
                 </div>
                 <div className="filter-group">
                     <FilterButton
-                        active={!mutualOnly && !hideEdges && !noContradictions && !contradictionsOnly}
+                        active={
+                            !mutualOnly && !hideEdges && !noContradictions && !contradictionsOnly
+                        }
                         disabled={
                             mutualLocked &&
                             hideEdgesLocked &&
@@ -311,7 +313,6 @@ function SharkRankingGraph() {
             <div className="graph-canvas-row">
                 <SharkRankingNodePanel
                     match={selectedMatch}
-                    onClose={() => setSelectedMatch(null)}
                     showContradictionPath={showContradictionPath}
                     onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
                 />
@@ -354,10 +355,7 @@ function SharkRankingGraph() {
                         />
                     )}
                 </div>
-                <SharkRankingStatsPanel
-                    match={selectedMatch}
-                    onClose={() => setSelectedMatch(null)}
-                />
+                <SharkRankingStatsPanel match={selectedMatch} />
             </div>
         </div>
     );

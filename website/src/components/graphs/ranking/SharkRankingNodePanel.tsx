@@ -52,15 +52,14 @@ function renderBody(
                         <p>
                             A chain of best-match edges links this shark to whaleSharkID
                             {match.conflictingSharkIds.length > 1 ? "s" : ""}{" "}
-                            {match.conflictingSharkIds.join(", ")}, but geo/temporal data
-                            says that's IMPOSSIBLE for the same individual.
+                            {match.conflictingSharkIds.join(", ")}, but geo/temporal data says
+                            that's IMPOSSIBLE for the same individual.
                         </p>
                         <button
                             className={`graph-filter-btn${showContradictionPath ? " active" : ""}`}
                             onClick={onToggleContradictionPath}
                         >
-                            {showContradictionPath ? "Hide" : "Show"} chain to conflicting
-                            shark
+                            {showContradictionPath ? "Hide" : "Show"} chain to conflicting shark
                         </button>
                     </div>
                 </>
@@ -71,12 +70,11 @@ function renderBody(
 
 function SharkRankingNodePanel({
     match,
-    onClose,
     showContradictionPath,
     onToggleContradictionPath,
 }: SharkRankingNodePanelProps) {
     return (
-        <GraphPanelShell isEmpty={!match} emptyAlt="Click a node to see its shark card" onClose={onClose}>
+        <GraphPanelShell isEmpty={!match} emptyAlt="Click a node to see its shark card">
             {match && renderBody(match, showContradictionPath, onToggleContradictionPath)}
         </GraphPanelShell>
     );

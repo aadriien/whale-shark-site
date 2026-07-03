@@ -5,12 +5,11 @@ import sharkSelectionPlaceholder from "../../assets/images/chart-placeholders/gl
 type GraphPanelShellProps = {
     isEmpty: boolean;
     emptyAlt: string;
-    onClose: () => void;
     children: ReactNode;
 };
 
-// Shared empty state placeholder + close button for the graph side panels
-function GraphPanelShell({ isEmpty, emptyAlt, onClose, children }: GraphPanelShellProps) {
+// Shared empty state placeholder for the graph side panels
+function GraphPanelShell({ isEmpty, emptyAlt, children }: GraphPanelShellProps) {
     if (isEmpty) {
         return (
             <div className="graph-node-panel graph-node-panel--empty">
@@ -19,14 +18,7 @@ function GraphPanelShell({ isEmpty, emptyAlt, onClose, children }: GraphPanelShe
         );
     }
 
-    return (
-        <div className="graph-node-panel">
-            <button className="graph-panel-close" onClick={onClose} aria-label="Close panel">
-                ✕
-            </button>
-            {children}
-        </div>
-    );
+    return <div className="graph-node-panel">{children}</div>;
 }
 
 export default GraphPanelShell;

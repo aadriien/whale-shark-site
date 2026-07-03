@@ -8,12 +8,11 @@ const imageIdToUrl = new Map<number, string>(
         .map((occ) => [occ.image_id as number, occ.identifier_url as string])
 );
 
-function GraphSharkImagesPanel({ match, onClose, onSelectImage }: GraphImagesPanelProps) {
+function GraphSharkImagesPanel({ match, onSelectImage }: GraphImagesPanelProps) {
     return (
         <GraphPanelShell
             isEmpty={!match}
             emptyAlt="Click a GBIF node to see all images for that shark"
-            onClose={onClose}
         >
             {match && renderBody(match, onSelectImage)}
         </GraphPanelShell>

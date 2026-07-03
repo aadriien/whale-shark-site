@@ -187,7 +187,6 @@ export type SelectedSharkMatch = BaseSelectedMatch & {
 
 type BaseNodePanelProps<M> = {
     match: M | null;
-    onClose: () => void;
     showContradictionPath: boolean;
     onToggleContradictionPath: () => void;
 };
@@ -197,7 +196,6 @@ export type SharkRankingNodePanelProps = BaseNodePanelProps<SelectedSharkMatch>;
 
 type BaseDetailPanelProps<M> = {
     match: M | null;
-    onClose: () => void;
 };
 
 export type GraphImagesPanelProps = BaseDetailPanelProps<SelectedMatch> & {

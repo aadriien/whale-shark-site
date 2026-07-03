@@ -113,14 +113,14 @@ function renderBody(
     );
 }
 
-function SharkRankingStatsPanel({ match, onClose }: SharkRankingStatsPanelProps) {
+function SharkRankingStatsPanel({ match }: SharkRankingStatsPanelProps) {
     const pairRows = usePairwiseData(
         match?.clickedSharkId ?? null,
         match?.matchSharkId ?? null
     );
 
     return (
-        <GraphPanelShell isEmpty={!match} emptyAlt="Click a node to see match statistics" onClose={onClose}>
+        <GraphPanelShell isEmpty={!match} emptyAlt="Click a node to see match statistics">
             {match && renderBody(match, pairRows)}
         </GraphPanelShell>
     );

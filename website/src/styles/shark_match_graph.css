@@ -167,23 +167,6 @@
     position: relative;
 }
 
-.graph-panel-close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 0.85rem;
-    opacity: 0.5;
-    line-height: 1;
-    padding: 2px 6px;
-}
-
-.graph-panel-close:hover {
-    opacity: 1;
-}
-
 .graph-panel-section {
     display: flex;
     flex-direction: column;

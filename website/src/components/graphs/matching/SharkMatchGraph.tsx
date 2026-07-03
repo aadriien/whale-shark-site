@@ -429,7 +429,6 @@ function SharkMatchGraph() {
             <div className="graph-canvas-row">
                 <GraphNodePanel
                     match={selectedMatch}
-                    onClose={() => setSelectedMatch(null)}
                     showContradictionPath={showContradictionPath}
                     onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
                 />
@@ -472,11 +471,7 @@ function SharkMatchGraph() {
                         />
                     )}
                 </div>
-                <GraphSharkImagesPanel
-                    match={selectedMatch}
-                    onClose={() => setSelectedMatch(null)}
-                    onSelectImage={handleSelectImage}
-                />
+                <GraphSharkImagesPanel match={selectedMatch} onSelectImage={handleSelectImage} />
             </div>
         </div>
     );

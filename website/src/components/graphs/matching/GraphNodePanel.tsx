@@ -104,16 +104,11 @@ function renderBody(
 
 function GraphNodePanel({
     match,
-    onClose,
     showContradictionPath,
     onToggleContradictionPath,
 }: GraphNodePanelProps) {
     return (
-        <GraphPanelShell
-            isEmpty={!match}
-            emptyAlt="Click a GBIF node to see its shark card"
-            onClose={onClose}
-        >
+        <GraphPanelShell isEmpty={!match} emptyAlt="Click a GBIF node to see its shark card">
             {match && renderBody(match, showContradictionPath, onToggleContradictionPath)}
         </GraphPanelShell>
     );
