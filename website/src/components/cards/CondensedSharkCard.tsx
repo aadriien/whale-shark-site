@@ -1,7 +1,5 @@
-import { useReducer } from "react";
-
 import { parseImageField } from "../../utils/DataUtils";
-import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils";
+import FavoriteButton from "../controls/FavoriteButton";
 
 import { IndividualSharkProps } from "../../types/sharks";
 
@@ -18,9 +16,6 @@ function formatYearMonth(dateString: string) {
 }
 
 const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
-    // Purely for forcing re-render on shark favoriting / saving
-    const [, forceRender] = useReducer((x: number) => x + 1, 0);
-
     const images = shark.image !== "Unknown" ? parseImageField(shark.image) : [];
     const displayUrl = imageUrl ?? (images.length > 0 ? images[0].url : undefined);
 
@@ -87,16 +82,7 @@ const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
             {/* ID + favorite toggle */}
             <div className="condensed-id-row">
                 <strong>ID: {shark.id}</strong>
-                <button
-                    className="favorite-button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(shark.id);
-                        forceRender();
-                    }}
-                >
-                    {isFavorite(shark.id) ? "★" : "☆"}
-                </button>
+                <FavoriteButton sharkId={shark.id} />
             </div>
 
             {/* Sex + life stage */}

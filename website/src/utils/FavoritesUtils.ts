@@ -36,3 +36,10 @@ export function isFavorite(sharkId: string) {
 export function getSavedSharkIds() {
     return [...getFavorites()];
 }
+
+export function clearFavorites() {
+    localStorage.removeItem(STORAGE_KEY);
+
+    // Dispatch event to notify components that favorites changed
+    window.dispatchEvent(new CustomEvent("favoritesChanged"));
+}

@@ -1,11 +1,9 @@
-import { useState } from "react";
-
 import CondensedSharkCard from "../cards/CondensedSharkCard";
 import { mediaSharks } from "../../utils/DataUtils";
+import { clearFavorites } from "../../utils/FavoritesUtils";
+import { useSavedSharkIds } from "../../hooks/useSavedSharkIds";
 
 import { SavedSharkIDs, CondensedGridProps } from "../../types/sharks";
-
-const STORAGE_KEY = "savedSharks";
 
 function retrieveSharks(saved: SavedSharkIDs) {
     if (!saved || saved.size === 0) return [];
@@ -33,21 +31,13 @@ const CondensedGrid = ({ saved }: CondensedGridProps) => {
 };
 
 function SavedSharks() {
-    // Initialize from localStorage or empty set
-    const [saved, setSaved] = useState<SavedSharkIDs>(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? new Set(JSON.parse(stored)) : new Set();
-        } catch {
-            return new Set();
-        }
-    });
+    const saved = useSavedSharkIds();
 
     // Allow user to reset saved whale sharks
     const clearSaved = () => {
         const isConfirmed = confirm(`
             STOP! WAIT!\n\n
-            Are you sure you want to erase all of your saved whale sharks? 
+            Are you sure you want to erase all of your saved whale sharks?
             This cannot be undone.
         `);
 
@@ -55,8 +45,7 @@ function SavedSharks() {
             const isConfirmedAgain = confirm(`Seriously, last chance!`);
 
             if (isConfirmedAgain) {
-                localStorage.removeItem(STORAGE_KEY);
-                setSaved(new Set());
+                clearFavorites();
             }
         }
     };

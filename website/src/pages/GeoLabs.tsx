@@ -11,8 +11,8 @@ import SavedDisplay from "../components/panels/SavedSharksDisplay";
 import LabSelectionPanel from "../components/panels/LabSelectionPanel";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils";
-import { getFavorites } from "../utils/FavoritesUtils";
 import { useGlobeClick } from "../utils/GlobeClick";
+import { useSavedSharkIds } from "../hooks/useSavedSharkIds";
 
 import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils";
 import { mediaSharks } from "../utils/DataUtils";
@@ -29,7 +29,7 @@ function GeoLabs() {
     const [allSharksVisible, setAllSharksVisible] = useState<boolean>(true);
     const [filteredSharks, setFilteredSharks] = useState<WhaleSharkDatasetNormalized>(mediaSharks);
 
-    const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+    const savedIds = useSavedSharkIds();
     const [viewMode, setViewMode] = useState<ViewMode>("multiple"); // "individual" or "multiple"
 
     const [selectedSharksForLab, setSelectedSharksForLab] = useState<Set<string>>(new Set()); // for multi-select mode
@@ -46,25 +46,6 @@ function GeoLabs() {
     const [isTimelineMode, setIsTimelineMode] = useState<boolean>(false);
 
     const sharks = mediaSharks;
-
-    // Update saved IDs when favorites change
-    useEffect(() => {
-        const updateSavedIds = () => {
-            setSavedIds(getFavorites());
-        };
-
-        // Initial load
-        updateSavedIds();
-
-        // Listen for changes
-        window.addEventListener("storage", updateSavedIds);
-        window.addEventListener("favoritesChanged", updateSavedIds);
-
-        return () => {
-            window.removeEventListener("storage", updateSavedIds);
-            window.removeEventListener("favoritesChanged", updateSavedIds);
-        };
-    }, []);
 
     // Get coordinates for saved sharks only (with any filters in place)
     const pointsData = useMemo(() => {
@@ -311,6 +292,7 @@ function GeoLabs() {
                         <TimelineControls
                             globeRef={globeHandleRef}
                             selectedSharksForLab={selectedSharksForLab}
+                            savedSharkIds={savedIds}
                             onToggleTimelineMode={handleToggleTimelineMode}
                             isTimelineMode={isTimelineMode}
                         />

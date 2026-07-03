@@ -1,27 +1,11 @@
-import { useState, useEffect } from "react";
-
 import { toggleFavorite, isFavorite } from "../../utils/FavoritesUtils";
+import { useSavedSharkIds } from "../../hooks/useSavedSharkIds";
 
 import { FavoriteButtonProps } from "../../types/logbooks";
 
 const FavoriteButton = ({ sharkId, className = "favorite-button" }: FavoriteButtonProps) => {
-    // Purely for forcing re-render on shark favoriting / saving
-    const [_, forceRender] = useState<Record<string, never>>({});
-
-    // Listen for favorites changes to ensure re-render
-    useEffect(() => {
-        const handleFavoritesChange = () => {
-            forceRender({});
-        };
-
-        window.addEventListener("favoritesChanged", handleFavoritesChange);
-        window.addEventListener("storage", handleFavoritesChange);
-
-        return () => {
-            window.removeEventListener("favoritesChanged", handleFavoritesChange);
-            window.removeEventListener("storage", handleFavoritesChange);
-        };
-    }, []);
+    // Subscribes to favorites changes so this re-renders when they occur
+    useSavedSharkIds();
 
     return (
         <button
@@ -29,9 +13,6 @@ const FavoriteButton = ({ sharkId, className = "favorite-button" }: FavoriteButt
             onClick={(e) => {
                 e.stopPropagation();
                 toggleFavorite(sharkId);
-
-                // Update UI immediately
-                forceRender({});
             }}
         >
             {isFavorite(sharkId) ? "★" : "☆"}

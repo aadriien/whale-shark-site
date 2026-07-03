@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 
 import SharkBanner from "../cards/SharkBanner";
-import { getFavorites } from "../../utils/FavoritesUtils";
+import { useSavedSharkIds } from "../../hooks/useSavedSharkIds";
 
 import { WhaleSharkEntryNormalized } from "../../types/sharks";
 import { SavedSharksDisplayProps } from "../../types/panels";
@@ -14,27 +14,7 @@ function SavedSharksDisplay({
     selectedSharksForLab,
     onLabSelectionChange,
 }: SavedSharksDisplayProps) {
-    const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
-    const [isInitialized, setIsInitialized] = useState<boolean>(false);
-
-    // Load saved shark IDs from localStorage
-    useEffect(() => {
-        const updateSavedIds = () => {
-            setSavedIds(getFavorites());
-            setIsInitialized(true);
-        };
-
-        updateSavedIds();
-
-        // Listen for storage changes (favorites modified in other tab or same tab)
-        window.addEventListener("storage", updateSavedIds);
-        window.addEventListener("favoritesChanged", updateSavedIds);
-
-        return () => {
-            window.removeEventListener("storage", updateSavedIds);
-            window.removeEventListener("favoritesChanged", updateSavedIds);
-        };
-    }, []);
+    const savedIds = useSavedSharkIds();
 
     // Filter sharks to only include saved ones
     const savedSharks = useMemo(() => {
@@ -108,7 +88,7 @@ function SavedSharksDisplay({
                         })}
                     </div>
                 </div>
-            ) : isInitialized && savedIds.size === 0 ? (
+            ) : savedIds.size === 0 ? (
                 <div className="no-sharks-message">
                     Sorry! No whale sharks match your current filters.
                     <br />

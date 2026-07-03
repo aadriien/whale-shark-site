@@ -4,7 +4,6 @@ import TimelineButton from "./TimelineButton";
 import TimelineSelector from "./TimelineSelector";
 
 import { getGroupCoordinatesByTimeline } from "../../utils/CoordinateUtils";
-import { getSavedSharkIds } from "../../utils/FavoritesUtils";
 import { addPointsData, clearAllData } from "../../utils/GlobeUtils";
 
 import { TimelineControlsProps } from "../../types/controls";
@@ -13,6 +12,7 @@ import { PlottedCoordinatePoint } from "../../types/coordinates";
 const TimelineControls = ({
     globeRef,
     selectedSharksForLab,
+    savedSharkIds,
     onToggleTimelineMode,
     isTimelineMode,
 }: TimelineControlsProps) => {
@@ -43,7 +43,6 @@ const TimelineControls = ({
                     clearAllData(globeInstance);
                 }
 
-                const savedSharkIds = getSavedSharkIds();
                 let dataToShow: PlottedCoordinatePoint[];
 
                 if (selectedSharksForLab.size > 0) {
@@ -55,7 +54,11 @@ const TimelineControls = ({
                     );
                 } else {
                     // All saved sharks with timeline filtering
-                    dataToShow = getGroupCoordinatesByTimeline(savedSharkIds, month, year);
+                    dataToShow = getGroupCoordinatesByTimeline(
+                        Array.from(savedSharkIds),
+                        month,
+                        year
+                    );
                 }
 
                 // Store plotted coordinates for display in TimelineSelector
@@ -63,7 +66,7 @@ const TimelineControls = ({
                 addPointsData(globeInstance, dataToShow);
             }
         },
-        [globeRef, selectedSharksForLab]
+        [globeRef, selectedSharksForLab, savedSharkIds]
     );
 
     // Get available sharks for timeline range
@@ -71,7 +74,7 @@ const TimelineControls = ({
         if (selectedSharksForLab.size > 0) {
             return Array.from(selectedSharksForLab);
         } else {
-            return getSavedSharkIds();
+            return Array.from(savedSharkIds);
         }
     };
 
