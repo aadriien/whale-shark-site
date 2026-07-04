@@ -9566,7 +9566,7 @@
   {
     "whaleSharkID": "132352336",
     "image_count": 1,
-    "best_match_shark_id": "630245406",
+    "best_match_shark_id": "628820015",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.267,
@@ -16598,7 +16598,7 @@
   {
     "whaleSharkID": "452040850",
     "image_count": 10,
-    "best_match_shark_id": "628820015",
+    "best_match_shark_id": "630245406",
     "best_match_image_count": 1,
     "pair_count": 10,
     "distance_min": 1.0719,
