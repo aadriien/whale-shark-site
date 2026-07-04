@@ -5,7 +5,9 @@
 ###############################################################################
 
 
+import os
 import warnings
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -175,44 +177,76 @@ def process_single_image(row) -> dict:
         return {}
 
 
+def load_existing_embeddings() -> Optional[dict]:
+    if not os.path.exists(GBIF_OUTPUT_NPZ_FILE):
+        return None
+
+    with np.load(GBIF_OUTPUT_NPZ_FILE) as data:
+        return {key: data[key] for key in data.files}
+
+
 def process_all_images(media_df: pd.DataFrame) -> None:
+    # Skip images that already have embeddings stored in .npz file
+    existing = load_existing_embeddings()
+    existing_keys = set(existing["image_id_keys"]) if existing else set()
+    new_media_df = media_df[~media_df["key"].astype(str).isin(existing_keys)]
+
+    print(
+        f"Found {len(existing_keys)} existing embeddings; "
+        f"processing {len(new_media_df)} new images"
+    )
+
     results = []
 
-    # Calculate BBOX + embeddings for each image in media records
-    for _, row in media_df.iterrows():
+    # Calculate BBOX + embeddings for each new image in media records
+    for _, row in new_media_df.iterrows():
         result = process_single_image(row)
         if result:
             results.append(result)
 
-    # Extract fields & assemble for full export
-    miewid_embeddings = np.array([r["miewid_embedding"] for r in results])
-    dinov2_embeddings = np.array([r["dinov2_embedding"] for r in results])
-    bboxes = np.array([r["bbox"] for r in results])
-    image_id_keys = np.array([str(r["image_id (GBIF key)"]) for r in results])
-    whaleSharkIDs = np.array([str(r["whaleSharkID (GBIF)"]) for r in results])
-    occurrenceIDs = np.array([str(r["occurrenceID (GBIF)"]) for r in results])
-    identificationIDs = np.array([str(r["identificationID (GBIF)"]) for r in results])
-    image_url_identifiers = np.array(
-        [str(r["image_url (GBIF identifier)"]) for r in results]
-    )
+    if not results:
+        print("No new images to process, embeddings file unchanged.")
+        return
+
+    # Extract fields & assemble for new images
+    new_arrays = {
+        "miewid_embeddings": np.array([r["miewid_embedding"] for r in results]),
+        "dinov2_embeddings": np.array([r["dinov2_embedding"] for r in results]),
+        "bboxes": np.array([r["bbox"] for r in results]),
+        "image_id_keys": np.array(
+            [str(r["image_id (GBIF key)"]) for r in results]
+        ),
+        "whaleSharkIDs": np.array(
+            [str(r["whaleSharkID (GBIF)"]) for r in results]
+        ),
+        "occurrenceIDs": np.array(
+            [str(r["occurrenceID (GBIF)"]) for r in results]
+        ),
+        "identificationIDs": np.array(
+            [str(r["identificationID (GBIF)"]) for r in results]
+        ),
+        "image_url_identifiers": np.array(
+            [str(r["image_url (GBIF identifier)"]) for r in results]
+        ),
+    }
+
+    # Merge with previously-saved embeddings, so nothing gets lost
+    if existing:
+        combined = {
+            key: np.concatenate([existing[key], new_arrays[key]])
+            for key in new_arrays
+        }
+    else:
+        combined = new_arrays
 
     # Confirm folder to hold embeddings exists, then save to .npz file
     _ = folder_exists(GBIF_OUTPUT_NPZ_FILE, True)
-    np.savez(
-        GBIF_OUTPUT_NPZ_FILE,
-        miewid_embeddings=miewid_embeddings,
-        dinov2_embeddings=dinov2_embeddings,
-        bboxes=bboxes,
-        image_id_keys=image_id_keys,
-        whaleSharkIDs=whaleSharkIDs,
-        occurrenceIDs=occurrenceIDs,
-        identificationIDs=identificationIDs,
-        image_url_identifiers=image_url_identifiers,
-    )
+    np.savez(GBIF_OUTPUT_NPZ_FILE, **combined)
 
     print(
-        f"Saved {len(miewid_embeddings)} embeddings (MiewID + DINOv2)"
-        f" to: {GBIF_OUTPUT_NPZ_FILE}"
+        f"Saved {len(combined['miewid_embeddings'])} total embeddings "
+        f"(MiewID + DINOv2), with {len(results)} newly added, "
+        f"to: {GBIF_OUTPUT_NPZ_FILE}"
     )
 
 
