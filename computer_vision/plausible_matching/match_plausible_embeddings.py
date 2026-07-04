@@ -23,6 +23,7 @@ from ..vision_utils.io_utils import (
     export_to_json,
     format_match_summary,
     get_image_records,
+    translate_npz_positions_to_image_ids,
 )
 from ..vision_utils.plausibility_utils import build_exclusion_map
 from ..vision_utils.shark_matching_utils import find_first_different_shark
@@ -172,53 +173,6 @@ def identify_sharks(
         results.append(result)
 
     return results
-
-
-def translate_npz_positions_to_image_ids(
-    results_df: pd.DataFrame, new_data: dict, gbif_media_df: pd.DataFrame
-) -> pd.DataFrame:
-    # process_all_images() silently skips images that fail (download/YOLO
-    # errors), so new_data's arrays are a compacted subsequence of
-    # get_image_records(): npz position i doesn't generally correspond to
-    # image_id i. Recover the true image_id for each npz position via the
-    # GBIF media key recorded alongside each embedding.
-    # A single GBIF `key` (occurrence record) can bundle many photos, so
-    # `key` alone isn't unique per image. Pair it with `identifier`
-    # (photo URL), which together uniquely identify a gbif_media_df row.
-    key_to_image_id = dict(
-        zip(
-            zip(
-                gbif_media_df["key"].astype(str),
-                gbif_media_df["identifier"].astype(str),
-            ),
-            gbif_media_df["image_id"],
-        )
-    )
-    npz_pos_to_image_id = {
-        i: int(key_to_image_id[(key, identifier)])
-        for i, (key, identifier) in enumerate(
-            zip(
-                new_data["image_id_keys"].astype(str),
-                new_data["image_url_identifiers"].astype(str),
-            )
-        )
-        if (key, identifier) in key_to_image_id
-    }
-
-    def translate(npz_pos) -> int:
-        npz_pos = int(npz_pos)
-        return npz_pos_to_image_id.get(npz_pos, -1) if npz_pos >= 0 else -1
-
-    for col in [
-        "image_id",
-        "miewid_gbif_matched_image_id",
-        "miewid_gbif_matched_annotation_id",
-        "dinov2_gbif_matched_image_id",
-        "dinov2_gbif_matched_annotation_id",
-    ]:
-        results_df[col] = results_df[col].apply(translate)
-
-    return results_df
 
 
 def validate_matches(media_matches_df: pd.DataFrame) -> None:

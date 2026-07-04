@@ -24,6 +24,7 @@ from ..vision_utils.io_utils import (
     export_to_json,
     format_match_summary,
     get_image_records,
+    translate_npz_positions_to_image_ids,
 )  # noqa: F401
 from ..vision_utils.shark_matching_utils import find_first_different_shark  # noqa: F401
 from .unfiltered_matching_constants import (
@@ -232,8 +233,11 @@ if __name__ == "__main__":
     # enriched_df = gbif_media_df.reset_index(drop=True).join(results_df)
 
     # Add index used for matching explicitly & merge
-    results_df["image_id"] = results_df["image_id"].astype(int)
     gbif_media_df = gbif_media_df.reset_index().rename(columns={"index": "image_id"})
+
+    results_df = translate_npz_positions_to_image_ids(
+        results_df, new_data, gbif_media_df
+    )
 
     enriched_df = pd.merge(gbif_media_df, results_df, on="image_id", how="inner")
 
