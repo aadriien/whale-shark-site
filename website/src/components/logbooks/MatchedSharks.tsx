@@ -1,5 +1,5 @@
 import { mediaSharks } from "../../utils/DataUtils";
-import { getMatchedPairs, toggleMatchedPair, clearMatchedPairs } from "../../utils/MatchUtils";
+import { getMatchGroups, removeSharkFromMatches, clearMatchedPairs } from "../../utils/MatchUtils";
 import { useMatchedPairs } from "../../hooks/useMatchedPairs";
 import SharkBanner from "../cards/SharkBanner";
 
@@ -7,7 +7,7 @@ function MatchedSharks() {
     // Subscribes to matched-pair changes so this re-renders when they occur
     useMatchedPairs();
 
-    const pairs = getMatchedPairs();
+    const groups = getMatchGroups();
 
     // Allow user to reset saved match pairs
     const clearMatches = () => {
@@ -36,31 +36,33 @@ function MatchedSharks() {
             </div>
 
             <div className="matched-groups">
-                {pairs.length > 0 ? (
-                    pairs.map(({ sharkIdA, sharkIdB }) => {
-                        const sharkA = mediaSharks.find((s) => s.id === sharkIdA);
-                        const sharkB = mediaSharks.find((s) => s.id === sharkIdB);
+                {groups.length > 0 ? (
+                    groups.map((sharkIds) => {
+                        const groupKey = [...sharkIds].sort().join("::");
 
                         return (
-                            <div key={`${sharkIdA}::${sharkIdB}`} className="matched-pair-box">
-                                <button
-                                    className="match-remove-btn"
-                                    onClick={() => toggleMatchedPair(sharkIdA, sharkIdB)}
-                                    aria-label={`Remove saved match between ${sharkIdA} and ${sharkIdB}`}
-                                >
-                                    ✕
-                                </button>
-                                <div className="matched-pair-banners">
-                                    {sharkA ? (
-                                        <SharkBanner shark={sharkA} />
-                                    ) : (
-                                        <p className="graph-panel-missing">No data for ID {sharkIdA}</p>
-                                    )}
-                                    {sharkB ? (
-                                        <SharkBanner shark={sharkB} />
-                                    ) : (
-                                        <p className="graph-panel-missing">No data for ID {sharkIdB}</p>
-                                    )}
+                            <div key={groupKey} className="matched-group-box">
+                                <div className="matched-group-banners">
+                                    {sharkIds.map((sharkId) => {
+                                        const shark = mediaSharks.find((s) => s.id === sharkId);
+
+                                        return (
+                                            <div key={sharkId} className="matched-banner-wrapper">
+                                                <button
+                                                    className="match-remove-btn"
+                                                    onClick={() => removeSharkFromMatches(sharkId)}
+                                                    aria-label={`Remove ${sharkId} from this matched group`}
+                                                >
+                                                    ✕
+                                                </button>
+                                                {shark ? (
+                                                    <SharkBanner shark={shark} />
+                                                ) : (
+                                                    <p className="graph-panel-missing">No data for ID {sharkId}</p>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         );

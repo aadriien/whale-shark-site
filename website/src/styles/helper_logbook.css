@@ -660,25 +660,28 @@
     gap: 14px;
 }
 
-/* One bordered box per saved pair, holding both sharks' banners side
-   by side. Wraps to stacked if logbook is too narrow for both */
-.matched-pair-box {
-    position: relative;
+/* One bordered box per transitively-matched group, holding every shark's
+   banner in that group. Wraps as needed if logbook is too narrow */
+.matched-group-box {
     border: 1px solid var(--border-tertiary);
     border-radius: 8px;
     padding: 8px;
 }
 
-.matched-pair-banners {
+.matched-group-banners {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.matched-pair-banners .shark-banner {
+.matched-banner-wrapper {
+    position: relative;
     flex: 1 1 calc(50% - 4px);
-    width: auto;
     min-width: 140px;
+}
+
+.matched-banner-wrapper .shark-banner {
+    width: 100%;
 }
 
 .match-remove-btn {
