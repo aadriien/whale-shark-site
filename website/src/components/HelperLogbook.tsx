@@ -5,6 +5,7 @@ import PageOverview from "./logbooks/PageOverview";
 import PageFAQ from "./logbooks/PageFAQ";
 import VisitedStamps from "./logbooks/VisitedStamps";
 import SavedSharks from "./logbooks/SavedSharks";
+import MatchedSharks from "./logbooks/MatchedSharks";
 
 import { pageMap } from "./logbooks/LogbookContent";
 
@@ -25,6 +26,7 @@ function Logbook({ setIsLogbookOpen }: LogbookProps) {
         faq: <PageFAQ currentPage={pageSlug} />,
         stamps: <VisitedStamps currentPage={pageSlug} />,
         saved: <SavedSharks />,
+        matches: <MatchedSharks />,
     };
 
     return (
@@ -89,6 +91,15 @@ function Logbook({ setIsLogbookOpen }: LogbookProps) {
                                 className={activeSection === "saved" ? "active" : ""}
                             >
                                 Saved Sharks
+                            </a>
+                        </h4>
+                        <span>|</span>
+                        <h4>
+                            <a
+                                onClick={() => setActiveSection("matches")}
+                                className={activeSection === "matches" ? "active" : ""}
+                            >
+                                Matched Sharks
                             </a>
                         </h4>
                     </div>

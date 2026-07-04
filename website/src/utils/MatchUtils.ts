@@ -3,17 +3,17 @@ import { MatchedPair } from "../types/logbooks";
 const STORAGE_KEY = "matchedSharkPairs";
 
 // A shark from the image graph can match different sharks across its own
-// images, so pairs are keyed by (query, match) rather than by query shark
-// alone. This means a single query shark carry multiple saved matches
+// images, i.e. potentially multiple saved matches per shark. That said,
+// "A matches B" is the same as "B matches A", so sort by the 2 IDs first
 const PAIR_DELIMITER = "::";
 
 function makePairKey(querySharkId: string, matchedSharkId: string): string {
-    return `${querySharkId}${PAIR_DELIMITER}${matchedSharkId}`;
+    return [querySharkId, matchedSharkId].sort().join(PAIR_DELIMITER);
 }
 
 function parsePairKey(key: string): MatchedPair {
-    const [querySharkId, matchedSharkId] = key.split(PAIR_DELIMITER);
-    return { querySharkId, matchedSharkId };
+    const [sharkIdA, sharkIdB] = key.split(PAIR_DELIMITER);
+    return { sharkIdA, sharkIdB };
 }
 
 export function getMatchedPairKeys(): Set<string> {

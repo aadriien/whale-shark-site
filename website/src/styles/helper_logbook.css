@@ -593,12 +593,20 @@
     align-items: center;
     background: var(--condensed-id-bg);
     width: 100%;
+    min-width: 0;
     height: 50px;
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--condensed-id-text);
+}
+
+.tiny-id-row strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .favorite-button {
@@ -609,6 +617,7 @@
     color: var(--favorite-button); /* golden star */
     text-align: center;
     width: 50px;
+    flex-shrink: 0;
     padding: 4px 0 !important;
 }
 
@@ -639,8 +648,56 @@
 
 .condensed-places {
     background-color: var(--condensed-places-bg);
-    border-left: 6px solid var(--condensed-places-border); 
+    border-left: 6px solid var(--condensed-places-border);
     color: var(--condensed-places-text);
+}
+
+
+/* MATCHED SECTION */
+.matched-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* One bordered box per saved pair, holding both sharks' banners side
+   by side. Wraps to stacked if logbook is too narrow for both */
+.matched-pair-box {
+    position: relative;
+    border: 1px solid var(--border-tertiary);
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.matched-pair-banners {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.matched-pair-banners .shark-banner {
+    flex: 1 1 calc(50% - 4px);
+    width: auto;
+    min-width: 140px;
+}
+
+.match-remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    opacity: 0.5;
+    line-height: 1;
+    padding: 2px 6px;
+    z-index: 1;
+}
+
+.match-remove-btn:hover {
+    opacity: 1;
+    color: var(--error);
 }
 
 
