@@ -69,6 +69,7 @@ MEDIA_RELEVANT_FIELDS = [
     "occurrenceID",
     "identificationID",
     "whaleSharkID",
+    "eventDate",
     "media",
 ]
 

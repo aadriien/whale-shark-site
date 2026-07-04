@@ -140,12 +140,18 @@ def get_image_records() -> pd.DataFrame:
         "format",
         "references",
         "identifier",  # image URL (often in AWS S3 bucket)
+        "eventDate",  # required below, dropped before returning (see comment)
     ]
     media_df = media_df[RELEVANT_COLUMNS]
 
-    # Enforce essential fields for embedding
-    REQUIRED_FOR_EMBEDDING = ["key", "whaleSharkID", "identifier"]
+    # Enforce essential fields for embedding.
+    # eventDate is required so every embedded image belongs to a shark 
+    # that ALSO survives export_individual_shark_stats's own eventDate 
+    # requirement. Without this, the shark shows up in the vision 
+    # pipeline but is absent from GBIF stats / media datasets
+    REQUIRED_FOR_EMBEDDING = ["key", "whaleSharkID", "identifier", "eventDate"]
     media_df_clean = media_df.dropna(subset=REQUIRED_FOR_EMBEDDING)
+    media_df_clean = media_df_clean.drop(columns=["eventDate"])
     media_df_clean.reset_index(drop=True, inplace=True)
 
     return media_df_clean
