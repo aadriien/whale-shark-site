@@ -1,4 +1,7 @@
+import type { Core } from "cytoscape";
+
 import { visionOccurrences } from "../../../utils/DataUtils";
+import { findBestMatch } from "../../../utils/GraphUtils";
 import GraphPanelShell from "../../panels/GraphPanelShell";
 import { GraphImagesPanelProps } from "../../../types/graphs";
 
@@ -8,31 +11,36 @@ const imageIdToUrl = new Map<number, string>(
         .map((occ) => [occ.image_id as number, occ.identifier_url as string])
 );
 
-function GraphSharkImagesPanel({ match, onSelectImage }: GraphImagesPanelProps) {
+function GraphSharkImagesPanel({ match, cy, onSelectImage }: GraphImagesPanelProps) {
     return (
         <GraphPanelShell
             isEmpty={!match}
             emptyAlt="Click a GBIF node to see all images for that shark"
         >
-            {match && renderBody(match, onSelectImage)}
+            {match && cy && renderBody(cy, match, onSelectImage)}
         </GraphPanelShell>
     );
 }
 
 function renderBody(
+    cy: Core,
     match: NonNullable<GraphImagesPanelProps["match"]>,
     onSelectImage: GraphImagesPanelProps["onSelectImage"]
 ) {
     const { clickedSharkId, clickedImageId, contradictionImageIds } = match;
 
     const sharkOccurrences = visionOccurrences.filter((occ) => occ.id === clickedSharkId);
+    const occurrenceMatches = sharkOccurrences.map((occ) => ({
+        occ,
+        match: occ.image_id != null ? findBestMatch(cy, `gbif_${occ.image_id}`) : null,
+    }));
 
     const voteTallyMap = new Map<string, number>();
-    for (const occ of sharkOccurrences) {
-        if (occ.matched_shark_id) {
+    for (const { match: occMatch } of occurrenceMatches) {
+        if (occMatch) {
             voteTallyMap.set(
-                occ.matched_shark_id,
-                (voteTallyMap.get(occ.matched_shark_id) ?? 0) + 1
+                occMatch.matchSharkId,
+                (voteTallyMap.get(occMatch.matchSharkId) ?? 0) + 1
             );
         }
     }
@@ -45,13 +53,13 @@ function renderBody(
             <div className="graph-panel-section">
                 <span className="graph-panel-label">Other Images · Shark {clickedSharkId}</span>
 
-                {sharkOccurrences.length === 0 ? (
+                {occurrenceMatches.length === 0 ? (
                     <p className="graph-panel-missing">No occurrences found for this shark</p>
                 ) : (
-                    sharkOccurrences.map((occ) => {
+                    occurrenceMatches.map(({ occ, match: occMatch }) => {
                         const matchedUrl =
-                            occ.matched_image_id != null
-                                ? imageIdToUrl.get(occ.matched_image_id as number)
+                            occMatch?.matchImageId != null
+                                ? imageIdToUrl.get(occMatch.matchImageId)
                                 : undefined;
 
                         return (
@@ -80,7 +88,7 @@ function renderBody(
                                     <div className="graph-panel-thumbnail graph-panel-thumbnail--missing" />
                                 )}
                                 <span className="graph-panel-match-id">
-                                    {occ.matched_shark_id ?? "—"}
+                                    {occMatch?.matchSharkId ?? "—"}
                                 </span>
                             </div>
                         );

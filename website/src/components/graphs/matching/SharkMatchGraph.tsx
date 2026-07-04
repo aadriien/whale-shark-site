@@ -471,7 +471,11 @@ function SharkMatchGraph() {
                         />
                     )}
                 </div>
-                <GraphSharkImagesPanel match={selectedMatch} onSelectImage={handleSelectImage} />
+                <GraphSharkImagesPanel
+                    match={selectedMatch}
+                    cy={cyRef.current}
+                    onSelectImage={handleSelectImage}
+                />
             </div>
         </div>
     );

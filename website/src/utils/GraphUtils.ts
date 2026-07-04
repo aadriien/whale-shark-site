@@ -322,11 +322,17 @@ export function findBestMatch(cy: Core, nodeId: string): SelectedMatch | null {
                 )
                 .map((n) => n.data("image_id") as number);
 
+            const matchPopulation = targetNode.data("population") as "gbif" | "ningaloo";
+
             return {
                 clickedSharkId: sharkId,
                 clickedImageId: parseInt(clickedNode.data("image_id"), 10),
                 matchSharkId: targetNode.data("shark_id") as string,
-                matchPopulation: targetNode.data("population") as "gbif" | "ningaloo",
+                matchPopulation,
+                matchImageId:
+                    matchPopulation === "gbif"
+                        ? (targetNode.data("image_id") as number)
+                        : undefined,
                 matchDistance: bestDist,
                 conflictingSharkIds,
                 contradictionImageIds,

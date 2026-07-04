@@ -1,3 +1,5 @@
+import type { Core } from "cytoscape";
+
 /* Graph types */
 
 /* ---- Filters ---- */
@@ -170,6 +172,7 @@ type BaseSelectedMatch = {
 export type SelectedMatch = BaseSelectedMatch & {
     clickedImageId: number;
     matchPopulation: "gbif" | "ningaloo";
+    matchImageId?: number;
     matchDistance: number;
     contradictionImageIds: number[];
 };
@@ -199,6 +202,7 @@ type BaseDetailPanelProps<M> = {
 };
 
 export type GraphImagesPanelProps = BaseDetailPanelProps<SelectedMatch> & {
+    cy: Core | null;
     onSelectImage: (imageId: number) => void;
 };
 
