@@ -10,11 +10,12 @@ ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 		convert_csv_json zip_data \
 		generate_shark_names_images generate_shark_names generate_shark_images \
 		extract_tar process_annotations train_model \
-		get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings \
-		match_plausible_shark_embeddings \
-		run_vision_pipeline generate_vision_examples \
-		build_shark_graph \
-		rank_shark_matches build_shark_ranking_graph run_shark_ranking_pipeline \
+		get_new_shark_embeddings \
+		match_shark_embeddings validate_shark_embeddings run_vision_pipeline_unfiltered \
+		match_plausible_shark_embeddings build_shark_graph run_vision_pipeline_plausible \
+		rank_shark_matches build_shark_ranking_graph run_vision_pipeline_ranking \
+		run_full_vision_pipeline \
+		generate_vision_examples \
 		format format_vision format_website format_all clean \
 		setup_website run_website deploy_website clean_website
 
@@ -33,7 +34,7 @@ setup:
 
 
 # Run full ETL pipeline for latest data
-refresh_all_gbif: clean_gbif analyze_gbif convert_csv_json run_vision_pipeline
+refresh_all_gbif: clean_gbif analyze_gbif convert_csv_json run_full_vision_pipeline
 
 
 # Fetch data from API (NOTE: returned data don't really "go" anywhere)
@@ -101,6 +102,7 @@ train_model:
 get_new_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.one_offs.get_new_image_embeddings
 
+
 # Identify matches for unknown sharks based on source of truth
 match_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.unfiltered_matching.match_embeddings
@@ -109,18 +111,20 @@ match_shark_embeddings:
 validate_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.unfiltered_matching.validate_embeddings
 
-# Identify plausible-only matches (excludes geo/temporal IMPOSSIBLE candidates);
-# powers the match graph in build_graph.py
+# Run CV pipeline for unfiltered matches (i.e. not preventing impossible matches)
+run_vision_pipeline_unfiltered: match_shark_embeddings validate_shark_embeddings
+
+
+# Identify plausible-only matches (excludes geo/temporal IMPOSSIBLE candidates)
 match_plausible_shark_embeddings:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.plausible_matching.match_plausible_embeddings
-
-# Run full CV matching pipeline sequentially (embeddings -> matches -> validation)
-run_vision_pipeline: get_new_shark_embeddings match_shark_embeddings validate_shark_embeddings match_plausible_shark_embeddings build_shark_graph
-
 
 # Build match graph: UMAP projection + networkx graph construction
 build_shark_graph:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.plausible_matching.build_graph
+
+# Run CV pipeline for plausible matches (i.e. dropping impossible before matching)
+run_vision_pipeline_plausible: match_plausible_shark_embeddings build_shark_graph
 
 
 # Rank sharks by aggregate MiewID distance across all image pairs (GBIF only)
@@ -132,13 +136,16 @@ build_shark_ranking_graph:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.shark_ranking.build_shark_graph
 
 # Run full shark ranking pipeline sequentially (ranking -> graph)
-run_shark_ranking_pipeline: rank_shark_matches build_shark_ranking_graph
+run_vision_pipeline_ranking: rank_shark_matches build_shark_ranking_graph
+
+
+# Run full CV matching pipeline sequentially (embeddings -> matches -> validation)
+run_full_vision_pipeline: get_new_shark_embeddings run_vision_pipeline_unfiltered run_vision_pipeline_plausible run_vision_pipeline_ranking
 
 
 # Generate CV examples with YOLO bounding boxes & segmentation masks
 generate_vision_examples:
 	@$(ACTIVATE_VENV) $(POETRY) run python -m computer_vision.one_offs.generate_vision_examples
-
 
 
 # Auto-format Python code (ETL for wildlife data)
