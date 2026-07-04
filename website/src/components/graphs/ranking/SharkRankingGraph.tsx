@@ -5,6 +5,7 @@ import type { Core } from "cytoscape";
 import SharkRankingNodePanel from "./SharkRankingNodePanel";
 import SharkRankingStatsPanel from "./SharkRankingStatsPanel";
 import FilterButton from "../../controls/FilterButton";
+import GraphDistanceRange from "../../controls/GraphDistanceRange";
 import {
     buildGraphStylesheet,
     DISTANCE_RANGE_DEFAULT,
@@ -286,33 +287,12 @@ function SharkRankingGraph() {
                     >
                         Contradictions only
                     </FilterButton>
-                    <label className="graph-distance-range">
-                        Median image distance:
-                        <input
-                            type="number"
-                            step="0.05"
-                            min="0"
-                            max={distanceRange[1]}
-                            value={distanceRange[0]}
-                            onChange={(e) => {
-                                const val = parseFloat(e.target.value);
-                                if (!isNaN(val)) setDistanceRange([val, distanceRange[1]]);
-                            }}
-                            className="graph-range-input"
-                        />
-                        <span>to</span>
-                        <input
-                            type="number"
-                            step="0.05"
-                            min={distanceRange[0]}
-                            value={distanceRange[1]}
-                            onChange={(e) => {
-                                const val = parseFloat(e.target.value);
-                                if (!isNaN(val)) setDistanceRange([distanceRange[0], val]);
-                            }}
-                            className="graph-range-input"
-                        />
-                    </label>
+                    <GraphDistanceRange
+                        label="Median image distance:"
+                        step={0.05}
+                        value={distanceRange}
+                        onChange={setDistanceRange}
+                    />
                 </div>
             </div>
 

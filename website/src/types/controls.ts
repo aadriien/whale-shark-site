@@ -52,3 +52,10 @@ export type OceanViewerTimelineProps = {
     isLoadingDataset: boolean;
     datasetKey: string;
 };
+
+export type GraphDistanceRangeProps = {
+    label: string;
+    step: number;
+    value: [number, number];
+    onChange: (range: [number, number]) => void;
+};
