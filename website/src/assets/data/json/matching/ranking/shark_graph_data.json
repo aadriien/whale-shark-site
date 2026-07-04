@@ -2805,7 +2805,7 @@
       "image_count": 1,
       "x": 4.061956405639648,
       "y": 0.6231486797332764,
-      "cluster_id": 125,
+      "cluster_id": 65,
       "contradiction": false
     },
     {
@@ -2886,7 +2886,7 @@
       "image_count": 1,
       "x": 5.234068870544434,
       "y": 1.3962295055389404,
-      "cluster_id": 126,
+      "cluster_id": 125,
       "contradiction": false
     },
     {
@@ -2913,7 +2913,7 @@
       "image_count": 1,
       "x": 3.6192643642425537,
       "y": 0.6020795702934265,
-      "cluster_id": 127,
+      "cluster_id": 126,
       "contradiction": false
     },
     {
@@ -2922,7 +2922,7 @@
       "image_count": 1,
       "x": 6.8928728103637695,
       "y": -0.3023328483104706,
-      "cluster_id": 128,
+      "cluster_id": 127,
       "contradiction": false
     },
     {
@@ -2940,7 +2940,7 @@
       "image_count": 1,
       "x": 5.179632663726807,
       "y": 2.0590832233428955,
-      "cluster_id": 127,
+      "cluster_id": 126,
       "contradiction": false
     },
     {
@@ -2958,7 +2958,7 @@
       "image_count": 1,
       "x": 3.7033233642578125,
       "y": 1.3424440622329712,
-      "cluster_id": 129,
+      "cluster_id": 128,
       "contradiction": false
     },
     {
@@ -3066,7 +3066,7 @@
       "image_count": 1,
       "x": 4.538158893585205,
       "y": 1.3972431421279907,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -3084,7 +3084,7 @@
       "image_count": 1,
       "x": 4.654475688934326,
       "y": -0.2747431993484497,
-      "cluster_id": 131,
+      "cluster_id": 130,
       "contradiction": false
     },
     {
@@ -3147,7 +3147,7 @@
       "image_count": 2,
       "x": 6.845278739929199,
       "y": 0.2428523153066635,
-      "cluster_id": 132,
+      "cluster_id": 131,
       "contradiction": false
     },
     {
@@ -3156,7 +3156,7 @@
       "image_count": 1,
       "x": 4.790712356567383,
       "y": -0.16221515834331512,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -3210,7 +3210,7 @@
       "image_count": 2,
       "x": 5.197320461273193,
       "y": -0.5653958916664124,
-      "cluster_id": 133,
+      "cluster_id": 132,
       "contradiction": false
     },
     {
@@ -3219,7 +3219,7 @@
       "image_count": 1,
       "x": 4.697744369506836,
       "y": 0.6048092842102051,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -3264,7 +3264,7 @@
       "image_count": 1,
       "x": 4.808560848236084,
       "y": 0.5786836743354797,
-      "cluster_id": 135,
+      "cluster_id": 134,
       "contradiction": false
     },
     {
@@ -3291,7 +3291,7 @@
       "image_count": 5,
       "x": 5.748701095581055,
       "y": 0.2668750584125519,
-      "cluster_id": 136,
+      "cluster_id": 135,
       "contradiction": true
     },
     {
@@ -3300,7 +3300,7 @@
       "image_count": 2,
       "x": 3.8544673919677734,
       "y": -0.17027437686920166,
-      "cluster_id": 137,
+      "cluster_id": 136,
       "contradiction": false
     },
     {
@@ -3336,7 +3336,7 @@
       "image_count": 4,
       "x": 3.8617522716522217,
       "y": 0.3878498375415802,
-      "cluster_id": 138,
+      "cluster_id": 137,
       "contradiction": true
     },
     {
@@ -3372,7 +3372,7 @@
       "image_count": 2,
       "x": 5.594970703125,
       "y": -0.675563633441925,
-      "cluster_id": 139,
+      "cluster_id": 138,
       "contradiction": false
     },
     {
@@ -3381,7 +3381,7 @@
       "image_count": 1,
       "x": 3.8977441787719727,
       "y": 1.731549620628357,
-      "cluster_id": 140,
+      "cluster_id": 139,
       "contradiction": false
     },
     {
@@ -3408,7 +3408,7 @@
       "image_count": 1,
       "x": 6.800045967102051,
       "y": -0.710346519947052,
-      "cluster_id": 141,
+      "cluster_id": 140,
       "contradiction": false
     },
     {
@@ -3462,7 +3462,7 @@
       "image_count": 2,
       "x": 4.785610198974609,
       "y": 0.27747491002082825,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -3489,7 +3489,7 @@
       "image_count": 1,
       "x": 3.449233293533325,
       "y": -0.7610321044921875,
-      "cluster_id": 142,
+      "cluster_id": 141,
       "contradiction": false
     },
     {
@@ -3498,7 +3498,7 @@
       "image_count": 2,
       "x": 5.822364330291748,
       "y": 1.9286799430847168,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -3678,7 +3678,7 @@
       "image_count": 2,
       "x": 6.398576259613037,
       "y": 0.08708614856004715,
-      "cluster_id": 132,
+      "cluster_id": 131,
       "contradiction": false
     },
     {
@@ -3759,7 +3759,7 @@
       "image_count": 3,
       "x": 6.563452243804932,
       "y": 1.6774797439575195,
-      "cluster_id": 144,
+      "cluster_id": 143,
       "contradiction": false
     },
     {
@@ -3867,7 +3867,7 @@
       "image_count": 11,
       "x": 3.8470165729522705,
       "y": 0.6851466298103333,
-      "cluster_id": 138,
+      "cluster_id": 137,
       "contradiction": true
     },
     {
@@ -3885,7 +3885,7 @@
       "image_count": 10,
       "x": 4.36413049697876,
       "y": 2.469287872314453,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -3948,7 +3948,7 @@
       "image_count": 1,
       "x": 5.103936672210693,
       "y": 0.31923553347587585,
-      "cluster_id": 137,
+      "cluster_id": 136,
       "contradiction": false
     },
     {
@@ -3957,7 +3957,7 @@
       "image_count": 1,
       "x": 4.786267280578613,
       "y": 2.6625964641571045,
-      "cluster_id": 146,
+      "cluster_id": 145,
       "contradiction": false
     },
     {
@@ -3984,7 +3984,7 @@
       "image_count": 8,
       "x": 6.987061023712158,
       "y": -0.6174922585487366,
-      "cluster_id": 141,
+      "cluster_id": 140,
       "contradiction": false
     },
     {
@@ -3993,7 +3993,7 @@
       "image_count": 5,
       "x": 2.9703140258789062,
       "y": -0.16685281693935394,
-      "cluster_id": 147,
+      "cluster_id": 146,
       "contradiction": true
     },
     {
@@ -4020,7 +4020,7 @@
       "image_count": 2,
       "x": 7.132430076599121,
       "y": -0.5655246376991272,
-      "cluster_id": 141,
+      "cluster_id": 140,
       "contradiction": false
     },
     {
@@ -4173,7 +4173,7 @@
       "image_count": 1,
       "x": 6.290401935577393,
       "y": 1.4858644008636475,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -4218,7 +4218,7 @@
       "image_count": 1,
       "x": 5.344457626342773,
       "y": 0.06865321844816208,
-      "cluster_id": 148,
+      "cluster_id": 147,
       "contradiction": false
     },
     {
@@ -4272,7 +4272,7 @@
       "image_count": 3,
       "x": 2.6677088737487793,
       "y": 0.7847809791564941,
-      "cluster_id": 149,
+      "cluster_id": 148,
       "contradiction": true
     },
     {
@@ -4344,7 +4344,7 @@
       "image_count": 1,
       "x": 4.667647361755371,
       "y": 2.517366409301758,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -4362,7 +4362,7 @@
       "image_count": 2,
       "x": 4.714659690856934,
       "y": 0.6105618476867676,
-      "cluster_id": 150,
+      "cluster_id": 149,
       "contradiction": false
     },
     {
@@ -4398,7 +4398,7 @@
       "image_count": 3,
       "x": 3.993269443511963,
       "y": -0.19628266990184784,
-      "cluster_id": 146,
+      "cluster_id": 145,
       "contradiction": false
     },
     {
@@ -4407,7 +4407,7 @@
       "image_count": 3,
       "x": 5.417973041534424,
       "y": 2.6822545528411865,
-      "cluster_id": 151,
+      "cluster_id": 150,
       "contradiction": true
     },
     {
@@ -4569,7 +4569,7 @@
       "image_count": 1,
       "x": 3.142896890640259,
       "y": 1.1888244152069092,
-      "cluster_id": 152,
+      "cluster_id": 151,
       "contradiction": false
     },
     {
@@ -4587,7 +4587,7 @@
       "image_count": 1,
       "x": 4.531291961669922,
       "y": 0.09002097696065903,
-      "cluster_id": 153,
+      "cluster_id": 152,
       "contradiction": true
     },
     {
@@ -4605,7 +4605,7 @@
       "image_count": 1,
       "x": 7.117631912231445,
       "y": -0.6791778206825256,
-      "cluster_id": 154,
+      "cluster_id": 153,
       "contradiction": false
     },
     {
@@ -4659,7 +4659,7 @@
       "image_count": 1,
       "x": 3.8499372005462646,
       "y": 0.19843965768814087,
-      "cluster_id": 127,
+      "cluster_id": 126,
       "contradiction": false
     },
     {
@@ -4677,7 +4677,7 @@
       "image_count": 1,
       "x": 3.6539084911346436,
       "y": -0.0001758575817802921,
-      "cluster_id": 155,
+      "cluster_id": 154,
       "contradiction": false
     },
     {
@@ -4749,7 +4749,7 @@
       "image_count": 3,
       "x": 5.094517230987549,
       "y": 1.949294090270996,
-      "cluster_id": 156,
+      "cluster_id": 155,
       "contradiction": false
     },
     {
@@ -4812,7 +4812,7 @@
       "image_count": 1,
       "x": 2.8539669513702393,
       "y": 0.009608480148017406,
-      "cluster_id": 157,
+      "cluster_id": 156,
       "contradiction": true
     },
     {
@@ -4848,7 +4848,7 @@
       "image_count": 1,
       "x": 4.030009746551514,
       "y": -0.24126951396465302,
-      "cluster_id": 131,
+      "cluster_id": 130,
       "contradiction": false
     },
     {
@@ -4866,7 +4866,7 @@
       "image_count": 1,
       "x": 2.768782138824463,
       "y": 1.290580153465271,
-      "cluster_id": 149,
+      "cluster_id": 148,
       "contradiction": true
     },
     {
@@ -4893,7 +4893,7 @@
       "image_count": 1,
       "x": 6.920036315917969,
       "y": -0.409511536359787,
-      "cluster_id": 128,
+      "cluster_id": 127,
       "contradiction": false
     },
     {
@@ -4902,7 +4902,7 @@
       "image_count": 1,
       "x": 5.609592914581299,
       "y": 1.2138177156448364,
-      "cluster_id": 154,
+      "cluster_id": 153,
       "contradiction": false
     },
     {
@@ -4911,7 +4911,7 @@
       "image_count": 1,
       "x": 6.278162479400635,
       "y": 1.4288123846054077,
-      "cluster_id": 158,
+      "cluster_id": 157,
       "contradiction": false
     },
     {
@@ -4947,7 +4947,7 @@
       "image_count": 1,
       "x": 5.133974075317383,
       "y": -0.44525063037872314,
-      "cluster_id": 133,
+      "cluster_id": 132,
       "contradiction": false
     },
     {
@@ -4965,7 +4965,7 @@
       "image_count": 1,
       "x": 3.2034506797790527,
       "y": 0.08396212756633759,
-      "cluster_id": 159,
+      "cluster_id": 158,
       "contradiction": false
     },
     {
@@ -4974,7 +4974,7 @@
       "image_count": 2,
       "x": 3.7892210483551025,
       "y": 0.061146777123212814,
-      "cluster_id": 155,
+      "cluster_id": 154,
       "contradiction": false
     },
     {
@@ -5010,7 +5010,7 @@
       "image_count": 3,
       "x": 5.435672760009766,
       "y": 0.721312403678894,
-      "cluster_id": 160,
+      "cluster_id": 159,
       "contradiction": false
     },
     {
@@ -5046,7 +5046,7 @@
       "image_count": 5,
       "x": 5.803558826446533,
       "y": 1.3754123449325562,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -5082,7 +5082,7 @@
       "image_count": 1,
       "x": 4.394679546356201,
       "y": -0.01654512993991375,
-      "cluster_id": 153,
+      "cluster_id": 152,
       "contradiction": true
     },
     {
@@ -5091,7 +5091,7 @@
       "image_count": 3,
       "x": 3.096419095993042,
       "y": -0.38202035427093506,
-      "cluster_id": 147,
+      "cluster_id": 146,
       "contradiction": true
     },
     {
@@ -5136,7 +5136,7 @@
       "image_count": 1,
       "x": 4.333410739898682,
       "y": 2.315659284591675,
-      "cluster_id": 161,
+      "cluster_id": 160,
       "contradiction": false
     },
     {
@@ -5145,7 +5145,7 @@
       "image_count": 4,
       "x": 5.9801764488220215,
       "y": 1.6392265558242798,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -5190,7 +5190,7 @@
       "image_count": 2,
       "x": 3.9258038997650146,
       "y": 0.45292171835899353,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -5199,7 +5199,7 @@
       "image_count": 5,
       "x": 3.5191736221313477,
       "y": -0.25630810856819153,
-      "cluster_id": 162,
+      "cluster_id": 161,
       "contradiction": false
     },
     {
@@ -5208,7 +5208,7 @@
       "image_count": 1,
       "x": 3.740694284439087,
       "y": -0.15655049681663513,
-      "cluster_id": 125,
+      "cluster_id": 65,
       "contradiction": false
     },
     {
@@ -5244,7 +5244,7 @@
       "image_count": 7,
       "x": 5.037001609802246,
       "y": 1.9476954936981201,
-      "cluster_id": 156,
+      "cluster_id": 155,
       "contradiction": false
     },
     {
@@ -5334,7 +5334,7 @@
       "image_count": 1,
       "x": 7.117759704589844,
       "y": 0.4699106216430664,
-      "cluster_id": 132,
+      "cluster_id": 131,
       "contradiction": false
     },
     {
@@ -5406,7 +5406,7 @@
       "image_count": 1,
       "x": 5.6837310791015625,
       "y": 0.4186946749687195,
-      "cluster_id": 148,
+      "cluster_id": 147,
       "contradiction": false
     },
     {
@@ -5478,7 +5478,7 @@
       "image_count": 1,
       "x": 5.143378734588623,
       "y": 0.6958324909210205,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -5487,7 +5487,7 @@
       "image_count": 1,
       "x": 3.9136743545532227,
       "y": 1.4757901430130005,
-      "cluster_id": 137,
+      "cluster_id": 136,
       "contradiction": false
     },
     {
@@ -5532,7 +5532,7 @@
       "image_count": 2,
       "x": 5.786137104034424,
       "y": 1.9549163579940796,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -5559,7 +5559,7 @@
       "image_count": 1,
       "x": 2.4214541912078857,
       "y": -0.5771915912628174,
-      "cluster_id": 163,
+      "cluster_id": 162,
       "contradiction": false
     },
     {
@@ -5613,7 +5613,7 @@
       "image_count": 1,
       "x": 4.440618515014648,
       "y": -0.6668676137924194,
-      "cluster_id": 164,
+      "cluster_id": 163,
       "contradiction": false
     },
     {
@@ -5622,7 +5622,7 @@
       "image_count": 1,
       "x": 3.523179054260254,
       "y": -0.11621733754873276,
-      "cluster_id": 153,
+      "cluster_id": 152,
       "contradiction": true
     },
     {
@@ -5631,7 +5631,7 @@
       "image_count": 1,
       "x": 4.371876239776611,
       "y": -0.7727106213569641,
-      "cluster_id": 164,
+      "cluster_id": 163,
       "contradiction": false
     },
     {
@@ -5640,7 +5640,7 @@
       "image_count": 1,
       "x": 5.818399429321289,
       "y": 0.7298467755317688,
-      "cluster_id": 160,
+      "cluster_id": 159,
       "contradiction": false
     },
     {
@@ -5649,7 +5649,7 @@
       "image_count": 1,
       "x": 5.617268085479736,
       "y": 1.1138731241226196,
-      "cluster_id": 160,
+      "cluster_id": 159,
       "contradiction": false
     },
     {
@@ -5658,7 +5658,7 @@
       "image_count": 1,
       "x": 5.599266529083252,
       "y": 1.1032930612564087,
-      "cluster_id": 160,
+      "cluster_id": 159,
       "contradiction": false
     },
     {
@@ -5667,7 +5667,7 @@
       "image_count": 1,
       "x": 5.252542495727539,
       "y": 0.8061076998710632,
-      "cluster_id": 160,
+      "cluster_id": 159,
       "contradiction": false
     },
     {
@@ -5730,7 +5730,7 @@
       "image_count": 1,
       "x": 4.625229835510254,
       "y": 0.8079453110694885,
-      "cluster_id": 129,
+      "cluster_id": 128,
       "contradiction": false
     },
     {
@@ -5775,7 +5775,7 @@
       "image_count": 1,
       "x": 3.878819704055786,
       "y": -1.6935601234436035,
-      "cluster_id": 165,
+      "cluster_id": 164,
       "contradiction": true
     },
     {
@@ -5820,7 +5820,7 @@
       "image_count": 1,
       "x": 4.487597465515137,
       "y": 1.81201171875,
-      "cluster_id": 126,
+      "cluster_id": 125,
       "contradiction": false
     },
     {
@@ -5919,7 +5919,7 @@
       "image_count": 1,
       "x": 3.5296292304992676,
       "y": -1.2920258045196533,
-      "cluster_id": 166,
+      "cluster_id": 165,
       "contradiction": false
     },
     {
@@ -6000,7 +6000,7 @@
       "image_count": 1,
       "x": 3.140465021133423,
       "y": -0.17183513939380646,
-      "cluster_id": 157,
+      "cluster_id": 156,
       "contradiction": true
     },
     {
@@ -6018,7 +6018,7 @@
       "image_count": 7,
       "x": 2.9045817852020264,
       "y": -0.5755678415298462,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -6036,7 +6036,7 @@
       "image_count": 1,
       "x": 4.747071266174316,
       "y": 2.6516876220703125,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -6072,7 +6072,7 @@
       "image_count": 2,
       "x": 4.145015239715576,
       "y": -1.2658928632736206,
-      "cluster_id": 165,
+      "cluster_id": 164,
       "contradiction": true
     },
     {
@@ -6144,7 +6144,7 @@
       "image_count": 4,
       "x": 5.452382564544678,
       "y": 0.7158432602882385,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -6171,7 +6171,7 @@
       "image_count": 3,
       "x": 5.790931701660156,
       "y": 0.42466458678245544,
-      "cluster_id": 136,
+      "cluster_id": 135,
       "contradiction": true
     },
     {
@@ -6198,7 +6198,7 @@
       "image_count": 1,
       "x": 3.9683117866516113,
       "y": 2.1141765117645264,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -6216,7 +6216,7 @@
       "image_count": 2,
       "x": 5.732141494750977,
       "y": 1.6083647012710571,
-      "cluster_id": 146,
+      "cluster_id": 145,
       "contradiction": false
     },
     {
@@ -6234,7 +6234,7 @@
       "image_count": 3,
       "x": 5.675091743469238,
       "y": 0.4231337606906891,
-      "cluster_id": 136,
+      "cluster_id": 135,
       "contradiction": true
     },
     {
@@ -6261,7 +6261,7 @@
       "image_count": 6,
       "x": 4.5325212478637695,
       "y": 0.08477281033992767,
-      "cluster_id": 151,
+      "cluster_id": 150,
       "contradiction": true
     },
     {
@@ -6288,7 +6288,7 @@
       "image_count": 1,
       "x": 3.6329691410064697,
       "y": 0.31196191906929016,
-      "cluster_id": 167,
+      "cluster_id": 166,
       "contradiction": false
     },
     {
@@ -6315,7 +6315,7 @@
       "image_count": 1,
       "x": 3.6112847328186035,
       "y": 1.3212672472000122,
-      "cluster_id": 138,
+      "cluster_id": 137,
       "contradiction": true
     },
     {
@@ -6324,7 +6324,7 @@
       "image_count": 1,
       "x": 4.947176456451416,
       "y": 1.8124815225601196,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -6378,7 +6378,7 @@
       "image_count": 3,
       "x": 4.636450290679932,
       "y": 0.8413635492324829,
-      "cluster_id": 129,
+      "cluster_id": 128,
       "contradiction": false
     },
     {
@@ -6387,7 +6387,7 @@
       "image_count": 1,
       "x": 5.465442180633545,
       "y": -0.4496663510799408,
-      "cluster_id": 168,
+      "cluster_id": 167,
       "contradiction": false
     },
     {
@@ -6396,7 +6396,7 @@
       "image_count": 1,
       "x": 5.353085041046143,
       "y": -1.0733267068862915,
-      "cluster_id": 169,
+      "cluster_id": 168,
       "contradiction": false
     },
     {
@@ -6486,7 +6486,7 @@
       "image_count": 1,
       "x": 4.249853610992432,
       "y": -1.3196076154708862,
-      "cluster_id": 170,
+      "cluster_id": 169,
       "contradiction": false
     },
     {
@@ -6531,7 +6531,7 @@
       "image_count": 1,
       "x": 4.410272121429443,
       "y": 1.7604196071624756,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -6540,7 +6540,7 @@
       "image_count": 1,
       "x": 4.557623863220215,
       "y": 2.401334524154663,
-      "cluster_id": 146,
+      "cluster_id": 145,
       "contradiction": false
     },
     {
@@ -6594,7 +6594,7 @@
       "image_count": 4,
       "x": 3.661149024963379,
       "y": 0.5695332884788513,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -6639,7 +6639,7 @@
       "image_count": 2,
       "x": 5.554632186889648,
       "y": 0.2841547131538391,
-      "cluster_id": 148,
+      "cluster_id": 147,
       "contradiction": false
     },
     {
@@ -6657,7 +6657,7 @@
       "image_count": 1,
       "x": 4.964601993560791,
       "y": 2.0308971405029297,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -6684,7 +6684,7 @@
       "image_count": 1,
       "x": 3.357649326324463,
       "y": 0.4003532826900482,
-      "cluster_id": 149,
+      "cluster_id": 148,
       "contradiction": true
     },
     {
@@ -6783,7 +6783,7 @@
       "image_count": 1,
       "x": 5.172176361083984,
       "y": -0.08561877906322479,
-      "cluster_id": 171,
+      "cluster_id": 170,
       "contradiction": false
     },
     {
@@ -6864,7 +6864,7 @@
       "image_count": 1,
       "x": 4.633984565734863,
       "y": -0.8821520805358887,
-      "cluster_id": 172,
+      "cluster_id": 171,
       "contradiction": false
     },
     {
@@ -6873,7 +6873,7 @@
       "image_count": 1,
       "x": 2.862889051437378,
       "y": 1.250088095664978,
-      "cluster_id": 173,
+      "cluster_id": 172,
       "contradiction": true
     },
     {
@@ -6882,7 +6882,7 @@
       "image_count": 1,
       "x": 3.3413798809051514,
       "y": -1.4416515827178955,
-      "cluster_id": 165,
+      "cluster_id": 164,
       "contradiction": true
     },
     {
@@ -6891,7 +6891,7 @@
       "image_count": 1,
       "x": 5.086195468902588,
       "y": 1.652120590209961,
-      "cluster_id": 140,
+      "cluster_id": 139,
       "contradiction": false
     },
     {
@@ -6918,7 +6918,7 @@
       "image_count": 1,
       "x": 6.161966323852539,
       "y": -0.9817618131637573,
-      "cluster_id": 141,
+      "cluster_id": 140,
       "contradiction": false
     },
     {
@@ -6936,7 +6936,7 @@
       "image_count": 2,
       "x": 4.702176570892334,
       "y": 0.09475524723529816,
-      "cluster_id": 170,
+      "cluster_id": 169,
       "contradiction": false
     },
     {
@@ -6954,7 +6954,7 @@
       "image_count": 1,
       "x": 5.310478687286377,
       "y": 2.318709135055542,
-      "cluster_id": 146,
+      "cluster_id": 145,
       "contradiction": false
     },
     {
@@ -6990,7 +6990,7 @@
       "image_count": 2,
       "x": 7.098964691162109,
       "y": -0.7693385481834412,
-      "cluster_id": 154,
+      "cluster_id": 153,
       "contradiction": false
     },
     {
@@ -7008,7 +7008,7 @@
       "image_count": 1,
       "x": 4.838160514831543,
       "y": 1.7506756782531738,
-      "cluster_id": 140,
+      "cluster_id": 139,
       "contradiction": false
     },
     {
@@ -7107,7 +7107,7 @@
       "image_count": 8,
       "x": 3.3330109119415283,
       "y": 1.0007617473602295,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -7179,7 +7179,7 @@
       "image_count": 2,
       "x": 3.992828607559204,
       "y": 0.7435012459754944,
-      "cluster_id": 152,
+      "cluster_id": 151,
       "contradiction": false
     },
     {
@@ -7206,7 +7206,7 @@
       "image_count": 5,
       "x": 5.468520641326904,
       "y": 1.0080124139785767,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -7260,7 +7260,7 @@
       "image_count": 1,
       "x": 5.165657997131348,
       "y": 1.7074803113937378,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -7269,7 +7269,7 @@
       "image_count": 1,
       "x": 4.712096214294434,
       "y": 2.844477891921997,
-      "cluster_id": 151,
+      "cluster_id": 150,
       "contradiction": true
     },
     {
@@ -7395,7 +7395,7 @@
       "image_count": 1,
       "x": 5.270612716674805,
       "y": 0.276350200176239,
-      "cluster_id": 170,
+      "cluster_id": 169,
       "contradiction": false
     },
     {
@@ -7548,7 +7548,7 @@
       "image_count": 3,
       "x": 5.057548999786377,
       "y": 1.4120005369186401,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -7593,7 +7593,7 @@
       "image_count": 8,
       "x": 4.103239059448242,
       "y": 0.32750239968299866,
-      "cluster_id": 155,
+      "cluster_id": 154,
       "contradiction": false
     },
     {
@@ -7602,7 +7602,7 @@
       "image_count": 7,
       "x": 3.5481183528900146,
       "y": -0.2645813226699829,
-      "cluster_id": 147,
+      "cluster_id": 146,
       "contradiction": true
     },
     {
@@ -7665,7 +7665,7 @@
       "image_count": 1,
       "x": 6.962667942047119,
       "y": -0.36330342292785645,
-      "cluster_id": 128,
+      "cluster_id": 127,
       "contradiction": false
     },
     {
@@ -7737,7 +7737,7 @@
       "image_count": 10,
       "x": 6.620786666870117,
       "y": 1.6931521892547607,
-      "cluster_id": 144,
+      "cluster_id": 143,
       "contradiction": false
     },
     {
@@ -7782,7 +7782,7 @@
       "image_count": 1,
       "x": 5.372065544128418,
       "y": 0.32312920689582825,
-      "cluster_id": 174,
+      "cluster_id": 173,
       "contradiction": false
     },
     {
@@ -7890,7 +7890,7 @@
       "image_count": 2,
       "x": 5.674242973327637,
       "y": 1.4069792032241821,
-      "cluster_id": 161,
+      "cluster_id": 160,
       "contradiction": false
     },
     {
@@ -7944,7 +7944,7 @@
       "image_count": 1,
       "x": 5.438248634338379,
       "y": -0.34938812255859375,
-      "cluster_id": 139,
+      "cluster_id": 138,
       "contradiction": false
     },
     {
@@ -7953,7 +7953,7 @@
       "image_count": 1,
       "x": 4.150619029998779,
       "y": 0.43829602003097534,
-      "cluster_id": 175,
+      "cluster_id": 174,
       "contradiction": false
     },
     {
@@ -7980,7 +7980,7 @@
       "image_count": 1,
       "x": 5.956238269805908,
       "y": 0.42156049609184265,
-      "cluster_id": 176,
+      "cluster_id": 175,
       "contradiction": false
     },
     {
@@ -7989,7 +7989,7 @@
       "image_count": 2,
       "x": 3.8869545459747314,
       "y": 0.44636303186416626,
-      "cluster_id": 167,
+      "cluster_id": 166,
       "contradiction": false
     },
     {
@@ -8016,7 +8016,7 @@
       "image_count": 1,
       "x": 4.324019432067871,
       "y": 2.5815279483795166,
-      "cluster_id": 140,
+      "cluster_id": 139,
       "contradiction": false
     },
     {
@@ -8052,7 +8052,7 @@
       "image_count": 1,
       "x": 5.328853607177734,
       "y": 0.3669224977493286,
-      "cluster_id": 136,
+      "cluster_id": 135,
       "contradiction": true
     },
     {
@@ -8061,7 +8061,7 @@
       "image_count": 1,
       "x": 3.9417097568511963,
       "y": -0.8917690515518188,
-      "cluster_id": 166,
+      "cluster_id": 165,
       "contradiction": false
     },
     {
@@ -8088,7 +8088,7 @@
       "image_count": 1,
       "x": 3.575087547302246,
       "y": 2.0953264236450195,
-      "cluster_id": 158,
+      "cluster_id": 157,
       "contradiction": false
     },
     {
@@ -8169,7 +8169,7 @@
       "image_count": 3,
       "x": 2.4172921180725098,
       "y": 1.0276283025741577,
-      "cluster_id": 149,
+      "cluster_id": 148,
       "contradiction": true
     },
     {
@@ -8340,7 +8340,7 @@
       "image_count": 2,
       "x": 2.2275583744049072,
       "y": 1.8767807483673096,
-      "cluster_id": 159,
+      "cluster_id": 158,
       "contradiction": false
     },
     {
@@ -8394,7 +8394,7 @@
       "image_count": 4,
       "x": 2.6842057704925537,
       "y": -0.758161187171936,
-      "cluster_id": 157,
+      "cluster_id": 156,
       "contradiction": true
     },
     {
@@ -8412,7 +8412,7 @@
       "image_count": 4,
       "x": 5.116154193878174,
       "y": 0.5460140109062195,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -8430,7 +8430,7 @@
       "image_count": 1,
       "x": 5.279296398162842,
       "y": -0.9378310441970825,
-      "cluster_id": 172,
+      "cluster_id": 171,
       "contradiction": false
     },
     {
@@ -8448,7 +8448,7 @@
       "image_count": 1,
       "x": 5.458792686462402,
       "y": 0.20132571458816528,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -8475,7 +8475,7 @@
       "image_count": 1,
       "x": 4.7660369873046875,
       "y": 0.26547542214393616,
-      "cluster_id": 150,
+      "cluster_id": 149,
       "contradiction": false
     },
     {
@@ -8511,7 +8511,7 @@
       "image_count": 2,
       "x": 5.34785270690918,
       "y": -0.6985015869140625,
-      "cluster_id": 142,
+      "cluster_id": 141,
       "contradiction": false
     },
     {
@@ -8520,7 +8520,7 @@
       "image_count": 1,
       "x": 3.3397510051727295,
       "y": -1.4143667221069336,
-      "cluster_id": 177,
+      "cluster_id": 176,
       "contradiction": false
     },
     {
@@ -8538,7 +8538,7 @@
       "image_count": 3,
       "x": 3.6139578819274902,
       "y": 0.3403383791446686,
-      "cluster_id": 167,
+      "cluster_id": 166,
       "contradiction": false
     },
     {
@@ -8610,7 +8610,7 @@
       "image_count": 1,
       "x": 3.0339815616607666,
       "y": 2.068988084793091,
-      "cluster_id": 137,
+      "cluster_id": 136,
       "contradiction": false
     },
     {
@@ -8646,7 +8646,7 @@
       "image_count": 1,
       "x": 3.782742977142334,
       "y": -0.20418217778205872,
-      "cluster_id": 140,
+      "cluster_id": 139,
       "contradiction": false
     },
     {
@@ -8673,7 +8673,7 @@
       "image_count": 3,
       "x": 5.41158390045166,
       "y": 0.1903059482574463,
-      "cluster_id": 153,
+      "cluster_id": 152,
       "contradiction": true
     },
     {
@@ -8709,7 +8709,7 @@
       "image_count": 1,
       "x": 6.1760711669921875,
       "y": -0.9580963850021362,
-      "cluster_id": 169,
+      "cluster_id": 168,
       "contradiction": false
     },
     {
@@ -8736,7 +8736,7 @@
       "image_count": 1,
       "x": 3.796757936477661,
       "y": 0.008340176194906235,
-      "cluster_id": 131,
+      "cluster_id": 130,
       "contradiction": false
     },
     {
@@ -8898,7 +8898,7 @@
       "image_count": 2,
       "x": 6.646876811981201,
       "y": 1.7370728254318237,
-      "cluster_id": 144,
+      "cluster_id": 143,
       "contradiction": false
     },
     {
@@ -8925,7 +8925,7 @@
       "image_count": 1,
       "x": 3.6681902408599854,
       "y": 0.5437945127487183,
-      "cluster_id": 127,
+      "cluster_id": 126,
       "contradiction": false
     },
     {
@@ -9006,7 +9006,7 @@
       "image_count": 2,
       "x": 4.024184703826904,
       "y": 2.6054282188415527,
-      "cluster_id": 151,
+      "cluster_id": 150,
       "contradiction": true
     },
     {
@@ -9051,7 +9051,7 @@
       "image_count": 1,
       "x": 4.029201507568359,
       "y": 1.2422678470611572,
-      "cluster_id": 146,
+      "cluster_id": 145,
       "contradiction": false
     },
     {
@@ -9123,7 +9123,7 @@
       "image_count": 1,
       "x": 4.269463062286377,
       "y": 0.6908843517303467,
-      "cluster_id": 131,
+      "cluster_id": 130,
       "contradiction": false
     },
     {
@@ -9267,7 +9267,7 @@
       "image_count": 1,
       "x": 3.4648122787475586,
       "y": 0.10429652035236359,
-      "cluster_id": 173,
+      "cluster_id": 172,
       "contradiction": true
     },
     {
@@ -9420,7 +9420,7 @@
       "image_count": 2,
       "x": 4.249034404754639,
       "y": -1.7035648822784424,
-      "cluster_id": 169,
+      "cluster_id": 168,
       "contradiction": false
     },
     {
@@ -9627,7 +9627,7 @@
       "image_count": 1,
       "x": 2.8278262615203857,
       "y": 1.6034613847732544,
-      "cluster_id": 152,
+      "cluster_id": 151,
       "contradiction": false
     },
     {
@@ -9771,7 +9771,7 @@
       "image_count": 1,
       "x": 4.712748050689697,
       "y": -1.3188270330429077,
-      "cluster_id": 169,
+      "cluster_id": 168,
       "contradiction": false
     },
     {
@@ -9780,7 +9780,7 @@
       "image_count": 1,
       "x": 5.410521030426025,
       "y": 0.5676044225692749,
-      "cluster_id": 148,
+      "cluster_id": 147,
       "contradiction": false
     },
     {
@@ -9798,7 +9798,7 @@
       "image_count": 2,
       "x": 4.598580360412598,
       "y": 0.5937479734420776,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -9807,7 +9807,7 @@
       "image_count": 1,
       "x": 3.1662204265594482,
       "y": -0.7641834616661072,
-      "cluster_id": 130,
+      "cluster_id": 129,
       "contradiction": false
     },
     {
@@ -9834,7 +9834,7 @@
       "image_count": 3,
       "x": 3.2461791038513184,
       "y": -1.189993143081665,
-      "cluster_id": 177,
+      "cluster_id": 176,
       "contradiction": false
     },
     {
@@ -9861,7 +9861,7 @@
       "image_count": 1,
       "x": 3.548431873321533,
       "y": -0.6357896327972412,
-      "cluster_id": 129,
+      "cluster_id": 128,
       "contradiction": false
     },
     {
@@ -9906,7 +9906,7 @@
       "image_count": 1,
       "x": 2.9297008514404297,
       "y": -0.7229317426681519,
-      "cluster_id": 147,
+      "cluster_id": 146,
       "contradiction": true
     },
     {
@@ -9915,7 +9915,7 @@
       "image_count": 1,
       "x": 3.7119877338409424,
       "y": 0.006972223520278931,
-      "cluster_id": 125,
+      "cluster_id": 65,
       "contradiction": false
     },
     {
@@ -10032,7 +10032,7 @@
       "image_count": 1,
       "x": 2.2057719230651855,
       "y": 0.992590606212616,
-      "cluster_id": 149,
+      "cluster_id": 148,
       "contradiction": true
     },
     {
@@ -10167,7 +10167,7 @@
       "image_count": 2,
       "x": 5.914432525634766,
       "y": 0.45420172810554504,
-      "cluster_id": 176,
+      "cluster_id": 175,
       "contradiction": false
     },
     {
@@ -10203,7 +10203,7 @@
       "image_count": 2,
       "x": 5.586004257202148,
       "y": 0.8065611720085144,
-      "cluster_id": 161,
+      "cluster_id": 160,
       "contradiction": false
     },
     {
@@ -10248,7 +10248,7 @@
       "image_count": 1,
       "x": 4.719167709350586,
       "y": 0.6361428499221802,
-      "cluster_id": 150,
+      "cluster_id": 149,
       "contradiction": false
     },
     {
@@ -10284,7 +10284,7 @@
       "image_count": 1,
       "x": 5.411192417144775,
       "y": 2.0307488441467285,
-      "cluster_id": 137,
+      "cluster_id": 136,
       "contradiction": false
     },
     {
@@ -10293,7 +10293,7 @@
       "image_count": 1,
       "x": 4.88488245010376,
       "y": 0.27887019515037537,
-      "cluster_id": 135,
+      "cluster_id": 134,
       "contradiction": false
     },
     {
@@ -10392,7 +10392,7 @@
       "image_count": 1,
       "x": 3.7965292930603027,
       "y": 0.8461397290229797,
-      "cluster_id": 127,
+      "cluster_id": 126,
       "contradiction": false
     },
     {
@@ -10482,7 +10482,7 @@
       "image_count": 1,
       "x": 2.738833427429199,
       "y": -0.6090002655982971,
-      "cluster_id": 147,
+      "cluster_id": 146,
       "contradiction": true
     },
     {
@@ -10491,7 +10491,7 @@
       "image_count": 1,
       "x": 2.672025203704834,
       "y": -0.662517786026001,
-      "cluster_id": 147,
+      "cluster_id": 146,
       "contradiction": true
     },
     {
@@ -10536,7 +10536,7 @@
       "image_count": 3,
       "x": 2.5850582122802734,
       "y": -0.6167837381362915,
-      "cluster_id": 147,
+      "cluster_id": 146,
       "contradiction": true
     },
     {
@@ -10554,7 +10554,7 @@
       "image_count": 1,
       "x": 2.7455122470855713,
       "y": -0.5403818488121033,
-      "cluster_id": 177,
+      "cluster_id": 176,
       "contradiction": false
     },
     {
@@ -10572,7 +10572,7 @@
       "image_count": 2,
       "x": 3.901296377182007,
       "y": 0.31099745631217957,
-      "cluster_id": 174,
+      "cluster_id": 173,
       "contradiction": false
     },
     {
@@ -10608,7 +10608,7 @@
       "image_count": 1,
       "x": 2.664809465408325,
       "y": 0.6721062064170837,
-      "cluster_id": 163,
+      "cluster_id": 162,
       "contradiction": false
     },
     {
@@ -10734,7 +10734,7 @@
       "image_count": 3,
       "x": 3.3837432861328125,
       "y": -1.052700161933899,
-      "cluster_id": 166,
+      "cluster_id": 165,
       "contradiction": false
     },
     {
@@ -10788,7 +10788,7 @@
       "image_count": 1,
       "x": 6.123563766479492,
       "y": 1.5258110761642456,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -10851,7 +10851,7 @@
       "image_count": 1,
       "x": 6.074110507965088,
       "y": 0.20256441831588745,
-      "cluster_id": 129,
+      "cluster_id": 128,
       "contradiction": false
     },
     {
@@ -10860,7 +10860,7 @@
       "image_count": 1,
       "x": 5.795015811920166,
       "y": 1.7440931797027588,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -10941,7 +10941,7 @@
       "image_count": 1,
       "x": 6.7509002685546875,
       "y": -0.7682406902313232,
-      "cluster_id": 141,
+      "cluster_id": 140,
       "contradiction": false
     },
     {
@@ -10986,7 +10986,7 @@
       "image_count": 1,
       "x": 6.498974323272705,
       "y": 0.12103545665740967,
-      "cluster_id": 170,
+      "cluster_id": 169,
       "contradiction": false
     },
     {
@@ -10995,7 +10995,7 @@
       "image_count": 2,
       "x": 3.0921630859375,
       "y": 1.1093703508377075,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -11013,7 +11013,7 @@
       "image_count": 1,
       "x": 5.230311393737793,
       "y": 2.089124917984009,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -11022,7 +11022,7 @@
       "image_count": 1,
       "x": 4.163912296295166,
       "y": 2.6793668270111084,
-      "cluster_id": 131,
+      "cluster_id": 130,
       "contradiction": false
     },
     {
@@ -11076,7 +11076,7 @@
       "image_count": 1,
       "x": 4.146670341491699,
       "y": 0.05366440862417221,
-      "cluster_id": 174,
+      "cluster_id": 173,
       "contradiction": false
     },
     {
@@ -11094,7 +11094,7 @@
       "image_count": 1,
       "x": 3.990398645401001,
       "y": 0.8921380639076233,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -11121,7 +11121,7 @@
       "image_count": 1,
       "x": 3.7750823497772217,
       "y": -0.6719943881034851,
-      "cluster_id": 161,
+      "cluster_id": 160,
       "contradiction": false
     },
     {
@@ -11130,7 +11130,7 @@
       "image_count": 1,
       "x": 6.000041961669922,
       "y": 0.4162975251674652,
-      "cluster_id": 136,
+      "cluster_id": 135,
       "contradiction": true
     },
     {
@@ -11139,7 +11139,7 @@
       "image_count": 1,
       "x": 3.635415554046631,
       "y": -0.3372865617275238,
-      "cluster_id": 162,
+      "cluster_id": 161,
       "contradiction": false
     },
     {
@@ -11157,7 +11157,7 @@
       "image_count": 1,
       "x": 5.819305419921875,
       "y": 0.42795613408088684,
-      "cluster_id": 136,
+      "cluster_id": 135,
       "contradiction": true
     },
     {
@@ -11175,7 +11175,7 @@
       "image_count": 1,
       "x": 6.0459184646606445,
       "y": 0.5615187883377075,
-      "cluster_id": 136,
+      "cluster_id": 135,
       "contradiction": true
     },
     {
@@ -11193,7 +11193,7 @@
       "image_count": 1,
       "x": 6.0267133712768555,
       "y": 0.6092605590820312,
-      "cluster_id": 150,
+      "cluster_id": 149,
       "contradiction": false
     },
     {
@@ -11202,7 +11202,7 @@
       "image_count": 3,
       "x": 3.4509665966033936,
       "y": -1.1536269187927246,
-      "cluster_id": 166,
+      "cluster_id": 165,
       "contradiction": false
     },
     {
@@ -11211,7 +11211,7 @@
       "image_count": 5,
       "x": 2.8689444065093994,
       "y": -0.48275938630104065,
-      "cluster_id": 157,
+      "cluster_id": 156,
       "contradiction": true
     },
     {
@@ -11220,7 +11220,7 @@
       "image_count": 1,
       "x": 5.918627738952637,
       "y": 0.8258073925971985,
-      "cluster_id": 158,
+      "cluster_id": 157,
       "contradiction": false
     },
     {
@@ -11382,7 +11382,7 @@
       "image_count": 1,
       "x": 3.179173469543457,
       "y": 0.16368763148784637,
-      "cluster_id": 157,
+      "cluster_id": 156,
       "contradiction": true
     },
     {
@@ -11436,7 +11436,7 @@
       "image_count": 4,
       "x": 6.213089466094971,
       "y": 0.7451320290565491,
-      "cluster_id": 125,
+      "cluster_id": 65,
       "contradiction": false
     },
     {
@@ -11445,7 +11445,7 @@
       "image_count": 1,
       "x": 2.5651590824127197,
       "y": 1.441880464553833,
-      "cluster_id": 173,
+      "cluster_id": 172,
       "contradiction": true
     },
     {
@@ -11481,7 +11481,7 @@
       "image_count": 2,
       "x": 4.104128360748291,
       "y": 2.4371731281280518,
-      "cluster_id": 127,
+      "cluster_id": 126,
       "contradiction": false
     },
     {
@@ -11517,7 +11517,7 @@
       "image_count": 1,
       "x": 5.665699005126953,
       "y": -0.22712695598602295,
-      "cluster_id": 170,
+      "cluster_id": 169,
       "contradiction": false
     },
     {
@@ -11535,7 +11535,7 @@
       "image_count": 1,
       "x": 5.437472343444824,
       "y": 2.66856050491333,
-      "cluster_id": 151,
+      "cluster_id": 150,
       "contradiction": true
     },
     {
@@ -11679,7 +11679,7 @@
       "image_count": 1,
       "x": 2.447343349456787,
       "y": 1.669290542602539,
-      "cluster_id": 149,
+      "cluster_id": 148,
       "contradiction": true
     },
     {
@@ -11823,7 +11823,7 @@
       "image_count": 1,
       "x": 5.996052265167236,
       "y": 0.2662810981273651,
-      "cluster_id": 148,
+      "cluster_id": 147,
       "contradiction": false
     },
     {
@@ -11895,7 +11895,7 @@
       "image_count": 1,
       "x": 5.536462783813477,
       "y": 1.0659910440444946,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -11913,7 +11913,7 @@
       "image_count": 1,
       "x": 6.081012725830078,
       "y": 0.3460438847541809,
-      "cluster_id": 176,
+      "cluster_id": 175,
       "contradiction": false
     },
     {
@@ -11949,7 +11949,7 @@
       "image_count": 1,
       "x": 6.3269429206848145,
       "y": 1.1270381212234497,
-      "cluster_id": 134,
+      "cluster_id": 133,
       "contradiction": false
     },
     {
@@ -11976,7 +11976,7 @@
       "image_count": 1,
       "x": 2.1290128231048584,
       "y": 1.4738713502883911,
-      "cluster_id": 175,
+      "cluster_id": 174,
       "contradiction": false
     },
     {
@@ -12012,7 +12012,7 @@
       "image_count": 1,
       "x": 2.6643924713134766,
       "y": -0.4819866120815277,
-      "cluster_id": 171,
+      "cluster_id": 170,
       "contradiction": false
     },
     {
@@ -12021,7 +12021,7 @@
       "image_count": 1,
       "x": 2.181074857711792,
       "y": 1.8821512460708618,
-      "cluster_id": 159,
+      "cluster_id": 158,
       "contradiction": false
     },
     {
@@ -12030,7 +12030,7 @@
       "image_count": 1,
       "x": 2.9934754371643066,
       "y": 0.6374360918998718,
-      "cluster_id": 173,
+      "cluster_id": 172,
       "contradiction": true
     },
     {
@@ -12039,7 +12039,7 @@
       "image_count": 1,
       "x": 5.0897603034973145,
       "y": -0.05528179928660393,
-      "cluster_id": 168,
+      "cluster_id": 167,
       "contradiction": false
     },
     {
@@ -12147,7 +12147,7 @@
       "image_count": 1,
       "x": 6.007108688354492,
       "y": 0.7043103575706482,
-      "cluster_id": 150,
+      "cluster_id": 149,
       "contradiction": false
     },
     {
@@ -12183,7 +12183,7 @@
       "image_count": 1,
       "x": 5.014454364776611,
       "y": -1.4190850257873535,
-      "cluster_id": 150,
+      "cluster_id": 149,
       "contradiction": false
     },
     {
@@ -12300,7 +12300,7 @@
       "image_count": 1,
       "x": 3.675650119781494,
       "y": 1.3766478300094604,
-      "cluster_id": 138,
+      "cluster_id": 137,
       "contradiction": true
     },
     {
@@ -12372,7 +12372,7 @@
       "image_count": 1,
       "x": 2.9177944660186768,
       "y": 0.9316406846046448,
-      "cluster_id": 145,
+      "cluster_id": 144,
       "contradiction": true
     },
     {
@@ -12408,7 +12408,7 @@
       "image_count": 1,
       "x": 2.925377130508423,
       "y": 0.29514744877815247,
-      "cluster_id": 127,
+      "cluster_id": 126,
       "contradiction": false
     },
     {
@@ -12516,7 +12516,7 @@
       "image_count": 1,
       "x": 3.2838969230651855,
       "y": 1.9149043560028076,
-      "cluster_id": 146,
+      "cluster_id": 145,
       "contradiction": false
     },
     {
@@ -12534,7 +12534,7 @@
       "image_count": 1,
       "x": 6.813388824462891,
       "y": 0.9488444328308105,
-      "cluster_id": 143,
+      "cluster_id": 142,
       "contradiction": true
     },
     {
@@ -12606,7 +12606,7 @@
       "image_count": 1,
       "x": 4.0111260414123535,
       "y": -1.9158680438995361,
-      "cluster_id": 165,
+      "cluster_id": 164,
       "contradiction": true
     },
     {
@@ -12734,7 +12734,7 @@
       "distance_mean": 1.1494,
       "distance_max": 1.1591,
       "pair_count": 2,
-      "mutual": false
+      "mutual": true
     },
     {
       "source": "shark_111481639",
@@ -12794,7 +12794,7 @@
       "distance_mean": 1.1494,
       "distance_max": 1.1591,
       "pair_count": 2,
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "shark_112763571",
@@ -18668,7 +18668,7 @@
     },
     {
       "source": "shark_452040850",
-      "target": "shark_630245406",
+      "target": "shark_628820015",
       "distance_median": 1.557,
       "distance_min": 1.0719,
       "distance_mean": 1.5204,
@@ -23298,7 +23298,7 @@
     },
     {
       "source": "shark_71512790",
-      "target": "shark_111485881",
+      "target": "shark_111481591",
       "distance_median": 1.1494,
       "distance_min": 1.1396,
       "distance_mean": 1.1494,
@@ -24244,7 +24244,7 @@
       "distance_mean": 1.3446,
       "distance_max": 1.3446,
       "pair_count": 1,
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "shark_75410732",
@@ -26468,13 +26468,13 @@
     },
     {
       "source": "shark_94731976",
-      "target": "shark_75410729",
+      "target": "shark_439630298",
       "distance_median": 1.3446,
       "distance_min": 1.3446,
       "distance_mean": 1.3446,
       "distance_max": 1.3446,
       "pair_count": 1,
-      "mutual": true
+      "mutual": false
     },
     {
       "source": "shark_94748906",
@@ -26722,12 +26722,12 @@
       "cluster_id": 0,
       "conflicting_shark_ids": [
         [
-          "550181768",
-          "562030152"
-        ],
-        [
           "132623297",
           "84554796"
+        ],
+        [
+          "550181768",
+          "562030152"
         ],
         [
           "35466639",
@@ -26748,24 +26748,24 @@
       "cluster_id": 2,
       "conflicting_shark_ids": [
         [
+          "647430677",
+          "716744412"
+        ],
+        [
           "260252539",
           "497063895"
         ],
         [
-          "154662900",
-          "707802029"
-        ],
-        [
-          "647430677",
-          "716744412"
+          "114374259",
+          "235097395"
         ],
         [
           "116640913",
           "603605361"
         ],
         [
-          "114374259",
-          "235097395"
+          "154662900",
+          "707802029"
         ]
       ]
     },
@@ -26782,16 +26782,16 @@
       "cluster_id": 4,
       "conflicting_shark_ids": [
         [
-          "569795081",
-          "79588956"
-        ],
-        [
           "79588956",
           "80341533"
         ],
         [
           "569795081",
           "80341533"
+        ],
+        [
+          "569795081",
+          "79588956"
         ]
       ]
     },
@@ -26808,18 +26808,6 @@
       "cluster_id": 9,
       "conflicting_shark_ids": [
         [
-          "710779148",
-          "749221893"
-        ],
-        [
-          "682808752",
-          "710779148"
-        ],
-        [
-          "673841956",
-          "710779148"
-        ],
-        [
           "111481664",
           "111481705"
         ],
@@ -26834,6 +26822,18 @@
         [
           "528543483",
           "611801364"
+        ],
+        [
+          "682808752",
+          "710779148"
+        ],
+        [
+          "673841956",
+          "710779148"
+        ],
+        [
+          "710779148",
+          "749221893"
         ]
       ]
     },
@@ -26853,12 +26853,12 @@
           "651270289"
         ],
         [
-          "682808753",
-          "763067012"
-        ],
-        [
           "384902403",
           "387416311"
+        ],
+        [
+          "682808753",
+          "763067012"
         ]
       ]
     },
@@ -26893,51 +26893,7 @@
       "cluster_id": 16,
       "conflicting_shark_ids": [
         [
-          "652344051",
-          "804286707"
-        ],
-        [
-          "346285327",
-          "804286707"
-        ],
-        [
-          "764877616",
-          "769624847"
-        ],
-        [
-          "769624847",
-          "800158248"
-        ],
-        [
-          "769624847",
-          "832304684"
-        ],
-        [
-          "769624847",
-          "815656458"
-        ],
-        [
-          "807948059",
-          "825994913"
-        ],
-        [
-          "815656458",
-          "825994913"
-        ],
-        [
-          "515635656",
-          "599201621"
-        ],
-        [
-          "515635656",
-          "716905742"
-        ],
-        [
-          "505986569",
-          "515635656"
-        ],
-        [
-          "736324882",
+          "712275788",
           "787466633"
         ],
         [
@@ -26945,19 +26901,31 @@
           "787466633"
         ],
         [
-          "712275788",
+          "736324882",
           "787466633"
         ],
         [
-          "807948059",
-          "832304684"
+          "728902269",
+          "736324882"
+        ],
+        [
+          "699501109",
+          "736324882"
+        ],
+        [
+          "699614368",
+          "736324882"
         ],
         [
           "505986569",
+          "515635656"
+        ],
+        [
+          "515635656",
           "716905742"
         ],
         [
-          "505986569",
+          "515635656",
           "599201621"
         ],
         [
@@ -26965,24 +26933,84 @@
           "784961769"
         ],
         [
-          "764877616",
-          "807948059"
-        ],
-        [
-          "699501109",
-          "736324882"
-        ],
-        [
-          "728902269",
-          "736324882"
-        ],
-        [
-          "699614368",
-          "736324882"
+          "652344051",
+          "804286707"
         ],
         [
           "346285327",
           "652344051"
+        ],
+        [
+          "346285327",
+          "804286707"
+        ],
+        [
+          "815656458",
+          "825994913"
+        ],
+        [
+          "807948059",
+          "815656458"
+        ],
+        [
+          "769624847",
+          "815656458"
+        ],
+        [
+          "764877616",
+          "769624847"
+        ],
+        [
+          "769624847",
+          "832304684"
+        ],
+        [
+          "769624847",
+          "800158248"
+        ],
+        [
+          "712275788",
+          "728902269"
+        ],
+        [
+          "699501109",
+          "712275788"
+        ],
+        [
+          "699614368",
+          "712275788"
+        ],
+        [
+          "807948059",
+          "832304684"
+        ],
+        [
+          "764877616",
+          "807948059"
+        ],
+        [
+          "807948059",
+          "825994913"
+        ],
+        [
+          "800158248",
+          "807948059"
+        ],
+        [
+          "505986569",
+          "716905742"
+        ],
+        [
+          "505986569",
+          "599201621"
+        ],
+        [
+          "88898731",
+          "99612700"
+        ],
+        [
+          "117400462",
+          "485748508"
         ],
         [
           "599201621",
@@ -26990,35 +27018,7 @@
         ],
         [
           "699501109",
-          "712275788"
-        ],
-        [
-          "699501109",
           "699614368"
-        ],
-        [
-          "807948059",
-          "815656458"
-        ],
-        [
-          "800158248",
-          "807948059"
-        ],
-        [
-          "699614368",
-          "712275788"
-        ],
-        [
-          "117400462",
-          "485748508"
-        ],
-        [
-          "712275788",
-          "728902269"
-        ],
-        [
-          "88898731",
-          "99612700"
         ]
       ]
     },
@@ -27043,16 +27043,16 @@
           "41356680"
         ],
         [
+          "716562556",
+          "735566023"
+        ],
+        [
           "117400981",
           "221591280"
         ],
         [
           "287717479",
           "41356680"
-        ],
-        [
-          "716562556",
-          "735566023"
         ]
       ]
     },
@@ -27104,12 +27104,12 @@
           "345512297"
         ],
         [
-          "682808748",
-          "787710814"
-        ],
-        [
           "345510542",
           "345513332"
+        ],
+        [
+          "682808748",
+          "787710814"
         ]
       ]
     },
@@ -27117,16 +27117,8 @@
       "cluster_id": 32,
       "conflicting_shark_ids": [
         [
-          "528070170",
-          "709617366"
-        ],
-        [
-          "656784134",
-          "709617366"
-        ],
-        [
-          "556044308",
-          "709617366"
+          "130086304",
+          "165903952"
         ],
         [
           "528070170",
@@ -27137,8 +27129,16 @@
           "656784134"
         ],
         [
-          "130086304",
-          "165903952"
+          "556044308",
+          "709617366"
+        ],
+        [
+          "528070170",
+          "709617366"
+        ],
+        [
+          "656784134",
+          "709617366"
         ]
       ]
     },
@@ -27146,18 +27146,26 @@
       "cluster_id": 33,
       "conflicting_shark_ids": [
         [
-          "19313789",
-          "33006567"
-        ],
-        [
           "547368095",
           "803919028"
+        ],
+        [
+          "19313789",
+          "33006567"
         ]
       ]
     },
     {
       "cluster_id": 34,
       "conflicting_shark_ids": [
+        [
+          "565002817",
+          "572353324"
+        ],
+        [
+          "509369833",
+          "511316933"
+        ],
         [
           "724225794",
           "737691602"
@@ -27171,8 +27179,32 @@
           "724225794"
         ],
         [
-          "237611513",
-          "403103931"
+          "407245280",
+          "407488339"
+        ],
+        [
+          "407488339",
+          "408656833"
+        ],
+        [
+          "746820058",
+          "770510388"
+        ],
+        [
+          "737691602",
+          "746820058"
+        ],
+        [
+          "17693359",
+          "198553515"
+        ],
+        [
+          "770510388",
+          "809730481"
+        ],
+        [
+          "407245280",
+          "408656833"
         ],
         [
           "728606835",
@@ -27183,44 +27215,12 @@
           "728606835"
         ],
         [
-          "565002817",
-          "572353324"
-        ],
-        [
-          "509369833",
-          "511316933"
-        ],
-        [
-          "770510388",
-          "809730481"
+          "237611513",
+          "403103931"
         ],
         [
           "737691602",
           "770510388"
-        ],
-        [
-          "746820058",
-          "770510388"
-        ],
-        [
-          "17693359",
-          "198553515"
-        ],
-        [
-          "407488339",
-          "408656833"
-        ],
-        [
-          "407245280",
-          "408656833"
-        ],
-        [
-          "737691602",
-          "746820058"
-        ],
-        [
-          "407245280",
-          "407488339"
         ]
       ]
     },
@@ -27228,12 +27228,12 @@
       "cluster_id": 35,
       "conflicting_shark_ids": [
         [
-          "200999590",
-          "524247854"
-        ],
-        [
           "789934126",
           "825071313"
+        ],
+        [
+          "200999590",
+          "524247854"
         ]
       ]
     },
@@ -27241,12 +27241,12 @@
       "cluster_id": 36,
       "conflicting_shark_ids": [
         [
-          "472623316",
-          "503464783"
+          "452040850",
+          "472623316"
         ],
         [
-          "628820015",
-          "630245406"
+          "472623316",
+          "503464783"
         ],
         [
           "630245406",
@@ -27254,11 +27254,11 @@
         ],
         [
           "628820015",
-          "659568881"
+          "630245406"
         ],
         [
-          "452040850",
-          "472623316"
+          "628820015",
+          "659568881"
         ]
       ]
     },
@@ -27279,16 +27279,16 @@
       "cluster_id": 41,
       "conflicting_shark_ids": [
         [
-          "664775325",
-          "668626236"
+          "164205405",
+          "193415541"
         ],
         [
           "668626236",
           "741910353"
         ],
         [
-          "164205405",
-          "193415541"
+          "664775325",
+          "668626236"
         ]
       ]
     },
@@ -27336,24 +27336,28 @@
       "cluster_id": 49,
       "conflicting_shark_ids": [
         [
-          "553443722",
-          "571911556"
+          "407379880",
+          "500196798"
         ],
         [
-          "553443722",
-          "571074848"
+          "407379880",
+          "419589228"
         ],
         [
-          "553443722",
-          "589011770"
+          "407379880",
+          "416451802"
         ],
         [
-          "377805269",
-          "751081908"
+          "403075133",
+          "516708506"
         ],
         [
-          "472540320",
-          "593477055"
+          "435893509",
+          "501144458"
+        ],
+        [
+          "416451802",
+          "500196798"
         ],
         [
           "597700124",
@@ -27364,28 +27368,32 @@
           "46199221"
         ],
         [
-          "403075133",
-          "516708506"
-        ],
-        [
-          "407379880",
-          "416451802"
-        ],
-        [
-          "416451802",
-          "500196798"
-        ],
-        [
-          "407379880",
-          "419589228"
-        ],
-        [
-          "675467457",
-          "815455644"
-        ],
-        [
           "472540320",
           "482616254"
+        ],
+        [
+          "377805269",
+          "751081908"
+        ],
+        [
+          "553443722",
+          "571074848"
+        ],
+        [
+          "571074848",
+          "589011770"
+        ],
+        [
+          "571074848",
+          "571911556"
+        ],
+        [
+          "589011770",
+          "597700124"
+        ],
+        [
+          "553443722",
+          "589011770"
         ],
         [
           "745856966",
@@ -27396,19 +27404,15 @@
           "763433026"
         ],
         [
-          "407379880",
-          "500196798"
+          "472540320",
+          "593477055"
         ],
         [
-          "571074848",
-          "589011770"
+          "224922375",
+          "46199221"
         ],
         [
-          "589011770",
-          "597700124"
-        ],
-        [
-          "571074848",
+          "553443722",
           "571911556"
         ],
         [
@@ -27416,12 +27420,8 @@
           "597700124"
         ],
         [
-          "435893509",
-          "501144458"
-        ],
-        [
-          "224922375",
-          "46199221"
+          "675467457",
+          "815455644"
         ]
       ]
     },
@@ -27429,12 +27429,12 @@
       "cluster_id": 50,
       "conflicting_shark_ids": [
         [
-          "34572183",
-          "9967270"
-        ],
-        [
           "142817202",
           "89191282"
+        ],
+        [
+          "34572183",
+          "9967270"
         ],
         [
           "183730879",
@@ -27450,16 +27450,16 @@
           "582832938"
         ],
         [
-          "472854570",
-          "582832938"
+          "145753109",
+          "63899782"
         ],
         [
           "145753109",
           "199547057"
         ],
         [
-          "145753109",
-          "63899782"
+          "472854570",
+          "582832938"
         ]
       ]
     },
@@ -27467,16 +27467,8 @@
       "cluster_id": 57,
       "conflicting_shark_ids": [
         [
-          "238516818",
-          "31230744"
-        ],
-        [
-          "453360643",
-          "701226491"
-        ],
-        [
-          "572366560",
-          "655565433"
+          "481097900",
+          "487725075"
         ],
         [
           "572366560",
@@ -27487,8 +27479,16 @@
           "7550786"
         ],
         [
-          "481097900",
-          "487725075"
+          "572366560",
+          "655565433"
+        ],
+        [
+          "453360643",
+          "701226491"
+        ],
+        [
+          "238516818",
+          "31230744"
         ]
       ]
     },
@@ -27514,18 +27514,34 @@
       "cluster_id": 64,
       "conflicting_shark_ids": [
         [
-          "503464830",
-          "549265286"
-        ],
-        [
           "787265763",
           "798782008"
+        ],
+        [
+          "503464830",
+          "549265286"
         ]
       ]
     },
     {
       "cluster_id": 66,
       "conflicting_shark_ids": [
+        [
+          "159136933",
+          "631712721"
+        ],
+        [
+          "388745002",
+          "684867378"
+        ],
+        [
+          "58833132",
+          "79591195"
+        ],
+        [
+          "79591195",
+          "79591196"
+        ],
         [
           "178216981",
           "631712721"
@@ -27535,36 +27551,20 @@
           "79591196"
         ],
         [
-          "79591195",
-          "79591196"
+          "75410721",
+          "75410723"
         ],
         [
           "482465967",
           "684867378"
         ],
         [
-          "631712721",
-          "632715250"
-        ],
-        [
-          "159136933",
-          "631712721"
-        ],
-        [
-          "58833132",
-          "79591195"
-        ],
-        [
           "31610608",
           "63248419"
         ],
         [
-          "75410721",
-          "75410723"
-        ],
-        [
-          "388745002",
-          "684867378"
+          "631712721",
+          "632715250"
         ]
       ]
     },
@@ -27612,16 +27612,16 @@
           "456201035"
         ],
         [
-          "414154852",
-          "414155431"
-        ],
-        [
-          "414154852",
-          "414157836"
-        ],
-        [
           "414155431",
           "414157836"
+        ],
+        [
+          "414154852",
+          "414157836"
+        ],
+        [
+          "414154852",
+          "414155431"
         ]
       ]
     },
@@ -27700,12 +27700,12 @@
       "cluster_id": 113,
       "conflicting_shark_ids": [
         [
-          "578204290",
-          "578204357"
-        ],
-        [
           "84165419",
           "84165420"
+        ],
+        [
+          "578204290",
+          "578204357"
         ]
       ]
     },
@@ -27719,14 +27719,14 @@
       ]
     },
     {
-      "cluster_id": 136,
+      "cluster_id": 135,
       "conflicting_shark_ids": [
         [
-          "790483062",
+          "790483071",
           "790483078"
         ],
         [
-          "790483071",
+          "790483062",
           "790483078"
         ],
         [
@@ -27736,7 +27736,7 @@
       ]
     },
     {
-      "cluster_id": 138,
+      "cluster_id": 137,
       "conflicting_shark_ids": [
         [
           "316796877",
@@ -27745,7 +27745,7 @@
       ]
     },
     {
-      "cluster_id": 143,
+      "cluster_id": 142,
       "conflicting_shark_ids": [
         [
           "330042447",
@@ -27754,7 +27754,7 @@
       ]
     },
     {
-      "cluster_id": 145,
+      "cluster_id": 144,
       "conflicting_shark_ids": [
         [
           "580422774",
@@ -27763,7 +27763,7 @@
       ]
     },
     {
-      "cluster_id": 147,
+      "cluster_id": 146,
       "conflicting_shark_ids": [
         [
           "75541281",
@@ -27772,7 +27772,7 @@
       ]
     },
     {
-      "cluster_id": 149,
+      "cluster_id": 148,
       "conflicting_shark_ids": [
         [
           "384365573",
@@ -27781,20 +27781,20 @@
       ]
     },
     {
-      "cluster_id": 151,
+      "cluster_id": 150,
       "conflicting_shark_ids": [
-        [
-          "392298922",
-          "566791235"
-        ],
         [
           "685109089",
           "816624766"
+        ],
+        [
+          "392298922",
+          "566791235"
         ]
       ]
     },
     {
-      "cluster_id": 153,
+      "cluster_id": 152,
       "conflicting_shark_ids": [
         [
           "434252688",
@@ -27803,7 +27803,7 @@
       ]
     },
     {
-      "cluster_id": 157,
+      "cluster_id": 156,
       "conflicting_shark_ids": [
         [
           "791675561",
@@ -27812,7 +27812,7 @@
       ]
     },
     {
-      "cluster_id": 165,
+      "cluster_id": 164,
       "conflicting_shark_ids": [
         [
           "489025911",
@@ -27821,7 +27821,7 @@
       ]
     },
     {
-      "cluster_id": 173,
+      "cluster_id": 172,
       "conflicting_shark_ids": [
         [
           "537683628",

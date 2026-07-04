@@ -7602,9 +7602,9 @@
     "Newest Occurrence": "2023-11-18",
     "country (year)": "Myanmar (2023)",
     "stateProvince - verbatimLocality (month year)": "Ayeyarwady - Myanmar (Nov 2023)",
-    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ed0645-fc21-11e2-ac3f-081965b14959 (3100, 1.4463), MIEWID GBIF: 45ed0a9d-fc21-11e2-ac3f-081965b14959 (3104, 1.3505), MIEWID GBIF: 526312326 (3083, 1.2555)",
+    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ed0645-fc21-11e2-ac3f-081965b14959 (-1, 1.4463), MIEWID GBIF: 45ed0a9d-fc21-11e2-ac3f-081965b14959 (-1, 1.3505), MIEWID GBIF: 526312326 (3083, 1.2555)",
     "MIEWID NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "MIEWID NINGALOO: 24e404dd-094c-e5bd-defa-e52125422443 (205, 1.3954), MIEWID NINGALOO: a785af89-b8c0-5e7b-acec-c4874ec5483f (45, 1.418), MIEWID NINGALOO: e7515a92-d708-9705-8da7-34dbc4ef990d (107, 1.2271)",
-    "DINOV2 GBIF: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 GBIF: 203657971 (1625, 0.4351), DINOV2 GBIF: 24333042 (2634, 0.529), DINOV2 GBIF: 45ed0874-fc21-11e2-ac3f-081965b14959 (3097, 0.7237)",
+    "DINOV2 GBIF: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 GBIF: 203657971 (1625, 0.4351), DINOV2 GBIF: 24333042 (2634, 0.529), DINOV2 GBIF: 45ed0874-fc21-11e2-ac3f-081965b14959 (-1, 0.7237)",
     "DINOV2 NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 NINGALOO: 2aa9e645-0073-5866-ae58-2943b4642d32 (260, 0.9915), DINOV2 NINGALOO: 6c42f6ee-96d8-ce7c-4594-d68850806cc3 (6454, 1.1281), DINOV2 NINGALOO: 7299e510-4de5-9f5b-d7a4-9009594a3a24 (5686, 1.0584)"
   },
   {
@@ -21534,7 +21534,7 @@
     "Newest Occurrence": "2008-03-13",
     "country (year)": "Mexico (2008)",
     "stateProvince - verbatimLocality (month year)": "Sonora - San Luis Rio Colorado, Son., Mexico (Mar 2008)",
-    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ed1343-fc21-11e2-ac3f-081965b14959 (3105, 1.3324)",
+    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ed1343-fc21-11e2-ac3f-081965b14959 (-1, 1.3324)",
     "MIEWID NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "MIEWID NINGALOO: 18b0f340-8147-3d7f-a8aa-22d590108a1b (2606, 1.4766)",
     "DINOV2 GBIF: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 GBIF: 154662900 (1588, 0.7064)",
     "DINOV2 NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 NINGALOO: 286def01-47a6-5b70-b37d-17dac3689f1a (3340, 1.4334)"
@@ -22134,9 +22134,9 @@
     "Newest Occurrence": "1974-01-01",
     "country (year)": "South Africa (1974)",
     "stateProvince - verbatimLocality (month year)": "Unknown",
-    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (3099, 0.8923)",
+    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (-1, 0.8923)",
     "MIEWID NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "MIEWID NINGALOO: d638c399-ff9f-b83d-3fe3-e533b881aa1d (1795, 1.5015)",
-    "DINOV2 GBIF: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (3099, 0.2327)",
+    "DINOV2 GBIF: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (-1, 0.2327)",
     "DINOV2 NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 NINGALOO: 13358d13-b940-7836-2d35-d00e8310b297 (3951, 1.1287)"
   },
   {
@@ -22146,9 +22146,9 @@
     "Newest Occurrence": "1974-01-01",
     "country (year)": "South Africa (1974)",
     "stateProvince - verbatimLocality (month year)": "Unknown",
-    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (3099, 1.4043)",
+    "MIEWID GBIF: closest_whale_shark_id (matched_image_id, distance)": "MIEWID GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (-1, 1.4043)",
     "MIEWID NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "MIEWID NINGALOO: 24e404dd-094c-e5bd-defa-e52125422443 (4622, 1.4692)",
-    "DINOV2 GBIF: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (3099, 0.4266)",
+    "DINOV2 GBIF: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 GBIF: 45ecfd99-fc21-11e2-ac3f-081965b14959 (-1, 0.4266)",
     "DINOV2 NINGALOO: closest_whale_shark_id (matched_image_id, distance)": "DINOV2 NINGALOO: 286def01-47a6-5b70-b37d-17dac3689f1a (3340, 1.3448)"
   },
   {
