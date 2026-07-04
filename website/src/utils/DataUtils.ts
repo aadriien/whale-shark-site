@@ -312,8 +312,8 @@ function formatVisionKeyVals(obj: WhaleSharkEntryVision, keyMap: Record<string, 
         renamed.monthsToYears = {};
     }
 
-    // Coerce identificationID to string (JSON stores it as a number)
-    (renamed as Record<string, unknown>).identificationID = String(obj.identificationID);
+    // identificationID is null when GBIF didn't provide one for that occurrence
+    (renamed as Record<string, unknown>).identificationID = obj.identificationID ?? "";
 
     // Set default values for filterable fields
     renamed.occurrences = 1;

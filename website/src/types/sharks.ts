@@ -64,7 +64,7 @@ export type WhaleSharkDatasetRegular = WhaleSharkEntryRegular[];
 export type WhaleSharkEntryVision = {
     whaleSharkID: string;
 
-    identificationID: number | string;
+    identificationID: string | null;
     occurrenceID: string;
 
     key: number;
