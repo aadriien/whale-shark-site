@@ -74,6 +74,7 @@ function SharkMatchGraph() {
     const [showContradictionPath, setShowContradictionPath] = useState(false);
 
     const [graphData, setGraphData] = useState<GraphData | null>(null);
+    const [graphLoadError, setGraphLoadError] = useState<string | null>(null);
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
     const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
@@ -158,9 +159,14 @@ function SharkMatchGraph() {
     });
 
     useEffect(() => {
-        import("../../../assets/data/json/matching/plausible/graph_data.json").then((mod) => {
-            setGraphData(mod.default as GraphData);
-        });
+        import("../../../assets/data/json/matching/plausible/graph_data.json")
+            .then((mod) => {
+                setGraphData(mod.default as GraphData);
+            })
+            .catch((err) => {
+                console.error("Failed to load match graph data:", err);
+                setGraphLoadError("Failed to load graph data. Check the console for details.");
+            });
     }, []);
 
     const sharkContinentMap = useSharkContinentMap();
@@ -433,7 +439,9 @@ function SharkMatchGraph() {
                     onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
                 />
                 <div ref={containerRef} className="cytoscape-canvas">
-                    {!graphData ? (
+                    {graphLoadError ? (
+                        <div className="graph-loading">{graphLoadError}</div>
+                    ) : !graphData ? (
                         <div className="graph-loading">Loading graph…</div>
                     ) : (
                         <CytoscapeComponent

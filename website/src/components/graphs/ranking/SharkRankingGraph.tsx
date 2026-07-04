@@ -47,6 +47,7 @@ function SharkRankingGraph() {
     const [showContradictionPath, setShowContradictionPath] = useState(false);
 
     const [graphData, setGraphData] = useState<SharkRankingGraphData | null>(null);
+    const [graphLoadError, setGraphLoadError] = useState<string | null>(null);
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedSharkMatch | null>(null);
     const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
@@ -97,9 +98,14 @@ function SharkRankingGraph() {
     });
 
     useEffect(() => {
-        import("../../../assets/data/json/matching/ranking/shark_graph_data.json").then((mod) => {
-            setGraphData(mod.default as SharkRankingGraphData);
-        });
+        import("../../../assets/data/json/matching/ranking/shark_graph_data.json")
+            .then((mod) => {
+                setGraphData(mod.default as SharkRankingGraphData);
+            })
+            .catch((err) => {
+                console.error("Failed to load shark ranking graph data:", err);
+                setGraphLoadError("Failed to load graph data. Check the console for details.");
+            });
     }, []);
 
     const sharkContinentMap = useSharkContinentMap();
@@ -317,7 +323,9 @@ function SharkRankingGraph() {
                     onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
                 />
                 <div ref={containerRef} className="cytoscape-canvas">
-                    {!graphData ? (
+                    {graphLoadError ? (
+                        <div className="graph-loading">{graphLoadError}</div>
+                    ) : !graphData ? (
                         <div className="graph-loading">Loading graph…</div>
                     ) : (
                         <CytoscapeComponent
