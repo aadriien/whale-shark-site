@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Camera } from "lucide-react";
 
 import { parseImageField } from "../../utils/DataUtils";
-import SharkImagesLightbox from "./SharkImagesLightbox";
+import SharkMediaLightbox from "./SharkMediaLightbox";
 
 import { IndividualSharkProps } from "../../types/sharks";
 
@@ -43,7 +43,7 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
 
             {/* Lightbox Overlay */}
             {expandedImageIndex !== null && (
-                <SharkImagesLightbox
+                <SharkMediaLightbox
                     images={images}
                     activeIndex={expandedImageIndex}
                     onNavigate={setExpandedImageIndex}

@@ -18,7 +18,7 @@ export type SharkGridProps = SharkCardBaseProps & {
     sharks: WhaleSharkDatasetNormalized;
 };
 
-export type SharkImagesLightboxProps = {
+export type SharkMediaLightboxProps = {
     images: ImageMetadata[];
     activeIndex: number;
     onNavigate: (index: number) => void;
