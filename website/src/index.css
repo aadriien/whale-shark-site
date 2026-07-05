@@ -13,6 +13,7 @@
 @import "./styles/shark_match_graph.css";
 @import "./styles/build_a_shark.css";
 @import "./styles/animation.css";
+@import "./styles/confirm_modal.css";
 
 
 /* Global reset of default margins */
