@@ -833,13 +833,13 @@
 .match-remove-btn:hover {
     background-color: var(--error) !important;
     border-color: var(--error);
-    color: #ffffff;
+    color: var(--text-on-accent);
 }
 
 .match-move-select:hover {
     background-color: var(--primary-blue) !important;
     border-color: var(--primary-blue);
-    color: #ffffff;
+    color: var(--text-on-accent);
 }
 
 .match-move-select:disabled {

@@ -13,7 +13,6 @@
     --primary-purple: #7e58f0;
     --primary-teal: #a8e8ea;
     --primary-green: #ccece5;
-    --text-on-primary-accent: #1a1a1a;
 
     /* Background Colors */
     --bg-all-pages: rgba(212, 243, 252, 0.4);
@@ -43,6 +42,10 @@
     --accent-purple: #6b47d9;
     --accent-dark-blue: #25417d;
     --accent-navy: #063f8e;
+
+    /* Saturated Accent Text */
+    --text-on-accent: #ffffff;
+    --text-on-primary-accent: #1a1a1a;
     
     /* Border Colors */
     --border-primary: #000000;
@@ -263,7 +266,6 @@
     --primary-purple: #9370f2;
     --primary-teal: #7dd3d6;
     --primary-green: #a8d4c8;
-    --text-on-primary-accent: #1a1a1a;
 
     /* Background Colors */
     --bg-all-pages: rgba(22, 41, 45, 0.4);
@@ -293,6 +295,10 @@
     --accent-purple: #8b6df4;
     --accent-dark-blue: #809fe0;
     --accent-navy: #93baf1;
+
+    /* Saturated Accent Text */
+    --text-on-accent: #ffffff;
+    --text-on-primary-accent: #1a1a1a;
     
     /* Border Colors */
     --border-primary: #555555;

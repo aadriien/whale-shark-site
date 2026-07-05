@@ -50,11 +50,11 @@
 .confirm-modal-button.primary {
     background-color: var(--primary-blue);
     border-color: var(--primary-blue);
-    color: #ffffff;
+    color: var(--text-on-accent);
 }
 
 .confirm-modal-button.danger {
     background-color: var(--error);
     border-color: var(--error);
-    color: #ffffff;
+    color: var(--text-on-accent);
 }
