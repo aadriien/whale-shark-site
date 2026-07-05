@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Camera } from "lucide-react";
 
 import { parseImageField } from "../../utils/DataUtils";
+import SharkImagesLightbox from "./SharkImagesLightbox";
 
 import { IndividualSharkProps } from "../../types/sharks";
 
@@ -13,24 +14,6 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
     // Open lightbox with image index, not just image object
     const openImage = (index: number) => setExpandedImageIndex(index);
     const closeImage = () => setExpandedImageIndex(null);
-
-    // Keyboard navigation for image carousel
-    useEffect(() => {
-        if (expandedImageIndex === null) return;
-
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "ArrowLeft") {
-                setExpandedImageIndex((idx) => Math.max(idx! - 1, 0));
-            } else if (e.key === "ArrowRight") {
-                setExpandedImageIndex((idx) => Math.min(idx! + 1, images.length - 1));
-            } else if (e.key === "Escape") {
-                closeImage();
-            }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [expandedImageIndex, images.length]);
 
     return (
         <>
@@ -47,7 +30,8 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
                             />
                             <p className="shark-image-meta">
                                 <small>
-                                    <Camera className="credit-icon" /> Creator: {img.creator} | {img.license}
+                                    <Camera className="credit-icon" /> Creator: {img.creator} |{" "}
+                                    {img.license}
                                 </small>
                             </p>
                         </div>
@@ -59,44 +43,12 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
 
             {/* Lightbox Overlay */}
             {expandedImageIndex !== null && (
-                <div className="image-overlay" onClick={closeImage}>
-                    <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
-                        <button
-                            className="carousel-button left"
-                            onClick={() => setExpandedImageIndex((prev) => Math.max(prev! - 1, 0))}
-                            disabled={expandedImageIndex === 0}
-                        >
-                            &lt; {/* Left arrow for image carousel */}
-                        </button>
-
-                        <div className="overlay-image-wrapper">
-                            <img
-                                src={images[expandedImageIndex].url}
-                                alt={`Expanded shark image ${expandedImageIndex}`}
-                            />
-                            <p className="overlay-meta">
-                                <Camera className="credit-icon" /> Creator: {images[expandedImageIndex].creator} |{" "}
-                                {images[expandedImageIndex].license}
-                            </p>
-                        </div>
-
-                        <button
-                            className="carousel-button right"
-                            onClick={() =>
-                                setExpandedImageIndex((prev) =>
-                                    Math.min(prev! + 1, images.length - 1)
-                                )
-                            }
-                            disabled={expandedImageIndex === images.length - 1}
-                        >
-                            &gt; {/* Right arrow for image carousel */}
-                        </button>
-
-                        <button className="close-button" onClick={closeImage}>
-                            X
-                        </button>
-                    </div>
-                </div>
+                <SharkImagesLightbox
+                    images={images}
+                    activeIndex={expandedImageIndex}
+                    onNavigate={setExpandedImageIndex}
+                    onClose={closeImage}
+                />
             )}
         </>
     );

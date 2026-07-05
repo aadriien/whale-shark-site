@@ -18,6 +18,13 @@ export type SharkGridProps = SharkCardBaseProps & {
     sharks: WhaleSharkDatasetNormalized;
 };
 
+export type SharkImagesLightboxProps = {
+    images: ImageMetadata[];
+    activeIndex: number;
+    onNavigate: (index: number) => void;
+    onClose: () => void;
+};
+
 export type MatchSharkBoxProps = {
     label: string;
     sharkId: string;
