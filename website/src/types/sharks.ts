@@ -213,8 +213,8 @@ export type IndividualSharkOrNullProps = {
 
 export type ImageMetadata = {
     url: string;
-    license: string;
-    creator: string;
+    license?: string;
+    creator?: string;
 };
 
 export type ImagesWithMetadata = ImageMetadata[];

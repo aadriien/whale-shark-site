@@ -478,3 +478,12 @@
     height: auto;
 }
 
+.lightbox-match-content .close-button {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.6rem;
+    border: 1px solid var(--border-primary);
+}
+

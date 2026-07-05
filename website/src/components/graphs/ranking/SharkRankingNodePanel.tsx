@@ -109,14 +109,20 @@ function SharkRankingNodePanel({
                     onClose={() => setLightboxOpen(false)}
                     left={{
                         sharkId: match.clickedSharkId,
-                        title: "QUERY SHARK ID",
+                        label: "QUERY SHARK ID",
+                        countries: clickedShark?.countries,
+                        oldest: clickedShark?.oldest,
+                        newest: clickedShark?.newest,
                         images: queryImages,
                         activeIndex: queryIdx,
                         onSelectThumbnail: setQueryIdx,
                     }}
                     right={{
                         sharkId: match.matchSharkId,
-                        title: "MATCHED SHARK ID",
+                        label: "MATCHED SHARK ID",
+                        countries: matchedShark?.countries,
+                        oldest: matchedShark?.oldest,
+                        newest: matchedShark?.newest,
                         images: matchImages,
                         activeIndex: matchIdx,
                         onSelectThumbnail: setMatchIdx,

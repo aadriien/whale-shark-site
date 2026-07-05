@@ -119,6 +119,12 @@ function GraphNodePanel({
 }: GraphNodePanelProps) {
     const [lightboxOpen, setLightboxOpen] = useState(false);
 
+    const clickedShark = match ? (mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null) : null;
+    const matchedShark =
+        match && match.matchPopulation === "gbif"
+            ? (mediaSharks.find((s) => s.id === match.matchSharkId) ?? null)
+            : null;
+
     const queryImages = match ? getSharkOccurrenceImages(match.clickedSharkId) : [];
     const matchImages =
         match && match.matchPopulation === "gbif" ? getSharkOccurrenceImages(match.matchSharkId) : [];
@@ -136,7 +142,10 @@ function GraphNodePanel({
                     onClose={() => setLightboxOpen(false)}
                     left={{
                         sharkId: match.clickedSharkId,
-                        title: "QUERY SHARK ID",
+                        label: "QUERY SHARK ID",
+                        countries: clickedShark?.countries,
+                        oldest: clickedShark?.oldest,
+                        newest: clickedShark?.newest,
                         images: queryImages,
                         activeIndex: activeOccurrenceIndex(queryImages, match.clickedImageId),
                         onSelectThumbnail: (idx) => onSelectImage(queryImages[idx].imageId),
@@ -145,7 +154,10 @@ function GraphNodePanel({
                         matchImages.length > 0
                             ? {
                                   sharkId: match.matchSharkId,
-                                  title: "MATCHED SHARK ID",
+                                  label: "MATCHED SHARK ID",
+                                  countries: matchedShark?.countries,
+                                  oldest: matchedShark?.oldest,
+                                  newest: matchedShark?.newest,
                                   images: matchImages,
                                   activeIndex: activeOccurrenceIndex(matchImages, match.matchImageId),
                                   onSelectThumbnail: (idx) => onSelectImage(matchImages[idx].imageId),

@@ -1,4 +1,5 @@
 import type { Core } from "cytoscape";
+import type { ImageMetadata } from "./sharks";
 
 /* Graph types */
 
@@ -201,16 +202,13 @@ export type SharkRankingNodePanelProps = BaseNodePanelProps<SelectedSharkMatch>;
 
 /* ---- Match image lightbox (query vs. match, side by side) ---- */
 
-export type LightboxImage = {
-    url: string;
-    creator?: string;
-    license?: string;
-};
-
 export type LightboxPanelData = {
     sharkId: string;
-    title: string;
-    images: LightboxImage[];
+    label: string;
+    countries?: string;
+    oldest?: string;
+    newest?: string;
+    images: ImageMetadata[];
     activeIndex: number;
     onSelectThumbnail: (index: number) => void;
 };
