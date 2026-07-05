@@ -1,8 +1,10 @@
 import { useState } from "react";
 
 import { mediaSharks, parseImageField } from "../../utils/DataUtils";
-import { removeSharkFromGroup, moveSharkToGroup, clearAllGroups } from "../../utils/MatchUtils";
+import { clearAllGroups } from "../../utils/MatchUtils";
+import { buildRemoveConfirm, buildMoveConfirm } from "../../utils/MatchConfirmUtils";
 import { useMatchedGroups } from "../../hooks/useMatchedGroups";
+import { useConfirmModal } from "../../hooks/useConfirmModal";
 import SharkBanner from "../cards/SharkBanner";
 import SharkMediaLightbox from "../cards/SharkMediaLightbox";
 import MatchGroupNotes from "./MatchGroupNotes";
@@ -54,6 +56,8 @@ function MatchedSharks() {
     // Shark whose media lightbox is currently open, if any (+ which image is active)
     const [galleryShark, setGalleryShark] = useState<WhaleSharkEntryNormalized | null>(null);
     const [galleryIndex, setGalleryIndex] = useState(0);
+
+    const { requestConfirm, confirmModal } = useConfirmModal();
 
     const openGallery = (shark: WhaleSharkEntryNormalized) => {
         setGalleryShark(shark);
@@ -109,12 +113,29 @@ function MatchedSharks() {
                                                     <div className="matched-banner-controls">
                                                         <MatchRemoveButton
                                                             sharkId={sharkId}
-                                                            onRemove={removeSharkFromGroup}
+                                                            onRemove={(id) =>
+                                                                requestConfirm(
+                                                                    buildRemoveConfirm(id, group)
+                                                                )
+                                                            }
                                                         />
                                                         <MatchMoveSelect
                                                             sharkId={sharkId}
                                                             otherGroups={otherGroups}
-                                                            onMove={moveSharkToGroup}
+                                                            onMove={(id, targetGroupId) => {
+                                                                const targetGroup = otherGroups.find(
+                                                                    (g) => g.id === targetGroupId
+                                                                );
+                                                                if (targetGroup) {
+                                                                    requestConfirm(
+                                                                        buildMoveConfirm(
+                                                                            id,
+                                                                            group,
+                                                                            targetGroup
+                                                                        )
+                                                                    );
+                                                                }
+                                                            }}
                                                         />
                                                     </div>
                                                     {shark ? (
@@ -151,6 +172,8 @@ function MatchedSharks() {
                     onClose={() => setGalleryShark(null)}
                 />
             )}
+
+            {confirmModal}
         </div>
     );
 }
