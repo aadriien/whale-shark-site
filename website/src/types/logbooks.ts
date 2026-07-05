@@ -45,6 +45,10 @@ export type MatchButtonProps = {
     className?: string;
 };
 
+export type MatchGroupNotesProps = {
+    sharkIds: string[];
+};
+
 export type LogbookProps = {
     setIsLogbookOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

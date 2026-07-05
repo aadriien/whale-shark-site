@@ -660,28 +660,93 @@
     gap: 14px;
 }
 
-/* One bordered box per transitively-matched group, holding every shark's
-   banner in that group. Wraps as needed if logbook is too narrow */
+/* One bordered box per transitively-matched group, plus notes panel */
 .matched-group-box {
+    container-type: inline-size;
+    container-name: matched-group;
     border: 1px solid var(--border-tertiary);
     border-radius: 8px;
     padding: 8px;
 }
 
-.matched-group-banners {
+.matched-group-layout {
     display: flex;
-    flex-wrap: wrap;
+    align-items: stretch;
     gap: 8px;
+}
+
+.match-notes-box {
+    flex: 0 0 160px;
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+}
+
+.match-notes-header {
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.match-notes-textarea {
+    flex: 1;
+    min-height: 0;
+    resize: none;
+    border-radius: 6px;
+    border: 1px solid var(--border-tertiary);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 6px 8px;
+    overflow-y: auto;
+}
+
+.match-notes-textarea::placeholder {
+    color: var(--text-tertiary);
+}
+
+.matched-group-banners {
+    flex: 1 1 auto;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 150px; /* roughly 2 shark banners tall */
+    overflow-y: auto;
+    padding-top: 4px;
+    padding-right: 2px;
 }
 
 .matched-banner-wrapper {
     position: relative;
-    flex: 1 1 calc(50% - 4px);
-    min-width: 140px;
+    flex-shrink: 0;
 }
 
 .matched-banner-wrapper .shark-banner {
     width: 100%;
+}
+
+/* Stack notes below banners when group box is narrow */
+@container matched-group (max-width: 320px) {
+    .matched-group-layout {
+        flex-direction: column;
+    }
+
+    .matched-group-banners {
+        flex-basis: auto;
+        width: 100%;
+    }
+
+    .match-notes-box {
+        flex-basis: auto;
+        width: 100%;
+    }
+
+    .match-notes-textarea {
+        flex: 0 0 90px;
+    }
 }
 
 .match-remove-btn {
