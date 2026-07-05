@@ -1,6 +1,10 @@
+import { useState } from "react";
+
 import CondensedSharkCard from "../../cards/CondensedSharkCard";
 import MatchButton from "../../controls/MatchButton";
+import MatchImageLightbox from "../shared/MatchImageLightbox";
 import { mediaSharks, visionOccurrences } from "../../../utils/DataUtils";
+import { getSharkOccurrenceImages, activeOccurrenceIndex } from "../../../utils/graph/lightboxImages";
 import GraphPanelShell from "../../panels/GraphPanelShell";
 
 import { GraphNodePanelProps, SelectedMatch } from "../../../types/graphs";
@@ -8,7 +12,8 @@ import { GraphNodePanelProps, SelectedMatch } from "../../../types/graphs";
 function renderBody(
     match: SelectedMatch,
     showContradictionPath: boolean,
-    onToggleContradictionPath: () => void
+    onToggleContradictionPath: () => void,
+    onOpenLightbox: () => void
 ) {
     const clickedShark = mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null;
     const matchedShark =
@@ -33,7 +38,11 @@ function renderBody(
             <div className="graph-panel-section">
                 <span className="graph-panel-label">Selected image</span>
                 {clickedShark ? (
-                    <CondensedSharkCard shark={clickedShark} imageUrl={imageURL} />
+                    <CondensedSharkCard
+                        shark={clickedShark}
+                        imageUrl={imageURL}
+                        onImageClick={onOpenLightbox}
+                    />
                 ) : (
                     <p className="graph-panel-missing">No data for ID {match.clickedSharkId}</p>
                 )}
@@ -51,7 +60,7 @@ function renderBody(
                 </span>
                 {match.matchPopulation === "gbif" ? (
                     matchedShark ? (
-                        <CondensedSharkCard shark={matchedShark} />
+                        <CondensedSharkCard shark={matchedShark} onImageClick={onOpenLightbox} />
                     ) : (
                         <p className="graph-panel-missing">No data for ID {match.matchSharkId}</p>
                     )
@@ -106,10 +115,45 @@ function GraphNodePanel({
     match,
     showContradictionPath,
     onToggleContradictionPath,
+    onSelectImage,
 }: GraphNodePanelProps) {
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+
+    const queryImages = match ? getSharkOccurrenceImages(match.clickedSharkId) : [];
+    const matchImages =
+        match && match.matchPopulation === "gbif" ? getSharkOccurrenceImages(match.matchSharkId) : [];
+
     return (
         <GraphPanelShell isEmpty={!match} emptyAlt="Click a GBIF node to see its shark card">
-            {match && renderBody(match, showContradictionPath, onToggleContradictionPath)}
+            {match &&
+                renderBody(match, showContradictionPath, onToggleContradictionPath, () =>
+                    setLightboxOpen(true)
+                )}
+
+            {match && (
+                <MatchImageLightbox
+                    isOpen={lightboxOpen}
+                    onClose={() => setLightboxOpen(false)}
+                    left={{
+                        sharkId: match.clickedSharkId,
+                        title: "QUERY SHARK ID",
+                        images: queryImages,
+                        activeIndex: activeOccurrenceIndex(queryImages, match.clickedImageId),
+                        onSelectThumbnail: (idx) => onSelectImage(queryImages[idx].imageId),
+                    }}
+                    right={
+                        matchImages.length > 0
+                            ? {
+                                  sharkId: match.matchSharkId,
+                                  title: "MATCHED SHARK ID",
+                                  images: matchImages,
+                                  activeIndex: activeOccurrenceIndex(matchImages, match.matchImageId),
+                                  onSelectThumbnail: (idx) => onSelectImage(matchImages[idx].imageId),
+                              }
+                            : null
+                    }
+                />
+            )}
         </GraphPanelShell>
     );
 }

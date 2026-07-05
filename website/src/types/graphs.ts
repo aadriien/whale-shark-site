@@ -194,8 +194,26 @@ type BaseNodePanelProps<M> = {
     onToggleContradictionPath: () => void;
 };
 
-export type GraphNodePanelProps = BaseNodePanelProps<SelectedMatch>;
+export type GraphNodePanelProps = BaseNodePanelProps<SelectedMatch> & {
+    onSelectImage: (imageId: number) => void;
+};
 export type SharkRankingNodePanelProps = BaseNodePanelProps<SelectedSharkMatch>;
+
+/* ---- Match image lightbox (query vs. match, side by side) ---- */
+
+export type LightboxImage = {
+    url: string;
+    creator?: string;
+    license?: string;
+};
+
+export type LightboxPanelData = {
+    sharkId: string;
+    title: string;
+    images: LightboxImage[];
+    activeIndex: number;
+    onSelectThumbnail: (index: number) => void;
+};
 
 type BaseDetailPanelProps<M> = {
     match: M | null;

@@ -15,7 +15,7 @@ function formatYearMonth(dateString: string) {
     return date.toLocaleDateString(undefined, options);
 }
 
-const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
+const CondensedSharkCard = ({ shark, imageUrl, onImageClick }: IndividualSharkProps) => {
     const images = shark.image !== "Unknown" ? parseImageField(shark.image) : [];
     const displayUrl = imageUrl ?? (images.length > 0 ? images[0].url : undefined);
 
@@ -71,7 +71,10 @@ const CondensedSharkCard = ({ shark, imageUrl }: IndividualSharkProps) => {
     return (
         <div className="condensed-shark-card">
             {/* Any media at top */}
-            <div className="condensed-media">
+            <div
+                className={`condensed-media${onImageClick ? " condensed-media--clickable" : ""}`}
+                onClick={displayUrl ? onImageClick : undefined}
+            >
                 {displayUrl ? (
                     <img src={displayUrl} alt={`Image of shark ${shark.id}`} />
                 ) : (

@@ -454,3 +454,27 @@
     font-weight: 500;
 }
 
+.condensed-media--clickable {
+    cursor: pointer;
+}
+
+.condensed-media--clickable:hover {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: -2px;
+}
+
+.lightbox-match-content {
+    position: relative;
+    width: min(1100px, 92vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-xl);
+}
+
+.lightbox-match-container {
+    height: auto;
+}
+

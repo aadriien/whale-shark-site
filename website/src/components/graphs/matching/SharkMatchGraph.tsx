@@ -417,6 +417,7 @@ function SharkMatchGraph() {
                     match={selectedMatch}
                     showContradictionPath={showContradictionPath}
                     onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
+                    onSelectImage={handleSelectImage}
                 />
                 <div ref={containerRef} className="cytoscape-canvas">
                     {graphLoadError ? (
