@@ -72,3 +72,7 @@ export type ConfirmModalProps = {
     actions: ConfirmModalAction[];
     onClose: () => void;
 };
+
+// What a caller hands to useConfirmModal()'s requestConfirm. Has everything
+// ConfirmModalProps needs except onClose, which the hook supplies itself
+export type ConfirmRequest = Omit<ConfirmModalProps, "onClose">;
