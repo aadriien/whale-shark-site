@@ -59,3 +59,16 @@ export type GraphDistanceRangeProps = {
     value: [number, number];
     onChange: (range: [number, number]) => void;
 };
+
+export type ConfirmModalAction = {
+    label: string;
+    onClick: () => void;
+    variant?: "primary" | "danger" | "neutral";
+};
+
+export type ConfirmModalProps = {
+    title?: string;
+    message: string;
+    actions: ConfirmModalAction[];
+    onClose: () => void;
+};

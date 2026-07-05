@@ -694,6 +694,30 @@
     color: var(--text-on-primary-accent);
 }
 
+.match-group-name-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-on-primary-accent);
+    padding: 0 0 2px;
+}
+
+.match-group-name-input::placeholder {
+    font-weight: 400;
+    color: var(--text-on-primary-accent);
+    opacity: 0.7;
+}
+
+.match-group-name-input:hover,
+.match-group-name-input:focus {
+    border-bottom-color: var(--border-tertiary);
+    outline: none;
+}
+
 .match-notes-textarea {
     flex: 1;
     min-height: 0;

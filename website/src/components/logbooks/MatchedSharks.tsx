@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import { mediaSharks, parseImageField } from "../../utils/DataUtils";
-import { getMatchGroups, removeSharkFromMatches, clearMatchedPairs } from "../../utils/MatchUtils";
-import { useMatchedPairs } from "../../hooks/useMatchedPairs";
+import { removeSharkFromGroup, clearAllGroups } from "../../utils/MatchUtils";
+import { useMatchedGroups } from "../../hooks/useMatchedGroups";
 import SharkBanner from "../cards/SharkBanner";
 import SharkMediaLightbox from "../cards/SharkMediaLightbox";
 import MatchGroupNotes from "./MatchGroupNotes";
@@ -10,10 +10,8 @@ import MatchGroupNotes from "./MatchGroupNotes";
 import { WhaleSharkEntryNormalized } from "../../types/sharks";
 
 function MatchedSharks() {
-    // Subscribes to matched-pair changes so this re-renders when they occur
-    useMatchedPairs();
-
-    const groups = getMatchGroups();
+    // Subscribes to matched-group changes so this re-renders when they occur
+    const groups = useMatchedGroups();
 
     // Shark whose media lightbox is currently open, if any (+ which image is active)
     const [galleryShark, setGalleryShark] = useState<WhaleSharkEntryNormalized | null>(null);
@@ -39,7 +37,7 @@ function MatchedSharks() {
             const isConfirmedAgain = confirm(`Seriously, last chance!`);
 
             if (isConfirmedAgain) {
-                clearMatchedPairs();
+                clearAllGroups();
             }
         }
     };
@@ -55,14 +53,12 @@ function MatchedSharks() {
 
             <div className="matched-groups">
                 {groups.length > 0 ? (
-                    groups.map((sharkIds) => {
-                        const groupKey = [...sharkIds].sort().join("::");
-
+                    groups.map((group) => {
                         return (
-                            <div key={groupKey} className="matched-group-box">
+                            <div key={group.id} className="matched-group-box">
                                 <div className="matched-group-layout">
                                     <div className="matched-group-banners">
-                                        {sharkIds.map((sharkId) => {
+                                        {group.sharkIds.map((sharkId) => {
                                             const shark = mediaSharks.find((s) => s.id === sharkId);
 
                                             return (
@@ -73,7 +69,7 @@ function MatchedSharks() {
                                                     <button
                                                         className="match-remove-btn"
                                                         onClick={() =>
-                                                            removeSharkFromMatches(sharkId)
+                                                            removeSharkFromGroup(sharkId)
                                                         }
                                                         aria-label={`Remove ${sharkId} from this matched group`}
                                                     >
@@ -94,7 +90,7 @@ function MatchedSharks() {
                                         })}
                                     </div>
 
-                                    <MatchGroupNotes sharkIds={sharkIds} />
+                                    <MatchGroupNotes group={group} />
                                 </div>
                             </div>
                         );

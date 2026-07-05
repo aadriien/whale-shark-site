@@ -33,10 +33,10 @@ export type FavoriteButtonProps = {
     className?: string;
 };
 
-// Matches are undirected, i.e. "A matches B" == "B matches A"
-export type MatchedPair = {
-    sharkIdA: string;
-    sharkIdB: string;
+export type MatchGroup = {
+    id: string;
+    sharkIds: string[];
+    name?: string;
 };
 
 export type MatchButtonProps = {
@@ -46,7 +46,7 @@ export type MatchButtonProps = {
 };
 
 export type MatchGroupNotesProps = {
-    sharkIds: string[];
+    group: MatchGroup;
 };
 
 export type LogbookProps = {
