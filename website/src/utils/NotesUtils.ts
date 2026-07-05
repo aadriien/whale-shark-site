@@ -1,5 +1,3 @@
-import { MatchGroup } from "../types/logbooks";
-
 const STORAGE_KEY = "matchGroupNotes";
 
 export const MAX_NOTE_LENGTH = 500;
@@ -40,26 +38,4 @@ export function deleteGroupNote(groupId: string) {
 
 export function clearAllNotes() {
     localStorage.removeItem(STORAGE_KEY);
-}
-
-// One-time upgrade from the legacy per-shark note storage (where every
-// member of a group carried a redundant copy of the same note) to the new
-// per-group storage. For each newly-migrated group, carries over whichever
-// member's note was non-empty first, matching the old "first match wins"
-// lookup behavior
-export function migrateLegacyNotes(groups: MatchGroup[]) {
-    const legacyNotes = getAllNotes();
-    const migrated: Record<string, string> = {};
-
-    for (const group of groups) {
-        const existingNote = group.sharkIds
-            .map((sharkId) => legacyNotes[sharkId])
-            .find((note) => Boolean(note));
-
-        if (existingNote) {
-            migrated[group.id] = existingNote;
-        }
-    }
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
 }

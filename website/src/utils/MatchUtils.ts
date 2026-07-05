@@ -1,96 +1,21 @@
 import { MatchGroup } from "../types/logbooks";
-import {
-    clearAllNotes,
-    deleteGroupNote,
-    getGroupNote,
-    setGroupNote,
-    migrateLegacyNotes,
-    MAX_NOTE_LENGTH,
-} from "./NotesUtils";
+import { clearAllNotes, deleteGroupNote, getGroupNote, setGroupNote, MAX_NOTE_LENGTH } from "./NotesUtils";
 
 const STORAGE_KEY = "matchedSharkGroups";
 const GROUPS_CHANGED_EVENT = "matchedGroupsChanged";
-
-// Legacy storage this replaces: a flat set of "sharkIdA::sharkIdB" edges,
-// with groups derived transitively (connected components) on every read.
-// That worked for simple pairwise toggling, but had no stable identity for
-// a group, so notes/names couldn't attach to it, and detaching one shark
-// could silently sever the rest of the group if it wasn't fully connected
-// internally (e.g. a "star" of edges all going through the removed shark)
-const LEGACY_PAIRS_KEY = "matchedSharkPairs";
-const LEGACY_PAIR_DELIMITER = "::";
-
-function readGroups(): MatchGroup[] {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        return stored ? JSON.parse(stored) : [];
-    } catch {
-        return [];
-    }
-}
 
 function writeGroups(groups: MatchGroup[]) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
     window.dispatchEvent(new CustomEvent(GROUPS_CHANGED_EVENT));
 }
 
-// Runs once: converts the legacy edge list into explicit groups with a
-// stable id each, then carries notes over and removes the legacy key
-function migrateLegacyPairsIfNeeded() {
-    if (localStorage.getItem(STORAGE_KEY)) return;
-
-    const legacyRaw = localStorage.getItem(LEGACY_PAIRS_KEY);
-    if (!legacyRaw) return;
-
-    let pairKeys: string[];
-    try {
-        pairKeys = JSON.parse(legacyRaw);
-    } catch {
-        return;
-    }
-
-    const adjacency = new Map<string, Set<string>>();
-    for (const key of pairKeys) {
-        const [sharkIdA, sharkIdB] = key.split(LEGACY_PAIR_DELIMITER);
-        if (!adjacency.has(sharkIdA)) adjacency.set(sharkIdA, new Set());
-        if (!adjacency.has(sharkIdB)) adjacency.set(sharkIdB, new Set());
-        adjacency.get(sharkIdA)!.add(sharkIdB);
-        adjacency.get(sharkIdB)!.add(sharkIdA);
-    }
-
-    const visited = new Set<string>();
-    const groups: MatchGroup[] = [];
-
-    for (const sharkId of adjacency.keys()) {
-        if (visited.has(sharkId)) continue;
-
-        const sharkIds: string[] = [];
-        const queue = [sharkId];
-        visited.add(sharkId);
-
-        while (queue.length > 0) {
-            const current = queue.shift()!;
-            sharkIds.push(current);
-
-            for (const neighbor of adjacency.get(current) ?? []) {
-                if (!visited.has(neighbor)) {
-                    visited.add(neighbor);
-                    queue.push(neighbor);
-                }
-            }
-        }
-
-        groups.push({ id: crypto.randomUUID(), sharkIds });
-    }
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
-    migrateLegacyNotes(groups);
-    localStorage.removeItem(LEGACY_PAIRS_KEY);
-}
-
 export function getGroups(): MatchGroup[] {
-    migrateLegacyPairsIfNeeded();
-    return readGroups();
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch {
+        return [];
+    }
 }
 
 export function getGroupForShark(sharkId: string): MatchGroup | undefined {
@@ -186,7 +111,6 @@ export function moveSharkToGroup(sharkId: string, targetGroupId: string) {
 
 export function clearAllGroups() {
     localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(LEGACY_PAIRS_KEY);
     clearAllNotes();
     window.dispatchEvent(new CustomEvent(GROUPS_CHANGED_EVENT));
 }
