@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import GraphPanelShell from "../../panels/GraphPanelShell";
-import { SharkRankingStatsPanelProps } from "../../../types/graphs";
+import { SharkRankingStatsPanelProps } from "../../../types/panels";
 
 type PairwiseRow = {
     shark_id_a: string;

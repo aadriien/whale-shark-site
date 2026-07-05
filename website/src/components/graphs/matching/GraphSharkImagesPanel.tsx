@@ -3,7 +3,7 @@ import type { Core } from "cytoscape";
 import { visionOccurrences } from "../../../utils/DataUtils";
 import { findBestMatch } from "../../../utils/GraphUtils";
 import GraphPanelShell from "../../panels/GraphPanelShell";
-import { GraphImagesPanelProps } from "../../../types/graphs";
+import { GraphImagesPanelProps } from "../../../types/panels";
 
 const imageIdToUrl = new Map<number, string>(
     visionOccurrences

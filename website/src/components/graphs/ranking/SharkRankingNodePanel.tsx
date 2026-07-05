@@ -6,7 +6,8 @@ import MatchImageLightbox from "../shared/MatchImageLightbox";
 import { mediaSharks, parseImageField } from "../../../utils/DataUtils";
 import GraphPanelShell from "../../panels/GraphPanelShell";
 
-import { SharkRankingNodePanelProps, SelectedSharkMatch } from "../../../types/graphs";
+import { SelectedSharkMatch } from "../../../types/graphs";
+import { SharkRankingNodePanelProps } from "../../../types/panels";
 
 function renderBody(
     match: SelectedSharkMatch,
@@ -88,8 +89,12 @@ function SharkRankingNodePanel({
         setMatchIdx(0);
     }, [match?.clickedSharkId, match?.matchSharkId]);
 
-    const clickedShark = match ? (mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null) : null;
-    const matchedShark = match ? (mediaSharks.find((s) => s.id === match.matchSharkId) ?? null) : null;
+    const clickedShark = match
+        ? (mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null)
+        : null;
+    const matchedShark = match
+        ? (mediaSharks.find((s) => s.id === match.matchSharkId) ?? null)
+        : null;
 
     const queryImages =
         clickedShark && clickedShark.image !== "Unknown" ? parseImageField(clickedShark.image) : [];
@@ -107,6 +112,10 @@ function SharkRankingNodePanel({
                 <MatchImageLightbox
                     isOpen={lightboxOpen}
                     onClose={() => setLightboxOpen(false)}
+                    querySharkId={match.clickedSharkId}
+                    matchSharkId={match.matchSharkId}
+                    distanceLabel="Median Image Embedding Distance"
+                    distanceValue={match.distanceMedian}
                     left={{
                         sharkId: match.clickedSharkId,
                         label: "QUERY SHARK ID",

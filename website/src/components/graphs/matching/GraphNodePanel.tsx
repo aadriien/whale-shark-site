@@ -4,10 +4,14 @@ import CondensedSharkCard from "../../cards/CondensedSharkCard";
 import MatchButton from "../../controls/MatchButton";
 import MatchImageLightbox from "../shared/MatchImageLightbox";
 import { mediaSharks, visionOccurrences } from "../../../utils/DataUtils";
-import { getSharkOccurrenceImages, activeOccurrenceIndex } from "../../../utils/graph/lightboxImages";
+import {
+    getSharkOccurrenceImages,
+    activeOccurrenceIndex,
+} from "../../../utils/graph/lightboxImages";
 import GraphPanelShell from "../../panels/GraphPanelShell";
 
-import { GraphNodePanelProps, SelectedMatch } from "../../../types/graphs";
+import { SelectedMatch } from "../../../types/graphs";
+import { GraphNodePanelProps } from "../../../types/panels";
 
 function renderBody(
     match: SelectedMatch,
@@ -99,9 +103,9 @@ function renderBody(
                             <p>
                                 Another image of this shark has a chain of matches linking it to
                                 whaleSharkID{match.conflictingSharkIds.length > 1 ? "s" : ""}{" "}
-                                {match.conflictingSharkIds.join(", ")}, which geo/temporal data
-                                says is IMPOSSIBLE for the same individual. It's outlined in red in
-                                the images panel.
+                                {match.conflictingSharkIds.join(", ")}, which geo/temporal data says
+                                is IMPOSSIBLE for the same individual. It's outlined in red in the
+                                images panel.
                             </p>
                         )}
                     </div>
@@ -119,7 +123,9 @@ function GraphNodePanel({
 }: GraphNodePanelProps) {
     const [lightboxOpen, setLightboxOpen] = useState(false);
 
-    const clickedShark = match ? (mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null) : null;
+    const clickedShark = match
+        ? (mediaSharks.find((s) => s.id === match.clickedSharkId) ?? null)
+        : null;
     const matchedShark =
         match && match.matchPopulation === "gbif"
             ? (mediaSharks.find((s) => s.id === match.matchSharkId) ?? null)
@@ -127,7 +133,9 @@ function GraphNodePanel({
 
     const queryImages = match ? getSharkOccurrenceImages(match.clickedSharkId) : [];
     const matchImages =
-        match && match.matchPopulation === "gbif" ? getSharkOccurrenceImages(match.matchSharkId) : [];
+        match && match.matchPopulation === "gbif"
+            ? getSharkOccurrenceImages(match.matchSharkId)
+            : [];
 
     return (
         <GraphPanelShell isEmpty={!match} emptyAlt="Click a GBIF node to see its shark card">
@@ -140,6 +148,10 @@ function GraphNodePanel({
                 <MatchImageLightbox
                     isOpen={lightboxOpen}
                     onClose={() => setLightboxOpen(false)}
+                    querySharkId={match.clickedSharkId}
+                    matchSharkId={match.matchSharkId}
+                    distanceLabel="Image Embedding Distance"
+                    distanceValue={match.matchDistance}
                     left={{
                         sharkId: match.clickedSharkId,
                         label: "QUERY SHARK ID",
@@ -159,8 +171,12 @@ function GraphNodePanel({
                                   oldest: matchedShark?.oldest,
                                   newest: matchedShark?.newest,
                                   images: matchImages,
-                                  activeIndex: activeOccurrenceIndex(matchImages, match.matchImageId),
-                                  onSelectThumbnail: (idx) => onSelectImage(matchImages[idx].imageId),
+                                  activeIndex: activeOccurrenceIndex(
+                                      matchImages,
+                                      match.matchImageId
+                                  ),
+                                  onSelectThumbnail: (idx) =>
+                                      onSelectImage(matchImages[idx].imageId),
                               }
                             : null
                     }

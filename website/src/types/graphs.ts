@@ -1,6 +1,3 @@
-import type { Core } from "cytoscape";
-import type { ImageMetadata } from "./sharks";
-
 /* Graph types */
 
 /* ---- Filters ---- */
@@ -187,39 +184,3 @@ export type SelectedSharkMatch = BaseSelectedMatch & {
     isMutual: boolean;
 };
 
-/* ---- Panel props ---- */
-
-type BaseNodePanelProps<M> = {
-    match: M | null;
-    showContradictionPath: boolean;
-    onToggleContradictionPath: () => void;
-};
-
-export type GraphNodePanelProps = BaseNodePanelProps<SelectedMatch> & {
-    onSelectImage: (imageId: number) => void;
-};
-export type SharkRankingNodePanelProps = BaseNodePanelProps<SelectedSharkMatch>;
-
-/* ---- Match image lightbox (query vs. match, side by side) ---- */
-
-export type LightboxPanelData = {
-    sharkId: string;
-    label: string;
-    countries?: string;
-    oldest?: string;
-    newest?: string;
-    images: ImageMetadata[];
-    activeIndex: number;
-    onSelectThumbnail: (index: number) => void;
-};
-
-type BaseDetailPanelProps<M> = {
-    match: M | null;
-};
-
-export type GraphImagesPanelProps = BaseDetailPanelProps<SelectedMatch> & {
-    cy: Core | null;
-    onSelectImage: (imageId: number) => void;
-};
-
-export type SharkRankingStatsPanelProps = BaseDetailPanelProps<SelectedSharkMatch>;

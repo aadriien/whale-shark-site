@@ -1,16 +1,19 @@
 import { useEffect } from "react";
 
 import MatchSharkBox from "../../cards/MatchSharkBox";
-import { LightboxPanelData } from "../../../types/graphs";
+import MatchButton from "../../controls/MatchButton";
+import { MatchImageLightboxProps } from "../../../types/panels";
 
-type MatchImageLightboxProps = {
-    isOpen: boolean;
-    onClose: () => void;
-    left: LightboxPanelData | null;
-    right: LightboxPanelData | null;
-};
-
-function MatchImageLightbox({ isOpen, onClose, left, right }: MatchImageLightboxProps) {
+function MatchImageLightbox({
+    isOpen,
+    onClose,
+    left,
+    right,
+    querySharkId,
+    matchSharkId,
+    distanceLabel,
+    distanceValue,
+}: MatchImageLightboxProps) {
     useEffect(() => {
         if (!isOpen) return;
 
@@ -27,9 +30,16 @@ function MatchImageLightbox({ isOpen, onClose, left, right }: MatchImageLightbox
     return (
         <div className="image-overlay" onClick={onClose}>
             <div className="lightbox-match-content" onClick={(e) => e.stopPropagation()}>
-                <button className="close-button" onClick={onClose}>
-                    X
-                </button>
+                <div className="lightbox-match-topbar">
+                    <MatchButton querySharkId={querySharkId} matchedSharkId={matchSharkId} />
+                    <span className="lightbox-match-distance">
+                        {distanceLabel}: {distanceValue.toFixed(4)}
+                    </span>
+                    <button className="close-button" onClick={onClose}>
+                        X
+                    </button>
+                </div>
+
                 <div className="match-container lightbox-match-container">
                     <MatchSharkBox {...left} />
                     {right && <MatchSharkBox {...right} />}
