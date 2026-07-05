@@ -1,13 +1,51 @@
 import { useState } from "react";
 
 import { mediaSharks, parseImageField } from "../../utils/DataUtils";
-import { removeSharkFromGroup, clearAllGroups } from "../../utils/MatchUtils";
+import { removeSharkFromGroup, moveSharkToGroup, clearAllGroups } from "../../utils/MatchUtils";
 import { useMatchedGroups } from "../../hooks/useMatchedGroups";
 import SharkBanner from "../cards/SharkBanner";
 import SharkMediaLightbox from "../cards/SharkMediaLightbox";
 import MatchGroupNotes from "./MatchGroupNotes";
 
 import { WhaleSharkEntryNormalized } from "../../types/sharks";
+import { MatchRemoveButtonProps, MatchMoveSelectProps } from "../../types/logbooks";
+
+function MatchRemoveButton({ sharkId, onRemove }: MatchRemoveButtonProps) {
+    return (
+        <button
+            className="match-remove-btn"
+            onClick={() => onRemove(sharkId)}
+            aria-label={`Remove ${sharkId} from this matched group`}
+        >
+            ✕
+        </button>
+    );
+}
+
+// Lets user pick a different (existing) group to move this shark into.
+// Button is disabled when there's nowhere else to move it
+function MatchMoveSelect({ sharkId, otherGroups, onMove }: MatchMoveSelectProps) {
+    return (
+        <select
+            className="match-move-select"
+            defaultValue=""
+            disabled={otherGroups.length === 0}
+            onChange={(e) => {
+                if (e.target.value) onMove(sharkId, e.target.value);
+            }}
+            aria-label={`Move ${sharkId} to a different matched group`}
+        >
+            <option value="" disabled hidden>
+                →
+            </option>
+            {otherGroups.map((group) => (
+                <option key={group.id} value={group.id}>
+                    {group.name ?? group.sharkIds.join(", ")}
+                </option>
+            ))}
+        </select>
+    );
+}
 
 function MatchedSharks() {
     // Subscribes to matched-group changes so this re-renders when they occur
@@ -54,6 +92,8 @@ function MatchedSharks() {
             <div className="matched-groups">
                 {groups.length > 0 ? (
                     groups.map((group) => {
+                        const otherGroups = groups.filter((g) => g.id !== group.id);
+
                         return (
                             <div key={group.id} className="matched-group-box">
                                 <div className="matched-group-layout">
@@ -66,15 +106,17 @@ function MatchedSharks() {
                                                     key={sharkId}
                                                     className="matched-banner-wrapper"
                                                 >
-                                                    <button
-                                                        className="match-remove-btn"
-                                                        onClick={() =>
-                                                            removeSharkFromGroup(sharkId)
-                                                        }
-                                                        aria-label={`Remove ${sharkId} from this matched group`}
-                                                    >
-                                                        ✕
-                                                    </button>
+                                                    <div className="matched-banner-controls">
+                                                        <MatchRemoveButton
+                                                            sharkId={sharkId}
+                                                            onRemove={removeSharkFromGroup}
+                                                        />
+                                                        <MatchMoveSelect
+                                                            sharkId={sharkId}
+                                                            otherGroups={otherGroups}
+                                                            onMove={moveSharkToGroup}
+                                                        />
+                                                    </div>
                                                     {shark ? (
                                                         <SharkBanner
                                                             shark={shark}

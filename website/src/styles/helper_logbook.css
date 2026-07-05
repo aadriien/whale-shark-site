@@ -671,7 +671,7 @@
     background-color: var(--primary-green);
     border: 1px solid var(--border-tertiary);
     border-radius: 8px;
-    padding: 8px;
+    padding: 6px;
 }
 
 .matched-group-layout {
@@ -689,13 +689,20 @@
 
 .match-notes-header {
     margin-bottom: 4px;
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-on-primary-accent);
 }
 
 .match-group-name-input {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     border: none;
     border-bottom: 1px solid transparent;
     background: transparent;
@@ -704,6 +711,12 @@
     font-weight: 600;
     color: var(--text-on-primary-accent);
     padding: 0 0 2px;
+}
+
+.match-group-name-count {
+    flex-shrink: 0;
+    font-weight: 400;
+    opacity: 0.7;
 }
 
 .match-group-name-input::placeholder {
@@ -744,13 +757,16 @@
     gap: 8px;
     height: 150px; /* roughly 2 shark banners tall */
     overflow-y: auto;
-    padding-top: 4px;
+    padding-top: 2px;
     padding-right: 2px;
 }
 
 .matched-banner-wrapper {
     position: relative;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .matched-banner-wrapper .shark-banner {
@@ -778,10 +794,15 @@
     }
 }
 
-.match-remove-btn {
-    position: absolute;
-    top: -2px;
-    right: -2px;
+.matched-banner-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.match-remove-btn,
+.match-move-select {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-tertiary);
     border-radius: 50%;
@@ -797,13 +818,39 @@
     color: var(--logbook-close-button-text);
     cursor: pointer;
     box-shadow: 0 1px 4px var(--condensed-card-shadow);
-    z-index: 1;
+}
+
+/* A native <select> can't lay out its own value via flex, so it's
+   center-aligned by text rules instead, with native chrome stripped */
+.match-move-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-align: center;
+    text-align-last: center;
 }
 
 .match-remove-btn:hover {
     background-color: var(--error) !important;
     border-color: var(--error);
     color: #ffffff;
+}
+
+.match-move-select:hover {
+    background-color: var(--primary-blue) !important;
+    border-color: var(--primary-blue);
+    color: #ffffff;
+}
+
+.match-move-select:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.match-move-select:disabled:hover {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-tertiary);
+    color: var(--logbook-close-button-text);
 }
 
 

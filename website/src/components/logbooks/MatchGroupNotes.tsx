@@ -31,9 +31,10 @@ function MatchGroupNotes({ group }: MatchGroupNotesProps) {
                     value={name}
                     onChange={handleNameChange}
                     maxLength={MAX_NAME_LENGTH}
-                    placeholder={`Group of ${group.sharkIds.length} sharks`}
+                    placeholder="Your group name..."
                     aria-label="Group name"
                 />
+                <span className="match-group-name-count">({group.sharkIds.length})</span>
             </div>
 
             <textarea

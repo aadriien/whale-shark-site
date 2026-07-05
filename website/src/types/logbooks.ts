@@ -49,6 +49,17 @@ export type MatchGroupNotesProps = {
     group: MatchGroup;
 };
 
+export type MatchRemoveButtonProps = {
+    sharkId: string;
+    onRemove: (sharkId: string) => void;
+};
+
+export type MatchMoveSelectProps = {
+    sharkId: string;
+    otherGroups: MatchGroup[];
+    onMove: (sharkId: string, targetGroupId: string) => void;
+};
+
 export type LogbookProps = {
     setIsLogbookOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
