@@ -1,7 +1,7 @@
 import React from "react";
 import type { Core } from "cytoscape";
 
-import { WhaleSharkDatasetNormalized, ImageMetadata } from "./sharks";
+import { WhaleSharkDatasetNormalized } from "./sharks";
 import { SharkClickProps } from "./globes";
 import { SelectedMatch, SelectedSharkMatch } from "./graphs";
 
@@ -69,27 +69,3 @@ export type GraphImagesPanelProps = BaseDetailPanelProps<SelectedMatch> & {
 };
 
 export type SharkRankingStatsPanelProps = BaseDetailPanelProps<SelectedSharkMatch>;
-
-/* ---- Match image lightbox (query vs. match, side by side) ---- */
-
-export type LightboxPanelData = {
-    sharkId: string;
-    label: string;
-    countries?: string;
-    oldest?: string;
-    newest?: string;
-    images: ImageMetadata[];
-    activeIndex: number;
-    onSelectThumbnail: (index: number) => void;
-};
-
-export type MatchImageLightboxProps = {
-    isOpen: boolean;
-    onClose: () => void;
-    left: LightboxPanelData | null;
-    right: LightboxPanelData | null;
-    querySharkId: string;
-    matchSharkId: string;
-    distanceLabel: string;
-    distanceValue: number;
-};

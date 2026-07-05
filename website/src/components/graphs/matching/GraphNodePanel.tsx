@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import CondensedSharkCard from "../../cards/CondensedSharkCard";
 import MatchButton from "../../controls/MatchButton";
-import MatchImageLightbox from "../shared/MatchImageLightbox";
+import MatchedSharkPairLightbox from "../../cards/MatchedSharkPairLightbox";
 import { mediaSharks, visionOccurrences } from "../../../utils/DataUtils";
 import {
     getSharkOccurrenceImages,
@@ -145,7 +145,7 @@ function GraphNodePanel({
                 )}
 
             {match && (
-                <MatchImageLightbox
+                <MatchedSharkPairLightbox
                     isOpen={lightboxOpen}
                     onClose={() => setLightboxOpen(false)}
                     querySharkId={match.clickedSharkId}

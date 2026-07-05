@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import CondensedSharkCard from "../../cards/CondensedSharkCard";
 import MatchButton from "../../controls/MatchButton";
-import MatchImageLightbox from "../shared/MatchImageLightbox";
+import MatchedSharkPairLightbox from "../../cards/MatchedSharkPairLightbox";
 import { mediaSharks, parseImageField } from "../../../utils/DataUtils";
 import GraphPanelShell from "../../panels/GraphPanelShell";
 
@@ -109,7 +109,7 @@ function SharkRankingNodePanel({
                 )}
 
             {match && (
-                <MatchImageLightbox
+                <MatchedSharkPairLightbox
                     isOpen={lightboxOpen}
                     onClose={() => setLightboxOpen(false)}
                     querySharkId={match.clickedSharkId}

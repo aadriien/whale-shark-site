@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 
-import MatchSharkBox from "../../cards/MatchSharkBox";
-import MatchButton from "../../controls/MatchButton";
-import { MatchImageLightboxProps } from "../../../types/panels";
+import MatchSharkBox from "./MatchSharkBox";
+import MatchButton from "../controls/MatchButton";
+import { MatchedPairLightboxProps } from "../../types/cards";
 
-function MatchImageLightbox({
+function MatchedSharkPairLightbox({
     isOpen,
     onClose,
     left,
@@ -13,7 +13,7 @@ function MatchImageLightbox({
     matchSharkId,
     distanceLabel,
     distanceValue,
-}: MatchImageLightboxProps) {
+}: MatchedPairLightboxProps) {
     useEffect(() => {
         if (!isOpen) return;
 
@@ -49,4 +49,4 @@ function MatchImageLightbox({
     );
 }
 
-export default MatchImageLightbox;
+export default MatchedSharkPairLightbox;
