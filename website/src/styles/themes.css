@@ -13,7 +13,8 @@
     --primary-purple: #7e58f0;
     --primary-teal: #a8e8ea;
     --primary-green: #ccece5;
-    
+    --text-on-primary-accent: #1a1a1a;
+
     /* Background Colors */
     --bg-all-pages: rgba(212, 243, 252, 0.4);
     --bg-primary: #ffffff;
@@ -262,7 +263,8 @@
     --primary-purple: #9370f2;
     --primary-teal: #7dd3d6;
     --primary-green: #a8d4c8;
-    
+    --text-on-primary-accent: #1a1a1a;
+
     /* Background Colors */
     --bg-all-pages: rgba(22, 41, 45, 0.4);
     --bg-primary: #1a1a1a;

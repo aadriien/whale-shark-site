@@ -664,6 +664,7 @@
 .matched-group-box {
     container-type: inline-size;
     container-name: matched-group;
+    background-color: var(--primary-green);
     border: 1px solid var(--border-tertiary);
     border-radius: 8px;
     padding: 8px;
@@ -686,7 +687,7 @@
     margin-bottom: 4px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: var(--text-on-primary-accent);
 }
 
 .match-notes-textarea {
