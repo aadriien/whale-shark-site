@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { Camera } from "lucide-react";
 
-import { SharkImagesLightboxProps } from "../../types/cards";
+import { SharkMediaLightboxProps } from "../../types/cards";
 
-const SharkImagesLightbox = ({
+const SharkMediaLightbox = ({
     images,
     activeIndex,
     onNavigate,
     onClose,
-}: SharkImagesLightboxProps) => {
+}: SharkMediaLightboxProps) => {
     // Keyboard navigation for image carousel
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -63,4 +63,4 @@ const SharkImagesLightbox = ({
     );
 };
 
-export default SharkImagesLightbox;
+export default SharkMediaLightbox;

@@ -587,6 +587,10 @@
     object-fit: cover;
 }
 
+.tiny-banner-media--clickable {
+    cursor: pointer;
+}
+
 .tiny-id-row {
     display: flex;
     justify-content: space-between;
@@ -777,6 +781,7 @@
     border-color: var(--error);
     color: #ffffff;
 }
+
 
 
 

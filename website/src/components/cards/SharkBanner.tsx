@@ -3,13 +3,16 @@ import FavoriteButton from "../controls/FavoriteButton";
 
 import { IndividualSharkProps } from "../../types/sharks";
 
-const SharkBanner = ({ shark }: IndividualSharkProps) => {
+const SharkBanner = ({ shark, onImageClick }: IndividualSharkProps) => {
     const images = shark.image !== "Unknown" ? parseImageField(shark.image) : [];
 
     return (
         <div className="shark-banner">
             {/* Any media */}
-            <div className="tiny-banner-media">
+            <div
+                className={`tiny-banner-media${onImageClick ? " tiny-banner-media--clickable" : ""}`}
+                onClick={images.length > 0 ? onImageClick : undefined}
+            >
                 {images.length > 0 ? (
                     <img src={images[0].url} alt={`Image of shark ${shark.id}`} />
                 ) : (

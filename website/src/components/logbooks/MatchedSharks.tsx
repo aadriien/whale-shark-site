@@ -1,14 +1,31 @@
-import { mediaSharks } from "../../utils/DataUtils";
+import { useState } from "react";
+
+import { mediaSharks, parseImageField } from "../../utils/DataUtils";
 import { getMatchGroups, removeSharkFromMatches, clearMatchedPairs } from "../../utils/MatchUtils";
 import { useMatchedPairs } from "../../hooks/useMatchedPairs";
 import SharkBanner from "../cards/SharkBanner";
+import SharkMediaLightbox from "../cards/SharkMediaLightbox";
 import MatchGroupNotes from "./MatchGroupNotes";
+
+import { WhaleSharkEntryNormalized } from "../../types/sharks";
 
 function MatchedSharks() {
     // Subscribes to matched-pair changes so this re-renders when they occur
     useMatchedPairs();
 
     const groups = getMatchGroups();
+
+    // Shark whose media lightbox is currently open, if any (+ which image is active)
+    const [galleryShark, setGalleryShark] = useState<WhaleSharkEntryNormalized | null>(null);
+    const [galleryIndex, setGalleryIndex] = useState(0);
+
+    const openGallery = (shark: WhaleSharkEntryNormalized) => {
+        setGalleryShark(shark);
+        setGalleryIndex(0);
+    };
+
+    const galleryImages =
+        galleryShark && galleryShark.image !== "Unknown" ? parseImageField(galleryShark.image) : [];
 
     // Allow user to reset saved match pairs
     const clearMatches = () => {
@@ -49,18 +66,28 @@ function MatchedSharks() {
                                             const shark = mediaSharks.find((s) => s.id === sharkId);
 
                                             return (
-                                                <div key={sharkId} className="matched-banner-wrapper">
+                                                <div
+                                                    key={sharkId}
+                                                    className="matched-banner-wrapper"
+                                                >
                                                     <button
                                                         className="match-remove-btn"
-                                                        onClick={() => removeSharkFromMatches(sharkId)}
+                                                        onClick={() =>
+                                                            removeSharkFromMatches(sharkId)
+                                                        }
                                                         aria-label={`Remove ${sharkId} from this matched group`}
                                                     >
                                                         ✕
                                                     </button>
                                                     {shark ? (
-                                                        <SharkBanner shark={shark} />
+                                                        <SharkBanner
+                                                            shark={shark}
+                                                            onImageClick={() => openGallery(shark)}
+                                                        />
                                                     ) : (
-                                                        <p className="graph-panel-missing">No data for ID {sharkId}</p>
+                                                        <p className="graph-panel-missing">
+                                                            No data for ID {sharkId}
+                                                        </p>
                                                     )}
                                                 </div>
                                             );
@@ -76,6 +103,16 @@ function MatchedSharks() {
                     <p>No matched shark pairs saved</p>
                 )}
             </div>
+
+            {/* Lightbox popup to cycle through a clicked shark's images */}
+            {galleryShark && (
+                <SharkMediaLightbox
+                    images={galleryImages}
+                    activeIndex={galleryIndex}
+                    onNavigate={setGalleryIndex}
+                    onClose={() => setGalleryShark(null)}
+                />
+            )}
         </div>
     );
 }
