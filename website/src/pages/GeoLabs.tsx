@@ -43,6 +43,10 @@ function GeoLabs() {
     const selectedSharksForLabRef = useRef(selectedSharksForLab);
     selectedSharksForLabRef.current = selectedSharksForLab;
 
+    // IDs to show highlighted in SharkSelector list, as if auto-clicked,
+    // because they share a match group with the current selection(s)
+    const highlightedIdsRef = useRef<Set<string>>(new Set());
+
     // Step-through story functionality
     const [isStepMode, setIsStepMode] = useState<boolean>(false);
     const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
@@ -119,6 +123,19 @@ function GeoLabs() {
         });
         return expanded;
     }, [combineMatches, selectedSharksForLab, groups]);
+
+    // Sharks to highlight in the selector list (as if auto-clicked): 
+    // Individual mode == selected shark's whole match group
+    // Multi mode == everything effectiveLabSharkIds already expanded to
+    const highlightedIds = useMemo(() => {
+        if (!combineMatches) return new Set<string>();
+        if (viewMode === "individual") {
+            if (!selectedShark) return new Set<string>();
+            return new Set(currentGroup ? currentGroup.sharkIds : [selectedShark.id]);
+        }
+        return effectiveLabSharkIds;
+    }, [combineMatches, viewMode, selectedShark, currentGroup, effectiveLabSharkIds]);
+    highlightedIdsRef.current = highlightedIds;
 
     // Get coordinates for selected lab sharks (multi-select mode)
     // Timeline filtering is handled in TimelineControls, not through this memo
@@ -240,6 +257,7 @@ function GeoLabs() {
                 viewMode={viewMode}
                 selectedSharksForLab={selectedSharksForLabRef.current}
                 onLabSelectionChange={setSelectedSharksForLab}
+                highlightedIds={highlightedIdsRef.current}
                 // Disable onSelect in multiple mode
                 onSelect={viewMode === "multiple" ? undefined : props.onSelect}
             />

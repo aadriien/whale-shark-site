@@ -13,6 +13,7 @@ function SavedSharksDisplay({
     viewMode,
     selectedSharksForLab,
     onLabSelectionChange,
+    highlightedIds,
 }: SavedSharksDisplayProps) {
     const savedIds = useSavedSharkIds();
 
@@ -68,15 +69,18 @@ function SavedSharksDisplay({
                         {savedSharks.map((shark) => {
                             const isSelectedForLab =
                                 selectedSharksForLab && selectedSharksForLab.has(shark.id);
+                            const isHighlighted = highlightedIds?.has(shark.id) ?? false;
                             return (
                                 <div
                                     key={shark.id}
                                     className={`saved-shark-card-wrapper ${
-                                        viewMode === "individual" && shark.id === selectedSharkId
+                                        viewMode === "individual" &&
+                                        (shark.id === selectedSharkId || isHighlighted)
                                             ? "selected"
                                             : ""
                                     } ${
-                                        viewMode === "multiple" && isSelectedForLab
+                                        viewMode === "multiple" &&
+                                        (isSelectedForLab || isHighlighted)
                                             ? "selected-for-lab"
                                             : ""
                                     }`}

@@ -27,6 +27,9 @@ export type SavedSharksDisplayProps = {
     viewMode: string;
     selectedSharksForLab: Set<string>;
     onLabSelectionChange: (value: Set<string>) => void;
+    // IDs to also show as "selected" (combine-matched-sharks toggle
+    // in GeoLabs) even though they weren't literally clicked
+    highlightedIds?: Set<string>;
 };
 
 export type SharkSelectorProps = {
