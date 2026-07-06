@@ -13,9 +13,11 @@ import LabSelectionPanel from "../components/panels/LabSelectionPanel";
 import { addPointsData, clearAllData } from "../utils/GlobeUtils";
 import { useGlobeClick } from "../utils/GlobeClick";
 import { useSavedSharkIds } from "../hooks/useSavedSharkIds";
+import { useMatchedGroups } from "../hooks/useMatchedGroups";
 
 import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils";
 import { mediaSharks } from "../utils/DataUtils";
+import { buildConsolidatedShark } from "../utils/ConsolidatedSharkUtils";
 
 import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "../types/sharks";
 import { SavedSharksDisplayProps } from "../types/panels";
@@ -32,6 +34,11 @@ function GeoLabs() {
     const savedIds = useSavedSharkIds();
     const [viewMode, setViewMode] = useState<ViewMode>("multiple"); // "individual" or "multiple"
 
+    // Combine-matched-sharks toggle: lets the user opt into viewing a
+    // selected shark's confirmed match group as 1 consolidated record
+    const groups = useMatchedGroups();
+    const [combineMatches, setCombineMatches] = useState<boolean>(false);
+
     const [selectedSharksForLab, setSelectedSharksForLab] = useState<Set<string>>(new Set()); // for multi-select mode
     const selectedSharksForLabRef = useRef(selectedSharksForLab);
     selectedSharksForLabRef.current = selectedSharksForLab;
@@ -46,6 +53,34 @@ function GeoLabs() {
     const [isTimelineMode, setIsTimelineMode] = useState<boolean>(false);
 
     const sharks = mediaSharks;
+
+    // The selected shark's match group, if any (individual view only)
+    const currentGroup = useMemo(
+        () =>
+            selectedShark ? groups.find((g) => g.sharkIds.includes(selectedShark.id)) : undefined,
+        [selectedShark, groups]
+    );
+
+    // Whether the combine toggle would have any effect for the current selection
+    const hasApplicableGroup = useMemo(() => {
+        if (viewMode === "individual") return Boolean(currentGroup);
+        return Array.from(selectedSharksForLab).some((id) =>
+            groups.some((g) => g.sharkIds.includes(id))
+        );
+    }, [viewMode, currentGroup, selectedSharksForLab, groups]);
+
+    // Shark object actually handed to SharkInfoPanel: the raw selection, or
+    // (when combining) a consolidated pseudo-record built from its match group
+    const panelShark = useMemo(() => {
+        if (!combineMatches || !currentGroup || !selectedShark) return selectedShark;
+
+        const sharkMap = new Map(sharks.map((s) => [s.id, s]));
+        const members = currentGroup.sharkIds
+            .map((id) => sharkMap.get(id))
+            .filter((s): s is WhaleSharkEntryNormalized => Boolean(s));
+
+        return members.length > 1 ? buildConsolidatedShark(currentGroup, members) : selectedShark;
+    }, [combineMatches, currentGroup, selectedShark, sharks]);
 
     // Get coordinates for saved sharks only (with any filters in place)
     const pointsData = useMemo(() => {
@@ -132,6 +167,7 @@ function GeoLabs() {
     const handleReset = () => {
         setSelectedShark(null);
         setAllSharksVisible(true);
+        setCombineMatches(false);
     };
 
     const handleToggleStepMode = () => {
@@ -212,6 +248,7 @@ function GeoLabs() {
         setSelectedShark(null);
         setSelectedSharksForLab(new Set());
         setAllSharksVisible(true);
+        setCombineMatches(false);
 
         // Exit step mode if active
         if (isStepMode) {
@@ -267,6 +304,15 @@ function GeoLabs() {
                             : "Switch to Single Shark View"}
                     </button>
 
+                    {/* Combine Matched Sharks Toggle */}
+                    <button
+                        className={`match-consolidate-toggle ${combineMatches ? "active" : ""}`}
+                        onClick={() => setCombineMatches((prev) => !prev)}
+                        disabled={!hasApplicableGroup}
+                    >
+                        {combineMatches ? "Ignore Shark Match Groups" : "Combine Matched Sharks"}
+                    </button>
+
                     {/* Step Through Story Controls */}
                     {selectedShark && (
                         <div className="story-controls-container">
@@ -308,7 +354,7 @@ function GeoLabs() {
                             />
                         </div>
                     ) : (
-                        <SharkInfoPanel shark={selectedShark} />
+                        <SharkInfoPanel shark={panelShark} />
                     )}
                 </div>
 

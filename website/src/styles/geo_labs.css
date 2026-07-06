@@ -19,6 +19,38 @@
 }
 
 
+/* Combine-matched-sharks toggle button */
+.match-consolidate-toggle {
+    background-color: var(--surface-secondary);
+    border: 2px solid var(--border-tertiary);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    text-align: center;
+}
+
+.match-consolidate-toggle:hover:not(:disabled) {
+    background-color: var(--active-bg);
+}
+
+.match-consolidate-toggle.active {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+    color: var(--surface-primary);
+}
+
+.match-consolidate-toggle:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
 .saved-sharks-display {
     display: flex;
     flex-direction: column;

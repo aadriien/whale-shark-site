@@ -298,6 +298,22 @@
     margin: 0.5rem;
 }
 
+.match-group-header-label {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.timeline-source-header,
+.media-source-header {
+    font-weight: bold;
+    color: var(--accent-dark-blue);
+    border-bottom: 1px solid var(--border-tertiary);
+    margin-top: 0.6rem;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.2rem;
+}
+
 .shark-panel-details {
     display: flex;
     flex-direction: column;
