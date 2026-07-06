@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { mediaSharks, parseImageField } from "../../utils/DataUtils";
-import { clearAllGroups } from "../../utils/MatchUtils";
+import { clearAllGroups, groupDisplayLabel } from "../../utils/MatchUtils";
 import { buildRemoveConfirm, buildMoveConfirm } from "../../utils/MatchConfirmUtils";
 import { useMatchedGroups } from "../../hooks/useMatchedGroups";
 import { useConfirmModal } from "../../hooks/useConfirmModal";
@@ -42,7 +42,7 @@ function MatchMoveSelect({ sharkId, otherGroups, onMove }: MatchMoveSelectProps)
             </option>
             {otherGroups.map((group) => (
                 <option key={group.id} value={group.id}>
-                    {group.name ?? group.sharkIds.join(", ")}
+                    {groupDisplayLabel(group)}
                 </option>
             ))}
         </select>

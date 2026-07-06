@@ -207,10 +207,6 @@ export type IndividualSharkProps = {
     onImageClick?: () => void;
 };
 
-export type IndividualSharkOrNullProps = {
-    shark: WhaleSharkEntryNormalized | null;
-};
-
 export type ImageMetadata = {
     url: string;
     license?: string;
@@ -226,4 +222,27 @@ export type SharkTimelineEntry = {
     region: string;
     publishing: string;
     remarks: string;
+};
+
+// Consolidated shark records: assembled at runtime from a match group's
+// member sharks (see ConsolidatedSharkUtils), not read directly from data file
+export type SharkTimelineSourceGroup = {
+    sharkId: string;
+    entries: SharkTimelineEntry[];
+};
+
+export type SharkMediaSourceGroup = {
+    sharkId: string;
+    images: ImagesWithMetadata;
+};
+
+export type ConsolidatedShark = WhaleSharkEntryNormalized & {
+    groupName?: string;
+    memberIds: string[];
+    timelineBySource: SharkTimelineSourceGroup[];
+    mediaBySource: SharkMediaSourceGroup[];
+};
+
+export type IndividualSharkOrNullProps = {
+    shark: WhaleSharkEntryNormalized | ConsolidatedShark | null;
 };
