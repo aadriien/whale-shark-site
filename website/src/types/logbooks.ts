@@ -39,6 +39,13 @@ export type MatchGroup = {
     name?: string;
 };
 
+// What groupDisplayLabel needs to build a label. Satisfied by a real
+// MatchGroup, or by a consolidated shark's { groupName, memberIds }
+export type NamedSharkGroup = {
+    name?: string;
+    sharkIds: string[];
+};
+
 export type MatchButtonProps = {
     querySharkId: string;
     matchedSharkId: string;

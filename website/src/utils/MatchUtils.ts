@@ -1,4 +1,4 @@
-import { MatchGroup } from "../types/logbooks";
+import { MatchGroup, NamedSharkGroup } from "../types/logbooks";
 import { clearAllNotes, deleteGroupNote, getGroupNote, setGroupNote, MAX_NOTE_LENGTH } from "./NotesUtils";
 
 const STORAGE_KEY = "matchedSharkGroups";
@@ -23,7 +23,7 @@ export function getGroupForShark(sharkId: string): MatchGroup | undefined {
 }
 
 // Group name if set, otherwise its member IDs, comma-separated
-export function groupDisplayLabel(group: MatchGroup): string {
+export function groupDisplayLabel(group: NamedSharkGroup): string {
     return group.name ?? group.sharkIds.join(", ");
 }
 
