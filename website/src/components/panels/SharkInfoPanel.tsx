@@ -1,8 +1,11 @@
 import { buildTimelineEntries } from "../../utils/DataUtils";
+import { isConsolidatedShark } from "../../utils/ConsolidatedSharkUtils";
+import { groupDisplayLabel } from "../../utils/MatchUtils";
 
 import FavoriteButton from "../controls/FavoriteButton";
 import SharkTimeline from "../cards/SharkTimeline";
 import SharkMediaGallery from "../cards/SharkMediaGallery";
+import GroupedMediaGallery from "../cards/GroupedMediaGallery";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
 
@@ -18,11 +21,21 @@ const SharkInfoPanel = ({ shark }: IndividualSharkOrNullProps) => {
         );
     }
 
+    const consolidated = isConsolidatedShark(shark);
+
     return (
         <div className="shark-info-panel">
             <h2>
-                ID: {shark.id}
-                <FavoriteButton sharkId={shark.id} />
+                {consolidated ? (
+                    <span className="match-group-header-label">
+                        {groupDisplayLabel({ name: shark.groupName, sharkIds: shark.memberIds })}
+                    </span>
+                ) : (
+                    <>
+                        ID: {shark.id}
+                        <FavoriteButton sharkId={shark.id} />
+                    </>
+                )}
             </h2>
 
             <div className="shark-panel-details">
@@ -55,11 +68,25 @@ const SharkInfoPanel = ({ shark }: IndividualSharkOrNullProps) => {
                 <div className="shark-regions">
                     <h3 className="shark-details">Places Visited</h3>
                     <ul className="timeline-list">
-                        <SharkTimeline entries={buildTimelineEntries(shark)} />
+                        {consolidated ? (
+                            shark.timelineBySource.map((block) => (
+                                <SharkTimeline
+                                    key={block.sharkId}
+                                    entries={block.entries}
+                                    sourceLabel={block.sharkId}
+                                />
+                            ))
+                        ) : (
+                            <SharkTimeline entries={buildTimelineEntries(shark)} />
+                        )}
                     </ul>
                 </div>
 
-                <SharkMediaGallery shark={shark} />
+                {consolidated ? (
+                    <GroupedMediaGallery mediaBySource={shark.mediaBySource} />
+                ) : (
+                    <SharkMediaGallery shark={shark} />
+                )}
             </div>
         </div>
     );

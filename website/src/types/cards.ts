@@ -8,6 +8,7 @@ import {
     ImageMetadata,
     ImagesWithMetadata,
     SharkTimelineEntry,
+    SharkMediaSourceGroup,
 } from "./sharks";
 
 export type SharkCardBaseProps = {
@@ -39,6 +40,10 @@ export type SharkTimelineProps = {
 export type SharkImageGridProps = {
     images: ImagesWithMetadata;
     onImageClick: (localIndex: number) => void;
+};
+
+export type GroupedMediaGalleryProps = {
+    mediaBySource: SharkMediaSourceGroup[];
 };
 
 export type MatchSharkBoxProps = {
