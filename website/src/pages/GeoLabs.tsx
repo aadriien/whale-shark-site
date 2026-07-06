@@ -103,15 +103,32 @@ function GeoLabs() {
         return getGroupCoordinates(intersectionSavedFiltered);
     }, [savedIds, filteredSharks]);
 
+    // Lab selection actually used for display / computation: 
+    // Consists of the raw clicked IDs, or (when combining) expanded to 
+    // include each one's match-group siblings too, since they're 
+    // hypothesized to be "the same shark".
+    // Note that the raw selectedSharksForLab state itself stays untouched 
+    // so click-toggling in SavedSharksDisplay keeps working normally
+    const effectiveLabSharkIds = useMemo(() => {
+        if (!combineMatches) return selectedSharksForLab;
+
+        const expanded = new Set<string>();
+        selectedSharksForLab.forEach((id) => {
+            const group = groups.find((g) => g.sharkIds.includes(id));
+            (group ? group.sharkIds : [id]).forEach((sid) => expanded.add(sid));
+        });
+        return expanded;
+    }, [combineMatches, selectedSharksForLab, groups]);
+
     // Get coordinates for selected lab sharks (multi-select mode)
     // Timeline filtering is handled in TimelineControls, not through this memo
     const selectedLabPointsData = useMemo(() => {
-        if (selectedSharksForLab.size === 0) return [];
-        const labSharkIds = Array.from(selectedSharksForLab);
+        if (effectiveLabSharkIds.size === 0) return [];
+        const labSharkIds = Array.from(effectiveLabSharkIds);
 
         console.log("Plotting selected lab sharks on globe:", labSharkIds);
         return getGroupCoordinates(labSharkIds);
-    }, [selectedSharksForLab]);
+    }, [effectiveLabSharkIds]);
 
     useEffect(() => {
         if (!globeHandleRef.current) return;
@@ -338,7 +355,7 @@ function GeoLabs() {
                     {viewMode === "multiple" && (
                         <TimelineControls
                             globeRef={globeHandleRef}
-                            selectedSharksForLab={selectedSharksForLab}
+                            selectedSharksForLab={effectiveLabSharkIds}
                             savedSharkIds={savedIds}
                             onToggleTimelineMode={handleToggleTimelineMode}
                             isTimelineMode={isTimelineMode}
@@ -348,7 +365,7 @@ function GeoLabs() {
                     {viewMode === "multiple" ? (
                         <div className="shark-info-panel">
                             <LabSelectionPanel
-                                selectedSharksForLab={selectedSharksForLab}
+                                selectedSharksForLab={effectiveLabSharkIds}
                                 savedIds={savedIds}
                                 sharks={sharks}
                                 onSelectAllToggle={handleSelectAllToggle}
