@@ -4,8 +4,16 @@ import { MatchGroup } from "../types/logbooks";
 import {
     WhaleSharkEntryNormalized,
     WhaleSharkDatasetNormalized,
+    SharkTimelineEntry,
     ConsolidatedShark,
 } from "../types/sharks";
+
+// Each shark's own entries are already most-recent-first (source data order).
+// This finds that most recent date so blocks can be ordered the same way
+function mostRecentEntryDate(entries: SharkTimelineEntry[]): number {
+    const dates = entries.map((e) => new Date(e.date).getTime()).filter((t) => !isNaN(t));
+    return dates.length > 0 ? Math.max(...dates) : -Infinity;
+}
 
 function mergeUniqueField(members: WhaleSharkDatasetNormalized, field: "sex" | "lifeStage"): string {
     const values = members
@@ -43,6 +51,12 @@ export function buildConsolidatedShark(
 ): ConsolidatedShark {
     const first = members[0];
 
+    // Both sections share 1 member order (most-recent-first), so each
+    // source's block lands in the same position in both
+    const orderedMembers = [...members].sort(
+        (a, b) => mostRecentEntryDate(buildTimelineEntries(b)) - mostRecentEntryDate(buildTimelineEntries(a))
+    );
+
     return {
         ...first,
         groupName: group.name,
@@ -54,11 +68,11 @@ export function buildConsolidatedShark(
         newest: earliestOrLatest(members, "newest"),
         sex: mergeUniqueField(members, "sex"),
         lifeStage: mergeUniqueField(members, "lifeStage"),
-        timelineBySource: members.map((m) => ({
+        timelineBySource: orderedMembers.map((m) => ({
             sharkId: m.id,
             entries: buildTimelineEntries(m),
         })),
-        mediaBySource: members.map((m) => ({
+        mediaBySource: orderedMembers.map((m) => ({
             sharkId: m.id,
             images: m.image && m.image !== "Unknown" ? parseImageField(m.image) : [],
         })),
