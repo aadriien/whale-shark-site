@@ -218,3 +218,12 @@ export type ImageMetadata = {
 };
 
 export type ImagesWithMetadata = ImageMetadata[];
+
+// A single parsed "Places Visited" timeline row for 1 shark record
+export type SharkTimelineEntry = {
+    header: string;
+    date: string;
+    region: string;
+    publishing: string;
+    remarks: string;
+};

@@ -2,7 +2,13 @@
 
 import type { ReactNode } from "react";
 
-import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized, ImageMetadata } from "./sharks";
+import {
+    WhaleSharkEntryNormalized,
+    WhaleSharkDatasetNormalized,
+    ImageMetadata,
+    ImagesWithMetadata,
+    SharkTimelineEntry,
+} from "./sharks";
 
 export type SharkCardBaseProps = {
     onPlayStory: (id: string) => void;
@@ -23,6 +29,16 @@ export type SharkMediaLightboxProps = {
     activeIndex: number;
     onNavigate: (index: number) => void;
     onClose: () => void;
+};
+
+export type SharkTimelineProps = {
+    entries: SharkTimelineEntry[];
+    sourceLabel?: string;
+};
+
+export type SharkImageGridProps = {
+    images: ImagesWithMetadata;
+    onImageClick: (localIndex: number) => void;
 };
 
 export type MatchSharkBoxProps = {

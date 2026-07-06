@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Camera } from "lucide-react";
 
 import { parseImageField } from "../../utils/DataUtils";
+import SharkImageGrid from "./SharkImageGrid";
 import SharkMediaLightbox from "./SharkMediaLightbox";
 
 import { IndividualSharkProps } from "../../types/sharks";
@@ -19,26 +19,7 @@ const SharkMediaGallery = ({ shark }: IndividualSharkProps) => {
         <>
             <div className="shark-images-container">
                 <h3>Media Gallery</h3>
-                {images.length > 0 ? (
-                    images.map((img, idx) => (
-                        <div key={idx} className="shark-image-card">
-                            <img
-                                src={img.url}
-                                alt={`Shark image ${idx}`}
-                                onClick={() => openImage(idx)}
-                                style={{ cursor: "pointer" }}
-                            />
-                            <p className="shark-image-meta">
-                                <small>
-                                    <Camera className="credit-icon" /> Creator: {img.creator} |{" "}
-                                    {img.license}
-                                </small>
-                            </p>
-                        </div>
-                    ))
-                ) : (
-                    <p>No media available.</p>
-                )}
+                <SharkImageGrid images={images} onImageClick={openImage} />
             </div>
 
             {/* Lightbox Overlay */}

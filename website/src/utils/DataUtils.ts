@@ -20,6 +20,7 @@ import {
     WhaleSharkEntryNormalized,
     WhaleSharkDatasetNormalized,
     ImagesWithMetadata,
+    SharkTimelineEntry,
 } from "../types/sharks";
 import { WhaleSharkCoordinates } from "../types/coordinates";
 
@@ -221,6 +222,35 @@ export function parseImageField(imageField: string = "") {
             creator: creatorMatch ? creatorMatch[1].trim() : "Unknown",
         };
     }) as ImagesWithMetadata;
+}
+
+// Builds the "Places Visited" timeline rows for 1 shark record, pairing up
+// its comma-separated countries / regions / publishing entries by index
+export function buildTimelineEntries(shark: WhaleSharkEntryNormalized): SharkTimelineEntry[] {
+    const countries = (shark.countries ?? "").split(",").map((s) => s.trim());
+    const regions = shark.regions ? shark.regions.split(",").map((s) => s.trim()) : [];
+    const publishing = shark.publishing ? shark.publishing.split(",").map((s) => s.trim()) : [];
+
+    // Don't split remarks by comma, i.e. show full remarks for all locations
+    const fullRemarks = shark.remarks || "";
+
+    return countries.map((country, index) => {
+        const regionEntry = regions[index] || "Unknown";
+        const publishingEntry = publishing[index] || "Unspecified";
+        const remarksEntry = fullRemarks || "None";
+
+        const regionDate = getDate(regionEntry);
+        const fallbackDate = getDate(country);
+        const displayDate = regionDate !== "Unknown" ? regionDate : fallbackDate;
+
+        return {
+            header: parseSpecificRegion(country),
+            date: displayDate,
+            region: regionEntry !== "Unknown" ? parseSpecificRegion(regionEntry) : "Unspecified",
+            publishing: publishingEntry !== "Unknown" ? publishingEntry : "Unspecified",
+            remarks: remarksEntry !== "Unknown" ? parseRemarks(remarksEntry) : "None",
+        };
+    });
 }
 
 function extractMonthsToYears(obj: WhaleSharkEntryNormalized): Record<string, number[]> {

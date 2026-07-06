@@ -1,6 +1,7 @@
-import { getDate, parseSpecificRegion, parseRemarks } from "../../utils/DataUtils";
+import { buildTimelineEntries } from "../../utils/DataUtils";
 
 import FavoriteButton from "../controls/FavoriteButton";
+import SharkTimeline from "../cards/SharkTimeline";
 import SharkMediaGallery from "../cards/SharkMediaGallery";
 
 import ChartPlaceholder from "../charts/ChartPlaceholder";
@@ -16,13 +17,6 @@ const SharkInfoPanel = ({ shark }: IndividualSharkOrNullProps) => {
             </div>
         );
     }
-
-    const countries = (shark.countries ?? "").split(",").map((s) => s.trim());
-    const regions = shark.regions ? shark.regions.split(",").map((s) => s.trim()) : [];
-    const publishing = shark.publishing ? shark.publishing.split(",").map((s) => s.trim()) : [];
-
-    // Don't split remarks by comma (show full remarks for all locations)
-    const fullRemarks = shark.remarks || "";
 
     return (
         <div className="shark-info-panel">
@@ -61,50 +55,7 @@ const SharkInfoPanel = ({ shark }: IndividualSharkOrNullProps) => {
                 <div className="shark-regions">
                     <h3 className="shark-details">Places Visited</h3>
                     <ul className="timeline-list">
-                        {countries.map((country, index) => {
-                            const regionEntry = regions[index] || "Unknown";
-                            const publishingEntry = publishing[index] || "Unspecified";
-                            // Show full remarks for all locations (don't split by comma)
-                            const remarksEntry = fullRemarks || "None";
-
-                            const regionDate = getDate(regionEntry);
-                            const fallbackDate = getDate(country);
-                            const displayDate =
-                                regionDate !== "Unknown" ? regionDate : fallbackDate;
-
-                            return (
-                                <li key={index} className="timeline-item">
-                                    <div className="timeline-header">
-                                        <strong>{parseSpecificRegion(country)}</strong>{" "}
-                                        <span className="timeline-date">({displayDate})</span>
-                                    </div>
-                                    <div className="timeline-region">
-                                        <span className="timeline-label">Region:</span>{" "}
-                                        <em>
-                                            {regionEntry !== "Unknown"
-                                                ? parseSpecificRegion(regionEntry)
-                                                : "Unspecified"}
-                                        </em>
-                                    </div>
-                                    <div className="timeline-meta">
-                                        <span className="timeline-label">Published by:</span>{" "}
-                                        <em>
-                                            {publishingEntry !== "Unknown"
-                                                ? publishingEntry
-                                                : "Unspecified"}
-                                        </em>
-                                    </div>
-                                    <div className="timeline-remarks">
-                                        <span className="timeline-label">Sighting remarks:</span>{" "}
-                                        <em>
-                                            {remarksEntry !== "Unknown"
-                                                ? parseRemarks(remarksEntry)
-                                                : "None"}
-                                        </em>
-                                    </div>
-                                </li>
-                            );
-                        })}
+                        <SharkTimeline entries={buildTimelineEntries(shark)} />
                     </ul>
                 </div>
 
