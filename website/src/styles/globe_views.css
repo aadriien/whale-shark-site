@@ -16,7 +16,9 @@
 
 .info-sidebar,
 .shark-selector {
-    flex: 0 0 17rem; 
+    flex: 0 0 18rem;
+    /* stop nowrap descendants from growing this past its 18rem basis */
+    min-width: 0;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -300,6 +302,8 @@
 
 .match-group-header-label {
     display: block;
+    /* let flex item shrink so overflow-x can scroll instead of push out */
+    min-width: 0;
     overflow-x: auto;
     white-space: nowrap;
 }

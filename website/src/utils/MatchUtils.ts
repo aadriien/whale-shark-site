@@ -24,7 +24,7 @@ export function getGroupForShark(sharkId: string): MatchGroup | undefined {
 
 // Group name if set, otherwise its member IDs, comma-separated
 export function groupDisplayLabel(group: NamedSharkGroup): string {
-    return group.name ?? group.sharkIds.join(", ");
+    return group.name?.trim() || group.sharkIds.join(", ");
 }
 
 export function isMatchedPair(querySharkId: string, matchedSharkId: string): boolean {
