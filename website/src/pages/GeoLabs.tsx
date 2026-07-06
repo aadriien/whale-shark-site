@@ -329,6 +329,7 @@ function GeoLabs() {
                                 onStepChange={handleStepChange}
                                 currentStepIndex={currentStepIndex}
                                 isVisible={isStepMode}
+                                sharkIds={combineMatches ? currentGroup?.sharkIds : undefined}
                             />
                         </div>
                     )}

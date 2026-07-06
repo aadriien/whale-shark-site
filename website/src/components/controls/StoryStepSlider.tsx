@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-import { getSharkCoordinates } from "../../utils/CoordinateUtils";
+import { getSharkStoryCoordinates } from "../../utils/CoordinateUtils";
 
 import { PlottedCoordinatePoint } from "../../types/coordinates";
 import { StoryStepSliderProps } from "../../types/controls";
@@ -11,12 +11,14 @@ const StoryStepSlider = ({
     onStepChange,
     currentStepIndex,
     isVisible,
+    sharkIds,
 }: StoryStepSliderProps) => {
     const [storyData, setStoryData] = useState<PlottedCoordinatePoint[]>([]);
 
     useEffect(() => {
         if (shark) {
-            const coordinates = getSharkCoordinates(shark.id);
+            const ids = sharkIds && sharkIds.length > 0 ? sharkIds : [shark.id];
+            const coordinates = getSharkStoryCoordinates(ids);
             setStoryData(coordinates);
 
             // Handle single data point case immediately when data loads
@@ -24,7 +26,7 @@ const StoryStepSlider = ({
                 onStepChange(0, coordinates[0]);
             }
         }
-    }, [shark, isVisible, onStepChange]);
+    }, [shark, sharkIds, isVisible, onStepChange]);
 
     if (!isVisible || !shark || storyData.length === 0) return null;
 

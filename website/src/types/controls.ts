@@ -43,6 +43,9 @@ export type StoryStepSliderProps = {
     onStepChange: (stepIndex: number, point: PlottedCoordinatePoint) => void;
     currentStepIndex: number;
     isVisible: boolean;
+    // When set (combining a match group), the story steps across every
+    // listed shark's coordinates instead of just those from single shark
+    sharkIds?: string[];
 };
 
 export type OceanViewerTimelineProps = {
