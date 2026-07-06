@@ -89,6 +89,22 @@ export function getSharkCoordinates(sharkID: string) {
     return getCoordinates(sharkDict);
 }
 
+// Coordinate feed for story-stepping: 1 real shark's own track (unchanged
+// timing order), or, when consolidating a match group, every member's points
+// merged into 1 chronological sequence, so "stepping through the story"
+// reads as 1 coherent timeline across ALL matched shark records
+export function getSharkStoryCoordinates(sharkIds: string[]): PlottedCoordinatePoint[] {
+    if (sharkIds.length <= 1) {
+        return sharkIds.length === 1 ? getSharkCoordinates(sharkIds[0]) : [];
+    }
+
+    return getGroupCoordinates(sharkIds).sort((a, b) => {
+        const aTime = a.date ? new Date(a.date).getTime() : 0;
+        const bTime = b.date ? new Date(b.date).getTime() : 0;
+        return aTime - bTime;
+    });
+}
+
 // Filter coordinates by month & year
 export function filterCoordinatesByDate(
     coordinates: PlottedCoordinatePoint[],
