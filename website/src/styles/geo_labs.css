@@ -1,17 +1,24 @@
-/* View mode toggle button */
-.view-mode-toggle {
-    background-color: var(--primary-purple);
-    border: 2px solid var(--active-bg);
+/* Shared shape / sizing for sidebar's mode-toggle buttons.
+   Each toggle keeps its own class for color to signal what
+   it does, e.g. purple = view mode, green = combine matches */
+.geo-labs-toggle-button {
+    border: 2px solid transparent;
     border-radius: 8px;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--surface-primary);
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 0.5rem;
     width: 100%;
     text-align: center;
+}
+
+/* View mode toggle button */
+.view-mode-toggle {
+    background-color: var(--primary-purple);
+    border-color: var(--active-bg);
+    color: var(--surface-primary);
 }
 
 .view-mode-toggle:hover {
@@ -22,17 +29,8 @@
 /* Combine-matched-sharks toggle button */
 .match-consolidate-toggle {
     background-color: var(--surface-secondary);
-    border: 2px solid var(--border-tertiary);
-    border-radius: 8px;
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
+    border-color: var(--border-tertiary);
     color: var(--text-primary);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 0.5rem;
-    width: 100%;
-    text-align: center;
 }
 
 .match-consolidate-toggle:hover:not(:disabled) {

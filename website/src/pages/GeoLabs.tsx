@@ -107,11 +107,11 @@ function GeoLabs() {
         return getGroupCoordinates(intersectionSavedFiltered);
     }, [savedIds, filteredSharks]);
 
-    // Lab selection actually used for display / computation: 
-    // Consists of the raw clicked IDs, or (when combining) expanded to 
-    // include each one's match-group siblings too, since they're 
+    // Lab selection actually used for display / computation:
+    // Consists of the raw clicked IDs, or (when combining) expanded to
+    // include each one's match-group siblings too, since they're
     // hypothesized to be "the same shark".
-    // Note that the raw selectedSharksForLab state itself stays untouched 
+    // Note that the raw selectedSharksForLab state itself stays untouched
     // so click-toggling in SavedSharksDisplay keeps working normally
     const effectiveLabSharkIds = useMemo(() => {
         if (!combineMatches) return selectedSharksForLab;
@@ -124,7 +124,7 @@ function GeoLabs() {
         return expanded;
     }, [combineMatches, selectedSharksForLab, groups]);
 
-    // Sharks to highlight in the selector list (as if auto-clicked): 
+    // Sharks to highlight in the selector list (as if auto-clicked):
     // Individual mode == selected shark's whole match group
     // Multi mode == everything effectiveLabSharkIds already expanded to
     const highlightedIds = useMemo(() => {
@@ -331,7 +331,7 @@ function GeoLabs() {
                 <div className="info-sidebar">
                     {/* View Mode Toggle Button */}
                     <button
-                        className={`view-mode-toggle ${viewMode}`}
+                        className={`geo-labs-toggle-button view-mode-toggle ${viewMode}`}
                         onClick={handleToggleViewMode}
                     >
                         {viewMode === "individual"
@@ -341,7 +341,7 @@ function GeoLabs() {
 
                     {/* Combine Matched Sharks Toggle */}
                     <button
-                        className={`match-consolidate-toggle ${combineMatches ? "active" : ""}`}
+                        className={`geo-labs-toggle-button match-consolidate-toggle ${combineMatches ? "active" : ""}`}
                         onClick={() => setCombineMatches((prev) => !prev)}
                         disabled={!hasApplicableGroup}
                     >
