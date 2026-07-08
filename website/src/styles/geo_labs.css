@@ -28,19 +28,23 @@
 
 /* Combine-matched-sharks toggle button */
 .match-consolidate-toggle {
-    background-color: var(--surface-secondary);
-    border-color: var(--border-tertiary);
-    color: var(--text-primary);
+    background-color: var(--active-bg);
+    border-color: var(--accent-dark-blue);
+    color: var(--text-secondary);
 }
 
 .match-consolidate-toggle:hover:not(:disabled) {
-    background-color: var(--active-bg);
+    background-color: var(--primary-blue);
 }
 
 .match-consolidate-toggle.active {
-    background-color: var(--primary-green);
-    border-color: var(--primary-green);
-    color: var(--surface-primary);
+    background-color: var(--accent-dark-blue);
+    border-color: var(--accent-dark-blue);
+    color: var(--bg-primary);
+}
+
+.match-consolidate-toggle.active:hover:not(:disabled) {
+    background-color: var(--accent-blue);
 }
 
 .match-consolidate-toggle:disabled {
