@@ -9,7 +9,8 @@ export type SharedFilterKey =
     | "no_contradictions"
     | "contradictions_only"
     | "hide_edges"
-    | "saved_only";
+    | "saved_only"
+    | "matches_only";
 
 export type NodeFilter = "all" | "gbif" | "ningaloo";
 
@@ -76,6 +77,8 @@ type BaseViewParams = {
     colors: GraphThemeColors;
     savedOnly: boolean;
     savedSharkIds: Set<string>;
+    matchesOnly: boolean;
+    matchedSharkIds: Set<string>;
 };
 
 export type GraphViewParams = BaseViewParams & {

@@ -21,6 +21,7 @@ import { useGraphTheme } from "../../../hooks/useGraphTheme";
 import { useCyResize } from "../../../hooks/useCyResize";
 import { useSharkContinentMap } from "../../../hooks/useSharkContinentMap";
 import { useSavedSharkIds } from "../../../hooks/useSavedSharkIds";
+import { useMatchedSharkIds } from "../../../hooks/useMatchedSharkIds";
 
 import {
     NodeFilter,
@@ -111,8 +112,10 @@ function SharkMatchGraph() {
     const contradictionsOnly = active.has("contradictions_only");
     const hideEdges = active.has("hide_edges");
     const savedOnly = active.has("saved_only");
+    const matchesOnly = active.has("matches_only");
 
     const savedSharkIds = useSavedSharkIds();
+    const matchedSharkIds = useMatchedSharkIds();
 
     // gbif_only/gbif_gbif are only ever forced ON by other filters, and
     // ningaloo_only/gbif_ningaloo are only ever forced OFF. So a forced-on
@@ -135,6 +138,7 @@ function SharkMatchGraph() {
     const contradictionsOnlyLocked = locked.has("contradictions_only");
     const hideEdgesLocked = locked.has("hide_edges");
     const savedOnlyLocked = locked.has("saved_only");
+    const matchesOnlyLocked = locked.has("matches_only");
 
     const cyRef = useRef<Core | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -157,6 +161,8 @@ function SharkMatchGraph() {
         colors: graphColors,
         savedOnly,
         savedSharkIds,
+        matchesOnly,
+        matchedSharkIds,
     });
 
     useEffect(() => {
@@ -210,6 +216,8 @@ function SharkMatchGraph() {
             colors: graphColors,
             savedOnly,
             savedSharkIds,
+            matchesOnly,
+            matchedSharkIds,
         };
         viewRef.current = params;
         if (cyRef.current) applyGraphView(cyRef.current, params);
@@ -227,6 +235,8 @@ function SharkMatchGraph() {
         graphColors,
         savedOnly,
         savedSharkIds,
+        matchesOnly,
+        matchedSharkIds,
     ]);
 
     // The path toggle is contextual to whichever contradiction node is
@@ -343,6 +353,13 @@ function SharkMatchGraph() {
                         onClick={() => toggleFilter("saved_only")}
                     >
                         My Saved Sharks Only
+                    </FilterButton>
+                    <FilterButton
+                        active={matchesOnly}
+                        disabled={matchesOnlyLocked}
+                        onClick={() => toggleFilter("matches_only")}
+                    >
+                        My Shark Matches Only
                     </FilterButton>
                 </div>
                 <div className="filter-group">

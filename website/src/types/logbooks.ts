@@ -39,6 +39,8 @@ export type MatchGroup = {
     name?: string;
 };
 
+export type MatchedSharkIDs = Set<string>;
+
 // What groupDisplayLabel needs to build a label. Satisfied by a real
 // MatchGroup, or by a consolidated shark's { groupName, memberIds }
 export type NamedSharkGroup = {

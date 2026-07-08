@@ -17,6 +17,8 @@ export type ApplyGraphViewConfig = {
     colors: GraphThemeColors;
     savedOnly: boolean;
     savedSharkIds: Set<string>;
+    matchesOnly: boolean;
+    matchedSharkIds: Set<string>;
 
     // Base node width / height (px) from stylesheet; scaled up as filters
     // thin out the visible node count, so sparse graphs stay legible
@@ -51,6 +53,8 @@ export function runApplyGraphView(cy: Core, config: ApplyGraphViewConfig) {
         colors,
         savedOnly,
         savedSharkIds,
+        matchesOnly,
+        matchedSharkIds,
         baseNodeSize,
         edgeResetProps,
         ambientSelector,
@@ -85,6 +89,12 @@ export function runApplyGraphView(cy: Core, config: ApplyGraphViewConfig) {
         if (savedOnly) {
             cy.nodes()
                 .filter((n) => !savedSharkIds.has(n.data("shark_id") as string))
+                .style("display", "none");
+        }
+
+        if (matchesOnly) {
+            cy.nodes()
+                .filter((n) => !matchedSharkIds.has(n.data("shark_id") as string))
                 .style("display", "none");
         }
 
