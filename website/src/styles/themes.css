@@ -53,7 +53,15 @@
     --border-tertiary: #dddddd;
     --border-quaternary: #e0e0e0;
     --border-light: #eeeeee;
-    
+
+    /* Border Radius Scale (same across both themes) */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-pill: 999px;
+
     /* Status Colors */
     --success: #4CAF50;
     --info: #2196F3;

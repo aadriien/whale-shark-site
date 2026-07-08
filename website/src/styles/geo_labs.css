@@ -3,7 +3,7 @@
    it does, e.g. purple = view mode, green = combine matches */
 .geo-labs-toggle-button {
     border: 2px solid transparent;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 0.75rem 1rem;
     font-size: 1rem;
     font-weight: 600;
@@ -82,7 +82,7 @@
 /* Step-through-story toggle & timeline toggle share same look */
 .geo-labs-step-button,
 .geo-labs-timeline-button {
-    border-radius: 8px; /* all corners rounded by default */
+    border-radius: var(--radius-md); /* all corners rounded by default */
     border: 1px solid var(--accent-purple);
     padding: 0.75rem 1rem;
     color: var(--text-secondary);
@@ -106,7 +106,7 @@
 
 .geo-labs-step-button.step-mode-active,
 .geo-labs-timeline-button.timeline-mode-active {
-    border-radius: 8px 8px 0 0; /* only top corners rounded when open */
+    border-radius: var(--radius-md) var(--radius-md) 0 0; /* only top corners rounded when open */
     background-color: var(--primary-purple);
     color: var(--surface-primary);
     border-bottom: 1px solid var(--accent-purple); /* purple bottom border when open */
@@ -120,7 +120,7 @@
 /* Timeline slider container */
 .story-step-container {
     padding: 1rem;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
     border: 1px solid var(--border-tertiary);
     background-color: var(--bg-tertiary);
     border-top: none;
@@ -189,7 +189,7 @@
     flex: 1;
     width: 100%;
     height: 6px;
-    border-radius: 3px;
+    border-radius: var(--radius-pill);
     outline: none;
     cursor: pointer;
     -webkit-appearance: none;
@@ -200,7 +200,7 @@
 .timeline-slider::-webkit-slider-track {
     height: 6px;
     background: linear-gradient(to right, var(--success) 0%, var(--info) 50%, var(--primary-purple) 100%);
-    border-radius: 3px;
+    border-radius: var(--radius-pill);
 }
 
 .story-slider::-webkit-slider-thumb,
@@ -227,7 +227,7 @@
 .timeline-slider::-moz-range-track {
     height: 6px;
     background: linear-gradient(to right, var(--success) 0%, var(--info) 50%, var(--primary-purple) 100%);
-    border-radius: 3px;
+    border-radius: var(--radius-pill);
     border: none;
 }
 
@@ -251,7 +251,7 @@
     padding: 1rem;
     background-color: var(--bg-tertiary);
     border: 1px solid var(--border-tertiary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     margin-bottom: 1rem;
 }
 
@@ -297,7 +297,7 @@
     background-color: var(--bg-primary);
     padding: 0.5rem;
     border: 1px solid var(--border-secondary);
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     font-size: 0.9rem;
     line-height: 0.95rem;
 
@@ -320,14 +320,14 @@
 .overview-container {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-tertiary);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
 /* Remove margin-top from data-overview-panel in GeoLabs context */
 .overview-container .data-overview-panel {
     margin-top: 0;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
 }
 
 .heatmap-container {
@@ -336,7 +336,7 @@
     margin-top: 10px;
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-tertiary);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
@@ -346,7 +346,7 @@
     margin-top: 10px;
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-tertiary);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
@@ -371,7 +371,7 @@
 .timeline-selector-container {
     width: 100%;
     padding: 1rem;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
     border: 1px solid var(--border-tertiary);
     background-color: var(--bg-tertiary);
     border-top: none;

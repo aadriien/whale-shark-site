@@ -67,7 +67,7 @@
     max-width: 100%;
     aspect-ratio: 1.3;
     border: 1px solid var(--border-secondary);
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     overflow: hidden;
 }
 
@@ -150,7 +150,7 @@
 .shark-card {
     background-color: var(--surface-secondary);
     border: 2px solid var(--border-secondary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 10px;
     cursor: pointer;
     display: flex;
@@ -190,7 +190,7 @@
 
 
 .play-story-button {
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-primary);
     padding: 6px 8px;
     color: var(--text-primary);
@@ -240,7 +240,7 @@
     font-size: 0.6rem;
     font-weight: 600;
     padding: 2px 8px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     white-space: nowrap;
     box-shadow: 0 0 0 1px var(--border-secondary);
     transition: background-color 0.2s ease;
@@ -259,7 +259,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     margin-bottom: 8px;
 }
 
@@ -272,7 +272,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
 }
 
 /* If some story is playing, but not THIS shark, then grayscale image */
@@ -291,7 +291,7 @@
 .shark-card-details {
     background: var(--surface-secondary); 
     padding: 0; 
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     box-shadow: var(--shadow-xs);
     margin-top: 16px;
     font-size: 0.8rem;

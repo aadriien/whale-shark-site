@@ -56,7 +56,7 @@
     margin-bottom: 16px;
     background: var(--surface-secondary);
     padding: 12px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-tertiary);
 }
 
@@ -71,7 +71,7 @@
 .shark-match-graph-section .graph-filter-btn {
     padding: 6px 16px;
     border: 1px solid var(--border-secondary);
-    border-radius: 20px;
+    border-radius: var(--radius-pill);
     background: transparent;
     color: var(--text-secondary);
     cursor: pointer;
@@ -112,14 +112,14 @@
     color: var(--text-secondary);
     padding: 4px 12px;
     border: 1px solid var(--border-secondary);
-    border-radius: 20px;
+    border-radius: var(--radius-pill);
 }
 
 .shark-match-graph-section .graph-range-input {
     width: 3.5rem;
     padding: 2px 4px;
     border: 1px solid var(--border-secondary);
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     font-size: 0.85rem;
     text-align: center;
     background: var(--bg-primary);
@@ -132,7 +132,7 @@
     width: 100%;
     height: 600px;
     border: 1px solid var(--border-tertiary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--bg-secondary);
     text-align: left !important;
 }
@@ -160,7 +160,7 @@
     flex-direction: column;
     gap: 12px;
     border: 1px solid var(--border-tertiary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--bg-tertiary);
     padding: 12px;
     overflow-y: auto;
@@ -177,7 +177,7 @@
     width: 100%;
     padding: 8px 12px;
     border: 1px solid var(--border-secondary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     background: transparent;
     color: var(--text-secondary);
     cursor: pointer;
@@ -226,7 +226,7 @@
 
 .graph-panel-ningaloo {
     border: 1px solid var(--border-tertiary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 16px 12px;
     text-align: center;
 }
@@ -247,7 +247,7 @@
 
 .graph-panel-contradiction {
     border: 1px solid var(--error);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 10px;
     background: var(--conservation-bg);
 }
@@ -318,7 +318,7 @@
     align-items: center;
     gap: 8px;
     padding: 3px 4px;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     border: 1px solid var(--border-tertiary);
     cursor: pointer;
 }
@@ -336,7 +336,7 @@
     width: 48px;
     height: 48px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     flex-shrink: 0;
 }
 
@@ -408,7 +408,7 @@
     flex-direction: column;
     padding: 8px;
     border: 1px solid var(--border-tertiary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     text-align: center;
 }
 
@@ -469,7 +469,7 @@
     max-height: 90vh;
     overflow-y: auto;
     background: var(--bg-primary);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 0.75rem 1.5rem 1.5rem;
     box-shadow: var(--shadow-xl);
 }

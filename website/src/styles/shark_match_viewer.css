@@ -32,7 +32,7 @@
 /* Shark Selection Panel */
 .match-selector-panel {
     background: var(--fact-card-bg);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 1.25rem;
     overflow-y: auto;
     max-height: 800px;
@@ -61,7 +61,7 @@
     color: var(--text-primary);
     border: none;
     padding: 0.5rem 0.75rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.85rem;
     transition: all 0.3s ease;
@@ -80,7 +80,7 @@
     color: var(--text-primary);
     border: none;
     padding: 0.5rem 0.75rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.85rem;
     transition: all 0.3s ease;
@@ -122,7 +122,7 @@
 .match-list-header {
     padding: 0.5rem 0.75rem;
     background: var(--bg-secondary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     margin: 0;
     font-size: 0.9rem;
     color: var(--text-secondary);
@@ -160,7 +160,7 @@
     padding: 0.75rem;
     background: var(--bg-primary);
     border: 1px solid var(--border-quaternary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -193,7 +193,7 @@
 .match-shark-item .match-plausibility {
     display: inline-block;
     padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     font-size: 0.7rem;
     font-weight: 600;
     margin-right: 0.25rem;
@@ -222,7 +222,7 @@
     justify-content: space-between;
     flex-shrink: 0;
     height: 60px;
-    border-radius: 8px 8px 0 0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
     margin-bottom: -1px;
     position: relative;
     z-index: 1;
@@ -264,7 +264,7 @@
     justify-content: flex-end;
     background: var(--surface-tertiary);
     padding: 0.5rem 1rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border-secondary);
     min-width: 0;
 }
@@ -279,7 +279,7 @@
 .match-plausibility {
     background: var(--bg-tertiary);
     padding: 0.5rem 1rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-weight: 700;
     font-size: 1rem;
     display: inline-block;
@@ -314,7 +314,7 @@
 
 .match-shark-info-box {
     background: var(--primary-blue);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 0.75rem;
     margin-bottom: 0.5rem;
     flex-shrink: 0;
@@ -329,7 +329,7 @@
     gap: 0.5rem;
     align-items: center;
     background: var(--bg-tertiary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 0.3rem 0.6rem;
 }
 
@@ -418,7 +418,7 @@
 .match-image-thumbnails {
     background: var(--fact-card-bg);
     padding: 1.5rem;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
 }
 
@@ -442,12 +442,12 @@
 
 .match-thumbnail-grid::-webkit-scrollbar-track {
     background: var(--bg-secondary);
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
 }
 
 .match-thumbnail-grid::-webkit-scrollbar-thumb {
     background: var(--text-light);
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
 }
 
 .match-thumbnail-grid::-webkit-scrollbar-thumb:hover {
@@ -458,7 +458,7 @@
     position: relative;
     cursor: pointer;
     border: 1px solid var(--border-secondary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     transition: all 0.3s ease;
     flex-shrink: 0;
@@ -499,7 +499,7 @@
 .match-details {
     background: var(--fact-card-bg);
     border: 1px solid var(--border-primary);
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
     padding: 1.5rem;
     box-shadow: var(--shadow-md);
     flex-shrink: 0;
@@ -522,7 +522,7 @@
     gap: 0.75rem;
     background: linear-gradient(135deg, var(--primary-teal) 0%, var(--primary-green) 100%);
     border: 1px solid color-mix(in srgb, var(--primary-teal) 30%, transparent);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 1.25rem;
     box-shadow: var(--shadow-md);
     height: 100%;
@@ -535,7 +535,7 @@
     height: auto;
     object-fit: cover;
     flex-shrink: 0;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border-primary);
 }
 
@@ -565,7 +565,7 @@
     position: relative;
     cursor: pointer;
     border: 1px solid var(--border-secondary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     transition: all 0.3s ease;
 }
@@ -626,7 +626,7 @@
     gap: 0.4rem;
     background: var(--bg-tertiary);
     border: 1px solid var(--border-secondary);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 0.5rem 0.75rem;
     margin-top: 0.5rem;
     font-size: 0.85rem;
@@ -657,7 +657,7 @@
     justify-content: center;
     height: 800px;
     background: var(--fact-card-bg);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text-secondary);
     font-size: 1.2rem;
     width: 100%;
