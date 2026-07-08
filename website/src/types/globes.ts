@@ -52,3 +52,8 @@ export type GlobeProps = {
     onSharkClick?: (sharkClickProps: SharkClickProps) => void;
     allowClicks?: boolean;
 };
+
+export type GlobeCoordinateReadoutProps = {
+    point: PlottedCoordinatePoint | null;
+    placeholder?: string;
+};

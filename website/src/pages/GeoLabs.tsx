@@ -4,6 +4,7 @@ import Globe from "../components/Globe";
 import PlayStoryButton from "../components/controls/PlayStoryButton";
 import StoryStepSlider from "../components/controls/StoryStepSlider";
 import TimelineControls from "../components/controls/TimelineControls";
+import GlobeCoordinateReadout from "../components/controls/GlobeCoordinateReadout";
 
 import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector";
@@ -402,35 +403,7 @@ function GeoLabs() {
                         allowClicks={viewMode === "individual" && !selectedShark}
                     />
                     {/* Coordinate display to match SharkTracker positioning */}
-                    {isStepMode && currentPoint && (
-                        <div
-                            style={{
-                                position: "absolute",
-                                bottom: 10,
-                                width: "100%",
-                                textAlign: "center",
-                                color: "white",
-                                fontSize: "0.85rem",
-                                fontFamily: "sans-serif",
-                                padding: "2px 0",
-                                backgroundColor: "rgba(0, 0, 0, 0)",
-                                textShadow: "0 0 8px rgba(0, 255, 255, 0.9)",
-                                pointerEvents: "none",
-                                userSelect: "none",
-                            }}
-                        >
-                            Lat:{" "}
-                            <span style={{ fontWeight: "bold" }}>
-                                {currentPoint.lat.toFixed(3)}
-                            </span>
-                            , Lng:{" "}
-                            <span style={{ fontWeight: "bold" }}>
-                                {currentPoint.lng.toFixed(3)}
-                            </span>{" "}
-                            — Date:{" "}
-                            <span style={{ fontWeight: "bold" }}>{currentPoint.date || "N/A"}</span>
-                        </div>
-                    )}
+                    {isStepMode && <GlobeCoordinateReadout point={currentPoint} />}
                 </div>
 
                 {/* Shark selector dropdown on right */}

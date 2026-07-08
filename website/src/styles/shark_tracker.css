@@ -71,6 +71,30 @@
     overflow: hidden;
 }
 
+/* Lat / lng / date readout overlaid on the globe, shared with GeoLabs */
+.globe-coordinate-readout {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: var(--text-on-accent);
+    font-size: 0.85rem;
+    font-family: sans-serif;
+    padding: 2px 0;
+
+    /* Fully transparent (no strip blocking globe), but soft highlight */
+    background-color: transparent;
+    text-shadow: 0 0 8px var(--coordinate-text);
+
+    /* Ensure clicks pass through to globe canvas */
+    pointer-events: none;
+    user-select: none;
+}
+
+.globe-coordinate-value {
+    font-weight: bold;
+}
+
 @media (max-width: 900px) {
     .sharktracker-wrapper {
         /* Ensure extra space to scroll */

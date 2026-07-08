@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 
 import Globe from "../components/Globe";
 import SharkGrid from "../components/cards/SharkGrid";
+import GlobeCoordinateReadout from "../components/controls/GlobeCoordinateReadout";
 
 import { storySharks } from "../utils/DataUtils";
 
@@ -55,47 +56,12 @@ function SharkTracker() {
                 </div>
 
                 {/* Globe */}
-                <div className="globe-container" style={{ position: "relative" }}>
+                <div className="globe-container">
                     <Globe ref={globeHandleRef} />
-                    <div
-                        style={{
-                            position: "absolute",
-                            bottom: 10,
-                            width: "100%",
-                            textAlign: "center",
-                            color: "white",
-                            fontSize: "0.85rem",
-                            fontFamily: "sans-serif",
-                            padding: "2px 0",
-
-                            // Fully transparent (no strip blocking globe), but soft highlight
-                            backgroundColor: "rgba(0, 0, 0, 0)",
-                            textShadow: "0 0 8px rgba(0, 255, 255, 0.9)",
-
-                            // Ensure clicks pass through to globe canvas
-                            pointerEvents: "none",
-                            userSelect: "none",
-                        }}
-                    >
-                        {currentPoint ? (
-                            <>
-                                Lat:{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    {currentPoint.lat.toFixed(3)}
-                                </span>
-                                , Lng:{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    {currentPoint.lng.toFixed(3)}
-                                </span>{" "}
-                                — Date:{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    {currentPoint.date || "N/A"}
-                                </span>
-                            </>
-                        ) : (
-                            "Story playback info will appear here"
-                        )}
-                    </div>
+                    <GlobeCoordinateReadout
+                        point={currentPoint}
+                        placeholder="Story playback info will appear here"
+                    />
                 </div>
 
                 {/* Right Shark Cards */}
