@@ -194,7 +194,7 @@
     border: 1px solid var(--border-primary);
     padding: 6px 8px;
     color: var(--text-primary);
-    font-size: 15px;
+    font-size: 0.9rem;
     font-weight: 500;
     font-family: inherit;
     background-color: var(--bg-secondary);
@@ -237,7 +237,7 @@
 .country-tag {
     background-color: var(--surface-tertiary);
     color: var(--accent-dark-blue);
-    font-size: 10px;
+    font-size: 0.6rem;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 8px;
@@ -264,7 +264,7 @@
 }
 
 .shark-card-image span {
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--text-muted);
 }
 
@@ -294,7 +294,7 @@
     border-radius: 5px;
     box-shadow: var(--shadow-xs);
     margin-top: 16px;
-    font-size: 13px; 
+    font-size: 0.8rem;
     color: var(--text-secondary);
     display: flex;
     flex-direction: column;
@@ -352,7 +352,7 @@
 .shark-records h3,
 .shark-observation h3,
 .shark-regions h3 {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--shark-section-title);
     margin-bottom: 6px; 
@@ -364,7 +364,7 @@
 .shark-records p,
 .shark-observation p,
 .shark-regions p {
-    font-size: 13px; 
+    font-size: 0.8rem;
     color: var(--shark-section-text);
     margin: 0; 
 }
@@ -401,7 +401,7 @@
     padding-left: 25px; 
     position: relative;
     text-align: left;
-    font-size: 13px;
+    font-size: 0.8rem;
     color: var(--timeline-text);
     margin-bottom: 8px;
 }
