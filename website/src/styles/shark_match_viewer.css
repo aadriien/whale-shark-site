@@ -457,7 +457,7 @@
 .match-thumbnail {
     position: relative;
     cursor: pointer;
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--border-secondary);
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -564,7 +564,7 @@
 .match-thumbnail-item {
     position: relative;
     cursor: pointer;
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--border-secondary);
     border-radius: 6px;
     overflow: hidden;
     transition: all 0.3s ease;

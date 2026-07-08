@@ -100,11 +100,11 @@
 }
 
 .step-header.clickable:hover {
-    background: rgba(var(--primary-blue-rgb, 59, 130, 246), 0.05);
+    background: color-mix(in srgb, var(--primary-blue) 5%, transparent);
 }
 
 .step-header.clickable:active {
-    background: rgba(var(--primary-blue-rgb, 59, 130, 246), 0.1);
+    background: color-mix(in srgb, var(--primary-blue) 10%, transparent);
 }
 
 .step-icon {
@@ -444,7 +444,7 @@
     padding: 2rem;
     text-align: left;
     transition: all 0.3s ease;
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--border-tertiary);
     box-shadow: var(--shadow-md);
 }
 
