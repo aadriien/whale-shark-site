@@ -30,7 +30,7 @@
 .ocean-viewer-map {
     width: 100%;
     height: 550px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
 }
 
@@ -51,7 +51,7 @@
     background: var(--bg-overlay-soft);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-left: none;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -72,13 +72,13 @@
 }
 
 .ocean-viewer-metrics-toggle:hover .ocean-viewer-metrics-arrow {
-    color: #fff;
+    color: var(--text-on-accent);
 }
 
 .ocean-viewer-metrics-indicator {
     width: 6px;
     height: 32px;
-    border-radius: 3px;
+    border-radius: var(--radius-pill);
 }
 
 .ocean-viewer-metrics-panel {
@@ -91,7 +91,7 @@
     background: var(--bg-overlay-soft);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-left: none;
-    border-radius: 0 6px 6px 0;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     order: -1;
     white-space: nowrap;
 }
@@ -116,7 +116,7 @@
     gap: 4px;
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     padding: 8px;
     cursor: pointer;
     text-align: left;
@@ -135,7 +135,7 @@
 .ocean-viewer-metric-gradient {
     width: 100%;
     height: 8px;
-    border-radius: 3px;
+    border-radius: var(--radius-pill);
 }
 
 .ocean-viewer-metric-label {
@@ -204,7 +204,7 @@
 .ocean-viewer-data-gradient {
     width: 140px;
     height: 12px;
-    border-radius: 2px;
+    border-radius: var(--radius-xs);
 }
 
 .ocean-viewer-legend-range {
@@ -222,12 +222,12 @@
 
 .shark-card-popup .maplibregl-popup-content {
     padding: 0;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
 }
 
 .shark-card-popup .condensed-shark-card {
-    border-radius: 8px;
+    border-radius: var(--radius-md);
 }
 
 .shark-card-popup .condensed-shark-card p {

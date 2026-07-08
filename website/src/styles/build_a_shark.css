@@ -17,7 +17,7 @@
     padding: 24px;
     background-color: var(--build-form-bg);
     border: 2px solid var(--build-form-border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     font-family: 'Inter', 'Segoe UI', sans-serif;
 
     display: flex;
@@ -40,7 +40,7 @@
     background-color: var(--build-label-bg);
 
     padding: 16px 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     border-left: 5px solid var(--build-label-border);
     width: 100%;
     text-align: left;
@@ -66,7 +66,7 @@
     margin: 0;
     padding: 10px 14px;
     border: 1px solid var(--build-input-border);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 1rem;
     background-color: var(--bg-primary);
     color: var(--text-secondary);
@@ -85,9 +85,9 @@
     padding: 12px 24px;
     font-size: 16px;
     font-weight: 600;
-    color: white;
+    color: var(--text-on-accent);
     border: 2px solid transparent; /* keep border width consistent */
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     box-sizing: border-box;
     cursor: pointer;
     flex-grow: 1;

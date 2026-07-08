@@ -11,7 +11,7 @@
 
 .confirm-modal-content {
     background-color: var(--bg-primary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 1.25rem;
     max-width: 380px;
     width: 100%;
@@ -38,7 +38,7 @@
 }
 
 .confirm-modal-button {
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border-tertiary);
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;

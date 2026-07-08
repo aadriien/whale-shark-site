@@ -20,7 +20,7 @@
     height: 30px; 
 
     margin-right: 5px;
-    border-radius: 40px;
+    border-radius: var(--radius-pill);
 
     border: 1px solid var(--moon); 
     background: var(--light-background);

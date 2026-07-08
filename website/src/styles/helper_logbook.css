@@ -60,7 +60,7 @@
 .logbook-close-button:focus {
     color: var(--logbook-close-button-hover);
     outline: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
 }
 
 
@@ -85,7 +85,7 @@
 
     background-color: var(--logbook-container-bg);
     border: 1px solid var(--logbook-container-border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 16px;
     box-shadow: 0 8px 20px var(--logbook-container-shadow);
     z-index: 9999;
@@ -132,7 +132,7 @@
     color: var(--logbook-page-name);
     background-color: var(--logbook-page-name-bg);
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     white-space: nowrap;
 }
 
@@ -207,7 +207,7 @@
     background: linear-gradient(to bottom right, var(--overview-box-bg-start), var(--overview-box-bg-end));
     border-left: 5px solid var(--overview-box-border);
     padding: 14px 16px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow-xs);
     position: relative;
     transition: background-color 0.3s ease;
@@ -239,7 +239,7 @@
 .faqItem {
     background: var(--faq-item-bg);
     border: 1px solid var(--faq-item-border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 16px 14px;
     box-shadow: 0 1px 4px var(--faq-item-shadow);
     transition: background-color 0.3s ease;
@@ -264,7 +264,7 @@
     color: var(--faq-toggle-text);
     font-size: 1rem;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     transition: background-color 0.3s ease;
 
     background: transparent !important;
@@ -333,7 +333,7 @@
     all: unset;
     display: inline-block;
     border: 1.5px solid var(--clear-button-border);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 0.9rem;
     color: var(--clear-button-text);
 
@@ -480,7 +480,7 @@
 
 .condensed-shark-card {
     background: var(--condensed-card-bg); 
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     box-shadow: 0 2px 8px var(--condensed-card-shadow);
     display: flex;
     flex-direction: column;
@@ -501,7 +501,7 @@
 
 .condensed-media {
     flex-shrink: 0;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     height: 85px;
     font-weight: 600;
     display: flex;
@@ -537,7 +537,7 @@
     align-items: center;
     background: var(--condensed-id-bg);
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 1rem;
     font-weight: 600;
     color: var(--condensed-id-text);
@@ -545,7 +545,7 @@
 
 .shark-banner {
     background: var(--condensed-card-bg); 
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     box-shadow: 0 2px 8px var(--condensed-card-shadow);
     display: flex;
     justify-content: space-between;
@@ -560,7 +560,7 @@
 
 .tiny-banner-media {
     flex-shrink: 0;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     height: 50px;
     width: 60px;
     font-weight: 600;
@@ -600,7 +600,7 @@
     min-width: 0;
     height: 50px;
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--condensed-id-text);
@@ -627,7 +627,7 @@
 
 .favorite-button:hover {
     background: var(--favorite-button-hover-bg);
-    border-radius: 50px;
+    border-radius: var(--radius-pill);
 }
 
 .condensed-traits,
@@ -635,7 +635,7 @@
 .condensed-places {
     font-size: 0.8rem;
     padding: 8px 12px;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
 }
 
 .condensed-traits {
@@ -670,7 +670,7 @@
     container-name: matched-group;
     background-color: var(--primary-green);
     border: 1px solid var(--border-tertiary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 6px;
 }
 
@@ -735,7 +735,7 @@
     flex: 1;
     min-height: 0;
     resize: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border-tertiary);
     background: var(--bg-secondary);
     color: var(--text-primary);

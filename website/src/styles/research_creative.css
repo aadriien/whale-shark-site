@@ -34,12 +34,10 @@
     border-bottom: 4px solid var(--research-hero-bottom-border);
 }
 
-.research-creative-hero-content h1, 
+.research-creative-hero-content h1,
 .research-creative-hero-content p {
     color: var(--research-hero-text);
-    text-shadow:
-        3px 3px 6px rgba(0, 0, 0, 0.9),
-        0 0 10px rgba(0, 0, 0, 0.7);
+    text-shadow: var(--hero-text-shadow);
 }
 
 .research-creative-hero-content h1 {
@@ -91,7 +89,7 @@
         var(--research-card-bg-start),
         var(--research-card-bg-end)
     );
-    border-radius: 18px;
+    border-radius: var(--radius-xl);
     overflow: hidden;
     box-shadow: 0 8px 24px var(--research-card-shadow);
     text-decoration: none;
