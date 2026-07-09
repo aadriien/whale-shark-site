@@ -21,8 +21,8 @@ const StoryStepSlider = ({
             const coordinates = getSharkStoryCoordinates(ids);
             setStoryData(coordinates);
 
-            // Handle single data point case immediately when data loads
-            if (isVisible && coordinates.length === 1) {
+            // Sync the first point immediately when data loads
+            if (isVisible && coordinates.length > 0) {
                 onStepChange(0, coordinates[0]);
             }
         }
