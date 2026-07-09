@@ -1,4 +1,4 @@
-import { buildTimelineEntries, parseImageField } from "./DataUtils";
+import { buildTimelineEntries, parseImageField, parseTimelineDateKey } from "./DataUtils";
 
 import { MatchGroup } from "../types/logbooks";
 import {
@@ -8,14 +8,17 @@ import {
     ConsolidatedShark,
 } from "../types/sharks";
 
-// Each shark's own entries are already most-recent-first (source data order).
-// This finds that most recent date so blocks can be ordered the same way
+// Each shark's own entries are already most-recent-first. This finds that
+// most recent date so blocks can be ordered the same way
 function mostRecentEntryDate(entries: SharkTimelineEntry[]): number {
-    const dates = entries.map((e) => new Date(e.date).getTime()).filter((t) => !isNaN(t));
-    return dates.length > 0 ? Math.max(...dates) : -Infinity;
+    const keys = entries.map((e) => parseTimelineDateKey(e.date)).filter((k) => k !== -Infinity);
+    return keys.length > 0 ? Math.max(...keys) : -Infinity;
 }
 
-function mergeUniqueField(members: WhaleSharkDatasetNormalized, field: "sex" | "lifeStage"): string {
+function mergeUniqueField(
+    members: WhaleSharkDatasetNormalized,
+    field: "sex" | "lifeStage"
+): string {
     const values = members
         .map((m) => m[field])
         .filter((v): v is string => Boolean(v && v.toLowerCase() !== "unknown"));
@@ -23,7 +26,10 @@ function mergeUniqueField(members: WhaleSharkDatasetNormalized, field: "sex" | "
     return [...new Set(values)].join(", ") || "Unknown";
 }
 
-function earliestOrLatest(members: WhaleSharkDatasetNormalized, field: "oldest" | "newest"): string {
+function earliestOrLatest(
+    members: WhaleSharkDatasetNormalized,
+    field: "oldest" | "newest"
+): string {
     const dated = members
         .map((m) => ({ raw: m[field], time: new Date(m[field]).getTime() }))
         .filter((d) => d.raw);
@@ -54,7 +60,9 @@ export function buildConsolidatedShark(
     // Both sections share 1 member order (most-recent-first), so each
     // source's block lands in the same position in both
     const orderedMembers = [...members].sort(
-        (a, b) => mostRecentEntryDate(buildTimelineEntries(b)) - mostRecentEntryDate(buildTimelineEntries(a))
+        (a, b) =>
+            mostRecentEntryDate(buildTimelineEntries(b)) -
+            mostRecentEntryDate(buildTimelineEntries(a))
     );
 
     return {

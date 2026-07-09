@@ -224,8 +224,27 @@ export function parseImageField(imageField: string = "") {
     }) as ImagesWithMetadata;
 }
 
+// Sortable key for a timeline date ("Mon YYYY" or bare "YYYY")
+// Year dominates, so a bare "2020" outranks any month in 2019
+export function parseTimelineDateKey(dateStr: string): number {
+    const monthYearMatch = dateStr.match(/^([A-Za-z]{3})\s+(\d{4})$/);
+    if (monthYearMatch) {
+        const monthIndex = MONTHS.indexOf(monthYearMatch[1]);
+        const year = parseInt(monthYearMatch[2], 10);
+        return year * 12 + Math.max(monthIndex, 0);
+    }
+
+    const yearOnlyMatch = dateStr.match(/^(\d{4})$/);
+    if (yearOnlyMatch) {
+        return parseInt(yearOnlyMatch[1], 10) * 12;
+    }
+
+    return -Infinity;
+}
+
 // Builds the "Places Visited" timeline rows for 1 shark record, pairing up
-// its comma-separated countries / regions / publishing entries by index
+// its comma-separated countries / regions / publishing entries by index,
+// then ordering most-recent-first
 export function buildTimelineEntries(shark: WhaleSharkEntryNormalized): SharkTimelineEntry[] {
     const countries = (shark.countries ?? "").split(",").map((s) => s.trim());
     const regions = shark.regions ? shark.regions.split(",").map((s) => s.trim()) : [];
@@ -234,7 +253,7 @@ export function buildTimelineEntries(shark: WhaleSharkEntryNormalized): SharkTim
     // Don't split remarks by comma, i.e. show full remarks for all locations
     const fullRemarks = shark.remarks || "";
 
-    return countries.map((country, index) => {
+    const entries = countries.map((country, index) => {
         const regionEntry = regions[index] || "Unknown";
         const publishingEntry = publishing[index] || "Unspecified";
         const remarksEntry = fullRemarks || "None";
@@ -250,6 +269,12 @@ export function buildTimelineEntries(shark: WhaleSharkEntryNormalized): SharkTim
             publishing: publishingEntry !== "Unknown" ? publishingEntry : "Unspecified",
             remarks: remarksEntry !== "Unknown" ? parseRemarks(remarksEntry) : "None",
         };
+    });
+
+    return entries.sort((a, b) => {
+        const keyA = parseTimelineDateKey(a.date);
+        const keyB = parseTimelineDateKey(b.date);
+        return keyA === keyB ? 0 : keyB - keyA;
     });
 }
 
