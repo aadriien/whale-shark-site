@@ -1,0 +1,6 @@
+import{j as s}from"./index-USTlY5iZ.js";const d=({shark:e,onPlayStory:t,isPlaying:a,playingSharkId:i,showPauseForGeoLabs:c=!1,onToggleStepMode:r,isStepMode:l=!1})=>e?c?s.jsx("div",{className:"play-story-section",children:s.jsx("button",{className:`geo-labs-step-button
+                        ${l?" step-mode-active":""}
+                    `,onClick:n=>{n.stopPropagation(),r==null||r()},children:l?"Exit Story Mode":s.jsxs(s.Fragment,{children:["Step Through ",s.jsx("strong",{children:e.name||e.id}),"'s Story"]})})}):s.jsx("div",{className:"play-story-section",children:s.jsx("button",{className:`play-story-button
+                    ${i===e.id&&a?" currentlyPlaying":""}
+                    ${a?" anyPlaying":""}
+                `,onClick:n=>{n.stopPropagation(),t==null||t(e.id)},disabled:a,children:a?"Story in Progress...":s.jsxs(s.Fragment,{children:["Play ",s.jsx("strong",{children:e.name||e.id}),"'s Story"]})})}):null,u=({point:e,placeholder:t})=>!e&&!t?null:s.jsx("div",{className:"globe-coordinate-readout",children:e?s.jsxs(s.Fragment,{children:["Lat: ",s.jsx("span",{className:"globe-coordinate-value",children:e.lat.toFixed(3)}),", Lng: ",s.jsx("span",{className:"globe-coordinate-value",children:e.lng.toFixed(3)})," — Date: ",s.jsx("span",{className:"globe-coordinate-value",children:e.date||"N/A"})]}):t});export{u as G,d as P};
