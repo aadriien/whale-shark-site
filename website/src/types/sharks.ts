@@ -69,6 +69,7 @@ export type WhaleSharkEntryVision = {
 
     key: number;
     image_id: number;
+    identifier_url: string;
 
     decimalLatitude: number | null;
     decimalLongitude: number | null;

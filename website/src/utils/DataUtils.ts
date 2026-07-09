@@ -22,7 +22,7 @@ import {
     ImagesWithMetadata,
     SharkTimelineEntry,
 } from "../types/sharks";
-import { WhaleSharkCoordinates } from "../types/coordinates";
+import { WhaleSharkCoordinates, PlottedCoordinatePoint } from "../types/coordinates";
 
 export const MONTHS: string[] = [
     "Jan",
@@ -414,3 +414,19 @@ export const visionSharks = mapVisionSharks(visionSharkData, keyMapVision);
 export const visionOccurrences = visionSharkData.map((occurrence) =>
     formatVisionKeyVals(occurrence, keyMapVision)
 );
+
+// First image for a specific stepped coordinate (shark ID + lat/lng), used
+// by the globe's per-step image overlay during GeoLabs story-stepping
+export function getFirstImageForPoint(
+    candidateSharkIds: string[],
+    point: PlottedCoordinatePoint
+): string | undefined {
+    const match = visionSharkData.find(
+        (occ) =>
+            candidateSharkIds.includes(occ.whaleSharkID) &&
+            occ.decimalLatitude === point.lat &&
+            occ.decimalLongitude === point.lng &&
+            occ.identifier_url
+    );
+    return match?.identifier_url;
+}

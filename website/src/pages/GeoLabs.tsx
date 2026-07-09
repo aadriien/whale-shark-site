@@ -5,6 +5,7 @@ import PlayStoryButton from "../components/controls/PlayStoryButton";
 import StoryStepSlider from "../components/controls/StoryStepSlider";
 import TimelineControls from "../components/controls/TimelineControls";
 import GlobeCoordinateReadout from "../components/controls/GlobeCoordinateReadout";
+import GlobeImageOverlay from "../components/controls/GlobeImageOverlay";
 
 import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector";
@@ -17,7 +18,7 @@ import { useSavedSharkIds } from "../hooks/useSavedSharkIds";
 import { useMatchedGroups } from "../hooks/useMatchedGroups";
 
 import { getGroupCoordinates, getSharkCoordinates } from "../utils/CoordinateUtils";
-import { mediaSharks } from "../utils/DataUtils";
+import { mediaSharks, getFirstImageForPoint } from "../utils/DataUtils";
 import { buildConsolidatedShark } from "../utils/ConsolidatedSharkUtils";
 
 import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "../types/sharks";
@@ -65,6 +66,19 @@ function GeoLabs() {
             selectedShark ? groups.find((g) => g.sharkIds.includes(selectedShark.id)) : undefined,
         [selectedShark, groups]
     );
+
+    // Shark IDs whose points are eligible for current step's image lookup
+    const currentStepSharkIds = useMemo(() => {
+        if (!selectedShark) return [];
+        return combineMatches && currentGroup ? currentGroup.sharkIds : [selectedShark.id];
+    }, [selectedShark, combineMatches, currentGroup]);
+
+    // First image (if any) tied to the currently stepped coordinate, for the
+    // globe's floating image overlay. Only applicable to individual shark view
+    const currentStepImageUrl = useMemo(() => {
+        if (viewMode !== "individual" || !isStepMode || !currentPoint) return undefined;
+        return getFirstImageForPoint(currentStepSharkIds, currentPoint);
+    }, [viewMode, isStepMode, currentPoint, currentStepSharkIds]);
 
     // Whether the combine toggle would have any effect for the current selection
     const hasApplicableGroup = useMemo(() => {
@@ -404,6 +418,10 @@ function GeoLabs() {
                     />
                     {/* Coordinate display to match SharkTracker positioning */}
                     {isStepMode && <GlobeCoordinateReadout point={currentPoint} />}
+                    {/* Floating thumbnail for current step's sighting image */}
+                    {viewMode === "individual" && (
+                        <GlobeImageOverlay imageUrl={currentStepImageUrl} />
+                    )}
                 </div>
 
                 {/* Shark selector dropdown on right */}

@@ -334,6 +334,37 @@
     border-radius: var(--radius-lg);
 }
 
+/* Floating thumbnail for the current step's sighting image in globe */
+.globe-image-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-secondary);
+
+    /* Subtle glow to match .globe-coordinate-readout's text-shadow */
+    box-shadow:
+        0 0 8px 1px color-mix(in srgb, var(--coordinate-text) 65%, transparent),
+        var(--shadow-md);
+}
+
+@media (max-width: 900px) {
+    .globe-image-overlay {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+.globe-image-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .heatmap-container {
     width: 100%;
     height: 280px;

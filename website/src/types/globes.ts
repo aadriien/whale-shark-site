@@ -57,3 +57,7 @@ export type GlobeCoordinateReadoutProps = {
     point: PlottedCoordinatePoint | null;
     placeholder?: string;
 };
+
+export type GlobeImageOverlayProps = {
+    imageUrl?: string;
+};
