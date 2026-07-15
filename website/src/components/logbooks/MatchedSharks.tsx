@@ -30,10 +30,11 @@ function MatchMoveSelect({ sharkId, otherGroups, onMove }: MatchMoveSelectProps)
     return (
         <select
             className="match-move-select"
-            defaultValue=""
+            value=""
             disabled={otherGroups.length === 0}
             onChange={(e) => {
-                if (e.target.value) onMove(sharkId, e.target.value);
+                const targetGroupId = e.target.value;
+                if (targetGroupId) onMove(sharkId, targetGroupId);
             }}
             aria-label={`Move ${sharkId} to a different matched group`}
         >
