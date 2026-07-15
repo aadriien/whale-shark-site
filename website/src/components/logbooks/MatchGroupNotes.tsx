@@ -34,7 +34,13 @@ function MatchGroupNotes({ group }: MatchGroupNotesProps) {
                     placeholder="Your group name..."
                     aria-label="Group name"
                 />
-                <span className="match-group-name-count">({group.sharkIds.length})</span>
+                <span
+                    className={`match-group-name-count${
+                        group.sharkIds.length < 2 ? " match-group-name-count--unmatched" : ""
+                    }`}
+                >
+                    ({group.sharkIds.length})
+                </span>
             </div>
 
             <textarea
