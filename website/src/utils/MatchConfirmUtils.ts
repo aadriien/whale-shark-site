@@ -34,7 +34,9 @@ export function buildRemoveConfirm(sharkId: string, group: MatchGroup): ConfirmR
     };
 }
 
-// Confirms moving a single shark out of its current group (+ into targetGroup)
+// Confirms moving either a single shark, or the entire group, out of
+// its current group (+ into targetGroup). Moving the whole group is
+// just a merge, with targetGroup absorbing every shark from that group
 export function buildMoveConfirm(
     sharkId: string,
     group: MatchGroup,
@@ -49,14 +51,19 @@ export function buildMoveConfirm(
     return {
         title: "Move shark?",
         message: wouldDissolve(group)
-            ? `Shark ${sharkId} is the only other shark in ${groupLabel}, so moving it will dissolve this group. Move it to ${targetLabel}?`
-            : `Move shark ${sharkId} to ${targetLabel}?`,
+            ? `Shark ${sharkId} is the only other shark in ${groupLabel}, so moving just this shark will dissolve this group. Move it to ${targetLabel}, or move the entire group (both sharks) to consolidate?`
+            : `Move shark ${sharkId} to ${targetLabel}, or move all ${group.sharkIds.length} sharks in ${groupLabel} to consolidate the 2 groups?`,
         actions: [
             { label: "Cancel", variant: "neutral", onClick: () => {} },
             {
-                label: "Move",
+                label: "Move this shark",
                 variant: "primary",
                 onClick: () => moveSharkToGroup(sharkId, targetGroup.id),
+            },
+            {
+                label: "Move entire group",
+                variant: "primary",
+                onClick: () => mergeGroups(targetGroup.id, group.id),
             },
         ],
     };
