@@ -52,9 +52,9 @@ export function buildRemoveConfirm(sharkId: string, group: MatchGroup): ConfirmR
     return {
         title: "Remove from group?",
         message: wouldEmpty(group)
-            ? `Shark ${sharkId} is alone in ${groupLabel}. Deleting it will remove this group entirely.`
-            : `Delete shark ${sharkId} entirely, or split it out into its own new group, leaving ` +
-              `${otherCount === 1 ? "the other shark" : `the other ${otherCount} sharks`} in ${groupLabel}?`,
+            ? `Shark ${sharkId} is alone in ${groupLabel}.\n\nDeleting it will remove this group entirely.`
+            : `Delete shark ${sharkId} entirely, or split it out into its own new (solo) group?\n\n` +
+              `Either way, ${otherCount === 1 ? "the other shark" : `the other ${otherCount} sharks`} will remain in ${groupLabel}.`,
         actions,
     };
 }
@@ -77,7 +77,7 @@ export function buildMoveConfirm(
     if (wouldEmpty(group)) {
         return {
             title: "Move shark?",
-            message: `Shark ${sharkId} is alone in ${groupLabel}. Moving it will remove this group entirely. Move it to ${targetLabel}?`,
+            message: `Shark ${sharkId} is alone in ${groupLabel}.\n\nMoving it will remove this group entirely.\n\nMove it to ${targetLabel}?`,
             actions: [
                 { label: "Cancel", variant: "neutral", onClick: () => {} },
                 {
@@ -92,8 +92,11 @@ export function buildMoveConfirm(
     return {
         title: "Move shark?",
         message: wouldLeaveSolo(group)
-            ? `Shark ${sharkId} is 1 of only 2 sharks in ${groupLabel}, so moving just this shark will leave the other alone (no longer a confirmed match). Move it to ${targetLabel}, or move the entire group (both sharks) to consolidate?`
-            : `Move shark ${sharkId} to ${targetLabel}, or move all ${group.sharkIds.length} sharks in ${groupLabel} to consolidate the 2 groups?`,
+            ? `Shark ${sharkId} is 1 of only 2 sharks in ${groupLabel}.\n\n` +
+              `Moving just this shark will leave the other alone, no longer a confirmed match.\n\n` +
+              `Move it to ${targetLabel}, or move the entire group (both sharks) to consolidate?`
+            : `Move shark ${sharkId} to ${targetLabel}?\n\n` +
+              `Or move all ${group.sharkIds.length} sharks in ${groupLabel} to consolidate the 2 groups?`,
         actions: [
             { label: "Cancel", variant: "neutral", onClick: () => {} },
             {
@@ -125,9 +128,9 @@ export function buildChooseRemoveConfirm(
     return {
         title: "Remove match?",
         message:
-            `Both shark ${querySharkId} and shark ${matchedSharkId} are in ${groupLabel}. ` +
+            `Both shark ${querySharkId} and shark ${matchedSharkId} are in ${groupLabel}.\n\n` +
             `${groupLabel[0].toUpperCase() + groupLabel.slice(1)} has ${otherCount} other shark${otherCount === 1 ? "" : "s"}` +
-            `${note ? `, with the following notes: "${note}"` : ""}. ` +
+            `${note ? `, with the following notes: "${note}"` : ""}.\n\n` +
             `Removing their match means 1 of these sharks will leave the group. Which shark would you like to remove?`,
         actions: [
             { label: "Cancel", variant: "neutral", onClick: () => {} },
@@ -159,7 +162,7 @@ export function buildMergeConfirm(
     return {
         title: "Combine groups?",
         message:
-            `Shark ${matchedSharkId} already belongs to ${matchedGroupLabel}, and shark ${querySharkId} already belongs to ${queryGroupLabel}. ` +
+            `Shark ${matchedSharkId} already belongs to ${matchedGroupLabel}, and shark ${querySharkId} already belongs to ${queryGroupLabel}.\n\n` +
             `Flagging them as a match will combine both groups, so every shark from both ends up together. Would you like to proceed?`,
         actions: [
             { label: "Cancel", variant: "neutral", onClick: () => {} },

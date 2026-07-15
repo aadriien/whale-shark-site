@@ -11,39 +11,61 @@
 
 .confirm-modal-content {
     background-color: var(--bg-primary);
-    border-radius: var(--radius-md);
-    padding: 1.25rem;
-    max-width: 380px;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    max-width: 400px;
     width: 100%;
-    box-shadow: 0 4px 16px var(--condensed-card-shadow);
+    box-shadow: var(--shadow-xl);
 }
 
 .confirm-modal-title {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
     color: var(--text-primary);
 }
 
 .confirm-modal-message {
-    margin: 0 0 1rem;
+    margin: 0;
     color: var(--text-secondary);
     font-size: 0.9rem;
+    line-height: 1.55;
     white-space: pre-line;
 }
 
 .confirm-modal-actions {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: flex-end;
+    flex-direction: column-reverse;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-quaternary);
 }
 
 .confirm-modal-button {
+    width: 100%;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-tertiary);
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
     background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease;
+}
+
+.confirm-modal-button.neutral {
+    background-color: transparent;
+    border-color: var(--border-secondary);
+    color: var(--text-tertiary);
+}
+
+.confirm-modal-button.neutral:hover {
+    background-color: var(--hover-bg);
     color: var(--text-primary);
 }
 
@@ -53,8 +75,16 @@
     color: var(--text-on-accent);
 }
 
+.confirm-modal-button.primary:hover {
+    filter: brightness(0.9);
+}
+
 .confirm-modal-button.danger {
     background-color: var(--error);
     border-color: var(--error);
     color: var(--text-on-accent);
+}
+
+.confirm-modal-button.danger:hover {
+    filter: brightness(0.9);
 }
