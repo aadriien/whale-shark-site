@@ -1,36 +1,61 @@
 import { MatchGroup } from "../types/logbooks";
-import { ConfirmRequest } from "../types/controls";
-import { removeSharkFromGroup, moveSharkToGroup, mergeGroups } from "./MatchUtils";
+import { ConfirmRequest, ConfirmModalAction } from "../types/controls";
+import {
+    removeSharkFromGroup,
+    moveSharkToGroup,
+    splitSharkToNewGroup,
+    mergeGroups,
+} from "./MatchUtils";
 import { getGroupNote } from "./NotesUtils";
 
 export function labelForGroup(group: MatchGroup, fallback: string): string {
     return group.name ? `group "${group.name}"` : fallback;
 }
 
-// True once removing 1 more shark would leave fewer than 2 members,
-// i.e. nobody left to be "the same shark"
-function wouldDissolve(group: MatchGroup): boolean {
-    return group.sharkIds.length - 1 < 2;
+// True once taking 1 more shark out would leave the group with 0
+// members, i.e. nobody left for it to represent at all
+function wouldEmpty(group: MatchGroup): boolean {
+    return group.sharkIds.length - 1 < 1;
 }
 
-// Confirms removing a single, already-identified shark from its group.
+// True once taking 1 more shark out would leave 1 member behind.
+// Group exists, but purely solo, since a "match" requires 2+ sharks
+function wouldLeaveSolo(group: MatchGroup): boolean {
+    return group.sharkIds.length - 1 === 1;
+}
+
+// Confirms removing a single, already-identified shark from its group,
+// offering to either delete it outright or split into solo group
 // Used both for the logbook's explicit remove button, and for MatchButton's
-// simplest "unmatch" case (a 2-member group, where both sharks dropped)
+// simplest "unmatch" case (a 2-member group, where 1 shark leaves the other)
 export function buildRemoveConfirm(sharkId: string, group: MatchGroup): ConfirmRequest {
     const groupLabel = labelForGroup(group, "this group");
+    const otherCount = group.sharkIds.length - 1;
+
+    const actions: ConfirmModalAction[] = [
+        { label: "Cancel", variant: "neutral", onClick: () => {} },
+        {
+            label: "Delete",
+            variant: "danger",
+            onClick: () => removeSharkFromGroup(sharkId),
+        },
+    ];
+
+    if (!wouldEmpty(group)) {
+        actions.push({
+            label: "Split into new group",
+            variant: "primary",
+            onClick: () => splitSharkToNewGroup(sharkId),
+        });
+    }
+
     return {
         title: "Remove from group?",
-        message: wouldDissolve(group)
-            ? `Removing shark ${sharkId} will dissolve ${groupLabel}, since no sharks would remain.`
-            : `Remove shark ${sharkId} from this group of ${group.sharkIds.length} sharks?`,
-        actions: [
-            { label: "Cancel", variant: "neutral", onClick: () => {} },
-            {
-                label: "Remove",
-                variant: "danger",
-                onClick: () => removeSharkFromGroup(sharkId),
-            },
-        ],
+        message: wouldEmpty(group)
+            ? `Shark ${sharkId} is alone in ${groupLabel}. Deleting it will remove this group entirely.`
+            : `Delete shark ${sharkId} entirely, or split it out into its own new group, leaving ` +
+              `${otherCount === 1 ? "the other shark" : `the other ${otherCount} sharks`} in ${groupLabel}?`,
+        actions,
     };
 }
 
@@ -48,10 +73,26 @@ export function buildMoveConfirm(
         `the group of ${targetGroup.sharkIds.length} sharks`
     );
 
+    // Origin group only has this shark, so moving dissolves that group
+    if (wouldEmpty(group)) {
+        return {
+            title: "Move shark?",
+            message: `Shark ${sharkId} is alone in ${groupLabel}. Moving it will remove this group entirely. Move it to ${targetLabel}?`,
+            actions: [
+                { label: "Cancel", variant: "neutral", onClick: () => {} },
+                {
+                    label: "Move",
+                    variant: "primary",
+                    onClick: () => moveSharkToGroup(sharkId, targetGroup.id),
+                },
+            ],
+        };
+    }
+
     return {
         title: "Move shark?",
-        message: wouldDissolve(group)
-            ? `Shark ${sharkId} is the only other shark in ${groupLabel}, so moving just this shark will dissolve this group. Move it to ${targetLabel}, or move the entire group (both sharks) to consolidate?`
+        message: wouldLeaveSolo(group)
+            ? `Shark ${sharkId} is 1 of only 2 sharks in ${groupLabel}, so moving just this shark will leave the other alone (no longer a confirmed match). Move it to ${targetLabel}, or move the entire group (both sharks) to consolidate?`
             : `Move shark ${sharkId} to ${targetLabel}, or move all ${group.sharkIds.length} sharks in ${groupLabel} to consolidate the 2 groups?`,
         actions: [
             { label: "Cancel", variant: "neutral", onClick: () => {} },

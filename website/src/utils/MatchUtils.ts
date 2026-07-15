@@ -1,5 +1,11 @@
 import { MatchGroup, NamedSharkGroup } from "../types/logbooks";
-import { clearAllNotes, deleteGroupNote, getGroupNote, setGroupNote, MAX_NOTE_LENGTH } from "./NotesUtils";
+import {
+    clearAllNotes,
+    deleteGroupNote,
+    getGroupNote,
+    setGroupNote,
+    MAX_NOTE_LENGTH,
+} from "./NotesUtils";
 
 const STORAGE_KEY = "matchedSharkGroups";
 const GROUPS_CHANGED_EVENT = "matchedGroupsChanged";
@@ -84,16 +90,17 @@ export function mergeGroups(intoGroupId: string, fromGroupId: string) {
     }
 }
 
-// Removes a shark from whichever group it's in. If < 2 members
-// remain, the group no longer represents a match, so it dissolves
-// entirely (along with its note, if it exists)
+// Removes a shark from whichever group it's in.
+// A group can persist with just 1 member left (e.g. match partner moved or split),
+// but it's no longer a confirmed match with anyone. The group dissolves when 0
+// members remain (along with the group's note, if it exists)
 function detachSharkFromGroup(groups: MatchGroup[], sharkId: string): MatchGroup[] {
     const group = groups.find((g) => g.sharkIds.includes(sharkId));
     if (!group) return groups;
 
     const remainingMembers = group.sharkIds.filter((id) => id !== sharkId);
 
-    if (remainingMembers.length < 2) {
+    if (remainingMembers.length < 1) {
         deleteGroupNote(group.id);
         return groups.filter((g) => g.id !== group.id);
     }
@@ -111,6 +118,15 @@ export function moveSharkToGroup(sharkId: string, targetGroupId: string) {
     if (!targetGroup) return;
 
     targetGroup.sharkIds.push(sharkId);
+    writeGroups(groups);
+}
+
+// Pulls a shark out of its current group, starting a new one
+// e.g. user realizes it doesn't match the others, but still wants
+// to track it & set up new group, rather than deleting it outright
+export function splitSharkToNewGroup(sharkId: string) {
+    const groups = detachSharkFromGroup(getGroups(), sharkId);
+    groups.push({ id: crypto.randomUUID(), sharkIds: [sharkId] });
     writeGroups(groups);
 }
 
