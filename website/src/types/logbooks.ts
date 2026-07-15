@@ -1,5 +1,8 @@
 import React from "react";
 
+import { WhaleSharkEntryNormalized } from "./sharks";
+import { ConfirmRequest } from "./controls";
+
 /* Helper logbook types */
 
 export type Page = {
@@ -67,6 +70,20 @@ export type MatchMoveSelectProps = {
     sharkId: string;
     otherGroups: MatchGroup[];
     onMove: (sharkId: string, targetGroupId: string) => void;
+};
+
+export type MatchGroupCardBaseProps = {
+    onOpenGallery: (shark: WhaleSharkEntryNormalized) => void;
+    requestConfirm: (request: ConfirmRequest) => void;
+};
+
+export type MatchGroupCardProps = MatchGroupCardBaseProps & {
+    group: MatchGroup;
+    otherGroups: MatchGroup[];
+};
+
+export type MatchedGroupsGridProps = MatchGroupCardBaseProps & {
+    groups: MatchGroup[];
 };
 
 export type LogbookProps = {
