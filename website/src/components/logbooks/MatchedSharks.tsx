@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { mediaSharks, parseImageField } from "../../utils/DataUtils";
 import { clearAllGroups, groupDisplayLabel } from "../../utils/MatchUtils";
 import { buildRemoveConfirm, buildMoveConfirm } from "../../utils/MatchConfirmUtils";
+import { getGroupNote } from "../../utils/NotesUtils";
 import { useMatchedGroups } from "../../hooks/useMatchedGroups";
 import { useConfirmModal } from "../../hooks/useConfirmModal";
 import SharkBanner from "../cards/SharkBanner";
@@ -10,7 +11,27 @@ import SharkMediaLightbox from "../cards/SharkMediaLightbox";
 import MatchGroupNotes from "./MatchGroupNotes";
 
 import { WhaleSharkEntryNormalized } from "../../types/sharks";
-import { MatchRemoveButtonProps, MatchMoveSelectProps } from "../../types/logbooks";
+import { MatchGroup, MatchRemoveButtonProps, MatchMoveSelectProps } from "../../types/logbooks";
+
+// Larger groups first; among ties, named groups before unnamed, then
+// noted groups before un-noted. No further tiebreaking beyond that
+function sortMatchedGroups(groups: MatchGroup[]): MatchGroup[] {
+    return [...groups].sort((a, b) => {
+        if (b.sharkIds.length !== a.sharkIds.length) {
+            return b.sharkIds.length - a.sharkIds.length;
+        }
+
+        const aHasName = Boolean(a.name?.trim());
+        const bHasName = Boolean(b.name?.trim());
+        if (aHasName !== bHasName) return aHasName ? -1 : 1;
+
+        const aHasNote = Boolean(getGroupNote(a.id));
+        const bHasNote = Boolean(getGroupNote(b.id));
+        if (aHasNote !== bHasNote) return aHasNote ? -1 : 1;
+
+        return 0;
+    });
+}
 
 function MatchRemoveButton({ sharkId, onRemove }: MatchRemoveButtonProps) {
     return (
@@ -53,6 +74,7 @@ function MatchMoveSelect({ sharkId, otherGroups, onMove }: MatchMoveSelectProps)
 function MatchedSharks() {
     // Subscribes to matched-group changes so this re-renders when they occur
     const groups = useMatchedGroups();
+    const sortedGroups = useMemo(() => sortMatchedGroups(groups), [groups]);
 
     // Shark whose media lightbox is currently open, if any (+ which image is active)
     const [galleryShark, setGalleryShark] = useState<WhaleSharkEntryNormalized | null>(null);
@@ -95,9 +117,9 @@ function MatchedSharks() {
             </div>
 
             <div className="matched-groups">
-                {groups.length > 0 ? (
-                    groups.map((group) => {
-                        const otherGroups = groups.filter((g) => g.id !== group.id);
+                {sortedGroups.length > 0 ? (
+                    sortedGroups.map((group) => {
+                        const otherGroups = sortedGroups.filter((g) => g.id !== group.id);
 
                         return (
                             <div key={group.id} className="matched-group-box">
@@ -124,9 +146,11 @@ function MatchedSharks() {
                                                             sharkId={sharkId}
                                                             otherGroups={otherGroups}
                                                             onMove={(id, targetGroupId) => {
-                                                                const targetGroup = otherGroups.find(
-                                                                    (g) => g.id === targetGroupId
-                                                                );
+                                                                const targetGroup =
+                                                                    otherGroups.find(
+                                                                        (g) =>
+                                                                            g.id === targetGroupId
+                                                                    );
                                                                 if (targetGroup) {
                                                                     requestConfirm(
                                                                         buildMoveConfirm(
