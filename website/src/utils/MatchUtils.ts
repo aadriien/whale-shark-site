@@ -135,3 +135,23 @@ export function clearAllGroups() {
     clearAllNotes();
     window.dispatchEvent(new CustomEvent(GROUPS_CHANGED_EVENT));
 }
+
+// Larger groups first; among ties, named groups before unnamed, then
+// noted groups before un-noted. No further tiebreaking beyond that
+export function sortMatchedGroups(groups: MatchGroup[]): MatchGroup[] {
+    return [...groups].sort((a, b) => {
+        if (b.sharkIds.length !== a.sharkIds.length) {
+            return b.sharkIds.length - a.sharkIds.length;
+        }
+
+        const aHasName = Boolean(a.name?.trim());
+        const bHasName = Boolean(b.name?.trim());
+        if (aHasName !== bHasName) return aHasName ? -1 : 1;
+
+        const aHasNote = Boolean(getGroupNote(a.id));
+        const bHasNote = Boolean(getGroupNote(b.id));
+        if (aHasNote !== bHasNote) return aHasNote ? -1 : 1;
+
+        return 0;
+    });
+}
