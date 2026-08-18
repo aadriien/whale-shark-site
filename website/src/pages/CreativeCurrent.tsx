@@ -16,6 +16,12 @@ function CreativeCurrent() {
             description: "Customize your own 3D path and watch a shark swim along it",
             image: "./animation.png",
         },
+        {
+            path: "/creative/aquarium",
+            title: "Aquarium",
+            description: "TBD",
+            image: "./animation.png",
+        },
     ];
 
     return (

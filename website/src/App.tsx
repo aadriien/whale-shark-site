@@ -23,6 +23,7 @@ const SharkVision = lazy(() => import("./pages/SharkVision"));
 
 const BuildAShark = lazy(() => import("./pages/BuildAShark"));
 const Animation = lazy(() => import("./pages/Animation"));
+const Aquarium = lazy(() => import("./pages/Aquarium"));
 
 function App() {
     const [isLogbookOpen, setIsLogbookOpen] = useState<boolean>(false);
@@ -89,6 +90,7 @@ function App() {
                     {/* Creative Current */}
                     <Route path="/creative/buildashark" element={<BuildAShark />} />
                     <Route path="/creative/animation" element={<Animation />} />
+                    <Route path="/creative/aquarium" element={<Aquarium />} />
                 </Routes>
             </HashRouter>
         </Suspense>

@@ -106,6 +106,12 @@ function Navbar({ isLogbookOpen, setIsLogbookOpen, theme, setTheme }: NavbarProp
                     >
                         Animation
                     </Link>
+                    <Link
+                        to="/creative/aquarium"
+                        className={location.pathname === "/creative/aquarium" ? "active" : ""}
+                    >
+                        Aquarium
+                    </Link>
                 </>
             )}
         </nav>
