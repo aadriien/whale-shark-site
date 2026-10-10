@@ -4,6 +4,7 @@ import { createLights, createCamera } from "../utils/GlobeUtils";
 import { createSharkSteering } from "../utils/SharkSteering";
 import { GlowSharkAnimated } from "components/animations/GlowSharkAnimated";
 import { createWaterVolume } from "components/animations/AquariumWater";
+import { createPlanktonLure } from "components/animations/PlanktonLure";
 
 function Aquarium() {
     return (
@@ -53,15 +54,10 @@ function AquariumTest() {
         shark.scale.set(1, 1, 1);
         scene.add(shark);
 
-        // Click-test box doubles as destination marker, shown while shark heads there
+        // Glowing plankton marks click destination, sized in proportion to shark
         sharkGeometry.computeBoundingSphere();
         const sharkRadius = sharkGeometry.boundingSphere!.radius;
-        const boxSize = sharkRadius * 0.2;
-        const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.visible = false;
-        scene.add(mesh);
+        const lure = createPlanktonLure(scene, sharkRadius * 0.6);
 
         // Frame the shark's swim path in view, derived from path bounds + camera fov/aspect
         // so it adapts to any viewport (no hardcoded camera distance)
@@ -110,6 +106,8 @@ function AquariumTest() {
             camera.aspect = containerWidth / containerHeight;
             fitCameraToPath();
             camera.updateProjectionMatrix();
+
+            lure.setViewport(renderer.domElement.height, camera.fov);
         };
 
         // Attach renderer to DOM after size is set
@@ -137,7 +135,7 @@ function AquariumTest() {
 
             if (hit) {
                 steering.setTarget(clickPoint);
-                mesh.position.copy(clickPoint);
+                lure.trigger(clickPoint);
                 console.log(clickPoint);
 
                 // // Determine coords, then send up to parent to find nearest shark
@@ -168,7 +166,7 @@ function AquariumTest() {
             const { phase, amplitude } = steering.getRipple();
             animateBody(clock.elapsedTime, phase, amplitude);
 
-            mesh.visible = steering.getState() !== "wander";
+            lure.update(delta, clock.elapsedTime, steering.getState());
 
             // Water brightens around shark, more so while it heads for a click
             const glowTarget = steering.getState() === "wander" ? 0.6 : 1;
@@ -194,6 +192,7 @@ function AquariumTest() {
             if (globeContainer.contains(renderer.domElement)) {
                 globeContainer.removeChild(renderer.domElement);
             }
+            lure.dispose();
             water.dispose();
             renderer.dispose();
         };
