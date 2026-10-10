@@ -4,9 +4,10 @@ import SharkModelPoints3D from "../../assets/data/json/shark_model_extracted_poi
 
 import { SegmentData, WaveProps, ApplyRippleProps } from "../../types/animations";
 
-function computeWave({ basePositions, time, wavelength, speed }: WaveProps) {
-    const waveValues = new Float32Array(basePositions.length / 3);
-
+function computeWave(
+    { basePositions, time, wavelength, speed }: WaveProps,
+    waveValues = new Float32Array(basePositions.length / 3)
+) {
     for (let i = 0; i < basePositions.length / 3; i++) {
         // Use Y axis to run wave lengthwise
         const y = basePositions[i * 3 + 1];
@@ -41,6 +42,17 @@ function computeSegments(basePositions: Float32Array<ArrayBuffer>, numSegments: 
     return { minY, maxY, segmentSize, segmentData };
 }
 
+// basePositions never change, so segment layout & wave buffer are built once per
+// shark rather than reallocated every frame (avoids churn / micro-stutter)
+const rippleCache = new WeakMap<
+    Float32Array,
+    {
+        numSegments: number;
+        segments: ReturnType<typeof computeSegments>;
+        waveValues: Float32Array<ArrayBuffer>;
+    }
+>();
+
 function applyRipple({
     positions,
     basePositions,
@@ -60,13 +72,26 @@ function applyRipple({
     const pointCount = basePositions.length / 3;
 
     // Compute wave values & body segments based on Y axis
-    const waveValues = computeWave({
-        basePositions,
-        time,
-        wavelength,
-        speed,
-    });
-    const { minY, maxY, segmentSize, segmentData } = computeSegments(basePositions, numSegments);
+    let cached = rippleCache.get(basePositions);
+    if (!cached || cached.numSegments !== numSegments) {
+        cached = {
+            numSegments,
+            segments: computeSegments(basePositions, numSegments),
+            waveValues: new Float32Array(pointCount),
+        };
+        rippleCache.set(basePositions, cached);
+    }
+
+    const waveValues = computeWave(
+        {
+            basePositions,
+            time,
+            wavelength,
+            speed,
+        },
+        cached.waveValues
+    );
+    const { minY, maxY, segmentSize, segmentData } = cached.segments;
 
     // Precompute segment ripple offsets with taper flipped (tail = higher Y)
     const segmentOffsets: number[] = new Array(numSegments).fill(0);

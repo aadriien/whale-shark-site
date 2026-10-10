@@ -435,11 +435,17 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         };
         mount.addEventListener("mousemove", handleHover);
 
+        // Track both loops so they can be cancelled on unmount
+        let animateFrameId = 0;
+        let collisionFrameId = 0;
+
+        const sharkSphere = new THREE.Sphere();
+        const blobSphere = new THREE.Sphere();
+
         // Activate glowing particle effect when shark swims through blob
         function checkSharkCollision() {
-            requestAnimationFrame(checkSharkCollision);
+            collisionFrameId = requestAnimationFrame(checkSharkCollision);
 
-            const sharkSphere = new THREE.Sphere();
             if (!geometry.boundingSphere) {
                 geometry.computeBoundingSphere();
             }
@@ -455,7 +461,7 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
             for (const mesh of clickableMeshes.current) {
                 if (!mesh.geometry.boundingSphere) continue;
 
-                const blobSphere = new THREE.Sphere().copy(mesh.geometry.boundingSphere);
+                blobSphere.copy(mesh.geometry.boundingSphere);
                 blobSphere.applyMatrix4(mesh.matrixWorld);
 
                 if (sharkSphere.intersectsSphere(blobSphere)) {
@@ -489,7 +495,7 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         const clock = new THREE.Clock();
 
         function animate() {
-            requestAnimationFrame(animate);
+            animateFrameId = requestAnimationFrame(animate);
             const elapsed = clock.getElapsedTime();
 
             stars.rotation.y = elapsed * 0.02;
@@ -519,6 +525,8 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
 
         // Clean up on unmount
         return () => {
+            cancelAnimationFrame(animateFrameId);
+            cancelAnimationFrame(collisionFrameId);
             window.removeEventListener("resize", onResize);
 
             if (mount && renderer.domElement.parentElement === mount) {
