@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { createLights, createCamera } from "../utils/GlobeUtils";
+import { GlowSharkAnimated } from "components/animations/GlowSharkAnimated";
 
 function Aquarium() {
     return (
@@ -38,12 +39,46 @@ function AquariumTest() {
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-        const geometry = new THREE.BoxGeometry();
+        // Create glowing whale shark & add to scene
+        const {
+            shark,
+            geometry: sharkGeometry,
+            basePositions: _basePositions,
+            curve,
+            update: updateShark,
+        } = GlowSharkAnimated();
+        shark.scale.set(1, 1, 1);
+        scene.add(shark);
+
+        // Click-test box, sized off the shark so it's in proportion (default 1x1x1 is
+        // invisible at shark scale)
+        sharkGeometry.computeBoundingSphere();
+        const boxSize = sharkGeometry.boundingSphere!.radius;
+        const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
-        camera.position.z = 5;
+        // Frame the shark's swim path in view, derived from path bounds + camera fov/aspect
+        // so it adapts to any viewport (no hardcoded camera distance)
+        const pathBounds = new THREE.Box3().setFromPoints(curve.getPoints(200));
+        const pathSize = pathBounds.getSize(new THREE.Vector3());
+        const pathCenter = pathBounds.getCenter(new THREE.Vector3());
+
+        const fitCameraToPath = () => {
+            const halfVFov = THREE.MathUtils.degToRad(camera.fov) / 2;
+            const halfHFov = Math.atan(Math.tan(halfVFov) * camera.aspect);
+
+            // Distance needed to fit path's height & width, whichever is more limiting
+            const distance = Math.max(
+                pathSize.y / 2 / Math.tan(halfVFov),
+                pathSize.x / 2 / Math.tan(halfHFov)
+            );
+
+            // Measure from nearest face of path so closest swim points stay in frame
+            camera.position.set(pathCenter.x, pathCenter.y, pathBounds.max.z + distance);
+            camera.far = (camera.position.z - pathBounds.min.z) * 1.5;
+        };
 
         const resizeCanvas = () => {
             if (!globeContainer.offsetWidth || !globeContainer.offsetHeight) return;
@@ -56,6 +91,7 @@ function AquariumTest() {
             renderer.setPixelRatio(window.devicePixelRatio);
 
             camera.aspect = containerWidth / containerHeight;
+            fitCameraToPath();
             camera.updateProjectionMatrix();
         };
 
@@ -102,14 +138,21 @@ function AquariumTest() {
         window.addEventListener("resize", resizeCanvas);
         globeContainer.addEventListener("click", handleClick);
 
+        const clock = new THREE.Clock();
+        let frameId = 0;
+
         const animate = () => {
+            // Drives color pulse, tail ripple, & preset swim path (same as home page)
+            updateShark(clock.getElapsedTime());
+
             renderer.render(scene, camera);
-            requestAnimationFrame(animate);
+            frameId = requestAnimationFrame(animate);
         };
         animate();
 
         // Cleanup on component unmount
         return () => {
+            cancelAnimationFrame(frameId);
             window.removeEventListener("resize", resizeCanvas);
 
             // Remove renderer's canvas
