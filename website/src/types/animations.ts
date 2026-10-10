@@ -69,6 +69,14 @@ export type ApplyRippleProps = WaveProps & {
     mode: Mode;
 };
 
+export type SharkSteeringState = "wander" | "seek" | "linger";
+
+export type SharkSteeringProps = {
+    shark: THREE.Object3D;
+    bounds: THREE.Box3;
+    sharkLength: number;
+};
+
 export type GalacticOceanProps = {
     isMobile: boolean;
 };
