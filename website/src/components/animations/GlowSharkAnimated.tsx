@@ -259,41 +259,47 @@ export function GlowSharkAnimated() {
     const curve = new THREE.CatmullRomCurve3(pathPoints);
     curve.closed = true;
 
+    const animateBody = (time: number, ripplePhase: number, amplitude = 20) => {
+        // Hue shift + pulse
+        const colors = geometry.attributes.color.array;
+        for (let i = 0; i < rawPoints.length; i++) {
+            const hue = (time * 0.1 + i / rawPoints.length) % 1;
+            const pulse = 0.5 + 0.5 * Math.sin(time + i * 0.01);
+
+            color.setHSL(hue, 1.0, 0.5 + 0.2 * pulse);
+
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
+        }
+        geometry.attributes.color.needsUpdate = true;
+
+        // Introduce ripple effect to simulate swimming motion
+        applyRipple({
+            positions,
+            basePositions,
+            time: ripplePhase,
+            axis: "x",
+            amplitude,
+            wavelength: 0.03,
+            speed: 1,
+            numSegments: 20,
+            taperPower: 1.05,
+            taperStart: 0.25,
+            mode: "smooth", // "simple", "segmented", "smooth"
+        });
+        geometry.attributes.position.needsUpdate = true;
+    };
+
     return {
         shark,
         geometry,
         basePositions,
         curve,
+        animateBody,
         update: (time: number) => {
-            // Hue shift + pulse
-            const colors = geometry.attributes.color.array;
-            for (let i = 0; i < rawPoints.length; i++) {
-                const hue = (time * 0.1 + i / rawPoints.length) % 1;
-                const pulse = 0.5 + 0.5 * Math.sin(time + i * 0.01);
-
-                color.setHSL(hue, 1.0, 0.5 + 0.2 * pulse);
-
-                colors[i * 3] = color.r;
-                colors[i * 3 + 1] = color.g;
-                colors[i * 3 + 2] = color.b;
-            }
-            geometry.attributes.color.needsUpdate = true;
-
-            // Introduce ripple effect to simulate swimming motion
-            applyRipple({
-                positions,
-                basePositions,
-                time,
-                axis: "x",
-                amplitude: 20,
-                wavelength: 0.03,
-                speed: 4,
-                numSegments: 20,
-                taperPower: 1.05,
-                taperStart: 0.25,
-                mode: "smooth", // "simple", "segmented", "smooth"
-            });
-            geometry.attributes.position.needsUpdate = true;
+            // Ripple phase = time * 4 keeps original ripple speed of 4
+            animateBody(time, time * 4);
 
             // Move shark along curve (40 sec to complete 1 loop)
             const loopDuration = 40;
