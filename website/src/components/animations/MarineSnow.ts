@@ -69,7 +69,7 @@ const snowFragmentShader = `
         float dist = length(gl_PointCoord - vec2(0.5));
         float soft = smoothstep(0.5, 0.0, dist);
 
-        gl_FragColor = vec4(vec3(0.70, 0.90, 1.0), soft * soft * vAlpha);
+        gl_FragColor = vec4(pow(vec3(0.70, 0.90, 1.0), vec3(2.2)), soft * soft * vAlpha);
     }
 `;
 

@@ -7,6 +7,14 @@ import { createWaterVolume } from "components/animations/AquariumWater";
 import { createPlanktonLure } from "components/animations/PlanktonLure";
 import { createMarineSnow } from "components/animations/MarineSnow";
 
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+
+// Kept faint on purpose: only brightest cores get a soft halo, so water keeps its depth.
+// strength 0 = no visible bloom
+const BLOOM = { strength: 0.3, radius: 0.5, threshold: 0.7 };
+
 function Aquarium() {
     return (
         <div className="aquarium-wrapper">
@@ -42,6 +50,17 @@ function AquariumTest() {
         cameraRef.current = camera;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+        const composer = new EffectComposer(renderer);
+        composer.addPass(new RenderPass(scene, camera));
+        const bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(globeContainer.clientWidth, globeContainer.clientHeight),
+            BLOOM.strength,
+            BLOOM.radius,
+            BLOOM.threshold
+        );
+        composer.addPass(bloomPass);
+
         const water = createWaterVolume(scene);
 
         // Create glowing whale shark & add to scene
@@ -106,9 +125,12 @@ function AquariumTest() {
             const containerWidth = globeContainer.offsetWidth;
             const containerHeight = globeContainer.offsetHeight;
 
-            // Increase pixel density for clarity
-            renderer.setSize(containerWidth, containerHeight);
+            // Increase pixel density for clarity (ratio first, so sizes account for it)
             renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(containerWidth, containerHeight);
+
+            composer.setPixelRatio(window.devicePixelRatio);
+            composer.setSize(containerWidth, containerHeight);
 
             camera.aspect = containerWidth / containerHeight;
             fitCameraToPath();
@@ -191,7 +213,7 @@ function AquariumTest() {
             sharkUv.set(sharkNdc.x * 0.5 + 0.5, sharkNdc.y * 0.5 + 0.5);
             water.update(clock.elapsedTime, camera.aspect, sharkUv, sharkGlow);
 
-            renderer.render(scene, camera);
+            composer.render();
             frameId = requestAnimationFrame(animate);
         };
         animate();
@@ -207,6 +229,8 @@ function AquariumTest() {
             if (globeContainer.contains(renderer.domElement)) {
                 globeContainer.removeChild(renderer.domElement);
             }
+            bloomPass.dispose();
+            composer.dispose();
             snow.dispose();
             lure.dispose();
             water.dispose();

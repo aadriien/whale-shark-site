@@ -71,7 +71,7 @@ const lureFragmentShader = `
         float soft = smoothstep(0.5, 0.0, dist);
 
         vec3 color = mix(vec3(0.25, 0.85, 1.0), vec3(0.55, 1.0, 0.75), vMix);
-        gl_FragColor = vec4(color, soft * soft * vAlpha);
+        gl_FragColor = vec4(pow(color, vec3(2.2)), soft * soft * vAlpha);
     }
 `;
 
@@ -105,7 +105,7 @@ const ringFragmentShader = `
         float rings = ringAt(r, uAge) + 0.5 * ringAt(r, uAge - 0.25);
         float fade = 1.0 - smoothstep(uRingSeconds * 0.55, uRingSeconds * 1.8, uAge);
 
-        vec3 color = vec3(0.45, 0.9, 1.0);
+        vec3 color = pow(vec3(0.45, 0.9, 1.0), vec3(2.2));
         gl_FragColor = vec4(color, rings * fade * uPresence);
     }
 `;

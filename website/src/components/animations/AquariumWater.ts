@@ -1,5 +1,9 @@
 import * as THREE from "three";
 
+// Exponent applied to water color on output. Note that 2.2 reproduces authored colors exactly
+// (deep, near-black trenches); lower values lift darks toward a hazier open ocean (1.0 = baby blue)
+const WATER_GAMMA = 1.8;
+
 // Full-screen quad that ignores camera, so water fills viewport regardless of shark framing
 const waterVertexShader = `
     varying vec2 vUv;
@@ -93,7 +97,8 @@ const waterFragmentShader = `
         // Dither to hide banding in dark gradients
         col += (hash(gl_FragCoord.xy + uTime) - 0.5) / 255.0;
 
-        gl_FragColor = vec4(col, 1.0);
+        // Composer's final pass sRGB-encodes frame, so hand it linear to land on authored colors
+        gl_FragColor = vec4(pow(col, vec3(${WATER_GAMMA.toFixed(2)})), 1.0);
     }
 `;
 
