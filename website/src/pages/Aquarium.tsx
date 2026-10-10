@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { createLights, createCamera } from "../utils/GlobeUtils";
 import { createSharkSteering } from "../utils/SharkSteering";
 import { GlowSharkAnimated } from "components/animations/GlowSharkAnimated";
+import { createWaterVolume } from "components/animations/AquariumWater";
 
 function Aquarium() {
     return (
@@ -39,6 +40,7 @@ function AquariumTest() {
         cameraRef.current = camera;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const water = createWaterVolume(scene);
 
         // Create glowing whale shark & add to scene
         const {
@@ -154,6 +156,10 @@ function AquariumTest() {
         const clock = new THREE.Clock();
         let frameId = 0;
 
+        const sharkNdc = new THREE.Vector3();
+        const sharkUv = new THREE.Vector2();
+        let sharkGlow = 0;
+
         const animate = () => {
             // Clamp delta so returning to a backgrounded tab doesn't teleport shark
             const delta = Math.min(clock.getDelta(), 0.1);
@@ -163,6 +169,14 @@ function AquariumTest() {
             animateBody(clock.elapsedTime, phase, amplitude);
 
             mesh.visible = steering.getState() !== "wander";
+
+            // Water brightens around shark, more so while it heads for a click
+            const glowTarget = steering.getState() === "wander" ? 0.6 : 1;
+            sharkGlow += (glowTarget - sharkGlow) * Math.min(1, 2 * delta);
+
+            sharkNdc.copy(shark.position).project(camera);
+            sharkUv.set(sharkNdc.x * 0.5 + 0.5, sharkNdc.y * 0.5 + 0.5);
+            water.update(clock.elapsedTime, camera.aspect, sharkUv, sharkGlow);
 
             renderer.render(scene, camera);
             frameId = requestAnimationFrame(animate);
@@ -180,6 +194,7 @@ function AquariumTest() {
             if (globeContainer.contains(renderer.domElement)) {
                 globeContainer.removeChild(renderer.domElement);
             }
+            water.dispose();
             renderer.dispose();
         };
     }, []);
