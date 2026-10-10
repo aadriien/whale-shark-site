@@ -40,6 +40,15 @@ const lureVertexShader = `
         // Blob draws inward while shark feeds
         blobPos *= 1.0 - 0.35 * uLinger;
 
+        // Strays peel away on a gentle current the longer blob goes unvisited,
+        // then are drawn back once shark arrives to feed
+        float stray = smoothstep(0.5, 1.0, fract(aSeed * 7.31));
+        float unvisited = 1.0 - exp(-max(uAge - uRingSeconds * 2.0, 0.0) * 0.06);
+        float strayAmount = stray * unvisited * (1.0 - uLinger);
+
+        vec3 current = normalize(vec3(0.8 + aOffset.x * 0.5, aOffset.y * 0.5, aOffset.z * 0.4));
+        blobPos += current * uRadius * 1.2 * strayAmount;
+
         float morph = smoothstep(uRingSeconds * 0.55, uRingSeconds * 2.0, uAge);
         vec4 mvPosition = modelViewMatrix * vec4(mix(ringPos, blobPos, morph), 1.0);
 
@@ -48,7 +57,7 @@ const lureVertexShader = `
         gl_PointSize = uPixelScale * (0.6 + aSeed * 0.8) * (1.0 + 0.6 * uLinger) / -mvPosition.z;
         gl_Position = projectionMatrix * mvPosition;
 
-        vAlpha = uPresence * twinkle * (0.6 + 0.4 * uLinger);
+        vAlpha = uPresence * twinkle * (0.6 + 0.4 * uLinger) * (1.0 - 0.5 * strayAmount);
         vMix = aSeed;
     }
 `;

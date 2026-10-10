@@ -5,6 +5,7 @@ import { createSharkSteering } from "../utils/SharkSteering";
 import { GlowSharkAnimated } from "components/animations/GlowSharkAnimated";
 import { createWaterVolume } from "components/animations/AquariumWater";
 import { createPlanktonLure } from "components/animations/PlanktonLure";
+import { createMarineSnow } from "components/animations/MarineSnow";
 
 function Aquarium() {
     return (
@@ -65,6 +66,12 @@ function AquariumTest() {
         const pathSize = pathBounds.getSize(new THREE.Vector3());
         const pathCenter = pathBounds.getCenter(new THREE.Vector3());
 
+        const snow = createMarineSnow(
+            scene,
+            { min: pathBounds.min.z, max: pathBounds.max.z },
+            sharkRadius * 2
+        );
+
         const steering = createSharkSteering({
             shark,
             bounds: pathBounds,
@@ -108,6 +115,8 @@ function AquariumTest() {
             camera.updateProjectionMatrix();
 
             lure.setViewport(renderer.domElement.height, camera.fov);
+            snow.fit(camera);
+            snow.setViewport(renderer.domElement.height, camera.fov);
         };
 
         // Attach renderer to DOM after size is set
@@ -167,6 +176,12 @@ function AquariumTest() {
             animateBody(clock.elapsedTime, phase, amplitude);
 
             lure.update(delta, clock.elapsedTime, steering.getState());
+            snow.update(
+                clock.elapsedTime,
+                shark.position,
+                steering.getForward(),
+                steering.getSpeedRatio()
+            );
 
             // Water brightens around shark, more so while it heads for a click
             const glowTarget = steering.getState() === "wander" ? 0.6 : 1;
@@ -192,6 +207,7 @@ function AquariumTest() {
             if (globeContainer.contains(renderer.domElement)) {
                 globeContainer.removeChild(renderer.domElement);
             }
+            snow.dispose();
             lure.dispose();
             water.dispose();
             renderer.dispose();

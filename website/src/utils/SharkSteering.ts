@@ -98,5 +98,9 @@ export function createSharkSteering({ shark, bounds, sharkLength }: SharkSteerin
         amplitude: THREE.MathUtils.lerp(RIPPLE_AMPLITUDE.min, RIPPLE_AMPLITUDE.max, speedRatio),
     });
 
-    return { update, setTarget, getState, getRipple };
+    const getForward = () => forward;
+
+    const getSpeedRatio = () => speedRatio;
+
+    return { update, setTarget, getState, getRipple, getForward, getSpeedRatio };
 }
