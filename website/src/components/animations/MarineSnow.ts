@@ -2,6 +2,13 @@ import * as THREE from "three";
 
 const PARTICLE_COUNT = 2500;
 
+// Gusts are smooth bumps of extra current. Speeds are in volume fractions per second
+const GUST = {
+    waitSeconds: { min: 10, max: 25 },
+    durationSeconds: { min: 5, max: 9 },
+    peakSpeed: { min: 0.04, max: 0.09 },
+};
+
 // Drift is in volume fractions per second, so it scales with whatever space is filled.
 // Wrapping & wake are computed per-particle in shader from time + shark uniforms alone,
 // so there's no CPU loop & motion is a pure function of time (no state to stutter)
@@ -17,6 +24,7 @@ const snowVertexShader = `
     uniform float uSpeed;
     uniform float uReach;
     uniform float uPixelScale;
+    uniform vec3 uGust;
 
     varying float vAlpha;
 
@@ -27,6 +35,9 @@ const snowVertexShader = `
         p += drift * uTime;
         p.x += sin(uTime * 0.3 + aSeed * 30.0) * 0.012;
         p.y += cos(uTime * 0.25 + aSeed * 17.0) * 0.010;
+
+        // Gust is accumulated offset, nearer specks carried further for parallax
+        p += uGust * (0.5 + aBase.z);
         p = fract(p);
 
         // Fade at volume edges so wrapping never pops
@@ -87,7 +98,14 @@ export function createMarineSnow(
         uSpeed: { value: 0 },
         uReach: { value: sharkLength * 0.6 },
         uPixelScale: { value: 1 },
+        uGust: { value: new THREE.Vector3() },
     };
+
+    const gustPeak = new THREE.Vector3();
+    let gustStart = 0;
+    let gustDuration = 0;
+    let nextGustAt = THREE.MathUtils.randFloat(GUST.waitSeconds.min, GUST.waitSeconds.max);
+    let lastTime = 0;
 
     const bases = new Float32Array(PARTICLE_COUNT * 3);
     const seeds = new Float32Array(PARTICLE_COUNT);
@@ -147,16 +165,51 @@ export function createMarineSnow(
         sharkForward: THREE.Vector3,
         speedRatio: number
     ) => {
+        const dt = Math.min(Math.max(time - lastTime, 0), 0.1);
+        lastTime = time;
+
+        if (gustDuration === 0 && time >= nextGustAt) {
+            const angle = (Math.random() - 0.5) * 1.2;
+            const sign = Math.random() < 0.75 ? 1 : -1;
+
+            gustPeak.set(Math.cos(angle) * sign, Math.sin(angle) * 0.3, 0);
+            gustPeak.multiplyScalar(
+                THREE.MathUtils.randFloat(GUST.peakSpeed.min, GUST.peakSpeed.max)
+            );
+
+            gustStart = time;
+            gustDuration = THREE.MathUtils.randFloat(
+                GUST.durationSeconds.min,
+                GUST.durationSeconds.max
+            );
+        }
+
+        if (gustDuration > 0) {
+            const progress = (time - gustStart) / gustDuration;
+
+            if (progress >= 1) {
+                gustDuration = 0;
+                nextGustAt =
+                    time + THREE.MathUtils.randFloat(GUST.waitSeconds.min, GUST.waitSeconds.max);
+            } else {
+                const envelope = Math.pow(Math.sin(Math.PI * progress), 2);
+                uniforms.uGust.value.addScaledVector(gustPeak, envelope * dt);
+            }
+        }
+
         uniforms.uTime.value = time;
         uniforms.uShark.value.copy(sharkPosition);
         uniforms.uDir.value.copy(sharkForward);
         uniforms.uSpeed.value = speedRatio;
     };
 
+    // Accumulated gust displacement, so other layers can drift with the same current
+    const getGustOffset = () => uniforms.uGust.value;
+
     const dispose = () => {
         geometry.dispose();
         material.dispose();
     };
 
-    return { fit, setViewport, update, dispose };
+    return { fit, setViewport, update, getGustOffset, dispose };
 }

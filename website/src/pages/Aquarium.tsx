@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { createLights, createCamera } from "../utils/GlobeUtils";
 import { createSharkSteering } from "../utils/SharkSteering";
 import { GlowSharkAnimated } from "components/animations/GlowSharkAnimated";
-import { createWaterVolume } from "components/animations/AquariumWater";
+import { createWaterVolume, WATER_FOG_COLOR } from "components/animations/AquariumWater";
 import { createPlanktonLure } from "components/animations/PlanktonLure";
 import { createMarineSnow } from "components/animations/MarineSnow";
 
@@ -85,17 +85,29 @@ function AquariumTest() {
         const pathSize = pathBounds.getSize(new THREE.Vector3());
         const pathCenter = pathBounds.getCenter(new THREE.Vector3());
 
+        // Swim space reaches deeper than preset path, so shark can recede into the
+        // water & return, giving real size change + parallax
+        const swimBounds = pathBounds.clone();
+        swimBounds.min.z -= pathSize.z;
+
         const snow = createMarineSnow(
             scene,
-            { min: pathBounds.min.z, max: pathBounds.max.z },
+            { min: swimBounds.min.z, max: swimBounds.max.z },
             sharkRadius * 2
         );
 
         const steering = createSharkSteering({
             shark,
-            bounds: pathBounds,
+            bounds: swimBounds,
             sharkLength: sharkRadius * 2,
         });
+
+        const fog = new THREE.Fog(WATER_FOG_COLOR, 1, 1000);
+        scene.fog = fog;
+
+        const cameraBase = new THREE.Vector3();
+        const swayX = pathSize.x * 0.01;
+        const swayY = pathSize.y * 0.01;
 
         // Camera-facing plane through path center turns 2D clicks into 3D destinations
         const clickPlane = new THREE.Plane().setFromNormalAndCoplanarPoint(
@@ -116,7 +128,13 @@ function AquariumTest() {
 
             // Measure from nearest face of path so closest swim points stay in frame
             camera.position.set(pathCenter.x, pathCenter.y, pathBounds.max.z + distance);
-            camera.far = (camera.position.z - pathBounds.min.z) * 1.5;
+            cameraBase.copy(camera.position);
+
+            // Fog runs from nearest to deepest swim distance, so depth reads as color falloff
+            const deepest = (camera.position.z - swimBounds.min.z) * 1.5;
+            camera.far = deepest;
+            fog.near = distance;
+            fog.far = deepest;
         };
 
         const resizeCanvas = () => {
@@ -205,13 +223,29 @@ function AquariumTest() {
                 steering.getSpeedRatio()
             );
 
+            // Slow drift & roll, as if camera were hanging in the current
+            const t = clock.elapsedTime;
+            camera.position.set(
+                cameraBase.x + Math.sin(t * 0.11) * swayX,
+                cameraBase.y + Math.sin(t * 0.07 + 1.3) * swayY,
+                cameraBase.z
+            );
+            camera.rotation.z = Math.sin(t * 0.05) * 0.006;
+            camera.updateMatrixWorld();
+
             // Water brightens around shark, more so while it heads for a click
             const glowTarget = steering.getState() === "wander" ? 0.6 : 1;
             sharkGlow += (glowTarget - sharkGlow) * Math.min(1, 2 * delta);
 
             sharkNdc.copy(shark.position).project(camera);
             sharkUv.set(sharkNdc.x * 0.5 + 0.5, sharkNdc.y * 0.5 + 0.5);
-            water.update(clock.elapsedTime, camera.aspect, sharkUv, sharkGlow);
+            water.update(
+                clock.elapsedTime,
+                camera.aspect,
+                sharkUv,
+                sharkGlow,
+                snow.getGustOffset()
+            );
 
             composer.render();
             frameId = requestAnimationFrame(animate);

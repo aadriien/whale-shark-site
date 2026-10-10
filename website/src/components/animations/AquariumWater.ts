@@ -4,6 +4,13 @@ import * as THREE from "three";
 // (deep, near-black trenches); lower values lift darks toward a hazier open ocean (1.0 = baby blue)
 const WATER_GAMMA = 1.8;
 
+// Mid-depth water color as it lands in linear space, so fog fades objects into the water
+export const WATER_FOG_COLOR = new THREE.Color(
+    0,
+    Math.pow(0.13, WATER_GAMMA),
+    Math.pow(0.28, WATER_GAMMA)
+);
+
 // Full-screen quad that ignores camera, so water fills viewport regardless of shark framing
 const waterVertexShader = `
     varying vec2 vUv;
@@ -18,6 +25,7 @@ const waterFragmentShader = `
     uniform float uAspect;
     uniform vec2 uShark;
     uniform float uSharkGlow;
+    uniform vec2 uCurrent;
     varying vec2 vUv;
 
     float hash(vec2 p) {
@@ -66,8 +74,8 @@ const waterFragmentShader = `
         vec3 col = mix(deep, mid, smoothstep(0.0, 0.6, uv.y));
         col = mix(col, shallow, pow(smoothstep(0.55, 1.0, uv.y), 1.5) * 0.7);
 
-        // Slow drifting murk
-        float murk = fbm(p * 1.2 + vec2(uTime * 0.02, -uTime * 0.015));
+        // Slow drifting murk, carried along by gusts
+        float murk = fbm(p * 1.2 + vec2(uTime * 0.02, -uTime * 0.015) - uCurrent * 2.0);
         col += vec3(0.02, 0.07, 0.10) * murk;
 
         // Light shafts fanning from a point above the screen, bent by noise
@@ -79,13 +87,21 @@ const waterFragmentShader = `
                      + noise(vec2(angle * 15.0 - uTime * 0.04, 3.0)) * 0.4;
         shafts = smoothstep(0.45, 0.9, shafts);
 
+        // Each shaft breathes on its own, as surface swell passes overhead
+        shafts *= 0.65 + 0.7 * noise(vec2(angle * 4.0 + 7.0, uTime * 0.35));
+
+        // Overall surface light wavers gently, from incommensurate slow sines so it never repeats
+        float flicker = 1.0 + 0.12 * sin(uTime * 0.9)
+                            + 0.08 * sin(uTime * 1.7 + 2.1)
+                            + 0.05 * sin(uTime * 3.1 + 0.6);
+
         float reach = exp(-length(toPixel) * 1.5);
-        col += vec3(0.14, 0.38, 0.48) * shafts * reach * 0.7;
+        col += vec3(0.14, 0.38, 0.48) * shafts * reach * 0.7 * flicker;
 
         // Caustic shimmer, strongest near surface
         float caustics = causticLayer(p * 5.0, vec2(uTime * 0.10, uTime * 0.07))
                        + causticLayer(p * 8.0, vec2(-uTime * 0.08, uTime * 0.11));
-        col += vec3(0.10, 0.30, 0.38) * caustics * 0.18 * smoothstep(0.25, 1.0, uv.y);
+        col += vec3(0.10, 0.30, 0.38) * caustics * 0.18 * flicker * smoothstep(0.25, 1.0, uv.y);
 
         // Shark lights the water around itself
         vec2 sharkP = vec2((uShark.x - 0.5) * uAspect, uShark.y - 0.5);
@@ -113,6 +129,7 @@ export function createWaterVolume(scene: THREE.Scene) {
             uAspect: { value: 1 },
             uShark: { value: new THREE.Vector2(0.5, 0.5) },
             uSharkGlow: { value: 0 },
+            uCurrent: { value: new THREE.Vector2() },
         },
     });
 
@@ -121,12 +138,19 @@ export function createWaterVolume(scene: THREE.Scene) {
     mesh.renderOrder = -1000;
     scene.add(mesh);
 
-    // sharkUv is shark's position in 0..1 screen space
-    const update = (time: number, aspect: number, sharkUv: THREE.Vector2, sharkGlow: number) => {
+    // sharkUv is shark's position in 0..1 screen space, current is accumulated gust offset
+    const update = (
+        time: number,
+        aspect: number,
+        sharkUv: THREE.Vector2,
+        sharkGlow: number,
+        current: THREE.Vector3
+    ) => {
         material.uniforms.uTime.value = time;
         material.uniforms.uAspect.value = aspect;
         material.uniforms.uShark.value.copy(sharkUv);
         material.uniforms.uSharkGlow.value = sharkGlow;
+        material.uniforms.uCurrent.value.set(current.x, current.y);
     };
 
     const dispose = () => {
