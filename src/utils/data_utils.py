@@ -57,7 +57,7 @@ def read_csv(
     if not csv_exists(csv_file):
         raise ValueError("Error, CSV does not exist")
 
-    return pd.read_csv(csv_file, usecols=columns, dtype=dtype)
+    return pd.read_csv(csv_file, usecols=columns, dtype=dtype, low_memory=False)
 
 
 def export_to_csv(csv_file: str, dataframe: pd.DataFrame) -> None:
