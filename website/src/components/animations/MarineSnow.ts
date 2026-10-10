@@ -206,10 +206,14 @@ export function createMarineSnow(
     // Accumulated gust displacement, so other layers can drift with the same current
     const getGustOffset = () => uniforms.uGust.value;
 
+    // Same displacement in world units, for objects that live in scene space
+    const getGustWorld = (target: THREE.Vector3) =>
+        target.copy(uniforms.uGust.value).multiply(uniforms.uSize.value);
+
     const dispose = () => {
         geometry.dispose();
         material.dispose();
     };
 
-    return { fit, setViewport, update, getGustOffset, dispose };
+    return { fit, setViewport, update, getGustOffset, getGustWorld, dispose };
 }

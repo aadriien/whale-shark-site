@@ -15,6 +15,10 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 // strength 0 = no visible bloom
 const BLOOM = { strength: 0.3, radius: 0.5, threshold: 0.7 };
 
+// Distant shark points are boosted (gain) & only partly faded into the water (fogMix),
+// so the body stays readable at depth. pointScale enlarges dots over home page size
+const SHARK_VISIBILITY = { gain: 0.8, fogMix: 0.5, pointScale: 1.25 };
+
 function Aquarium() {
     return (
         <div className="aquarium-wrapper">
@@ -73,6 +77,26 @@ function AquariumTest() {
         } = GlowSharkAnimated();
         shark.scale.set(1, 1, 1);
         scene.add(shark);
+
+        const sharkMaterial = shark.material as THREE.PointsMaterial;
+        sharkMaterial.size *= SHARK_VISIBILITY.pointScale;
+        sharkMaterial.onBeforeCompile = (shader) => {
+            shader.uniforms.uDepthGain = { value: SHARK_VISIBILITY.gain };
+            shader.uniforms.uFogMix = { value: SHARK_VISIBILITY.fogMix };
+
+            shader.fragmentShader =
+                "uniform float uDepthGain;\nuniform float uFogMix;\n" +
+                shader.fragmentShader.replace(
+                    "#include <fog_fragment>",
+                    `
+                    #ifdef USE_FOG
+                        float depthT = smoothstep(fogNear, fogFar, vFogDepth);
+                        gl_FragColor.rgb *= 1.0 + uDepthGain * depthT;
+                        gl_FragColor.rgb = mix(gl_FragColor.rgb, fogColor, depthT * uFogMix);
+                    #endif
+                    `
+                );
+        };
 
         // Glowing plankton marks click destination, sized in proportion to shark
         sharkGeometry.computeBoundingSphere();
@@ -203,6 +227,7 @@ function AquariumTest() {
         const clock = new THREE.Clock();
         let frameId = 0;
 
+        const gustWorld = new THREE.Vector3();
         const sharkNdc = new THREE.Vector3();
         const sharkUv = new THREE.Vector2();
         let sharkGlow = 0;
@@ -215,7 +240,12 @@ function AquariumTest() {
             const { phase, amplitude } = steering.getRipple();
             animateBody(clock.elapsedTime, phase, amplitude);
 
-            lure.update(delta, clock.elapsedTime, steering.getState());
+            lure.update(
+                delta,
+                clock.elapsedTime,
+                steering.getState(),
+                snow.getGustWorld(gustWorld)
+            );
             snow.update(
                 clock.elapsedTime,
                 shark.position,
