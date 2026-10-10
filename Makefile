@@ -2,7 +2,7 @@
 
 POETRY = poetry
 VENV_DIR = .venv
-PYTHON_VERSION = python3.10
+PYTHON_VERSION = python3.11
 ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 
 .PHONY: setup refresh_all_gbif \
