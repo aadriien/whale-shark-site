@@ -228,6 +228,7 @@ function AquariumTest() {
         let frameId = 0;
 
         const gustWorld = new THREE.Vector3();
+        const lureCore = new THREE.Vector3();
         const sharkNdc = new THREE.Vector3();
         const sharkUv = new THREE.Vector2();
         let sharkGlow = 0;
@@ -236,6 +237,8 @@ function AquariumTest() {
             // Clamp delta so returning to a backgrounded tab doesn't teleport shark
             const delta = Math.min(clock.getDelta(), 0.1);
 
+            // Shark chases plankton's core, not just where it was clicked
+            steering.retarget(lure.getCore(lureCore));
             steering.update(delta);
             const { phase, amplitude } = steering.getRipple();
             animateBody(clock.elapsedTime, phase, amplitude);
@@ -244,7 +247,8 @@ function AquariumTest() {
                 delta,
                 clock.elapsedTime,
                 steering.getState(),
-                snow.getGustWorld(gustWorld)
+                snow.getGustWorld(gustWorld),
+                steering.getProximity()
             );
             snow.update(
                 clock.elapsedTime,

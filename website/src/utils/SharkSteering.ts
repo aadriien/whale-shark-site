@@ -13,6 +13,9 @@ const RIPPLE_AMPLITUDE = { min: 12, max: 20 };
 
 const LINGER_SECONDS = { min: 3, max: 5 };
 const ARRIVE_RADIUS = 0.75; // body lengths
+
+// Feeding ends this many times faster the farther target has been carried from shark
+const LEAVE_DECAY = 6;
 const SPEED_DAMPING = 1.5;
 const BOUNDS_INSET = 0.15; // fraction of bounds size kept clear of edges on wander
 
@@ -31,6 +34,7 @@ export function createSharkSteering({ shark, bounds, sharkLength }: SharkSteerin
     let lingerRemaining = 0;
     let ripplePhase = 0;
     let speedRatio = 0;
+    let proximity = 0;
 
     const pickWanderTarget = () => {
         target.set(
@@ -54,13 +58,20 @@ export function createSharkSteering({ shark, bounds, sharkLength }: SharkSteerin
     };
 
     const update = (delta: number) => {
+        const arriveDistance = sharkLength * ARRIVE_RADIUS;
+        const distance = shark.position.distanceTo(target);
+
+        // 1 within arrive distance, fading to 0 at twice that
+        proximity = 1 - THREE.MathUtils.smoothstep(distance, arriveDistance, arriveDistance * 2);
+
         if (state === "linger") {
-            lingerRemaining -= delta;
-            if (lingerRemaining <= 0) {
+            // Target carried off by a current ends feeding sooner, so glow never trails away with it
+            lingerRemaining -= delta * (1 + LEAVE_DECAY * (1 - proximity));
+            if (lingerRemaining <= 0 || proximity <= 0) {
                 state = "wander";
                 pickWanderTarget();
             }
-        } else if (shark.position.distanceTo(target) < sharkLength * ARRIVE_RADIUS) {
+        } else if (distance < arriveDistance) {
             if (state === "seek") {
                 state = "linger";
                 lingerRemaining = THREE.MathUtils.randFloat(LINGER_SECONDS.min, LINGER_SECONDS.max);
@@ -91,7 +102,14 @@ export function createSharkSteering({ shark, bounds, sharkLength }: SharkSteerin
         state = "seek";
     };
 
+    // Follows a moving target (e.g. plankton carried by a current) without changing state
+    const retarget = (point: THREE.Vector3) => {
+        if (state !== "wander") target.copy(point);
+    };
+
     const getState = () => state;
+
+    const getProximity = () => proximity;
 
     const getRipple = () => ({
         phase: ripplePhase,
@@ -102,5 +120,14 @@ export function createSharkSteering({ shark, bounds, sharkLength }: SharkSteerin
 
     const getSpeedRatio = () => speedRatio;
 
-    return { update, setTarget, getState, getRipple, getForward, getSpeedRatio };
+    return {
+        update,
+        setTarget,
+        retarget,
+        getState,
+        getProximity,
+        getRipple,
+        getForward,
+        getSpeedRatio,
+    };
 }

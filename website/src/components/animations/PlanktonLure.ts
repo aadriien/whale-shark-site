@@ -11,6 +11,9 @@ const PLANE_PADDING = 1.2;
 // Share of ocean gust displacement felt by lure (lighter than the specks around it)
 const GUST_COUPLING = 0.5;
 
+// Mean of per-particle carry factors in vertex shader (0.4 + 0.8 * [0..1))
+const CORE_CARRY = GUST_COUPLING * 0.8;
+
 // Each click shifts hue by this much, so consecutive lures are clearly different colors
 const HUE_STEP = { min: 0.15, max: 0.5 };
 
@@ -242,12 +245,20 @@ export function createPlanktonLure(scene: THREE.Scene, radius: number) {
         hasPending = true;
     };
 
-    // gustDisplacement is accumulated ocean current in world units
+    // Where blob's mass actually is: its anchor plus average carry from currents
+    const getCore = (out: THREE.Vector3) => {
+        if (hasPending) return out.copy(pending);
+        return out.copy(group.position).addScaledVector(uniforms.uDrift.value, CORE_CARRY);
+    };
+
+    // gustDisplacement is accumulated ocean current in world units, feedProximity is how
+    // close shark actually is to core (0..1), so feeding glow tracks real contact
     const update = (
         delta: number,
         time: number,
         state: SharkSteeringState,
-        gustDisplacement: THREE.Vector3
+        gustDisplacement: THREE.Vector3,
+        feedProximity: number
     ) => {
         const wanted = hasPending || state === "wander" ? 0 : 1;
         const rate = hasPending ? 12 : wanted ? 4 : 1.5;
@@ -265,7 +276,10 @@ export function createPlanktonLure(scene: THREE.Scene, radius: number) {
             hasPending = false;
         }
 
-        linger += ((state === "linger" ? 1 : 0) - linger) * Math.min(1, 2 * delta);
+        // Feeding glow eases in gently but drops quickly once shark loses contact
+        const feeding = state === "linger" ? feedProximity : 0;
+        const feedRate = feeding < linger ? 6 : 2;
+        linger += (feeding - linger) * Math.min(1, feedRate * delta);
         age += delta;
 
         uniforms.uTime.value = time;
@@ -293,5 +307,5 @@ export function createPlanktonLure(scene: THREE.Scene, radius: number) {
         ringMaterial.dispose();
     };
 
-    return { trigger, update, setViewport, dispose };
+    return { trigger, update, getCore, setViewport, dispose };
 }
