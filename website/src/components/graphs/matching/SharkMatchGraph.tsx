@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
+import GraphHeader from "../GraphHeader";
 import GraphNodePanel from "./GraphNodePanel";
 import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
 import FilterButton from "../../controls/FilterButton";
@@ -19,6 +20,7 @@ import {
 } from "../../../utils/GraphUtils";
 import { useGraphTheme } from "../../../hooks/useGraphTheme";
 import { useCyResize } from "../../../hooks/useCyResize";
+import { useCyFocusCamera } from "../../../hooks/useCyFocusCamera";
 import { useSharkContinentMap } from "../../../hooks/useSharkContinentMap";
 import { useSavedSharkIds } from "../../../hooks/useSavedSharkIds";
 import { useMatchedSharkIds } from "../../../hooks/useMatchedSharkIds";
@@ -239,6 +241,8 @@ function SharkMatchGraph() {
         matchedSharkIds,
     ]);
 
+    useCyFocusCamera(cyRef, focusedNodeId);
+
     // The path toggle is contextual to whichever contradiction node is
     // currently focused; reset it so it doesn't silently carry over
     useEffect(() => {
@@ -309,31 +313,12 @@ function SharkMatchGraph() {
 
     return (
         <div className="shark-match-graph-section">
-            <div className="graph-header">
-                <h2>Identity Match Graph</h2>
-                <p>
-                    Each node is a whale shark image, colored by the continent where it was
-                    recorded. Gray squares are Ningaloo reference images. Nearby nodes are visually
-                    similar images, according to the computer vision model. Click any node to
-                    highlight its nearest embedding match and see details.
-                </p>
-                <div className="graph-legend">
-                    <span className="legend-square" style={{ background: graphColors.ningaloo }} />
-                    <span className="legend-label">Ningaloo (reference)</span>
-                    {(Object.entries(graphColors.continents) as [string, string][])
-                        .filter(([name]) => name !== "Unknown")
-                        .map(([name, color]) => (
-                            <span key={name} style={{ display: "contents" }}>
-                                <span className="legend-dot" style={{ background: color }} />
-                                <span className="legend-label">{name}</span>
-                            </span>
-                        ))}
-                    <span className="legend-dot legend-dot--contradiction" />
-                    <span className="legend-label">
-                        Contradiction (chain implies an impossible match)
-                    </span>
-                </div>
-            </div>
+            <GraphHeader
+                title="Identity Match Graph"
+                description="Each node is one whale shark image, placed near images the computer vision model finds visually similar, and colored by the continent where it was recorded. Click a node to see its closest match and every other image of that shark."
+                colors={graphColors}
+                showNingaloo
+            />
 
             <div className="graph-controls">
                 <div className="filter-group">

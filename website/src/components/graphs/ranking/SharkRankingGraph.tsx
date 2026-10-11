@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
+import GraphHeader from "../GraphHeader";
 import SharkRankingNodePanel from "./SharkRankingNodePanel";
 import SharkRankingStatsPanel from "./SharkRankingStatsPanel";
 import FilterButton from "../../controls/FilterButton";
@@ -18,6 +19,7 @@ import {
 } from "../../../utils/SharkRankingGraphUtils";
 import { useGraphTheme } from "../../../hooks/useGraphTheme";
 import { useCyResize } from "../../../hooks/useCyResize";
+import { useCyFocusCamera } from "../../../hooks/useCyFocusCamera";
 import { useSharkContinentMap } from "../../../hooks/useSharkContinentMap";
 import { useSavedSharkIds } from "../../../hooks/useSavedSharkIds";
 import { useMatchedSharkIds } from "../../../hooks/useMatchedSharkIds";
@@ -165,6 +167,8 @@ function SharkRankingGraph() {
         matchedSharkIds,
     ]);
 
+    useCyFocusCamera(cyRef, focusedNodeId);
+
     useEffect(() => {
         setShowContradictionPath(false);
     }, [focusedNodeId]);
@@ -204,28 +208,11 @@ function SharkRankingGraph() {
 
     return (
         <div className="shark-match-graph-section">
-            <div className="graph-header">
-                <h2>Shark-Level Match Graph</h2>
-                <p>
-                    Each node is a whale shark, positioned by the average of its MiewID image
-                    embeddings. Edges connect each shark to its closest aggregate match across all
-                    image pairs. Click any node to see the match breakdown.
-                </p>
-                <div className="graph-legend">
-                    {(Object.entries(graphColors.continents) as [string, string][])
-                        .filter(([name]) => name !== "Unknown")
-                        .map(([name, color]) => (
-                            <span key={name} style={{ display: "contents" }}>
-                                <span className="legend-dot" style={{ background: color }} />
-                                <span className="legend-label">{name}</span>
-                            </span>
-                        ))}
-                    <span className="legend-dot legend-dot--contradiction" />
-                    <span className="legend-label">
-                        Contradiction (chain implies an impossible match)
-                    </span>
-                </div>
-            </div>
+            <GraphHeader
+                title="Shark-Level Match Graph"
+                description="Each node is one whale shark, positioned by the average of its MiewID image embeddings, and lines connect each shark to its closest aggregate match across all image pairs. Click a node to see the match breakdown."
+                colors={graphColors}
+            />
 
             <div className="graph-controls">
                 <div className="filter-group">

@@ -6,11 +6,12 @@
 
 .shark-match-graph-section .graph-header {
     margin-bottom: 24px;
+    text-align: center;
 }
 
 .shark-match-graph-section .graph-header p {
-    margin-top: 8px;
-    max-width: 720px;
+    margin: 8px auto 0;
+    max-width: 640px;
     line-height: 1.6;
     opacity: 0.8;
 }
@@ -18,10 +19,19 @@
 .shark-match-graph-section .graph-legend {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 12px;
+    justify-content: center;
+    gap: 8px 18px;
+    margin-top: 14px;
     font-size: 0.82rem;
     flex-wrap: wrap;
+}
+
+/* Marker & label stay together when legend wraps onto another line */
+.shark-match-graph-section .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
 
 .shark-match-graph-section .legend-dot {
@@ -43,10 +53,6 @@
     background: transparent;
     border: 2px dashed var(--error);
     box-sizing: border-box;
-}
-
-.shark-match-graph-section .legend-label {
-    margin-right: 8px;
 }
 
 .shark-match-graph-section .graph-controls {

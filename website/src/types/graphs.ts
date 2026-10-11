@@ -66,6 +66,14 @@ export type GraphThemeColors = {
     continents: Record<string, string>;
 };
 
+export type GraphHeaderProps = {
+    title: string;
+    description: string;
+    colors: GraphThemeColors;
+    // Only image-level graph has Ningaloo reference nodes
+    showNingaloo?: boolean;
+};
+
 /* ---- View params (Cytoscape view-application config) ---- */
 
 type BaseViewParams = {
@@ -186,4 +194,3 @@ export type SelectedSharkMatch = BaseSelectedMatch & {
     pairCount: number;
     isMutual: boolean;
 };
-
