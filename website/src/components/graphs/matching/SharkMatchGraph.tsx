@@ -2,7 +2,6 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
-import GraphHeader from "../GraphHeader";
 import GraphLegend from "../GraphLegend";
 import GraphNodePanel from "./GraphNodePanel";
 import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
@@ -313,12 +312,7 @@ function SharkMatchGraph() {
     }, []);
 
     return (
-        <div className="shark-match-graph-section">
-            <GraphHeader
-                title="Identity Match Graph"
-                description="Each node is one whale shark image, placed near images the computer vision model finds visually similar, and colored by the continent where it was recorded. Click a node to see its closest match and every other image of that shark."
-            />
-
+        <>
             <div className="graph-controls">
                 <div className="filter-group">
                     {(Object.keys(NODE_FILTER_LABELS) as NodeFilter[]).map((f) => (
@@ -469,7 +463,7 @@ function SharkMatchGraph() {
                     onSelectImage={handleSelectImage}
                 />
             </div>
-        </div>
+        </>
     );
 }
 

@@ -2,7 +2,6 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
-import GraphHeader from "../GraphHeader";
 import GraphLegend from "../GraphLegend";
 import SharkRankingNodePanel from "./SharkRankingNodePanel";
 import SharkRankingStatsPanel from "./SharkRankingStatsPanel";
@@ -208,12 +207,7 @@ function SharkRankingGraph() {
     void handleSelectNode;
 
     return (
-        <div className="shark-match-graph-section">
-            <GraphHeader
-                title="Shark-Level Match Graph"
-                description="Each node is one whale shark, positioned by the average of its MiewID image embeddings, and lines connect each shark to its closest aggregate match across all image pairs. Click a node to see the match breakdown."
-            />
-
+        <>
             <div className="graph-controls">
                 <div className="filter-group">
                     <FilterButton
@@ -351,7 +345,7 @@ function SharkRankingGraph() {
                 </div>
                 <SharkRankingStatsPanel match={selectedMatch} />
             </div>
-        </div>
+        </>
     );
 }
 

@@ -66,9 +66,18 @@ export type GraphThemeColors = {
     continents: Record<string, string>;
 };
 
-export type GraphHeaderProps = {
+export type GraphView = "identity" | "shark";
+
+export type GraphHeaderOption = {
+    id: GraphView;
     title: string;
     description: string;
+};
+
+export type GraphHeaderProps = {
+    options: GraphHeaderOption[];
+    activeId: GraphView;
+    onChange: (id: GraphView) => void;
 };
 
 export type GraphLegendProps = {

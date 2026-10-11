@@ -8,17 +8,65 @@
     border-radius: var(--radius-xl);
 }
 
+/* Split header: 1 clickable side per graph, with a vertical rule between them */
 .shark-match-graph-section .graph-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     margin-bottom: 20px;
-    padding-bottom: 16px;
     border-bottom: 1px solid var(--border-tertiary);
-    text-align: center;
 }
 
-.shark-match-graph-section .graph-header p {
-    margin: 8px 0 0;
+.shark-match-graph-section .graph-header-option {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: -1px; /* active underline sits on header's own bottom rule */
+    padding: 4px 20px 16px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.2s, border-color 0.2s;
+}
+
+.shark-match-graph-section .graph-header-option + .graph-header-option {
+    border-left: 1px solid var(--border-tertiary);
+}
+
+.shark-match-graph-section .graph-header-option:hover {
+    opacity: 0.85;
+}
+
+.shark-match-graph-section .graph-header-option.active {
+    opacity: 1;
+    border-bottom-color: var(--accent-dark-blue);
+    cursor: default;
+}
+
+.shark-match-graph-section .graph-header-title {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.shark-match-graph-section .graph-header-blurb {
     line-height: 1.6;
-    opacity: 0.8;
+}
+
+@media (max-width: 700px) {
+    .shark-match-graph-section .graph-header {
+        grid-template-columns: 1fr;
+    }
+
+    .shark-match-graph-section .graph-header-option + .graph-header-option {
+        border-left: none;
+        border-top: 1px solid var(--border-tertiary);
+    }
 }
 
 /* Color key, pinned to bottom-left corner of canvas */
