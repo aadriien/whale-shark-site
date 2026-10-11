@@ -25,34 +25,6 @@
     box-sizing: border-box;
 }
 
-@media (max-width: 960px) {
-    .globe-views-container {
-        flex-direction: row; /* keep row so panels can be side by side */
-        flex-wrap: wrap; 
-        height: auto;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-
-    /* Make globe take full width & appear first */
-    .globe-container {
-        order: -1; 
-        flex: 1 1 100%;
-        height: 20rem !important; 
-        margin-bottom: 1rem;
-    }
-
-    /* Panels side by side under globe */
-    .info-sidebar,
-    .shark-selector {
-        order: 0;
-        flex: 1 1 45%; 
-        max-width: 100%;
-        height: auto;
-    }
-}
-
-
 .shark-selector-list {
     display: flex;
     flex-direction: column;

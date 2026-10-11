@@ -95,40 +95,6 @@
     font-weight: bold;
 }
 
-@media (max-width: 900px) {
-    .sharktracker-wrapper {
-        /* Ensure extra space to scroll */
-        padding-bottom: 20px; 
-    }
-
-    .globe-cards-container {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: auto; /* allow height to adjust */
-    }
-
-    .side-column {
-        height: auto;
-        flex: none;
-        width: 100%; /* full width on mobile */
-        justify-content: flex-start; /* normal stacking */
-    }
-
-    .side-column > .shark-grid {
-        align-content: start;
-        height: auto;
-        padding: 0 1rem;
-    }
-
-    .globe-container {
-        height: 300px; /* fixed height so globe is visible */
-        width: 90%;
-        flex: none;
-        margin-bottom: 1.5rem;
-    }
-}
-
 @media (min-width: 900px) and (max-width: 1250px) {
     .globe-cards-container {
         padding: 0 0.5rem !important; 
