@@ -3,6 +3,7 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
 import GraphHeader from "../GraphHeader";
+import GraphLegend from "../GraphLegend";
 import GraphNodePanel from "./GraphNodePanel";
 import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
 import FilterButton from "../../controls/FilterButton";
@@ -47,12 +48,12 @@ const EDGE_POPULATION_LABELS: Record<EdgePopulationFilter, string> = {
 };
 
 const CONTINENT_NAMES: string[] = [
-    "North America",
-    "Asia",
-    "Oceania",
     "Africa",
-    "South America",
+    "Asia",
     "Europe",
+    "North America",
+    "Oceania",
+    "South America",
 ];
 
 const CONTINENT_LABEL: Record<string, string> = {
@@ -316,8 +317,6 @@ function SharkMatchGraph() {
             <GraphHeader
                 title="Identity Match Graph"
                 description="Each node is one whale shark image, placed near images the computer vision model finds visually similar, and colored by the continent where it was recorded. Click a node to see its closest match and every other image of that shark."
-                colors={graphColors}
-                showNingaloo
             />
 
             <div className="graph-controls">
@@ -461,6 +460,8 @@ function SharkMatchGraph() {
                             }}
                         />
                     )}
+
+                    {graphData ? <GraphLegend colors={graphColors} showNingaloo /> : null}
                 </div>
                 <GraphSharkImagesPanel
                     match={selectedMatch}

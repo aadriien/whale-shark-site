@@ -1,32 +1,58 @@
+/* Section is a single card holding header, filters, canvas, panels */
 .shark-match-graph-section {
-    width: 100%;
-    margin-top: 60px;
-    padding: 0 1.5rem 60px;
+    width: calc(100% - 3rem);
+    margin: 60px auto;
+    padding: 1.5rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-xl);
 }
 
 .shark-match-graph-section .graph-header {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-tertiary);
     text-align: center;
 }
 
 .shark-match-graph-section .graph-header p {
-    margin: 8px auto 0;
-    max-width: 640px;
+    margin: 8px 0 0;
     line-height: 1.6;
     opacity: 0.8;
 }
 
+/* Color key, pinned to bottom-left corner of canvas */
 .shark-match-graph-section .graph-legend {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px 18px;
-    margin-top: 14px;
-    font-size: 0.82rem;
-    flex-wrap: wrap;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 2;
+    max-width: calc(100% - 20px);
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-tertiary);
+    border-radius: var(--radius-sm);
 }
 
-/* Marker & label stay together when legend wraps onto another line */
+.shark-match-graph-section .graph-legend-toggle {
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.shark-match-graph-section .graph-legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 6px;
+}
+
+/* Marker & label stay together */
 .shark-match-graph-section .legend-item {
     display: inline-flex;
     align-items: center;
@@ -60,10 +86,6 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 16px;
-    background: var(--surface-secondary);
-    padding: 12px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-tertiary);
 }
 
 .shark-match-graph-section .filter-group {

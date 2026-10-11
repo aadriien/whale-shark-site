@@ -3,6 +3,7 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
 import GraphHeader from "../GraphHeader";
+import GraphLegend from "../GraphLegend";
 import SharkRankingNodePanel from "./SharkRankingNodePanel";
 import SharkRankingStatsPanel from "./SharkRankingStatsPanel";
 import FilterButton from "../../controls/FilterButton";
@@ -32,12 +33,12 @@ import {
 } from "../../../types/graphs";
 
 const CONTINENT_NAMES: string[] = [
-    "North America",
-    "Asia",
-    "Oceania",
     "Africa",
-    "South America",
+    "Asia",
     "Europe",
+    "North America",
+    "Oceania",
+    "South America",
 ];
 
 function SharkRankingGraph() {
@@ -211,7 +212,6 @@ function SharkRankingGraph() {
             <GraphHeader
                 title="Shark-Level Match Graph"
                 description="Each node is one whale shark, positioned by the average of its MiewID image embeddings, and lines connect each shark to its closest aggregate match across all image pairs. Click a node to see the match breakdown."
-                colors={graphColors}
             />
 
             <div className="graph-controls">
@@ -346,6 +346,8 @@ function SharkRankingGraph() {
                             }}
                         />
                     )}
+
+                    {graphData ? <GraphLegend colors={graphColors} /> : null}
                 </div>
                 <SharkRankingStatsPanel match={selectedMatch} />
             </div>

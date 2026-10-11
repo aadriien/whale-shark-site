@@ -69,6 +69,9 @@ export type GraphThemeColors = {
 export type GraphHeaderProps = {
     title: string;
     description: string;
+};
+
+export type GraphLegendProps = {
     colors: GraphThemeColors;
     // Only image-level graph has Ningaloo reference nodes
     showNingaloo?: boolean;
