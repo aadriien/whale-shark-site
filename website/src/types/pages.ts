@@ -27,3 +27,9 @@ export type SectionIntroProps = {
     tagline: string;
     body: string;
 };
+
+export type CVHeroIntroProps = {
+    part: "hero" | "intro";
+    // Only rendered inside hero banner, pinned to bottom edge
+    children?: React.ReactNode;
+};
