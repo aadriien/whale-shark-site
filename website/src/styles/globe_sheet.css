@@ -41,7 +41,7 @@
         height: 100dvh;
         min-height: 100dvh;
         overflow: hidden;
-        padding: 65px 0 0 !important; /* clears fixed navbar */
+        padding: var(--navbar-height) 0 0 !important; /* clears fixed navbar */
     }
 
     .globe-layout {

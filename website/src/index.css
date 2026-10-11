@@ -118,6 +118,10 @@ a:hover {
 }
 
 
+:root {
+    --navbar-height: 65px;
+}
+
 nav {
     display: flex;
     justify-content: center;
@@ -127,7 +131,7 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 10;
+    z-index: 2000; /* above page content, below logbook & modals */
     overflow-x: auto; /* allow horizontal scroll on small screens */
     white-space: nowrap; /* prevent links from wrapping */
 }
@@ -217,19 +221,102 @@ nav a.active {
     box-shadow: var(--current-shadow);
 }
 
-/* Smaller font and margin on small screens */
-@media (max-width: 768px) {
+.nav-menu-button {
+    display: none;
+}
+
+/* No box on wide screens, so links stay flex items of nav */
+.nav-links {
+    display: contents;
+}
+
+/* Menu button | mode pills | logbook | theme, with page links in dropdown */
+@media (max-width: 900px) {
+    :root {
+        --navbar-height: 56px;
+    }
+
     nav {
         justify-content: flex-start;
-        padding: 10px;
+        gap: 8px;
+        height: var(--navbar-height);
+        padding: 0 10px;
+        overflow: visible;
     }
-    nav a {
-        margin: 0 10px;
-        font-size: 14px;
+
+    .nav-menu-button {
+        order: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: var(--navbar-text);
+        cursor: pointer;
     }
+
+    .version-toggle {
+        order: 1;
+        gap: 8px;
+        padding-right: 0;
+    }
+
     .version-toggle a {
-        padding: 4px 14px;
-        font-size: 12px;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+
+    .nav-pill-suffix {
+        display: none;
+    }
+
+    .logbook-button {
+        order: 2;
+        width: 48px !important;
+        height: 38px !important;
+        margin-right: 0;
+    }
+
+    /* Rotated 90deg, so width here is its visual height (match logbook) */
+    .theme-switcher-grid {
+        order: 3;
+        width: 38px;
+        height: 24px;
+        min-width: 0;
+        min-height: 0;
+        margin: 0 -7px;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        max-height: calc(100dvh - var(--navbar-height));
+        overflow-y: auto;
+        padding: 0.25rem 0;
+        background-color: var(--navbar-bg);
+        border-top: 1px solid var(--border-secondary);
+        box-shadow: var(--shadow-md);
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links a {
+        margin: 0;
+        padding: 0.85rem 1.25rem;
+        font-size: 1rem;
+    }
+
+    .nav-links a:hover {
+        transform: none !important;
     }
 }
 
