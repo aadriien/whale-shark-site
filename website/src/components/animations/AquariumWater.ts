@@ -26,6 +26,8 @@ const waterFragmentShader = `
     uniform vec2 uShark;
     uniform float uSharkGlow;
     uniform vec2 uCurrent;
+    uniform vec3 uGlowTint;
+    uniform float uGlowTintAmount;
     varying vec2 vUv;
 
     float hash(vec2 p) {
@@ -106,7 +108,8 @@ const waterFragmentShader = `
         // Shark lights the water around itself
         vec2 sharkP = vec2((uShark.x - 0.5) * uAspect, uShark.y - 0.5);
         float sharkDist = distance(p, sharkP);
-        col += vec3(0.10, 0.34, 0.55) * exp(-sharkDist * sharkDist * 14.0) * uSharkGlow;
+        vec3 glowColor = mix(vec3(0.10, 0.34, 0.55), uGlowTint, uGlowTintAmount);
+        col += glowColor * exp(-sharkDist * sharkDist * 14.0) * uSharkGlow;
 
         col *= 1.0 - clamp(dot(p, p) * 0.8, 0.0, 0.7);
 
@@ -130,6 +133,8 @@ export function createWaterVolume(scene: THREE.Scene) {
             uShark: { value: new THREE.Vector2(0.5, 0.5) },
             uSharkGlow: { value: 0 },
             uCurrent: { value: new THREE.Vector2() },
+            uGlowTint: { value: new THREE.Color() },
+            uGlowTintAmount: { value: 0 },
         },
     });
 
@@ -153,10 +158,16 @@ export function createWaterVolume(scene: THREE.Scene) {
         material.uniforms.uCurrent.value.set(current.x, current.y);
     };
 
+    // Tints the shark's halo toward a color (amount 0..1), for after it feeds
+    const setGlowTint = (tint: THREE.Color, amount: number) => {
+        material.uniforms.uGlowTint.value.copy(tint);
+        material.uniforms.uGlowTintAmount.value = amount;
+    };
+
     const dispose = () => {
         mesh.geometry.dispose();
         material.dispose();
     };
 
-    return { update, dispose };
+    return { update, setGlowTint, dispose };
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { createLights, createCamera } from "../utils/GlobeUtils";
 import { createSharkSteering } from "../utils/SharkSteering";
+import { tintPointColors } from "../utils/SharkTint";
 import { GlowSharkAnimated } from "components/animations/GlowSharkAnimated";
 import { createWaterVolume, WATER_FOG_COLOR } from "components/animations/AquariumWater";
 import { createPlanktonLure } from "components/animations/PlanktonLure";
@@ -18,6 +19,9 @@ const BLOOM = { strength: 0.3, radius: 0.5, threshold: 0.7 };
 // Distant shark points are boosted (gain) & only partly faded into the water (fogMix),
 // so the body stays readable at depth. pointScale enlarges dots over home page size
 const SHARK_VISIBILITY = { gain: 0.8, fogMix: 0.5, pointScale: 1.25 };
+
+// Per second rate at which shark's borrowed plankton color drains away (0.12 ~ 15-20s to fade)
+const SHARK_TINT_FADE = 0.12;
 
 function Aquarium() {
     return (
@@ -229,6 +233,12 @@ function AquariumTest() {
 
         const gustWorld = new THREE.Vector3();
         const lureCore = new THREE.Vector3();
+
+        const tintColor = new THREE.Color();
+        const glowTintColor = new THREE.Color();
+        let tintHue = 0;
+        let tintAmount = 0;
+
         const sharkNdc = new THREE.Vector3();
         const sharkUv = new THREE.Vector2();
         let sharkGlow = 0;
@@ -242,6 +252,36 @@ function AquariumTest() {
             steering.update(delta);
             const { phase, amplitude } = steering.getRipple();
             animateBody(clock.elapsedTime, phase, amplitude);
+
+            // Shark borrows color of plankton it feeds on, then slowly returns to its rainbow
+            const feeding = lure.getFeeding();
+            if (feeding > 0.05) {
+                if (tintAmount < 0.01) {
+                    tintHue = lure.getHue();
+                } else {
+                    // Shortest way around hue wheel, so new lure blends rather than sweeping
+                    let hueDelta = lure.getHue() - tintHue;
+                    hueDelta -= Math.round(hueDelta);
+                    tintHue = (tintHue + hueDelta * Math.min(1, 3 * delta) + 1) % 1;
+                }
+            }
+
+            tintAmount +=
+                feeding > tintAmount
+                    ? (feeding - tintAmount) * Math.min(1, 1.5 * delta)
+                    : -tintAmount * Math.min(1, SHARK_TINT_FADE * delta);
+
+            tintColor.setHSL(tintHue, 0.6, 0.74);
+            tintPointColors(
+                sharkGeometry.attributes.color as THREE.BufferAttribute,
+                tintColor,
+                tintAmount,
+                clock.elapsedTime
+            );
+
+            // Water halo takes a dimmer version of the same color
+            glowTintColor.copy(tintColor).multiplyScalar(0.5);
+            water.setGlowTint(glowTintColor, tintAmount);
 
             lure.update(
                 delta,

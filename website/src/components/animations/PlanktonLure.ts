@@ -245,6 +245,11 @@ export function createPlanktonLure(scene: THREE.Scene, radius: number) {
         hasPending = true;
     };
 
+    const getHue = () => uniforms.uHue.value as number;
+
+    // How strongly shark is currently feeding on this lure (0..1)
+    const getFeeding = () => linger;
+
     // Where blob's mass actually is: its anchor plus average carry from currents
     const getCore = (out: THREE.Vector3) => {
         if (hasPending) return out.copy(pending);
@@ -307,5 +312,5 @@ export function createPlanktonLure(scene: THREE.Scene, radius: number) {
         ringMaterial.dispose();
     };
 
-    return { trigger, update, getCore, setViewport, dispose };
+    return { trigger, update, getCore, getHue, getFeeding, setViewport, dispose };
 }
