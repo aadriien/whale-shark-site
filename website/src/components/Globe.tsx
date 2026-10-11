@@ -272,7 +272,9 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
             }
         };
 
-        window.addEventListener("resize", resizeCanvas);
+        // Observe container rather than window, so layout changes (e.g. sheet snaps) resize too
+        const resizeObserver = new ResizeObserver(resizeCanvas);
+        resizeObserver.observe(globeContainer);
         globeContainer.addEventListener("click", handleClick);
 
         const animate = () => {
@@ -286,7 +288,7 @@ const Globe = forwardRef<GlobeHandle, GlobeProps>((props, ref) => {
 
         // Cleanup on component unmount
         return () => {
-            window.removeEventListener("resize", resizeCanvas);
+            resizeObserver.disconnect();
 
             // Remove renderer's canvas
             globeContainer.removeEventListener("click", handleClick);
