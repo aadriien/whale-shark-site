@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 
 import Globe from "../components/Globe";
+import GlobePageLayout from "../components/GlobePageLayout";
 import PlayStoryButton from "../components/controls/PlayStoryButton";
 import StoryStepSlider from "../components/controls/StoryStepSlider";
 import TimelineControls from "../components/controls/TimelineControls";
@@ -58,7 +59,15 @@ function GeoLabs() {
     // Timeline mode functionality
     const [isTimelineMode, setIsTimelineMode] = useState<boolean>(false);
 
+    // Narrow screens only: panel tab showing
+    const [activeTab, setActiveTab] = useState<string>("Controls");
+
     const sharks = mediaSharks;
+
+    // However a shark gets selected (globe or list), show its info on narrow screens
+    useEffect(() => {
+        if (selectedShark) setActiveTab("Controls");
+    }, [selectedShark]);
 
     // The selected shark's match group, if any (individual view only)
     const currentGroup = useMemo(
@@ -341,103 +350,115 @@ function GeoLabs() {
         <div className="page-content globeviews-wrapper">
             {/* <h1>GeoLabs Page</h1> */}
 
-            <div className="globe-views-container">
-                {/* Shark info panel on left */}
-                <div className="info-sidebar">
-                    {/* View Mode Toggle Button */}
-                    <button
-                        className={`geo-labs-toggle-button view-mode-toggle ${viewMode}`}
-                        onClick={handleToggleViewMode}
-                    >
-                        {viewMode === "individual"
-                            ? "Switch to Multi Shark View"
-                            : "Switch to Single Shark View"}
-                    </button>
+            <GlobePageLayout
+                containerClassName="globe-views-container"
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                // Shark info panel on left
+                left={{
+                    label: "Controls",
+                    className: "info-sidebar",
+                    content: (
+                        <>
+                            {/* View Mode Toggle Button */}
+                            <button
+                                className={`geo-labs-toggle-button view-mode-toggle ${viewMode}`}
+                                onClick={handleToggleViewMode}
+                            >
+                                {viewMode === "individual"
+                                    ? "Switch to Multi Shark View"
+                                    : "Switch to Single Shark View"}
+                            </button>
 
-                    {/* Combine Matched Sharks Toggle */}
-                    <button
-                        className={`geo-labs-toggle-button match-consolidate-toggle ${combineMatches ? "active" : ""}`}
-                        onClick={() => setCombineMatches((prev) => !prev)}
-                        disabled={!hasApplicableGroup}
-                    >
-                        {combineMatches ? "Ignore Shark Match Groups" : "Combine Matched Sharks"}
-                    </button>
+                            {/* Combine Matched Sharks Toggle */}
+                            <button
+                                className={`geo-labs-toggle-button match-consolidate-toggle ${combineMatches ? "active" : ""}`}
+                                onClick={() => setCombineMatches((prev) => !prev)}
+                                disabled={!hasApplicableGroup}
+                            >
+                                {combineMatches
+                                    ? "Ignore Shark Match Groups"
+                                    : "Combine Matched Sharks"}
+                            </button>
 
-                    {/* Step Through Story Controls */}
-                    {selectedShark && (
-                        <div className="story-controls-container">
-                            <PlayStoryButton
-                                shark={selectedShark}
-                                onToggleStepMode={handleToggleStepMode}
-                                isStepMode={isStepMode}
-                                showPauseForGeoLabs={true}
-                            />
+                            {/* Step Through Story Controls */}
+                            {selectedShark && (
+                                <div className="story-controls-container">
+                                    <PlayStoryButton
+                                        shark={selectedShark}
+                                        onToggleStepMode={handleToggleStepMode}
+                                        isStepMode={isStepMode}
+                                        showPauseForGeoLabs={true}
+                                    />
 
-                            {/* Story step slider positioned below button */}
-                            <StoryStepSlider
-                                shark={selectedShark}
-                                onStepChange={handleStepChange}
-                                currentStepIndex={currentStepIndex}
-                                isVisible={isStepMode}
-                                sharkIds={combineMatches ? currentGroup?.sharkIds : undefined}
-                            />
-                        </div>
-                    )}
+                                    {/* Story step slider positioned below button */}
+                                    <StoryStepSlider
+                                        shark={selectedShark}
+                                        onStepChange={handleStepChange}
+                                        currentStepIndex={currentStepIndex}
+                                        isVisible={isStepMode}
+                                        sharkIds={
+                                            combineMatches ? currentGroup?.sharkIds : undefined
+                                        }
+                                    />
+                                </div>
+                            )}
 
-                    {/* Timeline Mode Controls shown in multiple view */}
-                    {viewMode === "multiple" && (
-                        <TimelineControls
-                            globeRef={globeHandleRef}
-                            selectedSharksForLab={effectiveLabSharkIds}
-                            savedSharkIds={savedIds}
-                            onToggleTimelineMode={handleToggleTimelineMode}
-                            isTimelineMode={isTimelineMode}
+                            {/* Timeline Mode Controls shown in multiple view */}
+                            {viewMode === "multiple" && (
+                                <TimelineControls
+                                    globeRef={globeHandleRef}
+                                    selectedSharksForLab={effectiveLabSharkIds}
+                                    savedSharkIds={savedIds}
+                                    onToggleTimelineMode={handleToggleTimelineMode}
+                                    isTimelineMode={isTimelineMode}
+                                />
+                            )}
+
+                            {viewMode === "multiple" ? (
+                                <div className="shark-info-panel">
+                                    <LabSelectionPanel
+                                        selectedSharksForLab={effectiveLabSharkIds}
+                                        savedIds={savedIds}
+                                        sharks={sharks}
+                                        onSelectAllToggle={handleSelectAllToggle}
+                                    />
+                                </div>
+                            ) : (
+                                <SharkInfoPanel shark={panelShark} />
+                            )}
+                        </>
+                    ),
+                }}
+                // Shark selector dropdown on right
+                right={{
+                    label: "Sharks",
+                    className: "shark-selector",
+                    content: (
+                        <SharkSelector
+                            sharks={sharks}
+                            onSelect={handleSelectShark}
+                            onReset={handleReset}
+                            selectedSharkId={selectedShark ? selectedShark.id : null}
+                            DisplayComponent={SavedDisplayComponent}
+                            // Disable selector while in step or timeline mode
+                            disabled={isStepMode || isTimelineMode}
+                            onFilteredSharksChange={setFilteredSharks}
                         />
-                    )}
-
-                    {viewMode === "multiple" ? (
-                        <div className="shark-info-panel">
-                            <LabSelectionPanel
-                                selectedSharksForLab={effectiveLabSharkIds}
-                                savedIds={savedIds}
-                                sharks={sharks}
-                                onSelectAllToggle={handleSelectAllToggle}
-                            />
-                        </div>
-                    ) : (
-                        <SharkInfoPanel shark={panelShark} />
-                    )}
-                </div>
-
+                    ),
+                }}
+            >
                 {/* Globe component */}
-                <div className="globe-container">
-                    <Globe
-                        ref={globeHandleRef}
-                        onSharkClick={handleSelectShark}
-                        allowClicks={viewMode === "individual" && !selectedShark}
-                    />
-                    {/* Coordinate display to match SharkTracker positioning */}
-                    {isStepMode && <GlobeCoordinateReadout point={currentPoint} />}
-                    {/* Floating thumbnail for current step's sighting image */}
-                    {viewMode === "individual" && (
-                        <GlobeImageOverlay imageUrl={currentStepImageUrl} />
-                    )}
-                </div>
-
-                {/* Shark selector dropdown on right */}
-                <div className="shark-selector">
-                    <SharkSelector
-                        sharks={sharks}
-                        onSelect={handleSelectShark}
-                        onReset={handleReset}
-                        selectedSharkId={selectedShark ? selectedShark.id : null}
-                        DisplayComponent={SavedDisplayComponent}
-                        // Disable selector while in step or timeline mode
-                        disabled={isStepMode || isTimelineMode}
-                        onFilteredSharksChange={setFilteredSharks}
-                    />
-                </div>
-            </div>
+                <Globe
+                    ref={globeHandleRef}
+                    onSharkClick={handleSelectShark}
+                    allowClicks={viewMode === "individual" && !selectedShark}
+                />
+                {/* Coordinate display to match SharkTracker positioning */}
+                {isStepMode && <GlobeCoordinateReadout point={currentPoint} />}
+                {/* Floating thumbnail for current step's sighting image */}
+                {viewMode === "individual" && <GlobeImageOverlay imageUrl={currentStepImageUrl} />}
+            </GlobePageLayout>
         </div>
     );
 }

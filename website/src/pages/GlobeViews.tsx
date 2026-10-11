@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Globe from "../components/Globe";
+import GlobePageLayout from "../components/GlobePageLayout";
 import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector";
 import ContinentDisplay from "../components/panels/ContinentSharksDisplay";
@@ -28,6 +29,9 @@ function GlobeViews() {
     const [filteredSharks, setFilteredSharks] = useState<WhaleSharkDatasetNormalized>(mediaSharks); // track filtered sharks
 
     const globeHandleRef = useRef<GlobeHandle>(null);
+
+    // Narrow screens only: panel tab showing, with shark list & filters as default
+    const [activeTab, setActiveTab] = useState<string>("Sharks");
 
     // Get coordinates for filtered sharks only
     const filteredPointsData = useMemo(() => {
@@ -57,6 +61,11 @@ function GlobeViews() {
             setAllSharksVisible(false);
         }
     }, [selectedShark, filteredPointsData]);
+
+    // However a shark gets selected (globe or list), show its info on narrow screens
+    useEffect(() => {
+        if (selectedShark) setActiveTab("Info");
+    }, [selectedShark]);
 
     // Initial setup to show sharks on mount
     useEffect(() => {
@@ -97,33 +106,39 @@ function GlobeViews() {
         <div className="page-content globeviews-wrapper">
             {/* <h1>GlobeViews Page</h1> */}
 
-            <div className="globe-views-container">
-                {/* Shark info panel on left */}
-                <div className="info-sidebar">
-                    <SharkInfoPanel shark={selectedShark} />
-                </div>
-
+            <GlobePageLayout
+                containerClassName="globe-views-container"
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                // Shark info panel on left
+                left={{
+                    label: "Info",
+                    className: "info-sidebar",
+                    content: <SharkInfoPanel shark={selectedShark} />,
+                }}
+                // Shark selector dropdown on right
+                right={{
+                    label: "Sharks",
+                    className: "shark-selector",
+                    content: (
+                        <SharkSelector
+                            sharks={sharks}
+                            onSelect={handleSelectShark}
+                            onReset={handleReset}
+                            selectedSharkId={selectedShark ? selectedShark.id : null}
+                            DisplayComponent={ContinentDisplay}
+                            onFilteredSharksChange={setFilteredSharks}
+                        />
+                    ),
+                }}
+            >
                 {/* Globe component */}
-                <div className="globe-container">
-                    <Globe
-                        ref={globeHandleRef}
-                        onSharkClick={handleSelectShark}
-                        allowClicks={!selectedShark}
-                    />
-                </div>
-
-                {/* Shark selector dropdown on right */}
-                <div className="shark-selector">
-                    <SharkSelector
-                        sharks={sharks}
-                        onSelect={handleSelectShark}
-                        onReset={handleReset}
-                        selectedSharkId={selectedShark ? selectedShark.id : null}
-                        DisplayComponent={ContinentDisplay}
-                        onFilteredSharksChange={setFilteredSharks}
-                    />
-                </div>
-            </div>
+                <Globe
+                    ref={globeHandleRef}
+                    onSharkClick={handleSelectShark}
+                    allowClicks={!selectedShark}
+                />
+            </GlobePageLayout>
         </div>
     );
 }

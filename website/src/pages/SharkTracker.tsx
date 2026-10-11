@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 
 import Globe from "../components/Globe";
+import GlobePageLayout from "../components/GlobePageLayout";
 import SharkGrid from "../components/cards/SharkGrid";
 import GlobeCoordinateReadout from "../components/controls/GlobeCoordinateReadout";
 
@@ -44,36 +45,42 @@ function SharkTracker() {
         <div className="page-content sharktracker-wrapper">
             {/* <h1>SharkTracker Page</h1> */}
 
-            <div className="globe-cards-container">
-                {/* Left Shark Cards */}
-                <div className="side-column">
-                    <SharkGrid
-                        sharks={leftSharks}
-                        onPlayStory={handlePlayStory}
-                        isPlaying={isPlaying}
-                        playingSharkId={playingSharkId ?? ""}
-                    />
-                </div>
-
+            <GlobePageLayout
+                containerClassName="globe-cards-container"
+                // Left Shark Cards
+                left={{
+                    label: "Sharks",
+                    className: "side-column",
+                    content: (
+                        <SharkGrid
+                            sharks={leftSharks}
+                            onPlayStory={handlePlayStory}
+                            isPlaying={isPlaying}
+                            playingSharkId={playingSharkId ?? ""}
+                        />
+                    ),
+                }}
+                // Right Shark Cards
+                right={{
+                    label: "Sharks",
+                    className: "side-column",
+                    content: (
+                        <SharkGrid
+                            sharks={rightSharks}
+                            onPlayStory={handlePlayStory}
+                            isPlaying={isPlaying}
+                            playingSharkId={playingSharkId ?? ""}
+                        />
+                    ),
+                }}
+            >
                 {/* Globe */}
-                <div className="globe-container">
-                    <Globe ref={globeHandleRef} />
-                    <GlobeCoordinateReadout
-                        point={currentPoint}
-                        placeholder="Story playback info will appear here"
-                    />
-                </div>
-
-                {/* Right Shark Cards */}
-                <div className="side-column">
-                    <SharkGrid
-                        sharks={rightSharks}
-                        onPlayStory={handlePlayStory}
-                        isPlaying={isPlaying}
-                        playingSharkId={playingSharkId ?? ""}
-                    />
-                </div>
-            </div>
+                <Globe ref={globeHandleRef} />
+                <GlobeCoordinateReadout
+                    point={currentPoint}
+                    placeholder="Story playback info will appear here"
+                />
+            </GlobePageLayout>
         </div>
     );
 }
