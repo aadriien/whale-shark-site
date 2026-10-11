@@ -22,3 +22,8 @@ export type PageMetadata = {
     description: string;
     image: string;
 };
+
+export type SectionIntroProps = {
+    tagline: string;
+    body: string;
+};

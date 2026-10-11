@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import SectionIntro from "../components/overviews/SectionIntro";
+
 import { PageMetadata } from "../types/pages";
 
 function ResearchReef() {
@@ -49,19 +51,10 @@ function ResearchReef() {
                 <p>Dive into data. Track real movements. Explore our oceans.</p>
             </div>
 
-            <div className="research-creative-intro">
-                <p className="tagline">
-                    Research Reef is the authentic science and data hub of our whale shark
-                    experience.
-                </p>
-                <p>
-                    Here you'll find real-world shark media, detailed satellite tracking, global
-                    ecological insights, interactive Earth visualizations, thoughtful data analyses,
-                    and customizable geomapping. Whether you're a curious explorer or simply a lover
-                    of the natural world, this section will lead you deep into the facts and the
-                    wonderment.
-                </p>
-            </div>
+            <SectionIntro
+                tagline="Research Reef is the authentic science and data hub of our whale shark experience."
+                body="Here you'll find real-world shark media, detailed satellite tracking, global ecological insights, interactive Earth visualizations, thoughtful data analyses, and customizable geomapping. Whether you're a curious explorer or simply a lover of the natural world, this section will lead you deep into the facts and the wonderment."
+            />
 
             <div className="research-creative-grid">
                 {pages.map(({ path, title, description, image }: PageMetadata) => (
