@@ -38,25 +38,25 @@
 .research-creative-hero-content p {
     color: var(--research-hero-text);
     text-shadow: var(--hero-text-shadow);
-    text-wrap: balance;
+    text-wrap: pretty;
 }
 
 .research-creative-hero-content h1 {
     font-family: 'Barlow Semi Condensed', sans-serif;
-    font-size: clamp(2.2rem, 7vw, 5rem); /* full size on desktop, scales down on small screens */
+    font-size: clamp(2.3rem, 7vw, 5rem); /* full size on desktop, scales down on small screens */
     font-weight: 600;
     margin-bottom: 0.7rem;
 }
 
 .research-creative-hero-content p {
-    font-size: clamp(1.05rem, 3vw, 1.7rem);
+    font-size: clamp(1.1rem, 3vw, 1.7rem);
     font-weight: 500;
 }
 
 .research-creative-intro {
     max-width: 85vw;
     margin: 1.5rem auto 3rem auto;
-    font-size: clamp(1rem, 2.6vw, 1.5rem);
+    font-size: clamp(0.85rem, 2.6vw, 1.5rem);
     line-height: 1.6;
     color: var(--research-intro-text);
     padding: 0.8rem 1.8rem 1.3rem 1.8rem;
@@ -69,9 +69,9 @@
 
 .research-creative-intro .tagline {
     margin-bottom: 1.5rem;
-    font-size: clamp(1.15rem, 3vw, 1.7rem);
+    font-size: clamp(1rem, 3vw, 1.7rem);
     color: var(--accent-dark-blue);
-    text-wrap: balance; /* no lone word left on last line */
+    text-wrap: pretty; /* fills available width, but no lone word left on last line */
 }
 
 /* Only used on narrow screens, where body folds behind it */
@@ -155,10 +155,14 @@
 /* Single-column cards size to their content, so there's no fixed height or
    inner scrolling for a swipe to get caught in */
 @media (max-width: 600px) {
+    .research-creative-hero-content {
+        padding: 1.5rem 1rem 1rem 1rem;
+    }
+
     .research-creative-intro {
         max-width: 92vw;
-        margin: 1rem auto 2rem auto;
-        padding: 0.6rem 1rem 1rem 1rem;
+        margin: 0.6rem auto 0.6rem auto;
+        padding: 0.6rem 1rem 0.6rem 1rem;
         border-left: none;
         border-right: none;
     }
@@ -177,7 +181,8 @@
     }
 
     .research-creative-intro .intro-toggle {
-        display: inline-block;
+        display: block;
+        margin: 0 auto;
         padding: 0.3rem 1rem;
         border: 1px solid var(--border-secondary);
         border-radius: var(--radius-pill);
