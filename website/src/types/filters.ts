@@ -66,3 +66,14 @@ export type MetadataFilterProps = BaseFilterProps & {
 export type SharkFilterProps = BaseFilterProps & {
     options: SharkFilterOptions;
 };
+
+export type FilterChipsProps = {
+    criteria: SharkBaseCriteria;
+    defaults: SharkBaseCriteria;
+    onChange: (criteria: SharkBaseCriteria) => void;
+};
+
+export type FilterChip = {
+    key: keyof SharkBaseCriteria;
+    label: string;
+};

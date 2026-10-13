@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import SharkFilter from "./SharkFilter";
+import FilterChips from "./FilterChips";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
 import { parseCriteria, criteriaToParams, mergeCriteriaParams } from "../../utils/UrlParamUtils";
@@ -133,6 +134,12 @@ function SharkSelector({
                             ? `Hide Filters (${activeFilterCount}) ▲`
                             : `Show Filters (${activeFilterCount}) ▼`}
                     </button>
+
+                    <FilterChips
+                        criteria={criteria}
+                        defaults={defaultCriteria}
+                        onChange={setCriteria}
+                    />
 
                     {showFilters && (
                         <SharkFilter
