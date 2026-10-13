@@ -45,3 +45,18 @@ export function criteriaToParams(criteria: SharkBaseCriteria, defaults: SharkBas
 
     return params;
 }
+
+// Writes criteria into existing params, leaving unrelated ones (e.g. page tab)
+// untouched. Plain criteriaToParams result would replace the full query string
+export function mergeCriteriaParams(
+    prev: URLSearchParams,
+    criteria: SharkBaseCriteria,
+    defaults: SharkBaseCriteria
+) {
+    const next = new URLSearchParams(prev);
+
+    for (const key in defaults) next.delete(key);
+    criteriaToParams(criteria, defaults).forEach((value, key) => next.set(key, value));
+
+    return next;
+}

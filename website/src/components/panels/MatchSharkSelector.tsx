@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import MatchFilter from "./MatchFilter";
 
 import { filterVisionSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
-import { parseCriteria, criteriaToParams } from "../../utils/UrlParamUtils";
+import { parseCriteria, mergeCriteriaParams } from "../../utils/UrlParamUtils";
 import { FULLMONTHS } from "../../utils/DataUtils";
 
 import { MatchSharkSelectorProps } from "../../types/panels";
@@ -66,8 +66,7 @@ function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSha
 
     // Ensure filters are reflected as query params in URL
     useEffect(() => {
-        const params = criteriaToParams(criteria, defaultCriteria);
-        setSearchParams(params);
+        setSearchParams((prev) => mergeCriteriaParams(prev, criteria, defaultCriteria));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [criteria]);
 
