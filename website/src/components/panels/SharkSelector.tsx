@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import SharkFilter from "./SharkFilter";
 
 import { filterSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
-import { parseCriteria, mergeCriteriaParams } from "../../utils/UrlParamUtils";
+import { parseCriteria, criteriaToParams, mergeCriteriaParams } from "../../utils/UrlParamUtils";
 import { FULLMONTHS } from "../../utils/DataUtils";
 
 import { SharkFilterOptions, SharkBaseCriteria } from "../../types/filters";
@@ -75,6 +75,11 @@ function SharkSelector({
         return result;
     }, [sharks, criteria]);
 
+    const activeFilterCount = useMemo(
+        () => Array.from(criteriaToParams(criteria, defaultCriteria).keys()).length,
+        [criteria, defaultCriteria]
+    );
+
     // Notify parent of filtered sharks changes
     useEffect(() => {
         if (onFilteredSharksChange) {
@@ -124,7 +129,9 @@ function SharkSelector({
                         className={`toggle-filter-button ${showFilters ? "active" : ""}`}
                         disabled={disabled}
                     >
-                        {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
+                        {showFilters
+                            ? `Hide Filters (${activeFilterCount}) ▲`
+                            : `Show Filters (${activeFilterCount}) ▼`}
                     </button>
 
                     {showFilters && (
