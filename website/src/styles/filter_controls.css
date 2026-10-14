@@ -63,3 +63,111 @@
     color: inherit;
     opacity: 0.75;
 }
+
+
+/* Filter panel: scroll box, grouped fieldsets & their inputs */
+.scrollable-filters {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.shark-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.25rem;
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.filter-group {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-tertiary);
+    border-radius: var(--radius-md);
+    padding: 0.3rem 0.5rem 0.7rem 0.5rem;
+}
+
+.filter-group legend {
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0 0.5rem;
+    margin: -0.5rem;
+    color: var(--accent-navy);
+}
+
+.filter-label {
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.filter-input,
+.filter-select {
+    width: 100%;
+    margin-top: 0.3rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-secondary);
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    background-color: var(--surface-primary);
+    color: var(--text-secondary);
+}
+
+.range-inputs {
+    display: flex;
+    align-items: center;
+}
+
+.filter-label input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+
+/* Applied-filter chips, directly under the filter buttons */
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0 0 0.75rem;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 100%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border-primary);
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
+    transition: background-color 0.2s ease;
+}
+
+.filter-chip:hover,
+.filter-chip:focus-visible {
+    background-color: var(--primary-teal);
+}
+
+/* Staged shark, styled like selected row in continent list */
+.filter-chip.selected-shark {
+    color: var(--bg-primary);
+    background-color: var(--primary-blue);
+}
+
+.filter-chip.selected-shark:hover,
+.filter-chip.selected-shark:focus-visible {
+    background-color: var(--primary-teal);
+    color: var(--text-primary);
+}
+
+.filter-chip-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
