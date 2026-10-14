@@ -71,10 +71,13 @@
 .scrollable-shark-list {
     flex: 1;
     min-height: 0;
-    max-height: min(8rem, 15vh);
     overflow-y: auto;
     padding: 0.5rem;
     padding-right: 0.5rem;
+}
+
+.continent-dropdown .scrollable-shark-list {
+    max-height: min(8rem, 15vh);
 }
 
 
