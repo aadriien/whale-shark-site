@@ -79,6 +79,11 @@ export type GlobeCoordinateReadoutProps = {
     placeholder?: string;
 };
 
+export type GlobeSharkCountReadoutProps = {
+    shown: number;
+    total: number;
+};
+
 export type GlobeImageOverlayProps = {
     imageUrl?: string;
 };

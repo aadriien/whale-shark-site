@@ -6,6 +6,7 @@ import GlobePageLayout from "../components/GlobePageLayout";
 import SharkInfoPanel from "../components/panels/SharkInfoPanel";
 import SharkSelector from "../components/panels/SharkSelector";
 import ContinentDisplay from "../components/panels/ContinentSharksDisplay";
+import GlobeSharkCountReadout from "../components/controls/GlobeSharkCountReadout";
 
 import { addPointsData, clearAllData } from "../utils/GlobeUtils";
 import { getGroupCoordinates } from "../utils/CoordinateUtils";
@@ -125,6 +126,7 @@ function GlobeViews() {
                             sharks={sharks}
                             onSelect={handleSelectShark}
                             onReset={handleReset}
+                            onDeselect={handleReset}
                             selectedSharkId={selectedShark ? selectedShark.id : null}
                             DisplayComponent={ContinentDisplay}
                             onFilteredSharksChange={setFilteredSharks}
@@ -138,6 +140,10 @@ function GlobeViews() {
                     onSharkClick={handleSelectShark}
                     allowClicks={!selectedShark}
                 />
+                {/* Only meaningful while globe shows filtered set, not a single shark */}
+                {!selectedShark && (
+                    <GlobeSharkCountReadout shown={filteredSharks.length} total={sharks.length} />
+                )}
             </GlobePageLayout>
         </div>
     );
