@@ -1,58 +1,63 @@
-/* Filter toggle & reset buttons, shared by every shark selector */
-.filter-buttons {
+.btn {
+    padding: var(--btn-padding);
+    font-size: var(--btn-font-size);
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: var(--btn-radius);
+    cursor: pointer;
+    transition: var(--btn-transition);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.btn:disabled {
+    opacity: var(--btn-disabled-opacity);
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    color: var(--btn-primary-text);
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--btn-primary-hover-bg);
+    border-color: var(--btn-primary-hover-bg);
+}
+
+.btn-primary:active:not(:disabled) {
+    background-color: var(--btn-primary-active-bg);
+    border-color: var(--btn-primary-active-bg);
+}
+
+.btn-secondary {
+    color: var(--btn-secondary-text);
+    background-color: transparent;
+    border-color: var(--btn-secondary-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--btn-secondary-hover-bg);
+}
+
+.btn-secondary:active:not(:disabled) {
+    background-color: var(--btn-secondary-active-bg);
+}
+
+.btn-row {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 0.75rem;
 }
 
-.toggle-filter-button,
-.reset-filters-button {
+.btn-row > .btn {
     flex: 1;
     min-width: 0;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-    border: 1px solid var(--primary-purple);
-    cursor: pointer;
-    padding: 0.5rem 0.4rem;
-    box-sizing: border-box;
-    border-radius: var(--radius-sm);
-    transition: all 0.3s ease;
-}
-
-/* Toggle is filled purple, reset is same hue outlined so they read as distinct */
-.toggle-filter-button {
-    color: var(--bg-primary);
-    background-color: var(--primary-purple);
-}
-
-.reset-filters-button {
-    color: var(--text-primary);
-    background-color: var(--bg-tertiary);
-}
-
-/* Subtle lift on hover */
-.toggle-filter-button:hover:not(:disabled),
-.reset-filters-button:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.toggle-filter-button:focus-visible,
-.reset-filters-button:focus-visible {
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
-}
-
-.toggle-filter-button:disabled,
-.reset-filters-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.toggle-filter-button.active {
-    box-shadow: var(--shadow-lg);
 }
 
 /* Quiet count beside a label */
