@@ -284,46 +284,35 @@ export default function SharkAnimation() {
     return (
         <div className="animation-controls">
             {/* UI Controls */}
-            <div className="animation-points-container">
+            <div className="animation-points-container" data-accent="blue">
                 <h3>{isAnimating ? "Shark Swimming Animation" : "Shark Path Editor"}</h3>
 
                 {/* Show editing controls only when not animating */}
-                {!isAnimating && (
-                    <>
-                        <button className="add-point-button" onClick={addControlPoint}>
-                            Add Point
-                        </button>
-                        <button
-                            className="remove-point-button"
-                            onClick={removeControlPoint}
-                            disabled={selectedPointIndex === null || controlPoints.length <= 3}
-                            style={{
-                                background:
-                                    selectedPointIndex !== null && controlPoints.length > 3
-                                        ? "#ff6b6b"
-                                        : "#666",
-                                cursor:
-                                    selectedPointIndex !== null && controlPoints.length > 3
-                                        ? "pointer"
-                                        : "not-allowed",
-                            }}
-                        >
-                            Remove Point
-                        </button>
-                    </>
-                )}
+                <div className="btn-row">
+                    {!isAnimating && (
+                        <>
+                            <button className="btn btn-secondary" onClick={addControlPoint}>
+                                Add Point
+                            </button>
+                            <button
+                                className="btn btn-secondary"
+                                onClick={removeControlPoint}
+                                disabled={selectedPointIndex === null || controlPoints.length <= 3}
+                            >
+                                Remove Point
+                            </button>
+                        </>
+                    )}
 
-                {/* Main toggle button */}
-                <button
-                    className="run-points-button"
-                    onClick={toggleAnimation}
-                    style={{
-                        background: isAnimating ? "#ff6b6b" : "#4ecd83",
-                        color: isAnimating ? "#300a0aff" : "#0a2609",
-                    }}
-                >
-                    {isAnimating ? "Stop & Edit Loop" : "Finish & Run"}
-                </button>
+                    {/* Main toggle button */}
+                    <button
+                        className="btn btn-secondary"
+                        data-accent="teal"
+                        onClick={toggleAnimation}
+                    >
+                        {isAnimating ? "Stop & Edit Loop" : "Finish & Run"}
+                    </button>
+                </div>
 
                 {/* Instructions */}
                 {isAnimating ? (

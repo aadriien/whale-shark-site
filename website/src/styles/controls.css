@@ -21,40 +21,44 @@
 
 .btn-primary {
     color: var(--btn-primary-text);
-    background-color: var(--btn-primary-bg);
-    border-color: var(--btn-primary-bg);
+    background-color: var(--btn-accent);
+    border-color: var(--btn-accent);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background-color: var(--btn-primary-hover-bg);
-    border-color: var(--btn-primary-hover-bg);
+    background-color: color-mix(in srgb, var(--btn-accent) 88%, var(--btn-shade));
+    border-color: color-mix(in srgb, var(--btn-accent) 88%, var(--btn-shade));
 }
 
 .btn-primary:active:not(:disabled) {
-    background-color: var(--btn-primary-active-bg);
-    border-color: var(--btn-primary-active-bg);
+    background-color: color-mix(in srgb, var(--btn-accent) 76%, var(--btn-shade));
+    border-color: color-mix(in srgb, var(--btn-accent) 76%, var(--btn-shade));
 }
 
 .btn-secondary {
     color: var(--btn-secondary-text);
-    background-color: transparent;
-    border-color: var(--btn-secondary-border);
+    background-color: color-mix(in srgb, var(--btn-accent) var(--btn-secondary-fill), transparent);
+    border-color: var(--btn-accent);
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background-color: var(--btn-secondary-hover-bg);
+    background-color: color-mix(in srgb, var(--btn-accent) var(--btn-secondary-hover), transparent);
 }
 
 .btn-secondary:active:not(:disabled) {
-    background-color: var(--btn-secondary-active-bg);
+    background-color: color-mix(in srgb, var(--btn-accent) var(--btn-secondary-active), transparent);
 }
 
 .btn-secondary[aria-pressed="true"] {
-    background-color: var(--btn-secondary-pressed-bg);
+    background-color: color-mix(in srgb, var(--btn-accent) var(--btn-secondary-pressed), transparent);
 }
 
 .btn-secondary[aria-pressed="true"]:hover:not(:disabled) {
-    background-color: var(--btn-secondary-pressed-hover-bg);
+    background-color: color-mix(
+        in srgb,
+        var(--btn-accent) var(--btn-secondary-pressed-hover),
+        transparent
+    );
 }
 
 .btn-secondary[aria-pressed="true"]:disabled {

@@ -206,7 +206,12 @@ const SharkGenerator = () => {
 
                 <div className="btn-row button-container">
                     {/* Reset all inputs button */}
-                    <button type="button" className="btn btn-lg btn-secondary" onClick={handleReset}>
+                    <button
+                        type="button"
+                        className="btn btn-lg btn-secondary"
+                        data-accent="blue"
+                        onClick={handleReset}
+                    >
                         Reset
                     </button>
 

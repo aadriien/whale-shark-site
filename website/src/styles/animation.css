@@ -25,31 +25,6 @@
     border-radius: var(--radius-md);
     color: var(--animation-text);
     font-family: Arial, sans-serif;
-}
-
-.add-point-button,
-.remove-point-button,
-.run-points-button {
-    font-size: 0.8rem;
-    padding: 8px 12px;
-    border: none;
-    border-radius: var(--radius-xs);
-}
-
-.add-point-button {
-    margin-right: 10px;
-    background: var(--animation-add-button-bg);
-    color: var(--animation-add-button-text);
-    cursor: pointer;
-}
-
-.remove-point-button {
-    margin-right: 10px;
-    color: var(--animation-remove-button-text);
-}
-
-.run-points-button {
-    font-weight: 600;
-    cursor: pointer;
+    --btn-secondary-text: var(--animation-text);
 }
 

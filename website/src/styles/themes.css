@@ -82,17 +82,15 @@
     --btn-transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     --btn-disabled-opacity: 0.6;
 
-    --btn-primary-bg: var(--primary-purple);
+    --btn-accent: var(--primary-purple);
+    --btn-shade: black;
     --btn-primary-text: #ffffff;
-    --btn-primary-hover-bg: color-mix(in srgb, var(--primary-purple) 88%, black);
-    --btn-primary-active-bg: color-mix(in srgb, var(--primary-purple) 76%, black);
-
     --btn-secondary-text: var(--text-primary);
-    --btn-secondary-border: var(--primary-purple);
-    --btn-secondary-hover-bg: color-mix(in srgb, var(--primary-purple) 12%, transparent);
-    --btn-secondary-active-bg: color-mix(in srgb, var(--primary-purple) 22%, transparent);
-    --btn-secondary-pressed-bg: color-mix(in srgb, var(--primary-purple) 28%, transparent);
-    --btn-secondary-pressed-hover-bg: color-mix(in srgb, var(--primary-purple) 36%, transparent);
+    --btn-secondary-fill: 0%;
+    --btn-secondary-hover: 12%;
+    --btn-secondary-active: 22%;
+    --btn-secondary-pressed: 28%;
+    --btn-secondary-pressed-hover: 36%;
     
     /* Shadows */
     --shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -197,9 +195,6 @@
     /* Animation Controls */
     --animation-container-bg: rgba(0, 0, 0, 0.7);
     --animation-text: #fff;
-    --animation-add-button-bg: #4ecdc4;
-    --animation-add-button-text: #000;
-    --animation-remove-button-text: #fff;
     
     /* Research Creative */
     --research-text: #e3f7ff;
@@ -352,9 +347,8 @@
     --focus-ring: rgba(138, 180, 248, 0.5);
 
     /* Buttons: dark purple takes dark text, so hover lightens */
+    --btn-shade: white;
     --btn-primary-text: var(--text-on-primary-accent);
-    --btn-primary-hover-bg: color-mix(in srgb, var(--primary-purple) 85%, white);
-    --btn-primary-active-bg: color-mix(in srgb, var(--primary-purple) 70%, white);
     
     /* Shadows */
     --shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -455,9 +449,6 @@
     /* Animation Controls */
     --animation-container-bg: rgba(0, 0, 0, 0.8);
     --animation-text: #ffffff;
-    --animation-add-button-bg: #3a9b94;
-    --animation-add-button-text: #ffffff;
-    --animation-remove-button-text: #ffffff;
     
     /* Research Creative */
     --research-text: #b8e6ff;
@@ -542,6 +533,25 @@
     --toggle-moon: #f1f1f1;
     --toggle-cloud: #fff;
     --toggle-star: #fff;
+}
+
+
+/* Button accents: set data-accent as needed. Default is purple */
+[data-accent="blue"],
+[data-accent="teal"] {
+    --btn-secondary-fill: 26%;
+    --btn-secondary-hover: 38%;
+    --btn-secondary-active: 48%;
+    --btn-secondary-pressed: 48%;
+    --btn-secondary-pressed-hover: 56%;
+}
+
+[data-accent="blue"] {
+    --btn-accent: var(--primary-blue);
+}
+
+[data-accent="teal"] {
+    --btn-accent: var(--primary-teal);
 }
 
 
