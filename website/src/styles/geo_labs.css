@@ -59,7 +59,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
     line-height: 1;
     padding: 0 0 0.1rem 0;
     margin: 0;
@@ -108,7 +108,7 @@
     border: 2px solid var(--primary-purple);
     cursor: pointer;
     box-shadow: var(--shadow-xs);
-    transition: all 0.2s ease;
+    transition: all var(--duration-fast) ease;
 }
 
 .story-slider::-webkit-slider-thumb:hover,

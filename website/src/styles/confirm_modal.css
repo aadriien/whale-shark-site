@@ -53,9 +53,9 @@
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     transition:
-        background-color 0.25s ease,
-        border-color 0.25s ease,
-        color 0.25s ease;
+        background-color var(--duration-fast) ease,
+        border-color var(--duration-fast) ease,
+        color var(--duration-fast) ease;
 }
 
 .confirm-modal-button.neutral {

@@ -72,7 +72,7 @@
     font-weight: 500;
     background-color: var(--bg-primary);
     border: 1px solid var(--data-filter-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-control);
     margin: 0rem 1rem;
     box-shadow: var(--shadow-xs);
     color: var(--text-secondary);
@@ -82,7 +82,7 @@
     color: var(--text-primary);
     background-color: var(--bg-primary);
     border: 1px solid var(--data-filter-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-control);
 }
 
 @media (max-width: 600px) {

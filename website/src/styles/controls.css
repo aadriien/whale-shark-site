@@ -157,7 +157,7 @@
     width: 100%;
     margin-top: 0.3rem;
     padding: 0.4rem 0.5rem;
-    border-radius: var(--radius-xs);
+    border-radius: var(--radius-control);
     border: 1px solid var(--border-secondary);
     font-size: 0.85rem;
     box-sizing: border-box;
@@ -192,11 +192,11 @@
     font-weight: 600;
     padding: 0.15rem 0.5rem;
     border: 1px solid var(--border-primary);
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     cursor: pointer;
     color: var(--text-primary);
     background-color: var(--bg-tertiary);
-    transition: background-color 0.2s ease;
+    transition: background-color var(--duration-fast) ease;
 }
 
 .filter-chip:hover,

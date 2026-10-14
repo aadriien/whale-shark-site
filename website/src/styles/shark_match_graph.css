@@ -30,7 +30,7 @@
     text-align: center;
     cursor: pointer;
     opacity: 0.55;
-    transition: opacity 0.2s, border-color 0.2s;
+    transition: opacity var(--duration-fast), border-color var(--duration-fast);
 }
 
 .shark-match-graph-section .graph-header-option + .graph-header-option {
@@ -161,7 +161,7 @@
     width: 3.5rem;
     padding: 2px 4px;
     border: 1px solid var(--border-secondary);
-    border-radius: var(--radius-xs);
+    border-radius: var(--radius-control);
     font-size: 0.85rem;
     text-align: center;
     background: var(--bg-primary);
@@ -225,7 +225,7 @@
     cursor: pointer;
     font-size: 0.85rem;
     font-weight: 600;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
 }
 
 .graph-panel-match-btn:hover {

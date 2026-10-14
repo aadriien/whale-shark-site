@@ -60,7 +60,14 @@
     --radius-md: 8px;
     --radius-lg: 12px;
     --radius-xl: 16px;
+    --radius-2xl: 24px;
     --radius-pill: 999px;
+    --radius-control: var(--radius-sm);
+
+    /* Motion Scale (same across both themes) */
+    --duration-fast: 0.2s;
+    --duration-base: 0.3s;
+    --duration-slow: 0.6s;
 
     /* Status Colors */
     --success: #4CAF50;
@@ -74,14 +81,14 @@
     --focus-ring: rgba(66, 153, 225, 0.5);
 
     /* Buttons: shape & motion shared by both themes, primary colors set per theme */
-    --btn-radius: var(--radius-sm);
+    --btn-radius: var(--radius-control);
     --btn-font-size: 0.85rem;
     --btn-padding: 0.5rem;
     --btn-font-size-lg: 1rem;
     --btn-padding-lg: 0.75rem 1.5rem;
     --btn-font-size-sm: 0.8rem;
     --btn-padding-sm: 0.25rem 0.75rem;
-    --btn-transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    --btn-transition: background-color var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease;
     --btn-disabled-opacity: 0.6;
 
     --btn-accent: var(--primary-purple);
@@ -567,7 +574,7 @@
 
 /* Transition for smooth theme switching */
 .theme-transition {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition: background-color var(--duration-base) ease, color var(--duration-base) ease, border-color var(--duration-base) ease;
 }
 
 /* Disable transitions during theme switch to prevent flashing */

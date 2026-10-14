@@ -84,7 +84,7 @@
 .ocean-viewer-metrics-panel {
     max-width: 0;
     overflow: hidden;
-    transition: max-width 0.22s ease;
+    transition: max-width var(--duration-fast) ease;
     display: flex;
     flex-direction: column;
     gap: 6px;

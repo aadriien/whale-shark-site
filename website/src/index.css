@@ -94,7 +94,7 @@ body::before {
 ::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb);
     border-radius: var(--radius-pill);
-    transition: background-color 0.2s ease;
+    transition: background-color var(--duration-fast) ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -144,7 +144,7 @@ nav a {
     text-decoration: none;
     color: var(--navbar-text);
     font-weight: normal;
-    transition: color 0.2s ease;
+    transition: color var(--duration-fast) ease;
 }
 
 nav a:hover {
@@ -177,7 +177,7 @@ nav a.active {
     background-color: var(--version-bg); /* subtle pastel highlight */
     border-radius: var(--radius-xl);
     text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color var(--duration-base) ease, color var(--duration-base) ease, box-shadow var(--duration-base) ease;
     box-shadow: var(--version-shadow);
     
     cursor: pointer;

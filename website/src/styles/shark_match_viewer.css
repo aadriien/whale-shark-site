@@ -113,7 +113,7 @@
     border: 1px solid var(--border-quaternary);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all var(--duration-base) ease;
 }
 
 .match-shark-item:hover {
@@ -411,7 +411,7 @@
     border: 1px solid var(--border-secondary);
     border-radius: var(--radius-md);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all var(--duration-base) ease;
     flex-shrink: 0;
     width: 150px;
     height: 150px;
@@ -518,7 +518,7 @@
     border: 1px solid var(--border-secondary);
     border-radius: var(--radius-sm);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all var(--duration-base) ease;
 }
 
 .match-thumbnail-item:hover {
