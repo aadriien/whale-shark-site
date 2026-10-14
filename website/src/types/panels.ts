@@ -18,6 +18,8 @@ export type ContinentDisplayProps = {
     sharks: WhaleSharkDatasetNormalized;
     onSelect: (id: string) => void;
     selectedSharkId: string;
+    // Open continent tabs on first render (e.g. shared filtered link)
+    autoExpand?: boolean;
 };
 
 export type SavedSharksDisplayProps = {

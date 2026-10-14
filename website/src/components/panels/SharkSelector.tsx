@@ -82,6 +82,10 @@ function SharkSelector({
         [criteria, defaultCriteria]
     );
 
+    // If landed with filters already in URL (shared link), then expand.
+    // Fixed at mount, so later filter tweaks never trigger auto-expand
+    const [autoExpandContinents] = useState<boolean>(activeFilterCount > 0);
+
     // Notify parent of filtered sharks changes
     useEffect(() => {
         if (onFilteredSharksChange) {
@@ -157,6 +161,7 @@ function SharkSelector({
                     sharks={filteredSharks}
                     onSelect={onSelect}
                     selectedSharkId={selectedSharkId ?? ""}
+                    autoExpand={autoExpandContinents}
                 />
             </div>
         </div>

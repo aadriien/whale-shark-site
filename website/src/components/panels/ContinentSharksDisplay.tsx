@@ -17,24 +17,45 @@ const VALID_CONTINENTS = [
 
 type Continent = (typeof VALID_CONTINENTS)[number];
 
-function ContinentDisplay({ sharks, onSelect, selectedSharkId }: ContinentDisplayProps) {
-    const [openContinents, setOpenContinents] = useState<Partial<Record<Continent, boolean>>>({});
+function groupSharksByContinent(sharks: WhaleSharkDatasetNormalized) {
+    const byContinent: Partial<Record<Continent, WhaleSharkDatasetNormalized>> = {};
+
+    sharks.forEach((shark) => {
+        const continents = extractContinents(shark.continent ?? "");
+
+        continents.forEach((continent) => {
+            if (VALID_CONTINENTS.includes(continent as Continent)) {
+                if (!byContinent[continent as Continent]) {
+                    byContinent[continent as Continent] = [];
+                }
+                byContinent[continent as Continent]!.push(shark);
+            }
+        });
+    });
+
+    return byContinent;
+}
+
+function ContinentDisplay({
+    sharks,
+    onSelect,
+    selectedSharkId,
+    autoExpand = false,
+}: ContinentDisplayProps) {
+    const [openContinents, setOpenContinents] = useState<Partial<Record<Continent, boolean>>>(
+        () => {
+            if (!autoExpand) return {};
+
+            const open: Partial<Record<Continent, boolean>> = {};
+            Object.keys(groupSharksByContinent(sharks)).forEach((continent) => {
+                open[continent as Continent] = true;
+            });
+            return open;
+        }
+    );
 
     const sharksByContinent = useMemo(() => {
-        const byContinent: Partial<Record<Continent, WhaleSharkDatasetNormalized>> = {};
-
-        sharks.forEach((shark) => {
-            const continents = extractContinents(shark.continent ?? "");
-
-            continents.forEach((continent) => {
-                if (VALID_CONTINENTS.includes(continent as Continent)) {
-                    if (!byContinent[continent as Continent]) {
-                        byContinent[continent as Continent] = [];
-                    }
-                    byContinent[continent as Continent]!.push(shark);
-                }
-            });
-        });
+        const byContinent = groupSharksByContinent(sharks);
 
         console.log(
             "Sharks by continent:",
