@@ -142,6 +142,8 @@
     gap: 0.3rem 0.4rem;
     flex-wrap: wrap;
     padding: 0.4rem 0.5rem;
+    background: var(--bg-quaternary);
+    border-color: var(--border-secondary);
 }
 
 .shark-match-graph-section .graph-distance-range {

@@ -556,6 +556,10 @@
     --btn-accent: var(--primary-teal);
 }
 
+[data-accent="navy"] {
+    --btn-accent: var(--accent-dark-blue);
+}
+
 [data-accent="red"] {
     --btn-accent: var(--error);
 }

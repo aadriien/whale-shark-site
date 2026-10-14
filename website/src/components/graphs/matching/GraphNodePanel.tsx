@@ -92,7 +92,7 @@ function renderBody(
                                     one.
                                 </p>
                                 <button
-                                    className="btn btn-sm btn-secondary btn-block"
+                                    className={`btn btn-sm btn-block ${showContradictionPath ? "btn-primary" : "btn-secondary"}`}
                                     data-accent="red"
                                     aria-pressed={showContradictionPath}
                                     onClick={onToggleContradictionPath}
