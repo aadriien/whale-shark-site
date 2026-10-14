@@ -121,15 +121,7 @@ function SharkSelector({
             }}
         >
             <div className="shark-selector-list">
-                <button
-                    onClick={handleReset}
-                    className={`show-all-button ${selectedSharkId == null ? "active" : ""}`}
-                    disabled={disabled}
-                >
-                    Show All Sharks
-                </button>
-
-                <div className="filter-toggle-container">
+                <div className="shark-selector-buttons">
                     <button
                         onClick={() => setShowFilters((prev) => !prev)}
                         className={`toggle-filter-button ${showFilters ? "active" : ""}`}
@@ -140,6 +132,16 @@ function SharkSelector({
                             : `Show Filters (${activeFilterCount}) ▼`}
                     </button>
 
+                    <button
+                        onClick={handleReset}
+                        className="show-all-button"
+                        disabled={disabled}
+                    >
+                        Reset Filters
+                    </button>
+                </div>
+
+                <div className="filter-toggle-container">
                     <FilterChips
                         criteria={criteria}
                         defaults={defaultCriteria}
