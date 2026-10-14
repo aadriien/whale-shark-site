@@ -360,30 +360,33 @@ function GeoLabs() {
                     className: "info-sidebar",
                     content: (
                         <>
-                            {/* View Mode Toggle Button */}
-                            <button
-                                className={`geo-labs-toggle-button view-mode-toggle ${viewMode}`}
-                                onClick={handleToggleViewMode}
-                            >
-                                {viewMode === "individual"
-                                    ? "Switch to Multi Shark View"
-                                    : "Switch to Single Shark View"}
-                            </button>
+                            <div className="btn-stack">
+                                {/* View Mode Toggle Button */}
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={handleToggleViewMode}
+                                >
+                                    {viewMode === "individual"
+                                        ? "Switch to Multi Shark View"
+                                        : "Switch to Single Shark View"}
+                                </button>
 
-                            {/* Combine Matched Sharks Toggle */}
-                            <button
-                                className={`geo-labs-toggle-button match-consolidate-toggle ${combineMatches ? "active" : ""}`}
-                                onClick={() => setCombineMatches((prev) => !prev)}
-                                disabled={!hasApplicableGroup}
-                            >
-                                {combineMatches
-                                    ? "Ignore Shark Match Groups"
-                                    : "Combine Matched Sharks"}
-                            </button>
+                                {/* Combine Matched Sharks Toggle */}
+                                <button
+                                    className="btn btn-secondary"
+                                    aria-pressed={combineMatches}
+                                    onClick={() => setCombineMatches((prev) => !prev)}
+                                    disabled={!hasApplicableGroup}
+                                >
+                                    {combineMatches
+                                        ? "Ignore Shark Match Groups"
+                                        : "Combine Matched Sharks"}
+                                </button>
+                            </div>
 
                             {/* Step Through Story Controls */}
                             {selectedShark && (
-                                <div className="story-controls-container">
+                                <div className="btn-stack">
                                     <PlayStoryButton
                                         shark={selectedShark}
                                         onToggleStepMode={handleToggleStepMode}

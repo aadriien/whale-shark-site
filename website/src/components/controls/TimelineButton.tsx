@@ -4,9 +4,8 @@ const TimelineButton = ({ onToggleTimelineMode, isTimelineMode = false }: Timeli
     return (
         <div className="timeline-mode-section">
             <button
-                className={`geo-labs-timeline-button
-                    ${isTimelineMode ? " timeline-mode-active" : ""}
-                `}
+                className="btn btn-secondary btn-block"
+                aria-pressed={isTimelineMode}
                 onClick={(e) => {
                     e.stopPropagation();
                     onToggleTimelineMode();

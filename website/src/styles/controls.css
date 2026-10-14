@@ -49,6 +49,27 @@
     background-color: var(--btn-secondary-active-bg);
 }
 
+.btn-secondary[aria-pressed="true"] {
+    background-color: var(--btn-secondary-pressed-bg);
+}
+
+.btn-secondary[aria-pressed="true"]:hover:not(:disabled) {
+    background-color: var(--btn-secondary-pressed-hover-bg);
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    white-space: normal;
+}
+
+.btn-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .btn-row {
     display: flex;
     gap: 0.5rem;

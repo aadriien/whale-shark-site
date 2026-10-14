@@ -79,7 +79,7 @@ const TimelineControls = ({
     };
 
     return (
-        <div className="timeline-controls-container">
+        <div className="btn-stack">
             <TimelineButton
                 onToggleTimelineMode={handleToggleTimelineMode}
                 isTimelineMode={isTimelineMode}

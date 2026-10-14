@@ -1,58 +1,3 @@
-/* Shared shape / sizing for sidebar's mode-toggle buttons.
-   Each toggle keeps its own class for color to signal what
-   it does, e.g. purple = view mode, green = combine matches */
-.geo-labs-toggle-button {
-    border: 2px solid transparent;
-    border-radius: var(--radius-md);
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 0.5rem;
-    width: 100%;
-    text-align: center;
-}
-
-/* View mode toggle button */
-.view-mode-toggle {
-    background-color: var(--primary-purple);
-    border-color: var(--active-bg);
-    color: var(--surface-primary);
-}
-
-.view-mode-toggle:hover {
-    background-color: var(--accent-purple);
-}
-
-
-/* Combine-matched-sharks toggle button */
-.match-consolidate-toggle {
-    background-color: var(--active-bg);
-    border-color: var(--accent-dark-blue);
-    color: var(--text-secondary);
-}
-
-.match-consolidate-toggle:hover:not(:disabled) {
-    background-color: var(--primary-blue);
-}
-
-.match-consolidate-toggle.active {
-    background-color: var(--accent-dark-blue);
-    border-color: var(--accent-dark-blue);
-    color: var(--bg-primary);
-}
-
-.match-consolidate-toggle.active:hover:not(:disabled) {
-    background-color: var(--accent-blue);
-}
-
-.match-consolidate-toggle:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-
 .saved-sharks-display {
     display: flex;
     flex-direction: column;
@@ -69,67 +14,12 @@
 }
 
 
-.story-controls-container {
-    margin-bottom: 0.75rem;
-    border: 1px solid var(--border-tertiary);
-    border-radius: 10px;
-    background-color: var(--bg-tertiary);
-    overflow: visible; 
-    transition: all 0.3s ease;
-}
-
-.story-controls-container .play-story-section {
-    margin: 0;
-    padding: 0;
-}
-
-/* Step-through-story toggle & timeline toggle share same look */
-.geo-labs-step-button,
-.geo-labs-timeline-button {
-    border-radius: var(--radius-md); /* all corners rounded by default */
-    border: 1px solid var(--accent-purple);
-    padding: 0.75rem 1rem;
-    color: var(--text-secondary);
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: inherit;
-    background-color: var(--active-bg);
-    cursor: pointer;
-    width: 100%;
-    text-align: left;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-}
-
-.geo-labs-step-button:hover,
-.geo-labs-timeline-button:hover {
-    background-color: var(--surface-quaternary);
-    color: var(--accent-blue);
-    font-weight: 700;
-}
-
-.geo-labs-step-button.step-mode-active,
-.geo-labs-timeline-button.timeline-mode-active {
-    border-radius: var(--radius-md) var(--radius-md) 0 0; /* only top corners rounded when open */
-    background-color: var(--primary-purple);
-    color: var(--surface-primary);
-    border-bottom: 1px solid var(--accent-purple); /* purple bottom border when open */
-}
-
-.geo-labs-step-button.step-mode-active:hover,
-.geo-labs-timeline-button.timeline-mode-active:hover {
-    background-color: var(--accent-purple);
-}
-
 /* Timeline slider container */
 .story-step-container {
     padding: 1rem;
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-tertiary);
     background-color: var(--bg-tertiary);
-    border-top: none;
-    min-height: auto; /* ensure full height */
-    overflow: visible; /* prevent clipping */
 }
 
 .story-slider-section h4 {
@@ -386,31 +276,13 @@
 }
 
 
-/* Timeline Controls */
-.timeline-controls-container {
-    width: 100%;
-    margin-bottom: 0.75rem;
-    border: 1px solid var(--border-tertiary);
-    border-radius: 10px;
-    background-color: var(--bg-tertiary);
-    overflow: visible;
-    transition: all 0.3s ease;
-}
-
-.timeline-mode-section {
-    margin: 0;
-    padding: 0;
-}
-
 /* Timeline Selector */
 .timeline-selector-container {
     width: 100%;
     padding: 1rem;
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-tertiary);
     background-color: var(--bg-tertiary);
-    border-top: none;
-    min-height: auto;
     overflow: hidden;
 }
 

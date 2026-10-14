@@ -89,6 +89,8 @@
     --btn-secondary-border: var(--primary-purple);
     --btn-secondary-hover-bg: color-mix(in srgb, var(--primary-purple) 12%, transparent);
     --btn-secondary-active-bg: color-mix(in srgb, var(--primary-purple) 22%, transparent);
+    --btn-secondary-pressed-bg: color-mix(in srgb, var(--primary-purple) 28%, transparent);
+    --btn-secondary-pressed-hover-bg: color-mix(in srgb, var(--primary-purple) 36%, transparent);
     
     /* Shadows */
     --shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.05);

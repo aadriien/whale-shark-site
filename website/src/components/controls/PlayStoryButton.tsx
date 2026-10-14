@@ -16,9 +16,8 @@ const PlayStoryButton = ({
         return (
             <div className="play-story-section">
                 <button
-                    className={`geo-labs-step-button
-                        ${isStepMode ? " step-mode-active" : ""}
-                    `}
+                    className="btn btn-secondary btn-block"
+                    aria-pressed={isStepMode}
                     onClick={(e) => {
                         e.stopPropagation();
                         onToggleStepMode?.();
