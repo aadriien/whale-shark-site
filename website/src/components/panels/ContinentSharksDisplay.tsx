@@ -92,7 +92,11 @@ function ContinentDisplay({
                                     className="continent-header"
                                     onClick={() => toggleContinent(continent)}
                                 >
-                                    {continent} {isOpen ? "▾" : "▸"}
+                                    {continent}{" "}
+                                    <span className="continent-count">
+                                        ({continentSharks.length})
+                                    </span>{" "}
+                                    {isOpen ? "▾" : "▸"}
                                 </div>
                                 {isOpen && (
                                     <div className="scrollable-shark-list">

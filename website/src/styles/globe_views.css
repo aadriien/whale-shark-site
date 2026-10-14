@@ -158,6 +158,13 @@
     flex-shrink: 0; 
 }
 
+.continent-count {
+    font-weight: 400;
+    font-size: 0.8rem;
+    margin: 0 0.25rem;
+    color: var(--text-tertiary);
+}
+
 .continent-header:hover {
     background-color: var(--surface-quaternary);
 }
