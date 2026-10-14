@@ -75,36 +75,7 @@
 }
 
 .shark-generator-form .button-container {
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
     margin-top: 20px;
-}
-
-.shark-generator-form button {
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-on-accent);
-    border: 2px solid transparent; /* keep border width consistent */
-    border-radius: var(--radius-md);
-    box-sizing: border-box;
-    cursor: pointer;
-    flex-grow: 1;
-    transition: background-color 0.3s;
-}
-
-.shark-generator-form button:hover {
-    background-color: var(--primary-purple) !important;
-    border: 2px solid var(--border-primary);
-}
-
-/* Red color for reset button, green for submit button */
-.shark-generator-form button[type="button"] {
-    background-color: var(--error); 
-}
-.shark-generator-form button[type="submit"] {
-    background-color: var(--success); 
 }
 
 #generated-image-container {

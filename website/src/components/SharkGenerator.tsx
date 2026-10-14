@@ -204,14 +204,16 @@ const SharkGenerator = () => {
                     />
                 </label>
 
-                <div className="button-container">
+                <div className="btn-row button-container">
                     {/* Reset all inputs button */}
-                    <button type="button" onClick={handleReset}>
+                    <button type="button" className="btn btn-lg btn-secondary" onClick={handleReset}>
                         Reset
                     </button>
 
                     {/* Submit inputs button */}
-                    <button type="submit">Submit</button>
+                    <button type="submit" className="btn btn-lg btn-primary">
+                        Submit
+                    </button>
                 </div>
             </form>
 

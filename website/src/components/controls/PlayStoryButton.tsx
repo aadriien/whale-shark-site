@@ -39,10 +39,8 @@ const PlayStoryButton = ({
     return (
         <div className="play-story-section">
             <button
-                className={`play-story-button
-                    ${playingSharkId === shark.id && isPlaying ? " currentlyPlaying" : ""}
-                    ${isPlaying ? " anyPlaying" : ""}
-                `}
+                className="btn btn-secondary btn-block"
+                aria-pressed={playingSharkId === shark.id && isPlaying}
                 onClick={(e) => {
                     e.stopPropagation();
                     onPlayStory?.(shark.id);

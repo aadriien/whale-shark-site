@@ -57,6 +57,16 @@
     background-color: var(--btn-secondary-pressed-hover-bg);
 }
 
+.btn-secondary[aria-pressed="true"]:disabled {
+    opacity: 1;
+    cursor: progress;
+}
+
+.btn-lg {
+    padding: var(--btn-padding-lg);
+    font-size: var(--btn-font-size-lg);
+}
+
 .btn-block {
     display: block;
     width: 100%;
