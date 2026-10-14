@@ -10,7 +10,9 @@ type FilterButtonProps = {
 function FilterButton({ active, disabled, onClick, children }: FilterButtonProps) {
     return (
         <button
-            className={`graph-filter-btn${active ? " active" : ""}`}
+            className="btn btn-sm btn-secondary btn-pill"
+            data-accent="blue"
+            aria-pressed={active}
             disabled={disabled}
             onClick={onClick}
         >

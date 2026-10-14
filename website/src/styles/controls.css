@@ -71,6 +71,16 @@
     font-size: var(--btn-font-size-lg);
 }
 
+.btn-sm {
+    padding: var(--btn-padding-sm);
+    font-size: var(--btn-font-size-sm);
+    font-weight: 500;
+}
+
+.btn-pill {
+    border-radius: var(--radius-pill);
+}
+
 .btn-block {
     display: block;
     width: 100%;

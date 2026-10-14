@@ -210,6 +210,7 @@ const SharkGenerator = () => {
                         type="button"
                         className="btn btn-lg btn-secondary"
                         data-accent="blue"
+                        data-tonal
                         onClick={handleReset}
                     >
                         Reset

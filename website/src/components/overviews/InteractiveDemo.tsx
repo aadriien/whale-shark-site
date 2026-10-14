@@ -104,7 +104,8 @@ const InteractiveDemo = () => {
 
                                 <p className="shark-image-meta">
                                     <small>
-                                        <Camera className="credit-icon" /> Creator: {image.creator} | {image.license}
+                                        <Camera className="credit-icon" /> Creator: {image.creator}{" "}
+                                        | {image.license}
                                     </small>
                                 </p>
                             </div>
@@ -122,21 +123,24 @@ const InteractiveDemo = () => {
             <div className="view-controls">
                 <h3>Analysis View:</h3>
 
-                <div className="control-buttons">
+                <div className="control-buttons" data-accent="blue">
                     <button
-                        className={activeView === "Original" ? "active" : ""}
+                        className="btn btn-lg btn-secondary"
+                        aria-pressed={activeView === "Original"}
                         onClick={() => setActiveView("Original")}
                     >
                         Original Image
                     </button>
                     <button
-                        className={activeView === "BBOX" ? "active" : ""}
+                        className="btn btn-lg btn-secondary"
+                        aria-pressed={activeView === "BBOX"}
                         onClick={() => setActiveView("BBOX")}
                     >
                         Bounding Box
                     </button>
                     <button
-                        className={activeView === "Segmentation" ? "active" : ""}
+                        className="btn btn-lg btn-secondary"
+                        aria-pressed={activeView === "Segmentation"}
                         onClick={() => setActiveView("Segmentation")}
                     >
                         Segmentation
@@ -156,7 +160,8 @@ const InteractiveDemo = () => {
 
                         <p className="shark-image-meta">
                             <small>
-                                <Camera className="credit-icon" /> Creator: {selectedImage.creator} | {selectedImage.license}
+                                <Camera className="credit-icon" /> Creator: {selectedImage.creator}{" "}
+                                | {selectedImage.license}
                             </small>
                         </p>
                     </div>

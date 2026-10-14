@@ -139,45 +139,9 @@
 .shark-match-graph-section .filter-group {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.3rem 0.4rem;
     flex-wrap: wrap;
-    padding: 0.5rem;
-}
-
-.shark-match-graph-section .graph-filter-btn {
-    padding: 6px 16px;
-    border: 1px solid var(--border-secondary);
-    border-radius: var(--radius-pill);
-    background: transparent;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
-
-.shark-match-graph-section .graph-filter-btn:hover:not(:disabled),
-.shark-match-graph-section .graph-filter-btn.active {
-    background: var(--accent-dark-blue);
-    color: var(--bg-primary);
-    border-color: var(--accent-dark-blue);
-}
-
-.shark-match-graph-section .graph-filter-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.graph-panel-contradiction .graph-filter-btn {
-    color: var(--error);
-    background: var(--bg-primary);
-    border-color: var(--error);
-}
-
-.graph-panel-contradiction .graph-filter-btn:hover:not(:disabled),
-.graph-panel-contradiction .graph-filter-btn.active {
-    color: var(--conservation-bg);
-    background: var(--error);
-    border-color: var(--error);
+    padding: 0.4rem 0.5rem;
 }
 
 .shark-match-graph-section .graph-distance-range {

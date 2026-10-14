@@ -92,7 +92,9 @@ function renderBody(
                                     one.
                                 </p>
                                 <button
-                                    className={`graph-filter-btn${showContradictionPath ? " active" : ""}`}
+                                    className="btn btn-sm btn-secondary btn-block"
+                                    data-accent="red"
+                                    aria-pressed={showContradictionPath}
                                     onClick={onToggleContradictionPath}
                                 >
                                     {showContradictionPath ? "Hide" : "Show"} chain to conflicting

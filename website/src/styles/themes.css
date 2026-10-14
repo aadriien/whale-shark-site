@@ -79,6 +79,8 @@
     --btn-padding: 0.5rem;
     --btn-font-size-lg: 1rem;
     --btn-padding-lg: 0.75rem 1.5rem;
+    --btn-font-size-sm: 0.8rem;
+    --btn-padding-sm: 0.25rem 0.75rem;
     --btn-transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     --btn-disabled-opacity: 0.6;
 
@@ -536,9 +538,9 @@
 }
 
 
-/* Button accents: set data-accent as needed. Default is purple */
-[data-accent="blue"],
-[data-accent="teal"] {
+/* Button accents: set data-accent as needed. Default is purple.
+   data-tonal also fills secondary buttons with a tint of the accent */
+[data-tonal] {
     --btn-secondary-fill: 26%;
     --btn-secondary-hover: 38%;
     --btn-secondary-active: 48%;
@@ -552,6 +554,10 @@
 
 [data-accent="teal"] {
     --btn-accent: var(--primary-teal);
+}
+
+[data-accent="red"] {
+    --btn-accent: var(--error);
 }
 
 

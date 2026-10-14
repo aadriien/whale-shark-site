@@ -42,7 +42,7 @@ function SharkTracker() {
     };
 
     return (
-        <div className="page-content sharktracker-wrapper" data-accent="blue">
+        <div className="page-content sharktracker-wrapper" data-accent="blue" data-tonal>
             {/* <h1>SharkTracker Page</h1> */}
 
             <GlobePageLayout

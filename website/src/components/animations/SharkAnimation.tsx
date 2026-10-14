@@ -284,7 +284,7 @@ export default function SharkAnimation() {
     return (
         <div className="animation-controls">
             {/* UI Controls */}
-            <div className="animation-points-container" data-accent="blue">
+            <div className="animation-points-container" data-accent="blue" data-tonal>
                 <h3>{isAnimating ? "Shark Swimming Animation" : "Shark Path Editor"}</h3>
 
                 {/* Show editing controls only when not animating */}

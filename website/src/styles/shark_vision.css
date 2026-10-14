@@ -34,13 +34,15 @@
 
 .folder-tab:hover {
     color: var(--text-primary);
+    background-color: color-mix(in srgb, var(--primary-blue) 14%, var(--bg-tertiary));
 }
 
 .folder-tab.active {
     margin-bottom: -1px;
     padding-bottom: calc(0.45rem + 1px);
     color: var(--accent-dark-blue);
-    background-color: var(--bg-all-pages);
+    /* Opaque, since the tab overlaps hero & --bg-all-pages is translucent */
+    background: linear-gradient(var(--bg-all-pages), var(--bg-all-pages)), var(--bg-primary);
     border-top: 2px solid var(--primary-blue);
 }
 
@@ -368,30 +370,8 @@
     align-items: center;
 }
 
-.control-buttons button {
-    background: var(--fact-card-bg);
-    border: 2px solid var(--border-primary);
-    padding: 0.8rem 1.5rem;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+.control-buttons .btn {
     min-width: 150px;
-}
-
-.control-buttons button:hover {
-    border-color: var(--primary-blue);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.control-buttons button.active {
-    background: var(--primary-blue);
-    border-color: var(--primary-blue);
-    color: white;
-    box-shadow: var(--shadow-lg);
 }
 
 
