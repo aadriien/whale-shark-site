@@ -1,0 +1,65 @@
+/* Filter toggle & reset buttons, shared by every shark selector */
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.toggle-filter-button,
+.reset-filters-button {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid var(--primary-purple);
+    cursor: pointer;
+    padding: 0.5rem 0.4rem;
+    box-sizing: border-box;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+}
+
+/* Toggle is filled purple, reset is same hue outlined so they read as distinct */
+.toggle-filter-button {
+    color: var(--bg-primary);
+    background-color: var(--primary-purple);
+}
+
+.reset-filters-button {
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
+}
+
+/* Subtle lift on hover */
+.toggle-filter-button:hover:not(:disabled),
+.reset-filters-button:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.toggle-filter-button:focus-visible,
+.reset-filters-button:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.toggle-filter-button:disabled,
+.reset-filters-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.toggle-filter-button.active {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Quiet count beside a label */
+.count-label {
+    font-weight: 400;
+    font-size: 0.8rem;
+    margin-left: 0.25rem;
+    color: inherit;
+    opacity: 0.75;
+}

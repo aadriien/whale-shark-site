@@ -80,14 +80,14 @@ function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSha
 
     return (
         <div className="match-shark-selector">
-            <div className="match-selector-buttons">
+            <div className="filter-buttons">
                 <button
                     onClick={() => setShowFilters((prev) => !prev)}
-                    className={`match-toggle-filter-button ${showFilters ? "active" : ""}`}
+                    className={`toggle-filter-button ${showFilters ? "active" : ""}`}
                 >
                     {showFilters ? "Hide Filters ▲" : "Show Filters ▼"}
                 </button>
-                <button onClick={handleReset} className="match-reset-filters-button">
+                <button onClick={handleReset} className="reset-filters-button">
                     Reset Filters
                 </button>
             </div>

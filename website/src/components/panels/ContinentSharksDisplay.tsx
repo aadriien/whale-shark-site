@@ -93,7 +93,7 @@ function ContinentDisplay({
                                     onClick={() => toggleContinent(continent)}
                                 >
                                     {continent}{" "}
-                                    <span className="continent-count">
+                                    <span className="count-label">
                                         ({continentSharks.length})
                                     </span>{" "}
                                     {isOpen ? "▾" : "▸"}

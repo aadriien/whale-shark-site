@@ -121,20 +121,19 @@ function SharkSelector({
             }}
         >
             <div className="shark-selector-list">
-                <div className="shark-selector-buttons">
+                <div className="filter-buttons">
                     <button
                         onClick={() => setShowFilters((prev) => !prev)}
                         className={`toggle-filter-button ${showFilters ? "active" : ""}`}
                         disabled={disabled}
                     >
-                        {showFilters
-                            ? `Hide Filters (${activeFilterCount}) ▲`
-                            : `Show Filters (${activeFilterCount}) ▼`}
+                        {showFilters ? "Hide Filters" : "Show Filters"}
+                        <span className="count-label">({activeFilterCount})</span>
                     </button>
 
                     <button
                         onClick={handleReset}
-                        className="show-all-button"
+                        className="reset-filters-button"
                         disabled={disabled}
                     >
                         Reset Filters
