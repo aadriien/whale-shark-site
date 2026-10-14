@@ -44,13 +44,32 @@ function buildChips(criteria: SharkBaseCriteria, defaults: SharkBaseCriteria): F
 }
 
 // Removable summary of applied filters, visible even when filter panel is hidden
-function FilterChips({ criteria, defaults, onChange }: FilterChipsProps) {
+function FilterChips({
+    criteria,
+    defaults,
+    onChange,
+    selectedSharkId,
+    onDeselect,
+}: FilterChipsProps) {
     const chips = buildChips(criteria, defaults);
+    const showSelectedShark = !!selectedSharkId && !!onDeselect;
 
-    if (chips.length === 0) return null;
+    if (chips.length === 0 && !showSelectedShark) return null;
 
     return (
         <div className="filter-chips" aria-label="Applied filters">
+            {showSelectedShark && (
+                <button
+                    type="button"
+                    className="filter-chip selected-shark"
+                    onClick={onDeselect}
+                    aria-label={`Deselect shark: ${selectedSharkId}`}
+                    title="Deselect shark"
+                >
+                    <span className="filter-chip-label">{selectedSharkId}</span>
+                    <span aria-hidden="true">✕</span>
+                </button>
+            )}
             {chips.map((chip) => (
                 <button
                     key={chip.key}

@@ -36,6 +36,8 @@ export type SharkSelectorProps = {
     sharks: WhaleSharkDatasetNormalized;
     onSelect: (arg: SharkClickProps | string) => void;
     onReset: () => void;
+    // Clears only the selected shark, but filters stay
+    onDeselect?: () => void;
     selectedSharkId: string | null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     DisplayComponent: React.ComponentType<any>;

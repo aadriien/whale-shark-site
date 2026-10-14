@@ -98,6 +98,17 @@
     background-color: var(--primary-teal);
 }
 
+.filter-chip.selected-shark {
+    color: var(--bg-primary);
+    background-color: var(--primary-blue);
+}
+
+.filter-chip.selected-shark:hover,
+.filter-chip.selected-shark:focus-visible {
+    background-color: var(--primary-teal);
+    color: var(--text-primary);
+}
+
 .filter-chip-label {
     overflow: hidden;
     text-overflow: ellipsis;

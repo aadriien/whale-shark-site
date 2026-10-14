@@ -14,6 +14,7 @@ import { SharkSelectorProps } from "../../types/panels";
 function SharkSelector({
     sharks,
     onReset,
+    onDeselect,
     onSelect,
     selectedSharkId,
     DisplayComponent,
@@ -139,6 +140,8 @@ function SharkSelector({
                         criteria={criteria}
                         defaults={defaultCriteria}
                         onChange={setCriteria}
+                        selectedSharkId={selectedSharkId}
+                        onDeselect={onDeselect}
                     />
 
                     {showFilters && (

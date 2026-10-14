@@ -71,6 +71,9 @@ export type FilterChipsProps = {
     criteria: SharkBaseCriteria;
     defaults: SharkBaseCriteria;
     onChange: (criteria: SharkBaseCriteria) => void;
+    // Selected shark gets its own chip
+    selectedSharkId?: string | null;
+    onDeselect?: () => void;
 };
 
 export type FilterChip = {
