@@ -572,8 +572,7 @@
 .lightbox-match-content {
     position: relative;
     width: min(1100px, 92vw);
-    max-height: calc(100dvh - var(--navbar-height) - 2rem);
-    margin-top: var(--navbar-height);
+    max-height: 100%;
     overflow-y: auto;
     background: var(--bg-primary);
     border-radius: var(--radius-lg);

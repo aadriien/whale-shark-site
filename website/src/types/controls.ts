@@ -6,6 +6,12 @@ import { GlobeHandle } from "./globes";
 
 /* Controls types */
 
+export type LightboxOverlayProps = {
+    onClose: () => void;
+    contentClassName?: string;
+    children: React.ReactNode;
+};
+
 export type PlayStoryButtonProps = {
     shark: WhaleSharkEntryNormalized;
     onPlayStory?: (id: string) => void;

@@ -221,3 +221,46 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.image-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--bg-overlay-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: calc(var(--navbar-height) + 1rem) 1rem 1rem;
+}
+
+.close-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 2rem;
+    background-color: var(--bg-secondary);
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+
+    /* Center X perfectly */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    line-height: normal; /* reset line height */
+    padding: 0;
+    user-select: none;
+}
+
+.close-button:hover {
+    background-color: var(--text-quaternary) !important;
+}
+
+@media (max-width: 900px) {
+    .image-overlay {
+        padding: calc(var(--navbar-height) + 0.5rem) 0.5rem 0.5rem;
+    }
+}
