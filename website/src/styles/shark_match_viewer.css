@@ -1,5 +1,7 @@
 .shark-match-viewer {
-    padding: 2rem 1.5rem;
+    width: calc(100% - 3rem);
+    margin: 0 auto;
+    padding: 2rem 0;
 }
 
 .shark-match-viewer h2 {
@@ -26,7 +28,7 @@
     grid-template-columns: 330px minmax(0, 1fr);
     gap: 1.5rem;
     height: 800px;
-    width: 90vw;
+    width: 100%;
 }
 
 /* Shark Selection Panel */
@@ -653,7 +655,7 @@
 
 @media (max-width: 768px) {
     .shark-match-viewer {
-        padding: 1rem;
+        padding: 1rem 0;
     }
 
     .match-info-banner {
