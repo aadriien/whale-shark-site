@@ -6,6 +6,24 @@ import { GlobeHandle } from "./globes";
 
 /* Controls types */
 
+export type CollapsibleToggleProps = {
+    isOpen: boolean;
+    accent?: string;
+    onToggle: () => void;
+    children: React.ReactNode;
+};
+
+export type CollapsibleBodyProps = {
+    isOpen: boolean;
+    className?: string;
+    children: React.ReactNode;
+};
+
+// Toggle + body that track their own open state
+export type CollapsiblePanelProps = Omit<CollapsibleBodyProps, "isOpen"> & {
+    label: (isOpen: boolean) => React.ReactNode;
+};
+
 export type ReadMoreToggleProps = {
     expanded: boolean;
     onToggle: () => void;

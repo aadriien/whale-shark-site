@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import MatchFilter from "./MatchFilter";
+import CollapsibleBody from "../controls/CollapsibleBody";
+import CollapsibleToggle from "../controls/CollapsibleToggle";
 
 import { filterVisionSharks, extractUniqueSortedRegions } from "../../utils/FilterSharks";
 import { parseCriteria, mergeCriteriaParams } from "../../utils/UrlParamUtils";
@@ -53,7 +55,21 @@ function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSha
     const [criteria, setCriteria] = useState<SharkCriteria>(() =>
         parseCriteria(searchParams, defaultCriteria)
     );
-    const [showFilters, setShowFilters] = useState<boolean>(true);
+    const [showFilters, setShowFilters] = useState<boolean>(
+        () => !window.matchMedia("(max-width: 900px)").matches
+    );
+    const [isListOpen, setIsListOpen] = useState<boolean>(!selectedSharkId);
+
+    // Only 1 of the 2 folds open at a time on narrow screens
+    const handleToggleList = () => {
+        setIsListOpen((prev) => !prev);
+        setShowFilters(false);
+    };
+
+    const handleToggleFilters = () => {
+        setShowFilters((prev) => !prev);
+        setIsListOpen(false);
+    };
 
     const handleReset = () => {
         setCriteria(defaultCriteria);
@@ -82,7 +98,7 @@ function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSha
         <div className="match-shark-selector">
             <div className="btn-row">
                 <button
-                    onClick={() => setShowFilters((prev) => !prev)}
+                    onClick={handleToggleFilters}
                     className="btn btn-primary"
                     aria-expanded={showFilters}
                 >
@@ -91,6 +107,9 @@ function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSha
                 <button onClick={handleReset} className="btn btn-secondary">
                     Reset Filters
                 </button>
+                <CollapsibleToggle isOpen={isListOpen} accent="navy" onToggle={handleToggleList}>
+                    {isListOpen ? "Hide Sharks ▲" : "Select a Shark ▼"}
+                </CollapsibleToggle>
             </div>
 
             <div className="match-list-header">
@@ -109,13 +128,16 @@ function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSha
                 </div>
             )}
 
-            <div className="match-list-container">
+            <CollapsibleBody isOpen={isListOpen} className="match-list-container">
                 <div className="match-shark-list">
                     {filteredSharks.map((shark) => (
                         <div
                             key={shark.id}
                             className={`match-shark-item ${selectedSharkId === shark.id ? "selected" : ""}`}
-                            onClick={() => onSharkSelect(shark.id)}
+                            onClick={() => {
+                                onSharkSelect(shark.id);
+                                setIsListOpen(false);
+                            }}
                         >
                             <div className="match-shark-id">ID: {shark.id || "N/A"}</div>
                             <div className="match-shark-meta">
@@ -140,7 +162,7 @@ function MatchSharkSelector({ sharks, onSharkSelect, selectedSharkId }: MatchSha
                         </div>
                     ))}
                 </div>
-            </div>
+            </CollapsibleBody>
         </div>
     );
 }

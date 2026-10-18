@@ -465,7 +465,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    align-items: start;
+    align-items: stretch;
     height: 100%;
 }
 
@@ -571,37 +571,6 @@
     font-size: 0.95rem;
     margin: 0;
 }
-
-.match-ningaloo-note {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.4rem;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-secondary);
-    border-radius: var(--radius-sm);
-    padding: 0.5rem 0.75rem;
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-}
-
-.match-ningaloo-label {
-    font-weight: 600;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    font-size: 0.75rem;
-}
-
-.match-ningaloo-id {
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.match-ningaloo-distance {
-    color: var(--text-muted);
-}
-
 
 /* No Selection State */
 .match-no-selection {
@@ -718,6 +687,7 @@
 
     .match-shark-box {
         gap: 0.5rem;
+        height: auto;
         padding: 0.5rem;
     }
 
@@ -733,18 +703,27 @@
     }
 
     .match-shark-label {
-        flex: 0 0 100%;
-        font-size: 0.65rem;
+        flex: 1;
+        min-width: 0;
+        font-size: 0.6rem;
+        letter-spacing: 0;
+        line-height: 1.2;
     }
 
     .match-shark-id-value {
+        order: 3;
+        flex: 0 0 100%;
         font-size: 0.9rem;
+        line-height: 1.1;
         overflow-wrap: anywhere;
     }
 
     .match-shark-id-row .favorite-button {
-        width: 1.75rem;
-        font-size: 1.2rem;
+        order: 2;
+        width: 1.5rem;
+        height: 1.4rem;
+        font-size: 1.1rem;
+        line-height: 1;
         padding: 0 !important;
     }
 
@@ -755,12 +734,19 @@
         padding: 0;
     }
 
-    .match-shark-meta {
-        font-size: 0.7rem;
+    .match-shark-details-row .match-shark-meta {
+        font-size: 0.65rem;
+        letter-spacing: 0;
+        text-align: left;
     }
 
     .match-main-image {
         max-height: 30dvh;
+    }
+
+    .match-images-grid {
+        min-height: 4rem;
+        max-height: 7rem;
     }
 
     .match-images-grid h6 {
@@ -782,6 +768,74 @@
     .match-no-matches,
     .match-no-other-images {
         padding: 0.25rem;
+        font-size: 0.7rem;
+    }
+
+    .match-viewer-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        height: auto;
+    }
+
+    .match-viewer-main {
+        height: auto;
+    }
+
+    .match-details {
+        padding: 0.5rem;
+    }
+
+    .match-no-selection {
+        flex: 1;
+        height: auto;
+        min-height: 12rem;
+    }
+
+    .match-shark-selector .btn-row {
+        flex-wrap: wrap;
+        margin-bottom: 0;
+    }
+
+    .match-shark-selector .btn-row > .btn {
+        flex: 1 1 40%;
+    }
+
+    .match-shark-selector .btn-row > .collapsible-toggle {
+        flex-basis: 100%;
+    }
+
+    .match-selector-panel {
+        max-height: none;
+        padding: 0;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        overflow-y: visible;
+    }
+
+    .match-shark-selector {
+        gap: 0.5rem;
+        height: auto;
+        max-height: none;
+    }
+
+    .match-filters-section {
+        flex: none;
+        max-height: 40dvh;
+    }
+
+    .match-shark-list {
+        flex: none;
+        max-height: 40dvh;
+    }
+
+    .match-distance-legend-inline {
+        padding: 0.4rem 0.6rem;
+        white-space: normal;
+    }
+
+    .match-distance-legend-inline small {
         font-size: 0.7rem;
     }
 }

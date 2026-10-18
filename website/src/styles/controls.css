@@ -234,6 +234,27 @@
     cursor: pointer;
 }
 
+.collapsible-toggle {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .collapsible-toggle {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-row > .collapsible-toggle {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .collapsible-body:not(.open) {
+        display: none;
+    }
+}
+
 .image-overlay {
     position: fixed;
     inset: 0;
