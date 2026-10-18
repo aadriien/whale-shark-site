@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
+import BottomSheetLayout from "../../BottomSheetLayout";
 import GraphLegend from "../GraphLegend";
 import SharkRankingNodePanel from "./SharkRankingNodePanel";
 import SharkRankingStatsPanel from "./SharkRankingStatsPanel";
@@ -23,6 +24,7 @@ import { useCyFocusCamera } from "../../../hooks/useCyFocusCamera";
 import { useSharkContinentMap } from "../../../hooks/useSharkContinentMap";
 import { useSavedSharkIds } from "../../../hooks/useSavedSharkIds";
 import { useMatchedSharkIds } from "../../../hooks/useMatchedSharkIds";
+import { useSheetSelection } from "../../../hooks/useSheetSelection";
 
 import {
     SharkRankingFilterKey,
@@ -55,6 +57,13 @@ function SharkRankingGraph() {
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedSharkMatch | null>(null);
     const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
+
+    const {
+        tab: sheetTab,
+        setTab: setSheetTab,
+        snap: sheetSnap,
+        setSnap: setSheetSnap,
+    } = useSheetSelection(selectedMatch?.clickedSharkId ?? null, "Match");
 
     const userActiveFilters = useMemo(() => {
         const next = new Set(activeFilters);
@@ -294,57 +303,68 @@ function SharkRankingGraph() {
                 </div>
             </div>
 
-            <div className="graph-canvas-row">
-                <SharkRankingNodePanel
-                    match={selectedMatch}
-                    showContradictionPath={showContradictionPath}
-                    onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
-                />
-                <div ref={containerRef} className="cytoscape-canvas">
-                    {graphLoadError ? (
-                        <div className="graph-loading">{graphLoadError}</div>
-                    ) : !graphData ? (
-                        <div className="graph-loading">Loading graph…</div>
-                    ) : (
-                        <CytoscapeComponent
-                            elements={elements}
-                            stylesheet={graphStylesheet}
-                            layout={{ name: "preset" }}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                position: "absolute",
-                                top: "0",
-                                left: "0",
-                            }}
-                            userZoomingEnabled={true}
-                            userPanningEnabled={true}
-                            autoungrabify={true}
-                            boxSelectionEnabled={false}
-                            textureOnViewport={true}
-                            hideEdgesOnViewport={true}
-                            pixelRatio={1}
-                            minZoom={0.03}
-                            maxZoom={3}
-                            cy={(cy: Core) => {
-                                cyRef.current = cy;
-                                if (lastCyInstance.current !== cy) {
-                                    lastCyInstance.current = cy;
-                                    initCyListeners(
-                                        cy,
-                                        viewRef,
-                                        setSelectedMatch,
-                                        setFocusedNodeId
-                                    );
-                                }
-                            }}
+            <BottomSheetLayout
+                className="graph-canvas-row"
+                mainClassName="cytoscape-canvas"
+                mainRef={containerRef}
+                activeTab={sheetTab}
+                onTabChange={setSheetTab}
+                snap={sheetSnap}
+                onSnapChange={setSheetSnap}
+                left={{
+                    label: "Match",
+                    className: "graph-panel-slot",
+                    content: (
+                        <SharkRankingNodePanel
+                            match={selectedMatch}
+                            showContradictionPath={showContradictionPath}
+                            onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
                         />
-                    )}
+                    ),
+                }}
+                right={{
+                    label: "Stats",
+                    className: "graph-panel-slot",
+                    content: <SharkRankingStatsPanel match={selectedMatch} />,
+                }}
+            >
+                {graphLoadError ? (
+                    <div className="graph-loading">{graphLoadError}</div>
+                ) : !graphData ? (
+                    <div className="graph-loading">Loading graph…</div>
+                ) : (
+                    <CytoscapeComponent
+                        elements={elements}
+                        stylesheet={graphStylesheet}
+                        layout={{ name: "preset" }}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                        }}
+                        userZoomingEnabled={true}
+                        userPanningEnabled={true}
+                        autoungrabify={true}
+                        boxSelectionEnabled={false}
+                        textureOnViewport={true}
+                        hideEdgesOnViewport={true}
+                        pixelRatio={1}
+                        minZoom={0.03}
+                        maxZoom={3}
+                        cy={(cy: Core) => {
+                            cyRef.current = cy;
+                            if (lastCyInstance.current !== cy) {
+                                lastCyInstance.current = cy;
+                                initCyListeners(cy, viewRef, setSelectedMatch, setFocusedNodeId);
+                            }
+                        }}
+                    />
+                )}
 
-                    {graphData ? <GraphLegend colors={graphColors} /> : null}
-                </div>
-                <SharkRankingStatsPanel match={selectedMatch} />
-            </div>
+                {graphData ? <GraphLegend colors={graphColors} /> : null}
+            </BottomSheetLayout>
         </>
     );
 }

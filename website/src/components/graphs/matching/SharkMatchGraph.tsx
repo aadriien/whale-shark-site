@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
+import BottomSheetLayout from "../../BottomSheetLayout";
 import GraphLegend from "../GraphLegend";
 import GraphNodePanel from "./GraphNodePanel";
 import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
@@ -24,6 +25,7 @@ import { useCyFocusCamera } from "../../../hooks/useCyFocusCamera";
 import { useSharkContinentMap } from "../../../hooks/useSharkContinentMap";
 import { useSavedSharkIds } from "../../../hooks/useSavedSharkIds";
 import { useMatchedSharkIds } from "../../../hooks/useMatchedSharkIds";
+import { useSheetSelection } from "../../../hooks/useSheetSelection";
 
 import {
     NodeFilter,
@@ -82,6 +84,13 @@ function SharkMatchGraph() {
 
     const [selectedMatch, setSelectedMatch] = useState<SelectedMatch | null>(null);
     const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
+
+    const {
+        tab: sheetTab,
+        setTab: setSheetTab,
+        snap: sheetSnap,
+        setSnap: setSheetSnap,
+    } = useSheetSelection(selectedMatch?.clickedSharkId ?? null, "Match");
 
     // FILTER_CONSTRAINTS resolves cross-filter dependencies (e.g. "mutual
     // matches only" implies GBIF-only nodes, which implies GBIF x GBIF edges).
@@ -407,62 +416,75 @@ function SharkMatchGraph() {
                 </div>
             </div>
 
-            <div className="graph-canvas-row">
-                <GraphNodePanel
-                    match={selectedMatch}
-                    showContradictionPath={showContradictionPath}
-                    onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
-                    onSelectImage={handleSelectImage}
-                />
-                <div ref={containerRef} className="cytoscape-canvas">
-                    {graphLoadError ? (
-                        <div className="graph-loading">{graphLoadError}</div>
-                    ) : !graphData ? (
-                        <div className="graph-loading">Loading graph…</div>
-                    ) : (
-                        <CytoscapeComponent
-                            elements={elements}
-                            stylesheet={graphStylesheet}
-                            layout={{ name: "preset" }}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                position: "absolute",
-                                top: "0",
-                                left: "0",
-                            }}
-                            userZoomingEnabled={true}
-                            userPanningEnabled={true}
-                            autoungrabify={true}
-                            boxSelectionEnabled={false}
-                            textureOnViewport={true}
-                            hideEdgesOnViewport={true}
-                            pixelRatio={1}
-                            minZoom={0.03}
-                            maxZoom={3}
-                            cy={(cy: Core) => {
-                                cyRef.current = cy;
-                                if (lastCyInstance.current !== cy) {
-                                    lastCyInstance.current = cy;
-                                    initCyListeners(
-                                        cy,
-                                        viewRef,
-                                        setSelectedMatch,
-                                        setFocusedNodeId
-                                    );
-                                }
-                            }}
+            <BottomSheetLayout
+                className="graph-canvas-row"
+                mainClassName="cytoscape-canvas"
+                mainRef={containerRef}
+                activeTab={sheetTab}
+                onTabChange={setSheetTab}
+                snap={sheetSnap}
+                onSnapChange={setSheetSnap}
+                left={{
+                    label: "Match",
+                    className: "graph-panel-slot",
+                    content: (
+                        <GraphNodePanel
+                            match={selectedMatch}
+                            showContradictionPath={showContradictionPath}
+                            onToggleContradictionPath={() => setShowContradictionPath((p) => !p)}
+                            onSelectImage={handleSelectImage}
                         />
-                    )}
+                    ),
+                }}
+                right={{
+                    label: "Images",
+                    className: "graph-panel-slot",
+                    content: (
+                        <GraphSharkImagesPanel
+                            match={selectedMatch}
+                            cy={cyRef.current}
+                            onSelectImage={handleSelectImage}
+                        />
+                    ),
+                }}
+            >
+                {graphLoadError ? (
+                    <div className="graph-loading">{graphLoadError}</div>
+                ) : !graphData ? (
+                    <div className="graph-loading">Loading graph…</div>
+                ) : (
+                    <CytoscapeComponent
+                        elements={elements}
+                        stylesheet={graphStylesheet}
+                        layout={{ name: "preset" }}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                        }}
+                        userZoomingEnabled={true}
+                        userPanningEnabled={true}
+                        autoungrabify={true}
+                        boxSelectionEnabled={false}
+                        textureOnViewport={true}
+                        hideEdgesOnViewport={true}
+                        pixelRatio={1}
+                        minZoom={0.03}
+                        maxZoom={3}
+                        cy={(cy: Core) => {
+                            cyRef.current = cy;
+                            if (lastCyInstance.current !== cy) {
+                                lastCyInstance.current = cy;
+                                initCyListeners(cy, viewRef, setSelectedMatch, setFocusedNodeId);
+                            }
+                        }}
+                    />
+                )}
 
-                    {graphData ? <GraphLegend colors={graphColors} showNingaloo /> : null}
-                </div>
-                <GraphSharkImagesPanel
-                    match={selectedMatch}
-                    cy={cyRef.current}
-                    onSelectImage={handleSelectImage}
-                />
-            </div>
+                {graphData ? <GraphLegend colors={graphColors} showNingaloo /> : null}
+            </BottomSheetLayout>
         </>
     );
 }

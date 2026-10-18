@@ -22,31 +22,33 @@ function renderBody(
         <>
             <MatchButton querySharkId={match.clickedSharkId} matchedSharkId={match.matchSharkId} />
 
-            <div className="graph-panel-section">
-                <span className="graph-panel-label">Selected shark</span>
-                {clickedShark ? (
-                    <CondensedSharkCard shark={clickedShark} onImageClick={onOpenLightbox} />
-                ) : (
-                    <p className="graph-panel-missing">No data for ID {match.clickedSharkId}</p>
-                )}
-            </div>
+            <div className="graph-panel-pair">
+                <div className="graph-panel-section">
+                    <span className="graph-panel-label">Selected shark</span>
+                    {clickedShark ? (
+                        <CondensedSharkCard shark={clickedShark} onImageClick={onOpenLightbox} />
+                    ) : (
+                        <p className="graph-panel-missing">No data for ID {match.clickedSharkId}</p>
+                    )}
+                </div>
 
-            <div className="graph-panel-divider" />
+                <div className="graph-panel-divider" />
 
-            <div className="graph-panel-section">
-                <span className="graph-panel-label">
-                    Closest match
-                    <span className="graph-panel-distance">
-                        {" "}
-                        · median {match.distanceMedian.toFixed(4)}
+                <div className="graph-panel-section">
+                    <span className="graph-panel-label">
+                        Closest match
+                        <span className="graph-panel-distance">
+                            {" "}
+                            · median {match.distanceMedian.toFixed(4)}
+                        </span>
+                        {match.isMutual && <span className="graph-panel-mutual"> · mutual</span>}
                     </span>
-                    {match.isMutual && <span className="graph-panel-mutual"> · mutual</span>}
-                </span>
-                {matchedShark ? (
-                    <CondensedSharkCard shark={matchedShark} onImageClick={onOpenLightbox} />
-                ) : (
-                    <p className="graph-panel-missing">No data for ID {match.matchSharkId}</p>
-                )}
+                    {matchedShark ? (
+                        <CondensedSharkCard shark={matchedShark} onImageClick={onOpenLightbox} />
+                    ) : (
+                        <p className="graph-panel-missing">No data for ID {match.matchSharkId}</p>
+                    )}
+                </div>
             </div>
 
             {match.conflictingSharkIds.length > 0 && (

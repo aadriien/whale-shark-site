@@ -32,9 +32,14 @@ function BottomSheetLayout({
 
     const swipeStartY = useRef<number | null>(null);
     const sheetRef = useRef<HTMLDivElement>(null);
+    const tabChanged = useRef(false);
 
     // Whenever tab changes, show content from the top & not hidden by collapsed sheet
     useEffect(() => {
+        if (!tabChanged.current) {
+            tabChanged.current = true;
+            return;
+        }
         sheetRef.current?.scrollTo({ top: 0 });
         if (snap === "peek") setSnap("half");
         // eslint-disable-next-line react-hooks/exhaustive-deps

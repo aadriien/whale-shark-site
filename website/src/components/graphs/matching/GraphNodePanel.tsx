@@ -39,41 +39,48 @@ function renderBody(
         <>
             <MatchButton querySharkId={match.clickedSharkId} matchedSharkId={match.matchSharkId} />
 
-            <div className="graph-panel-section">
-                <span className="graph-panel-label">Selected image</span>
-                {clickedShark ? (
-                    <CondensedSharkCard
-                        shark={clickedShark}
-                        imageUrl={imageURL}
-                        onImageClick={onOpenLightbox}
-                    />
-                ) : (
-                    <p className="graph-panel-missing">No data for ID {match.clickedSharkId}</p>
-                )}
-            </div>
-
-            <div className="graph-panel-divider" />
-
-            <div className="graph-panel-section">
-                <span className="graph-panel-label">
-                    Closest match
-                    <span className="graph-panel-distance">
-                        {" "}
-                        · dist {match.matchDistance.toFixed(4)}
-                    </span>
-                </span>
-                {match.matchPopulation === "gbif" ? (
-                    matchedShark ? (
-                        <CondensedSharkCard shark={matchedShark} onImageClick={onOpenLightbox} />
+            <div className="graph-panel-pair">
+                <div className="graph-panel-section">
+                    <span className="graph-panel-label">Selected image</span>
+                    {clickedShark ? (
+                        <CondensedSharkCard
+                            shark={clickedShark}
+                            imageUrl={imageURL}
+                            onImageClick={onOpenLightbox}
+                        />
                     ) : (
-                        <p className="graph-panel-missing">No data for ID {match.matchSharkId}</p>
-                    )
-                ) : (
-                    <div className="graph-panel-ningaloo">
-                        <p className="graph-panel-ningaloo-label">Ningaloo reference</p>
-                        <p className="graph-panel-ningaloo-id">{match.matchSharkId}</p>
-                    </div>
-                )}
+                        <p className="graph-panel-missing">No data for ID {match.clickedSharkId}</p>
+                    )}
+                </div>
+
+                <div className="graph-panel-divider" />
+
+                <div className="graph-panel-section">
+                    <span className="graph-panel-label">
+                        Closest match
+                        <span className="graph-panel-distance">
+                            {" "}
+                            · dist {match.matchDistance.toFixed(4)}
+                        </span>
+                    </span>
+                    {match.matchPopulation === "gbif" ? (
+                        matchedShark ? (
+                            <CondensedSharkCard
+                                shark={matchedShark}
+                                onImageClick={onOpenLightbox}
+                            />
+                        ) : (
+                            <p className="graph-panel-missing">
+                                No data for ID {match.matchSharkId}
+                            </p>
+                        )
+                    ) : (
+                        <div className="graph-panel-ningaloo">
+                            <p className="graph-panel-ningaloo-label">Ningaloo reference</p>
+                            <p className="graph-panel-ningaloo-id">{match.matchSharkId}</p>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {match.conflictingSharkIds.length > 0 && (
