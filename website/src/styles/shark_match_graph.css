@@ -370,6 +370,7 @@
     .graph-panel-pair .graph-panel-label {
         min-height: 2.4em;
         font-size: 0.65rem;
+        line-height: 1.2;
         text-align: center;
     }
 
@@ -614,5 +615,43 @@
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+    .lightbox-match-content {
+        width: 100%;
+        max-height: calc(100dvh - var(--navbar-height) - 2rem);
+        margin-top: var(--navbar-height);
+        padding: 0 0.5rem 0.5rem;
+        overflow-x: hidden;
+    }
+
+    .lightbox-match-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        background: var(--bg-primary);
+    }
+
+    .lightbox-match-topbar .graph-panel-match-btn {
+        min-width: 0;
+        padding: 6px 12px;
+    }
+
+    .lightbox-match-distance {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.7rem;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .lightbox-match-topbar .close-button {
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 1.3rem;
+    }
 }
 

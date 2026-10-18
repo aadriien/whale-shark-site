@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 import MatchSharkBox from "./MatchSharkBox";
 import MatchButton from "../controls/MatchButton";
@@ -27,7 +28,7 @@ function MatchedSharkPairLightbox({
 
     if (!isOpen || !left) return null;
 
-    return (
+    return createPortal(
         <div className="image-overlay" onClick={onClose}>
             <div className="lightbox-match-content" onClick={(e) => e.stopPropagation()}>
                 <div className="lightbox-match-topbar">
@@ -45,7 +46,8 @@ function MatchedSharkPairLightbox({
                     {right && <MatchSharkBox {...right} />}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
 
