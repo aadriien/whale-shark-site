@@ -14,7 +14,6 @@ function MatchSharkBox({
     onSelectThumbnail,
     imagesLabel = "All Images",
     noImagesMessage = "No other images for this whale shark",
-    footer,
 }: MatchSharkBoxProps) {
     const mainImage = images[activeIndex];
 
@@ -75,8 +74,6 @@ function MatchSharkBox({
                     <p className="match-no-other-images">{noImagesMessage}</p>
                 )}
             </div>
-
-            {footer}
         </div>
     );
 }

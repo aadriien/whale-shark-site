@@ -1,7 +1,5 @@
 /* Cards types */
 
-import type { ReactNode } from "react";
-
 import {
     WhaleSharkEntryNormalized,
     WhaleSharkDatasetNormalized,
@@ -57,7 +55,6 @@ export type MatchSharkBoxProps = {
     onSelectThumbnail: (index: number) => void;
     imagesLabel?: string;
     noImagesMessage?: string;
-    footer?: ReactNode;
 };
 
 /* ---- Matched shark pair lightbox (query vs. match, side by side) ---- */
