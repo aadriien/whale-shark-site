@@ -28,7 +28,8 @@ function MatchSharkBox({
                 <div className="match-shark-details-row">
                     <span className="match-shark-meta">{countries}</span>
                     <span className="match-shark-meta">
-                        ({oldest} to {newest})
+                        (<span className="match-shark-date">{oldest}</span> to{" "}
+                        <span className="match-shark-date">{newest}</span>)
                     </span>
                 </div>
             </div>

@@ -136,6 +136,10 @@
     margin-bottom: 0.25rem;
 }
 
+.match-shark-date {
+    white-space: nowrap;
+}
+
 .match-shark-meta {
     font-size: 0.9rem;
     color: var(--text-secondary);
@@ -700,26 +704,25 @@
     .match-shark-id-row {
         gap: 0.25rem;
         padding: 0.2rem 0.4rem;
+        text-align: left;
     }
 
     .match-shark-label {
-        flex: 1;
-        min-width: 0;
+        flex: 0 0 100%;
         font-size: 0.6rem;
         letter-spacing: 0;
         line-height: 1.2;
     }
 
     .match-shark-id-value {
-        order: 3;
-        flex: 0 0 100%;
+        flex: 1;
+        min-width: 0;
         font-size: 0.9rem;
         line-height: 1.1;
         overflow-wrap: anywhere;
     }
 
     .match-shark-id-row .favorite-button {
-        order: 2;
         width: 1.5rem;
         height: 1.4rem;
         font-size: 1.1rem;
@@ -837,6 +840,16 @@
 
     .match-distance-legend-inline small {
         font-size: 0.7rem;
+    }
+
+    .match-stat-pair {
+        flex: 0 0 auto;
+    }
+
+    .match-info-banner .match-distance-value,
+    .match-info-banner .match-plausibility {
+        padding: 0.2rem 0.75rem;
+        font-size: 0.8rem;
     }
 }
 
