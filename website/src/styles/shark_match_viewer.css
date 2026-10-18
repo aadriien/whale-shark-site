@@ -778,6 +778,12 @@
     .match-thumbnail-label {
         font-size: 0.65rem;
     }
+
+    .match-no-matches,
+    .match-no-other-images {
+        padding: 0.25rem;
+        font-size: 0.7rem;
+    }
 }
 
 

@@ -314,10 +314,8 @@
     display: contents;
 }
 
-@media (min-width: 901px) {
-    .graph-panel-slot {
-        display: contents;
-    }
+.graph-panel-slot {
+    flex-shrink: 0;
 }
 
 /* Mobile: graph on top, panels move into bottom sheet (see sheets.css) */
@@ -574,7 +572,8 @@
 .lightbox-match-content {
     position: relative;
     width: min(1100px, 92vw);
-    max-height: 90vh;
+    max-height: calc(100dvh - var(--navbar-height) - 2rem);
+    margin-top: var(--navbar-height);
     overflow-y: auto;
     background: var(--bg-primary);
     border-radius: var(--radius-lg);
@@ -620,8 +619,6 @@
 @media (max-width: 900px) {
     .lightbox-match-content {
         width: 100%;
-        max-height: calc(100dvh - var(--navbar-height) - 2rem);
-        margin-top: var(--navbar-height);
         padding: 0 0.5rem 0.5rem;
         overflow-x: hidden;
     }
