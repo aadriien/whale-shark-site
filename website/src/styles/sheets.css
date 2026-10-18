@@ -1,71 +1,50 @@
-/* Shared by every page built on GlobePageLayout (GlobeViews, GeoLabs, SharkTracker).
-   Wide screens keep each page's own side panel | globe | side panel rules, while
-   narrow screens move both side panels into 1 tabbed bottom sheet below globe */
+/* Wide screens keep each page's own side panel | main visual | side panel rules, while
+   narrow screens move both side panels into 1 tabbed bottom sheet below main visual */
 
 /* Sheet wrapper is invisible on wide screens, so panels remain flex items of the
-   page's container & only need ordering to sit on either side of the globe */
-.globe-sheet {
+   page's container & only need ordering to sit on either side of main visual */
+.sheet {
     display: contents;
 }
 
-.globe-layout > .globe-container {
+.sheet-layout > .sheet-main {
     order: 1;
 }
 
-.globe-sheet-right {
+.sheet-right {
     order: 2;
 }
 
-.globe-sheet-bar {
+.sheet-bar {
     display: none;
 }
 
 
 @media (max-width: 900px) {
-    .globe-layout {
+    .sheet-layout {
         --sheet-bar-height: 3.25rem;
         --sheet-height: 45%;
+        position: relative;
     }
 
-    .globe-layout[data-snap="peek"] {
+    .sheet-layout[data-snap="peek"] {
         --sheet-height: var(--sheet-bar-height);
     }
 
-    .globe-layout[data-snap="full"] {
+    .sheet-layout[data-snap="full"] {
         --sheet-height: calc(100% - 3rem);
     }
 
-    /* Page itself never scrolls, so globe touches don't fight page scroll */
-    .globeviews-wrapper,
-    .sharktracker-wrapper {
-        height: 100dvh;
-        min-height: 100dvh;
-        overflow: hidden;
-        padding: var(--navbar-height) 0 0 !important; /* clears fixed navbar */
-    }
-
-    .globe-layout {
-        position: relative;
-        flex: 1;
-        min-height: 0;
-        height: auto;
-        gap: 0;
-        padding: 0;
-    }
-
-    /* Globe fills whatever the sheet leaves open */
-    .globe-layout > .globe-container {
+    /* Main visual fills whatever the sheet leaves open */
+    .sheet-layout > .sheet-main {
         flex: none;
         width: 100%;
         min-width: 0;
         height: calc(100% - var(--sheet-height));
         aspect-ratio: auto;
-        margin: 0;
-        border: none;
-        border-radius: 0;
     }
 
-    .globe-sheet {
+    .sheet {
         display: flex;
         flex-direction: column;
         position: absolute;
@@ -82,7 +61,7 @@
         box-shadow: var(--shadow-md);
     }
 
-    .globe-sheet-bar {
+    .sheet-bar {
         display: flex;
         flex: none;
         flex-direction: column;
@@ -98,7 +77,7 @@
         user-select: none;
     }
 
-    .globe-sheet-handle {
+    .sheet-handle {
         width: 2.5rem;
         height: 0.4rem;
         padding: 0;
@@ -108,12 +87,12 @@
         cursor: pointer;
     }
 
-    .globe-sheet-tabs {
+    .sheet-tabs {
         display: flex;
         gap: 0.5rem;
     }
 
-    .globe-sheet-tabs button {
+    .sheet-tabs button {
         padding: 0.2rem 1rem;
         border: 1px solid var(--border-secondary);
         border-radius: var(--radius-pill);
@@ -124,13 +103,13 @@
         cursor: pointer;
     }
 
-    .globe-sheet-tabs button.active {
+    .sheet-tabs button.active {
         color: var(--bg-primary);
         background-color: var(--primary-purple);
     }
 
     /* Only the active tab's panels show, & sheet scrolls rather than each panel */
-    .globe-sheet-panel {
+    .sheet-panel {
         display: none;
         flex: none;
         width: 100%;
@@ -138,12 +117,39 @@
         padding: 0.5rem 1rem 1rem;
     }
 
-    .globe-sheet-panel.active {
+    .sheet-panel.active {
         display: flex;
     }
+}
 
-    .globe-sheet .scrollable-filters,
-    .globe-sheet .shark-info-panel {
+
+/* Globe pages (GlobeViews, GeoLabs, SharkTracker) */
+@media (max-width: 900px) {
+    /* Page itself never scrolls, so globe touches don't fight page scroll */
+    .globeviews-wrapper,
+    .sharktracker-wrapper {
+        height: 100dvh;
+        min-height: 100dvh;
+        overflow: hidden;
+        padding: var(--navbar-height) 0 0 !important; /* clears fixed navbar */
+    }
+
+    .globe-layout {
+        flex: 1;
+        min-height: 0;
+        height: auto;
+        gap: 0;
+        padding: 0;
+    }
+
+    .globe-layout > .sheet-main {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+    }
+
+    .globe-layout .scrollable-filters,
+    .globe-layout .shark-info-panel {
         max-height: none;
         overflow-y: visible;
     }

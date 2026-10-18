@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import ThreeGlobe from "three-globe";
 import { WhaleSharkEntryNormalized, WhaleSharkDatasetNormalized } from "./sharks";
 import { PlottedCoordinatePoint } from "./coordinates";
+import { SheetPanelSlot } from "./sheets";
 
 /* Globes types */
 
@@ -54,19 +55,10 @@ export type GlobeProps = {
     allowClicks?: boolean;
 };
 
-export type GlobeSheetSnap = "peek" | "half" | "full";
-
-export type GlobePanelSlot = {
-    // Tab title on narrow screens (panels sharing a label share a tab)
-    label: string;
-    className: string;
-    content: ReactNode;
-};
-
 export type GlobePageLayoutProps = {
     containerClassName: string;
-    left: GlobePanelSlot;
-    right: GlobePanelSlot;
+    left: SheetPanelSlot;
+    right: SheetPanelSlot;
     // Optional so a page can switch tabs itself (e.g. show info once shark selected)
     activeTab?: string;
     onTabChange?: (label: string) => void;
