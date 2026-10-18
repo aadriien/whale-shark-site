@@ -3,6 +3,7 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
 import BottomSheetLayout from "../../BottomSheetLayout";
+import GraphFilters from "../GraphFilters";
 import GraphLegend from "../GraphLegend";
 import GraphNodePanel from "./GraphNodePanel";
 import GraphSharkImagesPanel from "./GraphSharkImagesPanel";
@@ -322,7 +323,7 @@ function SharkMatchGraph() {
 
     return (
         <>
-            <div className="graph-controls">
+            <GraphFilters activeCount={active.size + (distanceActive ? 1 : 0)}>
                 <div className="filter-group">
                     {(Object.keys(NODE_FILTER_LABELS) as NodeFilter[]).map((f) => (
                         <FilterButton
@@ -414,7 +415,7 @@ function SharkMatchGraph() {
                         onChange={setDistanceRange}
                     />
                 </div>
-            </div>
+            </GraphFilters>
 
             <BottomSheetLayout
                 className="graph-canvas-row"

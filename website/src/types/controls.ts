@@ -6,6 +6,11 @@ import { GlobeHandle } from "./globes";
 
 /* Controls types */
 
+export type ReadMoreToggleProps = {
+    expanded: boolean;
+    onToggle: () => void;
+};
+
 export type LightboxOverlayProps = {
     onClose: () => void;
     contentClassName?: string;

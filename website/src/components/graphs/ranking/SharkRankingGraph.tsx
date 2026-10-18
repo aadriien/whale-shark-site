@@ -3,6 +3,7 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { Core } from "cytoscape";
 
 import BottomSheetLayout from "../../BottomSheetLayout";
+import GraphFilters from "../GraphFilters";
 import GraphLegend from "../GraphLegend";
 import SharkRankingNodePanel from "./SharkRankingNodePanel";
 import SharkRankingStatsPanel from "./SharkRankingStatsPanel";
@@ -11,6 +12,7 @@ import GraphDistanceRange from "../../controls/GraphDistanceRange";
 import {
     buildGraphStylesheet,
     DISTANCE_RANGE_DEFAULT,
+    isDistanceFiltering,
     normalizePositions,
     buildElements,
     applyGraphView,
@@ -217,7 +219,7 @@ function SharkRankingGraph() {
 
     return (
         <>
-            <div className="graph-controls">
+            <GraphFilters activeCount={active.size + (isDistanceFiltering(distanceRange) ? 1 : 0)}>
                 <div className="filter-group">
                     <FilterButton
                         active={continentFilters.size === 0}
@@ -301,7 +303,7 @@ function SharkRankingGraph() {
                         onChange={setDistanceRange}
                     />
                 </div>
-            </div>
+            </GraphFilters>
 
             <BottomSheetLayout
                 className="graph-canvas-row"

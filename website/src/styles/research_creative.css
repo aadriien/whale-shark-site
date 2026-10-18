@@ -75,7 +75,7 @@
 }
 
 /* Only used on narrow screens, where body folds behind it */
-.research-creative-intro .intro-toggle {
+.research-creative-intro .read-more-toggle {
     display: none;
 }
 
@@ -180,17 +180,8 @@
         display: block;
     }
 
-    .research-creative-intro .intro-toggle {
+    .research-creative-intro .read-more-toggle {
         display: block;
-        margin: 0 auto;
-        padding: 0.3rem 1rem;
-        border: 1px solid var(--border-secondary);
-        border-radius: var(--radius-pill);
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: var(--accent-dark-blue);
-        background-color: var(--bg-primary);
-        cursor: pointer;
     }
 
     .research-creative-grid {

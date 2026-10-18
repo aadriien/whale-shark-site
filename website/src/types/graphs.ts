@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 /* Graph types */
 
 /* ---- Filters ---- */
@@ -71,6 +73,8 @@ export type GraphView = "identity" | "shark";
 export type GraphHeaderOption = {
     id: GraphView;
     title: string;
+    shortTitle: string;
+    tagline: string;
     description: string;
 };
 
@@ -78,6 +82,11 @@ export type GraphHeaderProps = {
     options: GraphHeaderOption[];
     activeId: GraphView;
     onChange: (id: GraphView) => void;
+};
+
+export type GraphFiltersProps = {
+    activeCount: number;
+    children: ReactNode;
 };
 
 export type GraphLegendProps = {

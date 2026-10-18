@@ -58,14 +58,63 @@
     line-height: 1.6;
 }
 
+.shark-match-graph-section .graph-header-title-short,
+.shark-match-graph-section .graph-header-more {
+    display: none;
+}
+
 @media (max-width: 700px) {
     .shark-match-graph-section .graph-header {
-        grid-template-columns: 1fr;
+        margin-bottom: 0;
     }
 
-    .shark-match-graph-section .graph-header-option + .graph-header-option {
-        border-left: none;
-        border-top: 1px solid var(--border-tertiary);
+    .shark-match-graph-section .graph-header-option {
+        padding: 4px 8px 10px;
+    }
+
+    .shark-match-graph-section .graph-header-title {
+        display: none;
+    }
+
+    .shark-match-graph-section .graph-header-title-short {
+        display: block;
+        font-family: 'Barlow Semi Condensed', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-wrap: balance;
+    }
+
+    .shark-match-graph-section .graph-header-blurb {
+        display: none;
+    }
+
+    .shark-match-graph-section .graph-header-more {
+        display: block;
+        margin-bottom: 0.75rem;
+        padding: 0.6rem 0.75rem;
+        border: 1px solid var(--border-tertiary);
+        border-top: none;
+        border-radius: 0 0 var(--radius-md) var(--radius-md);
+        background: var(--bg-secondary);
+        text-align: center;
+    }
+
+    .shark-match-graph-section .graph-header-tagline,
+    .shark-match-graph-section .graph-header-more-body {
+        margin: 0 0 0.5rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        text-wrap: balance;
+    }
+
+    .shark-match-graph-section .graph-header-more-body,
+    .shark-match-graph-section .graph-header-more.expanded .graph-header-tagline {
+        display: none;
+    }
+
+    .shark-match-graph-section .graph-header-more.expanded .graph-header-more-body {
+        display: block;
     }
 }
 
@@ -134,6 +183,27 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 16px;
+}
+
+.shark-match-graph-section .graph-filters-toggle {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .shark-match-graph-section .graph-filters-toggle {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .shark-match-graph-section .graph-controls {
+        display: none;
+        margin-bottom: 0.5rem;
+    }
+
+    .shark-match-graph-section .graph-controls.open {
+        display: flex;
+    }
 }
 
 .shark-match-graph-section .filter-group {

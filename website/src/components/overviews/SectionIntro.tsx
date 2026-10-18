@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import ReadMoreToggle from "../controls/ReadMoreToggle";
 import { SectionIntroProps } from "../../types/pages";
 
 function SectionIntro({ tagline, body }: SectionIntroProps) {
@@ -10,14 +11,10 @@ function SectionIntro({ tagline, body }: SectionIntroProps) {
             <p className="tagline">{tagline}</p>
             <p className={`intro-body ${isExpanded ? "expanded" : ""}`}>{body}</p>
 
-            <button
-                type="button"
-                className="intro-toggle"
-                aria-expanded={isExpanded}
-                onClick={() => setIsExpanded((prev) => !prev)}
-            >
-                {isExpanded ? "Read less" : "Read more"}
-            </button>
+            <ReadMoreToggle
+                expanded={isExpanded}
+                onToggle={() => setIsExpanded((prev) => !prev)}
+            />
         </div>
     );
 }

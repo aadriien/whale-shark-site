@@ -222,6 +222,18 @@
     white-space: nowrap;
 }
 
+.read-more-toggle {
+    margin: 0 auto;
+    padding: 0.3rem 1rem;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-pill);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent-dark-blue);
+    background-color: var(--bg-primary);
+    cursor: pointer;
+}
+
 .image-overlay {
     position: fixed;
     inset: 0;
