@@ -16,6 +16,7 @@ export const pageMap: PageMap = {
 
     buildashark: { label: "Build-A-Shark", path: "/creative/buildashark" },
     animation: { label: "Animation", path: "/creative/animation" },
+    aquarium: { label: "Aquarium", path: "/creative/aquarium" },
 };
 
 export const pageContent: PageContent = {
@@ -185,6 +186,20 @@ export const pageContent: PageContent = {
             {
                 q: "Is there something familiar about this whale shark?",
                 a: "Yes! This is the very same 3D model that you can see in the home page, just without the points extracted for a glowing dot effect.",
+            },
+        ],
+    },
+    aquarium: {
+        overview:
+            "This is an underwater scene where a glowing whale shark swims on its own. Click anywhere in the water to leave a trail of plankton and lure the shark over!",
+        faqs: [
+            {
+                q: "How do I get the shark to come to me?",
+                a: "Click anywhere in the water. A ring of glowing plankton appears, and the shark swims over to feed on it. Click somewhere else to call it away.",
+            },
+            {
+                q: "Why did the shark change color?",
+                a: "Each plankton cloud has its own color, and the shark borrows it while feeding. The color slowly fades back to the shark's usual rainbow glow.",
             },
         ],
     },
