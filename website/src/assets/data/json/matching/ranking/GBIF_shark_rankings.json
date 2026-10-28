@@ -672,6 +672,30 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "82908892",
+    "image_count": 1,
+    "best_match_shark_id": "899040168",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 0.9406,
+    "distance_median": 0.9406,
+    "distance_mean": 0.9406,
+    "distance_max": 0.9406,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040168",
+    "image_count": 1,
+    "best_match_shark_id": "82908892",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 0.9406,
+    "distance_median": 0.9406,
+    "distance_mean": 0.9406,
+    "distance_max": 0.9406,
+    "is_mutual": true
+  },
+  {
     "whaleSharkID": "890145760",
     "image_count": 1,
     "best_match_shark_id": "892372565",
@@ -1070,7 +1094,7 @@
   {
     "whaleSharkID": "815435269",
     "image_count": 1,
-    "best_match_shark_id": "895746135",
+    "best_match_shark_id": "897163088",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 0.9807,
@@ -1152,18 +1176,6 @@
     "is_mutual": true
   },
   {
-    "whaleSharkID": "82908892",
-    "image_count": 1,
-    "best_match_shark_id": "892357890",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 0.9922,
-    "distance_median": 0.9922,
-    "distance_mean": 0.9922,
-    "distance_max": 0.9922,
-    "is_mutual": true
-  },
-  {
     "whaleSharkID": "892357890",
     "image_count": 1,
     "best_match_shark_id": "82908892",
@@ -1173,7 +1185,19 @@
     "distance_median": 0.9922,
     "distance_mean": 0.9922,
     "distance_max": 0.9922,
-    "is_mutual": true
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040160",
+    "image_count": 1,
+    "best_match_shark_id": "82908892",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 0.9922,
+    "distance_median": 0.9922,
+    "distance_mean": 0.9922,
+    "distance_max": 0.9922,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "27415711",
@@ -1306,6 +1330,30 @@
     "distance_mean": 1.006,
     "distance_max": 1.006,
     "is_mutual": false
+  },
+  {
+    "whaleSharkID": "156110098",
+    "image_count": 1,
+    "best_match_shark_id": "901113964",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0075,
+    "distance_median": 1.0075,
+    "distance_mean": 1.0075,
+    "distance_max": 1.0075,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "901113964",
+    "image_count": 1,
+    "best_match_shark_id": "156110098",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0075,
+    "distance_median": 1.0075,
+    "distance_mean": 1.0075,
+    "distance_max": 1.0075,
+    "is_mutual": true
   },
   {
     "whaleSharkID": "894907738",
@@ -1509,6 +1557,30 @@
     "distance_median": 1.0248,
     "distance_mean": 1.0248,
     "distance_max": 1.0248,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "862238894",
+    "image_count": 1,
+    "best_match_shark_id": "899792274",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0278,
+    "distance_median": 1.0278,
+    "distance_mean": 1.0278,
+    "distance_max": 1.0278,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899792274",
+    "image_count": 1,
+    "best_match_shark_id": "862238894",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0278,
+    "distance_median": 1.0278,
+    "distance_mean": 1.0278,
+    "distance_max": 1.0278,
     "is_mutual": true
   },
   {
@@ -1980,6 +2052,30 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "892357889",
+    "image_count": 1,
+    "best_match_shark_id": "899792274",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0464,
+    "distance_median": 1.0464,
+    "distance_mean": 1.0464,
+    "distance_max": 1.0464,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040159",
+    "image_count": 1,
+    "best_match_shark_id": "899792274",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0464,
+    "distance_median": 1.0464,
+    "distance_mean": 1.0464,
+    "distance_max": 1.0464,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "354641463",
     "image_count": 1,
     "best_match_shark_id": "501144460",
@@ -2037,6 +2133,18 @@
     "distance_median": 1.0501,
     "distance_mean": 1.0501,
     "distance_max": 1.0501,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899025574",
+    "image_count": 1,
+    "best_match_shark_id": "406273837",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0502,
+    "distance_median": 1.0502,
+    "distance_mean": 1.0502,
+    "distance_max": 1.0502,
     "is_mutual": false
   },
   {
@@ -2112,6 +2220,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "899036646",
+    "image_count": 1,
+    "best_match_shark_id": "42848898",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0542,
+    "distance_median": 1.0542,
+    "distance_mean": 1.0542,
+    "distance_max": 1.0542,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "606177274",
     "image_count": 1,
     "best_match_shark_id": "607948778",
@@ -2184,6 +2304,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "899040167",
+    "image_count": 1,
+    "best_match_shark_id": "82908892",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0564,
+    "distance_median": 1.0564,
+    "distance_mean": 1.0564,
+    "distance_max": 1.0564,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "770510388",
     "image_count": 1,
     "best_match_shark_id": "355209545",
@@ -2234,7 +2366,7 @@
   {
     "whaleSharkID": "288253761",
     "image_count": 1,
-    "best_match_shark_id": "892357890",
+    "best_match_shark_id": "899040160",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.0593,
@@ -2266,6 +2398,18 @@
     "distance_mean": 1.0594,
     "distance_max": 1.0594,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899038090",
+    "image_count": 1,
+    "best_match_shark_id": "406273837",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0594,
+    "distance_median": 1.0594,
+    "distance_mean": 1.0594,
+    "distance_max": 1.0594,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "347006914",
@@ -2364,6 +2508,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "899038091",
+    "image_count": 1,
+    "best_match_shark_id": "214210563",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0637,
+    "distance_median": 1.0637,
+    "distance_mean": 1.0637,
+    "distance_max": 1.0637,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "150199658",
     "image_count": 1,
     "best_match_shark_id": "95941755",
@@ -2410,6 +2566,18 @@
     "distance_mean": 1.0646,
     "distance_max": 1.0646,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040108",
+    "image_count": 1,
+    "best_match_shark_id": "228069004",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0646,
+    "distance_median": 1.0646,
+    "distance_mean": 1.0646,
+    "distance_max": 1.0646,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "21407237",
@@ -2618,7 +2786,7 @@
   {
     "whaleSharkID": "240514850",
     "image_count": 2,
-    "best_match_shark_id": "892357890",
+    "best_match_shark_id": "899040160",
     "best_match_image_count": 1,
     "pair_count": 2,
     "distance_min": 0.9935,
@@ -2643,6 +2811,18 @@
     "whaleSharkID": "880197919",
     "image_count": 1,
     "best_match_shark_id": "815656458",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0722,
+    "distance_median": 1.0722,
+    "distance_mean": 1.0722,
+    "distance_max": 1.0722,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040172",
+    "image_count": 1,
+    "best_match_shark_id": "406273837",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.0722,
@@ -2964,6 +3144,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "899025599",
+    "image_count": 1,
+    "best_match_shark_id": "890678833",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0834,
+    "distance_median": 1.0834,
+    "distance_mean": 1.0834,
+    "distance_max": 1.0834,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "27583185",
     "image_count": 1,
     "best_match_shark_id": "409020047",
@@ -3106,6 +3298,18 @@
     "distance_mean": 1.0875,
     "distance_max": 1.0875,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899036621",
+    "image_count": 1,
+    "best_match_shark_id": "282824639",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.0878,
+    "distance_median": 1.0878,
+    "distance_mean": 1.0878,
+    "distance_max": 1.0878,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "349998094",
@@ -3576,6 +3780,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "899025598",
+    "image_count": 1,
+    "best_match_shark_id": "890655089",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1002,
+    "distance_median": 1.1002,
+    "distance_mean": 1.1002,
+    "distance_max": 1.1002,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "726183654",
     "image_count": 1,
     "best_match_shark_id": "879454688",
@@ -3888,6 +4104,30 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "752210338",
+    "image_count": 1,
+    "best_match_shark_id": "899040167",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1057,
+    "distance_median": 1.1057,
+    "distance_mean": 1.1057,
+    "distance_max": 1.1057,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040124",
+    "image_count": 1,
+    "best_match_shark_id": "162423521",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1059,
+    "distance_median": 1.1059,
+    "distance_mean": 1.1059,
+    "distance_max": 1.1059,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "117558439",
     "image_count": 1,
     "best_match_shark_id": "602579553",
@@ -3982,6 +4222,18 @@
     "distance_mean": 1.1067,
     "distance_max": 1.1067,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899038071",
+    "image_count": 1,
+    "best_match_shark_id": "890655065",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1067,
+    "distance_median": 1.1067,
+    "distance_mean": 1.1067,
+    "distance_max": 1.1067,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "553443722",
@@ -4173,18 +4425,6 @@
     "distance_median": 1.109,
     "distance_mean": 1.109,
     "distance_max": 1.109,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "892357889",
-    "image_count": 1,
-    "best_match_shark_id": "890672410",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.1092,
-    "distance_median": 1.1092,
-    "distance_mean": 1.1092,
-    "distance_max": 1.1092,
     "is_mutual": false
   },
   {
@@ -4464,6 +4704,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "890643375",
+    "image_count": 1,
+    "best_match_shark_id": "899025574",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1137,
+    "distance_median": 1.1137,
+    "distance_mean": 1.1137,
+    "distance_max": 1.1137,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "549557901",
     "image_count": 1,
     "best_match_shark_id": "660440785",
@@ -4574,7 +4826,7 @@
   {
     "whaleSharkID": "818085318",
     "image_count": 1,
-    "best_match_shark_id": "895746135",
+    "best_match_shark_id": "897163088",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.1177,
@@ -4824,6 +5076,30 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "600245019",
+    "image_count": 1,
+    "best_match_shark_id": "898558056",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1249,
+    "distance_median": 1.1249,
+    "distance_mean": 1.1249,
+    "distance_max": 1.1249,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "898558056",
+    "image_count": 1,
+    "best_match_shark_id": "600245019",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1249,
+    "distance_median": 1.1249,
+    "distance_mean": 1.1249,
+    "distance_max": 1.1249,
+    "is_mutual": true
+  },
+  {
     "whaleSharkID": "871699268",
     "image_count": 1,
     "best_match_shark_id": "562030152",
@@ -4858,6 +5134,18 @@
     "distance_mean": 1.1256,
     "distance_max": 1.1256,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040122",
+    "image_count": 1,
+    "best_match_shark_id": "890672513",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1256,
+    "distance_median": 1.1256,
+    "distance_mean": 1.1256,
+    "distance_max": 1.1256,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "890672494",
@@ -5148,6 +5436,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "899036630",
+    "image_count": 1,
+    "best_match_shark_id": "420066869",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1317,
+    "distance_median": 1.1317,
+    "distance_mean": 1.1317,
+    "distance_max": 1.1317,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "687821543",
     "image_count": 1,
     "best_match_shark_id": "579856350",
@@ -5388,6 +5688,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "899040105",
+    "image_count": 1,
+    "best_match_shark_id": "75410723",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1364,
+    "distance_median": 1.1364,
+    "distance_mean": 1.1364,
+    "distance_max": 1.1364,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "200420598",
     "image_count": 1,
     "best_match_shark_id": "214401034",
@@ -5544,6 +5856,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "75059081",
+    "image_count": 1,
+    "best_match_shark_id": "899025598",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1402,
+    "distance_median": 1.1402,
+    "distance_mean": 1.1402,
+    "distance_max": 1.1402,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "228333175",
     "image_count": 1,
     "best_match_shark_id": "733759609",
@@ -5590,6 +5914,18 @@
     "distance_mean": 1.1395,
     "distance_max": 1.1726,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899036622",
+    "image_count": 1,
+    "best_match_shark_id": "890668476",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1406,
+    "distance_median": 1.1406,
+    "distance_mean": 1.1406,
+    "distance_max": 1.1406,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "881301682",
@@ -5748,18 +6084,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "75059081",
-    "image_count": 1,
-    "best_match_shark_id": "892357854",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.1445,
-    "distance_median": 1.1445,
-    "distance_mean": 1.1445,
-    "distance_max": 1.1445,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "274378784",
     "image_count": 1,
     "best_match_shark_id": "680238578",
@@ -5806,6 +6130,18 @@
     "distance_mean": 1.1449,
     "distance_max": 1.1449,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040123",
+    "image_count": 1,
+    "best_match_shark_id": "890672513",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1455,
+    "distance_median": 1.1455,
+    "distance_mean": 1.1455,
+    "distance_max": 1.1455,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "9170218",
@@ -6060,6 +6396,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "440789997",
+    "image_count": 3,
+    "best_match_shark_id": "901113964",
+    "best_match_image_count": 1,
+    "pair_count": 3,
+    "distance_min": 1.1452,
+    "distance_median": 1.1504,
+    "distance_mean": 1.1827,
+    "distance_max": 1.2524,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "454602885",
     "image_count": 1,
     "best_match_shark_id": "486027147",
@@ -6073,6 +6421,18 @@
   },
   {
     "whaleSharkID": "892357882",
+    "image_count": 1,
+    "best_match_shark_id": "890145758",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1512,
+    "distance_median": 1.1512,
+    "distance_mean": 1.1512,
+    "distance_max": 1.1512,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040137",
     "image_count": 1,
     "best_match_shark_id": "890145758",
     "best_match_image_count": 1,
@@ -6226,6 +6586,30 @@
     "distance_mean": 1.1541,
     "distance_max": 1.1541,
     "is_mutual": false
+  },
+  {
+    "whaleSharkID": "894907744",
+    "image_count": 1,
+    "best_match_shark_id": "899025569",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1549,
+    "distance_median": 1.1549,
+    "distance_mean": 1.1549,
+    "distance_max": 1.1549,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899025569",
+    "image_count": 1,
+    "best_match_shark_id": "894907744",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1549,
+    "distance_median": 1.1549,
+    "distance_mean": 1.1549,
+    "distance_max": 1.1549,
+    "is_mutual": true
   },
   {
     "whaleSharkID": "864753691",
@@ -6420,6 +6804,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "899025583",
+    "image_count": 1,
+    "best_match_shark_id": "892372587",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1602,
+    "distance_median": 1.1602,
+    "distance_mean": 1.1602,
+    "distance_max": 1.1602,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "857677812",
     "image_count": 3,
     "best_match_shark_id": "132623297",
@@ -6441,6 +6837,18 @@
     "distance_median": 1.1619,
     "distance_mean": 1.1619,
     "distance_max": 1.1619,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "434016713",
+    "image_count": 1,
+    "best_match_shark_id": "899040124",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1624,
+    "distance_median": 1.1624,
+    "distance_mean": 1.1624,
+    "distance_max": 1.1624,
     "is_mutual": false
   },
   {
@@ -6466,6 +6874,30 @@
     "distance_mean": 1.1627,
     "distance_max": 1.1627,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "892357846",
+    "image_count": 1,
+    "best_match_shark_id": "899792274",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1628,
+    "distance_median": 1.1628,
+    "distance_mean": 1.1628,
+    "distance_max": 1.1628,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899038083",
+    "image_count": 1,
+    "best_match_shark_id": "899792274",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1628,
+    "distance_median": 1.1628,
+    "distance_mean": 1.1628,
+    "distance_max": 1.1628,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "221266189",
@@ -6590,7 +7022,7 @@
   {
     "whaleSharkID": "684867378",
     "image_count": 2,
-    "best_match_shark_id": "892357889",
+    "best_match_shark_id": "899040159",
     "best_match_image_count": 1,
     "pair_count": 2,
     "distance_min": 1.0465,
@@ -6624,6 +7056,42 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "894907752",
+    "image_count": 1,
+    "best_match_shark_id": "899036633",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1666,
+    "distance_median": 1.1666,
+    "distance_mean": 1.1666,
+    "distance_max": 1.1666,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899036633",
+    "image_count": 1,
+    "best_match_shark_id": "894907752",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1666,
+    "distance_median": 1.1666,
+    "distance_mean": 1.1666,
+    "distance_max": 1.1666,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040104",
+    "image_count": 1,
+    "best_match_shark_id": "899792274",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1667,
+    "distance_median": 1.1667,
+    "distance_mean": 1.1667,
+    "distance_max": 1.1667,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "769624847",
     "image_count": 1,
     "best_match_shark_id": "652344051",
@@ -6645,18 +7113,6 @@
     "distance_median": 1.1668,
     "distance_mean": 1.1668,
     "distance_max": 1.1668,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "434016713",
-    "image_count": 1,
-    "best_match_shark_id": "564345340",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.1671,
-    "distance_median": 1.1671,
-    "distance_mean": 1.1671,
-    "distance_max": 1.1671,
     "is_mutual": false
   },
   {
@@ -6708,16 +7164,28 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "752210338",
+    "whaleSharkID": "899036631",
     "image_count": 1,
-    "best_match_shark_id": "892357871",
+    "best_match_shark_id": "94183348",
     "best_match_image_count": 1,
     "pair_count": 1,
-    "distance_min": 1.1676,
-    "distance_median": 1.1676,
-    "distance_mean": 1.1676,
-    "distance_max": 1.1676,
-    "is_mutual": false
+    "distance_min": 1.1677,
+    "distance_median": 1.1677,
+    "distance_mean": 1.1677,
+    "distance_max": 1.1677,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "94183348",
+    "image_count": 1,
+    "best_match_shark_id": "899036631",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1677,
+    "distance_median": 1.1677,
+    "distance_mean": 1.1677,
+    "distance_max": 1.1677,
+    "is_mutual": true
   },
   {
     "whaleSharkID": "594241555",
@@ -6804,18 +7272,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "890643375",
-    "image_count": 1,
-    "best_match_shark_id": "111481591",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.1691,
-    "distance_median": 1.1691,
-    "distance_mean": 1.1691,
-    "distance_max": 1.1691,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "822694362",
     "image_count": 1,
     "best_match_shark_id": "303749426",
@@ -6850,18 +7306,6 @@
     "distance_mean": 1.17,
     "distance_max": 1.17,
     "is_mutual": true
-  },
-  {
-    "whaleSharkID": "862238894",
-    "image_count": 1,
-    "best_match_shark_id": "892357871",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.17,
-    "distance_median": 1.17,
-    "distance_mean": 1.17,
-    "distance_max": 1.17,
-    "is_mutual": false
   },
   {
     "whaleSharkID": "892293442",
@@ -7056,6 +7500,42 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "890145784",
+    "image_count": 1,
+    "best_match_shark_id": "899025597",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1737,
+    "distance_median": 1.1737,
+    "distance_mean": 1.1737,
+    "distance_max": 1.1737,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899025597",
+    "image_count": 1,
+    "best_match_shark_id": "890145784",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1737,
+    "distance_median": 1.1737,
+    "distance_mean": 1.1737,
+    "distance_max": 1.1737,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899038072",
+    "image_count": 1,
+    "best_match_shark_id": "77042231",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.174,
+    "distance_median": 1.174,
+    "distance_mean": 1.174,
+    "distance_max": 1.174,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "146232207",
     "image_count": 1,
     "best_match_shark_id": "693156317",
@@ -7104,6 +7584,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "682808748",
+    "image_count": 3,
+    "best_match_shark_id": "899025574",
+    "best_match_image_count": 1,
+    "pair_count": 3,
+    "distance_min": 0.9823,
+    "distance_median": 1.1748,
+    "distance_mean": 1.2925,
+    "distance_max": 1.7203,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "75410733",
     "image_count": 1,
     "best_match_shark_id": "879454690",
@@ -7131,6 +7623,18 @@
     "whaleSharkID": "310847776",
     "image_count": 1,
     "best_match_shark_id": "329216146",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1749,
+    "distance_median": 1.1749,
+    "distance_mean": 1.1749,
+    "distance_max": 1.1749,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899036639",
+    "image_count": 1,
+    "best_match_shark_id": "420066869",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.1749,
@@ -7176,18 +7680,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "600245019",
-    "image_count": 1,
-    "best_match_shark_id": "9170218",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.176,
-    "distance_median": 1.176,
-    "distance_mean": 1.176,
-    "distance_max": 1.176,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "861043326",
     "image_count": 1,
     "best_match_shark_id": "698437703",
@@ -7198,6 +7690,30 @@
     "distance_mean": 1.176,
     "distance_max": 1.176,
     "is_mutual": false
+  },
+  {
+    "whaleSharkID": "836472965",
+    "image_count": 1,
+    "best_match_shark_id": "899040109",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1764,
+    "distance_median": 1.1764,
+    "distance_mean": 1.1764,
+    "distance_max": 1.1764,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040109",
+    "image_count": 1,
+    "best_match_shark_id": "836472965",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1764,
+    "distance_median": 1.1764,
+    "distance_mean": 1.1764,
+    "distance_max": 1.1764,
+    "is_mutual": true
   },
   {
     "whaleSharkID": "208954223",
@@ -7233,18 +7749,6 @@
     "distance_median": 1.1765,
     "distance_mean": 1.1765,
     "distance_max": 1.1765,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "156110098",
-    "image_count": 1,
-    "best_match_shark_id": "445761012",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.1766,
-    "distance_median": 1.1766,
-    "distance_mean": 1.1766,
-    "distance_max": 1.1766,
     "is_mutual": false
   },
   {
@@ -7287,6 +7791,18 @@
     "whaleSharkID": "472540320",
     "image_count": 1,
     "best_match_shark_id": "487010824",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1772,
+    "distance_median": 1.1772,
+    "distance_mean": 1.1772,
+    "distance_max": 1.1772,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899025572",
+    "image_count": 1,
+    "best_match_shark_id": "748046451",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.1772,
@@ -7341,6 +7857,18 @@
     "distance_median": 1.1783,
     "distance_mean": 1.1783,
     "distance_max": 1.1783,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "571911556",
+    "image_count": 1,
+    "best_match_shark_id": "899025599",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1784,
+    "distance_median": 1.1784,
+    "distance_mean": 1.1784,
+    "distance_max": 1.1784,
     "is_mutual": false
   },
   {
@@ -7402,6 +7930,18 @@
     "distance_mean": 1.1789,
     "distance_max": 1.2907,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040139",
+    "image_count": 1,
+    "best_match_shark_id": "890643375",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.179,
+    "distance_median": 1.179,
+    "distance_mean": 1.179,
+    "distance_max": 1.179,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "537683628",
@@ -7728,6 +8268,30 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "890672405",
+    "image_count": 1,
+    "best_match_shark_id": "899040158",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1842,
+    "distance_median": 1.1842,
+    "distance_mean": 1.1842,
+    "distance_max": 1.1842,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899040158",
+    "image_count": 1,
+    "best_match_shark_id": "890672405",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1842,
+    "distance_median": 1.1842,
+    "distance_mean": 1.1842,
+    "distance_max": 1.1842,
+    "is_mutual": true
+  },
+  {
     "whaleSharkID": "628358744",
     "image_count": 3,
     "best_match_shark_id": "67093154",
@@ -7750,6 +8314,18 @@
     "distance_mean": 1.3726,
     "distance_max": 1.7545,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899418502",
+    "image_count": 1,
+    "best_match_shark_id": "112763599",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1848,
+    "distance_median": 1.1848,
+    "distance_mean": 1.1848,
+    "distance_max": 1.1848,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "418706108",
@@ -7872,6 +8448,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "2152331",
+    "image_count": 1,
+    "best_match_shark_id": "899040109",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1875,
+    "distance_median": 1.1875,
+    "distance_mean": 1.1875,
+    "distance_max": 1.1875,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "426151580",
     "image_count": 1,
     "best_match_shark_id": "836713276",
@@ -7932,6 +8520,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "623763300",
+    "image_count": 3,
+    "best_match_shark_id": "899036633",
+    "best_match_image_count": 1,
+    "pair_count": 3,
+    "distance_min": 1.1786,
+    "distance_median": 1.1881,
+    "distance_mean": 1.3377,
+    "distance_max": 1.6463,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "137827227",
     "image_count": 1,
     "best_match_shark_id": "117400981",
@@ -7958,7 +8558,7 @@
   {
     "whaleSharkID": "890668442",
     "image_count": 1,
-    "best_match_shark_id": "892357835",
+    "best_match_shark_id": "899038080",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.1892,
@@ -7969,6 +8569,18 @@
   },
   {
     "whaleSharkID": "892357835",
+    "image_count": 1,
+    "best_match_shark_id": "890668442",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.1892,
+    "distance_median": 1.1892,
+    "distance_mean": 1.1892,
+    "distance_max": 1.1892,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899038080",
     "image_count": 1,
     "best_match_shark_id": "890668442",
     "best_match_image_count": 1,
@@ -8136,18 +8748,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "890145784",
-    "image_count": 1,
-    "best_match_shark_id": "890643373",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.1922,
-    "distance_median": 1.1922,
-    "distance_mean": 1.1922,
-    "distance_max": 1.1922,
-    "is_mutual": true
-  },
-  {
     "whaleSharkID": "890643373",
     "image_count": 1,
     "best_match_shark_id": "890145784",
@@ -8157,7 +8757,7 @@
     "distance_median": 1.1922,
     "distance_mean": 1.1922,
     "distance_max": 1.1922,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
     "whaleSharkID": "453419293",
@@ -8277,18 +8877,6 @@
     "distance_median": 1.1935,
     "distance_mean": 1.1935,
     "distance_max": 1.1935,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "890672405",
-    "image_count": 1,
-    "best_match_shark_id": "730455788",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.194,
-    "distance_median": 1.194,
-    "distance_mean": 1.194,
-    "distance_max": 1.194,
     "is_mutual": false
   },
   {
@@ -8508,18 +9096,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "571911556",
-    "image_count": 1,
-    "best_match_shark_id": "892295663",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.1983,
-    "distance_median": 1.1983,
-    "distance_mean": 1.1983,
-    "distance_max": 1.1983,
-    "is_mutual": true
-  },
-  {
     "whaleSharkID": "892295663",
     "image_count": 1,
     "best_match_shark_id": "571911556",
@@ -8529,7 +9105,7 @@
     "distance_median": 1.1983,
     "distance_mean": 1.1983,
     "distance_max": 1.1983,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
     "whaleSharkID": "897163072",
@@ -8592,18 +9168,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "623763300",
-    "image_count": 3,
-    "best_match_shark_id": "894907752",
-    "best_match_image_count": 1,
-    "pair_count": 3,
-    "distance_min": 1.0999,
-    "distance_median": 1.1996,
-    "distance_mean": 1.3484,
-    "distance_max": 1.7456,
-    "is_mutual": true
-  },
-  {
     "whaleSharkID": "75410732",
     "image_count": 1,
     "best_match_shark_id": "831996450",
@@ -8614,18 +9178,6 @@
     "distance_mean": 1.1996,
     "distance_max": 1.1996,
     "is_mutual": false
-  },
-  {
-    "whaleSharkID": "894907752",
-    "image_count": 1,
-    "best_match_shark_id": "623763300",
-    "best_match_image_count": 3,
-    "pair_count": 3,
-    "distance_min": 1.0999,
-    "distance_median": 1.1996,
-    "distance_mean": 1.3484,
-    "distance_max": 1.7456,
-    "is_mutual": true
   },
   {
     "whaleSharkID": "41812683",
@@ -8664,6 +9216,30 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "863716198",
+    "image_count": 1,
+    "best_match_shark_id": "899038078",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2009,
+    "distance_median": 1.2009,
+    "distance_mean": 1.2009,
+    "distance_max": 1.2009,
+    "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899038078",
+    "image_count": 1,
+    "best_match_shark_id": "863716198",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2009,
+    "distance_median": 1.2009,
+    "distance_mean": 1.2009,
+    "distance_max": 1.2009,
+    "is_mutual": true
+  },
+  {
     "whaleSharkID": "859183045",
     "image_count": 1,
     "best_match_shark_id": "890672515",
@@ -8690,7 +9266,7 @@
   {
     "whaleSharkID": "133356421",
     "image_count": 1,
-    "best_match_shark_id": "892357889",
+    "best_match_shark_id": "899040159",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.2011,
@@ -8748,30 +9324,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "2152331",
-    "image_count": 1,
-    "best_match_shark_id": "682806664",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2026,
-    "distance_median": 1.2026,
-    "distance_mean": 1.2026,
-    "distance_max": 1.2026,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "863716198",
-    "image_count": 1,
-    "best_match_shark_id": "19313789",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2026,
-    "distance_median": 1.2026,
-    "distance_mean": 1.2026,
-    "distance_max": 1.2026,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "770727480",
     "image_count": 1,
     "best_match_shark_id": "190425878",
@@ -8817,6 +9369,18 @@
     "distance_median": 1.2039,
     "distance_mean": 1.2039,
     "distance_max": 1.2039,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899036616",
+    "image_count": 1,
+    "best_match_shark_id": "890668443",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.204,
+    "distance_median": 1.204,
+    "distance_mean": 1.204,
+    "distance_max": 1.204,
     "is_mutual": false
   },
   {
@@ -9000,6 +9564,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "899025621",
+    "image_count": 1,
+    "best_match_shark_id": "88898731",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2072,
+    "distance_median": 1.2072,
+    "distance_mean": 1.2072,
+    "distance_max": 1.2072,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "860952141",
     "image_count": 1,
     "best_match_shark_id": "714054423",
@@ -9009,6 +9585,18 @@
     "distance_median": 1.2073,
     "distance_mean": 1.2073,
     "distance_max": 1.2073,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "858640926",
+    "image_count": 1,
+    "best_match_shark_id": "899038090",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2074,
+    "distance_median": 1.2074,
+    "distance_mean": 1.2074,
+    "distance_max": 1.2074,
     "is_mutual": false
   },
   {
@@ -9036,6 +9624,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "75623983",
+    "image_count": 1,
+    "best_match_shark_id": "899036646",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2081,
+    "distance_median": 1.2081,
+    "distance_mean": 1.2081,
+    "distance_max": 1.2081,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "342283410",
     "image_count": 1,
     "best_match_shark_id": "9804529",
@@ -9057,6 +9657,18 @@
     "distance_median": 1.2082,
     "distance_mean": 1.3776,
     "distance_max": 1.7329,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "900306117",
+    "image_count": 2,
+    "best_match_shark_id": "303749426",
+    "best_match_image_count": 1,
+    "pair_count": 2,
+    "distance_min": 1.0465,
+    "distance_median": 1.2089,
+    "distance_mean": 1.2089,
+    "distance_max": 1.3712,
     "is_mutual": false
   },
   {
@@ -9117,6 +9729,18 @@
     "distance_median": 1.2097,
     "distance_mean": 1.2097,
     "distance_max": 1.2097,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899025586",
+    "image_count": 1,
+    "best_match_shark_id": "890147256",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2098,
+    "distance_median": 1.2098,
+    "distance_mean": 1.2098,
+    "distance_max": 1.2098,
     "is_mutual": false
   },
   {
@@ -9276,6 +9900,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "899025567",
+    "image_count": 1,
+    "best_match_shark_id": "890668429",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2128,
+    "distance_median": 1.2128,
+    "distance_mean": 1.2128,
+    "distance_max": 1.2128,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "221274040",
     "image_count": 1,
     "best_match_shark_id": "519365756",
@@ -9349,6 +9985,18 @@
   },
   {
     "whaleSharkID": "892357843",
+    "image_count": 1,
+    "best_match_shark_id": "214210563",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2142,
+    "distance_median": 1.2142,
+    "distance_mean": 1.2142,
+    "distance_max": 1.2142,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899038085",
     "image_count": 1,
     "best_match_shark_id": "214210563",
     "best_match_image_count": 1,
@@ -9504,6 +10152,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "286887280",
+    "image_count": 2,
+    "best_match_shark_id": "899038072",
+    "best_match_image_count": 1,
+    "pair_count": 2,
+    "distance_min": 1.1871,
+    "distance_median": 1.2173,
+    "distance_mean": 1.2173,
+    "distance_max": 1.2474,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "632715250",
     "image_count": 2,
     "best_match_shark_id": "862894916",
@@ -9526,6 +10186,18 @@
     "distance_mean": 1.2174,
     "distance_max": 1.2569,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "899025573",
+    "image_count": 1,
+    "best_match_shark_id": "890141934",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2174,
+    "distance_median": 1.2174,
+    "distance_mean": 1.2174,
+    "distance_max": 1.2174,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "679430406",
@@ -9597,6 +10269,18 @@
     "distance_median": 1.2184,
     "distance_mean": 1.2184,
     "distance_max": 1.2184,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "894907759",
+    "image_count": 1,
+    "best_match_shark_id": "899036633",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2187,
+    "distance_median": 1.2187,
+    "distance_mean": 1.2187,
+    "distance_max": 1.2187,
     "is_mutual": false
   },
   {
@@ -9720,6 +10404,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "17177494",
+    "image_count": 1,
+    "best_match_shark_id": "899025572",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2202,
+    "distance_median": 1.2202,
+    "distance_mean": 1.2202,
+    "distance_max": 1.2202,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "434391715",
     "image_count": 1,
     "best_match_shark_id": "18450771",
@@ -9825,18 +10521,6 @@
     "distance_median": 1.2222,
     "distance_mean": 1.2222,
     "distance_max": 1.2688,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "836472965",
-    "image_count": 1,
-    "best_match_shark_id": "569559248",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2226,
-    "distance_median": 1.2226,
-    "distance_mean": 1.2226,
-    "distance_max": 1.2226,
     "is_mutual": false
   },
   {
@@ -9972,18 +10656,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "440789997",
-    "image_count": 3,
-    "best_match_shark_id": "67093154",
-    "best_match_image_count": 1,
-    "pair_count": 3,
-    "distance_min": 1.1737,
-    "distance_median": 1.2252,
-    "distance_mean": 1.2521,
-    "distance_max": 1.3573,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "647430677",
     "image_count": 1,
     "best_match_shark_id": "247555597",
@@ -10104,6 +10776,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "185170962",
+    "image_count": 2,
+    "best_match_shark_id": "901113964",
+    "best_match_image_count": 1,
+    "pair_count": 2,
+    "distance_min": 1.1684,
+    "distance_median": 1.2268,
+    "distance_mean": 1.2268,
+    "distance_max": 1.2852,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "297890607",
     "image_count": 2,
     "best_match_shark_id": "894907744",
@@ -10113,7 +10797,7 @@
     "distance_median": 1.227,
     "distance_mean": 1.227,
     "distance_max": 1.3466,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
     "whaleSharkID": "83112455",
@@ -10126,18 +10810,6 @@
     "distance_mean": 1.227,
     "distance_max": 1.227,
     "is_mutual": false
-  },
-  {
-    "whaleSharkID": "894907744",
-    "image_count": 1,
-    "best_match_shark_id": "297890607",
-    "best_match_image_count": 2,
-    "pair_count": 2,
-    "distance_min": 1.1074,
-    "distance_median": 1.227,
-    "distance_mean": 1.227,
-    "distance_max": 1.3466,
-    "is_mutual": true
   },
   {
     "whaleSharkID": "351723497",
@@ -10284,6 +10956,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "246579442",
+    "image_count": 4,
+    "best_match_shark_id": "901113964",
+    "best_match_image_count": 1,
+    "pair_count": 4,
+    "distance_min": 1.1778,
+    "distance_median": 1.2307,
+    "distance_mean": 1.27,
+    "distance_max": 1.4407,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "295767595",
     "image_count": 2,
     "best_match_shark_id": "79317039",
@@ -10313,6 +10997,18 @@
     "best_match_shark_id": "823144",
     "best_match_image_count": 2,
     "pair_count": 2,
+    "distance_min": 1.2319,
+    "distance_median": 1.2319,
+    "distance_mean": 1.2319,
+    "distance_max": 1.2319,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899038074",
+    "image_count": 1,
+    "best_match_shark_id": "69527675",
+    "best_match_image_count": 1,
+    "pair_count": 1,
     "distance_min": 1.2319,
     "distance_median": 1.2319,
     "distance_mean": 1.2319,
@@ -10380,27 +11076,15 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "17177494",
+    "whaleSharkID": "404799295",
     "image_count": 1,
-    "best_match_shark_id": "530590192",
+    "best_match_shark_id": "899036646",
     "best_match_image_count": 1,
     "pair_count": 1,
-    "distance_min": 1.2332,
-    "distance_median": 1.2332,
-    "distance_mean": 1.2332,
-    "distance_max": 1.2332,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "286887280",
-    "image_count": 2,
-    "best_match_shark_id": "769624847",
-    "best_match_image_count": 1,
-    "pair_count": 2,
-    "distance_min": 1.2082,
-    "distance_median": 1.2336,
-    "distance_mean": 1.2336,
-    "distance_max": 1.2589,
+    "distance_min": 1.2333,
+    "distance_median": 1.2333,
+    "distance_mean": 1.2333,
+    "distance_max": 1.2333,
     "is_mutual": false
   },
   {
@@ -10500,6 +11184,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "890655084",
+    "image_count": 1,
+    "best_match_shark_id": "899025586",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2351,
+    "distance_median": 1.2351,
+    "distance_mean": 1.2351,
+    "distance_max": 1.2351,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "724685174",
     "image_count": 3,
     "best_match_shark_id": "228069004",
@@ -10509,6 +11205,18 @@
     "distance_median": 1.2352,
     "distance_mean": 1.3223,
     "distance_max": 1.5669,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040110",
+    "image_count": 1,
+    "best_match_shark_id": "17177494",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2352,
+    "distance_median": 1.2352,
+    "distance_mean": 1.2352,
+    "distance_max": 1.2352,
     "is_mutual": false
   },
   {
@@ -10524,18 +11232,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "858640926",
-    "image_count": 1,
-    "best_match_shark_id": "111481743",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2359,
-    "distance_median": 1.2359,
-    "distance_mean": 1.2359,
-    "distance_max": 1.2359,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "141116315",
     "image_count": 1,
     "best_match_shark_id": "355209545",
@@ -10545,18 +11241,6 @@
     "distance_median": 1.2362,
     "distance_mean": 1.2362,
     "distance_max": 1.2362,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "246579442",
-    "image_count": 4,
-    "best_match_shark_id": "85590916",
-    "best_match_image_count": 1,
-    "pair_count": 4,
-    "distance_min": 1.2223,
-    "distance_median": 1.2364,
-    "distance_mean": 1.2341,
-    "distance_max": 1.2415,
     "is_mutual": false
   },
   {
@@ -10701,19 +11385,19 @@
     "distance_median": 1.2379,
     "distance_mean": 1.2379,
     "distance_max": 1.2379,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
-    "whaleSharkID": "94183348",
+    "whaleSharkID": "899038084",
     "image_count": 1,
-    "best_match_shark_id": "892357850",
+    "best_match_shark_id": "94183348",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.2379,
     "distance_median": 1.2379,
     "distance_mean": 1.2379,
     "distance_max": 1.2379,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
     "whaleSharkID": "46199221",
@@ -10729,6 +11413,18 @@
   },
   {
     "whaleSharkID": "892357833",
+    "image_count": 1,
+    "best_match_shark_id": "890145784",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2385,
+    "distance_median": 1.2385,
+    "distance_mean": 1.2385,
+    "distance_max": 1.2385,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899038077",
     "image_count": 1,
     "best_match_shark_id": "890145784",
     "best_match_image_count": 1,
@@ -10761,18 +11457,6 @@
     "distance_median": 1.2389,
     "distance_mean": 1.2389,
     "distance_max": 1.2389,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "185170962",
-    "image_count": 2,
-    "best_match_shark_id": "75410709",
-    "best_match_image_count": 1,
-    "pair_count": 2,
-    "distance_min": 1.2309,
-    "distance_median": 1.239,
-    "distance_mean": 1.239,
-    "distance_max": 1.2471,
     "is_mutual": false
   },
   {
@@ -10826,7 +11510,7 @@
   {
     "whaleSharkID": "24437579",
     "image_count": 1,
-    "best_match_shark_id": "892357835",
+    "best_match_shark_id": "899038080",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.2407,
@@ -10911,6 +11595,18 @@
     "whaleSharkID": "744393045",
     "image_count": 1,
     "best_match_shark_id": "169656174",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2421,
+    "distance_median": 1.2421,
+    "distance_mean": 1.2421,
+    "distance_max": 1.2421,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040102",
+    "image_count": 1,
+    "best_match_shark_id": "390374150",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.2421,
@@ -11025,6 +11721,18 @@
     "distance_median": 1.2433,
     "distance_mean": 1.2433,
     "distance_max": 1.2433,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "158544473",
+    "image_count": 1,
+    "best_match_shark_id": "899036621",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2437,
+    "distance_median": 1.2437,
+    "distance_mean": 1.2437,
+    "distance_max": 1.2437,
     "is_mutual": false
   },
   {
@@ -11328,21 +12036,21 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "75623983",
-    "image_count": 1,
-    "best_match_shark_id": "843206011",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2484,
-    "distance_median": 1.2484,
-    "distance_mean": 1.2484,
-    "distance_max": 1.2484,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "232826020",
     "image_count": 1,
     "best_match_shark_id": "831901160",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2487,
+    "distance_median": 1.2487,
+    "distance_mean": 1.2487,
+    "distance_max": 1.2487,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "740121016",
+    "image_count": 1,
+    "best_match_shark_id": "899040104",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.2487,
@@ -11437,6 +12145,18 @@
   },
   {
     "whaleSharkID": "892357891",
+    "image_count": 1,
+    "best_match_shark_id": "390374150",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2498,
+    "distance_median": 1.2498,
+    "distance_mean": 1.2498,
+    "distance_max": 1.2498,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040147",
     "image_count": 1,
     "best_match_shark_id": "390374150",
     "best_match_image_count": 1,
@@ -11652,18 +12372,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "740121016",
-    "image_count": 1,
-    "best_match_shark_id": "890658426",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2532,
-    "distance_median": 1.2532,
-    "distance_mean": 1.2532,
-    "distance_max": 1.2532,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "82494302",
     "image_count": 1,
     "best_match_shark_id": "19037706",
@@ -11760,18 +12468,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "158544473",
-    "image_count": 1,
-    "best_match_shark_id": "19313789",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2562,
-    "distance_median": 1.2562,
-    "distance_mean": 1.2562,
-    "distance_max": 1.2562,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "83112457",
     "image_count": 1,
     "best_match_shark_id": "118740444",
@@ -11808,15 +12504,15 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "890655084",
+    "whaleSharkID": "221266187",
     "image_count": 1,
-    "best_match_shark_id": "75062771",
+    "best_match_shark_id": "899040102",
     "best_match_image_count": 1,
     "pair_count": 1,
-    "distance_min": 1.2566,
-    "distance_median": 1.2566,
-    "distance_mean": 1.2566,
-    "distance_max": 1.2566,
+    "distance_min": 1.2572,
+    "distance_median": 1.2572,
+    "distance_mean": 1.2572,
+    "distance_max": 1.2572,
     "is_mutual": false
   },
   {
@@ -11829,6 +12525,18 @@
     "distance_median": 1.2572,
     "distance_mean": 1.2572,
     "distance_max": 1.2572,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "1472604",
+    "image_count": 1,
+    "best_match_shark_id": "899025572",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2574,
+    "distance_median": 1.2574,
+    "distance_mean": 1.2574,
+    "distance_max": 1.2574,
     "is_mutual": false
   },
   {
@@ -11964,18 +12672,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "404799295",
-    "image_count": 1,
-    "best_match_shark_id": "716743679",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2592,
-    "distance_median": 1.2592,
-    "distance_mean": 1.2592,
-    "distance_max": 1.2592,
-    "is_mutual": true
-  },
-  {
     "whaleSharkID": "716743679",
     "image_count": 1,
     "best_match_shark_id": "404799295",
@@ -11985,7 +12681,7 @@
     "distance_median": 1.2592,
     "distance_mean": 1.2592,
     "distance_max": 1.2592,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
     "whaleSharkID": "9859765",
@@ -12300,6 +12996,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "890643379",
+    "image_count": 1,
+    "best_match_shark_id": "899025569",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2635,
+    "distance_median": 1.2635,
+    "distance_mean": 1.2635,
+    "distance_max": 1.2635,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "754010923",
     "image_count": 3,
     "best_match_shark_id": "21407276",
@@ -12337,6 +13045,18 @@
   },
   {
     "whaleSharkID": "892357858",
+    "image_count": 1,
+    "best_match_shark_id": "631271433",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2638,
+    "distance_median": 1.2638,
+    "distance_mean": 1.2638,
+    "distance_max": 1.2638,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899038095",
     "image_count": 1,
     "best_match_shark_id": "631271433",
     "best_match_image_count": 1,
@@ -12408,18 +13128,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "890643379",
-    "image_count": 1,
-    "best_match_shark_id": "733743353",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2651,
-    "distance_median": 1.2651,
-    "distance_mean": 1.2651,
-    "distance_max": 1.2651,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "849148976",
     "image_count": 2,
     "best_match_shark_id": "683985277",
@@ -12477,6 +13185,18 @@
     "distance_median": 1.2662,
     "distance_mean": 1.2662,
     "distance_max": 1.2662,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "679976917",
+    "image_count": 1,
+    "best_match_shark_id": "899038078",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2663,
+    "distance_median": 1.2663,
+    "distance_mean": 1.2663,
+    "distance_max": 1.2663,
     "is_mutual": false
   },
   {
@@ -12600,6 +13320,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "653899938",
+    "image_count": 1,
+    "best_match_shark_id": "899025599",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2681,
+    "distance_median": 1.2681,
+    "distance_mean": 1.2681,
+    "distance_max": 1.2681,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "177383356",
     "image_count": 3,
     "best_match_shark_id": "221266190",
@@ -12624,18 +13356,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "894907759",
-    "image_count": 1,
-    "best_match_shark_id": "149200686",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2691,
-    "distance_median": 1.2691,
-    "distance_mean": 1.2691,
-    "distance_max": 1.2691,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "388745002",
     "image_count": 2,
     "best_match_shark_id": "890668430",
@@ -12645,6 +13365,18 @@
     "distance_median": 1.2697,
     "distance_mean": 1.2697,
     "distance_max": 1.3009,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "892357873",
+    "image_count": 1,
+    "best_match_shark_id": "899418502",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2699,
+    "distance_median": 1.2699,
+    "distance_mean": 1.2699,
+    "distance_max": 1.2699,
     "is_mutual": false
   },
   {
@@ -12984,15 +13716,15 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "892357873",
+    "whaleSharkID": "899025585",
     "image_count": 1,
-    "best_match_shark_id": "660275848",
+    "best_match_shark_id": "75410721",
     "best_match_image_count": 1,
     "pair_count": 1,
-    "distance_min": 1.2783,
-    "distance_median": 1.2783,
-    "distance_mean": 1.2783,
-    "distance_max": 1.2783,
+    "distance_min": 1.2789,
+    "distance_median": 1.2789,
+    "distance_mean": 1.2789,
+    "distance_max": 1.2789,
     "is_mutual": false
   },
   {
@@ -13020,21 +13752,21 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "1472604",
-    "image_count": 1,
-    "best_match_shark_id": "390374150",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2796,
-    "distance_median": 1.2796,
-    "distance_mean": 1.2796,
-    "distance_max": 1.2796,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "538735271",
     "image_count": 1,
     "best_match_shark_id": "660440785",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2797,
+    "distance_median": 1.2797,
+    "distance_mean": 1.2797,
+    "distance_max": 1.2797,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "892293440",
+    "image_count": 1,
+    "best_match_shark_id": "899792274",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.2797,
@@ -13090,6 +13822,18 @@
     "distance_mean": 1.28,
     "distance_max": 1.28,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "641261995",
+    "image_count": 2,
+    "best_match_shark_id": "899038072",
+    "best_match_image_count": 1,
+    "pair_count": 2,
+    "distance_min": 1.228,
+    "distance_median": 1.2803,
+    "distance_mean": 1.2803,
+    "distance_max": 1.3327,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "735566023",
@@ -13161,6 +13905,18 @@
     "distance_median": 1.2814,
     "distance_mean": 1.3782,
     "distance_max": 1.8098,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "870930913",
+    "image_count": 1,
+    "best_match_shark_id": "899025598",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.2818,
+    "distance_median": 1.2818,
+    "distance_mean": 1.2818,
+    "distance_max": 1.2818,
     "is_mutual": false
   },
   {
@@ -13406,13 +14162,25 @@
   {
     "whaleSharkID": "524986335",
     "image_count": 4,
-    "best_match_shark_id": "892357882",
+    "best_match_shark_id": "899040137",
     "best_match_image_count": 1,
     "pair_count": 4,
     "distance_min": 1.1365,
     "distance_median": 1.2872,
     "distance_mean": 1.3208,
     "distance_max": 1.5722,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "549686638",
+    "image_count": 3,
+    "best_match_shark_id": "899036646",
+    "best_match_image_count": 1,
+    "pair_count": 3,
+    "distance_min": 1.2645,
+    "distance_median": 1.2872,
+    "distance_mean": 1.326,
+    "distance_max": 1.4265,
     "is_mutual": false
   },
   {
@@ -13497,18 +14265,6 @@
     "distance_median": 1.2902,
     "distance_mean": 1.3303,
     "distance_max": 1.5553,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "221266187",
-    "image_count": 1,
-    "best_match_shark_id": "440789997",
-    "best_match_image_count": 3,
-    "pair_count": 3,
-    "distance_min": 1.0903,
-    "distance_median": 1.2906,
-    "distance_mean": 1.2724,
-    "distance_max": 1.4362,
     "is_mutual": false
   },
   {
@@ -13884,18 +14640,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "679976917",
-    "image_count": 1,
-    "best_match_shark_id": "27583185",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.2984,
-    "distance_median": 1.2984,
-    "distance_mean": 1.2984,
-    "distance_max": 1.2984,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "63248419",
     "image_count": 2,
     "best_match_shark_id": "573239066",
@@ -13969,6 +14713,18 @@
   },
   {
     "whaleSharkID": "892357853",
+    "image_count": 1,
+    "best_match_shark_id": "890672441",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.3018,
+    "distance_median": 1.3018,
+    "distance_mean": 1.3018,
+    "distance_max": 1.3018,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899038089",
     "image_count": 1,
     "best_match_shark_id": "890672441",
     "best_match_image_count": 1,
@@ -14073,18 +14829,6 @@
     "distance_median": 1.3034,
     "distance_mean": 1.3654,
     "distance_max": 1.7068,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "870930913",
-    "image_count": 1,
-    "best_match_shark_id": "2152331",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.3037,
-    "distance_median": 1.3037,
-    "distance_mean": 1.3037,
-    "distance_max": 1.3037,
     "is_mutual": false
   },
   {
@@ -14518,18 +15262,6 @@
     "distance_mean": 1.313,
     "distance_max": 1.313,
     "is_mutual": true
-  },
-  {
-    "whaleSharkID": "892357846",
-    "image_count": 1,
-    "best_match_shark_id": "890668442",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.3132,
-    "distance_median": 1.3132,
-    "distance_mean": 1.3132,
-    "distance_max": 1.3132,
-    "is_mutual": false
   },
   {
     "whaleSharkID": "699106318",
@@ -15048,6 +15780,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "899659883",
+    "image_count": 1,
+    "best_match_shark_id": "502710059",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.3252,
+    "distance_median": 1.3252,
+    "distance_mean": 1.3252,
+    "distance_max": 1.3252,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "130788415",
     "image_count": 1,
     "best_match_shark_id": "355209545",
@@ -15288,6 +16032,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "90893014",
+    "image_count": 1,
+    "best_match_shark_id": "899025597",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.3322,
+    "distance_median": 1.3322,
+    "distance_mean": 1.3322,
+    "distance_max": 1.3322,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "19485634",
     "image_count": 1,
     "best_match_shark_id": "45ed1343-fc21-11e2-ac3f-081965b14959",
@@ -15358,6 +16114,18 @@
     "distance_mean": 1.3331,
     "distance_max": 1.3331,
     "is_mutual": true
+  },
+  {
+    "whaleSharkID": "416415864",
+    "image_count": 3,
+    "best_match_shark_id": "899025598",
+    "best_match_image_count": 1,
+    "pair_count": 3,
+    "distance_min": 1.257,
+    "distance_median": 1.3337,
+    "distance_mean": 1.4316,
+    "distance_max": 1.7042,
+    "is_mutual": false
   },
   {
     "whaleSharkID": "51287004",
@@ -15477,18 +16245,6 @@
     "distance_median": 1.3384,
     "distance_mean": 1.3022,
     "distance_max": 1.4476,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "892293440",
-    "image_count": 1,
-    "best_match_shark_id": "894907759",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.3388,
-    "distance_median": 1.3388,
-    "distance_mean": 1.3388,
-    "distance_max": 1.3388,
     "is_mutual": false
   },
   {
@@ -15717,7 +16473,7 @@
     "distance_median": 1.3446,
     "distance_mean": 1.3446,
     "distance_max": 1.3446,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
     "whaleSharkID": "844266821",
@@ -15734,14 +16490,14 @@
   {
     "whaleSharkID": "94731976",
     "image_count": 1,
-    "best_match_shark_id": "75410729",
+    "best_match_shark_id": "439630298",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.3446,
     "distance_median": 1.3446,
     "distance_mean": 1.3446,
     "distance_max": 1.3446,
-    "is_mutual": true
+    "is_mutual": false
   },
   {
     "whaleSharkID": "41577018",
@@ -15813,6 +16569,18 @@
     "distance_median": 1.3457,
     "distance_mean": 1.3457,
     "distance_max": 1.4588,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "899040138",
+    "image_count": 1,
+    "best_match_shark_id": "691312307",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.3463,
+    "distance_median": 1.3463,
+    "distance_mean": 1.3463,
+    "distance_max": 1.3463,
     "is_mutual": false
   },
   {
@@ -15890,7 +16658,7 @@
   {
     "whaleSharkID": "444869774",
     "image_count": 3,
-    "best_match_shark_id": "628820015",
+    "best_match_shark_id": "630245406",
     "best_match_image_count": 1,
     "pair_count": 3,
     "distance_min": 1.2891,
@@ -15902,7 +16670,7 @@
   {
     "whaleSharkID": "130461810",
     "image_count": 1,
-    "best_match_shark_id": "892357850",
+    "best_match_shark_id": "899038084",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.3498,
@@ -16104,6 +16872,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "661122780",
+    "image_count": 3,
+    "best_match_shark_id": "899036616",
+    "best_match_image_count": 1,
+    "pair_count": 3,
+    "distance_min": 1.2768,
+    "distance_median": 1.3574,
+    "distance_mean": 1.3555,
+    "distance_max": 1.4323,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "510072893",
     "image_count": 1,
     "best_match_shark_id": "700649925",
@@ -16154,7 +16934,7 @@
   {
     "whaleSharkID": "33006567",
     "image_count": 3,
-    "best_match_shark_id": "892357889",
+    "best_match_shark_id": "899040159",
     "best_match_image_count": 1,
     "pair_count": 3,
     "distance_min": 1.3212,
@@ -16320,18 +17100,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "661122780",
-    "image_count": 3,
-    "best_match_shark_id": "405180731",
-    "best_match_image_count": 1,
-    "pair_count": 3,
-    "distance_min": 1.2709,
-    "distance_median": 1.3637,
-    "distance_mean": 1.4761,
-    "distance_max": 1.7938,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "891412464",
     "image_count": 1,
     "best_match_shark_id": "830028025",
@@ -16353,18 +17121,6 @@
     "distance_median": 1.3655,
     "distance_mean": 1.3655,
     "distance_max": 1.509,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "641261995",
-    "image_count": 2,
-    "best_match_shark_id": "5959345",
-    "best_match_image_count": 2,
-    "pair_count": 4,
-    "distance_min": 1.2563,
-    "distance_median": 1.3661,
-    "distance_mean": 1.3881,
-    "distance_max": 1.5641,
     "is_mutual": false
   },
   {
@@ -16440,6 +17196,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "42405729",
+    "image_count": 1,
+    "best_match_shark_id": "899025585",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.3695,
+    "distance_median": 1.3695,
+    "distance_mean": 1.3695,
+    "distance_max": 1.3695,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "21492563",
     "image_count": 5,
     "best_match_shark_id": "818085318",
@@ -16449,18 +17217,6 @@
     "distance_median": 1.3701,
     "distance_mean": 1.365,
     "distance_max": 1.537,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "682808748",
-    "image_count": 3,
-    "best_match_shark_id": "406273837",
-    "best_match_image_count": 1,
-    "pair_count": 3,
-    "distance_min": 1.1364,
-    "distance_median": 1.3706,
-    "distance_mean": 1.3761,
-    "distance_max": 1.6213,
     "is_mutual": false
   },
   {
@@ -16497,18 +17253,6 @@
     "distance_median": 1.3711,
     "distance_mean": 1.3711,
     "distance_max": 1.5631,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "416415864",
-    "image_count": 3,
-    "best_match_shark_id": "892357854",
-    "best_match_image_count": 1,
-    "pair_count": 3,
-    "distance_min": 1.2116,
-    "distance_median": 1.3717,
-    "distance_mean": 1.4455,
-    "distance_max": 1.7531,
     "is_mutual": false
   },
   {
@@ -17100,18 +17844,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "90893014",
-    "image_count": 1,
-    "best_match_shark_id": "112763571",
-    "best_match_image_count": 2,
-    "pair_count": 2,
-    "distance_min": 1.2775,
-    "distance_median": 1.3856,
-    "distance_mean": 1.3856,
-    "distance_max": 1.4936,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "696118875",
     "image_count": 1,
     "best_match_shark_id": "228069004",
@@ -17450,13 +18182,13 @@
   {
     "whaleSharkID": "345513332",
     "image_count": 10,
-    "best_match_shark_id": "892372585",
+    "best_match_shark_id": "406273837",
     "best_match_image_count": 1,
     "pair_count": 10,
-    "distance_min": 1.2381,
-    "distance_median": 1.3956,
-    "distance_mean": 1.4318,
-    "distance_max": 1.6884,
+    "distance_min": 1.1893,
+    "distance_median": 1.396,
+    "distance_mean": 1.4025,
+    "distance_max": 1.6031,
     "is_mutual": false
   },
   {
@@ -17469,18 +18201,6 @@
     "distance_median": 1.3963,
     "distance_mean": 1.3963,
     "distance_max": 1.3963,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "653899938",
-    "image_count": 1,
-    "best_match_shark_id": "728606852",
-    "best_match_image_count": 3,
-    "pair_count": 3,
-    "distance_min": 1.3048,
-    "distance_median": 1.3967,
-    "distance_mean": 1.4663,
-    "distance_max": 1.6975,
     "is_mutual": false
   },
   {
@@ -17700,6 +18420,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "601215498",
+    "image_count": 2,
+    "best_match_shark_id": "899659883",
+    "best_match_image_count": 1,
+    "pair_count": 2,
+    "distance_min": 1.2501,
+    "distance_median": 1.4041,
+    "distance_mean": 1.4041,
+    "distance_max": 1.5582,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "45ed1569-fc21-11e2-ac3f-081965b14959",
     "image_count": 1,
     "best_match_shark_id": "45ecfd99-fc21-11e2-ac3f-081965b14959",
@@ -17784,6 +18516,18 @@
     "is_mutual": true
   },
   {
+    "whaleSharkID": "899025566",
+    "image_count": 1,
+    "best_match_shark_id": "890147251",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.4062,
+    "distance_median": 1.4062,
+    "distance_mean": 1.4062,
+    "distance_max": 1.4062,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "374377598",
     "image_count": 2,
     "best_match_shark_id": "660440788",
@@ -17822,7 +18566,7 @@
   {
     "whaleSharkID": "205888470",
     "image_count": 2,
-    "best_match_shark_id": "892357890",
+    "best_match_shark_id": "899040160",
     "best_match_image_count": 1,
     "pair_count": 2,
     "distance_min": 1.1964,
@@ -18036,6 +18780,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "482465967",
+    "image_count": 4,
+    "best_match_shark_id": "899040110",
+    "best_match_image_count": 1,
+    "pair_count": 4,
+    "distance_min": 1.2954,
+    "distance_median": 1.4218,
+    "distance_mean": 1.4311,
+    "distance_max": 1.5855,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "857194704",
     "image_count": 1,
     "best_match_shark_id": "59567430",
@@ -18072,15 +18828,15 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "42405729",
-    "image_count": 1,
-    "best_match_shark_id": "593371582",
-    "best_match_image_count": 13,
-    "pair_count": 13,
-    "distance_min": 1.2563,
-    "distance_median": 1.4238,
-    "distance_mean": 1.4532,
-    "distance_max": 1.5839,
+    "whaleSharkID": "898671000",
+    "image_count": 2,
+    "best_match_shark_id": "754010923",
+    "best_match_image_count": 3,
+    "pair_count": 6,
+    "distance_min": 1.3593,
+    "distance_median": 1.4243,
+    "distance_mean": 1.4993,
+    "distance_max": 1.7399,
     "is_mutual": false
   },
   {
@@ -18117,18 +18873,6 @@
     "distance_median": 1.4252,
     "distance_mean": 1.4096,
     "distance_max": 1.6915,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "662080643",
-    "image_count": 5,
-    "best_match_shark_id": "436769574",
-    "best_match_image_count": 2,
-    "pair_count": 10,
-    "distance_min": 1.3277,
-    "distance_median": 1.4257,
-    "distance_mean": 1.4794,
-    "distance_max": 1.6606,
     "is_mutual": false
   },
   {
@@ -18240,21 +18984,9 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "721361653",
-    "image_count": 3,
-    "best_match_shark_id": "471804554",
-    "best_match_image_count": 1,
-    "pair_count": 3,
-    "distance_min": 1.4157,
-    "distance_median": 1.4318,
-    "distance_mean": 1.4688,
-    "distance_max": 1.5589,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "31610608",
     "image_count": 1,
-    "best_match_shark_id": "892357890",
+    "best_match_shark_id": "899040160",
     "best_match_image_count": 1,
     "pair_count": 1,
     "distance_min": 1.4346,
@@ -18504,6 +19236,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "505745212",
+    "image_count": 1,
+    "best_match_shark_id": "899659883",
+    "best_match_image_count": 1,
+    "pair_count": 1,
+    "distance_min": 1.4458,
+    "distance_median": 1.4458,
+    "distance_mean": 1.4458,
+    "distance_max": 1.4458,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "728160270",
     "image_count": 2,
     "best_match_shark_id": "92991166",
@@ -18648,18 +19392,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "477659425",
-    "image_count": 2,
-    "best_match_shark_id": "205274764",
-    "best_match_image_count": 1,
-    "pair_count": 2,
-    "distance_min": 1.3497,
-    "distance_median": 1.4589,
-    "distance_mean": 1.4589,
-    "distance_max": 1.5682,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "881950481",
     "image_count": 2,
     "best_match_shark_id": "565624613",
@@ -18732,6 +19464,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "403075133",
+    "image_count": 6,
+    "best_match_shark_id": "899040139",
+    "best_match_image_count": 1,
+    "pair_count": 6,
+    "distance_min": 1.2421,
+    "distance_median": 1.4614,
+    "distance_mean": 1.5307,
+    "distance_max": 1.8341,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "96273961",
     "image_count": 15,
     "best_match_shark_id": "75410709",
@@ -18756,18 +19500,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "505745212",
-    "image_count": 1,
-    "best_match_shark_id": "502710059",
-    "best_match_image_count": 1,
-    "pair_count": 1,
-    "distance_min": 1.4632,
-    "distance_median": 1.4632,
-    "distance_mean": 1.4632,
-    "distance_max": 1.4632,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "856651695",
     "image_count": 1,
     "best_match_shark_id": "575152496",
@@ -18777,18 +19509,6 @@
     "distance_median": 1.4638,
     "distance_mean": 1.4638,
     "distance_max": 1.4638,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "601215498",
-    "image_count": 2,
-    "best_match_shark_id": "435275737",
-    "best_match_image_count": 1,
-    "pair_count": 2,
-    "distance_min": 1.1904,
-    "distance_median": 1.464,
-    "distance_mean": 1.464,
-    "distance_max": 1.7376,
     "is_mutual": false
   },
   {
@@ -18864,6 +19584,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "662080643",
+    "image_count": 5,
+    "best_match_shark_id": "467038627",
+    "best_match_image_count": 1,
+    "pair_count": 5,
+    "distance_min": 1.2835,
+    "distance_median": 1.4674,
+    "distance_mean": 1.5414,
+    "distance_max": 1.9231,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "603605361",
     "image_count": 4,
     "best_match_shark_id": "892372561",
@@ -18888,15 +19620,15 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "549686638",
-    "image_count": 3,
-    "best_match_shark_id": "668626236",
-    "best_match_image_count": 2,
-    "pair_count": 6,
-    "distance_min": 1.16,
-    "distance_median": 1.4686,
-    "distance_mean": 1.4518,
-    "distance_max": 1.7251,
+    "whaleSharkID": "402935021",
+    "image_count": 8,
+    "best_match_shark_id": "899038072",
+    "best_match_image_count": 1,
+    "pair_count": 8,
+    "distance_min": 1.3089,
+    "distance_median": 1.4685,
+    "distance_mean": 1.504,
+    "distance_max": 1.7504,
     "is_mutual": false
   },
   {
@@ -18921,6 +19653,18 @@
     "distance_median": 1.4704,
     "distance_mean": 1.4704,
     "distance_max": 1.4704,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "842837701",
+    "image_count": 4,
+    "best_match_shark_id": "899025586",
+    "best_match_image_count": 1,
+    "pair_count": 4,
+    "distance_min": 1.2352,
+    "distance_median": 1.4721,
+    "distance_mean": 1.4504,
+    "distance_max": 1.6222,
     "is_mutual": false
   },
   {
@@ -19008,6 +19752,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "901211911",
+    "image_count": 4,
+    "best_match_shark_id": "683985277",
+    "best_match_image_count": 1,
+    "pair_count": 4,
+    "distance_min": 1.3015,
+    "distance_median": 1.4766,
+    "distance_mean": 1.5074,
+    "distance_max": 1.775,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "379116801",
     "image_count": 3,
     "best_match_shark_id": "173834119",
@@ -19080,6 +19836,18 @@
     "is_mutual": false
   },
   {
+    "whaleSharkID": "721361653",
+    "image_count": 3,
+    "best_match_shark_id": "549261788",
+    "best_match_image_count": 1,
+    "pair_count": 3,
+    "distance_min": 1.2872,
+    "distance_median": 1.4808,
+    "distance_mean": 1.4699,
+    "distance_max": 1.6417,
+    "is_mutual": false
+  },
+  {
     "whaleSharkID": "230058950",
     "image_count": 5,
     "best_match_shark_id": "551619319",
@@ -19101,6 +19869,18 @@
     "distance_median": 1.4819,
     "distance_mean": 1.4896,
     "distance_max": 1.5984,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "477659425",
+    "image_count": 2,
+    "best_match_shark_id": "21407276",
+    "best_match_image_count": 1,
+    "pair_count": 2,
+    "distance_min": 1.395,
+    "distance_median": 1.4826,
+    "distance_mean": 1.4826,
+    "distance_max": 1.5702,
     "is_mutual": false
   },
   {
@@ -19185,18 +19965,6 @@
     "distance_median": 1.4864,
     "distance_mean": 1.4856,
     "distance_max": 1.8518,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "402935021",
-    "image_count": 8,
-    "best_match_shark_id": "438473060",
-    "best_match_image_count": 1,
-    "pair_count": 8,
-    "distance_min": 1.2921,
-    "distance_median": 1.4874,
-    "distance_mean": 1.4627,
-    "distance_max": 1.5887,
     "is_mutual": false
   },
   {
@@ -19332,18 +20100,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "482465967",
-    "image_count": 4,
-    "best_match_shark_id": "79591195",
-    "best_match_image_count": 1,
-    "pair_count": 4,
-    "distance_min": 1.3957,
-    "distance_median": 1.5007,
-    "distance_mean": 1.503,
-    "distance_max": 1.615,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "17693359",
     "image_count": 1,
     "best_match_shark_id": "728606835",
@@ -19389,18 +20145,6 @@
     "distance_median": 1.502,
     "distance_mean": 1.5261,
     "distance_max": 1.7204,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "842837701",
-    "image_count": 4,
-    "best_match_shark_id": "451097189",
-    "best_match_image_count": 1,
-    "pair_count": 4,
-    "distance_min": 1.1958,
-    "distance_median": 1.5028,
-    "distance_mean": 1.4857,
-    "distance_max": 1.7414,
     "is_mutual": false
   },
   {
@@ -19461,6 +20205,18 @@
     "distance_median": 1.5044,
     "distance_mean": 1.535,
     "distance_max": 1.9066,
+    "is_mutual": false
+  },
+  {
+    "whaleSharkID": "529152601",
+    "image_count": 5,
+    "best_match_shark_id": "899038090",
+    "best_match_image_count": 1,
+    "pair_count": 5,
+    "distance_min": 1.0917,
+    "distance_median": 1.5044,
+    "distance_mean": 1.4766,
+    "distance_max": 1.7821,
     "is_mutual": false
   },
   {
@@ -19764,18 +20520,6 @@
     "is_mutual": false
   },
   {
-    "whaleSharkID": "403075133",
-    "image_count": 6,
-    "best_match_shark_id": "855101406",
-    "best_match_image_count": 1,
-    "pair_count": 6,
-    "distance_min": 1.1923,
-    "distance_median": 1.5438,
-    "distance_mean": 1.5277,
-    "distance_max": 1.724,
-    "is_mutual": false
-  },
-  {
     "whaleSharkID": "75623734",
     "image_count": 3,
     "best_match_shark_id": "59567430",
@@ -19893,18 +20637,6 @@
     "distance_median": 1.567,
     "distance_mean": 1.567,
     "distance_max": 1.7606,
-    "is_mutual": false
-  },
-  {
-    "whaleSharkID": "529152601",
-    "image_count": 5,
-    "best_match_shark_id": "895642838",
-    "best_match_image_count": 1,
-    "pair_count": 5,
-    "distance_min": 1.2173,
-    "distance_median": 1.5671,
-    "distance_mean": 1.5613,
-    "distance_max": 1.7985,
     "is_mutual": false
   },
   {

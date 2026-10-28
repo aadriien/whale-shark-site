@@ -1,12 +1,12 @@
 year,Total Occurrences,Unique Sharks (with ID),Top 3 Publishing Countries,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,HUMAN_OBSERVATION,MACHINE_OBSERVATION,Sex: Female,Sex: Male,Sex: Unknown,Life Stage: Adult,Life Stage: Immature,Life Stage: Juvenile,Life Stage: Mature,Life Stage: Subadult,Life Stage: Unknown
-2026,202,189,United States > Mexico > Australia,30,19,18,23,25,24,25,26,12,0,0,0,197,5,3,7,192,16,0,4,0,0,182
-2025,331,316,United States > Mexico > Australia,11,11,9,15,11,25,81,87,26,19,16,20,330,1,4,4,323,22,0,2,0,0,307
+2026,207,194,United States > Mexico > Australia,30,19,18,23,26,24,25,27,13,2,0,0,202,5,3,7,197,16,0,4,0,0,187
+2025,385,370,Mexico > United States > Australia,11,11,9,15,11,25,94,127,26,19,17,20,384,1,4,4,377,22,0,2,0,0,361
 2024,1195,223,Australia > United States > Mexico,463,202,120,57,67,32,52,34,54,27,64,23,226,965,9,540,646,10,631,10,0,14,530
 2023,1068,179,Australia > United States > Mexico,12,18,30,32,11,18,34,30,33,20,174,656,181,887,137,459,472,15,610,14,0,84,345
-2022,597,100,Australia > United States > Mexico,117,102,84,84,46,23,36,42,13,16,24,10,114,483,163,323,111,6,483,6,0,0,102
+2022,599,102,Australia > United States > Mexico,117,102,84,84,47,23,37,42,13,16,24,10,116,483,163,323,113,6,483,6,0,0,104
 2021,187,58,Australia > United States > Mexico,5,4,6,14,6,5,9,8,2,9,4,115,76,105,52,60,75,11,105,8,0,0,63
 2020,126,72,United States > Australia > Mexico,42,28,14,0,1,3,8,8,5,11,5,1,81,43,4,44,78,6,43,4,0,0,73
-2019,913,132,Australia > United States > Mexico,166,162,113,202,50,25,18,25,15,12,62,63,146,767,9,103,801,15,199,10,0,0,689
+2019,914,132,Australia > United States > Mexico,166,162,113,202,50,25,18,25,16,12,62,63,147,767,9,103,802,15,199,10,0,0,690
 2018,1392,105,Australia > United States > Netherlands,262,138,146,143,78,41,82,132,79,180,73,38,168,1222,48,36,1308,25,86,11,8,44,1218
 2017,1975,134,Australia > Ecuador > United States,146,14,59,47,82,80,412,291,340,231,192,81,207,1764,65,159,1751,10,6,8,12,8,1931
 2016,2017,137,Ecuador > Australia > United States,209,99,37,27,36,95,124,143,416,350,347,134,163,1852,67,60,1890,17,2,10,8,2,1978
