@@ -21,8 +21,8 @@ function CreativeCurrent() {
         {
             path: "/creative/aquarium",
             title: "Aquarium",
-            description: "TBD",
-            image: "./animation.png",
+            description: "Enchant a whale shark with glowing plankton beneath the ocean's surface",
+            image: "./aquarium.png",
         },
     ];
 
