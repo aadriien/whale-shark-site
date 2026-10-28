@@ -9,6 +9,7 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 
 import { createReef, animateReef, createCurrent, animateCurrent } from "./ReefCurrentAnimated";
 import { GlowSharkAnimated } from "./GlowSharkAnimated";
+import { getCappedPixelRatio, disposeObject, disposeRenderer } from "../../utils/RenderUtils";
 
 import {
     GalacticOceanProps,
@@ -16,6 +17,8 @@ import {
     ParticleBlobs,
     SetActiveBlobProps,
 } from "../../types/animations";
+
+const MAX_PIXEL_RATIO = 2;
 
 function createNebula(scene: THREE.Scene) {
     // Stars particle system
@@ -282,9 +285,9 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
         camera.position.set(0, 75, 450);
         cameraRef.current = camera;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(getCappedPixelRatio(MAX_PIXEL_RATIO));
         renderer.setClearColor(0x000010);
         mount.appendChild(renderer.domElement);
 
@@ -528,13 +531,16 @@ function GalacticOcean({ isMobile }: GalacticOceanProps) {
             cancelAnimationFrame(animateFrameId);
             cancelAnimationFrame(collisionFrameId);
             window.removeEventListener("resize", onResize);
+            mount.removeEventListener("click", handleClick);
+            mount.removeEventListener("mousemove", handleHover);
+            document.body.style.cursor = "default";
 
             if (mount && renderer.domElement.parentElement === mount) {
                 mount.removeChild(renderer.domElement);
-                mount.removeEventListener("click", handleClick);
-                mount.removeEventListener("mousemove", handleHover);
             }
-            renderer.dispose();
+            controls.dispose();
+            disposeObject(scene);
+            disposeRenderer(renderer, composer);
         };
     }, [navigate]);
 

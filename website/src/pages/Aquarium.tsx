@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { createLights, createCamera } from "../utils/GlobeUtils";
 import { createSharkSteering } from "../utils/SharkSteering";
 import { tintPointColors } from "../utils/SharkTint";
+import { getCappedPixelRatio, disposeObject, disposeRenderer } from "../utils/RenderUtils";
 import { GlowSharkAnimated } from "components/animations/GlowSharkAnimated";
 import { createWaterVolume, WATER_FOG_COLOR } from "components/animations/AquariumWater";
 import { createPlanktonLure } from "components/animations/PlanktonLure";
@@ -19,6 +20,8 @@ const BLOOM = { strength: 0.3, radius: 0.5, threshold: 0.7 };
 // Distant shark points are boosted (gain) & only partly faded into the water (fogMix),
 // so the body stays readable at depth. pointScale enlarges dots over home page size
 const SHARK_VISIBILITY = { gain: 0.8, fogMix: 0.5, pointScale: 1.25 };
+
+const MAX_PIXEL_RATIO = 1.5;
 
 // Per second rate at which shark's borrowed plankton color drains away (0.12 ~ 15-20s to fade)
 const SHARK_TINT_FADE = 0.12;
@@ -57,7 +60,10 @@ function AquariumTest() {
         const camera = createCamera(globeContainer);
         cameraRef.current = camera;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            powerPreference: "high-performance",
+        });
 
         const composer = new EffectComposer(renderer);
         composer.addPass(new RenderPass(scene, camera));
@@ -172,10 +178,11 @@ function AquariumTest() {
             const containerHeight = globeContainer.offsetHeight;
 
             // Increase pixel density for clarity (ratio first, so sizes account for it)
-            renderer.setPixelRatio(window.devicePixelRatio);
+            const pixelRatio = getCappedPixelRatio(MAX_PIXEL_RATIO);
+            renderer.setPixelRatio(pixelRatio);
             renderer.setSize(containerWidth, containerHeight);
 
-            composer.setPixelRatio(window.devicePixelRatio);
+            composer.setPixelRatio(pixelRatio);
             composer.setSize(containerWidth, containerHeight);
 
             camera.aspect = containerWidth / containerHeight;
@@ -225,7 +232,13 @@ function AquariumTest() {
             }
         };
 
-        window.addEventListener("resize", resizeCanvas);
+        let resizeFrameId = 0;
+        const handleResize = () => {
+            cancelAnimationFrame(resizeFrameId);
+            resizeFrameId = requestAnimationFrame(resizeCanvas);
+        };
+
+        window.addEventListener("resize", handleResize);
         globeContainer.addEventListener("click", handleClick);
 
         const clock = new THREE.Clock();
@@ -329,7 +342,8 @@ function AquariumTest() {
         // Cleanup on component unmount
         return () => {
             cancelAnimationFrame(frameId);
-            window.removeEventListener("resize", resizeCanvas);
+            cancelAnimationFrame(resizeFrameId);
+            window.removeEventListener("resize", handleResize);
 
             // Remove renderer's canvas
             globeContainer.removeEventListener("click", handleClick);
@@ -337,12 +351,11 @@ function AquariumTest() {
             if (globeContainer.contains(renderer.domElement)) {
                 globeContainer.removeChild(renderer.domElement);
             }
-            bloomPass.dispose();
-            composer.dispose();
             snow.dispose();
             lure.dispose();
             water.dispose();
-            renderer.dispose();
+            disposeObject(scene);
+            disposeRenderer(renderer, composer);
         };
     }, []);
 
