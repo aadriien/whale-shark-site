@@ -1,0 +1,1 @@
+import{j as r}from"./index-DSszWZDk.js";function a({expanded:e,onToggle:o}){return r.jsx("button",{type:"button",className:"read-more-toggle","aria-expanded":e,onClick:o,children:e?"Read less":"Read more"})}export{a as R};
